@@ -44,7 +44,7 @@ thread::thread() {
 		pthread_attr_init(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		pvt->_thr=0;
-		pvt->_stacksize=sys::getPageSize();
+		pvt->_stacksize=sys::getMinThreadStackSize();
 	#endif
 	pvt->_function=NULL;
 	pvt->_arg=NULL;

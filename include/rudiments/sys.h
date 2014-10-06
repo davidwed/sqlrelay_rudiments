@@ -247,7 +247,7 @@ class RUDIMENTS_DLLSPEC sys {
 		/** Returns the number of CPU's that can be bound together
 		 *  in a single CPU Set.
 		 *  Returns -1 if not supported by the system. */
-		static	int64_t	getCPUSetSize();
+		static	int64_t	getCpuSetSize();
 
 		/** Returns the maximum length that a password can be.
 		 *  Returns -1 if not supported by the system. */
@@ -259,7 +259,7 @@ class RUDIMENTS_DLLSPEC sys {
 
 		/** Returns the maximum length that a login name can be.
 		 *  Returns -1 if not supported by the system. */
-		static	int64_t	getMaxProcessID();
+		static	int64_t	getMaxProcessId();
 
 		/** Use the sysconf() system call directly to access values
 		 *  other than the ones provided above. */

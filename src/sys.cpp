@@ -580,7 +580,7 @@ int64_t sys::getMaxCommandLineArgumentLength() {
 		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
 			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
 			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
-				return NULL;
+				return -1;
 			}
 		}
 
@@ -795,8 +795,7 @@ int64_t sys::getProcessorsOnline() {
 	#if defined(_SC_NPROCESSORS_ONLN)
 		return sysConf(_SC_NPROCESSORS_ONLN);
 	#else
-		error::setErrorNumber(ENOSYS);
-		return -1;
+		return getProcessorCount();
 	#endif
 }
 
@@ -830,6 +829,10 @@ int64_t sys::getMaxRealtimeSignals() {
 int64_t sys::getMaxSemaphoresPerProcess() {
 	#if defined(_SC_SEM_NSEMS_MAX)
 		return sysConf(_SC_SEM_NSEMS_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// on windows it's 2^24 (the maximum number of kernel handles
+		// per-process) though available memory limits it too
+		return 16777216;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -839,6 +842,9 @@ int64_t sys::getMaxSemaphoresPerProcess() {
 int64_t sys::getMaxSemaphoreValue() {
 	#if defined(_SC_SEM_VALUE_MAX)
 		return sysConf(_SC_SEM_VALUE_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// on windows it's 2^31-1
+		return 2147483647;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -882,6 +888,17 @@ int64_t sys::getSuggestedPasswordEntryBufferSize() {
 int64_t sys::getMinThreadStackSize() {
 	#if defined(_SC_THREAD_STACK_MIN)
 		return sysConf(_SC_THREAD_STACK_MIN);
+	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
+		// On windows, the stack size of a thread is defined when
+		// the thread is created and rounded up to the nearest
+		// page.  The minimum is actually defined in the header of
+		// the executable though and rounded up to the nearest multiple
+		// of the system's allocation granularity which is usually 64K.
+		// It can be specified by the /STACK argument to the linker or
+		// in the STACKSIZE variable in the .def file.  There's no
+		// obvious way to get that value but the default is 1MB so I
+		// guess we'll return 1MB for now.
+		return 1048576;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -924,9 +941,38 @@ int64_t sys::getMaxAtExitFunctions() {
 	#endif
 }
 
-int64_t sys::getCPUSetSize() {
+int64_t sys::getCpuSetSize() {
 	#if defined(_SC_CPUSET_SIZE)
 		return sysConf(_SC_CPUSET_SIZE);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+
+		// 0 for 32-bit systems
+		SYSTEM_INFO	sysinfo;
+		GetNativeSystemInfo((LPSYSTEM_INFO)&sysinfo);
+		if (sysinfo.wProcessorArchitecture!=
+				PROCESSOR_ARCHITECTURE_AMD64 &&
+			sysinfo.wProcessorArchitecture!=
+				PROCESSOR_ARCHITECTURE_IA64) {
+			return 0;
+		}
+
+		// 64 on 64-bit Windows 7 and Windows Server 2008 R2 and up
+		// 0 on older versions...
+
+		// get the os version info
+		// (yes, this craziness is how you have to do it)
+		OSVERSIONINFOEX	info;
+		bytestring::zero(&info,sizeof(info));
+		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
+		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
+			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+				return -1;
+			}
+		}
+
+		// Windows 7 and 2008R2 are 6.1
+		return (info.dwMajorVersion>=6 && info.dwMinorVersion>=1)?64:0;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -936,6 +982,37 @@ int64_t sys::getCPUSetSize() {
 int64_t sys::getMaxPasswordLength() {
 	#if defined(_SC_PASS_MAX)
 		return sysConf(_SC_PASS_MAX);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+
+		// lower than 2000 - 14 characters
+		// 2000/XP/Server 2003 - 127 technically but password-change
+		//			dialogs limit it to 32 characters
+		// Vista and higher - 127 characters
+
+		// get the os version info
+		// (yes, this craziness is how you have to do it)
+		OSVERSIONINFOEX	info;
+		bytestring::zero(&info,sizeof(info));
+		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
+		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
+			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+				return -1;
+			}
+		}
+
+		// 2000 is 5.0
+		if (info.dwMajorVersion<5) {
+			return 14;
+		}
+
+		// 2000, XP and Server 2003 are all 5.x
+		if (info.dwMajorVersion==5) {
+			return 32;
+		}
+
+		// Vista is 6.0
+		return 127;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
@@ -951,9 +1028,14 @@ int64_t sys::getMaxLogNameLength() {
 	#endif
 }
 
-int64_t sys::getMaxProcessID() {
+int64_t sys::getMaxProcessId() {
 	#if defined(_SC_MAXPID)
 		return sysConf(_SC_MAXPID);
+	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+		// On windows, there doesn't appear to be a definitive word on
+		// this.  It's stored as a dword and must be aligned, so the
+		// maximum PID ought to be 0xFFFFFFFC
+		return 0xFFFFFFFC;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;

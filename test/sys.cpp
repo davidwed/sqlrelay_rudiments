@@ -131,7 +131,7 @@ int main(int argc, const char **argv) {
 			(long long)sys::getMaxAtExitFunctions());
 
 	stdoutput.printf("CPUSet Size				: %lld\n",
-			(long long)sys::getCPUSetSize());
+			(long long)sys::getCpuSetSize());
 
 	stdoutput.printf("Max Password Length			: %lld\n",
 			(long long)sys::getMaxPasswordLength());
@@ -140,5 +140,5 @@ int main(int argc, const char **argv) {
 			(long long)sys::getMaxLogNameLength());
 
 	stdoutput.printf("Max Process ID				: %lld\n",
-			(long long)sys::getMaxProcessID());
+			(long long)sys::getMaxProcessId());
 }

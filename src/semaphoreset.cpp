@@ -8,6 +8,7 @@
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
 	#include <rudiments/charstring.h>
+	#include <rudiments/sys.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -523,7 +524,8 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 				// semaphore can't be inherited by a child
 				// process
 				HANDLE	sem=CreateSemaphore(
-						NULL,values[i],(2^31)-1,
+						NULL,values[i],
+						sys::getMaxSemaphoreValue(),
 						pvt->_semnames[i]);
 
 				// failure...
