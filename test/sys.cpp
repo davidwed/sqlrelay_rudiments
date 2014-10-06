@@ -8,8 +8,6 @@
 
 int main(int argc, const char **argv) {
 
-process::exit(0);
-
 	char	*name=sys::getOperatingSystemName();
 	stdoutput.printf("OS Name		: %s\n",name);
 	delete[] name;

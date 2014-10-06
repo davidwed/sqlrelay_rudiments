@@ -8,6 +8,7 @@
 #include <rudiments/device.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -328,7 +329,7 @@ void sys::sync() {
 		DWORD	volumes=GetLogicalDrives();
 
 		// for each volume
-		for (DWORD driveletter='A'; driveletter<='Z'; driveletter++) {
+		for (char driveletter='A'; driveletter<='Z'; driveletter++) {
 
 			DWORD	exists=volumes&0x0001;
 			volumes=volumes>>1;
@@ -360,6 +361,51 @@ void sys::sync() {
 		}
 	#endif
 }
+
+#if defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+static bool shutDownWindows(bool reboot) {
+
+	// make sure the curernt thread has permissions
+	// to shut down the system...
+
+	// open the current thread
+	HANDLE	ph;
+	if (!OpenProcessToken(GetCurrentProcess(),
+			TOKEN_ADJUST_PRIVILEGES|TOKEN_QUERY,&ph)) {
+		return false;
+	}
+	if (ph==INVALID_HANDLE_VALUE) {
+		return false;
+	}
+
+	// lookup the SE_SHUTDOWN_NAME privilege
+	LUID	luid;
+	if (!LookupPrivilegeValue(NULL,SE_SHUTDOWN_NAME,&luid)) {
+		return false;
+	}
+
+	// enable the privilege
+	TOKEN_PRIVILEGES	tp;
+	tp.PrivilegeCount=1;
+	tp.Privileges[0].Luid=luid;
+	tp.Privileges[0].Attributes=SE_PRIVILEGE_ENABLED;
+	if (!AdjustTokenPrivileges(ph,FALSE,
+				&tp,sizeof(TOKEN_PRIVILEGES),
+				NULL,NULL)) {
+		return false;
+	}
+
+	// FIXME: Arguably this should check to see if the calling user
+	// is the interactive user and run ExitWindowsEx instead of
+	// InitiateSystemShutdownEx if it is.
+	return InitiateSystemShutdownEx(
+			NULL,NULL,0,FALSE,
+			(reboot)?TRUE:FALSE,
+			SHTDN_REASON_MAJOR_OTHER|
+			SHTDN_REASON_MINOR_OTHER|
+			SHTDN_REASON_FLAG_PLANNED)!=0;
+}
+#endif
 
 bool sys::halt() {
 	#if defined(RUDIMENTS_HAVE_REBOOT_1)
@@ -394,6 +440,8 @@ bool sys::halt() {
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		_kern_shutdown(false);
 		return true;
+	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+		return shutDownWindows(false);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -461,6 +509,8 @@ bool sys::shutDown() {
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);
 		return (rosterprivate.ShutDown(false,false,true)==B_OK);
+	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+		return shutDownWindows(false);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -499,6 +549,8 @@ bool sys::reboot() {
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);
 		return (rosterprivate.ShutDown(true,false,true)==B_OK);
+	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+		return shutDownWindows(true);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
