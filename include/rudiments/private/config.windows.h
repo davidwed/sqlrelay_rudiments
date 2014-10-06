@@ -289,6 +289,9 @@
 /* Some systems have FindFirstFile */
 #define RUDIMENTS_HAVE_FINDFIRSTFILE 1
 
+/* Some systems have FlushFileBuffers */
+#define RUDIMENTS_HAVE_FLUSHFILEBUFFERS 1
+
 /* Some systems have fork */
 /* #undef RUDIMENTS_HAVE_FORK */
 
