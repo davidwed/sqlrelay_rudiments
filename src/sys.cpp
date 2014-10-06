@@ -318,12 +318,46 @@ bool sys::getLoadAverages(double *oneminuteaverage,
 void sys::sync() {
 	#if defined(RUDIMENTS_HAVE_SYNC)
 		sync();
-	#if defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
-		DWORD	size=GetLogicalDriveStrings(0,NULL);
-		char	*drivestrings=new char[size+1];
-		size=GetLogicalDriveStrings(size,NULL);
-		drivestrings[size]='\0';
-stdoutput.printf("%s\n",drivestrings);
+	#elif defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
+
+		// FIXME: for some reason GetLogicalDrives doesn't return file
+		// systems mounted by users when run as the Adminstrator but
+		// when run as a user, CreateFile can't open any volume
+
+		// get the volume bitmap
+		DWORD	volumes=GetLogicalDrives();
+
+		// for each volume
+		for (DWORD driveletter='A'; driveletter<='Z'; driveletter++) {
+
+			DWORD	exists=volumes&0x0001;
+			volumes=volumes>>1;
+			if (!exists) {
+				continue;
+			}
+
+			// create the volume name, eg: \\.\C:
+			char	volume[8];
+			charstring::copy(volume,"\\\\.\\x:");
+			volume[4]=driveletter;
+
+			// open the volume
+			HANDLE	vh=CreateFile(volume,
+						GENERIC_READ|GENERIC_WRITE,
+						FILE_SHARE_WRITE|
+						FILE_SHARE_READ,NULL,
+						OPEN_EXISTING,
+						FILE_ATTRIBUTE_NORMAL,NULL);
+			if (vh==INVALID_HANDLE_VALUE) {
+				continue;
+			}
+
+			// flush the volume
+			FlushFileBuffers(vh);
+
+			// close the volume
+			CloseHandle(vh);
+		}
 	#endif
 }
 
