@@ -392,9 +392,6 @@ static const char	*root="/";
 
 bool process::detach() {
 
-	FreeConsole();
-
-#if 0
 	// fork off a child process
 	pid_t	result=fork();
 	if (result==-1) {
@@ -422,7 +419,6 @@ bool process::detach() {
 	// avoid inheriting a umask which wouldn't give us write permissions to
 	// files we create.
 	process::setFileCreationMask(0);
-#endif
 
 	return true;
 }
