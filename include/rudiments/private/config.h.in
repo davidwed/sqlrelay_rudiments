@@ -880,6 +880,9 @@
 /* send has a const void * on most systems */
 #undef RUDIMENTS_HAVE_SEND_WITH_VOID
 
+/* Some systems have SetConsoleCtrlHandler */
+#undef RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER
+
 /* Some systems have SetCurrentDirectory */
 #undef RUDIMENTS_HAVE_SETCURRENTDIRECTORY
 
@@ -936,6 +939,9 @@
 
 /* Some systems have setuid */
 #undef RUDIMENTS_HAVE_SETUID
+
+/* Some systems have SetUnhandledExceptionFilter */
+#undef RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER
 
 /* Some systems have set_real_time_clock */
 #undef RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK

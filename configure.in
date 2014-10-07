@@ -1023,6 +1023,19 @@ AC_TRY_COMPILE([#include <signal.h>
 #endif],
 signal(0,NULL);,AC_DEFINE(RUDIMENTS_HAVE_SIGNAL,1,Some systems have signal) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for SetConsoleCtrlHandler)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+SetConsoleCtrlHandler(0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER,1,Some systems have SetConsoleCtrlHandler) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for SetUnhandledExceptionFilter)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+SetUnhandledExceptionFilter(0);,AC_DEFINE(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER,1,Some systems have SetUnhandledExceptionFilter) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+
 AC_MSG_CHECKING(signal handler parameter)
 AC_TRY_COMPILE([#include <signal.h>],
 void (*handler)(int);
