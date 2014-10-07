@@ -13,6 +13,7 @@
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_PROCESS
 	#include <rudiments/bytestring.h>
+	#include <rudiments/environment.h>
 #endif
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -347,6 +348,45 @@ pid_t process::spawn(const char *command,
 		return exec(command,args);
 	#elif defined(RUDIMENTS_HAVE_CREATE_PROCESS)
 
+		// if the command doesn't include a backslash then search
+		// the path for it
+		char	*fqcommand=NULL;
+		if (charstring::contains(command,"\\")) {
+			fqcommand=charstring::duplicate(command);
+		} else {
+
+			// split the PATH on ;'s
+			const char	*path=environment::getValue("PATH");
+			char		**dirs=NULL;
+			uint64_t	dircount=0;
+			charstring::split(path,";",true,&dirs,&dircount);
+
+			// search each directory in the PATH
+			size_t	cmdlen=charstring::length(command);
+			for (uint64_t i=0; i<dircount; i++) {
+
+				fqcommand=new char[
+						charstring::length(dirs[i])+1+
+						cmdlen+1];
+
+				charstring::copy(fqcommand,dirs[i]);
+				charstring::append(fqcommand,"\\");
+				charstring::append(fqcommand,command);
+
+				delete[] dirs[i];
+
+				if (file::exists(fqcommand)) {
+					break;
+				}
+
+				delete[] fqcommand;
+				fqcommand=NULL;
+			}
+	
+			// clean up
+			delete[] dirs;
+		}
+
 		// Create the command line from the args...
 		// CreateProcess must be able to modify the command line (for
 		// some reason, and there's no indication as to whether it could
@@ -387,13 +427,12 @@ pid_t process::spawn(const char *command,
 		PROCESS_INFORMATION	pi;
 		bytestring::zero(&si,sizeof(si));
 		bytestring::zero(&pi,sizeof(pi));
-		if (CreateProcess(command,commandline,
+		bool	success=(CreateProcess(fqcommand,commandline,
 					NULL,NULL,TRUE,
 					(detached)?CREATE_NEW_PROCESS_GROUP:0,
-					NULL,NULL,&si,&pi)==TRUE) {
-			return pi.dwProcessId;
-		}
-		return -1;
+					NULL,NULL,&si,&pi)==TRUE);
+		delete[] fqcommand;
+		return (success)?pi.dwProcessId:-1;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
