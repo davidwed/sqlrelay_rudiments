@@ -373,7 +373,7 @@ pid_t process::spawn(const char *command,
 		bytestring::zero(&pi,sizeof(pi));
 		if (CreateProcess(command,commandline,
 					NULL,NULL,TRUE,
-					(detached)?DETACHED_PROCESS:0,
+					(detached)?CREATE_NEW_PROCESS_GROUP:0,
 					NULL,NULL,&si,&pi)==TRUE) {
 			return pi.dwProcessId;
 		}
