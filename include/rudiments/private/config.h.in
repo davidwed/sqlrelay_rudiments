@@ -316,6 +316,9 @@
 /* Some systems have ftruncate */
 #undef RUDIMENTS_HAVE_FTRUNCATE
 
+/* Some systems have GenerateConsoleCtrlEvent */
+#undef RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT
+
 /* Some systems have GetAce */
 #undef RUDIMENTS_HAVE_GETACE
 

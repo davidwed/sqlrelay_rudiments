@@ -1056,6 +1056,12 @@ AC_TRY_COMPILE([#include <signal.h>
 #endif],
 kill(0,0);,AC_DEFINE(RUDIMENTS_HAVE_KILL,1,Some systems have kill) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GenerateConsoleCtrlEvent)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GenerateConsoleCtrlEvent(0,0);,AC_DEFINE(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT,1,Some systems have GenerateConsoleCtrlEvent) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for sigsuspend)
 AC_TRY_COMPILE([#include <signal.h>
 #ifdef RUDIMENTS_HAVE_STDLIB_H
