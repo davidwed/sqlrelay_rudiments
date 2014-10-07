@@ -814,6 +814,9 @@
 /* Some systems have putenv */
 #undef RUDIMENTS_HAVE_PUTENV
 
+/* Some systems have raise */
+#undef RUDIMENTS_HAVE_RAISE
+
 /* Some systems have rand */
 #undef RUDIMENTS_HAVE_RAND
 

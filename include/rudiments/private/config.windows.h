@@ -808,6 +808,9 @@
 /* Some systems have putenv */
 #define RUDIMENTS_HAVE_PUTENV 1
 
+/* Some systems have raise */
+#define RUDIMENTS_HAVE_RAISE 1
+
 /* Some systems have rand */
 #define RUDIMENTS_HAVE_RAND 1
 
