@@ -1,8 +1,12 @@
-0.49 - combned passswdentry and shadowentry classes into userentry class
+0.49 - combined passswdentry and shadowentry classes into userentry class
 	updated file::sync() to use FlushFileBuffers directly
 	implemented sys::sync(), reboot(), halt() and shutdown() for windows
 	implemented various sys::getXXX() methods for windows
 	added "detached" option to process::spawn()
+	crash-related methods in process class handle SIGABRT, SIGFPE and
+		SIGILL in addition to SIGSEGV now
+	signal classes support SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV
+		and SIGTERM on windows now
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

@@ -12,8 +12,8 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_PROCESS
-	#include <rudiments/bytestring.h>
 	#include <rudiments/environment.h>
+	#include <rudiments/bytestring.h>
 #endif
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -47,17 +47,16 @@
 #endif
 
 // for waitpid...
-#if !defined(_WIN32) && defined(RUDIMENTS_HAVE_SYS_WAIT_H)
+#if defined(RUDIMENTS_HAVE_SYS_WAIT_H)
 	#include <sys/wait.h>
 #endif
 
-#ifndef _WIN32
 signalhandler	process::_deadchildhandler;
 signalhandler	process::_shutdownhandler;
 signalhandler	process::_crashhandler;
+
 void		(*process::_shutdownfunc)(int32_t);
 void		(*process::_crashfunc)(int32_t);
-#endif
 
 pid_t process::getProcessId() {
 	#if defined(RUDIMENTS_HAVE_GETCURRENTPROCESSID)
@@ -439,12 +438,6 @@ pid_t process::spawn(const char *command,
 	#endif
 }
 
-#ifdef _WIN32
-static const char	*root="C:\\";
-#else
-static const char	*root="/";
-#endif
-
 bool process::detach() {
 
 	// fork off a child process
@@ -467,7 +460,11 @@ bool process::detach() {
 
 	// change directory to root to avoid
 	// keeping any directories in use
-	directory::changeDirectory(root);
+	#ifdef _WIN32
+		directory::changeDirectory("C:\\");
+	#else
+		directory::changeDirectory("/");
+	#endif
 
 	// Set umask such that files are created 666 and directories 777.  This
 	// way we can change them to whatever we like using chmod().  We want to
@@ -503,7 +500,6 @@ int64_t process::checkForPidFile(const char *filename) {
 	return retval;
 }
 
-#ifndef _WIN32
 void process::exitOnCrashOrShutDown() {
 	exitOnShutDown();
 	exitOnCrash();
@@ -517,9 +513,7 @@ void process::exitOnShutDown() {
 }
 
 void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
-
 	_shutdownfunc=shutdownfunction;
-
 	_shutdownhandler.setHandler(shutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
@@ -527,27 +521,35 @@ void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
 
 void process::exitOnCrash() {
 	_crashhandler.setHandler(defaultCrash);
+	_crashhandler.handleSignal(SIGABRT);
+	_crashhandler.handleSignal(SIGFPE);
+	_crashhandler.handleSignal(SIGILL);
 	_crashhandler.handleSignal(SIGSEGV);
 }
 
 void process::handleCrash(void (*crashfunction)(int32_t)) {
-
 	_crashfunc=crashfunction;
-
 	_crashhandler.setHandler(crash);
+	_crashhandler.handleSignal(SIGABRT);
+	_crashhandler.handleSignal(SIGFPE);
+	_crashhandler.handleSignal(SIGILL);
 	_crashhandler.handleSignal(SIGSEGV);
 }
 
 void process::waitForChildren() {
-	_deadchildhandler.setHandler(waitForChildrenToExit);
-	_deadchildhandler.addFlag(SA_NOCLDSTOP);
-	_deadchildhandler.handleSignal(SIGCHLD);
+	#ifdef SIGCHLD
+		_deadchildhandler.setHandler(waitForChildrenToExit);
+		_deadchildhandler.addFlag(SA_NOCLDSTOP);
+		_deadchildhandler.handleSignal(SIGCHLD);
+	#endif
 }
 
 void process::dontWaitForChildren() {
-	_deadchildhandler.setHandler((void (*)(int32_t))SIG_DFL);
-	_deadchildhandler.removeAllFlags();
-	_deadchildhandler.handleSignal(SIGCHLD);
+	#ifdef SIGCHLD
+		_deadchildhandler.setHandler((void (*)(int32_t))SIG_DFL);
+		_deadchildhandler.removeAllFlags();
+		_deadchildhandler.handleSignal(SIGCHLD);
+	#endif
 }
 
 void process::shutDown(int32_t signum) {
@@ -559,43 +561,6 @@ void process::crash(int32_t signum) {
 	waitForChildren();
 	(*_crashfunc)(signum);
 }
-#else
-void process::exitOnCrashOrShutDown() {
-	// FIXME: implement this
-}
-
-void process::exitOnShutDown() {
-	// FIXME: implement this
-}
-
-void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
-	// FIXME: implement this
-}
-
-void process::exitOnCrash() {
-	// FIXME: implement this
-}
-
-void process::handleCrash(void (*crashfunction)(int32_t)) {
-	// FIXME: implement this
-}
-
-void process::waitForChildren() {
-	// FIXME: implement this
-}
-
-void process::dontWaitForChildren() {
-	// FIXME: implement this
-}
-
-void process::shutDown(int32_t signum) {
-	// FIXME: implement this
-}
-
-void process::crash(int32_t signum) {
-	// FIXME: implement this
-}
-#endif
 
 void process::defaultShutDown(int32_t signum) {
 	waitForChildren();

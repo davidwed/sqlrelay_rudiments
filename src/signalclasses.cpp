@@ -14,6 +14,9 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif
 
 #include <stdio.h>
 
@@ -189,7 +192,7 @@ bool signalset::addAllSignals() {
 		#ifdef SIGRTMAX
 			addSignal(SIGRTMAX);
 		#endif
-		return false;
+		return true;
 	#endif
 }
 
@@ -258,7 +261,23 @@ uint32_t signalmanager::alarm(uint32_t seconds) {
 }
 
 bool signalmanager::ignoreSignals(const signalset *sset) {
-	#if defined(RUDIMENTS_HAVE_SIGACTION)
+	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+		bool	result=true;
+		for (linkedlistnode< int32_t > *node=
+				sset->pvt->_siglist.getFirst();
+				node; node=node->getNext()) {
+
+			if (node->getValue()==SIGINT || 
+				node->getValue()==SIGTERM) {
+
+				result=(result &&
+					SetConsoleCtrlHandler(
+						(PHANDLER_ROUTINE)NULL,
+						TRUE)==TRUE);
+			}
+		}
+		return result;
+	#elif defined(RUDIMENTS_HAVE_SIGACTION)
 		int32_t	result;
 		do {
 			#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
@@ -270,7 +289,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
-	#else
+	#elif defined(RUDIMENTS_HAVE_SIGNAL)
 		bool	result=true;
 		for (linkedlistnode< int32_t > *node=
 				sset->pvt->_siglist.getFirst();
@@ -279,6 +298,9 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 				(signal(node->getValue(),SIG_IGN)!=SIG_ERR));
 		}
 		return result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -315,6 +337,11 @@ class signalhandlerprivate {
 		void		(*_handler)(int32_t);
 		#if defined(RUDIMENTS_HAVE_SIGACTION)
 			struct sigaction	_handlerstruct;
+		#endif
+		#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+			static signalhandlerprivate	*_sigsegvinstance;
+			static LONG	_sigsegvHandler(
+						struct _EXCEPTION_POINTERS *ei);
 		#endif
 };
 
@@ -366,8 +393,41 @@ bool signalhandler::handleSignal(int32_t signum) {
 	return handleSignal(signum,NULL);
 }
 
+#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+signalhandlerprivate	*signalhandlerprivate::_sigsegvinstance=NULL;
+
+LONG signalhandlerprivate::_sigsegvHandler(struct _EXCEPTION_POINTERS *ei) {
+	_sigsegvinstance->_handler(SIGSEGV);
+	return 1;
+}
+#endif
+
 bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
-	#if defined(RUDIMENTS_HAVE_SIGACTION)
+	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+		if (oldhandler) {
+			// FIXME: set this somehow
+			oldhandler->pvt->_handler=NULL;
+		}
+		switch (signum) {
+			case SIGINT:
+			case SIGTERM:
+				return SetConsoleCtrlHandler(
+					(PHANDLER_ROUTINE)pvt->_handler,
+					TRUE)==TRUE;
+			case SIGABRT:
+			case SIGFPE:
+			case SIGILL:
+			case SIGSEGV:
+				{
+					pvt->_sigsegvinstance=this->pvt;
+					SetUnhandledExceptionFilter(
+							pvt->_sigsegvHandler);
+				}
+				return true;
+		}
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#elif defined(RUDIMENTS_HAVE_SIGACTION)
 		struct sigaction	oldaction;
 		int32_t			result;
 		if (pvt->_sset) {
@@ -393,12 +453,15 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 			oldhandler->pvt->_handlerstruct=oldaction;
 		}
 		return !result;
-	#else
+	#elif defined(RUDIMENTS_HAVE_SIGNAL)
 		void (*prev)(int)=signal(signum,pvt->_handler);
 		if (oldhandler) {
 			oldhandler->pvt->_handler=prev;
 		}
 		return (prev!=SIG_ERR);
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
