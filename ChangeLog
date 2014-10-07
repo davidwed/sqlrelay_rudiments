@@ -2,6 +2,7 @@
 	updated file::sync() to use FlushFileBuffers directly
 	implemented sys::sync(), reboot(), halt() and shutdown() for windows
 	implemented various sys::getXXX() methods for windows
+	added "detached" option to process::spawn()
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

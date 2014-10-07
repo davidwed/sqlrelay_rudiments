@@ -152,6 +152,8 @@ class RUDIMENTS_DLLSPEC process {
 					const char * const *args);
 
 		/** Runs "command" with arguments "args" as a new process.
+		 *  If "detached" is true then the process is started in
+		 *  the background.
 		 *  Use this instead of a combinination of fork() and exec()
 		 *  as it is more efficient on some platforms.
 		 *  Note that the first element of array "args" should be the
@@ -160,7 +162,8 @@ class RUDIMENTS_DLLSPEC process {
 		 *  Returns the process id of the child process or -1 if an
 		 *  error occurred. */
 		static pid_t	spawn(const char *command,
-					const char * const *args);
+					const char * const *args,
+					bool detached);
 
 		/** Detaches the current process from the controlling tty,
 		 *  creates a new session, changes directory to / and sets the

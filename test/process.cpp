@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
 	file::remove("pidfile");
 
 	stdoutput.printf("spawn'ing...\n");
-	pid_t	pid=process::spawn(cmd,args);
+	pid_t	pid=process::spawn(cmd,args,false);
 	snooze::macrosnooze(1);
 	stdoutput.printf("Process id was %d\n",pid);
 

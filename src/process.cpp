@@ -204,6 +204,7 @@ bool process::setEffectiveUserId(uid_t uid) {
 	#elif defined(RUDIMENTS_HAVE_SYSCALL_SETEUID)
 		return !syscall(SYS_seteuid,uid);
 	#else
+		// windows doesn't have the notion of effective user id's
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
@@ -236,6 +237,7 @@ gid_t process::getEffectiveGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETEGID)
 		return getegid();
 	#else
+		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);
 		return -1;
 	#endif
@@ -263,6 +265,7 @@ bool process::setEffectiveGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETEGID)
 		return !setegid(gid);
 	#else
+		// windows doesn't have the notion of effective group id's
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
@@ -310,7 +313,7 @@ bool process::exec(const char *command, const char * const *args) {
 	#if defined(RUDIMENTS_HAVE_EXECVP)
 		return execvp(command,(char * const *)args)!=-1;
 	#elif defined(RUDIMENTS_HAVE_CREATE_PROCESS)
-		if (spawn(command,args)) {
+		if (spawn(command,args,false)) {
 			exit(0);
 		}
 		return false;
@@ -320,7 +323,9 @@ bool process::exec(const char *command, const char * const *args) {
 	#endif
 }
 
-pid_t process::spawn(const char *command, const char * const *args) {
+pid_t process::spawn(const char *command,
+				const char * const *args,
+				bool detached) {
 	#if defined(RUDIMENTS_HAVE_FORK) && defined(RUDIMENTS_HAVE_EXECVP)
 		pid_t	child=fork();
 		if (child==-1 || child>0) {
@@ -368,7 +373,8 @@ pid_t process::spawn(const char *command, const char * const *args) {
 		bytestring::zero(&pi,sizeof(pi));
 		if (CreateProcess(command,commandline,
 					NULL,NULL,TRUE,
-					0,NULL,NULL,&si,&pi)==TRUE) {
+					(detached)?DETACHED_PROCESS:0,
+					NULL,NULL,&si,&pi)==TRUE) {
 			return pi.dwProcessId;
 		}
 		return -1;
@@ -386,6 +392,9 @@ static const char	*root="/";
 
 bool process::detach() {
 
+	FreeConsole();
+
+#if 0
 	// fork off a child process
 	pid_t	result=fork();
 	if (result==-1) {
@@ -413,6 +422,7 @@ bool process::detach() {
 	// avoid inheriting a umask which wouldn't give us write permissions to
 	// files we create.
 	process::setFileCreationMask(0);
+#endif
 
 	return true;
 }

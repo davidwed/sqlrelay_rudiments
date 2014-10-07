@@ -41,8 +41,7 @@ int main(int argc, const char **argv) {
 
 	// create a pid file which is used to make sure that only one instance
 	// is running and can also be used to kill the process
-	process::createPidFile("dmn.pid",
-					permissions::ownerReadWrite());
+	process::createPidFile("dmn.pid",permissions::ownerReadWrite());
 
 	if (!process::fork()) {
 		for (;;) {
