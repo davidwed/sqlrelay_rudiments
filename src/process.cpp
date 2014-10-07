@@ -12,7 +12,6 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_PROCESS
-	#include <rudiments/stringbuffer.h>
 	#include <rudiments/bytestring.h>
 #endif
 
