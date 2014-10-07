@@ -323,6 +323,20 @@ bool process::exec(const char *command, const char * const *args) {
 	#endif
 }
 
+#if defined(RUDIMENTS_HAVE_CREATE_PROCESS)
+static char *quoteArg(const char *arg) {
+	// put quotes around args that contain spaces...
+	if (!charstring::contains(arg," ")) {
+		return charstring::duplicate(arg);
+	}
+	char	*quotedarg=new char[charstring::length(arg)+3];
+	charstring::copy(quotedarg,"\"");
+	charstring::append(quotedarg,arg);
+	charstring::append(quotedarg,"\"");
+	return quotedarg;
+}
+#endif
+
 pid_t process::spawn(const char *command,
 				const char * const *args,
 				bool detached) {
@@ -356,10 +370,13 @@ pid_t process::spawn(const char *command,
 				} else {
 					first=false;
 				}
-				size_t	size=charstring::length(*arg);
+				char	*qarg=quoteArg(*arg);
+				size_t	size=charstring::length(qarg);
 				if (totalsize+size<32767) {
-					charstring::append(commandline,*arg);
+					charstring::append(commandline,qarg);
+					delete[] qarg;
 				} else {
+					delete[] qarg;
 					break;
 				}
 				totalsize=totalsize+size;
