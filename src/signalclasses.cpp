@@ -238,9 +238,60 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
 
-		// For now, simulate SIGINT for all signals...
+		// For now, bail unless the signal is SIGINT or SIGTERM
+		if (signum!=SIGINT && signum!=SIGTERM) {
+			return false;
+		}
 
-		// Yes, the ridiculousness below is the only way to do this...
+		// decide what access rights we need
+		DWORD	accessrights=PROCESS_TERMINATE;
+		if (signum==SIGINT) {
+			accessrights=PROCESS_CREATE_THREAD|
+					PROCESS_QUERY_INFORMATION|
+					PROCESS_VM_OPERATION|
+					PROCESS_VM_WRITE|
+					PROCESS_VM_READ;
+		}
+
+		// open the target process
+		HANDLE	targetprocess=OpenProcess(accessrights,FALSE,processid);
+		if (!targetprocess) {
+			return false;
+		}
+
+		// for SIGTERM we just need to call TerminateProcess
+		if (signum==SIGTERM) {
+			bool	result=(TerminateProcess(targetprocess,1)!=0);
+			CloseHandle(targetprocess);
+			return result;
+		}
+
+		// For SIGINT, it gets a lot crazier...
+
+		// Yes, the ridiculousness below is the only "reasonable"
+		// way to do this...
+
+		// Ideally we'd just run
+		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,processid) but that
+		// only works if the calling process is in the same process
+		// group as processid (ie. a parent or child of processid).
+		// 
+		// So, we need to somehow coerce a process or thread in the
+		// target process group to run it for us.  We can create a new
+		// thread in the target process using CreateRemoteThread.
+		// 
+		// Ideally we'd just tell it to run
+		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,0) but
+		// CreateRemoteThread only allows you to pass one argument
+		// to the function that it runs and we need to pass two.
+		//
+		// The only "obvious" way to do this is to do define a chunk
+		// of memory containing the machine code for a function that
+		// runs GenerateConsoleCtrlEvent(CTRL_C_EVENT,0) and copy it
+		// over to the target process.
+ 		//
+		// Then we can create a thread over there and aim the thread at
+		// our function.
 
 		// this only works on x86 and x64, so bail right away if
 		// this isn't one of those platforms
@@ -249,40 +300,24 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return false;
 		}
 
-		// Create a new thread in the target process that runs 
-		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,0).  Since we need
-		// to pass 2 arguments but CreateRemoteThread only allows you
-		// to pass 1, we have to do some seriously hairy stuff...
-
-		// open the target process
-		HANDLE	targetprocess=
-			OpenProcess(PROCESS_CREATE_THREAD|
-					PROCESS_QUERY_INFORMATION|
-					PROCESS_VM_OPERATION|
-					PROCESS_VM_WRITE|
-					PROCESS_VM_READ,
-					FALSE,processid);
-		if (!targetprocess) {
-			return false;
-		}
-
-		// get the address of GenerateConsoleCtrlEvent in kernel32.dll
+		// Get the address of the appropriate function in kernel32.dll.
+		// For SIGINT, use GenerateControlCtrlEvent.
+		// For SIGTERM use ExitProcess.
 		// kernel32.dll is loaded at the same address for all programs,
 		// so the address of this function ought to be the same in
-		// the target process as it is here
+		// the target process as it is here.
 		HMODULE	kernel32=GetModuleHandle("Kernel32");
 		if (!kernel32) {
 			return false;
 		}
-		FARPROC	generateconsolectrlevent=
-				GetProcAddress(kernel32,
-					"GenerateConsoleCtrlEvent");
-		if (!generateconsolectrlevent) {
+		FARPROC	funcaddr=GetProcAddress(kernel32,
+						"GenerateConsoleCtrlEvent");
+		if (!funcaddr) {
 			return false;
 		}
 
 		// Define a chunk of memory containing the machine code for
-		// a "function" that runs GenerateConsoleCtrlEvent with two
+		// a function that runs GenerateConsoleCtrlEvent with two
 		// parameters (with values of 0).  Eventually this code will
 		// be run in the target process...
 		//
@@ -326,7 +361,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 							machinecode32size);
 			uint32_t	*addr=
 				(uint32_t *)(updatedmachinecode32+5);
-			*addr=(uint32_t)generateconsolectrlevent;
+			*addr=(uint32_t)funcaddr;
 			updatedmachinecode=updatedmachinecode32;
 			machinecodesize=machinecode32size;
 
@@ -372,7 +407,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 							machinecode64size);
 			uint64_t	*addr=
 				(uint64_t *)(updatedmachinecode64+20);
-			*addr=(uint64_t)generateconsolectrlevent;
+			*addr=(uint64_t)funcaddr;
 			updatedmachinecode=updatedmachinecode64;
 			machinecodesize=machinecode64size;
 		#endif
@@ -398,8 +433,8 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return false;
 		}
 
-		// run GenerateConsoleCtrlEvent with the specified parameters
-		// as a thread in the target process
+		// create a thread in the target process and aim it at
+		// the machine code we passed over there
 		HANDLE	otherthread=
 			CreateRemoteThread(targetprocess,
 					NULL,0,
@@ -410,7 +445,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return false;
 		}
 
-		// Wait for the thread to finish running
+		// wait for the thread to finish running
 		WaitForSingleObject(otherthread,INFINITE);
 
 		// clean up
