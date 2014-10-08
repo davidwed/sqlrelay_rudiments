@@ -10,7 +10,8 @@
 // define a function to shut down the process cleanly
 void shutDown(int sig) {
 
-	stdoutput.printf("%d: shutting down\n",process::getProcessId());
+	stdoutput.printf("%d: shutting down with signal %d\n",
+					process::getProcessId(),sig);
 
 	// clean up
 	file::remove("dmn.pid");
@@ -19,7 +20,8 @@ void shutDown(int sig) {
 
 void crash(int sig) {
 
-	stdoutput.printf("%d: crashing\n",process::getProcessId());
+	stdoutput.printf("%d: crashing with signal %d\n",
+					process::getProcessId(),sig);
 
 	// clean up
 	file::remove("dmn.pid");
@@ -39,7 +41,7 @@ int main(int argc, const char **argv) {
 	process::setGroup("nobody");
 
 	// make sure that only one instance is running
-	int	pid=process::checkForPidFile("dmn.pid");
+	int64_t	pid=process::checkForPidFile("dmn.pid");
 	if (pid>-1) {
 		stdoutput.printf("Sorry, an instance of this daemon is already running with process id: %d\n",pid);
 		process::exit(0);

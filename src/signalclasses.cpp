@@ -209,6 +209,41 @@ bool signalset::removeSignal(int32_t signum) {
 	#endif
 }
 
+bool signalset::removeShutDownSignals() {
+	return removeSignal(SIGINT) &&
+		removeSignal(SIGTERM)
+		#ifdef SIGQUIT
+		&& removeSignal(SIGQUIT)
+		#endif
+		#ifdef SIGHUP
+		&& removeSignal(SIGHUP)
+		#endif
+		;
+}
+
+bool signalset::removeCrashSignals() {
+	return removeSignal(SIGABRT) &&
+		removeSignal(SIGFPE) &&
+		removeSignal(SIGILL) &&
+		removeSignal(SIGSEGV)
+		#ifdef SIGBUS
+		&& removeSignal(SIGBUS)
+		#endif
+		#ifdef SIGBUS
+		&& removeSignal(SIGBUS)
+		#endif
+		#ifdef SIGIOT
+		&& removeSignal(SIGIOT)
+		#endif
+		#ifdef SIGEMT
+		&& removeSignal(SIGEMT)
+		#endif
+		#ifdef SIGSYS
+		&& removeSignal(SIGSYS)
+		#endif
+		;
+}
+
 bool signalset::removeAllSignals() {
 	#if defined(RUDIMENTS_HAVE_SIGACTION)
 		return !sigemptyset(&pvt->_sigset);
@@ -240,7 +275,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 
 		// decide what access rights we need
 		DWORD	accessrights=PROCESS_TERMINATE;
-		if (signum!=SIGTERM) {
+		if (signum!=SIGKILL) {
 			accessrights=PROCESS_CREATE_THREAD|
 					PROCESS_QUERY_INFORMATION|
 					PROCESS_VM_OPERATION|
@@ -254,8 +289,8 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return false;
 		}
 
-		// for SIGTERM we just need to call TerminateProcess
-		if (signum==SIGTERM) {
+		// for SIGKILL we just need to call TerminateProcess
+		if (signum==SIGKILL) {
 			bool	result=(TerminateProcess(targetprocess,1)!=0);
 			CloseHandle(targetprocess);
 			return result;
@@ -264,7 +299,8 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		// For SIGABRT, SIGFPE, SIGILL and SIGSEGV we can trigger the
 		// target process' unhandled exception filter by creating a
 		// thread aimed at NULL.
-		if (signum!=SIGINT) {
+		if (signum==SIGABRT || signum==SIGFPE ||
+				signum==SIGILL || signum==SIGSEGV) {
 			HANDLE	otherthread=
 				CreateRemoteThread(targetprocess,
 						NULL,0,
@@ -277,12 +313,12 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return otherthread!=NULL;
 		}
 
-		// For SIGINT, it gets a lot crazier...
+		// For SIGINT/SIGTERM, it gets a lot crazier...
 
 		// Yes, the ridiculousness below is the only "reasonable"
 		// way to do this...
 
-		// Ideally for SIGINT we'd just run
+		// Ideally for SIGINT/SIGTERM we'd just run
 		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,processid) but that
 		// only works if the calling process is in the same process
 		// group as processid (ie. a parent or child of processid).
@@ -311,9 +347,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return false;
 		}
 
-		// Get the address of the appropriate function in kernel32.dll.
-		// For SIGINT, use GenerateControlCtrlEvent.
-		// For SIGTERM use ExitProcess.
+		// Get the address of GenerateConsoleCtrlEvent in kernel32.dll.
 		// kernel32.dll is loaded at the same address for all programs,
 		// so the address of this function ought to be the same in
 		// the target process as it is here.
@@ -475,10 +509,11 @@ bool signalmanager::raiseSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
 		switch (signum) {
 			case SIGINT:
+			case SIGTERM:
 				if (GenerateConsoleCtrlEvent(CTRL_C_EVENT,0)) {
 					return true;
 				}
-			case SIGTERM:
+			case SIGKILL:
 				if (TerminateProcess(INVALID_HANDLE_VALUE,1)) {
 					return true;
 				}
@@ -529,19 +564,19 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 				node; node=node->getNext()) {
 
 			switch (node->getValue()) {
+			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 				case SIGINT:
 				case SIGTERM:
-			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 					result=(result &&
 						SetConsoleCtrlHandler(
 							(PHANDLER_ROUTINE)NULL,
 							TRUE)==TRUE);
 			#endif
+			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 				case SIGABRT:
 				case SIGFPE:
 				case SIGILL:
 				case SIGSEGV:
-			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 					SetUnhandledExceptionFilter(NULL);
 			#endif
 			}
@@ -680,18 +715,18 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 			oldhandler->pvt->_handler=NULL;
 		}
 		switch (signum) {
+			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 			case SIGINT:
 			case SIGTERM:
-			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 				return SetConsoleCtrlHandler(
 					(PHANDLER_ROUTINE)pvt->_handler,
 					TRUE)==TRUE;
 			#endif
+			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 			case SIGABRT:
 			case SIGFPE:
 			case SIGILL:
 			case SIGSEGV:
-			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 				{
 					pvt->_sigsegvinstance=this->pvt;
 					SetUnhandledExceptionFilter(

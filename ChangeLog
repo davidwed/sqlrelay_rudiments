@@ -3,10 +3,13 @@
 	implemented sys::sync(), reboot(), halt() and shutdown() for windows
 	implemented various sys::getXXX() methods for windows
 	added "detached" option to process::spawn()
-	crash-related methods in process class handle SIGABRT, SIGFPE and
-		SIGILL in addition to SIGSEGV now
-	signal classes now support catching, sending and raising SIGABRT,
-		SIGFPE, SIGILL, SIGINT, SIGSEGV and SIGTERM on windows
+	crash-related methods in process class catch SIGABRT, SIGFPE, SIGILL,
+		SIGBUS, SIGIOT, SIGEMT and SIGSYS in addition to SIGSEGV now
+	shutdown-related methods in process class catch SIGQUIT and SIGHUP
+		in addition to SIGINT and SIGTERM now
+	on windows, signal classes now support catching, sending/raising
+		SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV and SIGTERM and
+		sending/raising SIGKILL
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

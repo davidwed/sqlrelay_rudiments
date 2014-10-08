@@ -34,6 +34,14 @@ class RUDIMENTS_DLLSPEC signalset {
 		 *  Returns true on success and false on failure. */
 		bool	removeSignal(int32_t signum);
 
+		/** Remove signals from the set that the process
+		 *  class listens for in its handleShutDown() method. */
+		bool	removeShutDownSignals();
+
+		/** Remove signals from the set that the process
+		 *  class listens for in its handleCrash() method. */
+		bool	removeCrashSignals();
+
 		/** Remove all signals from the set.
 		 *  Returns true on success and false on failure. */
 		bool	removeAllSignals();

@@ -201,26 +201,30 @@ class RUDIMENTS_DLLSPEC process {
 						mode_t permissions);
 
 		/** Sets up a default handler that exits cleanly when the
-		 *  process is killed with SIGINT or SIGTERM signals.
+		 *  process is killed with a termination signal -
+		 *  SIGINT, SIGTERM, SIGQUIT or SIGHUP.
 		 *  NOTE: The default handler calls waitForChildren() before
 		 *  exiting to prevent zombie processes. */
 		static void	exitOnShutDown();
 
 		/** Allows you to designate a function to run when the
-		 *  process is killed with SIGINT or SIGTERM signals. */
+		 *  process is killed with a termination signal -
+		 *  SIGINT, SIGTERM, SIGQUIT or SIGHUP. */
 		static	void	handleShutDown(
 					void (*shutdownfunction)(int32_t));
 
 		/** Sets up a default handler that exits cleanly if the
-		 *  process crashes with a SIGSEGV (segmentation fault)
-		 *  signal.
+		 *  process crashes with a program error signal -
+		 *  SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
+		 *  SIGEMT or SIGSYS.
 		 *  NOTE: The default handler calls waitForChildren() before
 		 *  exiting to prevent zombie processes. */
 		static void	exitOnCrash();
 
 		/** Allows you to designate a function to run if the
-		 *  process crashes with a SIGSEGV (segmentation fault)
-		 *  signal. */
+		 *  process crashes with a program error signal -
+		 *  SIGABRT, SIGFPE, SIGILL, SIGSEGV, SIGBUS, SIGIOT,
+		 *  SIGEMT or SIGSYS. */
 		static	void	handleCrash(void (*crashfunction)(int32_t));
 
 		/** This method causes the process to wait on child processes

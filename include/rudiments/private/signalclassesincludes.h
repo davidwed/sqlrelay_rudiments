@@ -9,3 +9,8 @@
 	#include <sys/signal.h>
 #endif
 #include <sys/types.h>
+
+// make sure SIGKILL is defined
+#ifndef SIGKILL
+	#define SIGKILL 9
+#endif

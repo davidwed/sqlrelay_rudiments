@@ -14,9 +14,9 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	int32_t	sig=SIGINT;
-	if (!charstring::compare(argv[1],"SIGTERM")) {
-		sig=SIGTERM;
+	int32_t	sig=SIGTERM;
+	if (!charstring::compare(argv[1],"SIGINT")) {
+		sig=SIGINT;
 	} else if (!charstring::compare(argv[1],"SIGABRT")) {
 		sig=SIGABRT;
 	} else if (!charstring::compare(argv[1],"SIGFPE")) {
@@ -25,6 +25,8 @@ int main(int argc, const char **argv) {
 		sig=SIGILL;
 	} else if (!charstring::compare(argv[1],"SIGSEGV")) {
 		sig=SIGSEGV;
+	} else if (!charstring::compare(argv[1],"SIGKILL")) {
+		sig=SIGKILL;
 	}
 
 	pid_t	pid=charstring::toInteger(argv[2]);

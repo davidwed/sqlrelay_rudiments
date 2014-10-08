@@ -510,6 +510,12 @@ void process::exitOnShutDown() {
 	_shutdownhandler.setHandler(defaultShutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
+	#ifdef SIGQUIT
+	_shutdownhandler.handleSignal(SIGQUIT);
+	#endif
+	#ifdef SIGHUP
+	_shutdownhandler.handleSignal(SIGHUP);
+	#endif
 }
 
 void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
@@ -517,6 +523,12 @@ void process::handleShutDown(void (*shutdownfunction)(int32_t)) {
 	_shutdownhandler.setHandler(shutDown);
 	_shutdownhandler.handleSignal(SIGINT);
 	_shutdownhandler.handleSignal(SIGTERM);
+	#ifdef SIGQUIT
+	_shutdownhandler.handleSignal(SIGQUIT);
+	#endif
+	#ifdef SIGHUP
+	_shutdownhandler.handleSignal(SIGHUP);
+	#endif
 }
 
 void process::exitOnCrash() {
@@ -525,6 +537,18 @@ void process::exitOnCrash() {
 	_crashhandler.handleSignal(SIGFPE);
 	_crashhandler.handleSignal(SIGILL);
 	_crashhandler.handleSignal(SIGSEGV);
+	#ifdef SIGBUS
+	_crashhandler.handleSignal(SIGBUS);
+	#endif
+	#ifdef SIGIOT
+	_crashhandler.handleSignal(SIGIOT);
+	#endif
+	#ifdef SIGEMT
+	_crashhandler.handleSignal(SIGEMT);
+	#endif
+	#ifdef SIGSYS
+	_crashhandler.handleSignal(SIGSYS);
+	#endif
 }
 
 void process::handleCrash(void (*crashfunction)(int32_t)) {
@@ -534,6 +558,18 @@ void process::handleCrash(void (*crashfunction)(int32_t)) {
 	_crashhandler.handleSignal(SIGFPE);
 	_crashhandler.handleSignal(SIGILL);
 	_crashhandler.handleSignal(SIGSEGV);
+	#ifdef SIGBUS
+	_crashhandler.handleSignal(SIGBUS);
+	#endif
+	#ifdef SIGIOT
+	_crashhandler.handleSignal(SIGIOT);
+	#endif
+	#ifdef SIGEMT
+	_crashhandler.handleSignal(SIGEMT);
+	#endif
+	#ifdef SIGSYS
+	_crashhandler.handleSignal(SIGSYS);
+	#endif
 }
 
 void process::waitForChildren() {
