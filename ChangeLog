@@ -5,8 +5,8 @@
 	added "detached" option to process::spawn()
 	crash-related methods in process class handle SIGABRT, SIGFPE and
 		SIGILL in addition to SIGSEGV now
-	signal classes support SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV
-		and SIGTERM on windows now
+	signal classes now support catching, sending and raising SIGABRT,
+		SIGFPE, SIGILL, SIGINT, SIGSEGV and SIGTERM on windows
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber
