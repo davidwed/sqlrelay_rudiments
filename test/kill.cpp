@@ -30,7 +30,7 @@ int main(int argc, const char **argv) {
 	pid_t	pid=charstring::toInteger(argv[2]);
 
 	if (!signalmanager::sendSignal(pid,sig)) {
-stdoutput.printf("%s\n",error::getErrorString());
+		stdoutput.printf("kill failed: %s\n",error::getErrorString());
 		process::exit(1);
 	}
 	process::exit(0);
