@@ -7,6 +7,10 @@
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
 	#include <rudiments/linkedlist.h>
 #endif
+#if defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
+	#include <rudiments/process.h>
+	#include <rudiments/sys.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
@@ -232,23 +236,228 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			result=kill(processid,signum);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
+	#elif defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
+
+		// For now, simulate SIGINT for all signals...
+
+		// Yes, the ridiculousness below is the only way to do this...
+
+		// this only works on x86 and x64, so bail right away if
+		// this isn't one of those platforms
+		char	*arch=sys::getOperatingSystemArchitecture();
+		if (!charstring::compare(arch,"Unknown")) {
+			return false;
+		}
+
+		// Create a new thread in the target process that runs 
+		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,0).  Since we need
+		// to pass 2 arguments but CreateRemoteThread only allows you
+		// to pass 1, we have to do some seriously hairy stuff...
+
+		// open the target process
+		HANDLE	targetprocess=
+			OpenProcess(PROCESS_CREATE_THREAD|
+					PROCESS_QUERY_INFORMATION|
+					PROCESS_VM_OPERATION|
+					PROCESS_VM_WRITE|
+					PROCESS_VM_READ,
+					FALSE,processid);
+		if (!targetprocess) {
+			return false;
+		}
+
+		// get the address of GenerateConsoleCtrlEvent in kernel32.dll
+		// kernel32.dll is loaded at the same address for all programs,
+		// so the address of this function ought to be the same in
+		// the target process as it is here
+		HMODULE	kernel32=GetModuleHandle("Kernel32");
+		if (!kernel32) {
+			return false;
+		}
+		FARPROC	generateconsolectrlevent=
+				GetProcAddress(kernel32,
+					"GenerateConsoleCtrlEvent");
+		if (!generateconsolectrlevent) {
+			return false;
+		}
+
+		// define a chunk of memory containing the machine code for
+		// a "function" that runs GenerateConsoleCtrlEvent with two
+		// parameters (with values of 0) to run in the target process...
+		//
+		// helpful site:
+		// https://defuse.ca/online-x86-assembler.htm
+
+		const unsigned char	*updatedmachinecode=NULL;
+		size_t			machinecodesize=0;
+
+		if (!charstring::compare(arch,"x86")) {
+
+			// for x86:
+			const unsigned char	machinecode32[]={
+				// allocate shadow space of 32 bytes on the
+				// stack and align it to 16 bytes
+				0x48,0x83,0xEC,		// sub rsp
+				0x28,			// 0x28
+				// load second parameter (0)
+				0x48,0xC7,0xC2,		// mov rdx
+				0x00,0x00,0x00,0x00,	// 0
+				// load first parameter (0)
+				0x48,0xC7,0xC1,		// mov rcx
+				0x00,0x00,0x00,0x00,	// 0
+				// load the absolute address of the function to
+				// call (for now use 0, we'll overwrite this in
+				// a minute)
+				0x49,0xBA,		// movabs r10
+				0x00,0x00,0x00,0x00,	// 0
+				0x00,0x00,0x00,0x00,	// 0 (64-bit)
+				// call the function
+				0x41,0xFF,0xD2,		// call r10
+				// return 1
+				0x48,0xC7,0xC0,		// mov rax
+				0x01,0x00,0x00,0x00,	// 1
+				// deallocate the shadow space
+				// and align the stack to 16 bytes
+				0x48,0x83,0xC4,		// add rsp
+				0x28,			// 0x28
+				// return
+				0xC3			// retq
+			};
+			size_t		machinecode32size=sizeof(machinecode32);
+
+			// copy the code into a buffer and
+			// replace the call address
+			unsigned char		*updatedmachinecode32=
+				(unsigned char *)bytestring::duplicate(
+							machinecode32,
+							machinecode32size);
+			uint32_t	*addr=
+				(uint32_t *)(updatedmachinecode32+20);
+			*addr=(uint32_t)generateconsolectrlevent;
+			updatedmachinecode=updatedmachinecode32;
+			machinecodesize=machinecode32size;
+
+		} else {
+
+			// for x64:
+			const unsigned char	machinecode64[]={
+				// allocate shadow space of 32 bytes on the
+				// stack and align it to 16 bytes
+				0x48,0x83,0xEC,		// sub rsp
+				0x28,			// 0x28
+				// load second parameter (0)
+				0x48,0xC7,0xC2,		// mov rdx
+				0x00,0x00,0x00,0x00,	// 0
+				// load first parameter (0)
+				0x48,0xC7,0xC1,		// mov rcx
+				0x00,0x00,0x00,0x00,	// 0
+				// load the absolute address of the function to
+				// call (for now use 0, we'll overwrite this in
+				// a minute)
+				0x49,0xBA,		// movabs r10
+				0x00,0x00,0x00,0x00,	// 0
+				0x00,0x00,0x00,0x00,	// 0 (64-bit)
+				// call the function
+				0x41,0xFF,0xD2,		// call r10
+				// return 1
+				0x48,0xC7,0xC0,		// mov rax
+				0x01,0x00,0x00,0x00,	// 1
+				// deallocate the shadow space
+				// and align the stack to 16 bytes
+				0x48,0x83,0xC4,		// add rsp
+				0x28,			// 0x28
+				// return
+				0xC3			// retq
+			};
+			size_t		machinecode64size=sizeof(machinecode64);
+
+			// copy the code into a buffer and
+			// replace the call address
+			unsigned char		*updatedmachinecode64=
+				(unsigned char *)bytestring::duplicate(
+							machinecode64,
+							machinecode64size);
+			uint64_t	*addr=
+				(uint64_t *)(updatedmachinecode64+20);
+			*addr=(uint64_t)generateconsolectrlevent;
+			updatedmachinecode=updatedmachinecode64;
+			machinecodesize=machinecode64size;
+		}
+
+/*stdoutput.printf("machine code:\n");
+for (uint16_t i=0; i<machinecode64size; i++) {
+	stdoutput.printf("0x%02x ",updatedmachinecode[i]);
+}
+stdoutput.printf("\n");*/
+
+		// allocate memory in the target process to copy the
+		// machine code into
+		void	*codetorun=VirtualAllocEx(targetprocess,
+						NULL,machinecodesize,
+						MEM_COMMIT,
+						PAGE_EXECUTE_READWRITE);
+		if (!codetorun) {
+			CloseHandle(targetprocess);
+			return false;
+		}
+
+		// copy the machine code over to the target process
+		if (!WriteProcessMemory(targetprocess,
+						codetorun,
+						updatedmachinecode,
+						machinecodesize,
+						NULL)) {
+			CloseHandle(targetprocess);
+			return false;
+		}
+
+		// run GenerateConsoleCtrlEvent with the specified parameters
+		// as a thread in the target process
+		HANDLE	otherthread=
+			CreateRemoteThread(targetprocess,
+					NULL,0,
+					(LPTHREAD_START_ROUTINE)codetorun,
+					NULL,0,NULL);
+		if (!otherthread) {
+			CloseHandle(targetprocess);
+			return false;
+		}
+
+		WaitForSingleObject(otherthread,INFINITE);
+
+		// clean up
+		VirtualFreeEx(targetprocess,codetorun,0,MEM_RELEASE);
+		CloseHandle(otherthread);
+		CloseHandle(targetprocess);
+		
+		return true;
 	#else
-		// Windows doesn't support sending an arbitrary signal to
-		// another process.  In fact, all signal handling is faked
-		// in windows.  Windows sends messages between processes,
-		// some of which correspond to what would be signals on unix.
-		// It might be possible to implement this that way.
 		error::setErrorNumber(ENOSYS);
 		return false;
 	#endif
 }
 
 bool signalmanager::raiseSignal(int32_t signum) {
-	int32_t	result;
-	do {
-		result=raise(signum);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	return !result;
+	#if defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
+		if (signum==SIGINT || signum==SIGTERM) {
+stdoutput.printf("raising signal %d\n",signum);
+			if (GenerateConsoleCtrlEvent(CTRL_C_EVENT,0)) {
+				return true;
+			} else {
+stdoutput.printf("error: %s\n",error::getNativeErrorString());
+			}
+		}
+		return false;
+	#elif defined(RUDIMENTS_HAVE_RAISE)
+		int32_t	result;
+		do {
+			result=raise(signum);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		return !result;
+	#else
+		error::setErrorNumber(ENOSYS);
+		return false;
+	#endif
 }
 
 uint32_t signalmanager::alarm(uint32_t seconds) {
@@ -261,19 +470,29 @@ uint32_t signalmanager::alarm(uint32_t seconds) {
 }
 
 bool signalmanager::ignoreSignals(const signalset *sset) {
-	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER) || \
+		defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 		bool	result=true;
 		for (linkedlistnode< int32_t > *node=
 				sset->pvt->_siglist.getFirst();
 				node; node=node->getNext()) {
 
-			if (node->getValue()==SIGINT || 
-				node->getValue()==SIGTERM) {
-
-				result=(result &&
-					SetConsoleCtrlHandler(
-						(PHANDLER_ROUTINE)NULL,
-						TRUE)==TRUE);
+			switch (node->getValue()) {
+				case SIGINT:
+				case SIGTERM:
+			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+					result=(result &&
+						SetConsoleCtrlHandler(
+							(PHANDLER_ROUTINE)NULL,
+							TRUE)==TRUE);
+			#endif
+				case SIGABRT:
+				case SIGFPE:
+				case SIGILL:
+				case SIGSEGV:
+			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
+					SetUnhandledExceptionFilter(NULL);
+			#endif
 			}
 		}
 		return result;
@@ -340,7 +559,7 @@ class signalhandlerprivate {
 		#endif
 		#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 			static signalhandlerprivate	*_sigsegvinstance;
-			static LONG	_sigsegvHandler(
+			static LONG	_sigsegvFilter(
 						struct _EXCEPTION_POINTERS *ei);
 		#endif
 };
@@ -396,14 +615,15 @@ bool signalhandler::handleSignal(int32_t signum) {
 #if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 signalhandlerprivate	*signalhandlerprivate::_sigsegvinstance=NULL;
 
-LONG signalhandlerprivate::_sigsegvHandler(struct _EXCEPTION_POINTERS *ei) {
+LONG signalhandlerprivate::_sigsegvFilter(struct _EXCEPTION_POINTERS *ei) {
 	_sigsegvinstance->_handler(SIGSEGV);
-	return 1;
+	return EXCEPTION_CONTINUE_EXECUTION;
 }
 #endif
 
 bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
-	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER) || \
+		defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 		if (oldhandler) {
 			// FIXME: set this somehow
 			oldhandler->pvt->_handler=NULL;
@@ -411,19 +631,23 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 		switch (signum) {
 			case SIGINT:
 			case SIGTERM:
+			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 				return SetConsoleCtrlHandler(
 					(PHANDLER_ROUTINE)pvt->_handler,
 					TRUE)==TRUE;
+			#endif
 			case SIGABRT:
 			case SIGFPE:
 			case SIGILL:
 			case SIGSEGV:
+			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
 				{
 					pvt->_sigsegvinstance=this->pvt;
 					SetUnhandledExceptionFilter(
-							pvt->_sigsegvHandler);
+							pvt->_sigsegvFilter);
 				}
 				return true;
+			#endif
 		}
 		error::setErrorNumber(ENOSYS);
 		return false;

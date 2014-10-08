@@ -17,13 +17,22 @@ void shutDown(int sig) {
 	process::exit(0);
 }
 
+void crash(int sig) {
+
+	stdoutput.printf("%d: crashing\n",process::getProcessId());
+
+	// clean up
+	file::remove("dmn.pid");
+	process::exit(0);
+}
+
 int main(int argc, const char **argv) {
 
 	process::waitForChildren();
 
 	// set up signal handlers for clean shutdown
 	process::handleShutDown(shutDown);
-	process::handleCrash(shutDown);
+	process::handleCrash(crash);
 
 	// change the user/group that the daemon is running as
 	process::setUser("nobody");

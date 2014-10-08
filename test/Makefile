@@ -39,6 +39,7 @@ PROGS = server$(EXE) \
 	sharedmemory1$(EXE) \
 	sharedmemory2$(EXE) \
 	signal$(EXE) \
+	kill$(EXE) \
 	stringbuffer$(EXE) \
 	bytebuffer$(EXE) \
 	device$(EXE) \
@@ -135,6 +136,7 @@ clean:
 		memorypool$(EXE) \
 		randomnumber$(EXE) \
 		signal$(EXE) \
+		kill$(EXE) \
 		stringbuffer$(EXE) \
 		handoff1$(EXE) \
 		handoff2$(EXE) \
@@ -314,6 +316,9 @@ randomnumber$(EXE): randomnumber.cpp randomnumber.lo
 
 signal$(EXE): signal.cpp signal.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ signal.lo $(ALLSTATIC) $(LIBS)
+
+kill$(EXE): kill.cpp kill.lo
+	$(LIBTOOL) --mode=link $(CXX) -o $@ kill.lo $(ALLSTATIC) $(LIBS)
 
 stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ stringbuffer.lo $(ALLSTATIC) $(LIBS)
