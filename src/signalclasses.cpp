@@ -238,14 +238,14 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
 
-		// For now, bail unless the signal is SIGINT or SIGTERM
+		// For now we can only handle SIGINT and SIGTERM
 		if (signum!=SIGINT && signum!=SIGTERM) {
 			return false;
 		}
 
 		// decide what access rights we need
 		DWORD	accessrights=PROCESS_TERMINATE;
-		if (signum==SIGINT) {
+		if (signum!=SIGTERM) {
 			accessrights=PROCESS_CREATE_THREAD|
 					PROCESS_QUERY_INFORMATION|
 					PROCESS_VM_OPERATION|
@@ -266,12 +266,12 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return result;
 		}
 
-		// For SIGINT, it gets a lot crazier...
+		// For other signals, it gets a lot crazier...
 
 		// Yes, the ridiculousness below is the only "reasonable"
 		// way to do this...
 
-		// Ideally we'd just run
+		// Ideally for SIGINT we'd just run
 		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,processid) but that
 		// only works if the calling process is in the same process
 		// group as processid (ie. a parent or child of processid).
@@ -292,6 +292,9 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
  		//
 		// Then we can create a thread over there and aim the thread at
 		// our function.
+
+		// FIXME: the other signals need to trigger the target process'
+		// unhandled exception filter somehow
 
 		// this only works on x86 and x64, so bail right away if
 		// this isn't one of those platforms
@@ -462,11 +465,17 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 
 bool signalmanager::raiseSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
-		if (signum==SIGINT || signum==SIGTERM) {
+		if (signum==SIGINT) {
 			if (GenerateConsoleCtrlEvent(CTRL_C_EVENT,0)) {
 				return true;
 			}
+		} else if (signum==SIGTERM) {
+			if (TerminateProcess(INVALID_HANDLE_VALUE,1)) {
+				return true;
+			}
 		}
+		// FIXME: other signals need to trigger the
+		// unhandled exception filter somehow
 		return false;
 	#elif defined(RUDIMENTS_HAVE_RAISE)
 		int32_t	result;
