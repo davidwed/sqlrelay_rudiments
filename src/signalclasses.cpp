@@ -281,9 +281,10 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			return false;
 		}
 
-		// define a chunk of memory containing the machine code for
+		// Define a chunk of memory containing the machine code for
 		// a "function" that runs GenerateConsoleCtrlEvent with two
-		// parameters (with values of 0) to run in the target process...
+		// parameters (with values of 0).  Eventually this code will
+		// be run in the target process...
 		//
 		// helpful site:
 		// https://defuse.ca/online-x86-assembler.htm
@@ -291,37 +292,29 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		const unsigned char	*updatedmachinecode=NULL;
 		size_t			machinecodesize=0;
 
-		if (!charstring::compare(arch,"x86")) {
+		// FIXME: use better method of detecting x86 vs. x64
+		#ifdef _USE_32BIT_TIME_T
 
 			// for x86:
 			const unsigned char	machinecode32[]={
-				// allocate shadow space of 32 bytes on the
-				// stack and align it to 16 bytes
-				0x48,0x83,0xEC,		// sub rsp
-				0x28,			// 0x28
 				// load second parameter (0)
-				0x48,0xC7,0xC2,		// mov rdx
-				0x00,0x00,0x00,0x00,	// 0
+				0x6A,			// push 
+				0x0,			// 0
 				// load first parameter (0)
-				0x48,0xC7,0xC1,		// mov rcx
-				0x00,0x00,0x00,0x00,	// 0
+				0x6A,			// push 
+				0x0,			// 0
 				// load the absolute address of the function to
 				// call (for now use 0, we'll overwrite this in
 				// a minute)
-				0x49,0xBA,		// movabs r10
-				0x00,0x00,0x00,0x00,	// 0
-				0x00,0x00,0x00,0x00,	// 0 (64-bit)
+				0xB8,			// mov eax
+				0x0,0x0,0x0,0x0,	// 0
 				// call the function
-				0x41,0xFF,0xD2,		// call r10
+				0xFF,0xD0,		// call eax
 				// return 1
-				0x48,0xC7,0xC0,		// mov rax
-				0x01,0x00,0x00,0x00,	// 1
-				// deallocate the shadow space
-				// and align the stack to 16 bytes
-				0x48,0x83,0xC4,		// add rsp
-				0x28,			// 0x28
+				0xB8,			// mov eax
+				0x1,0x0,0x0,0x0,	// 1
 				// return
-				0xC3			// retq
+				0xC3			// ret
 			};
 			size_t		machinecode32size=sizeof(machinecode32);
 
@@ -332,12 +325,12 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 							machinecode32,
 							machinecode32size);
 			uint32_t	*addr=
-				(uint32_t *)(updatedmachinecode32+20);
+				(uint32_t *)(updatedmachinecode32+5);
 			*addr=(uint32_t)generateconsolectrlevent;
 			updatedmachinecode=updatedmachinecode32;
 			machinecodesize=machinecode32size;
 
-		} else {
+		#else
 
 			// for x64:
 			const unsigned char	machinecode64[]={
@@ -382,13 +375,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			*addr=(uint64_t)generateconsolectrlevent;
 			updatedmachinecode=updatedmachinecode64;
 			machinecodesize=machinecode64size;
-		}
-
-/*stdoutput.printf("machine code:\n");
-for (uint16_t i=0; i<machinecode64size; i++) {
-	stdoutput.printf("0x%02x ",updatedmachinecode[i]);
-}
-stdoutput.printf("\n");*/
+		#endif
 
 		// allocate memory in the target process to copy the
 		// machine code into
@@ -423,6 +410,7 @@ stdoutput.printf("\n");*/
 			return false;
 		}
 
+		// Wait for the thread to finish running
 		WaitForSingleObject(otherthread,INFINITE);
 
 		// clean up
@@ -440,11 +428,8 @@ stdoutput.printf("\n");*/
 bool signalmanager::raiseSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT)
 		if (signum==SIGINT || signum==SIGTERM) {
-stdoutput.printf("raising signal %d\n",signum);
 			if (GenerateConsoleCtrlEvent(CTRL_C_EVENT,0)) {
 				return true;
-			} else {
-stdoutput.printf("error: %s\n",error::getNativeErrorString());
 			}
 		}
 		return false;
@@ -644,7 +629,8 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 				{
 					pvt->_sigsegvinstance=this->pvt;
 					SetUnhandledExceptionFilter(
-							pvt->_sigsegvFilter);
+						(LPTOP_LEVEL_EXCEPTION_FILTER)
+						pvt->_sigsegvFilter);
 				}
 				return true;
 			#endif
