@@ -15548,6 +15548,7 @@ $as_echo_n "checking for SCO OSR < 6.0.0... " >&6; }
 if ( test "`uname -s`" = "SCO_SV" )
 then
 
+
 $as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
 
 	if ( test "`uname -v | tr -d '.'`" -lt "600" )
@@ -15566,6 +15567,8 @@ $as_echo "no" >&6; }
 	then
 		CPPFLAGS="$CPPFLAGS -D_SVID3"
 	fi
+
+		ENABLE_RUDIMENTS_THREADS="no"
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }

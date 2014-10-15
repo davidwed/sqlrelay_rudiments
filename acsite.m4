@@ -576,6 +576,7 @@ CRTLIB=""
 AC_MSG_CHECKING(for SCO OSR < 6.0.0)
 if ( test "`uname -s`" = "SCO_SV" )
 then
+
   	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
 	if ( test "`uname -v | tr -d '.'`" -lt "600" )
 	then
@@ -590,6 +591,9 @@ then
 	then
 		CPPFLAGS="$CPPFLAGS -D_SVID3"
 	fi
+
+	dnl you can add FSU Pthreads to OSR5 but they cause odd problems
+	ENABLE_RUDIMENTS_THREADS="no"
 else
 	AC_MSG_RESULT(no)
 fi

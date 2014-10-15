@@ -12,8 +12,6 @@
 #endif
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_T)
-	// to fix an odd situation on SCO with FSU pthreads
-	//#define _TIMESTRUC_T
 	#include <pthread.h>
 #elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 	#include <rudiments/sys.h>
