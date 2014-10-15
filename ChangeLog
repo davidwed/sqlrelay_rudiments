@@ -10,6 +10,8 @@
 	on windows, signal classes now support catching, sending/raising
 		SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV and SIGTERM and
 		sending/raising SIGKILL
+	disabled threads outright on OSR5
+	fixed threads detection for solaris 2.6
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber
