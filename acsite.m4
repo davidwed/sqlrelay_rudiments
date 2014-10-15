@@ -823,8 +823,7 @@ AC_DEFUN([FW_CHECK_THREAD],
 
 		dnl check for pthread_t
 		AC_MSG_CHECKING(for pthread_t)
-		FW_TRY_LINK([#define _TIMESTRUC_T
-#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_T,1,pthread_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		dnl check for CreateThread
 		AC_MSG_CHECKING(for CreateThread)
@@ -842,8 +841,7 @@ AC_DEFUN([FW_CHECK_MUTEX],
 
 		dnl check for pthread_mutex_t
 		AC_MSG_CHECKING(for pthread_mutex_t)
-		FW_TRY_LINK([#define _TIMESTRUC_T
-#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <pthread.h>],[if (sizeof(pthread_mutex_t)) { return 0; } return 0;],[$CPPFLAGS $PTHREADINCLUDES],[$PTHREADLIB],[],[AC_DEFINE(RUDIMENTS_HAVE_PTHREAD_MUTEX_T,1,pthread_mutex_t type exists) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		dnl check for CreateMutex
 		AC_MSG_CHECKING(for CreateMutex)

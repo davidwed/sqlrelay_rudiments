@@ -6,7 +6,7 @@
 
 #if defined(RUDIMENTS_HAVE_PTHREAD_MUTEX_T)
 	// to fix an odd situation on SCO with FSU pthreads
-	#define _TIMESTRUC_T
+	//#define _TIMESTRUC_T
 	#include <pthread.h>
 #elif defined(RUDIMENTS_HAVE_CREATE_MUTEX)
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
