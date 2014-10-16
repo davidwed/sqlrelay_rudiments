@@ -139,6 +139,7 @@ class codetreeprivate {
 		uint8_t		_debuglevel;
 		stringbuffer	_excbuffer;
 		xmldomnode	*_excnode;
+		bool		_endofstring;
 };
 
 
@@ -154,6 +155,7 @@ codetree::codetree() {
 	pvt->_finalcodeposition=NULL;
 	pvt->_debuglevel=0;
 	pvt->_excnode=NULL;
+	pvt->_endofstring=false;
 }
 
 codetree::~codetree() {
@@ -194,6 +196,9 @@ bool codetree::parse(const char *input,
 
 	// re-init the error
 	pvt->_error=false;
+
+	// re-init endofstring flag
+	pvt->_endofstring=false;
 
 	// parse, starting with the specified start symbol
 	const char	*codepos=input;
@@ -249,6 +254,14 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
+
+	// handle end-of-string
+	if (**codeposition=='\0') {
+		debugPrintIndent(2);
+		debugPrintf(2,"end of string\n");
+		pvt->_endofstring=true;
+		return true;
+	}
 
 	pvt->_indentlevel++;
 
@@ -522,7 +535,7 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 		}
 		pvt->_break=oldbreak;
 
-		if (!parseresult) {
+		if (!parseresult || pvt->_endofstring) {
 			if (anyfound) {
 				debugPrintIndent(4);
 				debugPrintf(4,"} repetition success\n");
