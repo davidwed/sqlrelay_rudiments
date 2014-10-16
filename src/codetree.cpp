@@ -809,7 +809,12 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 	if (parseChild(def->getFirstTagChild(),
 			(codenode)?codenode:treeparent,
 			codeposition,
-			(ntbuffer)?ntbuffer:localntbuffer)) {
+			(ntbuffer)?ntbuffer:localntbuffer) &&
+
+			// if a break caused a zero-character read then we
+			// don't want to consider that a successful parse
+			*codeposition!=startcodeposition) {
+
 
 		debugPrintIndent(2);
 		debugPrintf(2,"} nonterminal \"%s\" found",name);
