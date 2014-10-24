@@ -51,6 +51,8 @@ static const char	LINE='e';
 static const char	BLOCK='b';
 static const char	NONE='n';
 
+static const char	STX=0x2;
+
 
 // create a child class of xmldom that disables the string cache and replaces
 // tag and attribute names with single-letter representations of them to
@@ -135,6 +137,7 @@ class codetreeprivate {
 		size_t		_indentlength;
 		bool		_previousparsechildretval;
 		bool		_break;
+		const char	*_beginningofinput;
 		const char	*_finalcodeposition;
 		uint8_t		_debuglevel;
 		stringbuffer	_excbuffer;
@@ -202,6 +205,7 @@ bool codetree::parse(const char *input,
 
 	// parse, starting with the specified start symbol
 	const char	*codepos=input;
+	pvt->_beginningofinput=input;
 	pvt->_finalcodeposition=*codeposition;
 
 	bool	retval=(parseNonTerminal(pvt->_grammartag,
@@ -473,19 +477,39 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 	debugPrintIndent(4);
 	debugPrintf(4,"alternation... {\n");
 
+	// keep track of the start position
+	const char	*startcodeposition=*codeposition;
+
+	// save old break state and reset break flag
+	bool	oldbreak=pvt->_break;
+	pvt->_break=false;
+
 	// one of the children must parse successfully
+	bool	retval=false;
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 		if (parseChild(child,treeparent,codeposition,ntbuffer)) {
-			debugPrintIndent(4);
-			debugPrintf(4,"} alternation success\n");
-			return true;
+			retval=true;
+			break;
 		}
 	}
 
-	debugPrintIndent(4);
-	debugPrintf(4,"} alternation failed\n");
-	return false;
+	// process a break and restore break state...
+	// if a break was encountered and it resulted in
+	// nothing being read then consider that a failure
+	if (pvt->_break && *codeposition==startcodeposition) {
+		retval=false;
+	}
+	pvt->_break=oldbreak;
+
+	if (retval) {
+		debugPrintIndent(4);
+		debugPrintf(4,"} alternation success\n");
+	} else {
+		debugPrintIndent(4);
+		debugPrintf(4,"} alternation failed\n");
+	}
+	return retval;
 }
 
 bool codetree::parseOption(xmldomnode *grammarnode, 
@@ -521,19 +545,19 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 	for (;;) {
 
 		// save old break state and reset break flag
-		bool	oldbreak=pvt->_break;
-		pvt->_break=false;
+		//bool	oldbreak=pvt->_break;
+		//pvt->_break=false;
 
 		// parse the child
 		bool	parseresult=parseChild(child,treeparent,
 						codeposition,ntbuffer);
 
 		// process a break and restore break state
-		if (pvt->_break) {
-			parseresult=false;
-			anyfound=true;
-		}
-		pvt->_break=oldbreak;
+		//if (pvt->_break) {
+			//parseresult=false;
+			//anyfound=true;
+		//}
+		//pvt->_break=oldbreak;
 
 		if (!parseresult || pvt->_endofstring) {
 			if (anyfound) {
@@ -578,6 +602,19 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 	const char	*value=grammarnode->getAttributeValue(VALUE);
 	size_t		valuelength=charstring::length(value);
 	const char	*casesensitive=grammarnode->getAttributeValue(CASE);
+
+	// first, check for beginning-of-line characters,
+	// which should only occur at the beginning of a value
+	// (STX is used to represent the beginning of a line)
+	if (value && value[0]==STX) {
+		if (*codeposition==pvt->_beginningofinput ||
+					*(*codeposition-1)=='\n') {
+			value++;
+			valuelength--;
+		} else {
+			return false;
+		}
+	}
 
 	// see if the code matches this terminal
 	bool	match=(casesensitive && casesensitive[0]=='f')?
@@ -702,8 +739,8 @@ bool codetree::parseSet(xmldomnode *grammarnode,
 	// nonterminal and advance the code position
 	if (character::inSet((int32_t)(**codeposition),value)) {
 		debugPrintIndent(4);
-		debugPrintf(4,"set member found: \"%c\"\n",**codeposition);
-		debugPrintf(4,"set was \"%s\"\n",value);
+		debugPrintf(4,"set member found: \"%c\" from set \"%s\"\n",
+							**codeposition,value);
 		if (ntbuffer) {
 			ntbuffer->append(**codeposition);
 		}
@@ -725,6 +762,19 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 	size_t		valuelength=charstring::length(value);
 	const char	*casesensitive=grammarnode->getAttributeValue(CASE);
 
+	// first, check for beginning-of-line characters,
+	// which should only occur at the beginning of a value
+	// (STX is used to represent the beginning of a line)
+	if (value && value[0]==STX) {
+		if (*codeposition==pvt->_beginningofinput ||
+					*(*codeposition-1)=='\n') {
+			value++;
+			valuelength--;
+		} else {
+			return false;
+		}
+	}
+
 	// see if the code matches this terminal
 	bool	match=(casesensitive && casesensitive[0]=='f')?
 			!charstring::compareIgnoringCase(
@@ -735,10 +785,10 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 	// return true or false but don't advance the code position or append
 	// the value to the nonterminal
 	if (match) {
-		debugPrintIndent(4);
-		debugPrintf(4,"break \"");
-		debugSafePrint(4,value);
-		debugPrintf(4,"\" found\n");
+		debugPrintIndent(2);
+		debugPrintf(2,"break \"");
+		debugSafePrint(2,value);
+		debugPrintf(2,"\" found\n");
 		pvt->_break=true;
 		return true;
 	}
@@ -809,11 +859,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 	if (parseChild(def->getFirstTagChild(),
 			(codenode)?codenode:treeparent,
 			codeposition,
-			(ntbuffer)?ntbuffer:localntbuffer) &&
-
-			// if a break caused a zero-character read then we
-			// don't want to consider that a successful parse
-			*codeposition!=startcodeposition) {
+			(ntbuffer)?ntbuffer:localntbuffer)) {
 
 
 		debugPrintIndent(2);

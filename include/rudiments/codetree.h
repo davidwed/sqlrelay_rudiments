@@ -132,7 +132,9 @@ class codetreeprivate;
  * The <terminal> tag refers to a terminal and has the following attributes:
  *
  *     value - The text of the terminal.  Ascii characters or XML entities
- *             can be used.
+ *             can be used.  To specify the end of a line, use XML entity
+ *             &#10; (newline).  To specify the beginning of a line, use
+ *             XML entity &#2; (start of text).
  *
  *     case - Whether the terminal is case-sensitive or not.  Acceptable values
  *            are true or false.
@@ -145,6 +147,8 @@ class codetreeprivate;
  *         <terminal value="||"/>
  *         <terminal value="&&"/>
  *         <terminal value="class" case="false"/>
+ *         <terminal value="&#2;class"/>
+ *         <terminal value="class&#10;"/>
  *
  * The <letter> tag refers to an alphabetic character, either upper or lower
  * case.  It is more efficient to use the <letter> tag than to define a

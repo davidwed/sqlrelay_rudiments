@@ -15,6 +15,7 @@
 	codetree bails properly at end of string now
 	fixed a break-related condition that could cause codetree to loop
 		indefinitely
+	added support for a beginning-of-line character to codetree
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber
