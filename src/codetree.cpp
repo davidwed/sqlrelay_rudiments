@@ -2,13 +2,14 @@
 #include <rudiments/file.h>
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
+#include <rudiments/linkedlist.h>
 #include <rudiments/stdio.h>
 
 // for fflush, stdout
 #include <stdio.h>
 
 // some debug macros
-#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_indentlevel; i++) { stdoutput.printf(" "); } }
+#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_depth; i++) { stdoutput.printf(" "); } }
 #ifdef _MSC_VER
 	#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS,__VA_ARGS__); fflush(stdout); }
 #else
@@ -44,6 +45,7 @@ static const char	*END="e";
 
 static const char	*VALUE="v";
 static const char	*CASE="c";
+static const char	*RECURSIVE="r";
 
 static const char	INLINE='i';
 static const char	LITERAL='l';
@@ -60,16 +62,19 @@ static const char	STX=0x2;
 class grammar : public xmldom {
 	public:
 			grammar();
+		bool	hasRecursiveBreak();
 	protected:
 		bool	tagStart(const char *name);
 		bool	attributeName(const char *name);
 		bool	attributeValue(const char *value);
 	private:
 		char	previousattribute;
+		bool	hasrecursivebreak;
 };
 
 grammar::grammar() : xmldom(false) {
 	previousattribute='\0';
+	hasrecursivebreak=false;
 }
 
 bool grammar::tagStart(const char *name) {
@@ -99,6 +104,9 @@ bool grammar::attributeName(const char *name) {
         char	newname[2];
 	newname[0]=name[0];
 	newname[1]='\0';
+	if (newname[0]=='r') {
+		hasrecursivebreak=true;
+	}
 	return xmldom::attributeName(newname);
 }
 
@@ -124,6 +132,15 @@ bool grammar::attributeValue(const char *value) {
 	return xmldom::attributeValue(newvalue);
 }
 
+bool grammar::hasRecursiveBreak() {
+	return hasrecursivebreak;
+}
+
+struct break_t {
+	const char	*value;
+	size_t		valuelength;
+	const char	*casesensitive;
+};
 
 // private members of the codetree class
 class codetreeprivate {
@@ -132,17 +149,19 @@ class codetreeprivate {
 		grammar		_grammar;
 		xmldomnode	*_grammartag;
 		bool		_error;
-		uint32_t	_indentlevel;
+		uint32_t	_depth;
 		const char	*_indentstring;
 		size_t		_indentlength;
 		bool		_previousparsechildretval;
-		bool		_break;
 		const char	*_beginningofinput;
 		const char	*_finalcodeposition;
 		uint8_t		_debuglevel;
 		stringbuffer	_excbuffer;
 		xmldomnode	*_excnode;
 		bool		_endofstring;
+
+		bool					_break;
+		linkedlist< linkedlist< break_t * > * >	_breakstack;
 };
 
 
@@ -150,7 +169,7 @@ class codetreeprivate {
 codetree::codetree() {
 	pvt=new codetreeprivate;
 	pvt->_error=false;
-	pvt->_indentlevel=0;
+	pvt->_depth=0;
 	pvt->_indentstring="\t";
 	pvt->_grammartag=NULL;
 	pvt->_previousparsechildretval=true;
@@ -267,7 +286,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 		return true;
 	}
 
-	pvt->_indentlevel++;
+	pvt->_depth++;
 
 	pvt->_finalcodeposition=*codeposition;
 
@@ -443,7 +462,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 	}
 	delete localntbuffer;
 
-	pvt->_indentlevel--;
+	pvt->_depth--;
 	pvt->_previousparsechildretval=retval;
 	return retval;
 }
@@ -484,6 +503,8 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 	bool	oldbreak=pvt->_break;
 	pvt->_break=false;
 
+	pushBreakStack();
+
 	// one of the children must parse successfully
 	bool	retval=false;
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
@@ -492,7 +513,12 @@ bool codetree::parseAlternation(xmldomnode *grammarnode,
 			retval=true;
 			break;
 		}
+		if (pvt->_break) {
+			break;
+		}
 	}
+
+	popBreakStack();
 
 	// process a break and restore break state...
 	// if a break was encountered and it resulted in
@@ -598,34 +624,19 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
+	// first check for a break
+	if (parseBreakStack(codeposition)) {
+		return false;
+	}
+
 	// get the attributes of this terminal
 	const char	*value=grammarnode->getAttributeValue(VALUE);
 	size_t		valuelength=charstring::length(value);
 	const char	*casesensitive=grammarnode->getAttributeValue(CASE);
 
-	// first, check for beginning-of-line characters,
-	// which should only occur at the beginning of a value
-	// (STX is used to represent the beginning of a line)
-	if (value && value[0]==STX) {
-		if (*codeposition==pvt->_beginningofinput ||
-					*(*codeposition-1)=='\n') {
-			value++;
-			valuelength--;
-		} else {
-			return false;
-		}
-	}
-
-	// see if the code matches this terminal
-	bool	match=(casesensitive && casesensitive[0]=='f')?
-			!charstring::compareIgnoringCase(
-					value,*codeposition,valuelength):
-			!charstring::compare(
-					value,*codeposition,valuelength);
-
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (match) {
+	if (compareValue(*codeposition,value,&valuelength,casesensitive)) {
 		debugPrintIndent(4);
 		debugPrintf(4,"terminal \"");
 		debugSafePrint(4,value);
@@ -641,10 +652,37 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 	return false;
 }
 
+bool codetree::compareValue(const char *code,
+				const char *value, size_t *valuelength,
+				const char *casesensitive) {
+
+	// first, check for beginning-of-line characters,
+	// which should only occur at the beginning of a value
+	// (STX is used to represent the beginning of a line)
+	if (value && value[0]==STX) {
+		if (code==pvt->_beginningofinput || *(code-1)=='\n') {
+			value++;
+			(*valuelength)--;
+		} else {
+			return false;
+		}
+	}
+
+	// see if the code matches this value
+	return (casesensitive && casesensitive[0]=='f')?
+		!charstring::compareIgnoringCase(value,code,*valuelength):
+		!charstring::compare(value,code,*valuelength);
+}
+
 bool codetree::parseLetter(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
+
+	// first check for a break
+	if (parseBreakStack(codeposition)) {
+		return false;
+	}
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
@@ -666,6 +704,11 @@ bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
 					xmldomnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer) {
+
+	// first check for a break
+	if (parseBreakStack(codeposition)) {
+		return false;
+	}
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
@@ -689,6 +732,11 @@ bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
 					const char **codeposition,
 					stringbuffer *ntbuffer) {
 
+	// first check for a break
+	if (parseBreakStack(codeposition)) {
+		return false;
+	}
+
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isUpperCase((int32_t)(**codeposition))) {
@@ -711,6 +759,11 @@ bool codetree::parseDigit(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
+	// first check for a break
+	if (parseBreakStack(codeposition)) {
+		return false;
+	}
+
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isDigit((int32_t)(**codeposition))) {
@@ -731,6 +784,11 @@ bool codetree::parseSet(xmldomnode *grammarnode,
 				xmldomnode *treeparent,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
+
+	// first check for a break
+	if (parseBreakStack(codeposition)) {
+		return false;
+	}
 
 	// get the set value
 	const char	*value=grammarnode->getAttributeValue(VALUE);
@@ -761,30 +819,25 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 	const char	*value=grammarnode->getAttributeValue(VALUE);
 	size_t		valuelength=charstring::length(value);
 	const char	*casesensitive=grammarnode->getAttributeValue(CASE);
+	const char	*recurse=grammarnode->getAttributeValue(RECURSIVE);
 
-	// first, check for beginning-of-line characters,
-	// which should only occur at the beginning of a value
-	// (STX is used to represent the beginning of a line)
-	if (value && value[0]==STX) {
-		if (*codeposition==pvt->_beginningofinput ||
-					*(*codeposition-1)=='\n') {
-			value++;
-			valuelength--;
-		} else {
-			return false;
-		}
+	// add this break to the stack, if necessary
+	if (recurse && recurse[0]=='t') {
+		break_t	*b=new break_t;
+		b->value=value;
+		b->valuelength=valuelength;
+		b->casesensitive=casesensitive;
+		pvt->_breakstack.getLast()->getValue()->append(b);
+
+		debugPrintIndent(2);
+		debugPrintf(2,"adding break \"");
+		debugSafePrint(2,value);
+		debugPrintf(2,"\" to break stack\n");
 	}
-
-	// see if the code matches this terminal
-	bool	match=(casesensitive && casesensitive[0]=='f')?
-			!charstring::compareIgnoringCase(
-					value,*codeposition,valuelength):
-			!charstring::compare(
-					value,*codeposition,valuelength);
 
 	// return true or false but don't advance the code position or append
 	// the value to the nonterminal
-	if (match) {
+	if (compareValue(*codeposition,value,&valuelength,casesensitive)) {
 		debugPrintIndent(2);
 		debugPrintf(2,"break \"");
 		debugSafePrint(2,value);
@@ -899,6 +952,63 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 	return false;
 }
 
+void codetree::pushBreakStack() {
+	if (!pvt->_grammar.hasRecursiveBreak()) {
+		return;
+	}
+	pvt->_breakstack.append(new linkedlist< break_t * >());
+}
+
+void codetree::popBreakStack() {
+	if (!pvt->_grammar.hasRecursiveBreak()) {
+		return;
+	}
+	linkedlistnode< linkedlist< break_t * > * >
+			*stacknode=pvt->_breakstack.getLast();
+	pvt->_breakstack.detach(stacknode);
+	for (linkedlistnode< break_t * > *listnode=
+			stacknode->getValue()->getFirst();
+			listnode; listnode=listnode->getNext()) {
+		delete[] listnode->getValue();
+	}
+	delete stacknode->getValue();
+	delete stacknode;
+}
+
+bool codetree::parseBreakStack(const char **codeposition) {
+
+	if (!pvt->_grammar.hasRecursiveBreak()) {
+		return false;
+	}
+
+	// for each set of breaks...
+	for (linkedlistnode< linkedlist< break_t * > * >
+			*stacknode=pvt->_breakstack.getLast();
+			stacknode; stacknode=stacknode->getPrevious()) {
+
+		// for each break in the set...
+		for (linkedlistnode< break_t * >
+				*listnode=stacknode->getValue()->getLast();
+				listnode; listnode=listnode->getPrevious()) {
+
+			// do the next few characters match?
+			break_t	*b=listnode->getValue();
+			if (compareValue(*codeposition,
+					b->value,&(b->valuelength),
+					b->casesensitive)) {
+
+				debugPrintIndent(2);
+				debugPrintf(2,"break \"");
+				debugSafePrint(2,b->value);
+				debugPrintf(2,"\" found (from stack)\n");
+				pvt->_break=true;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 bool codetree::write(xmldomnode *input,
 			const char *grammar,
 			stringbuffer *output) {
@@ -918,7 +1028,7 @@ bool codetree::write(xmldomnode *input,
 	}
 
 	// re-init indent
-	pvt->_indentlevel=0;
+	pvt->_depth=0;
 	pvt->_indentstring=pvt->_grammartag->getAttributeValue(INDENT);
 	if (!pvt->_indentstring) {
 		pvt->_indentstring="\t";
@@ -981,9 +1091,9 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		output->append(value);
 	} else {
 
-		// increase pvt->_indentlevel
+		// increase pvt->_depth
 		if (block) {
-			pvt->_indentlevel++;
+			pvt->_depth++;
 		}
 
 		// write the children
@@ -995,9 +1105,9 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 			}
 		}
 
-		// decrease indentlevel
+		// decrease depth
 		if (block) {
-			pvt->_indentlevel--;
+			pvt->_depth--;
 		}
 	}
 
@@ -1017,7 +1127,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 }
 
 void codetree::indent(stringbuffer *output) {
-	for (uint32_t i=0; i<pvt->_indentlevel; i++) {
+	for (uint32_t i=0; i<pvt->_depth; i++) {
 		output->append(pvt->_indentstring);
 	}
 }
@@ -1029,15 +1139,15 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 	}
 
 	// save indent level
-	uint32_t	startindentlevel=pvt->_indentlevel;
+	uint32_t	startdepth=pvt->_depth;
 
 	// if it started with a backspace then either remove the preceeding
 	// carriage-return/line-feed or back up one level of indention
 	if (string[0]=='\b') {
 
 		// make sure not to attempt to indent less than 0
-		if (pvt->_indentlevel) {
-			pvt->_indentlevel--;
+		if (pvt->_depth) {
+			pvt->_depth--;
 		}
 
 		const char	*outstr=output->getString();
@@ -1066,5 +1176,5 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 	}
 
 	// restore indent level
-	pvt->_indentlevel=startindentlevel;
+	pvt->_depth=startdepth;
 }

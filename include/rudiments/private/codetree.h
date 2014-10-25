@@ -33,6 +33,10 @@
 					xmldomnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
+		bool	compareValue(const char *code,
+					const char *value,
+					size_t *valuelength,
+					const char *casesensitive);
 		bool	parseLetter(xmldomnode *grammarnode,
 					xmldomnode *treeparent,
 					const char **codeposition,
@@ -61,6 +65,10 @@
 					xmldomnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
+
+		void	pushBreakStack();
+		void	popBreakStack();
+		bool	parseBreakStack(const char **codeposition);
 
 		bool	writeNode(xmldomnode *node,
 					stringbuffer *output);
