@@ -137,7 +137,7 @@ class codetreeprivate;
  *             XML entity &#2; (start of text).
  *
  *     case - Whether the terminal is case-sensitive or not.  Acceptable values
- *            are true or false.
+ *            are true or false.  Defaults to false.
  *
  *     Examples:
  *
@@ -238,6 +238,33 @@ class codetreeprivate;
  *                 <terminal value=" --&gt;"/>
  *             </concatenation>
  *         </definition>
+ *
+ * The break tag has the following attributes:
+ *
+ *     value - The text of the break.  Ascii characters or XML entities
+ *             can be used.  To specify the end of a line, use XML entity
+ *             &#10; (newline).  To specify the beginning of a line, use
+ *             XML entity &#2; (start of text).
+ *
+ *     case - Whether the break text is case-sensitive or not.  Acceptable
+ *            values are true or false.  Defaults to false.
+ *
+ *     recursive - Acceptable values are true or false.  Defaults to false.
+ *                 When set false, the parser only looks for the break text
+ *                 at the point that it is defined.  When set true, the parser
+ *                 looks for the break text when parsing siblings as well.
+ *
+ *                 In the above example, the parser would only look for " -->"
+ *                 at the beginning of each repetition.  This is fine if each
+ *                 of the nonterminals only processes a single character.
+ *
+ *                 But, if the nonterminal "symbol" looked for a string of
+ *                 symbols rather than a single symbol, the break would need to
+ *                 be defined as recursive or the parser would miss it if it
+ *                 ran into something like "! -->".
+ *
+ *                 It is often safe to define all breaks as recursive, but
+ *                 non-recursive breaks perform better.
  *
  *
  * These tags may be used together to define nonterminals and ultimately a set

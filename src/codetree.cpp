@@ -162,6 +162,7 @@ class codetreeprivate {
 
 		bool					_break;
 		linkedlist< linkedlist< break_t * > * >	_breakstack;
+		uint64_t				_breakcount;
 };
 
 
@@ -173,11 +174,12 @@ codetree::codetree() {
 	pvt->_indentstring="\t";
 	pvt->_grammartag=NULL;
 	pvt->_previousparsechildretval=true;
-	pvt->_break=false;
 	pvt->_finalcodeposition=NULL;
 	pvt->_debuglevel=0;
 	pvt->_excnode=NULL;
 	pvt->_endofstring=false;
+	pvt->_break=false;
+	pvt->_breakcount=0;
 }
 
 codetree::~codetree() {
@@ -828,6 +830,7 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 		b->valuelength=valuelength;
 		b->casesensitive=casesensitive;
 		pvt->_breakstack.getLast()->getValue()->append(b);
+		pvt->_breakcount++;
 
 		debugPrintIndent(2);
 		debugPrintf(2,"adding break \"");
@@ -966,6 +969,7 @@ void codetree::popBreakStack() {
 	linkedlistnode< linkedlist< break_t * > * >
 			*stacknode=pvt->_breakstack.getLast();
 	pvt->_breakstack.detach(stacknode);
+	pvt->_breakcount=pvt->_breakcount-stacknode->getValue()->getLength();
 	for (linkedlistnode< break_t * > *listnode=
 			stacknode->getValue()->getFirst();
 			listnode; listnode=listnode->getNext()) {
@@ -977,7 +981,7 @@ void codetree::popBreakStack() {
 
 bool codetree::parseBreakStack(const char **codeposition) {
 
-	if (!pvt->_grammar.hasRecursiveBreak()) {
+	if (!pvt->_grammar.hasRecursiveBreak() || !pvt->_breakcount) {
 		return false;
 	}
 
