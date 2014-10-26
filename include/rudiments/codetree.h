@@ -263,9 +263,6 @@ class codetreeprivate;
  *                 be defined as recursive or the parser would miss it if it
  *                 ran into something like "! -->".
  *
- *                 It is often safe to define all breaks as recursive, but
- *                 non-recursive breaks perform better.
- *
  *
  * These tags may be used together to define nonterminals and ultimately a set
  * of nonterminals may be used to define a grammar.
