@@ -20,7 +20,8 @@
 #endif
 
 // LAME: not in the class
-#if !defined(RUDIMENTS_HAVE_RAND_R)
+#if !defined(RUDIMENTS_HAVE_RAND_R) && \
+	!defined(RUDIMENTS_HAVE_RANDOM_R)
 static threadmutex	*_rnmutex;
 #endif
 
@@ -43,10 +44,20 @@ int32_t randomnumber::getSeed() {
 
 int32_t randomnumber::generateNumber(int32_t seed) {
 
-	// FIXME: use random(_r)()/srandom(_r)()/
-	//		initstate(_r)()/setstate(_r)() instead?
-
-	#ifdef RUDIMENTS_HAVE_RAND_R
+	#if defined(RUDIMENTS_HAVE_RANDOM_R)
+		char		statebuf[64];
+		random_data	buffer;
+		rawbuffer::zero(statebuf,sizeof(statebuf));
+		rawbuffer::zero(&buffer,sizeof(buffer));
+		if (initstate_r(seed,statebuf,sizeof(statebuf),&buffer)) {
+			return -1;
+		}
+		int32_t	res;
+		if (random_r(&buffer,&res)) {
+			return -1;
+		}
+		return res;
+	#elif defined(RUDIMENTS_HAVE_RAND_R)
 		uint32_t	useed=seed;
 		return rand_r(&useed);
 	#else
@@ -64,15 +75,17 @@ int32_t randomnumber::generateNumber(int32_t seed) {
 
 int32_t randomnumber::generateScaledNumber(int32_t seed,
 					int32_t lower, int32_t upper) {
-	return lower+
-		(int32_t)(((float)generateNumber(seed)*
-				(float)(upper-lower))/float(RAND_MAX));
+	return scaleNumber(generateNumber(seed),lower,upper);
 }
 
 int32_t randomnumber::scaleNumber(int32_t number,
 					int32_t lower, int32_t upper) {
-	return lower+(int32_t)(((float)number*(float)(upper-lower))/
-							float(RAND_MAX));
+	float	originalrange=(int64_t)getRandMax()+1;
+	float	newrange=(float)abs(upper-lower)+1.0;
+	float	shrunk=((float)number)/originalrange;
+	float	expanded=shrunk*newrange;
+	int32_t	shifted=lower+(int32_t)expanded;
+	return shifted;
 }
 
 int32_t randomnumber::getRandMax() {
@@ -80,7 +93,8 @@ int32_t randomnumber::getRandMax() {
 }
 
 bool randomnumber::needsMutex() {
-	#if !defined(RUDIMENTS_HAVE_RAND_R)
+	#if !defined(RUDIMENTS_HAVE_RAND_R) && \
+		!defined(RUDIMENTS_HAVE_RANDOM_R)
 		return true;
 	#else
 		return false;
@@ -88,7 +102,8 @@ bool randomnumber::needsMutex() {
 }
 
 void randomnumber::setMutex(threadmutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_RAND_R)
+	#if !defined(RUDIMENTS_HAVE_RAND_R) && \
+		!defined(RUDIMENTS_HAVE_RANDOM_R)
 		_rnmutex=mtx;
 	#endif
 }
