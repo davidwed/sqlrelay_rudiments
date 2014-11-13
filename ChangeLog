@@ -17,6 +17,8 @@
 		indefinitely
 	added support for a beginning-of-line character to codetree
 	added support for recursive breaks to codetree
+	made charstring::compareIgnoringCase null-safe for platforms that
+		don't have str(n)casecmp
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

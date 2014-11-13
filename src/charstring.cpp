@@ -963,6 +963,9 @@ int32_t charstring::compareIgnoringCase(const char *str1, const char *str2) {
 	#ifdef RUDIMENTS_HAVE_STRCASECMP
 		return (str1 && str2)?strcasecmp(str1,str2):(str1!=str2);
 	#else
+		if (!str1 || !str2) {
+			return (str1!=str2);
+		}
 		const char	*ptr1=str1;
 		const char	*ptr2=str2;
 		int32_t		diff=0;
@@ -989,6 +992,9 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 	#ifdef RUDIMENTS_HAVE_STRNCASECMP
 		return (str1 && str2)?strncasecmp(str1,str2,size):(str1!=str2);
 	#else
+		if (!str1 || !str2) {
+			return (str1!=str2);
+		}
 		size_t		count=0;
 		const char	*ptr1=str1;
 		const char	*ptr2=str2;
