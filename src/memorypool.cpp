@@ -69,9 +69,6 @@ memorypool::~memorypool() {
 
 unsigned char *memorypool::allocate(size_t length) { 
 
-	// add the length to the total size
-	pvt->_totalusedsize=pvt->_totalusedsize+length;
-
 	// look for a node with enough memory remaining
 	memorypoollistnode	*node=pvt->_nodelist.getFirst();
 	memorypoolnode		*memnode;
@@ -88,14 +85,19 @@ unsigned char *memorypool::allocate(size_t length) {
 	if (!node) {
 		// increase size by increments of at least 10% for better
 		// performance and 10% max memory usage penalty - Claudio Freire
-		size_t	incr=pvt->_increment;
-		size_t	tot=pvt->_totalusedsize;
-		if (incr<(tot/10)) {
-			incr=(tot/10);
+		size_t	incr=length;
+		if (incr<pvt->_increment) {
+			incr=pvt->_increment;
 		}
-		memnode=new memorypoolnode((length>incr)?length:incr);
+		if (incr<(pvt->_totalusedsize/10)) {
+			incr=(pvt->_totalusedsize/10);
+		}
+		memnode=new memorypoolnode(incr);
 		pvt->_nodelist.append(memnode);
 	}
+
+	// add the length to the total size
+	pvt->_totalusedsize=pvt->_totalusedsize+length;
 
 	// return the buffer
 	unsigned char	*buffer=memnode->_buffer+memnode->_position;
@@ -130,12 +132,11 @@ void memorypool::deallocate() {
 		delete[] first->_buffer;
 		first->_buffer=new unsigned char[pvt->_initialsize];
 		first->_size=pvt->_initialsize;
-		first->_remaining=pvt->_initialsize;
 	}
 
 	// reset position and remaining on the first node
 	first->_position=0;
-	first->_remaining=pvt->_initialsize;
+	first->_remaining=first->_size;
 
 	// delete all nodes beyond the first node
 	memorypoollistnode	*currentlistnode=firstlistnode->getNext();
