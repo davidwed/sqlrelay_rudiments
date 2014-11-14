@@ -383,11 +383,12 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			// for x86:
 			const unsigned char	machinecode32[]={
 				// load second parameter (0)
-				0x6A,			// push 
-				0x0,			// 0
-				// load first parameter (0)
-				0x6A,			// push 
-				0x0,			// 0
+				// (we'll overwrite this in a minute)
+				0x68,			// push (word)
+				0x0,0x0,0x0,0x0,	// 0
+				// load first parameter (1)
+				0x6A,			// push (byte)
+				0x1,			// 1
 				// load the absolute address of the function to
 				// call (for now use 0, we'll overwrite this in
 				// a minute)
@@ -404,14 +405,20 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			size_t		machinecode32size=sizeof(machinecode32);
 
 			// copy the code into a buffer and
-			// replace the call address
+			// replace the second parameter and call address
 			unsigned char		*updatedmachinecode32=
 				(unsigned char *)bytestring::duplicate(
 							machinecode32,
 							machinecode32size);
+
 			uint32_t	*addr=
-				(uint32_t *)(updatedmachinecode32+5);
+				(uint32_t *)(updatedmachinecode32+1);
+			// FIXME: for some reason this doesn't work...
+			//*addr=(uint32_t)processid;
+
+			addr=(uint32_t *)(updatedmachinecode32+8);
 			*addr=(uint32_t)funcaddr;
+
 			updatedmachinecode=updatedmachinecode32;
 			machinecodesize=machinecode32size;
 
@@ -424,6 +431,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 				0x48,0x83,0xEC,		// sub rsp
 				0x28,			// 0x28
 				// load second parameter (0)
+				// (we'll overwrite this in a minute)
 				0x48,0xC7,0xC2,		// mov rdx
 				0x00,0x00,0x00,0x00,	// 0
 				// load first parameter (0)
