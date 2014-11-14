@@ -12,6 +12,8 @@
 
 int main(int argc, const char **argv) {
 
+	stdoutput.printf("pid: %d\n",process::getProcessId());
+
 	// listen on inet socket port 1800
 	inetsocketserver	inetsock;
 	bool	inetlisten=inetsock.listen(NULL,8000,15);

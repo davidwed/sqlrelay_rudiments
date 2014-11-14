@@ -445,14 +445,15 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 			size_t		machinecode64size=sizeof(machinecode64);
 
 			// copy the code into a buffer and
-			// replace the call address
+			// replace the second parameter and call address
 			unsigned char		*updatedmachinecode64=
 				(unsigned char *)bytestring::duplicate(
 							machinecode64,
 							machinecode64size);
-			uint64_t	*addr=
+			uint64_t	*addr64=
 				(uint64_t *)(updatedmachinecode64+20);
-			*addr=(uint64_t)funcaddr;
+			*addr64=(uint64_t)funcaddr;
+
 			updatedmachinecode=updatedmachinecode64;
 			machinecodesize=machinecode64size;
 		#endif

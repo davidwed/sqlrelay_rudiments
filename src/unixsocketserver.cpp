@@ -52,6 +52,23 @@ unixsocketserver &unixsocketserver::operator=(const unixsocketserver &u) {
 }
 
 unixsocketserver::~unixsocketserver() {
+	// filedescriptor's destructor calls close(), why the close() call here?
+	// Destructors don't always call overridden methods, but rather the
+	// version defined in that class.  In this case, lowLevelClose() needs
+	// to be called from this class, especially on Windows where
+	// closesocket() must be called rather than close() to prevent a crash.
+	// If close() is called here, it will eventually call this method's
+	// lowLevelClose() rather than filedescriptor::lowLevelClose().
+	#ifdef _WIN32
+		// However, on windows, we're faking unix sockets using inet
+		// sockets, and the actual inet socket will be closed during
+		// the delete below, so don't close anything here, just set the
+		// filedescriptor to -1 so the filedescriptor destructor
+		// doesn't try to close anything when it runs.
+		setFileDescriptor(-1);
+	#else
+		close();
+	#endif
 	delete pvt;
 }
 
