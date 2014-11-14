@@ -318,8 +318,13 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		// Yes, the ridiculousness below is the only "reasonable"
 		// way to do this...
 
+		// First... SIGINT is really CTRL-C, but processes created with
+		// the CREATE_NEW_PROCESS_GROUP flag don't respond to CTRL-C.
+		// All processes respond to CTRL-BREAK though, so we need to
+		// use that instead.
+
 		// Ideally for SIGINT/SIGTERM we'd just run
-		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,processid) but that
+		// GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,processid) but that
 		// only works if the calling process is in the same process
 		// group as processid (ie. a parent or child of processid).
 		// 
@@ -328,13 +333,13 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		// thread in the target process using CreateRemoteThread.
 		// 
 		// Ideally we'd just tell it to run
-		// GenerateConsoleCtrlEvent(CTRL_C_EVENT,0) but
+		// GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,0) but
 		// CreateRemoteThread only allows you to pass one argument
 		// to the function that it runs and we need to pass two.
 		//
 		// The only "obvious" way to do this is to do define a chunk
 		// of memory containing the machine code for a function that
-		// runs GenerateConsoleCtrlEvent(CTRL_C_EVENT,0) and copy it
+		// runs GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,0) and copy it
 		// over to the target process.
  		//
 		// Then we can create a thread over there and aim the thread at
@@ -423,7 +428,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 				0x00,0x00,0x00,0x00,	// 0
 				// load first parameter (0)
 				0x48,0xC7,0xC1,		// mov rcx
-				0x00,0x00,0x00,0x00,	// 0
+				0x01,0x00,0x00,0x00,	// 1
 				// load the absolute address of the function to
 				// call (for now use 0, we'll overwrite this in
 				// a minute)
@@ -450,6 +455,11 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 				(unsigned char *)bytestring::duplicate(
 							machinecode64,
 							machinecode64size);
+
+			uint32_t	*addr32=
+				(uint32_t *)(updatedmachinecode64+7);
+			*addr32=(uint32_t)processid;
+
 			uint64_t	*addr64=
 				(uint64_t *)(updatedmachinecode64+20);
 			*addr64=(uint64_t)funcaddr;
@@ -511,11 +521,18 @@ bool signalmanager::raiseSignal(int32_t signum) {
 		switch (signum) {
 			case SIGINT:
 			case SIGTERM:
-				if (GenerateConsoleCtrlEvent(CTRL_C_EVENT,0)) {
+				// SIGINT is really CTRL-C, but processes
+				// created with the CREATE_NEW_PROCESS_GROUP
+				// flag don't respond to CTRL-C.  All processes
+				// respond to CTRL-BREAK though, so we need to
+				// use that instead.
+				if (GenerateConsoleCtrlEvent(
+						CTRL_BREAK_EVENT,0)) {
 					return true;
 				}
 			case SIGKILL:
-				if (TerminateProcess(INVALID_HANDLE_VALUE,1)) {
+				if (TerminateProcess(
+						INVALID_HANDLE_VALUE,1)) {
 					return true;
 				}
 			case SIGFPE:
@@ -645,7 +662,10 @@ class signalhandlerprivate {
 			struct sigaction	_handlerstruct;
 		#endif
 		#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
-			static signalhandlerprivate	*_sigsegvinstance;
+			void		(*_siginthandler)(int32_t);
+			static signalhandlerprivate	*_ctrlinst;
+			static BOOL	_ctrlHandler(DWORD ctrltype);
+			static signalhandlerprivate	*_sigsegvinst;
 			static LONG	_sigsegvFilter(
 						struct _EXCEPTION_POINTERS *ei);
 		#endif
@@ -657,6 +677,9 @@ signalhandler::signalhandler() {
 	pvt->_sset=NULL;
 	pvt->_flags=0;
 	pvt->_handler=NULL;
+	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+		pvt->_siginthandler=NULL;
+	#endif
 }
 
 signalhandler::~signalhandler() {
@@ -700,10 +723,28 @@ bool signalhandler::handleSignal(int32_t signum) {
 }
 
 #if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
-signalhandlerprivate	*signalhandlerprivate::_sigsegvinstance=NULL;
+signalhandlerprivate	*signalhandlerprivate::_ctrlinst=NULL;
+BOOL signalhandlerprivate::_ctrlHandler(DWORD ctrltype) {
+	switch (ctrltype) {
+		case CTRL_C_EVENT:
+		case CTRL_BREAK_EVENT:
+			if (_ctrlinst->_siginthandler) {
+				_ctrlinst->_siginthandler(SIGINT);
+			} else {
+				process::exit(0);
+			}
+			break;
+		case CTRL_CLOSE_EVENT:
+		case CTRL_LOGOFF_EVENT:
+		case CTRL_SHUTDOWN_EVENT:
+			break;
+	}
+	return TRUE;
+}
 
+signalhandlerprivate	*signalhandlerprivate::_sigsegvinst=NULL;
 LONG signalhandlerprivate::_sigsegvFilter(struct _EXCEPTION_POINTERS *ei) {
-	_sigsegvinstance->_handler(SIGSEGV);
+	_sigsegvinst->_handler(SIGSEGV);
 	return EXCEPTION_CONTINUE_EXECUTION;
 }
 #endif
@@ -719,8 +760,13 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 			#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
 			case SIGINT:
 			case SIGTERM:
+				pvt->_siginthandler=pvt->_handler;
+				// FIXME: use pointer to member function
+				// rather than this silliness
+				signalhandlerprivate::_ctrlinst=this->pvt;
 				return SetConsoleCtrlHandler(
-					(PHANDLER_ROUTINE)pvt->_handler,
+					(PHANDLER_ROUTINE)
+					signalhandlerprivate::_ctrlHandler,
 					TRUE)==TRUE;
 			#endif
 			#if defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
@@ -728,12 +774,12 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 			case SIGFPE:
 			case SIGILL:
 			case SIGSEGV:
-				{
-					pvt->_sigsegvinstance=this->pvt;
-					SetUnhandledExceptionFilter(
-						(LPTOP_LEVEL_EXCEPTION_FILTER)
-						pvt->_sigsegvFilter);
-				}
+				// FIXME: use pointer to member function
+				// rather than this silliness
+				signalhandlerprivate::_sigsegvinst=this->pvt;
+				SetUnhandledExceptionFilter(
+					(LPTOP_LEVEL_EXCEPTION_FILTER)
+					signalhandlerprivate::_sigsegvFilter);
 				return true;
 			#endif
 		}
