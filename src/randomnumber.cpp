@@ -27,7 +27,8 @@ class randomnumberprivate {
 		#elif defined(RUDIMENTS_HAVE_RANDOM_R)
 			char		statebuf[64];
 			random_data	buffer;
-		#elif defined(RUDIMENTS_HAVE_RAND_R)
+		#elif defined(RUDIMENTS_HAVE_RAND_R) && \
+			!defined(RUDIMENTS_HAVE_ARC4RANDOM)
 			uint32_t	seed;
 		#elif defined(RUDIMENTS_HAVE_LRAND48_R)
 			drand48_data	buffer;
