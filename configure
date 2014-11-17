@@ -15895,7 +15895,6 @@ fi
 
 
 
-
 WNOOVERLOADEDVIRTUAL=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether -Wno-overloaded-virtual is needed" >&5
 $as_echo_n "checking whether -Wno-overloaded-virtual is needed... " >&6; }

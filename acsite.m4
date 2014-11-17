@@ -310,7 +310,7 @@ AC_SUBST(WNOFORMAT)
 
 
 
-dnl checks to see if -Wno-format option is needed
+dnl checks to see if -Wno-overloaded-virtual option is needed
 AC_DEFUN([FW_CHECK_WNOOVERLOADEDVIRTUAL],
 [
 
