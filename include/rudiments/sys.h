@@ -264,8 +264,6 @@ class RUDIMENTS_DLLSPEC sys {
 		/** Use the sysconf() system call directly to access values
 		 *  other than the ones provided above. */
 		static	int64_t	sysConf(int32_t name);
-
-	#include <rudiments/private/sys.h>
 };
 
 #endif

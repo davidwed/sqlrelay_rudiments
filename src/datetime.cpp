@@ -159,7 +159,8 @@ bool datetime::initialize(const char *tmstring) {
 	pvt->_isdst=-1;
 
 	// parse out the time zone if it was provided
-	if ((ptr=charstring::findFirst(ptr,' '))) {
+	ptr=charstring::findFirst(ptr,' ');
+	if (ptr) {
 		ptr=ptr+sizeof(char);
 		pvt->_zone=(ptr && ptr[0])?charstring::duplicate(ptr):NULL;
 	} else {

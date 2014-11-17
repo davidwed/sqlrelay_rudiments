@@ -360,6 +360,8 @@ FW_CHECK_WALL
 
 FW_CHECK_WNOFORMAT
 
+FW_CHECK_WNOOVERLOADEDVIRTUAL
+
 dnl Remove -Wall and -Werror from CPPFLAGS/CXXFLAGS as they cause way to many
 dnl problems with the test programs.  They will be reincluded later if
 dnl appropriate.
@@ -3741,7 +3743,7 @@ fi
 if ( test "$INCLUDE_SYSTEM" = "1" )
 then
 	HEADERS="$HEADERS sys.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS sys.h sysincludes.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS sysincludes.h"
 	SRCS="$SRCS sys.cpp"
 	LOBJS="$LOBJS sys.lo"
 fi
