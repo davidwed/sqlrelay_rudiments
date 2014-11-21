@@ -199,7 +199,8 @@ char *hostentry::getAddressString(int32_t index) const {
 char *hostentry::getAddressString(const char *hostname) {
 	hostentry	he;
 	if (he.initialize(hostname)) {
-		return he.getAddressString(0);
+		// Minix 3.1.8 needs the int32_t cast.
+		return he.getAddressString((int32_t)0);
 	}
 	return NULL;
 }
@@ -216,7 +217,8 @@ char *hostentry::getAddressString(const char *address,
 					int32_t len, int32_t type) {
 	hostentry	he;
 	if (he.initialize(address,len,type)) {
-		return he.getAddressString(0);
+		// Minix 3.1.8 needs the int32_t cast.
+		return he.getAddressString((int32_t)0);
 	}
 	return NULL;
 }

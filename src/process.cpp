@@ -662,7 +662,8 @@ pid_t process::getChildStateChange(pid_t pid,
 	// wait
 	int32_t	childpid=-1;
 	do {
-		childpid=waitpid(pid,&status,options);
+		// Minix 3.1.8 needs the int * cast
+		childpid=waitpid(pid,(int *)&status,options);
 	} while (childpid==-1 && error::getErrorNumber()==EINTR);
 
 	// set return values
