@@ -418,14 +418,13 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 			pvt->_writereadylist.clear();
 			#if defined(RUDIMENTS_HAVE_KQUEUE)
 				for (int32_t i=0; i<result; i++) {
-					if (pvt->_rkevs[i].filter&
-							EVFILT_READ) {
+					if (pvt->_rkevs[i].filter==
+								EVFILT_READ) {
 						pvt->_readreadylist.append(
 							(filedescriptor *)
 							pvt->_rkevs[i].udata);
-					}
-					if (pvt->_rkevs[i].filter&
-							EVFILT_WRITE) {
+					} else if (pvt->_rkevs[i].filter==
+								EVFILT_WRITE) {
 						pvt->_readreadylist.append(
 							(filedescriptor *)
 							pvt->_rkevs[i].udata);
@@ -575,7 +574,7 @@ bool listener::rebuildMonitorList() {
 
 			EV_SET(&pvt->_kevs[fdcount],
 				node->getValue()->fd->getFileDescriptor(),
-				filter,EV_ADD,0,0,fdptr);
+				filter,EV_ADD|EV_ENABLE,0,0,fdptr);
 			EV_SET(&pvt->_rkevs[fdcount],0,0,0,0,0,0);
 
 		#elif defined(RUDIMENTS_HAVE_EPOLL)

@@ -21,6 +21,7 @@
 		don't have str(n)casecmp
 	improved Windows support in signal classes
 	-Wno-overloaded-virtual is now set when clang is used
+	fixed some subtle kqueue-related bugs
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber
