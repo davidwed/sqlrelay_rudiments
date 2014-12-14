@@ -612,6 +612,10 @@ AC_MSG_CHECKING(for os/kernel/OS.h)
 AC_TRY_LINK([#include <os/kernel/OS.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_OS_KERNEL_OS_H,1,Some systems have os/kernel/OS.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for sys/byteorder.h)
+AC_TRY_LINK([#include <sys/byteorder.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H,1,Some systems have sys/byteorder.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for os/support/ByteOrder.h)
 AC_TRY_LINK([#include <os/support/ByteOrder.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H,1,Some systems have os/support/ByteOrder.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
