@@ -532,6 +532,9 @@
 /* Some systems have HANDLE_FLAG_INHERIT */
 #undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT
 
+/* Some systems have htonll */
+#undef RUDIMENTS_HAVE_HTONLL
+
 /* Some systems have inet_addr */
 #undef RUDIMENTS_HAVE_INET_ADDR
 
@@ -744,6 +747,9 @@
 
 /* Some systems define _NSGetEnviron in crt_externs.h */
 #undef RUDIMENTS_HAVE_NSGETENVIRON
+
+/* Some systems have ntohll */
+#undef RUDIMENTS_HAVE_NTOHLL
 
 /* Some systems have open */
 #undef RUDIMENTS_HAVE_OPEN

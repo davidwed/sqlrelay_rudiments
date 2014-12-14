@@ -2721,6 +2721,30 @@ dnl Checks for byte swap functions
 echo
 echo "***** Byte Swap Functions ****"
 
+AC_MSG_CHECKING(for htonll)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_INTTYPES_H
+	#include <inttypes.h>
+#endif],
+htonll(0);,AC_DEFINE(RUDIMENTS_HAVE_HTONLL,1,Some systems have htonll) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for ntohll)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_NETINET_IN_H
+	#include <netinet/in.h>
+#endif
+#ifdef RUDIMENTS_HAVE_INTTYPES_H
+	#include <inttypes.h>
+#endif],
+ntohll(0);,AC_DEFINE(RUDIMENTS_HAVE_NTOHLL,1,Some systems have ntohll) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for bswap_64)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
