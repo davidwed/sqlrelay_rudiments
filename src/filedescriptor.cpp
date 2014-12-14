@@ -106,6 +106,24 @@
 	#define __BYTE_ORDER	__LITTLE_ENDIAN
 #endif
 
+// On solaris (and probably others), BYTE_ORDER is undefined (even with
+// underscore prefixes.  Either _BIG_ENDIAN or _LITTLE_ENDIAN is
+// defined, but it's just "defined", not set to any value.
+#if !defined(__BYTE_ORDER) && \
+	!defined(_BYTE_ORDER) && \
+	!defined(BYTE_ORDER) && \
+	(defined(_BIG_ENDIAN) || defined(_LITTLE_ENDIAN))
+
+	#define __LITTLE_ENDIAN 1234
+	#define __BIG_ENDIAN	4321
+
+	#ifdef _LITTLE_ENDIAN
+		#define __BYTE_ORDER	__LITTLE_ENDIAN
+	#else
+		#define __BYTE_ORDER	__BIG_ENDIAN
+	#endif
+#endif
+
 #ifndef __BYTE_ORDER
 	#if defined(BYTE_ORDER)
 		#define __BYTE_ORDER BYTE_ORDER
