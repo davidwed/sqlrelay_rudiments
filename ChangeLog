@@ -22,7 +22,8 @@
 	improved Windows support in signal classes
 	-Wno-overloaded-virtual is now set when clang is used
 	fixed some subtle kqueue-related bugs
-	added sys/byteorder.h and htonll/ntohll for solaris
+	added sys/byteorder.h and htonll/ntohll for solaris 11
+	fixed endian-detection macros for solaris 10 and older
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber
