@@ -38,6 +38,7 @@ inetsocketserver::inetsocketserver() : socketserver(), inetsocketutil() {
 inetsocketserver::inetsocketserver(const inetsocketserver &i) :
 					socketserver(i), inetsocketutil(i) {
 	pvt=new inetsocketserverprivate;
+	translateByteOrder();
 	type("inetsocketserver");
 }
 
@@ -45,6 +46,7 @@ inetsocketserver &inetsocketserver::operator=(const inetsocketserver &i) {
 	if (this!=&i) {
 		socketserver::operator=(i);
 		inetsocketutil::operator=(i);
+		translateByteOrder();
 	}
 	return *this;
 }

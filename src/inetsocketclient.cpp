@@ -46,6 +46,7 @@ inetsocketclient::inetsocketclient(const inetsocketclient &i) :
 	pvt->_randomize=true;
 	pvt->_seed=0;
 	pvt->_seeded=false;
+	translateByteOrder();
 	type("inetsocketclient");
 }
 
@@ -56,6 +57,7 @@ inetsocketclient &inetsocketclient::operator=(const inetsocketclient &i) {
 		pvt->_randomize=i.pvt->_randomize;
 		pvt->_seed=i.pvt->_seed;
 		pvt->_seeded=i.pvt->_seeded;
+		translateByteOrder();
 	}
 	return *this;
 }

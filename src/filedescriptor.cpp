@@ -92,6 +92,9 @@
 #ifdef RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64
 	#include <libkern/OSByteOrder.h>
 #endif
+#ifdef RUDIMENTS_HAVE_SYS_BYTEORDER_H
+	#include <sys/byteorder.h>
+#endif
 #ifdef RUDIMENTS_HAVE_OS_SUPPORT_BYTEORDER_H
 	#include <os/support/ByteOrder.h>
 #endif
@@ -104,10 +107,19 @@
 #endif
 
 #ifndef __BYTE_ORDER
-	#define __BYTE_ORDER BYTE_ORDER
+	#if defined(BYTE_ORDER)
+		#define __BYTE_ORDER BYTE_ORDER
+	#elif defined (_BYTE_ORDER)
+		#define __BYTE_ORDER _BYTE_ORDER
+	#endif
 #endif
+
 #ifndef __BIG_ENDIAN
-	#define __BIG_ENDIAN BIG_ENDIAN
+	#if defined(BIG_ENDIAN)
+		#define __BIG_ENDIAN BIG_ENDIAN
+	#elif defined(_BIG_ENDIAN)
+		#define __BIG_ENDIAN _BIG_ENDIAN
+	#endif
 #endif
 
 // for FD_SET (macro that uses memset) on solaris
@@ -1554,26 +1566,28 @@ uint32_t filedescriptor::hostToNet(uint32_t value) {
 }
 
 uint64_t filedescriptor::hostToNet(uint64_t value) {
-	#if __BYTE_ORDER == __BIG_ENDIAN
+	#if defined(RUDIMENTS_HAVE_HTONLL)
+		return htonll(value);
+	#elif __BYTE_ORDER == __BIG_ENDIAN
 		return value;
+	#elif defined(RUDIMENTS_HAVE_BSWAP_64)
+		return bswap_64(value);
+	#elif defined(RUDIMENTS_HAVE___BSWAP64)
+		return __bswap64(value);
+	#elif defined(RUDIMENTS_HAVE_BSWAP64)
+		return bswap64(value);
+	#elif defined(RUDIMENTS_HAVE_SWAP64)
+		return swap64(value);
+	#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
+		return __swap_int64(value);
+	#elif defined(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64)
+		return OSSwapHostToLittleInt64(value);
 	#else
-		#if defined(RUDIMENTS_HAVE_BSWAP_64)
-			return bswap_64(value);
-		#elif defined(RUDIMENTS_HAVE___BSWAP64)
-			return __bswap64(value);
-		#elif defined(RUDIMENTS_HAVE_BSWAP64)
-			return bswap64(value);
-		#elif defined(RUDIMENTS_HAVE_SWAP64)
-			return swap64(value);
-		#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
-			return __swap_int64(value);
-		#elif defined(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64)
-			return OSSwapHostToLittleInt64(value);
-		#else
-			return
-			(((uint64_t)hostToNet((uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
-			((uint64_t)hostToNet((uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
-		#endif
+		return
+		(((uint64_t)hostToNet(
+			(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
+		((uint64_t)hostToNet(
+			(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 	#endif
 }
 
@@ -1586,26 +1600,28 @@ uint32_t filedescriptor::netToHost(uint32_t value) {
 }
 
 uint64_t filedescriptor::netToHost(uint64_t value) {
-	#if __BYTE_ORDER == __BIG_ENDIAN
+	#if defined(RUDIMENTS_HAVE_NTOHLL)
+		return ntohll(value);
+	#elif __BYTE_ORDER == __BIG_ENDIAN
 		return value;
+	#elif defined(RUDIMENTS_HAVE_BSWAP_64)
+		return bswap_64(value);
+	#elif defined(RUDIMENTS_HAVE___BSWAP64)
+		return __bswap64(value);
+	#elif defined(RUDIMENTS_HAVE_BSWAP64)
+		return bswap64(value);
+	#elif defined(RUDIMENTS_HAVE_SWAP64)
+		return swap64(value);
+	#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
+		return __swap_int64(value);
+	#elif defined(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64)
+		return OSSwapLittleToHostInt64(value);
 	#else
-		#if defined(RUDIMENTS_HAVE_BSWAP_64)
-			return bswap_64(value);
-		#elif defined(RUDIMENTS_HAVE___BSWAP64)
-			return __bswap64(value);
-		#elif defined(RUDIMENTS_HAVE_BSWAP64)
-			return bswap64(value);
-		#elif defined(RUDIMENTS_HAVE_SWAP64)
-			return swap64(value);
-		#elif defined(RUDIMENTS_HAVE_SWAP_INT64)
-			return __swap_int64(value);
-		#elif defined(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64)
-			return OSSwapLittleToHostInt64(value);
-		#else
-			return
-			(((uint64_t)netToHost((uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
-			((uint64_t)netToHost((uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
-		#endif
+		return
+		(((uint64_t)netToHost(
+			(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
+		((uint64_t)netToHost(
+			(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 	#endif
 }
 
