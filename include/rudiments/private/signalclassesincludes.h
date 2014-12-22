@@ -10,7 +10,10 @@
 #endif
 #include <sys/types.h>
 
-// make sure SIGKILL is defined
+// make sure SIGKILL and SIGALRM are defined
 #ifndef SIGKILL
 	#define SIGKILL 9
+#endif
+#ifndef SIGALRM
+	#define SIGALRM 14
 #endif

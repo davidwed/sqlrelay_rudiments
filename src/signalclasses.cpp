@@ -573,7 +573,19 @@ bool signalmanager::raiseSignal(int32_t signum) {
 }
 
 uint32_t signalmanager::alarm(uint32_t seconds) {
-	#ifdef RUDIMENTS_HAVE_ALARM
+	#if defined(RUDIMENTS_HAVE_CREATE_TIMER_QUEUE_TIMER)
+		if (timer!=INVALID_HANDLE_VALUE) {
+			DeleteTimerQueueTimer(NULL,timer,NULL);
+		}
+		if (CreateTimerQueueTimer(&timer,NULL,
+					signalhandlerprivate::_alarmHandler,
+					NULL,seconds*1000,
+					0,WT_EXECUTEONLYONCE)!=FALSE) {
+			// FIXME: there ought to be some way to return failure
+			return 0;
+		}
+		return 0;
+	#elif defined(RUDIMENTS_HAVE_ALARM)
 		return ::alarm(seconds);
 	#else
 		error::setErrorNumber(ENOSYS);
@@ -676,6 +688,9 @@ class signalhandlerprivate {
 			static signalhandlerprivate	*_sigsegvinst;
 			static LONG	_sigsegvFilter(
 						struct _EXCEPTION_POINTERS *ei);
+			static signalhandlerprivate	*_alarminst;
+			static VOID	_alarmHandler(PVOID aPrameter,
+						BOOLEAN timerorwaitfired);
 		#endif
 };
 
@@ -757,6 +772,16 @@ LONG signalhandlerprivate::_sigsegvFilter(struct _EXCEPTION_POINTERS *ei) {
 }
 #endif
 
+#if defined(RUDIMENTS_HAVE_CREATE_TIMER_QUEUE_TIMER)
+static HANDLE timer=INVALID_HANDLE_VALUE;
+
+signalhandlerprivate	*signalhandlerprivate::_alarminst=NULL;
+VOID signalhandlerprivate::_alarmHandler(PVOID aPrameter,
+						BOOLEAN timerorwaitfired) {
+	_alarminst->_handler(SIGALRM);
+}
+#endif
+
 bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER) || \
 		defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
@@ -788,6 +813,11 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 				SetUnhandledExceptionFilter(
 					(LPTOP_LEVEL_EXCEPTION_FILTER)
 					signalhandlerprivate::_sigsegvFilter);
+				return true;
+			case SIGALRM:
+				// FIXME: use pointer to member function
+				// rather than this silliness
+				signalhandlerprivate::_alarminst=this->pvt;
 				return true;
 			#endif
 		}
