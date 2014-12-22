@@ -196,6 +196,9 @@
 /* CreateThread function exists */
 #define RUDIMENTS_HAVE_CREATETHREAD 1
 
+/* Some systems have CreateTimerQueueTimer */
+#define RUDIMENTS_HAVE_CREATETIMERQUEUETIMER 1
+
 /* Some systems have CreateFileMapping */
 #define RUDIMENTS_HAVE_CREATE_FILE_MAPPING 1
 

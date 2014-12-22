@@ -196,6 +196,9 @@
 /* CreateThread function exists */
 #undef RUDIMENTS_HAVE_CREATETHREAD
 
+/* Some systems have CreateTimerQueueTimer */
+#undef RUDIMENTS_HAVE_CREATETIMERQUEUETIMER
+
 /* Some systems have CreateFileMapping */
 #undef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 

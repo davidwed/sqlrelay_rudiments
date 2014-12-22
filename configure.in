@@ -1094,6 +1094,12 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 #endif],
 alarm(0);,AC_DEFINE(RUDIMENTS_HAVE_ALARM,1,Some systems have alarm) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for CreateTimerQueueTimer)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+CreateTimerQueueTimer(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_CREATETIMERQUEUETIMER,1,Some systems have CreateTimerQueueTimer) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 fi
