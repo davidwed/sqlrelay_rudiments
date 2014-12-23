@@ -292,6 +292,10 @@ class RUDIMENTS_DLLSPEC process {
 						int32_t *signum,
 						bool *coredump);
 
+		/** Returns true if the platform supports waiting for a child
+		 *  process to exit or change state and false otherwise. */
+		static bool	supportsGetChildStateChange();
+
 	#include <rudiments/private/process.h>
 };
 

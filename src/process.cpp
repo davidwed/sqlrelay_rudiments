@@ -16,6 +16,7 @@
 	#include <rudiments/bytestring.h>
 #endif
 
+
 #ifndef __USE_XOPEN_EXTENDED
 	// for getsid()
 	#define __USE_XOPEN_EXTENDED
@@ -30,6 +31,9 @@
 #endif
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
+	// for GetConsoleWindow
+	#define _WIN32_WINNT 0x0500
+
 	#include <windows.h>
 #endif
 #ifdef RUDIMENTS_HAVE_TLHELP32_H
@@ -78,12 +82,18 @@ pid_t process::getParentProcessId() {
 		}
 		PROCESSENTRY32	pe;
 		pe.dwSize=sizeof(pe);
-		if (!Process32First(snap,&pe)) {
-			CloseHandle(snap);
-			return -1;
+		pid_t	mypid=getProcessId();
+		pid_t	ppid=-1;
+		if (Process32First(snap,&pe)) {
+			do {
+				if (pe.th32ProcessID==mypid) {
+					ppid=pe.th32ParentProcessID;
+					break;
+				}
+			} while (Process32Next(snap,&pe));
 		}
 		CloseHandle(snap);
-		return pe.th32ParentProcessID;
+		return ppid;
 	#else
 		#error no getppid or anything like it
 	#endif
@@ -640,7 +650,10 @@ pid_t process::getChildStateChange(pid_t pid,
 					int32_t	*exitstatus,
 					int32_t *signum,
 					bool *coredump) {
-#ifndef _WIN32
+#ifdef _WIN32
+	error::setErrorNumber(ENOSYS);
+	return -1;
+#else
 
 	// build options
 	int32_t	options=0;
@@ -696,10 +709,13 @@ pid_t process::getChildStateChange(pid_t pid,
 	}
 
 	return childpid;
-#else
-	// FIXME: implement this...
-	// Use ChildStart()
-	error::setErrorNumber(ENOSYS);
-	return -1;
 #endif
+}
+
+bool process::supportsGetChildStateChange() {
+	#ifdef _WIN32
+		return false;
+	#else
+		return true;
+	#endif
 }

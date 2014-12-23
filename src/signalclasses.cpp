@@ -36,6 +36,30 @@ class signalsetprivate {
 		#endif
 };
 
+class signalhandlerprivate {
+	friend class signalmanager;
+	friend class signalhandler;
+	private:
+		const signalset	*_sset;
+		int32_t		_flags;
+		void		(*_handler)(int32_t);
+		#if defined(RUDIMENTS_HAVE_SIGACTION)
+			struct sigaction	_handlerstruct;
+		#endif
+		#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+			void		(*_siginthandler)(int32_t);
+			static signalhandlerprivate	*_ctrlinst;
+			static BOOL	_ctrlHandler(DWORD ctrltype);
+			static signalhandlerprivate	*_sigsegvinst;
+			static LONG	_sigsegvFilter(
+						struct _EXCEPTION_POINTERS *ei);
+			static HANDLE 	_timer;
+			static signalhandlerprivate	*_alarminst;
+			static VOID	_alarmHandler(PVOID aPrameter,
+						BOOLEAN timerorwaitfired);
+		#endif
+};
+
 // signalset methods
 signalset::signalset() {
 	pvt=new signalsetprivate;
@@ -572,15 +596,31 @@ bool signalmanager::raiseSignal(int32_t signum) {
 	#endif
 }
 
+#ifdef RUDIMENTS_HAVE_CREATETIMERQUEUETIMER
+HANDLE			signalhandlerprivate::_timer=INVALID_HANDLE_VALUE;
+signalhandlerprivate	*signalhandlerprivate::_alarminst=NULL;
+
+VOID signalhandlerprivate::_alarmHandler(PVOID parameter,
+						BOOLEAN timerorwaitfired) {
+	if (_alarminst && _alarminst->_handler) {
+		_alarminst->_handler(SIGALRM);
+	}
+}
+#endif
+
 uint32_t signalmanager::alarm(uint32_t seconds) {
-	#if defined(RUDIMENTS_HAVE_CREATE_TIMER_QUEUE_TIMER)
-		if (timer!=INVALID_HANDLE_VALUE) {
-			DeleteTimerQueueTimer(NULL,timer,NULL);
+	#if defined(RUDIMENTS_HAVE_CREATETIMERQUEUETIMER)
+		if (signalhandlerprivate::_timer!=INVALID_HANDLE_VALUE) {
+			DeleteTimerQueueTimer(
+				NULL,signalhandlerprivate::_timer,NULL);
+			signalhandlerprivate::_timer=INVALID_HANDLE_VALUE;
 		}
-		if (CreateTimerQueueTimer(&timer,NULL,
+		if (seconds &&
+			CreateTimerQueueTimer(
+					&signalhandlerprivate::_timer,NULL,
 					signalhandlerprivate::_alarmHandler,
 					NULL,seconds*1000,
-					0,WT_EXECUTEONLYONCE)!=FALSE) {
+					0,WT_EXECUTEONLYONCE)==FALSE) {
 			// FIXME: there ought to be some way to return failure
 			return 0;
 		}
@@ -671,29 +711,6 @@ bool signalmanager::examineBlockedSignals(signalset *sset) {
 	#endif
 }
 
-
-class signalhandlerprivate {
-	friend class signalhandler;
-	private:
-		const signalset	*_sset;
-		int32_t		_flags;
-		void		(*_handler)(int32_t);
-		#if defined(RUDIMENTS_HAVE_SIGACTION)
-			struct sigaction	_handlerstruct;
-		#endif
-		#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
-			void		(*_siginthandler)(int32_t);
-			static signalhandlerprivate	*_ctrlinst;
-			static BOOL	_ctrlHandler(DWORD ctrltype);
-			static signalhandlerprivate	*_sigsegvinst;
-			static LONG	_sigsegvFilter(
-						struct _EXCEPTION_POINTERS *ei);
-			static signalhandlerprivate	*_alarminst;
-			static VOID	_alarmHandler(PVOID aPrameter,
-						BOOLEAN timerorwaitfired);
-		#endif
-};
-
 // signalhandler methods
 signalhandler::signalhandler() {
 	pvt=new signalhandlerprivate;
@@ -772,16 +789,6 @@ LONG signalhandlerprivate::_sigsegvFilter(struct _EXCEPTION_POINTERS *ei) {
 }
 #endif
 
-#if defined(RUDIMENTS_HAVE_CREATE_TIMER_QUEUE_TIMER)
-static HANDLE timer=INVALID_HANDLE_VALUE;
-
-signalhandlerprivate	*signalhandlerprivate::_alarminst=NULL;
-VOID signalhandlerprivate::_alarmHandler(PVOID aPrameter,
-						BOOLEAN timerorwaitfired) {
-	_alarminst->_handler(SIGALRM);
-}
-#endif
-
 bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 	#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER) || \
 		defined(RUDIMENTS_HAVE_SETUNHANDLEDEXCEPTIONFILTER)
@@ -814,6 +821,8 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 					(LPTOP_LEVEL_EXCEPTION_FILTER)
 					signalhandlerprivate::_sigsegvFilter);
 				return true;
+			#endif
+			#ifdef RUDIMENTS_HAVE_CREATETIMERQUEUETIMER
 			case SIGALRM:
 				// FIXME: use pointer to member function
 				// rather than this silliness

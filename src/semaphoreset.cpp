@@ -153,9 +153,12 @@ bool semaphoreset::wait(int32_t index, int32_t seconds, int32_t nanoseconds) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semTimedOp(pvt->_waitop[index],seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return (WaitForSingleObject(pvt->_sems[index],
-					seconds*1000+nanoseconds/1000000)==
-								WAIT_OBJECT_0);
+		DWORD	result=WaitForSingleObject(pvt->_sems[index],
+					seconds*1000+nanoseconds/1000000);
+		if (result==WAIT_TIMEOUT) {
+			error::setErrorNumber(EAGAIN);
+		}
+		return (result==WAIT_OBJECT_0);
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -624,7 +627,8 @@ bool semaphoreset::semTimedOp(struct sembuf *sops,
 }
 
 bool semaphoreset::supportsTimedSemaphoreOperations() {
-	#ifdef RUDIMENTS_HAVE_SEMTIMEDOP
+	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP) || \
+		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return true;
 	#else
 		return false;
