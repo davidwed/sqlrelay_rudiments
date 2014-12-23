@@ -60,6 +60,7 @@ class semaphoresetprivate {
 		#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 			HANDLE	*_sems;
 			char	**_semnames;
+			HMODULE	_lib;
 		#endif
 };
 
@@ -79,6 +80,7 @@ semaphoreset::semaphoreset() {
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		pvt->_sems=NULL;
 		pvt->_semnames=NULL;
+		pvt->_lib=NULL;
 	#endif
 }
 
@@ -105,6 +107,9 @@ semaphoreset::~semaphoreset() {
 			}
 			delete[] pvt->_sems;
 			delete[] pvt->_semnames;
+		}
+		if (pvt->_lib) {
+			FreeLibrary(pvt->_lib);
 		}
 	#endif
 
@@ -229,13 +234,15 @@ int32_t semaphoreset::getValue(int32_t index) {
 		return semControl(pvt,index,GETVAL,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		uint32_t	retval=-1;
-		HMODULE	lib=LoadLibrary("NTDLL");
-		if (lib) {
+		if (!pvt->_lib) {
+			pvt->_lib=LoadLibrary("NTDLL");
+		}
+		if (pvt->_lib) {
 			LONG (NTAPI *proc)
 				(HANDLE,ULONG,SEMINFO *,ULONG,ULONG *)=
 			(LONG (NTAPI *)
 				(HANDLE,ULONG,SEMINFO *,ULONG,ULONG *))
-				GetProcAddress(lib,"NtQuerySemaphore");
+				GetProcAddress(pvt->_lib,"NtQuerySemaphore");
 			if (proc) {
 				SEMINFO	seminfo;
 				LONG	status=
@@ -246,7 +253,6 @@ int32_t semaphoreset::getValue(int32_t index) {
 					retval=seminfo.count;
 				}
 			}
-			FreeLibrary(lib);
 		}
 		if (retval==-1) {
 			error::setErrorNumber(ENOSYS);
