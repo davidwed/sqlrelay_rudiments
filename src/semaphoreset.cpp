@@ -5,10 +5,12 @@
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
 	#include <rudiments/charstring.h>
 	#include <rudiments/sys.h>
+	#include <rudiments/bytestring.h>
 #endif
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -214,17 +216,45 @@ bool semaphoreset::signalWithUndo(int32_t index) {
 	#endif
 }
 
+#if defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+struct SEMINFO {
+	ULONG	count;
+	ULONG	limit;
+};
+#endif
+
 int32_t semaphoreset::getValue(int32_t index) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		semun	semctlun;
 		return semControl(pvt,index,GETVAL,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
-		return false;
+		uint32_t	retval=-1;
+		HMODULE	lib=LoadLibrary("NTDLL");
+		if (lib) {
+			LONG (NTAPI *proc)
+				(HANDLE,ULONG,SEMINFO *,ULONG,ULONG *)=
+			(LONG (NTAPI *)
+				(HANDLE,ULONG,SEMINFO *,ULONG,ULONG *))
+				GetProcAddress(lib,"NtQuerySemaphore");
+			if (proc) {
+				SEMINFO	seminfo;
+				LONG	status=
+					proc(pvt->_sems[index],0,
+						&seminfo,sizeof(seminfo),
+						NULL);
+				if (status==ERROR_SUCCESS) {
+					retval=seminfo.count;
+				}
+			}
+			FreeLibrary(lib);
+		}
+		if (retval==-1) {
+			error::setErrorNumber(ENOSYS);
+		}
+		return retval;
 	#else
 		error::setErrorNumber(ENOSYS);
-		return false;
+		return -1;
 	#endif
 }
 
@@ -234,9 +264,22 @@ bool semaphoreset::setValue(int32_t index, int32_t value) {
 		semctlun.val=value;
 		return !semControl(pvt,index,SETVAL,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
-		return false;
+		int32_t	current=getValue(index);
+		if (current<value) {
+			if (ReleaseSemaphore(pvt->_sems[index],
+						value-current,NULL)==0) {
+				return false;
+			}
+		} else if (current>value) {
+			for (int32_t i=current; i<value; i++) {
+				if (WaitForSingleObject(
+						pvt->_sems[index],
+						INFINITE)!=WAIT_OBJECT_0) {
+					return false;
+				}
+			}
+		}
+		return true;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;
@@ -531,13 +574,14 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 						sys::getMaxSemaphoreValue(),
 						pvt->_semnames[i]);
 
-				// failure...
+				// outright failure...
 				if (!sem) {
-					// see if this semaphore already exists
-					if (GetLastError()==
-						ERROR_ALREADY_EXISTS) {
-						error::setErrorNumber(EEXIST);
-					}
+					return false;
+				}
+
+				// see if this semaphore already exists
+				if (GetLastError()==ERROR_ALREADY_EXISTS) {
+					error::setErrorNumber(EEXIST);
 					return false;
 				}
 
@@ -547,9 +591,13 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 			} else {
 
 				// attach to existing semaphore
+				// SEMAPHORE_ALL_ACCESS is necessary rather than
+				// just SYNCHRONIZE|SEMAPHORE_MODIFY_STATE if
+				// we want to be able to use NTQuerySemaphore,
+				// and for some reason they can't all just be
+				// or'ed together
 				HANDLE	sem=OpenSemaphore(
-						SYNCHRONIZE|
-						SEMAPHORE_MODIFY_STATE,
+						SEMAPHORE_ALL_ACCESS,
 						TRUE,pvt->_semnames[i]);
 
 				// failure...
@@ -629,6 +677,14 @@ bool semaphoreset::semTimedOp(struct sembuf *sops,
 bool semaphoreset::supportsTimedSemaphoreOperations() {
 	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP) || \
 		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+bool semaphoreset::supportsUndoSemaphoreOperations() {
+	#ifdef SEM_UNDO
 		return true;
 	#else
 		return false;

@@ -25,6 +25,7 @@
 	added sys/byteorder.h and htonll/ntohll for solaris 11
 	fixed endian-detection macros for solaris 10 and older
 	added support for SIGLARM and signalmanager::alarm() on windows
+	improved windows implementation of semaphoreset
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

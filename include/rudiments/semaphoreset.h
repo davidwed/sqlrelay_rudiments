@@ -58,6 +58,13 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 		 *  semaphore operations or false otherwise. */
 		bool	supportsTimedSemaphoreOperations();
 
+		/** Returns true if the system supports the variants
+		 *  of the semaphore operations below with Undo in
+		 *  the method names or false otherwise.  On platforms
+		 *  that don't support Undo, the methods below just pass
+		 *  through to non-Undo variants.  */
+		bool	supportsUndoSemaphoreOperations();
+
 		/** Creates a semaphore set identified by "key"
 		 *       containing "semcount" semaphores.
 		 *  "key" should be generated using the ftok 
