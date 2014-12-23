@@ -55,7 +55,7 @@ class signalhandlerprivate {
 						struct _EXCEPTION_POINTERS *ei);
 			static HANDLE 	_timer;
 			static signalhandlerprivate	*_alarminst;
-			static VOID	_alarmHandler(PVOID aPrameter,
+			static VOID CALLBACK	_alarmHandler(PVOID aPrameter,
 						BOOLEAN timerorwaitfired);
 		#endif
 };
