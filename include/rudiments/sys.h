@@ -264,6 +264,11 @@ class RUDIMENTS_DLLSPEC sys {
 		/** Use the sysconf() system call directly to access values
 		 *  other than the ones provided above. */
 		static	int64_t	sysConf(int32_t name);
+
+		/** Returns true if signals interrupt system calls on this
+		 *  platform and false if signals do not interrupt system
+		 *  calls.  */
+		static	bool	signalsInterruptSystemCalls();
 };
 
 #endif

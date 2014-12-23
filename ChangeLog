@@ -26,6 +26,8 @@
 	fixed endian-detection macros for solaris 10 and older
 	added support for SIGLARM and signalmanager::alarm() on windows
 	improved windows implementation of semaphoreset
+	added sys::signalsInterruptSystemCalls()
+	added process::supportsFork()
 
 0.48 - got directory and file permissions working properly on windows
 	added non-static methods to randomnumber

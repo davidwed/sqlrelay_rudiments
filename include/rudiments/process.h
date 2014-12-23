@@ -140,6 +140,10 @@ class RUDIMENTS_DLLSPEC process {
 		 *  child is forked. */
 		static pid_t	fork();
 
+		/** Returns true of this platform supports fork() and false
+		 *  otherwise. */
+		static bool	supportsFork();
+
 		/** Runs "command" with arguments "args", replacing the current
 		 *  running process with this new process.  Whether the new
 		 *  process retains the process id of the current process is

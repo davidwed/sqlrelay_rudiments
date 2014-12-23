@@ -1054,3 +1054,11 @@ int64_t sys::sysConf(int32_t name) {
 		return -1;
 	#endif
 }
+
+bool sys::signalsInterruptSystemCalls() {
+	#ifdef _WIN32
+		return false;
+	#else
+		return true;
+	#endif
+}

@@ -318,6 +318,14 @@ pid_t process::fork() {
 	#endif
 }
 
+bool process::supportsFork() {
+	#if defined(RUDIMENTS_HAVE_FORK)
+		return true;
+	#else
+		return false;
+	#endif
+}
+
 bool process::exec(const char *command, const char * const *args) {
 	#if defined(RUDIMENTS_HAVE_EXECVP)
 		return execvp(command,(char * const *)args)!=-1;
