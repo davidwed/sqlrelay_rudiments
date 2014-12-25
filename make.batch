@@ -97,23 +97,23 @@ goto end
 
 
 :install
-mkdir c:\"Program Files (x86)"\Firstworks
-mkdir c:\"Program Files (x86)"\Firstworks\lib
-mkdir c:\"Program Files (x86)"\Firstworks\include\rudiments\private
-mkdir c:\"Program Files (x86)"\Firstworks\bin
+mkdir c:\"Program Files"\Firstworks
+mkdir c:\"Program Files"\Firstworks\lib
+mkdir c:\"Program Files"\Firstworks\include\rudiments\private
+mkdir c:\"Program Files"\Firstworks\bin
 
-copy msvc\Debug\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
-copy msvc\Debug\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
-copy msvc\DebugCLR\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
-copy msvc\DebugCLR\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
+copy msvc\Debug\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\Debug\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\DebugCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\DebugCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
-copy msvc\Release\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
-copy msvc\Release\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
-copy msvc\ReleaseCLR\librudiments.dll c:\"Program Files (x86)"\Firstworks\bin
-copy msvc\ReleaseCLR\librudiments.lib c:\"Program Files (x86)"\Firstworks\lib
+copy msvc\Release\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\Release\librudiments.lib c:\"Program Files"\Firstworks\lib
+copy msvc\ReleaseCLR\librudiments.dll c:\"Program Files"\Firstworks\bin
+copy msvc\ReleaseCLR\librudiments.lib c:\"Program Files"\Firstworks\lib
 
-copy include\rudiments\*.h c:\"Program Files (x86)"\Firstworks\include\rudiments
-copy include\rudiments\private\*.h c:\"Program Files (x86)"\Firstworks\include\rudiments\private
+copy include\rudiments\*.h c:\"Program Files"\Firstworks\include\rudiments
+copy include\rudiments\private\*.h c:\"Program Files"\Firstworks\include\rudiments\private
 goto end
 
 
@@ -142,9 +142,6 @@ goto end
 rmdir /s /q "C:\Program Files\Firstworks\include\rudiments"
 del "C:\Program Files\Firstworks\lib\librudiments.lib"
 del "C:\Program Files\Firstworks\bin\librudiments.dll"
-rmdir /s /q "C:\Program Files (x86)\Firstworks\include\rudiments"
-del "C:\Program Files (x86)\Firstworks\lib\librudiments.lib"
-del "C:\Program Files (x86)\Firstworks\bin\librudiments.dll"
 goto end
 
 
