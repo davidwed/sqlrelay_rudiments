@@ -437,8 +437,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 
 			uint32_t	*addr=
 				(uint32_t *)(updatedmachinecode32+1);
-			// FIXME: for some reason this doesn't work...
-			//*addr=(uint32_t)processid;
+			*addr=(uint32_t)processid;
 
 			addr=(uint32_t *)(updatedmachinecode32+8);
 			*addr=(uint32_t)funcaddr;
