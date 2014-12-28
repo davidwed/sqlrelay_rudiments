@@ -458,8 +458,6 @@ pid_t process::spawn(const char *command,
 
 bool process::detach() {
 
-#ifndef _WIN32
-
 	// fork off a child process
 	pid_t	result=fork();
 	if (result==-1) {
@@ -488,14 +486,6 @@ bool process::detach() {
 	setFileCreationMask(0);
 
 	return true;
-#else
-
-	// change directory to root to avoid keeping any directories in use
-	directory::changeDirectory("C:\\");
-
-	// free the controlling console
-	return (FreeConsole()==TRUE);
-#endif
 }
 
 void process::exit(int32_t status) {
