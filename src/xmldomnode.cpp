@@ -306,7 +306,9 @@ void xmldomnode::xml(stringbuffer *strb,
 			append(strb,fd,">");
 			if (indent && indentlevel) {
 				if (pvt->_firstchild->getType()!=
-						TEXT_XMLDOMNODETYPE) {
+						TEXT_XMLDOMNODETYPE &&
+					pvt->_firstchild->getType()!=
+						CDATA_XMLDOMNODETYPE) {
 					append(strb,fd,"\n");
 				}
 				*indentlevel=*indentlevel+2;
@@ -319,7 +321,9 @@ void xmldomnode::xml(stringbuffer *strb,
 			if (indent && indentlevel) {
 				*indentlevel=*indentlevel-2;
 				if (pvt->_lastchild->getType()!=
-						TEXT_XMLDOMNODETYPE) {
+						TEXT_XMLDOMNODETYPE &&
+					pvt->_lastchild->getType()!=
+						CDATA_XMLDOMNODETYPE) {
 					for (uint16_t i=0;
 						i<*indentlevel; i++) {
 						append(strb,fd," ");
