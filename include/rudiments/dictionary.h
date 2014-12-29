@@ -75,10 +75,25 @@ class dictionary {
 		 *  found. */
 		bool	getValue(keytype key, valuetype *value);
 
-		/** Removes the dictionarynode with "key".
+		/** Returns the node associated with "key" or NULL
+		 *  if "key" wasn't found. */
+		dictionarynode<keytype,valuetype> *getNode(keytype key);
+
+		/** Returns the value associated with "key" or NULL
+		 *  if "key" wasn't found.  Note that there is no
+		 *  way to distinguish between failure to find "key"
+		 *  and a valid value of NULL associated with "key". */
+		valuetype getValue(keytype key);
+
+		/** Removes the dictionarynode associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */
 		bool	remove(keytype key);
+
+		/** Detaches the dictionarynode associated with "key".
+		 *  Returns the node on success or NULL if "key" wasn't
+		 *  found. */
+		dictionarynode<keytype,valuetype> *detach(keytype key);
 
 		/** Returns the list used internally. */
 		linkedlist< dictionarynode<keytype,valuetype> *> *getList();

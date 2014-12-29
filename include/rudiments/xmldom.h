@@ -45,6 +45,9 @@ class RUDIMENTS_DLLSPEC xmldom : public xmlsax {
 		/** Returns the root node of the DOM tree. */
 		xmldomnode	*getRootNode() const;
 
+		/** Returns the null node of the DOM tree. */
+		xmldomnode	*getNullNode() const;
+
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */
 		void	createRootNode();

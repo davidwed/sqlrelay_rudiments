@@ -305,7 +305,10 @@ void xmldomnode::xml(stringbuffer *strb,
 		if (pvt->_childcount) {
 			append(strb,fd,">");
 			if (indent && indentlevel) {
-				append(strb,fd,"\n");
+				if (pvt->_firstchild->getType()!=
+						TEXT_XMLDOMNODETYPE) {
+					append(strb,fd,"\n");
+				}
 				*indentlevel=*indentlevel+2;
 			}
 			current=pvt->_firstchild;
@@ -315,8 +318,12 @@ void xmldomnode::xml(stringbuffer *strb,
 			}
 			if (indent && indentlevel) {
 				*indentlevel=*indentlevel-2;
-				for (uint16_t i=0; i<*indentlevel; i++) {
-					append(strb,fd," ");
+				if (pvt->_lastchild->getType()!=
+						TEXT_XMLDOMNODETYPE) {
+					for (uint16_t i=0;
+						i<*indentlevel; i++) {
+						append(strb,fd," ");
+					}
 				}
 			}
 			append(strb,fd,"</");

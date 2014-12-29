@@ -46,12 +46,45 @@ bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+valuetype DICTIONARY_CLASS::getValue(keytype key) {
+	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
+	if (node) {
+		return node->getValue()->getValue();
+	}
+	return (valuetype)0;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::getNode(keytype key) {
+	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
+	if (node) {
+		return node->getValue();
+	}
+	return NULL;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool DICTIONARY_CLASS::remove(keytype key) {
 	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
 	if (node) {
 		return dict.remove(node);
 	}
 	return false;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::detach(keytype key) {
+	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
+	if (node) {
+		dict.detach(node);
+		dictionarynode<keytype,valuetype> *contents=node->getValue();
+		delete node;
+		return contents;
+	}
+	return NULL;
 }
 
 DICTIONARY_TEMPLATE

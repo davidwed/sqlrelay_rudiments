@@ -129,6 +129,10 @@ xmldomnode *xmldom::getRootNode() const {
 	return (pvt->_rootnode)?pvt->_rootnode:pvt->_nullnode;
 }
 
+xmldomnode *xmldom::getNullNode() const {
+	return pvt->_nullnode;
+}
+
 bool xmldom::tagStart(const char *name) {
 	pvt->_currentattribute=NULL;
 	if (pvt->_rootnode->isNullNode()) {
