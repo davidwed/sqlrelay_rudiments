@@ -102,6 +102,17 @@ linkedlistnode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+linkedlist< keytype > *DICTIONARY_CLASS::getKeys() {
+	linkedlist< keytype >	*keys=new linkedlist< keytype >();
+	for (linkedlistnode< dictionarynode< char *, char * > *> *node=
+			dict.getFirst(); node; node=node->getNext()) {
+		keys->append(node->getValue()->getKey());
+	}
+	return keys;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 linkedlist< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getList() {
 	return &dict;
 }

@@ -95,6 +95,9 @@ class dictionary {
 		 *  found. */
 		dictionarynode<keytype,valuetype> *detach(keytype key);
 
+		/** Returns a list of the keys in the dictionary. */
+		linkedlist< keytype > *getKeys();
+
 		/** Returns the list used internally. */
 		linkedlist< dictionarynode<keytype,valuetype> *> *getList();
 
