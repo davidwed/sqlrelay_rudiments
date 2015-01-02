@@ -395,7 +395,9 @@ char *charstring::httpEscape(const char *input) {
 			(*outptr)='+';
 		} else if ((*ptr>='a' && *ptr<='z') || 
 				(*ptr>='A' && *ptr<='Z') ||
-				(*ptr>='0' && *ptr<='9')) {
+				(*ptr>='0' && *ptr<='9') ||
+				character::inSet(*ptr,
+					"-._~:/?#[]@!$&'()*+,;=")) {
 			(*outptr)=*ptr;
 		} else {
 			(*outptr)='%';
