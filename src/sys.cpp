@@ -335,9 +335,10 @@ void sys::sync() {
 		// get the volume bitmap
 		DWORD	volumes=GetLogicalDrives();
 
-		// for each volume
+		// for each volume...
 		for (char driveletter='A'; driveletter<='Z'; driveletter++) {
 
+			// ignore volumes that don't exist
 			DWORD	exists=volumes&0x0001;
 			volumes=volumes>>1;
 			if (!exists) {

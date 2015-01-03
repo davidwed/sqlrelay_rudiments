@@ -7,6 +7,7 @@
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <rudiments/charstring.h>
 #endif
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -136,8 +137,125 @@ bool filesystem::initialize(const char *path) {
 
 bool filesystem::initialize(int32_t fd) {
 	close();
-	pvt->_fd=fd;
-	return getCurrentProperties();
+	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+		pvt->_fd=fd;
+		return getCurrentProperties();
+	#else
+		// This is complex on Windows.
+		// We have to determine the file name that the file descriptor
+		// refers to and call the other version of initialize().  On
+		// Vista and newer we can use GetFinalPathNameByHandle(), but
+		// on older versions we have to memory-map the file, get the
+		// file name from the map and convert the volume name to a
+		// dos-style drive letter.  We'll just go ahead and do that.
+
+		// get the file handle
+		HANDLE	fh=(HANDLE)_get_osfhandle(fd);
+
+		// get the file size, can't map a zero-byte file
+		DWORD sizehi=0;
+		DWORD sizelo=GetFileSize(fh,&sizehi);
+		if (!sizehi && !sizelo) {
+			return false;
+		}
+
+		// map the file
+		HANDLE	fm=CreateFileMapping(fh,NULL,PAGE_READONLY,0,1,NULL);
+		if (!fm) {
+			return false;
+		}
+
+		// map view of file
+		void	*fv=MapViewOfFile(fm,FILE_MAP_READ,0,0,1);
+		if (!fv) {
+			CloseHandle(fm);
+			return false;
+		}
+
+		// get GetMappedFileName function
+		HMODULE	kernel32=GetModuleHandle("Kernel32");
+		if (!kernel32) {
+			return false;
+		}
+		DWORD (*getmappedfilename)(HANDLE, LPVOID, LPTSTR, DWORD)=
+			(DWORD (*)(HANDLE, LPVOID, LPTSTR, DWORD))
+			GetProcAddress(kernel32,"K32GetMappedFileNameA");
+		if (!getmappedfilename) {
+			return false;
+		}
+
+		// get file name
+		char	filename[MAX_PATH+1];
+		if (!getmappedfilename(GetCurrentProcess(),
+					fv,filename,MAX_PATH)) {
+			UnmapViewOfFile(fv);
+			CloseHandle(fm);
+			return false;
+		}
+
+		// This will start with something like:
+		// 	\Device\HarddiskVolume3\...
+		// instead of a drive letter.
+		// We need to translate it to a drive letter...
+
+		// get the volume bitmap
+		DWORD	volumes=GetLogicalDrives();
+
+		// set up a template for the volume name
+		char	volume[3];
+		charstring::copy(volume," :");
+		volume[0]='\0';
+
+		// set up a buffer for the drive mapping
+		char	mapping[MAX_PATH];
+
+		// for each volume...
+		for (char driveletter='A'; driveletter<='Z'; driveletter++) {
+
+			// ignore volumes that don't exist
+			DWORD	exists=volumes&0x0001;
+			volumes=volumes>>1;
+			if (!exists) {
+				continue;
+			}
+
+			// create the volume name, eg: C:
+			volume[0]=driveletter;
+
+			// get the drive mapping
+			if (!QueryDosDevice(volume,mapping,sizeof(mapping))) {
+				UnmapViewOfFile(fv);
+				CloseHandle(fm);
+				return false;
+			}
+
+			// if the drive mapping for this volume matches
+			// then we're done
+			if (!charstring::compare(filename,mapping,
+						charstring::length(mapping))) {
+				break;
+			}
+
+			// reset the volume name
+			volume[0]='\0';
+		}
+
+		// clean up
+		UnmapViewOfFile(fv);
+		CloseHandle(fm);
+
+		// replace drive mapping with volume name in filename
+		size_t	mappinglength=charstring::length(mapping);
+		char	*ptr=filename;
+		if (volume[0] && mappinglength>2) {
+			ptr=filename+charstring::length(mapping)-2;
+			*ptr=volume[0];
+			*(ptr+1)=':';
+		}
+		
+		// initialize using file name
+		return (volume[0])?initialize(ptr):false;
+	#endif
 }
 
 bool filesystem::close() {
@@ -162,6 +280,7 @@ bool filesystem::close() {
 	#endif
 	pvt->_fd=-1;
 	pvt->_closeflag=false;
+	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
 	return true;
 }
 
