@@ -75,4 +75,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("NULL:\n");
 	fs.initialize((const char *)NULL);
 	print(&fs);
+
+	stdoutput.printf("invalid file descriptor:\n");
+	fs.initialize(-1);
+	print(&fs);
 }

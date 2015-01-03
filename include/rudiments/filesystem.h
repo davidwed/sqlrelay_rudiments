@@ -32,7 +32,8 @@ class RUDIMENTS_DLLSPEC filesystem {
 		virtual		~filesystem();
 
 		/** Initializes the instance to use the filesystem containing
-		 *  "path".
+		 *  "path".  If "path" is NULL or an empty string then it the
+		 *  instance is initialized using the current working directoy.
 		 *
 		 *  Returns true on success and false on failure. */
 		bool	initialize(const char *path);
