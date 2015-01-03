@@ -7,6 +7,8 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
+#include <rudiments/private/winsock.h>
+
 // for rpcent, functions
 #ifdef RUDIMENTS_HAVE_NETDB_H
 	#include <netdb.h>
