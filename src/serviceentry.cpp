@@ -44,6 +44,7 @@ static threadmutex	*_semutex;
 
 serviceentry::serviceentry() {
 	pvt=new serviceentryprivate;
+	winsock::initWinsock();
 	pvt->_se=NULL;
 	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
@@ -54,6 +55,7 @@ serviceentry::serviceentry() {
 
 serviceentry::serviceentry(const serviceentry &s) {
 	pvt=new serviceentryprivate;
+	winsock::initWinsock();
 	initialize(s.getName(),s.getProtocol());
 }
 

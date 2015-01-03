@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Number:		%d\n",re.getNumber());
 	stdoutput.printf("	Alias list:\n");
 	int	i;
-	for (i=0; re.getAliasList()[i]; i++) {
+	for (i=0; re.getAliasList() && re.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",re.getAliasList()[i]);
 	}
 	stdoutput.printf("\n");
@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Name:		%s\n",re.getName());
 	stdoutput.printf("	Number:		%d\n",re.getNumber());
 	stdoutput.printf("	Alias list:\n");
-	for (i=0; re.getAliasList()[i]; i++) {
+	for (i=0; re.getAliasList() && re.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",re.getAliasList()[i]);
 	}
 	stdoutput.printf("\n");

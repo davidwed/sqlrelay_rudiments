@@ -55,6 +55,7 @@ static threadmutex	*_remutex;
 rpcentry::rpcentry() {
 	#ifdef RUDIMENTS_HAVE_RPC
 		pvt=new rpcentryprivate;
+		winsock::initWinsock();
 		pvt->_re=NULL;
 		#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 			defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)

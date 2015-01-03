@@ -39,6 +39,7 @@ static threadmutex	*_pemutex;
 
 protocolentry::protocolentry() {
 	pvt=new protocolentryprivate;
+	winsock::initWinsock();
 	pvt->_pe=NULL;
 	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
@@ -49,6 +50,7 @@ protocolentry::protocolentry() {
 
 protocolentry::protocolentry(const protocolentry &p) {
 	pvt=new protocolentryprivate;
+	winsock::initWinsock();
 	initialize(p.getName());
 }
 

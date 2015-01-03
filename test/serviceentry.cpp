@@ -18,7 +18,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Protocol:	%s\n",se.getProtocol());
 	stdoutput.printf("	Alias list:\n");
 	int	i;
-	for (i=0; se.getAliasList()[i]; i++) {
+	for (i=0; se.getAliasList() && se.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",se.getAliasList()[i]);
 	}
 	stdoutput.printf("\n");
@@ -34,7 +34,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	Port:		%d\n",se.getPort());
 	stdoutput.printf("	Protocol:	%s\n",se.getProtocol());
 	stdoutput.printf("	Alias list:\n");
-	for (i=0; se.getAliasList()[i]; i++) {
+	for (i=0; se.getAliasList() && se.getAliasList()[i]; i++) {
 		stdoutput.printf("		%s\n",se.getAliasList()[i]);
 	}
 	stdoutput.printf("\n");
