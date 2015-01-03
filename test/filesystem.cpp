@@ -59,6 +59,9 @@ void print(filesystem *fs) {
 int main(int argc, const char **argv) {
 
 	filesystem	fs;
+	stdoutput.printf("uninitialized:\n");
+	print(&fs);
+
 	fs.initialize(filename);
 	stdoutput.printf("from file name:\n");
 	print(&fs);
@@ -67,5 +70,9 @@ int main(int argc, const char **argv) {
 	f.open(filename,O_RDONLY);
 	fs.initialize(f.getFileDescriptor());
 	stdoutput.printf("from file descriptor:\n");
+	print(&fs);
+
+	stdoutput.printf("NULL:\n");
+	fs.initialize((const char *)NULL);
 	print(&fs);
 }
