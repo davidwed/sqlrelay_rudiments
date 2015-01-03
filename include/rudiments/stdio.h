@@ -6,8 +6,17 @@
 
 #include <rudiments/filedescriptor.h>
 
-extern	RUDIMENTS_DLLSPEC filedescriptor	stdinput;
-extern	RUDIMENTS_DLLSPEC filedescriptor	stdoutput;
-extern	RUDIMENTS_DLLSPEC filedescriptor	stderror;
+class stdiofiledescriptor : public filedescriptor {
+	public:
+		/** Flushes buffered prints to the console.  Returns
+		 *  true on success or false if an error occurred. */
+		bool	flush();
+
+	#include <rudiments/private/stdio.h>
+};
+
+extern	RUDIMENTS_DLLSPEC stdiofiledescriptor	stdinput;
+extern	RUDIMENTS_DLLSPEC stdiofiledescriptor	stdoutput;
+extern	RUDIMENTS_DLLSPEC stdiofiledescriptor	stderror;
 
 #endif

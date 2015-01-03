@@ -3,6 +3,26 @@
 
 #include <rudiments/stdio.h>
 
-RUDIMENTS_DLLSPEC filedescriptor	stdinput(0);
-RUDIMENTS_DLLSPEC filedescriptor	stdoutput(1);
-RUDIMENTS_DLLSPEC filedescriptor	stderror(2);
+#include <stdio.h>
+
+stdiofiledescriptor::stdiofiledescriptor(int32_t fd) : filedescriptor(fd) {
+}
+
+bool stdiofiledescriptor::flush() {
+	FILE	*strm=NULL;
+	switch (fd()) {
+		case 0:
+			strm=stdin;
+		case 1:
+			strm=stdout;
+		case 2:
+			strm=stderr;
+		default:
+			return false;
+	}
+	return !fflush(strm);
+}
+
+RUDIMENTS_DLLSPEC stdiofiledescriptor	stdinput(0);
+RUDIMENTS_DLLSPEC stdiofiledescriptor	stdoutput(1);
+RUDIMENTS_DLLSPEC stdiofiledescriptor	stderror(2);

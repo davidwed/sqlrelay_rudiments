@@ -3486,7 +3486,7 @@ fi
 if ( test "$INCLUDE_FILEDESCRIPTOR" = "1" )
 then
 	HEADERS="$HEADERS filedescriptor.h stdio.h"
-	PRIVATEHEADERS="$PRIVATEHEADERS filedescriptor.h filedescriptorincludes.h"
+	PRIVATEHEADERS="$PRIVATEHEADERS filedescriptor.h filedescriptorincludes.h stdio.h"
 	SRCS="$SRCS filedescriptor.cpp stdio.cpp"
 	LOBJS="$LOBJS filedescriptor.lo stdio.lo"
 fi
