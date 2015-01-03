@@ -27,7 +27,7 @@
 // include this after the above defines or Haiku can't find strchrnul
 #include <rudiments/stdio.h>
 
-// for vsnprintf
+// for vsnprintf/vsnprintf_s
 #include <stdio.h>
 
 #ifdef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
@@ -1824,6 +1824,8 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	#if defined(RUDIMENTS_HAVE___VSNPRINTF) || \
 		defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+	#elif defined(RUDIMENTS_HAVE_VSNPRINTF_S)
+		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
 	#else
 		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
 	#endif
