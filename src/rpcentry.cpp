@@ -128,10 +128,12 @@ bool rpcentry::initialize(int32_t number) {
 
 bool rpcentry::initialize(const char *rpcname, int32_t number) {
 
+	#ifdef RUDIMENTS_HAVE_RPC
 	pvt->_re=NULL;
 	if (!rpcname && number==-1) {
 		return false;
 	}
+	#endif
 
 	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
