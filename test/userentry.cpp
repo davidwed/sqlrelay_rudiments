@@ -42,8 +42,12 @@ void print(userentry *uent) {
 
 int main(int argc, const char **argv) {
 
-	// get the user entry for "dmuse"
+	// uninitialized
 	userentry	uent;
+	stdoutput.printf("uninitialized...\n");
+	print(&uent);
+
+	// get the user entry for "dmuse"
 	uent.initialize("dmuse");
 	stdoutput.printf("username: dmuse...\n");
 	print(&uent);
@@ -63,5 +67,10 @@ int main(int argc, const char **argv) {
 	id=uent.getUserId();
 	uent.initialize(id);
 	stdoutput.printf("userid: %d (invalid)...\n",id);
+	print(&uent);
+
+	// null-safety
+	stdoutput.printf("NULL...\n");
+	uent.initialize((const char *)NULL);
 	print(&uent);
 }

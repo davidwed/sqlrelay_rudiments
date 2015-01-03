@@ -606,24 +606,17 @@ bool userentry::initialize(const char *username, uid_t userid) {
 
 char *userentry::getName(uid_t userid) {
 	userentry	pwd;
-	if (pwd.initialize(userid)) {
-		return charstring::duplicate(pwd.getName());
-	}
-	return NULL;
+	return (pwd.initialize(userid))?
+			charstring::duplicate(pwd.getName()):NULL;
 }
 
 uid_t userentry::getUserId(const char *username) {
 	userentry	pwd;
-	if (pwd.initialize(username)) {
-		return pwd.getUserId();
-	}
-	return (uid_t)-1;
+	return (pwd.initialize(username))?pwd.getUserId():(uid_t)-1;
 }
 
 char *userentry::getSid(const char *username) {
 	userentry	pwd;
-	if (pwd.initialize(username)) {
-		return charstring::duplicate(pwd.getSid());
-	}
-	return NULL;
+	return (pwd.initialize(username))?
+			charstring::duplicate(pwd.getSid()):NULL;
 }

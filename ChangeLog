@@ -6,6 +6,7 @@
 	added flush() method to stdio classes
 	added detection and support for vsnprintf_s
 	fixed serviceentry, protocolentry and rpcentry on windows
+	updated *entry classes for NULL and uninitialization safety
 
 0.49 - combined passswdentry and shadowentry classes into userentry class
 	updated file::sync() to use FlushFileBuffers directly

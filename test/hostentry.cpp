@@ -27,53 +27,48 @@ char *getAddressString(int length, const char *addr) {
 	return address;
 }
 
-int main(int argc, const char **argv) {
-
-
-	// get the host information for "localhost"
-	hostentry	he;
-	he.initialize("localhost");
+void print(hostentry *he) {
 
 	// print the components individually
-	stdoutput.printf("Individually...\n");
-	stdoutput.printf("	Name: %s\n",he.getName());
+	stdoutput.printf("	Name: %s\n",he->getName());
 	stdoutput.printf("	Alias list:\n");
 	int	i;
-	for (i=0; he.getAliasList() && he.getAliasList()[i]; i++) {
-		stdoutput.printf("		%s\n",he.getAliasList()[i]);
+	for (i=0; he->getAliasList() && he->getAliasList()[i]; i++) {
+		stdoutput.printf("		%s\n",he->getAliasList()[i]);
 	}
-	stdoutput.printf("	Address type: %d\n",he.getAddressType());
-	stdoutput.printf("	Address length: %d\n",he.getAddressLength());
+	stdoutput.printf("	Address type: %d\n",he->getAddressType());
+	stdoutput.printf("	Address length: %d\n",he->getAddressLength());
 	stdoutput.printf("	Address list:\n");
-	for (i=0; he.getAddressList() && he.getAddressList()[i]; i++) {
-		char	*addr=getAddressString(he.getAddressLength(),
-						he.getAddressList()[i]);
+	for (i=0; he->getAddressList() && he->getAddressList()[i]; i++) {
+		char	*addr=getAddressString(he->getAddressLength(),
+						he->getAddressList()[i]);
 		stdoutput.printf("		%s\n",addr);
 		delete[] addr;
 	}
 	stdoutput.printf("\n");
+}
+
+int main(int argc, const char **argv) {
+
+	// unintialized
+	hostentry	he;
+	stdoutput.printf("uninitialized:\n");
+	print(&he);
 
 
+	// get the host information for "localhost"
+	he.initialize("localhost");
+	stdoutput.printf("localhost:\n");
+	print(&he);
 
 	// get the host information for "127.0.0.1"
 	char	address[]={127,0,0,1};
 	he.initialize(address,4,AF_INET);
+	stdoutput.printf("127.0.0.1:\n");
+	print(&he);
 
-	// print the components individually
-	stdoutput.printf("Individually...\n");
-	stdoutput.printf("	Name: %s\n",he.getName());
-	stdoutput.printf("	Alias list:\n");
-	for (i=0; he.getAliasList() && he.getAliasList()[i]; i++) {
-		stdoutput.printf("		%s\n",he.getAliasList()[i]);
-	}
-	stdoutput.printf("	Address type: %d\n",he.getAddressType());
-	stdoutput.printf("	Address length: %d\n",he.getAddressLength());
-	stdoutput.printf("	Address list:\n");
-	for (i=0; he.getAddressList() && he.getAddressList()[i]; i++) {
-		char	*addr=getAddressString(he.getAddressLength(),
-						he.getAddressList()[i]);
-		stdoutput.printf("		%s\n",addr);
-		delete[] addr;
-	}
-	stdoutput.printf("\n");
+	// null-safety
+	he.initialize(NULL);
+	stdoutput.printf("NULL:\n");
+	print(&he);
 }

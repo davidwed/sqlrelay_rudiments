@@ -75,20 +75,20 @@ serviceentry::~serviceentry() {
 }
 
 const char *serviceentry::getName() const {
-	return pvt->_se->s_name;
+	return (pvt->_se)?pvt->_se->s_name:NULL;
 }
 
 int32_t serviceentry::getPort() const {
-	return filedescriptor::netToHost(
-			static_cast<uint16_t>(pvt->_se->s_port));
+	return (pvt->_se)?filedescriptor::netToHost(
+				static_cast<uint16_t>(pvt->_se->s_port)):-1;
 }
 
 const char *serviceentry::getProtocol() const {
-	return pvt->_se->s_proto;
+	return (pvt->_se)?pvt->_se->s_proto:NULL;
 }
 
 const char * const *serviceentry::getAliasList() const {
-	return pvt->_se->s_aliases;
+	return (pvt->_se)?pvt->_se->s_aliases:NULL;
 }
 
 bool serviceentry::needsMutex() {
@@ -108,7 +108,7 @@ void serviceentry::setMutex(threadmutex *mtx) {
 }
 
 bool serviceentry::initialize(const char *servicename, const char *protocol) {
-	return initialize(servicename,0,protocol);
+	return initialize(servicename,-1,protocol);
 }
 
 bool serviceentry::initialize(int32_t port, const char *protocol) {
@@ -118,13 +118,15 @@ bool serviceentry::initialize(int32_t port, const char *protocol) {
 bool serviceentry::initialize(const char *servicename, int32_t port,
 						const char *protocol) {
 
+	pvt->_se=NULL;
+	if ((!servicename && port==-1) || !protocol) {
+		return false;
+	}
+
 	#if defined(RUDIMENTS_HAVE_GETSERVBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETSERVBYPORT_R)
-		if (pvt->_se) {
-			pvt->_se=NULL;
-			delete[] pvt->_buffer;
-			pvt->_buffer=NULL;
-		}
+		delete[] pvt->_buffer;
+		pvt->_buffer=NULL;
 		// getservbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -172,7 +174,6 @@ bool serviceentry::initialize(const char *servicename, int32_t port,
 		}
 		return false;
 	#else
-		pvt->_se=NULL;
 		return (!(_semutex && !_semutex->lock()) &&
 			((pvt->_se=((servicename)
 				?getservbyname(servicename,protocol)
@@ -185,16 +186,11 @@ bool serviceentry::initialize(const char *servicename, int32_t port,
 
 int32_t serviceentry::getPort(const char *servicename, const char *protocol) {
 	serviceentry	se;
-	if (se.initialize(servicename,protocol)) {
-		return se.getPort();
-	}
-	return -1;
+	return (se.initialize(servicename,protocol))?se.getPort():-1;
 }
 
 char	*serviceentry::getName(int32_t port, const char *protocol) {
 	serviceentry	se;
-	if (se.initialize(port,protocol)) {
-		return charstring::duplicate(se.getName());
-	}
-	return NULL;
+	return (se.initialize(port,protocol))?
+			charstring::duplicate(se.getName()):NULL;
 }

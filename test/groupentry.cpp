@@ -27,6 +27,10 @@ int main(int argc, const char **argv) {
 
 	// get the group entry for the groupname
 	groupentry	grent;
+	stdoutput.printf("uninitialized:\n");
+	print(&grent);
+
+	// get the group entry for the groupname
 	grent.initialize(groupname);
 	stdoutput.printf("groupname: %s...\n",groupname);
 	print(&grent);
@@ -46,5 +50,10 @@ int main(int argc, const char **argv) {
 	id=grent.getGroupId();
 	grent.initialize(id);
 	stdoutput.printf("groupid: %d (invalid)...\n",id);
+	print(&grent);
+
+	// null-safety
+	grent.initialize((const char *)NULL);
+	stdoutput.printf("NULL:\n");
 	print(&grent);
 }

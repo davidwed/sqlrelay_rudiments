@@ -70,15 +70,15 @@ protocolentry::~protocolentry() {
 }
 
 const char *protocolentry::getName() const {
-	return pvt->_pe->p_name;
+	return (pvt->_pe)?pvt->_pe->p_name:NULL;
 }
 
 const char * const *protocolentry::getAliasList() const {
-	return pvt->_pe->p_aliases;
+	return (pvt->_pe)?pvt->_pe->p_aliases:NULL;
 }
 
 int32_t protocolentry::getNumber() const {
-	return pvt->_pe->p_proto;
+	return (pvt->_pe)?pvt->_pe->p_proto:-1;
 }
 
 bool protocolentry::needsMutex() {
@@ -98,7 +98,7 @@ void protocolentry::setMutex(threadmutex *mtx) {
 }
 
 bool protocolentry::initialize(const char *protocolname) {
-	return initialize(protocolname,0);
+	return initialize(protocolname,-1);
 }
 
 bool protocolentry::initialize(int32_t number) {
@@ -107,13 +107,15 @@ bool protocolentry::initialize(int32_t number) {
 
 bool protocolentry::initialize(const char *protocolname, int32_t number) {
 
+	pvt->_pe=NULL;
+	if (!protocolname && number==-1) {
+		return false;
+	}
+
 	#if defined(RUDIMENTS_HAVE_GETPROTOBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETPROTOBYNUMBER_R)
-		if (pvt->_pe) {
-			pvt->_pe=NULL;
-			delete[] pvt->_buffer;
-			pvt->_buffer=NULL;
-		}
+		delete[] pvt->_buffer;
+		pvt->_buffer=NULL;
 		// getprotobyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -155,7 +157,6 @@ bool protocolentry::initialize(const char *protocolname, int32_t number) {
 		}
 		return false;
 	#else
-		pvt->_pe=NULL;
 		return (!(_pemutex && !_pemutex->lock())) &&
 			((pvt->_pe=((protocolname)
 				?getprotobyname(protocolname)
@@ -166,16 +167,11 @@ bool protocolentry::initialize(const char *protocolname, int32_t number) {
 
 int32_t protocolentry::getNumber(const char *protocolname) {
 	protocolentry	pe;
-	if (pe.initialize(protocolname)) {
-		return pe.getNumber();
-	}
-	return -1;
+	return (pe.initialize(protocolname))?pe.getNumber():-1;
 }
 
 char *protocolentry::getName(int32_t number) {
 	protocolentry	pe;
-	if (pe.initialize(number)) {
-		return charstring::duplicate(pe.getName());
-	}
-	return NULL;
+	return (pe.initialize(number))?
+			charstring::duplicate(pe.getName()):NULL;
 }

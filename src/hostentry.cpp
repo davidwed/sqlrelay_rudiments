@@ -72,23 +72,23 @@ hostentry::~hostentry() {
 }
 
 const char *hostentry::getName() const {
-	return pvt->_he->h_name;
+	return (pvt->_he)?pvt->_he->h_name:NULL;
 }
 
 const char * const *hostentry::getAliasList() const {
-	return pvt->_he->h_aliases;
+	return (pvt->_he)?pvt->_he->h_aliases:NULL;
 }
 
 int32_t hostentry::getAddressType() const {
-	return pvt->_he->h_addrtype;
+	return (pvt->_he)?pvt->_he->h_addrtype:-1;
 }
 
 int32_t hostentry::getAddressLength() const {
-	return pvt->_he->h_length;
+	return (pvt->_he)?pvt->_he->h_length:-1;
 }
 
 const char * const *hostentry::getAddressList() const {
-	return pvt->_he->h_addr_list;
+	return (pvt->_he)?pvt->_he->h_addr_list:NULL;
 }
 
 bool hostentry::needsMutex() {
@@ -118,17 +118,16 @@ bool hostentry::initialize(const char *address, int32_t len, int32_t type) {
 bool hostentry::initialize(const char *hostname, const char *address,
 						int32_t len, int32_t type) {
 
+	pvt->_he=NULL;
+
 	if (!hostname && !address) {
 		return false;
 	}
 
 	#if defined(RUDIMENTS_HAVE_GETHOSTBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETHOSTBYADDR_R)
-		if (pvt->_he) {
-			pvt->_he=NULL;
-			delete[] pvt->_buffer;
-			pvt->_buffer=NULL;
-		}
+		delete[] pvt->_buffer;
+		pvt->_buffer=NULL;
 		// gethostbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -173,7 +172,6 @@ bool hostentry::initialize(const char *hostname, const char *address,
 		}
 		return false;
 	#else
-		pvt->_he=NULL;
 		return (!(_hemutex && !_hemutex->lock()) &&
 			((pvt->_he=((hostname)
 				?gethostbyname(hostname)
@@ -198,27 +196,21 @@ char *hostentry::getAddressString(int32_t index) const {
 
 char *hostentry::getAddressString(const char *hostname) {
 	hostentry	he;
-	if (he.initialize(hostname)) {
-		// Minix 3.1.8 needs the int32_t cast.
-		return he.getAddressString((int32_t)0);
-	}
-	return NULL;
+	// Minix 3.1.8 needs the int32_t cast.
+	return (he.initialize(hostname))?
+			he.getAddressString((int32_t)0):NULL;
 }
 
 char *hostentry::getName(const char *address, int32_t len, int32_t type) {
 	hostentry	he;
-	if (he.initialize(address,len,type)) {
-		return charstring::duplicate(he.getName());
-	}
-	return NULL;
+	return he.initialize(address,len,type)?
+			charstring::duplicate(he.getName()):NULL;
 }
 
 char *hostentry::getAddressString(const char *address,
 					int32_t len, int32_t type) {
 	hostentry	he;
-	if (he.initialize(address,len,type)) {
-		// Minix 3.1.8 needs the int32_t cast.
-		return he.getAddressString((int32_t)0);
-	}
-	return NULL;
+	// Minix 3.1.8 needs the int32_t cast.
+	return (he.initialize(address,len,type))?
+			he.getAddressString((int32_t)0):NULL;
 }

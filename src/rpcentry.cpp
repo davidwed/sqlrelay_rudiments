@@ -79,7 +79,7 @@ rpcentry::~rpcentry() {
 
 const char *rpcentry::getName() const {
 	#ifdef RUDIMENTS_HAVE_RPC
-		return pvt->_re->r_name;
+		return (pvt->_re)?pvt->_re->r_name:NULL;
 	#else
 		return NULL;
 	#endif
@@ -87,7 +87,7 @@ const char *rpcentry::getName() const {
 
 int32_t rpcentry::getNumber() const {
 	#ifdef RUDIMENTS_HAVE_RPC
-		return pvt->_re->r_number;
+		return (pvt->_re)?pvt->_re->r_number:-1;
 	#else
 		return -1;
 	#endif
@@ -95,7 +95,7 @@ int32_t rpcentry::getNumber() const {
 
 const char * const *rpcentry::getAliasList() const {
 	#ifdef RUDIMENTS_HAVE_RPC
-		return pvt->_re->r_aliases;
+		return (pvt->_re)?pvt->_re->r_aliases:NULL;
 	#else
 		return NULL;
 	#endif
@@ -119,7 +119,7 @@ void rpcentry::setMutex(threadmutex *mtx) {
 }
 
 bool rpcentry::initialize(const char *name) {
-	return initialize(name,0);
+	return initialize(name,-1);
 }
 
 bool rpcentry::initialize(int32_t number) {
@@ -128,13 +128,15 @@ bool rpcentry::initialize(int32_t number) {
 
 bool rpcentry::initialize(const char *rpcname, int32_t number) {
 
+	pvt->_re=NULL;
+	if (!rpcname && number==-1) {
+		return false;
+	}
+
 	#if defined(RUDIMENTS_HAVE_GETRPCBYNAME_R) && \
 		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER_R)
-		if (pvt->_re) {
-			pvt->_re=NULL;
-			delete[] pvt->_buffer;
-			pvt->_buffer=NULL;
-		}
+		delete[] pvt->_buffer;
+		pvt->_buffer=NULL;
 		// getrpcbyname_r is goofy.
 		// It will retrieve an arbitrarily large amount of data, but
 		// requires that you pass it a pre-allocated buffer.  If the
@@ -175,7 +177,6 @@ bool rpcentry::initialize(const char *rpcname, int32_t number) {
 		return false;
 	#elif defined(RUDIMENTS_HAVE_GETRPCBYNAME) && \
 		defined(RUDIMENTS_HAVE_GETRPCBYNUMBER)
-		pvt->_re=NULL;
 		return (!(remutex && !remutex->lock()) &&
 			((pvt->_re=((rpcname)
 				?getrpcbyname(const_cast<char *>(rpcname))
