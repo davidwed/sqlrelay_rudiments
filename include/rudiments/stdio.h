@@ -6,7 +6,7 @@
 
 #include <rudiments/filedescriptor.h>
 
-class stdiofiledescriptor : public filedescriptor {
+class RUDIMENTS_DLLSPEC stdiofiledescriptor : public filedescriptor {
 	public:
 		/** Flushes buffered prints to the console.  Returns
 		 *  true on success or false if an error occurred. */
