@@ -60,19 +60,29 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("	new permissions: %s\n",
 				permissions::evalPermOctal(mode));
 
-	// display the name of the user that owns the file
+	// display the name of the user/group
 	uid_t	uid=fl.getOwnerUserId();
 	char	*username=userentry::getName(uid);
 	stdoutput.printf("	user       : %s\n",username);
-	delete[] username;
-
-
-	// display the name of the group that owns the file
 	gid_t	gid=fl.getOwnerGroupId();
 	char	*groupname=groupentry::getName(gid);
 	stdoutput.printf("	group      : %s\n",groupname);
+
+	// change owner of the file
+	stdoutput.printf("	chown      : %d\n",
+				fl.changeOwner(username,groupname));
+	delete[] username;
 	delete[] groupname;
 
+	// re-display the user/group
+	uid=fl.getOwnerUserId();
+	username=userentry::getName(uid);
+	stdoutput.printf("	user       : %s\n",username);
+	gid=fl.getOwnerGroupId();
+	groupname=groupentry::getName(gid);
+	stdoutput.printf("	group      : %s\n",groupname);
+	delete[] username;
+	delete[] groupname;
 
 	// display the size of the file in bytes
 	off64_t	size=fl.getSize();

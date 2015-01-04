@@ -1063,11 +1063,110 @@ bool file::changeOwner(const char *newuser, const char *newgroup) const {
 
 bool file::changeOwner(uid_t uid, gid_t gid) const {
 	#if defined(RUDIMENTS_HAVE_FCHOWN)
+
 		int32_t	result;
 		do {
 			result=fchown(fd(),uid,gid);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
+
+	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
+
+		// get the file handle
+		HANDLE	fh=(HANDLE)getHandleFromFileDescriptor(fd());
+		if (fh==INVALID_HANDLE_VALUE) {
+			return false;
+		}
+
+		// get the user and group sid's
+		userentry	ue;
+		groupentry	ge;
+		if (!ue.initialize(uid) || !ge.initialize(gid)) {
+			return false;
+		}
+		PSID	usid=NULL;
+		PSID	gsid=NULL;
+		ConvertStringSidToSid(ue.getSid(),&usid);
+		ConvertStringSidToSid(ge.getSid(),&gsid);
+
+		// build trustees
+		TRUSTEE ut;
+		bytestring::zero(&ut,sizeof(ut));
+		BuildTrusteeWithSid(&ut,usid);
+		TRUSTEE gt;
+		bytestring::zero(&gt,sizeof(gt));
+		BuildTrusteeWithSid(&gt,gsid);
+
+		// adjust my privileges so I can set the owner
+		HANDLE	th=NULL;
+		if (!OpenProcessToken(GetCurrentProcess(),
+					TOKEN_ADJUST_PRIVILEGES,&th)) {
+			return false;
+		}
+		TOKEN_PRIVILEGES	priv;
+		priv.PrivilegeCount=1;
+		priv.Privileges[0].Attributes=SE_PRIVILEGE_ENABLED;
+		const char *privs[5]={
+			SE_BACKUP_NAME,
+			SE_RESTORE_NAME,
+			SE_SECURITY_NAME,
+			SE_TAKE_OWNERSHIP_NAME,
+			NULL
+		};
+		for (const char * const *p=privs; *p; p++) {
+			LUID	luid;
+			if (!LookupPrivilegeValue(NULL,*p,&luid)) {
+				CloseHandle(th);
+				return false;
+			}
+			priv.Privileges[0].Luid=luid;
+			if (!AdjustTokenPrivileges(th,FALSE,&priv,
+					sizeof(TOKEN_PRIVILEGES),NULL,NULL)) {
+				CloseHandle(th);
+				return false;
+			}
+		}
+
+		// build security descriptor
+		DWORD	sdsize=0;
+		SECURITY_INFORMATION	sinfo=
+			OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION;
+		GetUserObjectSecurity(fh,&sinfo,NULL,0,&sdsize);
+		PSECURITY_DESCRIPTOR	sdesc=
+			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,sdsize);
+		if (!sdesc) {
+			CloseHandle(th);
+			return false;
+		}
+		bytestring::zero(sdesc,sdsize);
+		if (!GetUserObjectSecurity(fh,&sinfo,sdesc,sdsize,&sdsize)) {
+			LocalFree(sdesc);
+			CloseHandle(th);
+			return false;
+		}
+		PSECURITY_DESCRIPTOR	newsdesc=NULL;
+		DWORD	result=BuildSecurityDescriptor(
+						&ut,&gt,0,NULL,0,NULL,
+						sdesc,&sdsize,&newsdesc);
+		if (result!=ERROR_SUCCESS) {
+			LocalFree(sdesc);
+			LocalFree(newsdesc);
+			CloseHandle(th);
+			return false;
+		}
+
+		// set permissions
+		if (!SetUserObjectSecurity(fh,&sinfo,newsdesc)) {
+			LocalFree(sdesc);
+			LocalFree(newsdesc);
+			CloseHandle(th);
+			return false;
+		}
+		
+		LocalFree(sdesc);
+		LocalFree(newsdesc);
+		CloseHandle(th);
+		return true;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

@@ -198,7 +198,7 @@ int32_t chat::expect(const char *string, char **abort) {
 
 		#ifdef DEBUG_CHAT
 		stdoutput.safePrint(ch);
-		fflush(stdout);
+		stdoutput.flush();
 		#endif
 
 		// if we got an error, timeout or abort, return
@@ -311,7 +311,7 @@ int32_t chat::send(const char *string, constnamevaluepairs *variables) {
 
 			#ifdef DEBUG_CHAT
 			stdoutput.printf("%c",ch);
-			fflush(stdout);
+			stdoutput.flush();
 			#endif
 
 			result=pvt->_writefd->write(ch);
