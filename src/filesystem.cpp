@@ -9,6 +9,7 @@
 	#include <rudiments/filedescriptor.h>
 	#include <rudiments/charstring.h>
 #endif
+#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -267,9 +268,9 @@ bool filesystem::initialize(int32_t fd) {
 }
 
 bool filesystem::close() {
+	int32_t	result=0;
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		if (pvt->_fd>-1 && pvt->_closeflag) {
-			int32_t	result;
 			do {
 				#if defined(RUDIMENTS_HAVE__CLOSE)
 					result=_close(pvt->_fd);
@@ -279,8 +280,6 @@ bool filesystem::close() {
 					#error no close or anything like it
 				#endif
 			} while (result==-1 && error::getErrorNumber()==EINTR);
-			pvt->_fd=-1;
-			return !result;
 		}
 	#else
 		delete[] pvt->_volume;
@@ -289,7 +288,7 @@ bool filesystem::close() {
 	pvt->_fd=-1;
 	pvt->_closeflag=false;
 	bytestring::zero(&pvt->_st,sizeof(pvt->_st));
-	return true;
+	return !result;
 }
 
 bool filesystem::getCurrentProperties() {
@@ -304,6 +303,7 @@ bool filesystem::getCurrentProperties() {
 				result=fstatfs(pvt->_fd,&pvt->_st);
 			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
+stdoutput.printf("result=%d\n",result);
 		return !result;
 
 	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
