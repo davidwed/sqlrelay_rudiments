@@ -179,15 +179,16 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 class filedescriptorprivate {
 	friend class filedescriptor;
 	private:
+		bool	_retryinterruptedreads:1;
+		bool	_retryinterruptedwrites:1;
+		bool	_retryinterruptedwaits:1;
+		bool	_retryinterruptedfcntl:1;
+		bool	_retryinterruptedioctl:1;
+		bool	_allowshortreads:1;
+		bool	_allowshortwrites:1;
+		bool	_translatebyteorder:1;
+
 		int32_t	_fd;
-		bool	_retryinterruptedreads;
-		bool	_retryinterruptedwrites;
-		bool	_retryinterruptedwaits;
-		bool	_retryinterruptedfcntl;
-		bool	_retryinterruptedioctl;
-		bool	_allowshortreads;
-		bool	_allowshortwrites;
-		bool	_translatebyteorder;
 
 		#ifdef RUDIMENTS_HAS_SSL
 		SSL_CTX	*_ctx;
