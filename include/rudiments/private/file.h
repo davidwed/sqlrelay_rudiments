@@ -22,13 +22,6 @@
 		bool	unlock(int16_t whence,
 					off64_t start, off64_t len) const;
 
-		bool	setAttribute(const char *name,
-						const void *value,
-						size_t size,
-						int32_t flags) const;
-		const char * const	*attributeArray(const char *buffer,
-							size_t size) const;
-
 		void	fileClone(const file &f);
 
 

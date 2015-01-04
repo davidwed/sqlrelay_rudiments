@@ -70,7 +70,6 @@ PROGS = server$(EXE) \
 	nonhandoff1$(EXE) \
 	nonhandoff2$(EXE) \
 	nonhandoffclient$(EXE) \
-	xattr$(EXE) \
 	dtd$(EXE) \
 	xmls$(EXE) \
 	xmld$(EXE) xmlentities$(EXE) \
@@ -145,7 +144,6 @@ clean:
 		nonhandoff2$(EXE) \
 		nonhandoffclient$(EXE) \
 		bytebuffer$(EXE) \
-		xattr$(EXE) \
 		xmls$(EXE) \
 		xmld$(EXE) \
 		xmlentities$(EXE) \
@@ -343,9 +341,6 @@ nonhandoffclient$(EXE): nonhandoffclient.cpp nonhandoffclient.lo
 
 bytebuffer$(EXE): bytebuffer.cpp bytebuffer.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ bytebuffer.lo $(ALLSTATIC) $(LIBS)
-
-xattr$(EXE): xattr.cpp xattr.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ xattr.lo $(ALLSTATIC) $(LIBS)
 
 xmls$(EXE): xmls.cpp xmls.lo
 	$(LIBTOOL) --mode=link $(CXX) -o $@ xmls.lo $(ALLSTATIC) $(LIBS)

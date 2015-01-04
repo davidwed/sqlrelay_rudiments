@@ -307,9 +307,6 @@
 /* Some systems have FreeConsole */
 #define RUDIMENTS_HAVE_FREECONSOLE 1
 
-/* Some systems have fsetxattrs with a const 3rd parameter */
-/* #undef RUDIMENTS_HAVE_FSETXATTR_CONST */
-
 /* Some systems have fsync */
 /* #undef RUDIMENTS_HAVE_FSYNC */
 
@@ -1284,9 +1281,6 @@
 
 /* Some systems have WSADuplicateSocket */
 #define RUDIMENTS_HAVE_WSADUPLICATESOCKET 1
-
-/* Some systems have extended filesystem attributes */
-/* #undef RUDIMENTS_HAVE_XATTRS */
 
 /* Some systems have _access_s() */
 #define RUDIMENTS_HAVE__ACCESS_S 1

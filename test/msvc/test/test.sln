@@ -121,8 +121,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nonhandoff2", "..\nonhandof
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nonhandoffclient", "..\nonhandoffclient\nonhandoffclient.vcxproj", "{5B6C77B7-7D65-490C-A0EB-02B2F56A60BB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xattr", "..\xattr\xattr.vcxproj", "{BAE46A04-A598-4209-A5CA-9814A42F95A0}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dtd", "..\dtd\dtd.vcxproj", "{77F1259A-178E-4ABB-A826-EBC1B0C920C5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xmls", "..\xmls\xmls.vcxproj", "{B71E88FF-5E65-4D28-BF71-FB9FB221961B}"
