@@ -164,7 +164,8 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
 		// get the file handle
-		HANDLE	fh=(HANDLE)_get_osfhandle(fd);
+		HANDLE	fh=(HANDLE)filedescriptor::
+				getHandleFromFileDescriptor(fd);
 
 		// is this a file or directory?
 		BY_HANDLE_FILE_INFORMATION	bhfi;

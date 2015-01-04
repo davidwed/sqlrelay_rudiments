@@ -49,3 +49,4 @@
 
 	public:
 		filedescriptor(int32_t fd);
+		static void	*getHandleFromFileDescriptor(int32_t fd);

@@ -4,6 +4,9 @@
 #include <rudiments/memorymap.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
+#if defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+	#include <rudiments/filedescriptor.h>
+#endif
 
 #include <stdio.h>
 #ifdef RUDIMENTS_HAVE_SYS_MMAN_H
@@ -133,7 +136,8 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 		}
 
 		// create the file mapping
-		pvt->_map=CreateFileMapping((HANDLE)_get_osfhandle(fd),
+		pvt->_map=CreateFileMapping((HANDLE)filedescriptor::
+						getHandleFromFileDescriptor(fd),
 						NULL,mapprot,
 						maxsizehigh,maxsizelow,
 						NULL);

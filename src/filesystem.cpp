@@ -3,11 +3,12 @@
 
 #include <rudiments/filesystem.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/directory.h>
 #include <rudiments/error.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
+	#include <rudiments/filedescriptor.h>
 	#include <rudiments/charstring.h>
 #endif
-#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -110,6 +111,9 @@ filesystem::~filesystem() {
 
 bool filesystem::initialize(const char *path) {
 	close();
+	if (!path || !path[0]) {
+		path=directory::getCurrentWorkingDirectory();
+	}
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		pvt->_closeflag=true;
 		do {
@@ -150,7 +154,11 @@ bool filesystem::initialize(int32_t fd) {
 		// dos-style drive letter.  We'll just go ahead and do that.
 
 		// get the file handle
-		HANDLE	fh=(HANDLE)_get_osfhandle(fd);
+		HANDLE	fh=(HANDLE)filedescriptor::
+					getHandleFromFileDescriptor(fd);
+		if (fh==INVALID_HANDLE_VALUE) {
+			return false;
+		}
 
 		// get the file size, can't map a zero-byte file
 		DWORD sizehi=0;

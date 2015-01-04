@@ -737,7 +737,8 @@ bool file::getCurrentProperties() {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAVE_GETFILETYPE)
-		pvt->_filetype=GetFileType((HANDLE)_get_osfhandle(fd()));
+		pvt->_filetype=GetFileType(
+				(HANDLE)getHandleFromFileDescriptor(fd()));
 	#endif
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		filesystem	fs;
@@ -752,7 +753,8 @@ bool file::getCurrentProperties() {
 
 		BY_HANDLE_FILE_INFORMATION	bhfi;
 		if (GetFileInformationByHandle(
-				(HANDLE)_get_osfhandle(fd()),&bhfi)==TRUE) {
+				(HANDLE)getHandleFromFileDescriptor(fd()),
+				&bhfi)==TRUE) {
 
 			pvt->_inode=(((uint64_t)bhfi.nFileIndexHigh)<<32)|
 							bhfi.nFileIndexLow;
@@ -767,7 +769,7 @@ bool file::getCurrentProperties() {
 		// get the security information
 		PACL			dacl=NULL;
 		PSECURITY_DESCRIPTOR	ppsd=NULL;
-		if (GetSecurityInfo((HANDLE)_get_osfhandle(fd()),
+		if (GetSecurityInfo((HANDLE)getHandleFromFileDescriptor(fd()),
 					SE_FILE_OBJECT,
 					DACL_SECURITY_INFORMATION,
 					NULL,NULL,&dacl,NULL,&ppsd)!=
@@ -984,7 +986,7 @@ bool file::lock(int32_t method, int16_t type,
 		ol.OffsetHigh=lockstart.HighPart;
 		LARGE_INTEGER	locklength;
 		locklength.QuadPart=len;
-		return LockFileEx((HANDLE)_get_osfhandle(fd()),
+		return LockFileEx((HANDLE)getHandleFromFileDescriptor(fd()),
 					(method==F_SETLK)?
 						LOCKFILE_FAIL_IMMEDIATELY:0,
 					0,
@@ -1044,7 +1046,7 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 		}
 		LARGE_INTEGER	locklength;
 		locklength.QuadPart=len;
-		return UnlockFile((HANDLE)_get_osfhandle(fd()),
+		return UnlockFile((HANDLE)getHandleFromFileDescriptor(fd()),
 					lockstart.LowPart,
 					lockstart.HighPart,
 					locklength.LowPart,
@@ -1211,7 +1213,8 @@ bool file::sync() const {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#elif defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
-		return (FlushFileBuffers((HANDLE)_get_osfhandle(fd()))!=0);
+		return (FlushFileBuffers(
+			(HANDLE)getHandleFromFileDescriptor(fd()))!=0);
 	#elif defined(RUDIMENTS_HAVE_COMMIT)
 		return _commit(fd())==0;
 	#else

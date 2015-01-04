@@ -1208,7 +1208,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			if (actualread==-1) {
 				debugPrintf("%s ",error::getErrorString());
 			}
-			fflush(stdout);
+			stdoutput.flush();
 			#endif
 		#ifdef RUDIMENTS_HAS_SSL
 		}
@@ -1488,7 +1488,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			if (actualwrite==-1) {
 				debugPrintf("%s ",error::getErrorString());
 			}
-			fflush(stdout);
+			stdoutput.flush();
 			#endif
 
 		#ifdef RUDIMENTS_HAS_SSL
@@ -1791,7 +1791,7 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	// get the handle from the fd
 	HANDLE	localhandle=INVALID_HANDLE_VALUE;
 	if (success) {
-		localhandle=(HANDLE)_get_osfhandle(fd);
+		localhandle=(HANDLE)getHandleFromFileDescriptor(fd);
 		success=(localhandle!=INVALID_HANDLE_VALUE);
 	}
 
@@ -2229,7 +2229,7 @@ bool filedescriptor::closeOnExec() {
 		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)|FD_CLOEXEC);
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		return SetHandleInformation(
-				(HANDLE)_get_osfhandle(pvt->_fd),
+				(HANDLE)getHandleFromFileDescriptor(pvt->_fd),
 				HANDLE_FLAG_INHERIT,0)!=0;
 	#else
 		#error no FD_CLOEXEC or anything like it
@@ -2241,7 +2241,7 @@ bool filedescriptor::dontCloseOnExec() {
 		return !fCntl(F_SETFD,fCntl(F_GETFD,FD_CLOEXEC)&(~FD_CLOEXEC));
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		return SetHandleInformation(
-				(HANDLE)_get_osfhandle(pvt->_fd),
+				(HANDLE)getHandleFromFileDescriptor(pvt->_fd),
 				HANDLE_FLAG_INHERIT,
 				HANDLE_FLAG_INHERIT)!=0;
 	#else
@@ -2254,8 +2254,9 @@ bool filedescriptor::getCloseOnExec() {
 		return fCntl(F_GETFD,FD_CLOEXEC);
 	#elif defined(RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT)
 		DWORD	inherit;
-		if (GetHandleInformation((HANDLE)_get_osfhandle(pvt->_fd),
-								&inherit)) {
+		if (GetHandleInformation(
+				(HANDLE)getHandleFromFileDescriptor(pvt->_fd),
+				&inherit)) {
 			return (bool)(inherit&HANDLE_FLAG_INHERIT);
 		}
 		return false;
@@ -2374,4 +2375,26 @@ void filedescriptor::printBits(unsigned char *bits, uint64_t size) {
 			printf("%d",(byte>>j)&0x01);
 		}
 	}
+}
+
+#ifdef _WIN32
+static void invalidParameterHandler(const wchar_t *expression,
+					const wchar_t *function,
+					const wchar_t *file,
+					unsigned int line,
+					uintptr_t preserved) {
+	// don't do anything
+}
+#endif
+
+void *filedescriptor::getHandleFromFileDescriptor(int32_t fd) {
+	#ifdef _WIN32
+		_invalid_parameter_handler	oldiph=
+			_set_invalid_parameter_handler(invalidParameterHandler);
+		intptr_t	handle=_get_osfhandle(fd);
+		_set_invalid_parameter_handler(oldiph);
+		return (void *)handle;
+	#else
+		return NULL;
+	#endif
 }
