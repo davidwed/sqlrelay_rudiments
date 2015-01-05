@@ -303,7 +303,6 @@ bool filesystem::getCurrentProperties() {
 				result=fstatfs(pvt->_fd,&pvt->_st);
 			#endif
 		} while (result==-1 && error::getErrorNumber()==EINTR);
-stdoutput.printf("result=%d\n",result);
 		return !result;
 
 	#elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
