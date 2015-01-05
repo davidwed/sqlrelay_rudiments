@@ -115,7 +115,6 @@ enum _linkedlistutil_valuetype_t {
 	OBJECT_TYPE
 };
 
-
 RUDIMENTS_TEMPLATE_INLINE
 enum _linkedlistutil_valuetype_t _linkedlistutil_valuetype(char value) {
 	return INTEGER_TYPE;

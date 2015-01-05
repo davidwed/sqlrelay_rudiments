@@ -21,7 +21,7 @@ class linkedlistnode
 		/** Deletes this instance of the linkedlistnode class.
 		 *  Note however, that the value stored in the linkedlistnode
 		 *  is not deleted by this call. */
-		virtual	~linkedlistnode();
+		~linkedlistnode();
 
 		/** Set the value stored in the node to "value". */
 		void		setValue(valuetype value);
@@ -73,7 +73,7 @@ class linkedlist
 		/** Deletes this instance of the linkedlist class and all of
 		 *  its linkedlistnodes.  Note however, that the data stored
 		 *  in each linkedlistnode is not deleted by this call. */
-		virtual	~linkedlist();
+		~linkedlist();
 
 		/** Creates a new linkedlistnode containing "value" and
 		 *  prepends it to the linkedlist. */
