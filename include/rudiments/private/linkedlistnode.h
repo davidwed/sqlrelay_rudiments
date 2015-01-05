@@ -6,3 +6,4 @@
 
 	protected:
 		linkedlistnodeinternal	*n;
+		static valuetype	v;

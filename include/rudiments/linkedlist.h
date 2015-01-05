@@ -199,7 +199,6 @@ class linkedlist : public linkedlistinternal {
 	#include <rudiments/private/linkedlist.h>
 };
 
-
 #include <rudiments/private/linkedlistinlines.h>
 
 #endif

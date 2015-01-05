@@ -7,3 +7,4 @@
 				bool before);
 
 		linkedlistinternal	*l;
+		static	valuetype	v;
