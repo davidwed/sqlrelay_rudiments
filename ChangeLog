@@ -13,6 +13,9 @@
 	abstracted _get_osfhandle calls and added an invalid parameter callback
 	updated filedescriptor to use bit fields for all of its flags
 	implemented file::changeOwner() for windows
+	removed xattrs stuff
+	removed SSL-related ifdef's from headers and implemented degenerate
+		SSL routines for when SSL isn't supported
 
 0.49 - combined passswdentry and shadowentry classes into userentry class
 	updated file::sync() to use FlushFileBuffers directly

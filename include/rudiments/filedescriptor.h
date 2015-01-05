@@ -58,7 +58,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  Returns true on success and false on failure. */
 		bool	duplicate(int32_t newfd) const;
 
-		#ifdef RUDIMENTS_HAS_SSL
+		/** Returns true rudiments was built with SSL support
+		 *  and false otherwise. */
+		bool	supportsSSL();
+
 		/** Associates an SSL context "ctx" with the
 		 *  filedescriptor.  Passing in a NULL for "ctx"
 		 *  has the additional side effect of calling
@@ -109,7 +112,6 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  on the result of this method to determine
 		 *  the exact error. */
 		int32_t	getSSLResult() const;
-		#endif
 
 		/** Returns true if the client socket supports
 		 *  blocking/nonblocking modes and false otherwise. */

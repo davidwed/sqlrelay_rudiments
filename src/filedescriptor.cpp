@@ -386,19 +386,33 @@ bool filedescriptor::duplicate(int32_t newfd) const {
 	return (result==newfd);
 }
 
+bool filedescriptor::supportsSSL() {
 #ifdef RUDIMENTS_HAS_SSL
+	return true;
+#else
+	return false;
+#endif
+}
+
 void filedescriptor::setSSLContext(void *ctx) {
+#ifdef RUDIMENTS_HAS_SSL
 	if (!ctx) {
 		deInitializeSSL();
 	}
 	pvt->_ctx=(SSL_CTX *)ctx;
+#endif
 }
 
 void *filedescriptor::getSSLContext() {
+#ifdef RUDIMENTS_HAS_SSL
 	return (void *)pvt->_ctx;
+#else
+	return NULL;
+#endif
 }
 
 bool filedescriptor::initializeSSL() {
+#ifdef RUDIMENTS_HAS_SSL
 	if (pvt->_fd==-1) {
 		return false;
 	}
@@ -409,9 +423,13 @@ bool filedescriptor::initializeSSL() {
 		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
 	}
 	return true;
+#else
+	return false;
+#endif
 }
 
 void filedescriptor::deInitializeSSL() {
+#ifdef RUDIMENTS_HAS_SSL
 	if (pvt->_ssl) {
 		SSL_free(pvt->_ssl);
 		pvt->_ssl=NULL;
@@ -423,16 +441,24 @@ void filedescriptor::deInitializeSSL() {
 		//BIO_free(pvt->_bio);
 		pvt->_bio=NULL;
 	}
+#endif
 }
 
 void *filedescriptor::getSSL() const {
+#ifdef RUDIMENTS_HAS_SSL
 	return (void *)pvt->_ssl;
+#else
+	return NULL;
+#endif
 }
 
 void *filedescriptor::newSSLBIO() const {
+#ifdef RUDIMENTS_HAS_SSL
 	return (void *)BIO_new_fd(pvt->_fd,BIO_NOCLOSE);
-}
+#else
+	return NULL;
 #endif
+}
 
 bool filedescriptor::supportsBlockingNonBlockingModes() {
 	#if defined(RUDIMENTS_HAVE_FCNTL) && \
@@ -2207,23 +2233,35 @@ void filedescriptor::fd(int32_t filedes) {
 	setFileDescriptor(filedes);
 }
 
-#ifdef RUDIMENTS_HAS_SSL
 void *filedescriptor::ctx() {
+#ifdef RUDIMENTS_HAS_SSL
 	return (void *)pvt->_ctx;
+#else
+	return NULL;
+#endif
 }
 
 void *filedescriptor::ssl() {
+#ifdef RUDIMENTS_HAS_SSL
 	return (void *)pvt->_ssl;
+#else
+	return NULL;
+#endif
 }
 
 int32_t filedescriptor::sslresult() {
+#ifdef RUDIMENTS_HAS_SSL
 	return pvt->_sslresult;
+#else
+	return 0;
+#endif
 }
 
 void filedescriptor::sslresult(int32_t sslrslt) {
+#ifdef RUDIMENTS_HAS_SSL
 	pvt->_sslresult=sslrslt;
-}
 #endif
+}
 
 bool filedescriptor::closeOnExec() {
 	#if defined(RUDIMENTS_HAVE_FD_CLOEXEC)
