@@ -5,6 +5,4 @@
 		void	setPrevious(linkedlistnode<valuetype> *previous);
 
 	protected:
-		valuetype			value;
-		linkedlistnode<valuetype>	*next;
-		linkedlistnode<valuetype>	*previous;
+		linkedlistnodeinternal	*n;

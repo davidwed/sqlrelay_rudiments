@@ -3359,9 +3359,9 @@ AC_PREFIX_DEFAULT(/usr/local/firstworks)
 
 dnl perform substitutions for disable options
 HEADERS=""
-PRIVATEHEADERS=""
-SRCS=""
-LOBJS=""
+PRIVATEHEADERS="linkedlistinternal.h"
+SRCS="linkedlistinternal.cpp"
+LOBJS="linkedlistinternal.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )

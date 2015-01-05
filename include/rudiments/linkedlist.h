@@ -8,7 +8,7 @@
 
 /** The linkedlistnode class stores the values that compose a linkedlist. */
 template <class valuetype>
-class linkedlistnode {
+class linkedlistnode : public linkedlistnodeinternal {
 	public:
 		/** Creates an instance of the linkedlistnode class that
 		 *  stores value "value". */
