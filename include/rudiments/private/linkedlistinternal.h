@@ -4,6 +4,8 @@
 #ifndef RUDIMENTS_LINKEDLISTINTERNAL_H
 #define RUDIMENTS_LINKEDLISTINTERNAL_H
 
+#define LINKEDLISTINTERNAL
+
 #include <rudiments/private/linkedlistutilinlines.h>
 #include <rudiments/private/inttypes.h>
 

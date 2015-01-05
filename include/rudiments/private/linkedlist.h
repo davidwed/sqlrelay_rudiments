@@ -6,5 +6,10 @@
 				linkedlistnode<valuetype> *nodetomove,
 				bool before);
 
+#ifdef LINKEDLISTINTERNAL
 		linkedlistinternal	*l;
-		static	valuetype	v;
+#else
+		linkedlistnode<valuetype>	*first;
+		linkedlistnode<valuetype>	*last;
+		uint64_t			length;
+#endif
