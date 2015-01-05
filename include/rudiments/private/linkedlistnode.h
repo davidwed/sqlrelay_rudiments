@@ -5,10 +5,6 @@
 		void	setPrevious(linkedlistnode<valuetype> *previous);
 
 	protected:
-#ifdef LINKEDLISTINTERNAL
-		linkedlistnodeinternal	*n;
-#else
 		valuetype			value;
 		linkedlistnode<valuetype>	*next;
 		linkedlistnode<valuetype>	*previous;
-#endif

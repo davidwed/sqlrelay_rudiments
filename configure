@@ -30733,9 +30733,9 @@ SONAME_VERSION_INFO="1:0:0"
 
 
 HEADERS=""
-PRIVATEHEADERS="linkedlistinternal.h"
-SRCS="linkedlistinternal.cpp"
-LOBJS="linkedlistinternal.lo"
+PRIVATEHEADERS=""
+SRCS=""
+LOBJS=""
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )
