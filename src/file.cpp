@@ -104,7 +104,7 @@ class fileprivate {
 			char		*_name;
 			blksize_t	_blocksize;
 		#endif
-		bool		_getcurrentpropertiesonopen;
+		bool	_getcurrentpropertiesonopen;
 };
 
 file::file() : filedescriptor() {
