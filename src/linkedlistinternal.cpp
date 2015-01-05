@@ -14,10 +14,9 @@ class linkedlistnodeinternalprivate {
 		linkedlistnodeinternal	*_prev;
 };
 
-linkedlistnodeinternal::linkedlistnodeinternal(unsigned char *value,
-							uint64_t size) {
+linkedlistnodeinternal::linkedlistnodeinternal(
+				unsigned char *value, uint64_t size) {
 	pvt=new linkedlistnodeinternalprivate();
-	// FIXME: pad to word boundary
 	pvt->_value=(unsigned char *)bytestring::duplicate(value,size);
 	pvt->_prev=NULL;
 	pvt->_next=NULL;
@@ -147,19 +146,24 @@ class linkedlistinternalprivate {
 		
 };
 
-linkedlistinternal::linkedlistinternal(uint64_t size,
-				_linkedlistutil_valuetype_t valuetype) {
+linkedlistinternal::linkedlistinternal() {
 	pvt=new linkedlistinternalprivate;
 	pvt->_first=NULL;
 	pvt->_last=NULL;
 	pvt->_length=0;
-	pvt->_size=size;
-	pvt->_valuetype=valuetype;
+	pvt->_size=0;
+	pvt->_valuetype=OBJECT_TYPE;
 }
 
 linkedlistinternal::~linkedlistinternal() {
 	clear();
 	delete pvt;
+}
+
+void linkedlistinternal::init(uint64_t size,
+				_linkedlistutil_valuetype_t valuetype) {
+	pvt->_size=size;
+	pvt->_valuetype=valuetype;
 }
 
 void linkedlistinternal::prepend(unsigned char *value) {

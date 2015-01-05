@@ -12,9 +12,9 @@
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-LINKEDLIST_CLASS::linkedlist() {
+LINKEDLIST_CLASS::linkedlist() : linkedlistinternal() {
 	valuetype	v=0;
-	l=new linkedlistinternal(sizeof(valuetype),
+	linkedlistinternal::init(sizeof(valuetype),
 				_linkedlistutil_valuetype(v));
 }
 
@@ -22,73 +22,72 @@ LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 LINKEDLIST_CLASS::~linkedlist() {
 	clear();
-	delete l;
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::prepend(valuetype value) {
-	l->linkedlistinternal::prepend((unsigned char *)&value);
+	linkedlistinternal::prepend((unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::prepend(linkedlistnode<valuetype> *node) {
-	l->linkedlistinternal::prepend(node);
+	linkedlistinternal::prepend(node);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::append(valuetype value) {
-	l->linkedlistinternal::append((unsigned char *)&value);
+	linkedlistinternal::append((unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::append(linkedlistnode<valuetype> *node) {
-	l->linkedlistinternal::appendNode(node);
+	linkedlistinternal::appendNode(node);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::insertBefore(linkedlistnode<valuetype> *node,
 							valuetype value) {
-	l->linkedlistinternal::insertBefore(node,(unsigned char *)&value);
+	linkedlistinternal::insertBefore(node,(unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::insertBefore(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *newnode) {
-	l->linkedlistinternal::insertBefore(node,newnode);
+	linkedlistinternal::insertBefore(node,newnode);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::insertAfter(linkedlistnode<valuetype> *node,
 							valuetype value) {
-	l->linkedlistinternal::insertAfter(node,(unsigned char *)&value);
+	linkedlistinternal::insertAfter(node,(unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::insertAfter(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *newnode) {
-	l->linkedlistinternal::insertAfter(node,newnode);
+	linkedlistinternal::insertAfter(node,newnode);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::moveBefore(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *nodetomove) {
-	l->linkedlistinternal::moveBefore(node,nodetomove);
+	linkedlistinternal::moveBefore(node,nodetomove);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::moveAfter(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *nodetomove) {
-	l->linkedlistinternal::moveAfter(node,nodetomove);
+	linkedlistinternal::moveAfter(node,nodetomove);
 }
 
 LINKEDLIST_TEMPLATE
@@ -96,50 +95,50 @@ RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::move(linkedlistnode<valuetype> *node,
 					linkedlistnode<valuetype> *nodetomove,
 					bool before) {
-	l->linkedlistinternal::move(node,nodetomove,before);
+	linkedlistinternal::move(node,nodetomove,before);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::detach(linkedlistnode<valuetype> *node) {
-	l->linkedlistinternal::detach(node);
+	linkedlistinternal::detach(node);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::remove(valuetype value) {
-	return l->linkedlistinternal::remove((unsigned char *)&value);
+	return linkedlistinternal::remove((unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::removeAll(valuetype value) {
-	return l->linkedlistinternal::removeAll((unsigned char *)&value);
+	return linkedlistinternal::removeAll((unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool LINKEDLIST_CLASS::remove(linkedlistnode<valuetype> *node) {
-	return l->linkedlistinternal::removeNode(node);
+	return linkedlistinternal::removeNode(node);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 uint64_t LINKEDLIST_CLASS::getLength() const {
-	return l->linkedlistinternal::getLength();
+	return linkedlistinternal::getLength();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getFirst() {
-	return (linkedlistnode<valuetype> *)l->linkedlistinternal::getFirst();
+	return (linkedlistnode<valuetype> *)linkedlistinternal::getFirst();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getLast() {
 	return (linkedlistnode<valuetype> *)
-		l->linkedlistinternal::getLast();
+		linkedlistinternal::getLast();
 }
 
 LINKEDLIST_TEMPLATE
@@ -147,7 +146,7 @@ RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getPrevious(
 					linkedlistnode<valuetype> *node) {
 	return (linkedlistnode<valuetype> *)
-		l->linkedlistinternal::getPrevious(node);
+		linkedlistinternal::getPrevious(node);
 }
 
 LINKEDLIST_TEMPLATE
@@ -155,14 +154,14 @@ RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::getNext(
 					linkedlistnode<valuetype> *node) {
 	return (linkedlistnode<valuetype> *)
-		l->linkedlistinternal::getNext(node);
+		linkedlistinternal::getNext(node);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 linkedlistnode<valuetype> *LINKEDLIST_CLASS::find(valuetype value) {
 	return (linkedlistnode<valuetype> *)
-		l->linkedlistinternal::find((unsigned char *)&value);
+		linkedlistinternal::find((unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
@@ -171,37 +170,37 @@ linkedlistnode<valuetype> *LINKEDLIST_CLASS::find(
 					linkedlistnode<valuetype> *startnode,
 					valuetype value) {
 	return (linkedlistnode<valuetype> *)
-		l->linkedlistinternal::find(startnode,(unsigned char *)&value);
+		linkedlistinternal::find(startnode,(unsigned char *)&value);
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::insertionSort() {
-	l->linkedlistinternal::insertionSort();
+	linkedlistinternal::insertionSort();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::heapSort() {
-	l->linkedlistinternal::heapSort();
+	linkedlistinternal::heapSort();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::clear() {
-	l->linkedlistinternal::clear();
+	linkedlistinternal::clear();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::print() const {
-	l->linkedlistinternal::print();
+	linkedlistinternal::print();
 }
 
 LINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLIST_CLASS::print(uint64_t count) const {
-	l->linkedlistinternal::print(count);
+	linkedlistinternal::print(count);
 }
 
 #define LINKEDLISTNODE_TEMPLATE template <class valuetype>
@@ -248,7 +247,7 @@ LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() {
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t LINKEDLISTNODE_CLASS::compare(valuetype value) const {
-	valuetype	v;
+	valuetype	v=0;
 	return linkedlistnodeinternal::compare(
 				(unsigned char *)&value,
 				sizeof(valuetype),
@@ -264,7 +263,7 @@ int32_t LINKEDLISTNODE_CLASS::compare(linkedlistnode<valuetype> *peer) const {
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLISTNODE_CLASS::print() const {
-	valuetype	v;
+	valuetype	v=0;
 	linkedlistnodeinternal::print(sizeof(valuetype),
 				_linkedlistutil_valuetype(v));
 }

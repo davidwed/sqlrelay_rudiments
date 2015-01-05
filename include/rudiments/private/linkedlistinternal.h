@@ -26,6 +26,7 @@ class linkedlistnodeinternal {
 					const;
 		void	print(uint64_t size,
 				_linkedlistutil_valuetype_t valuetype) const;
+
 	private:
 		linkedlistnodeinternalprivate	*pvt;
 };
@@ -35,10 +36,11 @@ class linkedlistinternalprivate;
 
 class linkedlistinternal {
 	public:
-				linkedlistinternal(uint64_t size,
-					_linkedlistutil_valuetype_t valuetype);
+				linkedlistinternal();
 			virtual	~linkedlistinternal();
 
+		void	init(uint64_t size,
+				_linkedlistutil_valuetype_t valuetype);
 		void	prepend(unsigned char *value);
 		void	prependNode(linkedlistnodeinternal *node);
 		void	append(unsigned char *value);
