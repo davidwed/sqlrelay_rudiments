@@ -635,6 +635,10 @@ bool datetime::getBrokenDownTimeFromEpoch() {
 
 	struct tm	*tms=NULL;
 	#ifdef RUDIMENTS_HAVE_LOCALTIME_S
+		// localtime_s appears to rely on one or more of:
+		// _daylight, _timezone or _tzname rather than just on TZ,
+		// so we have to call _tzset() before calling localtime_s.
+		_tzset();
 		struct tm	tm;
 		if (localtime_s(&tm,&pvt->_epoch)) {
 			return false;
