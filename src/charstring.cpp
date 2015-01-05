@@ -193,7 +193,7 @@ bool charstring::strip(char *str1, const char *str2) {
 	bool	retval=false;
 
 	while (str1[index]) {
-		if (!strncmp(str1+index,str2,str2len)) {
+		if (!compare(str1+index,str2,str2len)) {
 			total=total+str2len;
 			index=index+str2len;
 			retval=true;
