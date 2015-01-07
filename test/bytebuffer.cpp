@@ -233,8 +233,35 @@ int main(int argc, const char **argv) {
 	test("= operator, data",
 		!bytestring::compare(dd.getBuffer(),"12.1234512.12345",16));
 	stdoutput.printf("\n");
-	
 
+	// initial contents
+	stdoutput.printf("initial contents\n");
+	unsigned char	*initialcontents=new unsigned char[100];
+	for (uint16_t i=0; i<10; i=i+10) {
+		bytestring::copy(initialcontents+i,"1234567890",10);
+	}
+	unsigned char	*iccopy=
+		(unsigned char *)bytestring::duplicate(initialcontents,100);
+	bytebuffer	ee(initialcontents,100,20);
+	test("initial contents, getSize()",ee.getSize()==100);
+	test("initial contents, getPosition()",ee.getPosition()==100);
+	test("initial contents, getEnd()",ee.getEnd()==100);
+	test("initial contents, getActualSize()",ee.getActualSize()==100);
+	test("initial contents, data",
+		!bytestring::compare(ee.getBuffer(),iccopy,100));
+	test("getBuffer(), getSize()",ee.getSize()==100);
+	test("getBuffer(), getPosition()",ee.getPosition()==100);
+	test("getBuffer(), getEnd()",ee.getEnd()==100);
+	test("getBuffer(), getActualSize()",ee.getActualSize()==100);
+	ee.append("1234567890");
+	test("append(), getSize()",ee.getSize()==110);
+	test("append(), getPosition()",ee.getPosition()==110);
+	test("append(), getEnd()",ee.getEnd()==110);
+	test("append(), getActualSize()",ee.getActualSize()==120);
+	test("append(), data",
+		!bytestring::compare(ee.getBuffer(),iccopy,100) &&
+		!bytestring::compare(ee.getBuffer()+100,"1234567890",10));
+	stdoutput.printf("\n");
 
 	// large writes
 	bb.clear();

@@ -45,16 +45,25 @@ bytebuffer::bytebuffer(unsigned char *initialcontents,
 void bytebuffer::init(unsigned char *initialcontents,
 				size_t initial, size_t extsize) {
 	pvt=new bytebufferprivate;
-	pvt->_curext=NULL;
 	pvt->_initial=initial;
 	pvt->_extsize=extsize;
-	pvt->_pos=0;
-	pvt->_end=0;
-	pvt->_totalbytes=0;
-	extend(initial);
-	size_t	initlen=charstring::length(initialcontents);
-	if (initlen) {
-		append(initialcontents,initlen);
+	if (initialcontents) {
+		bytebufferextent	*newext=new bytebufferextent;
+		newext->_buffer=initialcontents;
+		newext->_pos=0;
+		newext->_size=initial;
+		newext->_avail=0;
+		pvt->_extents.append(newext);
+		pvt->_curext=pvt->_extents.getFirst();
+		pvt->_pos=initial;
+		pvt->_end=initial;
+		pvt->_totalbytes=initial;
+	} else {
+		pvt->_curext=NULL;
+		pvt->_pos=0;
+		pvt->_end=0;
+		pvt->_totalbytes=0;
+		extend(initial);
 	}
 }
 
