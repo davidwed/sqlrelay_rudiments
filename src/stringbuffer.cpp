@@ -3,7 +3,6 @@
 
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
-#include <rudiments/stdio.h>
 
 stringbuffer::stringbuffer() : bytebuffer(128,32) {
 }
@@ -111,44 +110,32 @@ stringbuffer *stringbuffer::append(uint64_t number) {
 }
 
 stringbuffer *stringbuffer::append(int16_t number, uint16_t zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%0*hd",zeropadding,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(int32_t number, uint16_t zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%0*d",zeropadding,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(int64_t number, uint16_t zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%0*lld",zeropadding,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(uint16_t number, uint16_t zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%0*hd",zeropadding,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(uint32_t number, uint16_t zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%0*d",zeropadding,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(uint64_t number, uint16_t zeropadding) {
-	char	*numstr=charstring::parseNumber(number,zeropadding);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%0*lld",zeropadding,number);
 	return this;
 }
 
@@ -157,17 +144,13 @@ stringbuffer *stringbuffer::append(float number) {
 }
 
 stringbuffer *stringbuffer::append(float number, uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,scale);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%.*f",scale,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,precision,scale);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%*.*f",precision,scale,number);
 	return this;
 }
 
@@ -176,17 +159,13 @@ stringbuffer *stringbuffer::append(double number) {
 }
 
 stringbuffer *stringbuffer::append(double number, uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,scale);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%.*f",scale,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,precision,scale);
-	bytebuffer::append(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::appendFormatted("%*.*f",precision,scale,number);
 	return this;
 }
 
@@ -216,23 +195,17 @@ stringbuffer *stringbuffer::write(char character) {
 }
 
 stringbuffer *stringbuffer::write(int16_t number) {
-	char	*numstr=charstring::parseNumber(number);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%hd",number);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(int32_t number) {
-	char	*numstr=charstring::parseNumber(number);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%d",number);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(int64_t number) {
-	char	*numstr=charstring::parseNumber(number);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%lld",number);
 	return this;
 }
 
@@ -242,23 +215,17 @@ stringbuffer *stringbuffer::write(unsigned char character) {
 }
 
 stringbuffer *stringbuffer::write(uint16_t number) {
-	char	*numstr=charstring::parseNumber(number);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%hd",number);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(uint32_t number) {
-	char	*numstr=charstring::parseNumber(number);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%d",number);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(uint64_t number) {
-	char	*numstr=charstring::parseNumber(number);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%lld",number);
 	return this;
 }
 
@@ -267,17 +234,13 @@ stringbuffer *stringbuffer::write(float number) {
 }
 
 stringbuffer *stringbuffer::write(float number, uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,scale);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%.*f",scale,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(float number, uint16_t precision,
 							uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,precision,scale);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%*.*f",precision,scale,number);
 	return this;
 }
 
@@ -286,17 +249,13 @@ stringbuffer *stringbuffer::write(double number) {
 }
 
 stringbuffer *stringbuffer::write(double number, uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,scale);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%.*f",scale,number);
 	return this;
 }
 
 stringbuffer *stringbuffer::write(double number, uint16_t precision,
 							uint16_t scale) {
-	char	*numstr=charstring::parseNumber(number,precision,scale);
-	bytebuffer::write(numstr,charstring::length(numstr));
-	delete[] numstr;
+	bytebuffer::writeFormatted("%*.*f",precision,scale,number);
 	return this;
 }
 

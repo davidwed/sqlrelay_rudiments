@@ -50,6 +50,18 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("string: %s\n",str->getString());
 
 
+	// append some double floating point numbers to the buffer
+	str->append((double)1.1,1,1)->append(" ");
+	str->append((double)2.02,2,2)->append(" ");
+	str->append((double)3.003,3,3)->append(" ");
+	str->append((double)4.0004,4,4)->append(" ");
+	str->append((double)5.00005,5,5)->append(" ");
+
+	// display the length and contents of the buffer
+	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
+	stdoutput.printf("string: %s\n",str->getString());
+
+
 	// clear the buffer
 	str->clear();
 
