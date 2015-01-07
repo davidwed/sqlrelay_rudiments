@@ -333,6 +333,10 @@ void bytebuffer::clear(bool resetpositions) {
 		pvt->_curext=prev;
 	}
 
+	// FIXME: arguably if the initial extent is larger than pvt->_initial
+	// then its buffer ought to be reallocated.  Maybe this should be done
+	// periodically.
+
 	// reset available bytes in the first extent
 	bbe=pvt->_curext->getValue();
 	bbe->_avail=bbe->_size;
