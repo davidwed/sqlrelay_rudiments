@@ -33,37 +33,37 @@ class bytebufferprivate {
 		size_t		_totalbytes;
 };
 
-bytebuffer::bytebuffer(size_t initial, size_t extsize) {
-	init(NULL,initial,extsize);
+bytebuffer::bytebuffer(size_t initialsize, size_t increment) {
+	init(NULL,initialsize,increment);
 }
 
 bytebuffer::bytebuffer(unsigned char *initialcontents,
-				size_t initial, size_t extsize) {
-	init(initialcontents,initial,extsize);
+				size_t initialsize, size_t increment) {
+	init(initialcontents,initialsize,increment);
 }
 
 void bytebuffer::init(unsigned char *initialcontents,
-				size_t initial, size_t extsize) {
+				size_t initialsize, size_t increment) {
 	pvt=new bytebufferprivate;
-	pvt->_initial=initial;
-	pvt->_extsize=extsize;
+	pvt->_initial=initialsize;
+	pvt->_extsize=increment;
 	if (initialcontents) {
 		bytebufferextent	*newext=new bytebufferextent;
 		newext->_buffer=initialcontents;
 		newext->_pos=0;
-		newext->_size=initial;
+		newext->_size=initialsize;
 		newext->_avail=0;
 		pvt->_extents.append(newext);
 		pvt->_curext=pvt->_extents.getFirst();
-		pvt->_pos=initial;
-		pvt->_end=initial;
-		pvt->_totalbytes=initial;
+		pvt->_pos=initialsize;
+		pvt->_end=initialsize;
+		pvt->_totalbytes=initialsize;
 	} else {
 		pvt->_curext=NULL;
 		pvt->_pos=0;
 		pvt->_end=0;
 		pvt->_totalbytes=0;
-		extend(initial);
+		extend(initialsize);
 	}
 }
 
