@@ -4,14 +4,14 @@
 	protected:
 		void		init(unsigned char *initialcontents,
 					size_t initialsize, size_t increment);
-		void		extend(size_t size);
-		void		coalesce();
-		void		bytebufferClone(const bytebuffer &v);
+		void		clearExtents();
 		bytebuffer	*copy(unsigned char *data,
 						size_t size, bool copyin,
 						size_t *bytescopied);
+		void		extend(size_t size);
+		void		coalesce();
+		void		bytebufferClone(const bytebuffer &v);
 
-		unsigned char	*_buffer();
 		size_t		_end();
 		void		_end(size_t e);
 		size_t		_position();

@@ -169,7 +169,7 @@ int main(int argc, const char **argv) {
 	test("clear(), getSize()",bb.getSize()==0);
 	test("clear(), getPosition()",bb.getPosition()==0);
 	test("clear(), getEnd()",bb.getEnd()==0);
-	test("clear(), getActualSize()",bb.getActualSize()==0);
+	test("clear(), getActualSize()",bb.getActualSize()==45);
 	stdoutput.printf("\n");
 
 	// detach
@@ -180,7 +180,7 @@ int main(int argc, const char **argv) {
 	test("append(), getSize()",bb.getSize()==100);
 	test("append(), getPosition()",bb.getPosition()==100);
 	test("append(), getEnd()",bb.getEnd()==100);
-	test("append(), getActualSize()",bb.getActualSize()==100);
+	test("append(), getActualSize()",bb.getActualSize()==105);
 	unsigned char	*detachedbuffer=bb.detachBuffer();
 	test("detach(), getSize()",bb.getSize()==0);
 	test("detach(), getPosition()",bb.getPosition()==0);
