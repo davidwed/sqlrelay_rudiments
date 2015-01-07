@@ -10,17 +10,11 @@ class bytebufferprivate;
 
 /** The bytebuffer class can be used to store binary data of arbitrary length.
  *
- *  The class allocates a buffer internally of either a default or specified
- *  initial size.  If a write or append operation would exceed the size of the
- *  existing buffer, then it is grown by a multiple of either a default or
- *  specified incremental size.  This growth is accomplished by allocating a
- *  new, larger buffer and copying the contents of the old buffer into it along
- *  with whatever data was written or appended.
+ *  Internally, the class stores this data in a series of extents which are
+ *  coalesced when getBuffer() or detachBuffer() are called.  The size of the
+ *  initial and incremental extents are defined in the constructor.
  *
- *  If the buffer is cleared, then if the existing buffer has grown beyond its
- *  initial size then it is deleted and a new buffer is allocated using the
- *  initial size.  However if the buffer has not grown then no action is
- *  taken except to reset the internal position pointers. 
+ *  When cleared, all extents except for the initial extent are freed.
  *
  *  It is generally more efficient to reuse the same bytebuffer over and
  *  over than to allocate a new one for each operation. */
