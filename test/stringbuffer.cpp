@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/stringbuffer.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -117,7 +118,7 @@ int main(int argc, const char **argv) {
 	// written at position 50, but rather just at the current end of
 	// the buffer.
 	sb->append("12345");
-	for (i=0; i<55; i++) {
+	for (i=0; i<40; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
 			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
@@ -132,7 +133,7 @@ int main(int argc, const char **argv) {
 	// we just appended.  So calling write() here is equivalent to calling
 	// append.
 	sb->write("12345");
-	for (i=0; i<55; i++) {
+	for (i=0; i<45; i++) {
 		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
 			stdoutput.printf("%c",sb->getString()[i]);
 		} else {
@@ -149,8 +150,17 @@ int main(int argc, const char **argv) {
 	for (i=0; i<1024; i++) {
 		sb->append("0");
 	}
-	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
-	stdoutput.printf("string: %s\n",str->getString());
+	stdoutput.printf("length: %lld\n",(uint64_t)sb->getStringLength());
+	stdoutput.printf("string: %s\n",sb->getString());
 
+	delete sb;
+
+
+	// create another buffer
+	char	*data=charstring::duplicate("1234567890");
+	sb=new stringbuffer(data,10,32);
+	stdoutput.printf("%s\n",sb->getString());
+	sb->append("1234567890");
+	stdoutput.printf("%s\n",sb->getString());
 	delete sb;
 }

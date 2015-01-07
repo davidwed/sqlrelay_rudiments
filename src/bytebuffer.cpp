@@ -405,9 +405,11 @@ void bytebuffer::coalesce() {
 		pos=pos+bytestocopy;
 	}
 
-	// clear extents (but preserve position)
+	// clear extents (but preserve end and position)
+	size_t	end=pvt->_end;
 	pos=pvt->_pos;
 	clear();
+	pvt->_end=end;
 	pvt->_pos=pos;
 
 	// create a single extent with this data as the buffer
@@ -418,7 +420,6 @@ void bytebuffer::coalesce() {
 	newext->_avail=0;
 	pvt->_extents.append(newext);
 	pvt->_curext=pvt->_extents.getFirst();
-	pvt->_end=coalescedbuffersize;
 	pvt->_totalbytes=coalescedbuffersize;
 }
 

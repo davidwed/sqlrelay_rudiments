@@ -19,9 +19,8 @@ stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
 }
 
 stringbuffer::stringbuffer(char *initialcontents,
-					size_t initialsize, size_t increment) :
-			bytebuffer(reinterpret_cast<unsigned char *>(
-							initialcontents),
+				size_t initialsize, size_t increment) :
+		bytebuffer(reinterpret_cast<unsigned char *>(initialcontents),
 							initialsize,increment) {
 }
 
@@ -35,7 +34,8 @@ void stringbuffer::setPosition(size_t pos) {
 const char *stringbuffer::getString() {
 	bytebuffer::append('\0');
 	const char	*retval=reinterpret_cast<const char *>(getBuffer());
-	setPosition(getPosition()-1);
+	_position(_position()-1);
+	_end(_end()-1);
 	return retval;
 }
 
