@@ -5,11 +5,12 @@
 		void		init(unsigned char *initialcontents,
 					size_t initialsize, size_t increment);
 		void		clearExtents();
+		void		clear(bool resetpositions);
 		bytebuffer	*copy(unsigned char *data,
 						size_t size, bool copyin,
 						size_t *bytescopied);
 		void		extend(size_t size);
-		void		coalesce();
+		unsigned char	*coalesce(bool replaceinitial);
 		void		bytebufferClone(const bytebuffer &v);
 
 		size_t		_end();

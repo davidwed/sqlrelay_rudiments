@@ -85,6 +85,19 @@ bytebuffer::~bytebuffer() {
 	delete pvt;
 }
 
+void bytebuffer::clearExtents() {
+	pvt->_curext=pvt->_extents.getFirst();
+	while (pvt->_curext) {
+		linkedlistnode< bytebufferextent * >
+					*next=pvt->_curext->getNext();
+		bytebufferextent	*bbe=pvt->_curext->getValue();
+		delete[] bbe->_buffer;
+		delete bbe;
+		pvt->_extents.remove(pvt->_curext);
+ 		pvt->_curext=next;
+	}
+}
+
 void bytebuffer::bytebufferClone(const bytebuffer &v) {
 	
 	pvt=new bytebufferprivate;
@@ -302,6 +315,10 @@ bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
 }
 
 void bytebuffer::clear() {
+	clear(true);
+}
+
+void bytebuffer::clear(bool resetpositions) {
 
 	// remove all but the first extent
 	bytebufferextent	*bbe;
@@ -320,22 +337,13 @@ void bytebuffer::clear() {
 	bbe=pvt->_curext->getValue();
 	bbe->_avail=bbe->_size;
 
-	// reset positions and sizes
-	pvt->_pos=0;
-	pvt->_end=0;
+	// reset total size
 	pvt->_totalbytes=bbe->_size;
-}
 
-void bytebuffer::clearExtents() {
-	pvt->_curext=pvt->_extents.getFirst();
-	while (pvt->_curext) {
-		linkedlistnode< bytebufferextent * >
-					*next=pvt->_curext->getNext();
-		bytebufferextent	*bbe=pvt->_curext->getValue();
-		delete[] bbe->_buffer;
-		delete bbe;
-		pvt->_extents.remove(pvt->_curext);
- 		pvt->_curext=next;
+	// reset positions
+	if (resetpositions) {
+		pvt->_pos=0;
+		pvt->_end=0;
 	}
 }
 
@@ -387,28 +395,22 @@ void bytebuffer::extend(size_t bytestowrite) {
 }
 
 const unsigned char *bytebuffer::getBuffer() {
-	coalesce();
-	return pvt->_curext->getValue()->_buffer;
+	return coalesce(false);
 }
 
 unsigned char *bytebuffer::detachBuffer() {
-	coalesce();
-	bytebufferextent	*bbe=pvt->_curext->getValue();
-	unsigned char		*retval=bbe->_buffer;
-	bbe->_buffer=NULL;
-	clearExtents();
-	init(NULL,pvt->_initial,pvt->_extsize);
-	return retval;
+	return coalesce(true);
 }
 
-void bytebuffer::coalesce() {
+unsigned char *bytebuffer::coalesce(bool detach) {
 
 	// combine the data from all extents into a single buffer and place
 	// that buffer in the first extent...
 
-	// if there is only 1 extent then we don't need to do anything
-	if (pvt->_extents.getLength()==1) {
-		return;
+	// if we're not detaching and there is only 1
+	// extent then we don't need to do anything
+	if (!detach && pvt->_extents.getLength()==1) {
+		return pvt->_curext->getValue()->_buffer;
 	}
 
 	// allocate a buffer to copy the data into
@@ -421,10 +423,11 @@ void bytebuffer::coalesce() {
 
 	// copy data into the buffer
 	size_t	pos=0;
+	bytebufferextent	*bbe;
 	for (pvt->_curext=pvt->_extents.getFirst();
 		pvt->_curext; pvt->_curext=pvt->_curext->getNext()) {
 	
-		bytebufferextent	*bbe=pvt->_curext->getValue();
+		bbe=pvt->_curext->getValue();
 		size_t	bytestocopy=bbe->_size;
 		if (pvt->_end-pos<bytestocopy) {
 			bytestocopy=pvt->_end-pos;
@@ -433,18 +436,23 @@ void bytebuffer::coalesce() {
 		pos=pos+bytestocopy;
 	}
 
-	// clear all extents
-	clearExtents();
+	// clear all but the first extent
+	// (but preserve position and end if we're not detaching)
+	clear(detach);
 
-	// create a single extent with this data as the buffer
-	bytebufferextent	*newext=new bytebufferextent;
-	newext->_buffer=coalescedbuffer;
-	newext->_pos=0;
-	newext->_size=coalescedbuffersize;
-	newext->_avail=0;
-	pvt->_extents.append(newext);
-	pvt->_curext=pvt->_extents.getFirst();
-	pvt->_totalbytes=coalescedbuffersize;
+	if (!detach) {
+
+		// replace the first extent's buffer with the coalesced buffer
+		pvt->_curext=pvt->_extents.getFirst();
+		bbe=pvt->_curext->getValue();
+		delete[] bbe->_buffer;
+		bbe->_buffer=coalescedbuffer;
+		bbe->_size=coalescedbuffersize;
+		bbe->_avail=0;
+		pvt->_totalbytes=coalescedbuffersize;
+	}
+
+	return coalescedbuffer;
 }
 
 size_t bytebuffer::getSize() {

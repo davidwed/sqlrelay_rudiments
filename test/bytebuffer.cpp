@@ -185,7 +185,7 @@ int main(int argc, const char **argv) {
 	test("detach(), getSize()",bb.getSize()==0);
 	test("detach(), getPosition()",bb.getPosition()==0);
 	test("detach(), getEnd()",bb.getEnd()==0);
-	test("detach(), getActualSize()",bb.getActualSize()==10);
+	test("detach(), getActualSize()",bb.getActualSize()==45);
 	bool	validdata=true;
 	for (uint64_t i=0; i<100; i=i+10) {
 		if (bytestring::compare(detachedbuffer+i,"1234567890",10)) {
@@ -217,7 +217,7 @@ int main(int argc, const char **argv) {
 	test("copy constructor, getSize()",cc.getSize()==16);
 	test("copy constructor, getPosition()",cc.getPosition()==16);
 	test("copy constructor, getEnd()",cc.getEnd()==16);
-	test("copy constructor, getActualSize()",cc.getActualSize()==16);
+	test("copy constructor, getActualSize()",cc.getActualSize()==45);
 	test("copy constructor, data",
 		!bytestring::compare(cc.getBuffer(),"12.1234512.12345",16));
 	stdoutput.printf("\n");
@@ -229,7 +229,7 @@ int main(int argc, const char **argv) {
 	test("= operator, getSize()",dd.getSize()==16);
 	test("= operator, getPosition()",dd.getPosition()==16);
 	test("= operator, getEnd()",dd.getEnd()==16);
-	test("= operator, getActualSize()",dd.getActualSize()==16);
+	test("= operator, getActualSize()",dd.getActualSize()==45);
 	test("= operator, data",
 		!bytestring::compare(dd.getBuffer(),"12.1234512.12345",16));
 	stdoutput.printf("\n");
