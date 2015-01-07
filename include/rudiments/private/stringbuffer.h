@@ -2,5 +2,4 @@
 // See the COPYING file for more information.
 
 	private:
-		void	terminate();
 		stringbufferprivate	*pvt;

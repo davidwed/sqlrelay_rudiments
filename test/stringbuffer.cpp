@@ -12,12 +12,15 @@ int main(int argc, const char **argv) {
 	// append a NULL to the buffer
 	str->append((char *)NULL);
 
+	// append an empty string to the buffer
+	str->append((char *)"");
+
 	// append "hello there world" to the buffer in 3 parts
 	str->append("hello ")->append("there ")->append("world ");
 
 	// display the length and contents of the buffer
-	stdoutput.printf("length: %d\n\"%s\"\n",
-			str->getStringLength(),str->getString());
+	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
+	stdoutput.printf("string: %s\n",str->getString());
 
 
 	// append some long integers to the buffer
@@ -28,22 +31,22 @@ int main(int argc, const char **argv) {
 	str->append((int32_t)5)->append(" ");
 
 	// display the length and contents of the buffer
-	stdoutput.printf("length: %d\n\"%s\"\n",
-			str->getStringLength(),str->getString());
+	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
+	stdoutput.printf("string: %s\n",str->getString());
 
 	str->append(" ");
 
 
 	// append some floating point numbers to the buffer
-	str->append(1.1,1,0)->append(" ");
-	str->append(2.02,2,0)->append(" ");
-	str->append(3.003,3,0)->append(" ");
-	str->append(4.0004,4,0)->append(" ");
-	str->append(5.00005,5,0)->append(" ");
+	str->append(1.1,1,1)->append(" ");
+	str->append(2.02,2,2)->append(" ");
+	str->append(3.003,3,3)->append(" ");
+	str->append(4.0004,4,4)->append(" ");
+	str->append(5.00005,5,5)->append(" ");
 
 	// display the length and contents of the buffer
-	stdoutput.printf("length: %d\n\"%s\"\n",
-			str->getStringLength(),str->getString());
+	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
+	stdoutput.printf("string: %s\n",str->getString());
 
 
 	// clear the buffer
@@ -55,8 +58,8 @@ int main(int argc, const char **argv) {
 	for (i=0; i<1024; i++) {
 		str->append('*');
 	}
-	stdoutput.printf("length: %d\n%s\n",
-			str->getStringLength(),str->getString());
+	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
+	stdoutput.printf("string: %s\n",str->getString());
 
 	// delete the buffer
 	delete str;
@@ -146,7 +149,8 @@ int main(int argc, const char **argv) {
 	for (i=0; i<1024; i++) {
 		sb->append("0");
 	}
-	stdoutput.printf("length: %d\n%s\n",str->getStringLength(),str->getString());
+	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
+	stdoutput.printf("string: %s\n",str->getString());
 
 	delete sb;
 }

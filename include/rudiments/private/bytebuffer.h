@@ -2,12 +2,14 @@
 // See the COPYING file for more information.
 
 	protected:
-		void	init(unsigned char *initialcontents,
-				size_t initialsize, size_t increment);
-		void	extend(size_t size);
-		void	coalesce();
-
-		void	bytebufferClone(const bytebuffer &v);
+		void		init(unsigned char *initialcontents,
+					size_t initialsize, size_t increment);
+		void		extend(size_t size);
+		void		coalesce();
+		void		bytebufferClone(const bytebuffer &v);
+		bytebuffer	*copy(unsigned char *data,
+						size_t size, bool copyin,
+						size_t *bytescopied);
 
 		unsigned char	*_buffer();
 		size_t		_end();

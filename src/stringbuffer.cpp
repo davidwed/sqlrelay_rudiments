@@ -3,20 +3,12 @@
 
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
-
-#include <stdio.h>
-
-class stringbufferprivate {
-	friend class stringbuffer;
-	private:
-};
+#include <rudiments/stdio.h>
 
 stringbuffer::stringbuffer() : bytebuffer(128,32) {
-	pvt=new stringbufferprivate;
 }
 
 stringbuffer::stringbuffer(const stringbuffer &s) : bytebuffer(s) {
-	pvt=new stringbufferprivate;
 }
 
 stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
@@ -31,11 +23,9 @@ stringbuffer::stringbuffer(char *initialcontents,
 			bytebuffer(reinterpret_cast<unsigned char *>(
 							initialcontents),
 							initialsize,increment) {
-	pvt=new stringbufferprivate;
 }
 
 stringbuffer::~stringbuffer() {
-	delete pvt;
 }
 
 void stringbuffer::setPosition(size_t pos) {
@@ -43,8 +33,10 @@ void stringbuffer::setPosition(size_t pos) {
 }
 
 const char *stringbuffer::getString() {
-	terminate();
-	return reinterpret_cast<const char *>(getBuffer());
+	bytebuffer::append('\0');
+	const char	*retval=reinterpret_cast<const char *>(getBuffer());
+	setPosition(getPosition()-1);
+	return retval;
 }
 
 size_t stringbuffer::getStringLength() {
@@ -52,7 +44,7 @@ size_t stringbuffer::getStringLength() {
 }
 
 char *stringbuffer::detachString() {
-	terminate();
+	bytebuffer::append('\0');
 	return reinterpret_cast<char *>(detachBuffer());
 }
 
@@ -62,19 +54,10 @@ size_t stringbuffer::getPosition() {
 
 void stringbuffer::clear() {
 	bytebuffer::clear();
-	_buffer()[0]='\0';
-}
-
-void stringbuffer::terminate() {
-	bytebuffer::append((unsigned char)NULL);
-	_endofbuffer(_endofbuffer()-1);
-	_position(_position()-1);
 }
 
 stringbuffer *stringbuffer::append(const unsigned char *string) {
-	if (string) {
-		bytebuffer::append(string,charstring::length(string));
-	}
+	bytebuffer::append(string,charstring::length(string));
 	return this;
 }
 
@@ -84,9 +67,7 @@ stringbuffer *stringbuffer::append(const unsigned char *string, size_t size) {
 }
 
 stringbuffer *stringbuffer::append(const char *string) {
-	if (string) {
-		bytebuffer::append(string,charstring::length(string));
-	}
+	bytebuffer::append(string,charstring::length(string));
 	return this;
 }
 
@@ -321,10 +302,8 @@ stringbuffer *stringbuffer::write(double number, uint16_t precision,
 
 void stringbuffer::truncate(size_t pos) {
 	bytebuffer::truncate(pos);
-	terminate();
 }
 
 void stringbuffer::truncate() {
 	bytebuffer::truncate();
-	terminate();
 }
