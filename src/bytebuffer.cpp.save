@@ -4,17 +4,33 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/linkedlist.h>
 #include <rudiments/error.h>
+
+#ifdef RUDIMENTS_HAVE_VASPRINTF
+	#include <stdio.h>
+#endif
+
+
+class bytebufferextent {
+	friend class bytebuffer;
+	private:
+		unsigned char	*_buffer;
+		size_t		_pos;
+		size_t		_size;
+		size_t		_avail;
+};
 
 class bytebufferprivate {
 	friend class bytebuffer;
 	private:
-		unsigned char	*_buffer;
-		size_t		_buffersize;
-		size_t		_initialsize;
-		size_t		_increment;
-		size_t		_position;
-		size_t		_endofbuffer;
+		linkedlist< bytebufferextent * >	_extents;
+		linkedlistnode< bytebufferextent * >	*_curext;
+		size_t		_initial;
+		size_t		_extsize;
+		size_t		_pos;
+		size_t		_end;
+		size_t		_totalbytes;
 };
 
 bytebuffer::bytebuffer(size_t initialsize, size_t increment) {
@@ -29,17 +45,26 @@ bytebuffer::bytebuffer(unsigned char *initialcontents,
 void bytebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
 	pvt=new bytebufferprivate;
+	pvt->_initial=initialsize;
+	pvt->_extsize=increment;
 	if (initialcontents) {
-		pvt->_buffer=initialcontents;
-		pvt->_endofbuffer=initialsize;
+		bytebufferextent	*newext=new bytebufferextent;
+		newext->_buffer=initialcontents;
+		newext->_pos=0;
+		newext->_size=initialsize;
+		newext->_avail=0;
+		pvt->_extents.append(newext);
+		pvt->_curext=pvt->_extents.getFirst();
+		pvt->_pos=initialsize;
+		pvt->_end=initialsize;
+		pvt->_totalbytes=initialsize;
 	} else {
-		pvt->_buffer=new unsigned char[initialsize];
-		pvt->_endofbuffer=0;
+		pvt->_curext=NULL;
+		pvt->_pos=0;
+		pvt->_end=0;
+		pvt->_totalbytes=0;
+		extend(initialsize);
 	}
-	pvt->_buffersize=initialsize;
-	pvt->_initialsize=initialsize;
-	pvt->_increment=increment;
-	pvt->_position=0;
 }
 
 bytebuffer::bytebuffer(const bytebuffer &v) {
@@ -48,7 +73,7 @@ bytebuffer::bytebuffer(const bytebuffer &v) {
 
 bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
 	if (this!=&v) {
-		delete[] pvt->_buffer;
+		clearExtents();
 		delete pvt;
 		bytebufferClone(v);
 	}
@@ -56,53 +81,139 @@ bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
 }
 
 bytebuffer::~bytebuffer() {
-	delete[] pvt->_buffer;
+	clearExtents();
 	delete pvt;
 }
 
+void bytebuffer::clearExtents() {
+	pvt->_curext=pvt->_extents.getFirst();
+	while (pvt->_curext) {
+		linkedlistnode< bytebufferextent * >
+					*next=pvt->_curext->getNext();
+		bytebufferextent	*bbe=pvt->_curext->getValue();
+		delete[] bbe->_buffer;
+		delete bbe;
+		pvt->_extents.remove(pvt->_curext);
+ 		pvt->_curext=next;
+	}
+}
+
 void bytebuffer::bytebufferClone(const bytebuffer &v) {
+	
 	pvt=new bytebufferprivate;
-	pvt->_initialsize=v.pvt->_initialsize;
-	pvt->_increment=v.pvt->_increment;
-	pvt->_buffersize=v.pvt->_buffersize;
-	pvt->_position=v.pvt->_position;
-	pvt->_endofbuffer=v.pvt->_endofbuffer;
-	pvt->_buffer=new unsigned char[v.pvt->_buffersize];
-	bytestring::copy(pvt->_buffer,v.pvt->_buffer,pvt->_buffersize);
+
+	// clone the extents
+	for (linkedlistnode< bytebufferextent * > *curext=
+				v.pvt->_extents.getFirst();
+				curext; curext=curext->getNext()) {
+
+		bytebufferextent	*bbe=curext->getValue();
+
+		bytebufferextent	*newext=new bytebufferextent;
+		newext->_buffer=(unsigned char *)
+				bytestring::duplicate(bbe->_buffer,bbe->_size);
+		newext->_pos=bbe->_pos;
+		newext->_size=bbe->_size;
+		newext->_avail=bbe->_avail;
+		pvt->_extents.append(newext);
+
+		if (curext==v.pvt->_curext) {
+			pvt->_curext=pvt->_extents.getLast();
+		}
+	}
+
+	// clone sizes and positions
+	pvt->_initial=v.pvt->_initial;
+	pvt->_extsize=v.pvt->_extsize;
+	pvt->_pos=v.pvt->_pos;
+	pvt->_end=v.pvt->_end;
+	pvt->_totalbytes=v.pvt->_totalbytes;
 }
 
 ssize_t bytebuffer::read(unsigned char *data, size_t size) {
-
-	size_t	bytestoread=size;
-	if (pvt->_position>pvt->_endofbuffer) {
-		bytestoread=0;
-	} else if (pvt->_position+size>pvt->_endofbuffer) {
-		bytestoread=pvt->_endofbuffer-pvt->_position;
-	}
-
-	bytestring::copy(data,pvt->_buffer+pvt->_position,bytestoread);
-	pvt->_position=pvt->_position+bytestoread;
-
-	return bytestoread;
+	size_t	bytescopied;
+	copy(data,size,false,&bytescopied);
+	return bytescopied;
 }
 
 bytebuffer *bytebuffer::write(const unsigned char *data, size_t size) {
+	size_t	bytescopied;
+	return copy((unsigned char *)data,size,true,&bytescopied);
+}
 
-	// if the buffer is too small, extend it
-	if (pvt->_position>=pvt->_buffersize) {
-		extend(pvt->_position-pvt->_buffersize+size);
-	} else if (size>pvt->_buffersize-pvt->_position) {
-		extend(size-(pvt->_buffersize-pvt->_position));
+bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
+					bool copyin, size_t *bytescopied) {
+
+	// bail if we're not actually writing anything
+	// or, if copying out, if the current position
+	// is set to or set beyond the end
+	if (!size || (!copyin && pvt->_pos>=pvt->_end)) {
+		*bytescopied=0;
+		return this;
 	}
 
-	// copy the data into the buffer
-	bytestring::copy(pvt->_buffer+pvt->_position,data,size);
-
-	// increment the position indices
-	pvt->_position=pvt->_position+size;
-	if (pvt->_position>pvt->_endofbuffer) {
-		pvt->_endofbuffer=pvt->_position;
+	// if we're copying in, extend the list of buffers
+	// to accommodate "size" bytes beyond the current position
+	if (copyin) {
+		extend(size);
 	}
+
+	// determine which extent to start from
+	for (;;) {
+		bytebufferextent	*bbe=pvt->_curext->getValue();
+		if (bbe->_pos>pvt->_pos) {
+			pvt->_curext=pvt->_curext->getPrevious();
+		} else if (bbe->_pos<=pvt->_pos &&
+				bbe->_pos+bbe->_size<pvt->_pos) {
+			pvt->_curext=pvt->_curext->getNext();
+		} else {
+			break;
+		}
+	}
+
+	// detemine how many bytes are available in that extent
+	// beyond this position
+	pvt->_curext->getValue()->_avail=
+		pvt->_curext->getValue()->_pos+
+		pvt->_curext->getValue()->_size-
+		pvt->_pos;
+
+	// copy-in "size" bytes, updating the current extent and
+	// number of bytes available in that extent as we go
+	size_t	remaintocopy=size;
+	size_t	pos=0;
+	*bytescopied=0;
+	while (remaintocopy) {
+		bytebufferextent	*bbe=pvt->_curext->getValue();
+		size_t	avail=bbe->_avail;
+		size_t	bytestocopy=(avail<remaintocopy)?avail:remaintocopy;
+		if (copyin) {
+			bytestring::copy(bbe->_buffer+bbe->_size-avail,
+							data+pos,bytestocopy);
+		} else {
+			bytestring::copy(data+pos,
+				bbe->_buffer+bbe->_size-avail,bytestocopy);
+		}
+		remaintocopy=remaintocopy-bytestocopy;
+		pos=pos+bytestocopy;
+		*bytescopied=*bytescopied+bytestocopy;
+		if (remaintocopy) {
+			bbe->_avail=0;
+			pvt->_curext=pvt->_curext->getNext();
+			if (!copyin && !pvt->_curext) {
+				break;
+			}
+		} else {
+			bbe->_avail=avail-bytestocopy;
+		}
+	}
+
+	// update the current position and, if we're copyin in, end of buffer
+	pvt->_pos=pvt->_pos+size;
+	if (copyin && pvt->_pos>pvt->_end) {
+		pvt->_end=pvt->_pos;
+	}
+
 	return this;
 }
 
@@ -173,95 +284,203 @@ bytebuffer *bytebuffer::writeFormatted(const char *format, ...) {
 	return retval;
 }
 
-bytebuffer *bytebuffer::writeFormatted(const char *format,
-							va_list *argp) {
+bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
 
-	// find out how much space we need...
-	//
-	// Some compilers throw a warning if they see "printf(NULL..." at all,
-	// independent of whether it's the global function printf() or one that
-	// you've defined yourself.  This buffer=NULL thing works around it.
+	// If vasprintf is available, then use it, otherwise play games with
+	// charstring::printf().
 	char	*buffer=NULL;
-	size_t	size=charstring::printf(buffer,0,format,argp);
+	ssize_t	size=0;
+	#ifdef RUDIMENTS_HAVE_VASPRINTF
+	size=vasprintf(&buffer,format,*argp);
+	#else
+	// Some compilers throw a warning if they see "printf(NULL..." at all,
+	// whether it's the global function printf() or one that you've defined
+	// yourself.  Using buffer here works around that.
+	size=charstring::printf(buffer,0,format,argp);
+	buffer=new char[size+1];
+	size=charstring::printf(buffer,size+1,format,argp);
+	#endif
 
-	// extend the buffer if necessary
-	if (pvt->_position>=pvt->_buffersize) {
-		extend(pvt->_position-pvt->_buffersize+size);
-	} else if (size>pvt->_buffersize-pvt->_position) {
-		extend(size-(pvt->_buffersize-pvt->_position));
-	}
+	// extend the list of buffers to accommodate
+	// "size" bytes beyond the current position
+	extend(size);
 
-	// copy the data into the buffer
-	size=charstring::printf((char *)(pvt->_buffer+pvt->_position),
-						pvt->_buffersize-pvt->_position,
-						format,argp);
+	// write the buffer
+	write(buffer,size);
 
-	// increment the position indices
-	pvt->_position=pvt->_position+size;
-	if (pvt->_position>pvt->_endofbuffer) {
-		pvt->_endofbuffer=pvt->_position;
-	}
+	// clean up
+	delete[] buffer;
+	
 	return this;
 }
 
 void bytebuffer::clear() {
-	// If the buffer has grown beyond the initial size then reallocate it,
-	// otherwise just reset the start and end indices.
-	if (pvt->_buffersize>pvt->_initialsize) {
-		delete[] pvt->_buffer;
-		pvt->_buffer=new unsigned char[pvt->_initialsize];
-		pvt->_buffersize=pvt->_initialsize;
-	}
-	pvt->_position=0;
-	pvt->_endofbuffer=0;
+	clear(true);
 }
 
-void bytebuffer::extend(size_t size) {
-	size_t	newbuffersize=pvt->_buffersize+
-				((size/pvt->_increment)*pvt->_increment)+
-				(((size%pvt->_increment)>0)*pvt->_increment);
-	unsigned char	*newbuffer=new unsigned char[newbuffersize];
-	bytestring::copy(newbuffer,pvt->_buffer,pvt->_buffersize);
-	delete[] pvt->_buffer;
-	pvt->_buffer=newbuffer;
-	pvt->_buffersize=newbuffersize;
+void bytebuffer::clear(bool resetpositions) {
+
+	// remove all but the first extent
+	bytebufferextent	*bbe;
+	pvt->_curext=pvt->_extents.getLast();
+	while (pvt->_curext!=pvt->_extents.getFirst()) {
+		linkedlistnode< bytebufferextent * >
+					*prev=pvt->_curext->getPrevious();
+		bbe=pvt->_curext->getValue();
+		delete[] bbe->_buffer;
+		delete bbe;
+		pvt->_extents.remove(pvt->_curext);
+		pvt->_curext=prev;
+	}
+
+	// FIXME: arguably if the initial extent is larger than pvt->_initial
+	// then its buffer ought to be reallocated.  Maybe this should be done
+	// periodically.
+
+	// reset available bytes in the first extent
+	bbe=pvt->_curext->getValue();
+	bbe->_avail=bbe->_size;
+
+	// reset total size
+	pvt->_totalbytes=bbe->_size;
+
+	// reset positions
+	if (resetpositions) {
+		pvt->_pos=0;
+		pvt->_end=0;
+	}
+}
+
+void bytebuffer::extend(size_t bytestowrite) {
+
+	// figure out how many bytes are available between the current
+	// position and the end of all extents...
+	// if the position is already set past the end of all extents then
+	// handle that by pretending that we just have more bytes to write...
+	size_t	totalavail=0;
+	if (pvt->_pos>=pvt->_totalbytes) {
+		bytestowrite=bytestowrite+pvt->_pos-pvt->_totalbytes;
+	} else {
+		totalavail=pvt->_totalbytes-pvt->_pos;
+	}
+
+	// bail if we have enough space to accommodate
+	// the specified number of bytes
+	if (bytestowrite<=totalavail) {
+		return;
+	}
+
+	// calculate how many new extents we need
+	size_t	newextents=((bytestowrite-totalavail-1)/pvt->_extsize)+1;
+
+	// create those extents
+	for (size_t i=0; i<newextents; i++) {
+		bytebufferextent	*newext=new bytebufferextent;
+		newext->_buffer=new unsigned char[pvt->_extsize];
+		if (!pvt->_extents.getLength()) {
+			newext->_pos=0;
+		} else {
+			bytebufferextent	*bbe=
+					pvt->_extents.getLast()->getValue();
+			newext->_pos=bbe->_pos+bbe->_size;
+		}
+		newext->_size=pvt->_extsize;
+		newext->_avail=pvt->_extsize;
+		pvt->_extents.append(newext);
+	}
+
+	// update the total number of bytes in all extents
+	pvt->_totalbytes=pvt->_totalbytes+pvt->_extsize*newextents;
+
+	// set the curent extent if necessary
+	if (!pvt->_curext) {
+		pvt->_curext=pvt->_extents.getFirst();
+	}
 }
 
 const unsigned char *bytebuffer::getBuffer() {
-	return pvt->_buffer;
+	return coalesce(false);
 }
 
 unsigned char *bytebuffer::detachBuffer() {
-	unsigned char	*retval=pvt->_buffer;
-	pvt->_buffer=new unsigned char[pvt->_initialsize];
-	pvt->_buffersize=pvt->_initialsize;
-	pvt->_position=0;
-	pvt->_endofbuffer=0;
-	return retval;
+	return coalesce(true);
+}
+
+unsigned char *bytebuffer::coalesce(bool detach) {
+
+	// combine the data from all extents into a single buffer and place
+	// that buffer in the first extent...
+
+	// if we're not detaching and there is only 1
+	// extent then we don't need to do anything
+	if (!detach && pvt->_extents.getLength()==1) {
+		return pvt->_curext->getValue()->_buffer;
+	}
+
+	// allocate a buffer to copy the data into
+	// (since we're probably going to replace the initial extent with this
+	// buffer later, make sure the buffer is at least as large as the size
+	// specified for the initial segment)
+	size_t		coalescedbuffersize=
+			(pvt->_initial>pvt->_end)?pvt->_initial:pvt->_end;
+	unsigned char	*coalescedbuffer=new unsigned char[coalescedbuffersize];
+
+	// copy data into the buffer
+	size_t	pos=0;
+	bytebufferextent	*bbe;
+	for (pvt->_curext=pvt->_extents.getFirst();
+		pvt->_curext; pvt->_curext=pvt->_curext->getNext()) {
+	
+		bbe=pvt->_curext->getValue();
+		size_t	bytestocopy=bbe->_size;
+		if (pvt->_end-pos<bytestocopy) {
+			bytestocopy=pvt->_end-pos;
+		}
+		bytestring::copy(coalescedbuffer+pos,bbe->_buffer,bytestocopy);
+		pos=pos+bytestocopy;
+	}
+
+	// clear all but the first extent
+	// (but preserve position and end if we're not detaching)
+	clear(detach);
+
+	if (!detach) {
+
+		// replace the first extent's buffer with the coalesced buffer
+		pvt->_curext=pvt->_extents.getFirst();
+		bbe=pvt->_curext->getValue();
+		delete[] bbe->_buffer;
+		bbe->_buffer=coalescedbuffer;
+		bbe->_size=coalescedbuffersize;
+		bbe->_avail=0;
+		pvt->_totalbytes=coalescedbuffersize;
+	}
+
+	return coalescedbuffer;
 }
 
 size_t bytebuffer::getSize() {
-	return pvt->_endofbuffer;
+	return pvt->_end;
 }
 
 size_t bytebuffer::getPosition() {
-	return pvt->_position;
+	return pvt->_pos;
 }
 
 size_t bytebuffer::getEnd() {
-	return pvt->_endofbuffer;
+	return pvt->_end;
 }
 
 size_t bytebuffer::getActualSize() {
-	return pvt->_buffersize;
+	return pvt->_totalbytes;
 }
 
 void bytebuffer::setPosition(size_t pos) {
-	pvt->_position=pos;
+	pvt->_pos=pos;
 }
 
 bytebuffer *bytebuffer::append(const unsigned char *data, size_t size) {
-	pvt->_position=pvt->_endofbuffer;
+	pvt->_pos=pvt->_end;
 	return write(data,size);
 }
 
@@ -332,36 +551,31 @@ bytebuffer *bytebuffer::appendFormatted(const char *format, ...) {
 	return retval;
 }
 
-bytebuffer *bytebuffer::appendFormatted(const char *format,
-							va_list *argp) {
-	pvt->_position=pvt->_endofbuffer;
+bytebuffer *bytebuffer::appendFormatted(const char *format, va_list *argp) {
+	pvt->_pos=pvt->_end;
 	return writeFormatted(format,argp);
 }
 
 void bytebuffer::truncate(size_t pos) {
-	pvt->_endofbuffer=pos;
+	pvt->_end=pos;
 }
 
 void bytebuffer::truncate() {
-	pvt->_endofbuffer=pvt->_position;
+	pvt->_end=pvt->_pos;
 }
 
-unsigned char *bytebuffer::_buffer() {
-	return pvt->_buffer;
+size_t bytebuffer::_end() {
+	return pvt->_end;
 }
 
-size_t bytebuffer::_endofbuffer() {
-	return pvt->_endofbuffer;
-}
-
-void bytebuffer::_endofbuffer(size_t eob) {
-	pvt->_endofbuffer=eob;
+void bytebuffer::_end(size_t e) {
+	pvt->_end=e;
 }
 
 size_t bytebuffer::_position() {
-	return pvt->_position;
+	return pvt->_pos;
 }
 
 void bytebuffer::_position(size_t pos) {
-	pvt->_position=pos;
+	pvt->_pos=pos;
 }
