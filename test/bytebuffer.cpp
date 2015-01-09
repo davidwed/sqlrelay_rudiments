@@ -26,21 +26,25 @@ int main(int argc, const char **argv) {
 	test("append(), getPosition()",bb.getPosition()==5);
 	test("append(), getEnd()",bb.getEnd()==5);
 	test("append(), getActualSize()",bb.getActualSize()==10);
+	stdoutput.printf("append 12345...\n");
 	bb.append((unsigned char *)"12345",5);
 	test("append(), getSize()",bb.getSize()==10);
 	test("append(), getPosition()",bb.getPosition()==10);
 	test("append(), getEnd()",bb.getEnd()==10);
 	test("append(), getActualSize()",bb.getActualSize()==10);
+	stdoutput.printf("append 12345...\n");
 	bb.append((unsigned char *)"12345",5);
 	test("append(), getSize()",bb.getSize()==15);
 	test("append(), getPosition()",bb.getPosition()==15);
 	test("append(), getEnd()",bb.getEnd()==15);
 	test("append(), getActualSize()",bb.getActualSize()==20);
+	stdoutput.printf("append 12345...\n");
 	bb.append((unsigned char *)"12345",5);
 	test("append(), getSize()",bb.getSize()==20);
 	test("append(), getPosition()",bb.getPosition()==20);
 	test("append(), getEnd()",bb.getEnd()==20);
 	test("append(), getActualSize()",bb.getActualSize()==20);
+	stdoutput.printf("append 12345...\n");
 	bb.append((unsigned char *)"12345",5);
 	test("append(), getSize()",bb.getSize()==25);
 	test("append(), getPosition()",bb.getPosition()==25);
@@ -208,6 +212,16 @@ int main(int argc, const char **argv) {
 	bb.writeFormatted("%0.5f",12.12345);
 	test("writeFormatted(), data",
 		!bytestring::compare(bb.getBuffer(),"12.1234512.12345",16));
+	stdoutput.printf("\n");
+
+
+	// read past the end
+	stdoutput.printf("read past the end\n");
+	bb.setPosition(0);
+	unsigned char	readbuf[100];
+	test("read(), length",bb.read(readbuf,100)==16);
+	test("read(), data",
+		!bytestring::compare(readbuf,"12.1234512.12345",16));
 	stdoutput.printf("\n");
 
 
