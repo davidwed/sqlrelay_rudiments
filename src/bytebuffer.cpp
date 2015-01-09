@@ -60,19 +60,16 @@ void bytebuffer::init(unsigned char *initialcontents,
 	pvt->_extsize=increment;
 	if (initialcontents) {
 		pvt->_extents.append(initialcontents);
-		pvt->_curext=pvt->_extents.getFirst();
-		pvt->_curind=0;
 		pvt->_pos=initialsize;
 		pvt->_end=initialsize;
-		pvt->_tot=initialsize;
 	} else {
-		pvt->_curext=NULL;
-		pvt->_curind=0;
+		pvt->_extents.append(new unsigned char[initialsize]);
 		pvt->_pos=0;
 		pvt->_end=0;
-		pvt->_tot=0;
-		extend(initialsize);
 	}
+	pvt->_tot=initialsize;
+	pvt->_curext=pvt->_extents.getFirst();
+	pvt->_curind=0;
 }
 
 bytebuffer::bytebuffer(const bytebuffer &v) {
@@ -390,10 +387,10 @@ void bytebuffer::extend(size_t bytestowrite) {
 	pvt->_tot=pvt->_tot+pvt->_extsize*newextents;
 
 	// set the curent extent if necessary
-	if (!pvt->_curext) {
+	/*if (!pvt->_curext) {
 		pvt->_curext=pvt->_extents.getFirst();
 		pvt->_curind=0;
-	}
+	}*/
 }
 
 const unsigned char *bytebuffer::getBuffer() {
