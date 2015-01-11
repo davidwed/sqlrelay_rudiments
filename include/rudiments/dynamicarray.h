@@ -65,10 +65,6 @@ class dynamicarray {
 		 *  dynamicarray. */
 		valuetype	&operator[](uint64_t index);
 
-		/** Provides access to the "index"th element of the
-		 *  dynamicarray. */
-		const valuetype	&operator[](uint64_t index) const;
-
 		/** Returns the length of the array. */
 		uint64_t	getLength() const;
 

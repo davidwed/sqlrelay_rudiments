@@ -77,15 +77,6 @@ valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 }
 
 template< class valuetype >
-const valuetype &dynamicarray<valuetype>::operator[](uint64_t index) const {
-	extend(index+1);
-	if (index>=len) {
-		len=index+1;
-	}
-	return find(index);
-}
-
-template< class valuetype >
 uint64_t dynamicarray<valuetype>::getLength() const {
 	return len;
 }
