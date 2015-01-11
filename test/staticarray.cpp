@@ -32,20 +32,21 @@ void testclass::setValue(uint32_t value) {
 	this->value=value;
 }
 
+#define COUNT 4096
 
 int main(int argc, const char **argv) {
 
 	stdoutput.printf("staticarray:\n");
 
 	// Create a staticarray
-	staticarray<struct test,25>	sa;
+	staticarray<struct test,COUNT>	sa;
 	stdoutput.printf("create <test>...\n");
-	test("create, getLength()",sa.getLength()==25);
+	test("create, getLength()",sa.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
 	stdoutput.printf("set values...\n");
-	uint32_t	count=25;
+	uint32_t	count=COUNT;
 	for (uint32_t i=0; i<count; i++) {
 		char	*val=charstring::parseNumber(i);
 		charstring::copy(sa[i].str,val);
@@ -79,20 +80,19 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	sa.clear();
-	test("clear, getLength()",sa.getLength()==25);
+	test("clear, getLength()",sa.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 
 
 	// create
-	staticarray<testclass,25>	sa2;
+	staticarray<testclass,COUNT>	sa2;
 	stdoutput.printf("create <testclass>...\n");
-	test("create, getLength()",sa2.getLength()==25);
+	test("create, getLength()",sa2.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
 	stdoutput.printf("get values...\n");
-	count=25;
 	success=true;
 	for (uint32_t i=0; i<count; i++) {
 		success=(sa2[i].getValue()==1);
@@ -115,20 +115,19 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	sa2.clear();
-	test("clear, getLength()",sa2.getLength()==25);
+	test("clear, getLength()",sa2.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 
 
 	// create
-	staticarray<testclass *,25>	sa3;
+	staticarray<testclass *,COUNT>	sa3;
 	stdoutput.printf("create <testclass *>...\n");
-	test("create, getLength()",sa3.getLength()==25);
+	test("create, getLength()",sa3.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
 	stdoutput.printf("get values...\n");
-	count=25;
 	success=true;
 	for (uint32_t i=0; i<count; i++) {
 		sa3[i]=new testclass();
@@ -156,20 +155,19 @@ int main(int argc, const char **argv) {
 		delete sa3[i];
 	}
 	sa3.clear();
-	test("clear, getLength()",sa3.getLength()==25);
+	test("clear, getLength()",sa3.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 
 
 	// create
-	staticarray< staticarray< uint32_t,25 >,25 >	sa4;
+	staticarray< staticarray< uint32_t,COUNT >,COUNT >	sa4;
 	stdoutput.printf("create nested...\n");
-	test("create, getLength()",sa4.getLength()==25);
+	test("create, getLength()",sa4.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
 	stdoutput.printf("get values...\n");
-	count=25;
 	success=true;
 	for (uint32_t i=0; i<count; i++) {
 		for (uint32_t j=0; j<count; j++) {
@@ -193,6 +191,6 @@ int main(int argc, const char **argv) {
 	// clear
 	stdoutput.printf("clear...\n");
 	sa4.clear();
-	test("clear, getLength()",sa4.getLength()==25);
+	test("clear, getLength()",sa4.getLength()==COUNT);
 	stdoutput.printf("\n");
 }

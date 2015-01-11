@@ -1,8 +1,7 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information.
 
-#include <new>
-#include <rudiments/stdio.h>
+#include <rudiments/private/new.h>
 
 template< class valuetype, uint64_t length >
 staticarray<valuetype,length>::staticarray() {
