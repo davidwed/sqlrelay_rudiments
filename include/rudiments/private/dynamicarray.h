@@ -10,7 +10,7 @@
 		linkedlist< unsigned char **>		extents;
 		linkedlistnode< unsigned char **>	*curext;
 		uint64_t	curind;
-		uint64_t	initsize;
+		uint64_t	initial;
 		uint64_t	extsize;
 		uint64_t	len;
 		uint64_t	size;

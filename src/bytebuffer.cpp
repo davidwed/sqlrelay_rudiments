@@ -162,26 +162,19 @@ bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
 	}
 
 	// move to the extent that contains the current position
-	if (pvt->_pos<pvt->_initial) {
+	if (pvt->_pos<pvt->_initsize) {
 		pvt->_curext=pvt->_extents.getFirst();
 		pvt->_curind=0;
 	} else {
-		for (;;) {
-			size_t	epos=0;
-			size_t	esize=pvt->_initsize;
-			if (pvt->_curind) {
-				epos=pvt->_initsize+
-					pvt->_extsize*(pvt->_curind-1);
-				esize=pvt->_extsize;
-			}
-			if (epos>pvt->_pos) {
+		size_t	targetind=(pvt->_pos-pvt->_initsize+pvt->_extsize)/
+								pvt->_extsize;
+		while (pvt->_curind!=targetind) {
+			if (pvt->_curind>targetind) {
 				pvt->_curext=pvt->_curext->getPrevious();
 				pvt->_curind--;
-			} else if (epos+esize<=pvt->_pos) {
+			} else {
 				pvt->_curext=pvt->_curext->getNext();
 				pvt->_curind++;
-			} else {
-				break;
 			}
 		}
 	}
@@ -206,6 +199,7 @@ bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
 		}
 		size_t	bytestocopy=(erest<remaintocopy)?erest:remaintocopy;
 
+		// copy bytes
 		unsigned char	*ext=pvt->_curext->getValue()+eoff;
 		if (copyin) {
 			bytestring::copy(ext,data,bytestocopy);
@@ -213,10 +207,10 @@ bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
 			bytestring::copy(data,ext,bytestocopy);
 		}
 
+		// update counters and position
 		remaintocopy=remaintocopy-bytestocopy;
-		data=data+bytestocopy;
 		*bytescopied=*bytescopied+bytestocopy;
-
+		data=data+bytestocopy;
 		if (remaintocopy) {
 			if (!copyin && !pvt->_curext->getNext()) {
 				break;

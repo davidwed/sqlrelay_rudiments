@@ -19,7 +19,7 @@ void dynamicarray<valuetype>::init(uint64_t initialsize,
 						uint64_t increment) {
 	size=0;
 	len=0;
-	initsize=initialsize;
+	initial=initialsize;
 	extsize=increment;
 	extend(initialsize);
 	curext=extents.getFirst();
@@ -47,7 +47,7 @@ uint64_t dynamicarray<valuetype>::getLength() {
 
 template< class valuetype >
 void dynamicarray<valuetype>::extend(uint64_t size) {
-	uint64_t	inc=(extents.getLength())?extsize:initsize;
+	uint64_t	inc=(extents.getLength())?extsize:initial;
 	while (this->size<size) {
 		unsigned char	**newext=new unsigned char *[inc];
 		for (uint64_t i=0; i<inc; i++) {
@@ -62,30 +62,26 @@ void dynamicarray<valuetype>::extend(uint64_t size) {
 
 template< class valuetype >
 valuetype &dynamicarray<valuetype>::find(uint64_t index) {
-	
+
 	// move to the extent that contains the specified index
-	uint64_t	eind=0;
-	if (index<initsize) {
+	// (also calculate the index of the first element of the extent)
+	size_t	eind;
+	if (index<initial) {
 		curext=extents.getFirst();
 		curind=0;
+		eind=0;
 	} else {
-		for (;;) {
-			eind=0;
-			uint64_t	esize=initsize;
-			if (curind) {
-				eind=initsize+extsize*(curind-1);
-				esize=extsize;
-			}
-			if (eind>index) {
+		uint64_t	targetind=(index-initial+extsize)/extsize;
+		while (curind!=targetind) {
+			if (curind>targetind) {
 				curext=curext->getPrevious();
 				curind--;
-			} else if (eind+esize<=index) {
+			} else {
 				curext=curext->getNext();
 				curind++;
-			} else {
-				break;
 			}
 		}
+		eind=initial+extsize*(curind-1);
 	}
 
 	// return the value
@@ -94,7 +90,7 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 
 template< class valuetype >
 void dynamicarray<valuetype>::clearExtentList() {
-	uint64_t	inc=initsize;
+	uint64_t	inc=initial;
 	for (linkedlistnode<unsigned char **> *node=extents.getFirst();
 						node; node=node->getNext()) {
 		unsigned char	**ext=node->getValue();
@@ -114,7 +110,7 @@ void dynamicarray<valuetype>::clear() {
 	clearExtentList();
 	size=0;
 	len=0;
-	extend(initsize);
+	extend(initial);
 	curext=extents.getFirst();
 	curind=0;
 }
