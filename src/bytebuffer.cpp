@@ -54,6 +54,7 @@ bytebuffer::bytebuffer(unsigned char *initialcontents,
 
 void bytebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
+	// FIXME: handle initialsize=0 and increment=0
 	pvt=new bytebufferprivate;
 	pvt->_initial=initialsize;
 	pvt->_initsize=initialsize;
@@ -161,21 +162,27 @@ bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
 	}
 
 	// move to the extent that contains the current position
-	for (;;) {
-		size_t	epos=0;
-		size_t	esize=pvt->_initsize;
-		if (pvt->_curind) {
-			epos=pvt->_initsize+pvt->_extsize*(pvt->_curind-1);
-			esize=pvt->_extsize;
-		}
-		if (epos>pvt->_pos) {
-			pvt->_curext=pvt->_curext->getPrevious();
-			pvt->_curind--;
-		} else if (epos+esize<=pvt->_pos) {
-			pvt->_curext=pvt->_curext->getNext();
-			pvt->_curind++;
-		} else {
-			break;
+	if (pvt->_pos<pvt->_initial) {
+		pvt->_curext=pvt->_extents.getFirst();
+		pvt->_curind=0;
+	} else {
+		for (;;) {
+			size_t	epos=0;
+			size_t	esize=pvt->_initsize;
+			if (pvt->_curind) {
+				epos=pvt->_initsize+
+					pvt->_extsize*(pvt->_curind-1);
+				esize=pvt->_extsize;
+			}
+			if (epos>pvt->_pos) {
+				pvt->_curext=pvt->_curext->getPrevious();
+				pvt->_curind--;
+			} else if (epos+esize<=pvt->_pos) {
+				pvt->_curext=pvt->_curext->getNext();
+				pvt->_curind++;
+			} else {
+				break;
+			}
 		}
 	}
 
@@ -385,12 +392,6 @@ void bytebuffer::extend(size_t bytestowrite) {
 
 	// update the total number of bytes in all extents
 	pvt->_tot=pvt->_tot+pvt->_extsize*newextents;
-
-	// set the curent extent if necessary
-	/*if (!pvt->_curext) {
-		pvt->_curext=pvt->_extents.getFirst();
-		pvt->_curind=0;
-	}*/
 }
 
 const unsigned char *bytebuffer::getBuffer() {
