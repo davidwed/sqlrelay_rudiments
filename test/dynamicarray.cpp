@@ -196,12 +196,4 @@ int main(int argc, const char **argv) {
 	da4.clear();
 	test("clear, getLength()",da4.getLength()==0);
 	stdoutput.printf("\n");
-
-
-
-	// negative index
-	dynamicarray<int>	daneg(25,10);
-	stdoutput.printf("negative index (ought to crash)...\n");
-	daneg[-1]=0;
-	stdoutput.printf("\n");
 }
