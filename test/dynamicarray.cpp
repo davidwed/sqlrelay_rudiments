@@ -117,4 +117,11 @@ int main(int argc, const char **argv) {
 	da1.clear();
 	test("clear, getLength()",da1.getLength()==0);
 	stdoutput.printf("\n");
+
+
+	// negative index
+	dynamicarray<int>	da2(25,10);
+	stdoutput.printf("negative index (ought to crash)...\n");
+	da2[-1]=0;
+	stdoutput.printf("\n");
 }

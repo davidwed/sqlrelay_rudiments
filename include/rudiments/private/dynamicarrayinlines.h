@@ -4,44 +4,19 @@
 #include <new>
 
 template< class valuetype >
-dynamicarrayextent<valuetype>::dynamicarrayextent(int size) {
-	this->size=size;
-	a=new unsigned char *[size];
-	for (int i=0; i<size; i++) {
-		a[i]=new unsigned char[sizeof(valuetype)];
-		new(a[i]) valuetype;
-	}
-}
-
-template< class valuetype >
-dynamicarrayextent<valuetype>::~dynamicarrayextent() {
-	for (int i=0; i<size; i++) {
-		((valuetype *)a[i])->~valuetype();
-		delete[] a[i];
-	}
-	delete[] a;
-}
-
-template< class valuetype >
-valuetype &dynamicarrayextent<valuetype>::operator[](int index) {
-	return (valuetype &)*(a[index]);
-}
-
-
-
-
-template< class valuetype >
 dynamicarray<valuetype>::dynamicarray() {
 	init(128,32);
 }
 
 template< class valuetype >
-dynamicarray<valuetype>::dynamicarray(int initialsize, int increment) {
+dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
+						uint64_t increment) {
 	init((initialsize>1)?initialsize:128,(increment>1)?increment:32);
 }
 
 template< class valuetype >
-void dynamicarray<valuetype>::init(int initialsize, int increment) {
+void dynamicarray<valuetype>::init(uint64_t initialsize,
+						uint64_t increment) {
 	size=0;
 	len=0;
 	initsize=initialsize;
@@ -53,16 +28,11 @@ void dynamicarray<valuetype>::init(int initialsize, int increment) {
 
 template< class valuetype >
 dynamicarray<valuetype>::~dynamicarray() {
-	for (linkedlistnode<dynamicarrayextent<valuetype> *>
-			*node=extents.getFirst(); node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	extents.clear();
+	clearExtentList();
 }
 
 template< class valuetype >
-valuetype &dynamicarray<valuetype>::operator[](int index) {
-	// FIXME: handle index<0
+valuetype &dynamicarray<valuetype>::operator[](uint64_t index) {
 	extend(index+1);
 	if (index>=len) {
 		len=index+1;
@@ -71,31 +41,37 @@ valuetype &dynamicarray<valuetype>::operator[](int index) {
 }
 
 template< class valuetype >
-int dynamicarray<valuetype>::getLength() {
+uint64_t dynamicarray<valuetype>::getLength() {
 	return len;
 }
 
 template< class valuetype >
-void dynamicarray<valuetype>::extend(int size) {
+void dynamicarray<valuetype>::extend(uint64_t size) {
+	uint64_t	inc=(extents.getLength())?extsize:initsize;
 	while (this->size<size) {
-		int	inc=(extents.getLength())?extsize:initsize;
-		extents.append(new dynamicarrayextent<valuetype>(inc));
+		unsigned char	**newext=new unsigned char *[inc];
+		for (uint64_t i=0; i<inc; i++) {
+			newext[i]=new unsigned char[sizeof(valuetype)];
+			new(newext[i]) valuetype;
+		}
+		extents.append(newext);
 		this->size=this->size+inc;
+		inc=extsize;
 	}
 }
 
 template< class valuetype >
-valuetype &dynamicarray<valuetype>::find(int index) {
+valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 	
 	// move to the extent that contains the specified index
-	int	eind=0;
+	uint64_t	eind=0;
 	if (index<initsize) {
 		curext=extents.getFirst();
 		curind=0;
 	} else {
 		for (;;) {
 			eind=0;
-			int	esize=initsize;
+			uint64_t	esize=initsize;
 			if (curind) {
 				eind=initsize+extsize*(curind-1);
 				esize=extsize;
@@ -113,17 +89,29 @@ valuetype &dynamicarray<valuetype>::find(int index) {
 	}
 
 	// return the value
-	return (*curext->getValue())[index-eind];
+	return (valuetype &)(*curext->getValue()[index-eind]);
+}
+
+template< class valuetype >
+void dynamicarray<valuetype>::clearExtentList() {
+	uint64_t	inc=initsize;
+	for (linkedlistnode<unsigned char **> *node=extents.getFirst();
+						node; node=node->getNext()) {
+		unsigned char	**ext=node->getValue();
+		for (uint64_t i=0; i<inc; i++) {
+			((valuetype *)ext[i])->~valuetype();
+			delete[] ext[i];
+		}
+		delete[] ext;
+		inc=extsize;
+	}
+	extents.clear();
 }
 
 template< class valuetype >
 void dynamicarray<valuetype>::clear() {
 	// FIXME: rather than re-extending, just don't delete the first extent
-	for (linkedlistnode<dynamicarrayextent<valuetype> *>
-			*node=extents.getFirst(); node; node=node->getNext()) {
-		delete node->getValue();
-	}
-	extents.clear();
+	clearExtentList();
 	size=0;
 	len=0;
 	extend(initsize);
