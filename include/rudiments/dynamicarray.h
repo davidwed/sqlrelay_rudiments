@@ -66,7 +66,7 @@ class dynamicarray {
 		valuetype	&operator[](uint64_t index);
 
 		/** Returns the length of the array. */
-		uint64_t	getLength();
+		uint64_t	getLength() const;
 
 		/** Clears the array, deleting all of its values. */
 		void	clear();
