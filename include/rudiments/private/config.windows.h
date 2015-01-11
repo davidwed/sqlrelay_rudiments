@@ -745,6 +745,12 @@
 /* Some systems have NetUserGetInfo */
 #define RUDIMENTS_HAVE_NETUSERGETINFO 1
 
+/* Some systems have new */
+#define RUDIMENTS_HAVE_NEW 1
+
+/* Some systems have new.h */
+/* #undef RUDIMENTS_HAVE_NEW_H */
+
 /* Some systems define _NSGetEnviron in crt_externs.h */
 /* #undef RUDIMENTS_HAVE_NSGETENVIRON */
 

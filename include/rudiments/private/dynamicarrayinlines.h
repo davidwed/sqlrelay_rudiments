@@ -1,7 +1,7 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information.
 
-#include <new>
+#include <rudiments/private/new.h>
 
 template< class valuetype >
 dynamicarray<valuetype>::dynamicarray() {
@@ -15,6 +15,21 @@ dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
 }
 
 template< class valuetype >
+dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) {
+	dynamicarrayClone(v);
+}
+
+template< class valuetype >
+dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
+					const dynamicarray<valuetype> &v) {
+	if (this!=&v) {
+		clearExtentList();
+		dynamicarrayClone(v);
+	}
+	return *this;
+}
+
+template< class valuetype >
 void dynamicarray<valuetype>::init(uint64_t initialsize,
 						uint64_t increment) {
 	size=0;
@@ -24,6 +39,27 @@ void dynamicarray<valuetype>::init(uint64_t initialsize,
 	extend(initialsize);
 	curext=extents.getFirst();
 	curind=0;
+}
+
+template< class valuetype >
+void dynamicarray<valuetype>::dynamicarrayClone(
+				const dynamicarray<valuetype> &v) {
+
+	// clone the data
+	for (uint64_t i=0; i<v.getLength(); i++) {
+		this[i]=v[i];
+	}
+
+	// clone sizes and positions
+	size=v.size;
+	len=v.len;
+	initial=v.initial;
+	extsize=v.extsize;
+	curind=v.curind;
+	curext=extents.getFirst();
+	for (uint64_t eind=0; eind<curind; eind++) {
+		curext=curext->getNext();
+	}
 }
 
 template< class valuetype >
@@ -91,26 +127,47 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 template< class valuetype >
 void dynamicarray<valuetype>::clearExtentList() {
 	uint64_t	inc=initial;
-	for (linkedlistnode<unsigned char **> *node=extents.getFirst();
-						node; node=node->getNext()) {
-		unsigned char	**ext=node->getValue();
+	curext=extents.getFirst();
+	while (curext) {
+		linkedlistnode<unsigned char **> *next=curext->getNext();
+		unsigned char	**ext=curext->getValue();
 		for (uint64_t i=0; i<inc; i++) {
 			((valuetype *)ext[i])->~valuetype();
 			delete[] ext[i];
 		}
 		delete[] ext;
+		extents.remove(curext);
+ 		curext=next;
 		inc=extsize;
 	}
-	extents.clear();
 }
 
 template< class valuetype >
 void dynamicarray<valuetype>::clear() {
-	// FIXME: rather than re-extending, just don't delete the first extent
-	clearExtentList();
+
+	// remove all but the first extent
+	curext=extents.getLast();
+	while (curext!=extents.getFirst()) {
+		linkedlistnode<unsigned char **> *prev=curext->getPrevious();
+		unsigned char	**ext=curext->getValue();
+		for (uint64_t i=0; i<extsize; i++) {
+			((valuetype *)ext[i])->~valuetype();
+			delete[] ext[i];
+		}
+		delete[] ext;
+		extents.remove(curext);
+ 		curext=prev;
+	}
+
+	// reinit first extent
+	unsigned char	**ext=curext->getValue();
+	for (uint64_t i=0; i<initial; i++) {
+		((valuetype *)ext[i])->~valuetype();
+		new(ext[i]) valuetype;
+	}
+
+	// reset sizes and positions
 	size=0;
 	len=0;
-	extend(initial);
-	curext=extents.getFirst();
 	curind=0;
 }

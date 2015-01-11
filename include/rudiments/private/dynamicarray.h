@@ -3,6 +3,8 @@
 
 	private:
 		void		init(uint64_t initialsize, uint64_t increment);
+		void		dynamicarrayClone(
+					const dynamicarray<valuetype> &v);
 		void		extend(uint64_t len);
 		valuetype	&find(uint64_t index);
 		void		clearExtentList();

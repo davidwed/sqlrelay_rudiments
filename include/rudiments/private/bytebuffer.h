@@ -4,7 +4,7 @@
 	protected:
 		void		init(unsigned char *initialcontents,
 					size_t initialsize, size_t increment);
-		void		clearExtents();
+		void		clearExtentList();
 		void		clear(bool resetpositions);
 		bytebuffer	*copy(unsigned char *data,
 						size_t size, bool copyin,

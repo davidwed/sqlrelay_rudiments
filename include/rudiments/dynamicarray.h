@@ -27,11 +27,14 @@
  * 	dynamicarray< myclass *[100] > d;
  *
  *  However, it is possible to create an array of arrays by nesting
- *  dynamicarrays, like:
+ *  dynamicarrays and/or staticarrays, like:
  *
  * 	dynamicarray< dynamicarray< int > > d;
  * 	dynamicarray< dynamicarray< myclass > > d;
  * 	dynamicarray< dynamicarray< myclass * > > d;
+ * 	dynamicarray< staticarray< int > > d;
+ * 	dynamicarray< staticarray< myclass > > d;
+ * 	dynamicarray< staticarray< myclass * > > d;
  */
 template < class valuetype >
 class dynamicarray {
@@ -44,6 +47,15 @@ class dynamicarray {
 		 *  members and each successive extent will be created with
 		 *  "increment" members. */
 		dynamicarray(uint64_t initialsize, uint64_t increment);
+
+		/** Creates an instance of the dynamicarray class
+		 *  that is a copy of "v". */
+		dynamicarray(const dynamicarray<valuetype> &v);
+
+		/** Makes this instance of the dynamicarray class
+		 *  identical to "v". */
+		dynamicarray<valuetype>	&operator=(
+					const dynamicarray<valuetype> &v);
 
 		/** Deletes this instance of the dynamicarray class and all of
 		 *  its values. */

@@ -48,6 +48,7 @@ PROGS = server$(EXE) \
 	chat$(EXE) \
 	crypt$(EXE) \
 	dynamicarray$(EXE) \
+	staticarray$(EXE) \
 	dynamiclib$(EXE) \
 	error$(EXE) \
 	math$(EXE) \
@@ -157,6 +158,7 @@ clean:
 		chat$(EXE) \
 		crypt$(EXE) \
 		dynamicarray$(EXE) \
+		staticarray$(EXE) \
 		dynamiclib$(EXE) \
 		error$(EXE) \
 		math$(EXE) \
@@ -379,6 +381,9 @@ crypt$(EXE): crypt.cpp crypt.lo
 
 dynamicarray$(EXE): dynamicarray.cpp dynamicarray.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dynamicarray.lo $(ALLSTATIC) $(LIBS)
+
+staticarray$(EXE): staticarray.cpp staticarray.lo 
+	$(LIBTOOL) --mode=link $(CXX) -o $@ staticarray.lo $(ALLSTATIC) $(LIBS)
 
 dynamiclib$(EXE): dynamiclib.cpp dynamiclib.lo 
 	$(LIBTOOL) --mode=link $(CXX) -o $@ dynamiclib.lo $(ALLSTATIC) $(LIBS)

@@ -720,6 +720,14 @@ AC_TRY_COMPILE([#include <Roster.h>],
 AC_MSG_CHECKING(for sys/signal.h)
 AC_TRY_COMPILE([#include <sys/signal.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_SYS_SIGNAL_H, 1, Some systems have sys/signal.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for new)
+AC_TRY_COMPILE([#include <new>],
+[],AC_DEFINE(RUDIMENTS_HAVE_NEW, 1, Some systems have new) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for new.h)
+AC_TRY_COMPILE([#include <new.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_NEW_H, 1, Some systems have new.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 

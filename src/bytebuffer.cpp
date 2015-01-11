@@ -79,7 +79,7 @@ bytebuffer::bytebuffer(const bytebuffer &v) {
 
 bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
 	if (this!=&v) {
-		clearExtents();
+		clearExtentList();
 		delete pvt;
 		bytebufferClone(v);
 	}
@@ -87,11 +87,11 @@ bytebuffer &bytebuffer::operator=(const bytebuffer &v) {
 }
 
 bytebuffer::~bytebuffer() {
-	clearExtents();
+	clearExtentList();
 	delete pvt;
 }
 
-void bytebuffer::clearExtents() {
+void bytebuffer::clearExtentList() {
 	pvt->_curext=pvt->_extents.getFirst();
 	while (pvt->_curext) {
 		linkedlistnode< unsigned char * > *next=pvt->_curext->getNext();
