@@ -9,8 +9,8 @@
 		valuetype	&find(uint64_t index);
 		void		clearExtentList();
 
-		linkedlist< unsigned char **>		extents;
-		linkedlistnode< unsigned char **>	*curext;
+		linkedlist< valuetype *>	extents;
+		linkedlistnode< valuetype *>	*curext;
 		uint64_t	curind;
 		uint64_t	initial;
 		uint64_t	extsize;

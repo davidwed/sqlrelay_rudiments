@@ -85,11 +85,7 @@ template< class valuetype >
 void dynamicarray<valuetype>::extend(uint64_t size) {
 	uint64_t	inc=(extents.getLength())?extsize:initial;
 	while (this->size<size) {
-		unsigned char	**newext=new unsigned char *[inc];
-		for (uint64_t i=0; i<inc; i++) {
-			newext[i]=new unsigned char[sizeof(valuetype)];
-			new(newext[i]) valuetype;
-		}
+		valuetype	*newext=new valuetype[inc];
 		extents.append(newext);
 		this->size=this->size+inc;
 		inc=extsize;
@@ -121,24 +117,18 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 	}
 
 	// return the value
-	return (valuetype &)(*curext->getValue()[index-eind]);
+	return curext->getValue()[index-eind];
 }
 
 template< class valuetype >
 void dynamicarray<valuetype>::clearExtentList() {
-	uint64_t	inc=initial;
 	curext=extents.getFirst();
 	while (curext) {
-		linkedlistnode<unsigned char **> *next=curext->getNext();
-		unsigned char	**ext=curext->getValue();
-		for (uint64_t i=0; i<inc; i++) {
-			((valuetype *)ext[i])->~valuetype();
-			delete[] ext[i];
-		}
+		linkedlistnode<valuetype *>	*next=curext->getNext();
+		valuetype			*ext=curext->getValue();
 		delete[] ext;
 		extents.remove(curext);
  		curext=next;
-		inc=extsize;
 	}
 }
 
@@ -148,22 +138,18 @@ void dynamicarray<valuetype>::clear() {
 	// remove all but the first extent
 	curext=extents.getLast();
 	while (curext!=extents.getFirst()) {
-		linkedlistnode<unsigned char **> *prev=curext->getPrevious();
-		unsigned char	**ext=curext->getValue();
-		for (uint64_t i=0; i<extsize; i++) {
-			((valuetype *)ext[i])->~valuetype();
-			delete[] ext[i];
-		}
+		linkedlistnode<valuetype *>	*prev=curext->getPrevious();
+		valuetype			*ext=curext->getValue();
 		delete[] ext;
 		extents.remove(curext);
  		curext=prev;
 	}
 
 	// reinit first extent
-	unsigned char	**ext=curext->getValue();
+	valuetype	*ext=curext->getValue();
 	for (uint64_t i=0; i<initial; i++) {
-		((valuetype *)ext[i])->~valuetype();
-		new(ext[i]) valuetype;
+		ext[i].~valuetype();
+		new(&(ext[i])) valuetype;
 	}
 
 	// reset sizes and positions
