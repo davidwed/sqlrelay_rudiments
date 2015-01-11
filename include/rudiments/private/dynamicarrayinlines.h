@@ -11,7 +11,7 @@ dynamicarray<valuetype>::dynamicarray() {
 template< class valuetype >
 dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
 						uint64_t increment) {
-	init((initialsize>1)?initialsize:128,(increment>1)?increment:32);
+	init((initialsize)?initialsize:128,(increment)?increment:32);
 }
 
 template< class valuetype >

@@ -85,9 +85,9 @@ int main(int argc, const char **argv) {
 
 
 	// create
-	dynamicarray<testclass>	da1(25,10);
+	dynamicarray<testclass>	da2(25,10);
 	stdoutput.printf("create <testclass>...\n");
-	test("create, getLength()",da1.getLength()==0);
+	test("create, getLength()",da2.getLength()==0);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -95,33 +95,112 @@ int main(int argc, const char **argv) {
 	count=1024*1024;
 	success=true;
 	for (uint32_t i=0; i<count; i++) {
-		success=(da1[i].getValue()==1);
+		success=(da2[i].getValue()==1);
 	}
 	test("get values, default",success);
-	test("get values, getLength()",(uint32_t)da1.getLength()==count);
+	test("get values, getLength()",(uint32_t)da2.getLength()==count);
 	for (uint32_t i=0; success && i<count; i++) {
-		da1[i].setValue(2);
+		da2[i].setValue(2);
 	}
 	for (uint32_t i=0; success && i<count; i++) {
-		success=(da1[i].getValue()==2);
+		success=(da2[i].getValue()==2);
 	}
 	test("get values, forwards",success);
 	for (uint32_t i=count; success && i>0; i--) {
-		success=(da1[i-1].getValue()==2);
+		success=(da2[i-1].getValue()==2);
 	}
 	test("get values, backwards",success);
 	stdoutput.printf("\n");
 
 	// clear
 	stdoutput.printf("clear...\n");
-	da1.clear();
-	test("clear, getLength()",da1.getLength()==0);
+	da2.clear();
+	test("clear, getLength()",da2.getLength()==0);
 	stdoutput.printf("\n");
 
 
+
+	// create
+	dynamicarray<testclass *>	da3(25,10);
+	stdoutput.printf("create <testclass *>...\n");
+	test("create, getLength()",da3.getLength()==0);
+	stdoutput.printf("\n");
+
+	// set/check values
+	stdoutput.printf("get values...\n");
+	count=1024*1024;
+	success=true;
+	for (uint32_t i=0; i<count; i++) {
+		da3[i]=new testclass();
+	}
+	for (uint32_t i=0; success && i<count; i++) {
+		success=(da3[i]->getValue()==1);
+	}
+	test("get values, default",success);
+	for (uint32_t i=0; i<count; i++) {
+		da3[i]->setValue(2);
+	}
+	for (uint32_t i=0; success && i<count; i++) {
+		success=(da3[i]->getValue()==2);
+	}
+	test("get values, forwards",success);
+	for (uint32_t i=count; success && i>0; i--) {
+		success=(da3[i-1]->getValue()==2);
+	}
+	test("get values, backwards",success);
+	stdoutput.printf("\n");
+
+	// clear
+	stdoutput.printf("clear...\n");
+	for (uint32_t i=0; i<count; i++) {
+		delete da3[i];
+	}
+	da3.clear();
+	test("clear, getLength()",da3.getLength()==0);
+	stdoutput.printf("\n");
+
+
+
+	// create
+	dynamicarray< dynamicarray< uint32_t > >	da4(25,10);
+	stdoutput.printf("create nested...\n");
+	test("create, getLength()",da4.getLength()==0);
+	stdoutput.printf("\n");
+
+	// set/check values
+	stdoutput.printf("get values...\n");
+	count=1024;
+	success=true;
+	for (uint32_t i=0; i<count; i++) {
+		for (uint32_t j=0; j<count; j++) {
+			da4[i][j]=i*count+j;
+		}
+	}
+	for (uint32_t i=0; success && i<count; i++) {
+		for (uint32_t j=0; success && j<count; j++) {
+			success=(da4[i][j]==i*count+j);
+		}
+	}
+	test("get values, forwards",success);
+	for (uint32_t i=count; success && i>0; i--) {
+		for (uint32_t j=count; success && j>0; j--) {
+			success=(da4[i-1][j-1]==(i-1)*count+(j-1));
+		}
+	}
+	test("get values, backwards",success);
+	stdoutput.printf("\n");
+
+	// clear
+	stdoutput.printf("clear...\n");
+	da4.clear();
+	test("clear, getLength()",da4.getLength()==0);
+	stdoutput.printf("\n");
+
+
+
 	// negative index
-	dynamicarray<int>	da2(25,10);
+	dynamicarray<int>	daneg(25,10);
 	stdoutput.printf("negative index (ought to crash)...\n");
-	da2[-1]=0;
+	daneg[-1]=0;
 	stdoutput.printf("\n");
 }
