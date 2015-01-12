@@ -355,10 +355,6 @@ void bytebuffer::clear(bool resetpositions) {
 	}
 	pvt->_curind=0;
 
-	// FIXME: arguably if the initial extent is larger than pvt->_initial
-	// then its buffer ought to be reallocated.  Maybe this should be done
-	// periodically.
-
 	// reset total size
 	pvt->_tot=pvt->_initsize;
 
