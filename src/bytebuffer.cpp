@@ -11,6 +11,9 @@
 	#include <stdio.h>
 #endif
 
+#define DEFAULT_INITIALSIZE 128
+#define DEFAULT_INCREMENT 32
+
 class bytebufferprivate {
 	friend class bytebuffer;
 	private:
@@ -43,6 +46,10 @@ class bytebufferprivate {
 		size_t		_tot;
 };
 
+bytebuffer::bytebuffer() {
+	init(NULL,0,0);
+}
+
 bytebuffer::bytebuffer(size_t initialsize, size_t increment) {
 	init(NULL,initialsize,increment);
 }
@@ -54,7 +61,12 @@ bytebuffer::bytebuffer(unsigned char *initialcontents,
 
 void bytebuffer::init(unsigned char *initialcontents,
 				size_t initialsize, size_t increment) {
-	// FIXME: handle initialsize=0 and increment=0
+	if (initialsize==0) {
+		initialsize=DEFAULT_INITIALSIZE;
+	}
+	if (increment==0) {
+		increment=DEFAULT_INCREMENT;
+	}
 	pvt=new bytebufferprivate;
 	pvt->_initial=initialsize;
 	pvt->_initsize=initialsize;

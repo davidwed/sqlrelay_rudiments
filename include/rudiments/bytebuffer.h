@@ -12,7 +12,7 @@ class bytebufferprivate;
  *
  *  Internally, the class stores this data in a series of extents which are
  *  coalesced when getBuffer() or detachBuffer() are called.  The size of the
- *  initial and incremental extents are defined in the constructor.
+ *  initial and incremental extents may be defined in the constructor.
  *
  *  When cleared, all extents except for the initial extent are freed.
  *
@@ -20,6 +20,10 @@ class bytebufferprivate;
  *  over than to allocate a new one for each operation. */
 class RUDIMENTS_DLLSPEC bytebuffer {
 	public:
+
+		/** Creates an instance of the bytebuffer class with
+ 		 *  default initial size and increment parameters. */
+		bytebuffer();
 
 		/** Creates an instance of the bytebuffer class with
 		 *  the specified "initialsize" and "increment" parameters. */

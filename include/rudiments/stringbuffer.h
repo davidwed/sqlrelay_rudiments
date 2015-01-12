@@ -10,14 +10,24 @@ class stringbufferprivate;
 
 /** The stringbuffer class can be used to store strings of arbitrary length.
  *
- *  The stringbuffer is a child of bytebuffer.  See the bytebuffer
- *  class for details on how this is achieved. */
+ *  Internally, the class stores this data in a series of extents which are
+ *  coalesced when getString() or detachString() are called.  The size of the
+ *  initial and incremental extents may be defined in the constructor.
+ *
+ *  When cleared, all extents except for the initial extent are freed.
+ *
+ *  It is generally more efficient to reuse the same stringbuffer over and
+ *  over than to allocate a new one for each operation. */
 class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 	public:
 
 		/** Creates an instance of the stringbuffer class with
 		 *  default initial size and increment parameters. */
 		stringbuffer();
+
+		/** Creates an instance of the stringbuffer class with the
+		 *  specified "initialsize" and "increment" parameters. */
+		stringbuffer(size_t initialsize, size_t increment);
 
 		/** Creates an instance of the stringbuffer class.
 		 *  The buffer "initialcontents" will be attached to the
@@ -26,8 +36,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  size and increment may be specified respectively by the
 		 *  "initialsize" and "increment" parameters. */
 		stringbuffer(char *initialcontents,
-				size_t initialsize,
-				size_t increment);
+				size_t initialsize, size_t increment);
 
 		/** Creates an instance of the stringbuffer class
 		 *  that is a copy of "s". */

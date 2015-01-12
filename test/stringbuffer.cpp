@@ -81,7 +81,7 @@ int main(int argc, const char **argv) {
 
 
 	// create another buffer
-	stringbuffer	*sb=new stringbuffer();
+	stringbuffer	*sb=new stringbuffer(128,32);
 
 	// append some string sequences to the buffer and display the contents
 	// of the buffer byte by byte
@@ -170,7 +170,7 @@ int main(int argc, const char **argv) {
 
 	// create another buffer
 	char	*data=charstring::duplicate("1234567890");
-	sb=new stringbuffer(data,10,32);
+	sb=new stringbuffer(data,128,32);
 	stdoutput.printf("%s\n",sb->getString());
 	sb->append("1234567890");
 	stdoutput.printf("%s\n",sb->getString());

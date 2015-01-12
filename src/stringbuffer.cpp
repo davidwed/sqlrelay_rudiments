@@ -4,7 +4,17 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
 
-stringbuffer::stringbuffer() : bytebuffer(128,32) {
+stringbuffer::stringbuffer() : bytebuffer() {
+}
+
+stringbuffer::stringbuffer(size_t initialsize, size_t increment) :
+			bytebuffer(initialsize,increment) {
+}
+
+stringbuffer::stringbuffer(char *initialcontents,
+				size_t initialsize, size_t increment) :
+			bytebuffer((unsigned char *)initialcontents,
+						initialsize,increment) {
 }
 
 stringbuffer::stringbuffer(const stringbuffer &s) : bytebuffer(s) {
@@ -15,12 +25,6 @@ stringbuffer &stringbuffer::operator=(const stringbuffer &s) {
 		bytebuffer::operator=(s);
 	}
 	return *this;
-}
-
-stringbuffer::stringbuffer(char *initialcontents,
-				size_t initialsize, size_t increment) :
-			bytebuffer((unsigned char *)initialcontents,
-						initialsize,increment) {
 }
 
 stringbuffer::~stringbuffer() {
