@@ -15,6 +15,7 @@ AND = &
 
 # includes and defines
 BASECPPFLAGS = /Wall
+EXTRACPPFLAGS =
 
 # debug and optimization flags (-g, -O2, etc.)
 # NOTE: -FPIC gets added if we're not using libtool
