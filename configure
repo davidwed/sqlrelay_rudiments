@@ -666,11 +666,7 @@ CRTLIB
 GNULIB
 BELIB
 WNOLONGDOUBLE
-MICROSOFT
 EXE
-UWIN
-CYGWIN
-MINGW32
 CXXCPP
 OTOOL64
 OTOOL
@@ -15388,16 +15384,12 @@ $as_echo "no" >&6; }
 esac
 EXE=""
 
-
-
-
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
 then
 	MICROSOFT="yes"
 	EXE=".exe"
 fi
-
 
 
 

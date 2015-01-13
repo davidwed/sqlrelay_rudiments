@@ -10,13 +10,6 @@ mandir = @mandir@
 datadir = @datadir@
 docdir = ${datadir}/doc/rudiments
 
-# compiler to use
-CC = @CC@
-CXX = @CXX@
-
-# archiver to use
-AR = @AR@
-
 # includes and defines
 BASECPPFLAGS = @WALL@ @WERROR@ @WNOLONGDOUBLE@ @WNOFORMAT@ @WNOOVERLOADEDVIRTUAL@ @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 
@@ -26,23 +19,33 @@ CXXFLAGS = @CXXFLAGS@ @PIPE@
 
 # linker flags
 LDFLAGS = @LDFLAGS@
+LINKFLAGS = -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
 
 # libtool command
 LIBTOOL = @LIBTOOL@
 
-# install command
-LTINSTALL = $(LIBTOOL) --mode=install $(top_builddir)/install-sh -c
-INSTALL = $(top_builddir)/install-sh -c
+# compile commands
+LTCOMPILE = $(LIBTOOL) --mode=compile
+LTLINK = $(LIBTOOL) --mode=link
+CC = @CC@
+CXX = @CXX@
+AR = @AR@
+COMPILE = -c
+OUT = -o
 
-# mkinstalldirs command
+# install commands
+LTINSTALL = $(LIBTOOL) --mode=install
+CP = cp
+CHMOD = chmod
+INSTALL = $(top_builddir)/install-sh -c
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
+LTFINISH = $(LIBTOOL) --mode=finish
 
 # commands to erase files and directories
+LTCLEAN = $(LIBTOOL) --mode=clean
+LTUNINSTALL = $(LIBTOOL) --mode=uninstall
 RM = rm -f
 RMTREE = rm -rf
-
-# command to create a symbolic link
-SYMLINK = ln -s
 
 # ssl library
 SSLLIBS = @SSLLIBS@

@@ -5,6 +5,7 @@ include ../config.mk
 .PHONY: all clean install uninstall
 
 CPPFLAGS = $(WERROR) $(BASECPPFLAGS) -I../ -I../include @EXTRACPPFLAGS@
+LIBS = $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(NETAPI32LIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(DEBUGLIB)
 
 SRCS = winsock.cpp @SRCS@
 LOBJS = winsock.lo @LOBJS@
@@ -12,21 +13,21 @@ LOBJS = winsock.lo @LOBJS@
 .SUFFIXES: .lo
 
 .cpp.lo:
-	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT) $@
 
 all: librudiments.la
 
 clean:
-	$(LIBTOOL) --mode=clean $(RM) *.lo *.la *.o
+	$(LTCLEAN) $(RM) *.lo *.la *.o
 	$(RMTREE) .libs
 
 librudiments.la: $(SRCS) $(LOBJS)
-	$(LIBTOOL) --mode=link $(CXX) -o $@ $(LOBJS) $(LDFLAGS) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(NETAPI32LIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(DEBUGLIB) -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
+	$(LTLINK) $(CXX) $(OUT) $@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)
-	$(LTINSTALL) librudiments.la $(libdir)/librudiments.la
-	$(LIBTOOL) --mode=finish $(libdir)
+	$(LTINSTALL) $(INSTALL) librudiments.la $(libdir)/librudiments.la
+	$(LTFINISH) $(libdir)
 
 uninstall:
-	$(LIBTOOL) --mode=uninstall $(RM) $(libdir)/librudiments.la
+	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.la
