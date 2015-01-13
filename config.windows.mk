@@ -10,6 +10,9 @@ mandir = $(prefix)\\share\\man
 datadir = $(prefix)\\share
 docdir = $(datadir)\\doc\\rudiments
 
+# command separator
+AND = &
+
 # includes and defines
 BASECPPFLAGS = /Wall
 

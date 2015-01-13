@@ -12,8 +12,8 @@ all:
 install:
 	$(MKINSTALLDIRS) $(includedir)/rudiments
 	$(MKINSTALLDIRS) $(includedir)/rudiments/private
-	cd rudiments; $(CP) $(HEADERS) $(includedir)/rudiments; \
-	cd private; $(CP) $(PRIVATEHEADERS) $(includedir)/rudiments/private
+	cd rudiments $(AND) $(CP) $(HEADERS) $(includedir)/rudiments $(AND) \
+	cd private $(AND) $(CP) $(PRIVATEHEADERS) $(includedir)/rudiments/private
 	$(CHMOD) 644 $(includedir)/rudiments/*.h $(includedir)/rudiments/private/*.h
 
 uninstall:

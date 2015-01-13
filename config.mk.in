@@ -10,6 +10,9 @@ mandir = @mandir@
 datadir = @datadir@
 docdir = ${datadir}/doc/rudiments
 
+# command separator
+AND = ;
+
 # includes and defines
 BASECPPFLAGS = @WALL@ @WERROR@ @WNOLONGDOUBLE@ @WNOFORMAT@ @WNOOVERLOADEDVIRTUAL@ @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 
