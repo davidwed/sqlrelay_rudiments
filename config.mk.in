@@ -39,7 +39,6 @@ OBJEXT = obj
 LTINSTALL = $(LIBTOOL) --mode=install
 CP = cp
 CHMOD = chmod
-INSTALL = $(top_builddir)/install-sh -c
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
 LTFINISH = $(LIBTOOL) --mode=finish
 

@@ -26,7 +26,7 @@ librudiments.$(LIBEXT): $(SRCS) $(LOBJS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)
-	$(LTINSTALL) $(INSTALL) librudiments.$(LIBEXT) $(libdir)/librudiments.$(LIBEXT)
+	$(LTINSTALL) $(CP) librudiments.$(LIBEXT) $(libdir)/librudiments.$(LIBEXT)
 	$(LTFINISH) $(libdir)
 
 uninstall:
