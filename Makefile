@@ -24,7 +24,8 @@ install:
 	cd doc; $(MAKE) install
 	cd man; $(MAKE) install
 	$(MKINSTALLDIRS) $(libdir)/pkgconfig
-	$(INSTALL) -m 0644 rudiments.pc $(libdir)/pkgconfig/rudiments.pc
+	$(CP) rudiments.pc $(libdir)/pkgconfig/rudiments.pc
+	$(CHMOD) 644 $(libdir)/pkgconfig/rudiments.pc
 
 uninstall:
 	cd src; $(MAKE) uninstall

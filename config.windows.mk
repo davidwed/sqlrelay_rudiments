@@ -34,9 +34,9 @@ OUT = -out:
 
 # install commands
 LTINSTALL =
-CP = cp
-CHMOD = chmod
-INSTALL = cp
+CP = copy
+CHMOD = echo
+INSTALL = copy
 MKINSTALLDIRS = mkdir
 LTFINISH = echo
 

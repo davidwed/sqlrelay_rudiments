@@ -6,19 +6,24 @@ include ../config.mk
 
 install:
 	$(MKINSTALLDIRS) $(docdir)
-	$(MKINSTALLDIRS) $(docdir)/classes/html
 	$(MKINSTALLDIRS) $(docdir)/css
+	$(MKINSTALLDIRS) $(docdir)/classes/html
 	$(MKINSTALLDIRS) $(docdir)/programming
-	$(INSTALL) -m 644 installing.html $(docdir)
-	$(INSTALL) -m 644 index.html $(docdir)
-	$(INSTALL) -m 644 introduction.html $(docdir)
-	$(INSTALL) -m 644 invisible.gif $(docdir)
-	$(INSTALL) -m 644 css/styles.css $(docdir)/css
-	for file in `/bin/ls classes/html/*.html classes/html/*.css classes/html/*.png classes/html/*.js`; \
-	do \
-		$(INSTALL) -m 644 $$file $(docdir)/classes/html; \
-	done
-	$(INSTALL) -m 644 programming/guide.html $(docdir)/programming
+	$(CP) installing.html $(docdir)
+	$(CP) index.html $(docdir)
+	$(CP) introduction.html $(docdir)
+	$(CP) invisible.gif $(docdir)
+	$(CP) css/styles.css $(docdir)/css
+	$(CP) classes/html/*.html $(docdir)/classes/html
+	$(CP) classes/html/*.png $(docdir)/classes/html
+	$(CP) classes/html/*.js $(docdir)/classes/html
+	$(CP) classes/html/*.js $(docdir)/classes/html
+	$(CP) programming/guide.html $(docdir)/programming
+	$(CHMOD) 644 $(docdir)/*.html
+	$(CHMOD) 644 $(docdir)/*.gif
+	$(CHMOD) 644 $(docdir)/css/*
+	$(CHMOD) 644 $(docdir)/classes/html/*
+	$(CHMOD) 644 $(docdir)/programming/*.html
 
 uninstall:
 	$(RMTREE) $(docdir)
