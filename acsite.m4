@@ -477,9 +477,6 @@ case $host_os in
 		;;
 esac
 EXE=""
-AC_SUBST(MINGW32)
-AC_SUBST(CYGWIN)
-AC_SUBST(UWIN)
 
 MICROSOFT=""
 if ( test "$UWIN" = "yes" -o "$MINGW32" = "yes" -o "$CYGWIN" = "yes" )
@@ -489,7 +486,6 @@ then
 fi
 
 AC_SUBST(EXE)
-AC_SUBST(MICROSOFT)
 
 if ( test "$MINGW32" )
 then

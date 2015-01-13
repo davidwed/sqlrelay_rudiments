@@ -1,8 +1,5 @@
-SHELL = @SHELL@
-VPATH = @srcdir@
-
 RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
-SONAME_VERSION_INFO=@SONAME_VERSION_INFO@
+SONAME_VERSION_INFO = @SONAME_VERSION_INFO@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -46,11 +43,6 @@ RMTREE = rm -rf
 
 # command to create a symbolic link
 SYMLINK = ln -s
-
-# windows environment
-MINGW32 = @MINGW32@
-CYGWIN = @CYGWIN@
-UWIN = @UWIN@
 
 # ssl library
 SSLLIBS = @SSLLIBS@
