@@ -2,9 +2,7 @@ top_builddir = ..
 
 include ../config.mk
 
-.PHONY: all clean
-
-CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
+CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB)
 
 PROGS = \
@@ -64,178 +62,180 @@ PROGS = \
 	xmlsax$(EXE) \
 	codetree$(EXE)
 
-.SUFFIXES: .lo
+.SUFFIXES: .$(OBJ) .obj
 
 .cpp.lo:
-	$(LIBTOOL) --mode=compile $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
+	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
+
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
 all: $(PROGS)
 
 clean:
-	$(LIBTOOL) --mode=clean $(RM) $(PROGS) *.lo *.o
-	$(RMTREE) .libs
+	$(LTCLEAN) $(RM) $(PROGS) *.lo *.o *.obj
 
-character$(EXE): character.cpp character.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ character.lo $(LIBS)
+character$(EXE): character.cpp character.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ character.$(OBJ) $(LIBS)
 
-charstring$(EXE): charstring.cpp charstring.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ charstring.lo $(LIBS)
+charstring$(EXE): charstring.cpp charstring.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring.$(OBJ) $(LIBS)
 
-chat$(EXE): chat.cpp chat.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ chat.lo $(LIBS)
+chat$(EXE): chat.cpp chat.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ chat.$(OBJ) $(LIBS)
 
-clientserverfactory$(EXE): clientserverfactory.cpp clientserverfactory.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ clientserverfactory.lo $(LIBS)
+clientserverfactory$(EXE): clientserverfactory.cpp clientserverfactory.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ clientserverfactory.$(OBJ) $(LIBS)
 
-commandline$(EXE): commandline.cpp commandline.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ commandline.lo $(LIBS)
+commandline$(EXE): commandline.cpp commandline.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ commandline.$(OBJ) $(LIBS)
 
-complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserver.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ complexinetsocketserver.lo $(LIBS)
+complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserver.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ complexinetsocketserver.$(OBJ) $(LIBS)
 
-crypt$(EXE): crypt.cpp crypt.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ crypt.lo $(LIBS)
+crypt$(EXE): crypt.cpp crypt.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ crypt.$(OBJ) $(LIBS)
 
-datetime$(EXE): datetime.cpp datetime.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ datetime.lo $(LIBS)
+datetime$(EXE): datetime.cpp datetime.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ datetime.$(OBJ) $(LIBS)
 
-device$(EXE): device.cpp device.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ device.lo $(LIBS)
+device$(EXE): device.cpp device.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ device.$(OBJ) $(LIBS)
 
-dictionary$(EXE): dictionary.cpp dictionary.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ dictionary.lo $(LIBS)
+dictionary$(EXE): dictionary.cpp dictionary.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ dictionary.$(OBJ) $(LIBS)
 
-dynamiclib$(EXE): dynamiclib.cpp dynamiclib.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ dynamiclib.lo $(LIBS)
+dynamiclib$(EXE): dynamiclib.cpp dynamiclib.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ dynamiclib.$(OBJ) $(LIBS)
 
-environment$(EXE): environment.cpp environment.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ environment.lo $(LIBS)
+environment$(EXE): environment.cpp environment.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ environment.$(OBJ) $(LIBS)
 
-error$(EXE): error.cpp error.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ error.lo $(LIBS)
+error$(EXE): error.cpp error.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ error.$(OBJ) $(LIBS)
 
-file$(EXE): file.cpp file.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ file.lo $(LIBS)
+file$(EXE): file.cpp file.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ file.$(OBJ) $(LIBS)
 
-filesystem$(EXE): filesystem.cpp filesystem.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ filesystem.lo $(LIBS)
+filesystem$(EXE): filesystem.cpp filesystem.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ filesystem.$(OBJ) $(LIBS)
 
-groupentry$(EXE): groupentry.cpp groupentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ groupentry.lo $(LIBS)
+groupentry$(EXE): groupentry.cpp groupentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ groupentry.$(OBJ) $(LIBS)
 
-hostentry$(EXE): hostentry.cpp hostentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ hostentry.lo $(LIBS)
+hostentry$(EXE): hostentry.cpp hostentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ hostentry.$(OBJ) $(LIBS)
 
-inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsocketclient.lo $(LIBS)
+inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ inetsocketclient.$(OBJ) $(LIBS)
 
-inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ inetsocketserver.lo $(LIBS)
+inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ inetsocketserver.$(OBJ) $(LIBS)
 
-intervaltimer$(EXE): intervaltimer.cpp intervaltimer.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ intervaltimer.lo $(LIBS)
+intervaltimer$(EXE): intervaltimer.cpp intervaltimer.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ intervaltimer.$(OBJ) $(LIBS)
 
-linkedlist$(EXE): linkedlist.cpp linkedlist.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ linkedlist.lo $(LIBS)
+linkedlist$(EXE): linkedlist.cpp linkedlist.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist.$(OBJ) $(LIBS)
 
-listener$(EXE): listener.cpp listener.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ listener.lo $(LIBS)
+listener$(EXE): listener.cpp listener.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ listener.$(OBJ) $(LIBS)
 
-logger$(EXE): logger.cpp logger.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ logger.lo $(LIBS)
+logger$(EXE): logger.cpp logger.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ logger.$(OBJ) $(LIBS)
 
-memorymap$(EXE): memorymap.cpp memorymap.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ memorymap.lo $(LIBS)
+memorymap$(EXE): memorymap.cpp memorymap.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ memorymap.$(OBJ) $(LIBS)
 
-memorypool$(EXE): memorypool.cpp memorypool.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ memorypool.lo $(LIBS)
+memorypool$(EXE): memorypool.cpp memorypool.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ memorypool.$(OBJ) $(LIBS)
 
-modemclient$(EXE): modemclient.cpp modemclient.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ modemclient.lo $(LIBS)
+modemclient$(EXE): modemclient.cpp modemclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ modemclient.$(OBJ) $(LIBS)
 
-modemserver$(EXE): modemserver.cpp modemserver.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ modemserver.lo $(LIBS)
+modemserver$(EXE): modemserver.cpp modemserver.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ modemserver.$(OBJ) $(LIBS)
 
-thread$(EXE): thread.cpp thread.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ thread.lo $(LIBS)
+thread$(EXE): thread.cpp thread.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ thread.$(OBJ) $(LIBS)
 
-threadmutex$(EXE): threadmutex.cpp threadmutex.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ threadmutex.lo $(LIBS)
+threadmutex$(EXE): threadmutex.cpp threadmutex.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ threadmutex.$(OBJ) $(LIBS)
 
-parameterstring$(EXE): parameterstring.cpp parameterstring.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ parameterstring.lo $(LIBS)
+parameterstring$(EXE): parameterstring.cpp parameterstring.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ parameterstring.$(OBJ) $(LIBS)
 
-userentry$(EXE): userentry.cpp userentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ userentry.lo $(LIBS)
+userentry$(EXE): userentry.cpp userentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ userentry.$(OBJ) $(LIBS)
 
-permissions$(EXE): permissions.cpp permissions.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ permissions.lo $(LIBS)
+permissions$(EXE): permissions.cpp permissions.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ permissions.$(OBJ) $(LIBS)
 
-process$(EXE): process.cpp process.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ process.lo $(LIBS)
+process$(EXE): process.cpp process.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process.$(OBJ) $(LIBS)
 
-protocolentry$(EXE): protocolentry.cpp protocolentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ protocolentry.lo $(LIBS)
+protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
 
-randomnumber$(EXE): randomnumber.cpp randomnumber.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ randomnumber.lo $(LIBS)
+randomnumber$(EXE): randomnumber.cpp randomnumber.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ randomnumber.$(OBJ) $(LIBS)
 
-bytestring$(EXE): bytestring.cpp bytestring.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ bytestring.lo $(LIBS)
+bytestring$(EXE): bytestring.cpp bytestring.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ bytestring.$(OBJ) $(LIBS)
 
-regularexpression$(EXE): regularexpression.cpp regularexpression.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ regularexpression.lo $(LIBS)
+regularexpression$(EXE): regularexpression.cpp regularexpression.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ regularexpression.$(OBJ) $(LIBS)
 
-rpcentry$(EXE): rpcentry.cpp rpcentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ rpcentry.lo $(LIBS)
+rpcentry$(EXE): rpcentry.cpp rpcentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ rpcentry.$(OBJ) $(LIBS)
 
-serialport$(EXE): serialport.cpp serialport.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ serialport.lo $(LIBS)
+serialport$(EXE): serialport.cpp serialport.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ serialport.$(OBJ) $(LIBS)
 
-serialportprofile$(EXE): serialportprofile.cpp serialportprofile.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ serialportprofile.lo $(LIBS)
+serialportprofile$(EXE): serialportprofile.cpp serialportprofile.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ serialportprofile.$(OBJ) $(LIBS)
 
-serviceentry$(EXE): serviceentry.cpp serviceentry.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ serviceentry.lo $(LIBS)
+serviceentry$(EXE): serviceentry.cpp serviceentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ serviceentry.$(OBJ) $(LIBS)
 
-sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory1.lo $(LIBS)
+sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory1.$(OBJ) $(LIBS)
 
-sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ sharedmemory2.lo $(LIBS)
+sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory2.$(OBJ) $(LIBS)
 
-shmfile$(EXE): shmfile.cpp shmfile.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ shmfile.lo $(LIBS)
+shmfile$(EXE): shmfile.cpp shmfile.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ shmfile.$(OBJ) $(LIBS)
 
-signal$(EXE): signal.cpp signal.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ signal.lo $(LIBS)
+signal$(EXE): signal.cpp signal.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ signal.$(OBJ) $(LIBS)
 
-snooze$(EXE): snooze.cpp snooze.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ snooze.lo $(LIBS)
+snooze$(EXE): snooze.cpp snooze.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ snooze.$(OBJ) $(LIBS)
 
-stdio$(EXE): stdio.cpp stdio.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ stdio.lo $(LIBS)
+stdio$(EXE): stdio.cpp stdio.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ stdio.$(OBJ) $(LIBS)
 
-stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ stringbuffer.lo $(LIBS)
+stringbuffer$(EXE): stringbuffer.cpp stringbuffer.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ stringbuffer.$(OBJ) $(LIBS)
 
-sys$(EXE): sys.cpp sys.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ sys.lo $(LIBS)
+sys$(EXE): sys.cpp sys.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sys.$(OBJ) $(LIBS)
 
-unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketclient.lo $(LIBS)
+unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ unixsocketclient.$(OBJ) $(LIBS)
 
-unixsocketserver$(EXE): unixsocketserver.cpp unixsocketserver.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ unixsocketserver.lo $(LIBS)
+unixsocketserver$(EXE): unixsocketserver.cpp unixsocketserver.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ unixsocketserver.$(OBJ) $(LIBS)
 
-bytebuffer$(EXE): bytebuffer.cpp bytebuffer.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ bytebuffer.lo $(LIBS)
+bytebuffer$(EXE): bytebuffer.cpp bytebuffer.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ bytebuffer.$(OBJ) $(LIBS)
 
-xmldom$(EXE): xmldom.cpp xmldom.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ xmldom.lo $(LIBS)
+xmldom$(EXE): xmldom.cpp xmldom.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ xmldom.$(OBJ) $(LIBS)
 
-xmlsax$(EXE): xmlsax.cpp xmlsax.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ xmlsax.lo $(LIBS)
+xmlsax$(EXE): xmlsax.cpp xmlsax.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ xmlsax.$(OBJ) $(LIBS)
 
-codetree$(EXE): codetree.cpp codetree.lo
-	$(LIBTOOL) --mode=link $(CXX) -o $@ codetree.lo $(LIBS)
+codetree$(EXE): codetree.cpp codetree.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ codetree.$(OBJ) $(LIBS)

@@ -2,9 +2,7 @@ top_builddir = ..
 
 include ../config.mk
 
-.PHONY: all clean
-
-CPPFLAGS = $(BASECPPFLAGS) -I../ -I../include
+CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(DEBUGLIB)
 
 PROGS = server$(EXE) \
@@ -88,10 +86,13 @@ PROGS = server$(EXE) \
 
 #ALLSTATIC=-all-static
 
-.SUFFIXES: .lo
+.SUFFIXES: .lo .obj
 
 .cpp.lo:
-	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) -g -c $< -o $@
+	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
+
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
 all: $(PROGS)
 
@@ -177,261 +178,256 @@ clean:
 		shutdown$(EXE) \
 		*.lo \
 		*.o \
+		*.obj \
 		test.log \
 		testfile \
 		test.xml \
 		ca.pem \
 		server.pem \
 		client.pem
-	$(RMTREE) .libs
-	cd certificates; $(MAKE) clean
-	$(RMTREE) msvc/test/Debug
-	$(RMTREE) msvc/test/Release
-	$(RMTREE) msvc/test/DebugCLR
-	$(RMTREE) msvc/test/Release
-	$(RMTREE) msvc/test/x64
-	$(RMTREE) msvc/character/Debug
-	$(RMTREE) msvc/character/Release
-	$(RMTREE) msvc/character/DebugCLR
-	$(RMTREE) msvc/character/Release
-	$(RMTREE) msvc/character/x64
+	cd certificates $(AND) $(MAKE) clean
+	cd msvc $(AND) cd test $(AND) $(RMTREE) Debug
+	cd msvc $(AND) cd test $(AND) $(RMTREE) Release
+	cd msvc $(AND) cd test $(AND) $(RMTREE) DebugCLR
+	cd msvc $(AND) cd test $(AND) $(RMTREE) Release
+	cd msvc $(AND) cd test $(AND) $(RMTREE) x64
 
-server$(EXE): server.cpp server.lo 
-	$(LTLINK) $(CXX) -o $@ server.lo $(ALLSTATIC) $(LIBS)
+server$(EXE): server.cpp server.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ server.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-nullserver$(EXE): nullserver.cpp nullserver.lo 
-	$(LTLINK) $(CXX) -o $@ nullserver.lo $(ALLSTATIC) $(LIBS)
+nullserver$(EXE): nullserver.cpp nullserver.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ nullserver.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-sslsvr$(EXE): sslsvr.cpp sslsvr.lo 
-	$(LTLINK) $(CXX) -o $@ sslsvr.lo $(ALLSTATIC) $(LIBS)
+sslsvr$(EXE): sslsvr.cpp sslsvr.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ sslsvr.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-listener$(EXE): listener.cpp listener.lo
-	$(LTLINK) $(CXX) -o $@ listener.lo $(ALLSTATIC) $(LIBS)
+listener$(EXE): listener.cpp listener.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ listener.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.lo
-	$(LTLINK) $(CXX) -o $@ inetsocketclient.lo $(ALLSTATIC) $(LIBS)
+inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ inetsocketclient.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-sslclnt$(EXE): sslclnt.cpp sslclnt.lo
-	$(LTLINK) $(CXX) -o $@ sslclnt.lo $(ALLSTATIC) $(LIBS)
+sslclnt$(EXE): sslclnt.cpp sslclnt.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sslclnt.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.lo
-	$(LTLINK) $(CXX) -o $@ unixsocketclient.lo $(ALLSTATIC) $(LIBS)
+unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ unixsocketclient.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-directory$(EXE): directory.cpp directory.lo 
-	$(LTLINK) $(CXX) -o $@ directory.lo $(ALLSTATIC) $(LIBS)
+directory$(EXE): directory.cpp directory.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ directory.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-daemon$(EXE): daemon.cpp daemon.lo 
-	$(LTLINK) $(CXX) -o $@ daemon.lo $(ALLSTATIC) $(LIBS)
+daemon$(EXE): daemon.cpp daemon.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ daemon.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-commandline$(EXE): commandline.cpp commandline.lo
-	$(LTLINK) $(CXX) -o $@ commandline.lo $(ALLSTATIC) $(LIBS)
+commandline$(EXE): commandline.cpp commandline.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ commandline.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-parameterstring$(EXE): parameterstring.cpp parameterstring.lo
-	$(LTLINK) $(CXX) -o $@ parameterstring.lo $(ALLSTATIC) $(LIBS)
+parameterstring$(EXE): parameterstring.cpp parameterstring.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ parameterstring.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-logger$(EXE): logger.cpp logger.lo
-	$(LTLINK) $(CXX) -o $@ logger.lo $(ALLSTATIC) $(LIBS)
+logger$(EXE): logger.cpp logger.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ logger.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-environment$(EXE): environment.cpp environment.lo
-	$(LTLINK) $(CXX) -o $@ environment.lo $(ALLSTATIC) $(LIBS)
+environment$(EXE): environment.cpp environment.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ environment.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-file$(EXE): file.cpp file.lo
-	$(LTLINK) $(CXX) -o $@ file.lo $(ALLSTATIC) $(LIBS)
+file$(EXE): file.cpp file.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ file.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-filesystem$(EXE): filesystem.cpp filesystem.lo
-	$(LTLINK) $(CXX) -o $@ filesystem.lo $(ALLSTATIC) $(LIBS)
+filesystem$(EXE): filesystem.cpp filesystem.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ filesystem.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-groupentry$(EXE): groupentry.cpp groupentry.lo
-	$(LTLINK) $(CXX) -o $@ groupentry.lo $(ALLSTATIC) $(LIBS)
+groupentry$(EXE): groupentry.cpp groupentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ groupentry.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-hostentry$(EXE): hostentry.cpp hostentry.lo
-	$(LTLINK) $(CXX) -o $@ hostentry.lo $(ALLSTATIC) $(LIBS)
+hostentry$(EXE): hostentry.cpp hostentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ hostentry.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-linkedlist$(EXE): linkedlist.cpp linkedlist.lo
-	$(LTLINK) $(CXX) -o $@ linkedlist.lo $(ALLSTATIC) $(LIBS)
+linkedlist$(EXE): linkedlist.cpp linkedlist.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-singlylinkedlist$(EXE): singlylinkedlist.cpp singlylinkedlist.lo
-	$(LTLINK) $(CXX) -o $@ singlylinkedlist.lo $(ALLSTATIC) $(LIBS)
+singlylinkedlist$(EXE): singlylinkedlist.cpp singlylinkedlist.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-listmetrics$(EXE): listmetrics.cpp listmetrics.lo
-	$(LTLINK) $(CXX) -o $@ listmetrics.lo $(ALLSTATIC) $(LIBS)
+listmetrics$(EXE): listmetrics.cpp listmetrics.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ listmetrics.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-lock1$(EXE): lock1.cpp lock1.lo
-	$(LTLINK) $(CXX) -o $@ lock1.lo $(ALLSTATIC) $(LIBS)
+lock1$(EXE): lock1.cpp lock1.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ lock1.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-lock2$(EXE): lock2.cpp lock2.lo
-	$(LTLINK) $(CXX) -o $@ lock2.lo $(ALLSTATIC) $(LIBS)
+lock2$(EXE): lock2.cpp lock2.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ lock2.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-memorypool$(EXE): memorypool.cpp memorypool.lo
-	$(LTLINK) $(CXX) -o $@ memorypool.lo $(ALLSTATIC) $(LIBS)
+memorypool$(EXE): memorypool.cpp memorypool.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ memorypool.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-oneshotclnt$(EXE): oneshotclnt.cpp oneshotclnt.lo
-	$(LTLINK) $(CXX) -o $@ oneshotclnt.lo $(ALLSTATIC) $(LIBS)
+oneshotclnt$(EXE): oneshotclnt.cpp oneshotclnt.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ oneshotclnt.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-oneshotsvr$(EXE): oneshotsvr.cpp oneshotsvr.lo
-	$(LTLINK) $(CXX) -o $@ oneshotsvr.lo $(ALLSTATIC) $(LIBS)
+oneshotsvr$(EXE): oneshotsvr.cpp oneshotsvr.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ oneshotsvr.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-userentry$(EXE): userentry.cpp userentry.lo
-	$(LTLINK) $(CXX) -o $@ userentry.lo $(ALLSTATIC) $(LIBS)
+userentry$(EXE): userentry.cpp userentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ userentry.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-serviceentry$(EXE): serviceentry.cpp serviceentry.lo
-	$(LTLINK) $(CXX) -o $@ serviceentry.lo $(ALLSTATIC) $(LIBS)
+serviceentry$(EXE): serviceentry.cpp serviceentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ serviceentry.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-permissions$(EXE): permissions.cpp permissions.lo
-	$(LTLINK) $(CXX) -o $@ permissions.lo $(ALLSTATIC) $(LIBS)
+permissions$(EXE): permissions.cpp permissions.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ permissions.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-protocolentry$(EXE): protocolentry.cpp protocolentry.lo
-	$(LTLINK) $(CXX) -o $@ protocolentry.lo $(ALLSTATIC) $(LIBS)
+protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-regularexpression$(EXE): regularexpression.cpp regularexpression.lo
-	$(LTLINK) $(CXX) -o $@ regularexpression.lo $(ALLSTATIC) $(LIBS)
+regularexpression$(EXE): regularexpression.cpp regularexpression.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ regularexpression.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-rpcentry$(EXE): rpcentry.cpp rpcentry.lo
-	$(LTLINK) $(CXX) -o $@ rpcentry.lo $(ALLSTATIC) $(LIBS)
+rpcentry$(EXE): rpcentry.cpp rpcentry.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ rpcentry.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-semaphoreset1$(EXE): semaphoreset1.cpp semaphoreset1.lo
-	$(LTLINK) $(CXX) -o $@ semaphoreset1.lo $(ALLSTATIC) $(LIBS)
+semaphoreset1$(EXE): semaphoreset1.cpp semaphoreset1.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ semaphoreset1.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-semaphoreset2$(EXE): semaphoreset2.cpp semaphoreset2.lo
-	$(LTLINK) $(CXX) -o $@ semaphoreset2.lo $(ALLSTATIC) $(LIBS)
+semaphoreset2$(EXE): semaphoreset2.cpp semaphoreset2.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ semaphoreset2.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.lo
-	$(LTLINK) $(CXX) -o $@ sharedmemory1.lo $(ALLSTATIC) $(LIBS)
+sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory1.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.lo
-	$(LTLINK) $(CXX) -o $@ sharedmemory2.lo $(ALLSTATIC) $(LIBS)
+sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory2.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-charstring$(EXE): charstring.cpp charstring.lo
-	$(LTLINK) $(CXX) -o $@ charstring.lo $(ALLSTATIC) $(LIBS)
+charstring$(EXE): charstring.cpp charstring.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-datetime$(EXE): datetime.cpp datetime.lo
-	$(LTLINK) $(CXX) -o $@ datetime.lo $(ALLSTATIC) $(LIBS)
+datetime$(EXE): datetime.cpp datetime.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ datetime.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-dictionary$(EXE): dictionary.cpp dictionary.lo
-	$(LTLINK) $(CXX) -o $@ dictionary.lo $(ALLSTATIC) $(LIBS)
+dictionary$(EXE): dictionary.cpp dictionary.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ dictionary.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-dtd$(EXE): dtd.cpp dtd.lo
-	$(LTLINK) $(CXX) -o $@ dtd.lo $(ALLSTATIC) $(LIBS)
+dtd$(EXE): dtd.cpp dtd.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ dtd.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-randomnumber$(EXE): randomnumber.cpp randomnumber.lo
-	$(LTLINK) $(CXX) -o $@ randomnumber.lo $(ALLSTATIC) $(LIBS)
+randomnumber$(EXE): randomnumber.cpp randomnumber.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ randomnumber.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-signal$(EXE): signal.cpp signal.lo
-	$(LTLINK) $(CXX) -o $@ signal.lo $(ALLSTATIC) $(LIBS)
+signal$(EXE): signal.cpp signal.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ signal.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-kill$(EXE): kill.cpp kill.lo
-	$(LTLINK) $(CXX) -o $@ kill.lo $(ALLSTATIC) $(LIBS)
+kill$(EXE): kill.cpp kill.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ kill.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-stringbuffer$(EXE): stringbuffer.cpp stringbuffer.lo 
-	$(LTLINK) $(CXX) -o $@ stringbuffer.lo $(ALLSTATIC) $(LIBS)
+stringbuffer$(EXE): stringbuffer.cpp stringbuffer.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ stringbuffer.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-handoff1$(EXE): handoff1.cpp handoff1.lo
-	$(LTLINK) $(CXX) -o $@ handoff1.lo $(ALLSTATIC) $(LIBS)
+handoff1$(EXE): handoff1.cpp handoff1.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ handoff1.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-handoff2$(EXE): handoff2.cpp handoff2.lo
-	$(LTLINK) $(CXX) -o $@ handoff2.lo $(ALLSTATIC) $(LIBS)
+handoff2$(EXE): handoff2.cpp handoff2.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ handoff2.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-handoffclient$(EXE): handoffclient.cpp handoffclient.lo
-	$(LTLINK) $(CXX) -o $@ handoffclient.lo $(ALLSTATIC) $(LIBS)
+handoffclient$(EXE): handoffclient.cpp handoffclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ handoffclient.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-nonhandoff1$(EXE): nonhandoff1.cpp nonhandoff1.lo
-	$(LTLINK) $(CXX) -o $@ nonhandoff1.lo $(ALLSTATIC) $(LIBS)
+nonhandoff1$(EXE): nonhandoff1.cpp nonhandoff1.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ nonhandoff1.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-nonhandoff2$(EXE): nonhandoff2.cpp nonhandoff2.lo
-	$(LTLINK) $(CXX) -o $@ nonhandoff2.lo $(ALLSTATIC) $(LIBS)
+nonhandoff2$(EXE): nonhandoff2.cpp nonhandoff2.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ nonhandoff2.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-nonhandoffclient$(EXE): nonhandoffclient.cpp nonhandoffclient.lo
-	$(LTLINK) $(CXX) -o $@ nonhandoffclient.lo $(ALLSTATIC) $(LIBS)
+nonhandoffclient$(EXE): nonhandoffclient.cpp nonhandoffclient.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ nonhandoffclient.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-bytebuffer$(EXE): bytebuffer.cpp bytebuffer.lo
-	$(LTLINK) $(CXX) -o $@ bytebuffer.lo $(ALLSTATIC) $(LIBS)
+bytebuffer$(EXE): bytebuffer.cpp bytebuffer.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ bytebuffer.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-xmls$(EXE): xmls.cpp xmls.lo
-	$(LTLINK) $(CXX) -o $@ xmls.lo $(ALLSTATIC) $(LIBS)
+xmls$(EXE): xmls.cpp xmls.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ xmls.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-xmld$(EXE): xmld.cpp xmld.lo
-	$(LTLINK) $(CXX) -o $@ xmld.lo $(ALLSTATIC) $(LIBS)
+xmld$(EXE): xmld.cpp xmld.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ xmld.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-xmlentities$(EXE): xmlentities.cpp xmlentities.lo
-	$(LTLINK) $(CXX) -o $@ xmlentities.lo $(ALLSTATIC) $(LIBS)
+xmlentities$(EXE): xmlentities.cpp xmlentities.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ xmlentities.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-intervaltimer$(EXE): intervaltimer.cpp intervaltimer.lo
-	$(LTLINK) $(CXX) -o $@ intervaltimer.lo $(ALLSTATIC) $(LIBS)
+intervaltimer$(EXE): intervaltimer.cpp intervaltimer.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ intervaltimer.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-inetclntbench$(EXE): inetclntbench.cpp inetclntbench.lo 
-	$(LTLINK) $(CXX) -o $@ inetclntbench.lo $(ALLSTATIC) $(LIBS)
+inetclntbench$(EXE): inetclntbench.cpp inetclntbench.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ inetclntbench.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-inetsvrbench$(EXE): inetsvrbench.cpp inetsvrbench.lo 
-	$(LTLINK) $(CXX) -o $@ inetsvrbench.lo $(ALLSTATIC) $(LIBS)
+inetsvrbench$(EXE): inetsvrbench.cpp inetsvrbench.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ inetsvrbench.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-device$(EXE): device.cpp device.lo 
-	$(LTLINK) $(CXX) -o $@ device.lo $(ALLSTATIC) $(LIBS)
+device$(EXE): device.cpp device.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ device.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-serialport$(EXE): serialport.cpp serialport.lo 
-	$(LTLINK) $(CXX) -o $@ serialport.lo $(ALLSTATIC) $(LIBS)
+serialport$(EXE): serialport.cpp serialport.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ serialport.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-shmfile$(EXE): shmfile.cpp shmfile.lo 
-	$(LTLINK) $(CXX) -o $@ shmfile.lo $(ALLSTATIC) $(LIBS)
+shmfile$(EXE): shmfile.cpp shmfile.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ shmfile.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-chat$(EXE): chat.cpp chat.lo 
-	$(LTLINK) $(CXX) -o $@ chat.lo $(ALLSTATIC) $(LIBS)
+chat$(EXE): chat.cpp chat.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ chat.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-crypt$(EXE): crypt.cpp crypt.lo 
-	$(LTLINK) $(CXX) -o $@ crypt.lo $(ALLSTATIC) $(LIBS)
+crypt$(EXE): crypt.cpp crypt.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ crypt.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-dynamicarray$(EXE): dynamicarray.cpp dynamicarray.lo 
-	$(LTLINK) $(CXX) -o $@ dynamicarray.lo $(ALLSTATIC) $(LIBS)
+dynamicarray$(EXE): dynamicarray.cpp dynamicarray.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ dynamicarray.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-staticarray$(EXE): staticarray.cpp staticarray.lo 
-	$(LTLINK) $(CXX) -o $@ staticarray.lo $(ALLSTATIC) $(LIBS)
+staticarray$(EXE): staticarray.cpp staticarray.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ staticarray.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-dynamiclib$(EXE): dynamiclib.cpp dynamiclib.lo 
-	$(LTLINK) $(CXX) -o $@ dynamiclib.lo $(ALLSTATIC) $(LIBS)
+dynamiclib$(EXE): dynamiclib.cpp dynamiclib.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ dynamiclib.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-error$(EXE): error.cpp error.lo 
-	$(LTLINK) $(CXX) -o $@ error.lo $(ALLSTATIC) $(LIBS)
+error$(EXE): error.cpp error.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ error.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-math$(EXE): math.cpp math.lo 
-	$(LTLINK) $(CXX) -o $@ math.lo $(ALLSTATIC) $(LIBS)
+math$(EXE): math.cpp math.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ math.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-thread$(EXE): thread.cpp thread.lo 
-	$(LTLINK) $(CXX) -o $@ thread.lo $(ALLSTATIC) $(LIBS)
+thread$(EXE): thread.cpp thread.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ thread.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-threadmutex$(EXE): threadmutex.cpp threadmutex.lo 
-	$(LTLINK) $(CXX) -o $@ threadmutex.lo $(ALLSTATIC) $(LIBS)
+threadmutex$(EXE): threadmutex.cpp threadmutex.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ threadmutex.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-process$(EXE): process.cpp process.lo 
-	$(LTLINK) $(CXX) -o $@ process.lo $(ALLSTATIC) $(LIBS)
+process$(EXE): process.cpp process.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ process.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-serialportprofile$(EXE): serialportprofile.cpp serialportprofile.lo 
-	$(LTLINK) $(CXX) -o $@ serialportprofile.lo $(ALLSTATIC) $(LIBS)
+serialportprofile$(EXE): serialportprofile.cpp serialportprofile.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ serialportprofile.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-snooze$(EXE): snooze.cpp snooze.lo 
-	$(LTLINK) $(CXX) -o $@ snooze.lo $(ALLSTATIC) $(LIBS)
+snooze$(EXE): snooze.cpp snooze.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ snooze.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-memorymap$(EXE): memorymap.cpp memorymap.lo 
-	$(LTLINK) $(CXX) -o $@ memorymap.lo $(ALLSTATIC) $(LIBS)
+memorymap$(EXE): memorymap.cpp memorymap.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ memorymap.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-character$(EXE): character.cpp character.lo 
-	$(LTLINK) $(CXX) -o $@ character.lo $(ALLSTATIC) $(LIBS)
+character$(EXE): character.cpp character.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ character.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-bytestring$(EXE): bytestring.cpp bytestring.lo 
-	$(LTLINK) $(CXX) -o $@ bytestring.lo $(ALLSTATIC) $(LIBS)
+bytestring$(EXE): bytestring.cpp bytestring.$(OBJ) 
+	$(LTLINK) $(CXX) $(OUT)$@ bytestring.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-sys$(EXE): sys.cpp sys.lo
-	$(LTLINK) $(CXX) -o $@ sys.lo $(ALLSTATIC) $(LIBS)
+sys$(EXE): sys.cpp sys.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ sys.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-reboot$(EXE): reboot.cpp reboot.lo
-	$(LTLINK) $(CXX) -o $@ reboot.lo $(ALLSTATIC) $(LIBS)
+reboot$(EXE): reboot.cpp reboot.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ reboot.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-halt$(EXE): halt.cpp halt.lo
-	$(LTLINK) $(CXX) -o $@ halt.lo $(ALLSTATIC) $(LIBS)
+halt$(EXE): halt.cpp halt.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ halt.$(OBJ) $(ALLSTATIC) $(LIBS)
 
-shutdown$(EXE): shutdown.cpp shutdown.lo
-	$(LTLINK) $(CXX) -o $@ shutdown.lo $(ALLSTATIC) $(LIBS)
+shutdown$(EXE): shutdown.cpp shutdown.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ shutdown.$(OBJ) $(ALLSTATIC) $(LIBS)
 
 server.pem:
-	cd certificates; $(MAKE) clean all
+	cd certificates $(AND) $(MAKE) clean all
 	cp certificates/certificates/ca.pem .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .

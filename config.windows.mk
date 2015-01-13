@@ -13,34 +13,32 @@ docdir = $(datadir)\\doc\\rudiments
 # command separator
 AND = &
 
-# compile flags
-BASECPPFLAGS = /O2 /DWIN32 /DLIBRUDIMENTS_EXPORTS
-EXTRACPPFLAGS =
-CXXFLAGS =
-INC = /I
-
-# linker flags
-LDFLAGS =
-LINKFLAGS =
-
 # libtool command
 LIBTOOL =
 
 # compile commands
 LTCOMPILE =
-LTLINK =
 CXX = cl
-LINK = link
-AR =
 COMPILE = /c
 OUT = -out:
+BASECPPFLAGS = /nologo /O2 /D LIBRUDIMENTS_EXPORTS
+EXTRACPPFLAGS =
+CXXFLAGS =
+INC = /I
+
+# link commands
+LTLINK =
+LINK = link
+AR =
+LDFLAGS = /nologo /dll
+LINKFLAGS =
 LIBEXT = dll
+OBJEXT = obj
 
 # install commands
 LTINSTALL =
 CP = copy
 CHMOD = echo
-INSTALL = copy
 MKINSTALLDIRS = mkdir
 LTFINISH = echo
 
@@ -48,7 +46,7 @@ LTFINISH = echo
 LTUNINSTALL =
 LTCLEAN =
 RM = del
-RMTREE = rmdir /s /q
+RMTREE = rd /s /q
 
 # ssl library
 SSLLIBS =
@@ -78,7 +76,7 @@ CRYPTLIB =
 INETATONLIB =
 
 # netapi32 library
-NETAPI32LIB =
+NETAPI32LIB = ws2_32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 
 # dl library
 DLLIB =

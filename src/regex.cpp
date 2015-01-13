@@ -44,7 +44,7 @@
 #endif
 
 #ifndef PARAMS
-# if defined __GNUC__ || (defined __STDC__ && __STDC__) || defined WIN32
+# if defined __GNUC__ || (defined __STDC__ && __STDC__) || defined _WIN32
 #  define PARAMS(args) args
 # else
 #  define PARAMS(args) ()
@@ -2061,7 +2061,7 @@ static reg_errcode_t byte_compile_range _RE_ARGS ((unsigned int range_start,
    reallocating to 0 bytes.  Such thing is not going to work too well.
    You have been warned!!  */
 # ifndef DEFINED_ONCE
-#  if defined _MSC_VER  && !defined WIN32
+#  if defined _MSC_VER  && !defined _WIN32
 /* Microsoft C 16-bit versions limit malloc to approx 65512 bytes.
    The REALLOC define eliminates a flurry of conversion warnings,
    but is not required. */

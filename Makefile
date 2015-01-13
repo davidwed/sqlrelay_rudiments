@@ -2,8 +2,6 @@ top_builddir = .
 
 include config.mk
 
-.PHONY: all clean install uninstall distclean
-
 all:
 	cd src $(AND) $(MAKE) all
 

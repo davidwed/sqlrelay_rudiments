@@ -1,9 +1,14 @@
-.PHONY: all clean
+include ../../config.mk
 
 all: database/index.txt database/serial certificates/ca.pem certificatechains/client.pem certificatechains/server.pem
 
 clean:
-	rm -f keys/*.key requests/*.csr certificates/*.pem database/index* database/serial* database/newcerts/*.pem certificatechains/*.pem
+	cd keys $(AND) $(RM) *.key
+	cd requests $(AND) $(RM) *.csr
+	cd certificates $(AND) $(RM) *.pem
+	cd database $(AND) $(RM) index* serial*
+	cd database $(AND) cd newcerts $(AND) $(RM) *.pem
+	cd certificatechains $(AND) $(RM) *.pem
 
 database/index.txt:
 	touch database/index.txt

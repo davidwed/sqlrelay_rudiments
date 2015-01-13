@@ -2,11 +2,10 @@ top_builddir = ..
 
 include ../config.mk
 
-.PHONY: install uninstall
-
 install:
 	$(MKINSTALLDIRS) $(bindir)
-	$(INSTALL) rudiments-config $(bindir)
+	$(CP) rudiments-config $(bindir)
+	$(CHMOD) 755 $(bindir)/rudiments-config
 
 uninstall:
 	$(RM) $(bindir)/rudiments-config
