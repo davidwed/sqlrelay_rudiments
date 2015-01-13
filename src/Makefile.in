@@ -15,19 +15,19 @@ LOBJS = winsock.lo @LOBJS@
 .cpp.lo:
 	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
 
-all: librudiments.la
+all: librudiments.$(LIBEXT)
 
 clean:
-	$(LTCLEAN) $(RM) *.lo *.la *.o
+	$(LTCLEAN) $(RM) *.lo *.$(LIBEXT) *.o
 	$(RMTREE) .libs
 
-librudiments.la: $(SRCS) $(LOBJS)
+librudiments.$(LIBEXT): $(SRCS) $(LOBJS)
 	$(LTLINK) $(LINK) $(OUT)$@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)
-	$(LTINSTALL) $(INSTALL) librudiments.la $(libdir)/librudiments.la
+	$(LTINSTALL) $(INSTALL) librudiments.$(LIBEXT) $(libdir)/librudiments.$(LIBEXT)
 	$(LTFINISH) $(libdir)
 
 uninstall:
-	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.la
+	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.$(LIBEXT)

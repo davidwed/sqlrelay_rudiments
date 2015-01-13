@@ -16,7 +16,7 @@ install:
 	$(CP) css/styles.css $(docdir)/css
 	$(CP) classes/html/*.html $(docdir)/classes/html
 	$(CP) classes/html/*.png $(docdir)/classes/html
-	$(CP) classes/html/*.js $(docdir)/classes/html
+	$(CP) classes/html/*.css $(docdir)/classes/html
 	$(CP) classes/html/*.js $(docdir)/classes/html
 	$(CP) programming/guide.html $(docdir)/programming
 	$(CHMOD) 644 $(docdir)/*.html

@@ -32,6 +32,7 @@ LINK = @CXX@
 AR = @AR@
 COMPILE = -c
 OUT = -o 
+LIBEXT = la
 
 # install commands
 LTINSTALL = $(LIBTOOL) --mode=install
@@ -41,9 +42,9 @@ INSTALL = $(top_builddir)/install-sh -c
 MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
 LTFINISH = $(LIBTOOL) --mode=finish
 
-# commands to erase files and directories
-LTCLEAN = $(LIBTOOL) --mode=clean
+# uninstall/clean commands
 LTUNINSTALL = $(LIBTOOL) --mode=uninstall
+LTCLEAN = $(LIBTOOL) --mode=clean
 RM = rm -f
 RMTREE = rm -rf
 

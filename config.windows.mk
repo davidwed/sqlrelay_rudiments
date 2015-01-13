@@ -31,6 +31,7 @@ LINK = link
 AR =
 COMPILE = /c
 OUT = -out:
+LIBEXT = dll
 
 # install commands
 LTINSTALL =
@@ -40,9 +41,9 @@ INSTALL = copy
 MKINSTALLDIRS = mkdir
 LTFINISH = echo
 
-# commands to erase files and directories
-LTCLEAN =
+# uninstall/clean commands
 LTUNINSTALL =
+LTCLEAN =
 RM = del
 RMTREE = rmdir /s /q
 
