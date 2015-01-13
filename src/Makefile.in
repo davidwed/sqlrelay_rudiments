@@ -4,7 +4,7 @@ include ../config.mk
 
 .PHONY: all clean install uninstall
 
-CPPFLAGS = $(WERROR) $(BASECPPFLAGS) -I../ -I../include $(EXTRACPPFLAGS)
+CPPFLAGS = $(WERROR) $(BASECPPFLAGS) $(INC)../ $(INC)../include $(EXTRACPPFLAGS)
 LIBS = $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(NETAPI32LIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(DEBUGLIB)
 
 SRCS = winsock.cpp @SRCS@
@@ -15,10 +15,13 @@ LOBJS = winsock.lo @LOBJS@
 .cpp.lo:
 	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
 
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
+
 all: librudiments.$(LIBEXT)
 
 clean:
-	$(LTCLEAN) $(RM) *.lo *.$(LIBEXT) *.o
+	$(LTCLEAN) $(RM) *.lo *.o *.obj *.$(LIBEXT)
 	$(RMTREE) .libs
 
 librudiments.$(LIBEXT): $(SRCS) $(LOBJS)

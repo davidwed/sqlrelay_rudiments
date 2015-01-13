@@ -13,13 +13,11 @@ docdir = ${datadir}/doc/rudiments
 # command separator
 AND = ;
 
-# includes and defines
+# compile flags
 BASECPPFLAGS = @WALL@ @WERROR@ @WNOLONGDOUBLE@ @WNOFORMAT@ @WNOOVERLOADEDVIRTUAL@ @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
 EXTRACPPFLAGS = @EXTRACPPFLAGS@
-
-# debug and optimization flags (-g, -O2, etc.)
-# NOTE: -FPIC gets added if we're not using libtool
 CXXFLAGS = @CXXFLAGS@ @PIPE@
+INC = -I
 
 # linker flags
 LDFLAGS = @LDFLAGS@

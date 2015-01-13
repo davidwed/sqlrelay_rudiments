@@ -13,13 +13,11 @@ docdir = $(datadir)\\doc\\rudiments
 # command separator
 AND = &
 
-# includes and defines
-BASECPPFLAGS = /Wall
+# compile flags
+BASECPPFLAGS = /O2 /DWIN32 /DLIBRUDIMENTS_EXPORTS
 EXTRACPPFLAGS =
-
-# debug and optimization flags (-g, -O2, etc.)
-# NOTE: -FPIC gets added if we're not using libtool
-CXXFLAGS = /O2
+CXXFLAGS =
+INC = /I
 
 # linker flags
 LDFLAGS =
