@@ -13,6 +13,9 @@ docdir = ${datadir}/doc/rudiments
 # command separator
 AND = ;
 
+# slash
+SLASH = /
+
 # libtool command
 LIBTOOL = @LIBTOOL@
 
@@ -32,6 +35,9 @@ LINK = @CXX@
 AR = @AR@
 LDFLAGS = @LDFLAGS@
 LINKFLAGS = -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
+INSTALLLIB = installlib
+UNINSTALLLIB = uninstalllib
+DLLEXT = 
 LIBEXT = la
 OBJEXT = obj
 

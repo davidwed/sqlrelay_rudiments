@@ -24,10 +24,23 @@ clean:
 librudiments.$(LIBEXT): $(SRCS) $(LOBJS)
 	$(LTLINK) $(LINK) $(OUT)$@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
 
-install:
+install: $(INSTALLLIB)
+
+installdll:
+	$(MKINSTALLDIRS) $(bindir)
+	$(LTINSTALL) $(CP) librudiments.$(LIBEXT) $(bindir)
 	$(MKINSTALLDIRS) $(libdir)
-	$(LTINSTALL) $(CP) librudiments.$(LIBEXT) $(libdir)/librudiments.$(LIBEXT)
+	$(LTINSTALL) $(CP) librudiments.lib $(libdir)
+
+installlib:
+	$(MKINSTALLDIRS) $(libdir)
+	$(LTINSTALL) $(CP) librudiments.$(LIBEXT) $(libdir)
 	$(LTFINISH) $(libdir)
 
-uninstall:
-	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.$(LIBEXT)
+uninstall: $(UNINSTALLLIB)
+
+uninstalldll:
+	$(LTUNINSTALL) $(RM) $(bindir)$(SLASH)librudiments.dll
+
+uninstalllib:
+	$(LTUNINSTALL) $(RM) $(libdir)$(SLASH)librudiments.lib

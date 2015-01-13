@@ -13,6 +13,9 @@ docdir = $(datadir)\\doc\\rudiments
 # command separator
 AND = &
 
+# slash
+SLASH = \\
+
 # libtool command
 LIBTOOL =
 
@@ -32,6 +35,8 @@ LINK = link
 AR =
 LDFLAGS = /nologo /dll
 LINKFLAGS =
+INSTALLLIB = installdll
+UNINSTALLLIB = uninstalldll
 LIBEXT = dll
 OBJEXT = obj
 
@@ -39,7 +44,7 @@ OBJEXT = obj
 LTINSTALL =
 CP = copy
 CHMOD = echo
-MKINSTALLDIRS = mkdir
+MKINSTALLDIRS = md
 LTFINISH = echo
 
 # uninstall/clean commands
