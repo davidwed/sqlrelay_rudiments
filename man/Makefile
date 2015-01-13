@@ -7,7 +7,8 @@ include ../config.mk
 install:
 	$(MKINSTALLDIRS) $(mandir)
 	$(MKINSTALLDIRS) $(mandir)/man1
-	$(INSTALL) -m 644 rudiments-config.1 $(mandir)/man1
+	$(CP) rudiments-config.1 $(mandir)/man1
+	$(CHMOD) 644 $(mandir)/man1/rudiments-config.1
 
 uninstall:
 	$(RM) $(mandir)/man1/rudiments-config.1

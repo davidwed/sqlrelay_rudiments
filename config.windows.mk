@@ -6,6 +6,7 @@ exec_prefix = $(prefix)\\bin
 bindir = $(prefix)\\bin
 includedir = $(prefix)\\include
 libdir = $(prefix)\\lib
+mandir = $(prefix)\\share\\man
 datadir = $(prefix)\\share
 docdir = ${datadir}\\doc\\rudiments
 
