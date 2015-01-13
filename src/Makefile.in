@@ -13,7 +13,7 @@ LOBJS = winsock.lo @LOBJS@
 .SUFFIXES: .lo
 
 .cpp.lo:
-	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT) $@
+	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
 
 all: librudiments.la
 
@@ -22,7 +22,7 @@ clean:
 	$(RMTREE) .libs
 
 librudiments.la: $(SRCS) $(LOBJS)
-	$(LTLINK) $(CXX) $(OUT) $@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
+	$(LTLINK) $(LINK) $(OUT)$@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
 
 install:
 	$(MKINSTALLDIRS) $(libdir)

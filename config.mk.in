@@ -27,11 +27,11 @@ LIBTOOL = @LIBTOOL@
 # compile commands
 LTCOMPILE = $(LIBTOOL) --mode=compile
 LTLINK = $(LIBTOOL) --mode=link
-CC = @CC@
 CXX = @CXX@
+LINK = @CXX@
 AR = @AR@
 COMPILE = -c
-OUT = -o
+OUT = -o 
 
 # install commands
 LTINSTALL = $(LIBTOOL) --mode=install

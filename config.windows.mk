@@ -26,11 +26,11 @@ LIBTOOL =
 # compile commands
 LTCOMPILE =
 LTLINK =
-CC = @CC@
-CXX = @CXX@
-AR = @AR@
-COMPILE = -c
-OUT = -o
+CXX = cl
+LINK = link
+AR =
+COMPILE = /c
+OUT = -out:
 
 # install commands
 LTINSTALL =
