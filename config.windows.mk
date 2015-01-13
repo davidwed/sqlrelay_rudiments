@@ -8,7 +8,7 @@ includedir = $(prefix)\\include
 libdir = $(prefix)\\lib
 mandir = $(prefix)\\share\\man
 datadir = $(prefix)\\share
-docdir = ${datadir}\\doc\\rudiments
+docdir = $(datadir)\\doc\\rudiments
 
 # includes and defines
 BASECPPFLAGS = /Wall
