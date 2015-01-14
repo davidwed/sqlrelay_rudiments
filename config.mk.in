@@ -32,6 +32,8 @@ LINK = @CXX@
 AR = @AR@
 LDFLAGS = @LDFLAGS@
 LINKFLAGS = -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
+LIBPATH = -L
+LIB = -l
 INSTALLLIB = installlib
 UNINSTALLLIB = uninstalllib
 DLLEXT = 
@@ -94,6 +96,9 @@ CRTLIB = @CRTLIB@
 
 # getpgid library
 GETPGIDLIB = @GETPGIDLIB@
+
+# rudiments library (for tests)
+RUDIMENTSLIB = -L$(top_builddir)/src -lrudiments
 
 # Microsoft-specific stuff
 EXE = @EXE@

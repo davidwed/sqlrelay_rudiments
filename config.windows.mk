@@ -30,8 +30,8 @@ INC = /I
 LTLINK =
 LINK = link
 AR =
-LDFLAGS = /nologo /dll
-LINKFLAGS =
+LDFLAGS = /nologo
+LINKFLAGS = /dll
 INSTALLLIB = installdll
 UNINSTALLLIB = uninstalldll
 LIBEXT = dll
@@ -93,6 +93,9 @@ CRTLIB = @CRTLIB@
 
 # getpgid library
 GETPGIDLIB = @GETPGIDLIB@
+
+# rudiments library (for tests)
+RUDIMENTSLIB = /LIBPATH:@top_builddir@\src librudiments.dll
 
 # Microsoft-specific stuff
 EXE = @EXE@

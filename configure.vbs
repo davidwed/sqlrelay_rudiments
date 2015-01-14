@@ -436,6 +436,10 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@DLLIB@",DLLIB,1,-1,0)
 	content=replace(content,"@GETPGIDLIB@",GETPGIDLIB,1,-1,0)
 
+	' extension
+	content=replace(content,"@EXE@",EXE,1,-1,0)
+
+
 	' top_builddir
 	content=replace(content,"@top_builddir@",top_builddir,1,-1,0)
 
