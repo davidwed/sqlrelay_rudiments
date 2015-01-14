@@ -25,6 +25,7 @@ BASECPPFLAGS = /nologo /O2 /D LIBRUDIMENTS_EXPORTS
 EXTRACPPFLAGS =
 CXXFLAGS =
 INC = /I
+OBJ = obj
 
 # link commands
 LTLINK =
