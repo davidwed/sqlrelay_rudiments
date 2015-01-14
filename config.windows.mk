@@ -1,14 +1,14 @@
 RUDIMENTS_VERSION = 0.50
 SONAME_VERSION_INFO =
 
-prefix = C:\\Program Files\\Firstworks
-exec_prefix = $(prefix)\\bin
-bindir = $(prefix)\\bin
-includedir = $(prefix)\\include
-libdir = $(prefix)\\lib
-mandir = $(prefix)\\share\\man
-datadir = $(prefix)\\share
-docdir = $(datadir)\\doc\\rudiments
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+includedir = @includedir@
+libdir = @libdir@
+mandir = @mandir@
+datadir = @datadir@
+docdir = $(datadir)\doc\rudiments
 
 # command separator
 AND = &
@@ -42,16 +42,16 @@ OBJEXT = obj
 
 # install commands
 LTINSTALL =
-CP = copy
+CP = @top_builddir@\cp.vbs
 CHMOD = echo
-MKINSTALLDIRS = md
+MKINSTALLDIRS = @top_builddir@\mkinstalldirs.vbs
 LTFINISH = echo
 
 # uninstall/clean commands
 LTUNINSTALL =
 LTCLEAN =
-RM = del
-RMTREE = rd /s /q
+RM = @top_builddir@\del.vbs
+RMTREE = @top_builddir@\rmtree.bat
 
 # ssl library
 SSLLIBS =
@@ -81,7 +81,7 @@ CRYPTLIB =
 INETATONLIB =
 
 # netapi32 library
-NETAPI32LIB = ws2_32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+NETAPI32LIB = @NETAPI32LIB@
 
 # dl library
 DLLIB =

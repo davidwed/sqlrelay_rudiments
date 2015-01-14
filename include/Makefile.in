@@ -2,19 +2,17 @@ top_builddir = ..
 
 include ../config.mk
 
-.PHONY: all install uninstall
-
 HEADERS = @HEADERS@
 PRIVATEHEADERS = @PRIVATEHEADERS@
 
 all:
 
 install:
-	$(MKINSTALLDIRS) $(includedir)/rudiments
-	$(MKINSTALLDIRS) $(includedir)/rudiments/private
-	cd rudiments $(AND) $(CP) $(HEADERS) $(includedir)/rudiments $(AND) \
-	cd private $(AND) $(CP) $(PRIVATEHEADERS) $(includedir)/rudiments/private
-	$(CHMOD) 644 $(includedir)/rudiments/*.h $(includedir)/rudiments/private/*.h
+	$(MKINSTALLDIRS) $(includedir)$(SLASH)rudiments
+	$(MKINSTALLDIRS) $(includedir)$(SLASH)rudiments$(SLASH)private
+	cd rudiments $(AND) $(CP) $(HEADERS) $(includedir)$(SLASH)rudiments
+	cd rudiments$(SLASH)private $(AND) $(CP) $(PRIVATEHEADERS) $(includedir)$(SLASH)rudiments$(SLASH)private
+	$(CHMOD) 644 $(includedir)$(SLASH)rudiments$(SLASH)*.h $(includedir)$(SLASH)rudiments$(SLASH)private$(SLASH)*.h
 
 uninstall:
-	$(RMTREE) $(includedir)/rudiments
+	$(RMTREE) $(includedir)$(SLASH)rudiments
