@@ -375,6 +375,22 @@ set fso=CreateObject("Scripting.FileSystemObject")
 top_builddir=fso.GetAbsolutePathName(".")
 
 
+' get 32/64-bit operating system
+' FIXME: this needs to determine whether the compiler generates
+' 32-bit or 64-bit code rather than the architecture of the OS
+USE_32BIT_TIME_T=""
+Set ObjNetwork = WScript.CreateObject("WScript.Network") 
+StrComputer = Trim(ObjNetwork.ComputerName) 
+Set ObjNetwork = Nothing 
+Set ObjWMI = GetObject("WINMGMTS:" & "{ImpersonationLevel=Impersonate,AuthenticationLevel=Pkt}!\\" & StrComputer & "\Root\CIMV2") 
+Set ColSettings = ObjWMI.ExecQuery ("SELECT * FROM Win32_Processor") 
+For Each ObjProcessor In ColSettings 
+	if ObjProcessor.AddressWidth = 32 then
+		USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
+	end if
+Next 
+
+
 ' input and output files
 infiles=Array(_
 	"config.windows.mk",_
@@ -418,6 +434,9 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@libdir@",libdir,1,-1,0)
 	content=replace(content,"@mandir@",mandir,1,-1,0)
 	content=replace(content,"@datadir@",datadir,1,-1,0)
+
+	' flags
+	content=replace(content,"@_USE_32BIT_TIME_T@",USE_32BIT_TIME_T,1,-1,0)
 
 	' libraries
 	content=replace(content,"@SOCKETLIBS@",SOCKETLIBS,1,-1,0)
