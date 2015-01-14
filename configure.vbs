@@ -50,14 +50,16 @@ infiles=Array(_
 	"include\\rudiments\\private\\config.windows.h",_
 	"src\\Makefile.in",_
 	"include\\Makefile.in",_
-	"bin\\rudiments-config.in"_
+	"bin\\rudiments-config.in",_
+	"rudiments.pc.in"_
 	)
 outfiles=Array(_
 	"config.mk",_
 	"include\\rudiments\\private\\config.h",_
 	"src\\Makefile",_
 	"include\\Makefile",_
-	"bin\\rudiments-config"_
+	"bin\\rudiments-config",_
+	"rudiments.pc"_
 	)
 
 

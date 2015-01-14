@@ -14,4 +14,6 @@ file=replace(file,"\\","\",1,-1,0)
 file=replace(file,"/","\",1,-1,0)
 
 ' remove the file
-call fso.DeleteFile(file)
+if fso.FileExists(file) then
+	call fso.DeleteFile(file)
+end if

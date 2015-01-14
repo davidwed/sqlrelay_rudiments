@@ -50,8 +50,8 @@ LTFINISH = echo
 # uninstall/clean commands
 LTUNINSTALL =
 LTCLEAN =
-RM = @top_builddir@\del.vbs
-RMTREE = @top_builddir@\rmtree.bat
+RM = @top_builddir@\rm.vbs
+RMTREE = @top_builddir@\rmtree.vbs
 
 # ssl library
 SSLLIBS =
