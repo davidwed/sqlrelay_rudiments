@@ -6,14 +6,17 @@ end if
 ' create file system object
 set fso=CreateObject("Scripting.FileSystemObject")
 
-' get the file to remove
-file=WScript.Arguments.Item(WScript.Arguments.Count-1)
+' remove files
+for i=0 to WScript.Arguments.Count-1
 
-' collapse backslashes and convert slashes to backslashes
-file=replace(file,"\\","\",1,-1,0)
-file=replace(file,"/","\",1,-1,0)
+	' get the file to remove
+	file=WScript.Arguments.Item(i)
 
-' remove the file
-if fso.FileExists(file) then
-	call fso.DeleteFile(file)
-end if
+	' collapse backslashes and convert slashes to backslashes
+	file=replace(file,"\\","\",1,-1,0)
+	file=replace(file,"/","\",1,-1,0)
+	
+	' remove the file (ignoring errors)
+	on error resume next
+	call fso.DeleteFile(file,true)
+next

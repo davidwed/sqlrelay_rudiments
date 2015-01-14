@@ -8,11 +8,11 @@ PRIVATEHEADERS = @PRIVATEHEADERS@
 all:
 
 install:
-	$(MKINSTALLDIRS) $(includedir)$(SLASH)rudiments
-	$(MKINSTALLDIRS) $(includedir)$(SLASH)rudiments$(SLASH)private
-	cd rudiments $(AND) $(CP) $(HEADERS) $(includedir)$(SLASH)rudiments
-	cd rudiments$(SLASH)private $(AND) $(CP) $(PRIVATEHEADERS) $(includedir)$(SLASH)rudiments$(SLASH)private
-	$(CHMOD) 644 $(includedir)$(SLASH)rudiments$(SLASH)*.h $(includedir)$(SLASH)rudiments$(SLASH)private$(SLASH)*.h
+	$(MKINSTALLDIRS) $(includedir)/rudiments
+	$(MKINSTALLDIRS) $(includedir)/rudiments/private
+	cd rudiments $(AND) $(CP) $(HEADERS) $(includedir)/rudiments
+	cd rudiments/private $(AND) $(CP) $(PRIVATEHEADERS) $(includedir)/rudiments/private
+	$(CHMOD) 644 $(includedir)/rudiments/*.h $(includedir)/rudiments/private/*.h
 
 uninstall:
-	$(RMTREE) $(includedir)$(SLASH)rudiments
+	$(RMTREE) $(includedir)/rudiments

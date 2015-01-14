@@ -13,9 +13,6 @@ docdir = ${datadir}/doc/rudiments
 # command separator
 AND = ;
 
-# slash
-SLASH = /
-
 # libtool command
 LIBTOOL = @LIBTOOL@
 
@@ -39,7 +36,6 @@ INSTALLLIB = installlib
 UNINSTALLLIB = uninstalllib
 DLLEXT = 
 LIBEXT = la
-OBJEXT = obj
 
 # install commands
 LTINSTALL = $(LIBTOOL) --mode=install

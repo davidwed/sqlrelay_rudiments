@@ -1,4 +1,4 @@
-RUDIMENTS_VERSION = 0.50
+RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
 SONAME_VERSION_INFO =
 
 prefix = @prefix@
@@ -12,9 +12,6 @@ docdir = $(datadir)\doc\rudiments
 
 # command separator
 AND = &
-
-# slash
-SLASH = \\
 
 # libtool command
 LIBTOOL =
@@ -38,7 +35,6 @@ LINKFLAGS =
 INSTALLLIB = installdll
 UNINSTALLLIB = uninstalldll
 LIBEXT = dll
-OBJEXT = obj
 
 # install commands
 LTINSTALL =
@@ -54,49 +50,49 @@ RM = @top_builddir@\rm.vbs
 RMTREE = @top_builddir@\rmtree.vbs
 
 # ssl library
-SSLLIBS =
+SSLLIBS = @SSLLIBS@
 
 # regular expression library
-PCRELIBS =
+PCRELIBS = @PCRELIBS@
 
 # socket library
-SOCKETLIBS =
+SOCKETLIBS = @SOCKETLIBS@
 
 # pthreads library
-PTHREADLIB =
+PTHREADLIB = @PTHREADLIB@
 
 # nanosleep library
-NANOSLEEPLIB =
+NANOSLEEPLIB = @NANOSLEEPLIB@
 
 # clock_nanosleep library
-CLOCKNANOSLEEPLIB =
+CLOCKNANOSLEEPLIB = @CLOCKNANOSLEEPLIB@
 
 # shmopen library
-SHMOPENLIB =
+SHMOPENLIB = @SHMOPENLIB@
 
 # crypt library
-CRYPTLIB =
+CRYPTLIB = @CRYPTLIB@
 
 # inet_aton library
-INETATONLIB =
+INETATONLIB = @INETATONLIB@
 
 # netapi32 library
 NETAPI32LIB = @NETAPI32LIB@
 
 # dl library
-DLLIB =
+DLLIB = @DLLIB@
 
 # be library
-BELIB =
+BELIB = @BELIB@
 
 # gnu library
-GNULIB =
+GNULIB = @GNULIB@
 
 # crt library
-CRTLIB =
+CRTLIB = @CRTLIB@
 
 # getpgid library
-GETPGIDLIB =
+GETPGIDLIB = @GETPGIDLIB@
 
 # Microsoft-specific stuff
-EXE = .exe
+EXE = @EXE@

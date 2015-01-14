@@ -40,8 +40,8 @@ installlib:
 uninstall: $(UNINSTALLLIB)
 
 uninstalldll:
-	$(LTUNINSTALL) $(RM) $(bindir)$(SLASH)librudiments.$(LIBEXT)
-	$(LTUNINSTALL) $(RM) $(bindir)$(SLASH)librudiments.lib
+	$(LTUNINSTALL) $(RM) $(bindir)/librudiments.$(LIBEXT)
+	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.lib
 
 uninstalllib:
-	$(LTUNINSTALL) $(RM) $(libdir)$(SLASH)librudiments.$(LIBEXT)
+	$(LTUNINSTALL) $(RM) $(libdir)/librudiments.$(LIBEXT)

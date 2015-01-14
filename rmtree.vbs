@@ -6,14 +6,17 @@ end if
 ' create file system object
 set fso=CreateObject("Scripting.FileSystemObject")
 
-' get the folder to remove
-folder=WScript.Arguments.Item(WScript.Arguments.Count-1)
+' remove folders
+for i=0 to WScript.Arguments.Count-1
 
-' collapse backslashes and convert slashes to backslashes
-folder=replace(folder,"\\","\",1,-1,0)
-folder=replace(folder,"/","\",1,-1,0)
+	' get the folder to remove
+	folder=WScript.Arguments.Item(i)
 
-' remove the folder
-if fso.FolderExists(folder) then
+	' collapse backslashes and convert slashes to backslashes
+	folder=replace(folder,"\\","\",1,-1,0)
+	folder=replace(folder,"/","\",1,-1,0)
+
+	' remove the folder (ignoring errors)
+	on error resume next
 	call fso.DeleteFolder(folder,true)
-end if
+next

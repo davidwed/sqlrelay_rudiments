@@ -29,6 +29,5 @@ for i=0 to WScript.Arguments.Count-2
 	source=replace(source,"/","\",1,-1,0)
 
 	' copy the file
-	'WScript.echo("cp.vbs "+source+" "+dest)
 	call fso.CopyFile(source,dest)
 next
