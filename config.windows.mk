@@ -96,7 +96,7 @@ CRTLIB = @CRTLIB@
 GETPGIDLIB = @GETPGIDLIB@
 
 # rudiments library (for tests)
-RUDIMENTSLIB = /LIBPATH:@top_builddir@\src librudiments.dll
+RUDIMENTSLIB = /LIBPATH:@top_builddir@\src librudiments.lib
 
 # Microsoft-specific stuff
 EXE = @EXE@
