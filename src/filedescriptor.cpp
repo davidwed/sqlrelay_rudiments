@@ -2,8 +2,8 @@
 // See the COPYING file for more information
 
 //#define DEBUG_PASSFD 1
-//#define DEBUG_WRITE 1
-//#define DEBUG_READ 1
+#define DEBUG_WRITE 1
+#define DEBUG_READ 1
 //#define DEBUG_BUFFERING 1
 
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
