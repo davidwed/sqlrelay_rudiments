@@ -4,7 +4,14 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
 
+// might need this in the future
+class stringbufferprivate {
+	friend stringbuffer;
+};
+
 stringbuffer::stringbuffer() : bytebuffer() {
+	// to avoid compiler warnings/errors
+	pvt=NULL;
 }
 
 stringbuffer::stringbuffer(size_t initialsize, size_t increment) :
