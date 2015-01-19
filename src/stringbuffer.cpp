@@ -6,7 +6,7 @@
 
 // might need this in the future
 class stringbufferprivate {
-	friend stringbuffer;
+	friend class stringbuffer;
 };
 
 stringbuffer::stringbuffer() : bytebuffer() {
