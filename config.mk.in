@@ -13,6 +13,9 @@ docdir = ${datadir}/doc/rudiments
 # command separator
 AND = ;
 
+# shell
+SHELL = @SHELL@
+
 # libtool command
 LIBTOOL = @LIBTOOL@
 
