@@ -19,7 +19,7 @@ LOBJS = @LOBJS@
 all: librudiments.$(LIBEXT)
 
 clean:
-	$(LTCLEAN) $(RM) *.lo *.o *.obj *.$(LIBEXT)
+	$(LTCLEAN) $(RM) *.lo *.o *.obj *.$(LIBEXT) *.lib *.exp
 
 librudiments.$(LIBEXT): $(SRCS) $(LOBJS)
 	$(LTLINK) $(LINK) $(OUT)$@ $(LOBJS) $(LDFLAGS) $(LIBS) $(LINKFLAGS)
