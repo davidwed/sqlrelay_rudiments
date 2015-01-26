@@ -340,11 +340,11 @@ RUDIMENTS_VERSION="0.50"
 ' paths
 prefix="C:\""Program Files""\Firstworks"
 exec_prefix=prefix
-bindir = prefix+"\bin"
-includedir = prefix+"\include"
-libdir = prefix+"\lib"
-mandir = prefix+"\share\man"
-datadir = prefix+"\share"
+bindir=prefix+"\bin"
+includedir=prefix+"\include"
+libdir=prefix+"\lib"
+mandir=prefix+"\share\man"
+datadir=prefix+"\share"
 
 ' libraries
 SOCKETLIBS=""
@@ -366,7 +366,6 @@ GETPGIDLIB=""
 ' extension
 EXE=".exe"
 
-
 ' create file system object
 set fso=CreateObject("Scripting.FileSystemObject")
 
@@ -375,26 +374,41 @@ set fso=CreateObject("Scripting.FileSystemObject")
 top_builddir=fso.GetAbsolutePathName(".")
 
 
+' determine VC++ version
+set WshShell=WScript.CreateObject("WScript.Shell")
+set cmd=WshShell.exec("cl")
+stdout=cmd.StdOut.ReadAll()
+stderr=cmd.StdErr.ReadLine()
+parts=split(stderr)
+version=parts(6)
+parts=split(version,".")
+version=parts(0)
+configwindowsh="include\\rudiments\\private\\config.windows.h"
+if version<16 then
+	configwindowsh="include\\rudiments\\private\\config.vc2008.h"
+end if
+
+
 ' get 32/64-bit operating system
 ' FIXME: this needs to determine whether the compiler generates
 ' 32-bit or 64-bit code rather than the architecture of the OS
 USE_32BIT_TIME_T=""
-Set ObjNetwork = WScript.CreateObject("WScript.Network") 
-StrComputer = Trim(ObjNetwork.ComputerName) 
-Set ObjNetwork = Nothing 
-Set ObjWMI = GetObject("WINMGMTS:" & "{ImpersonationLevel=Impersonate,AuthenticationLevel=Pkt}!\\" & StrComputer & "\Root\CIMV2") 
-Set ColSettings = ObjWMI.ExecQuery ("SELECT * FROM Win32_Processor") 
-For Each ObjProcessor In ColSettings 
-	if ObjProcessor.AddressWidth = 32 then
+set network=WScript.CreateObject("WScript.Network") 
+computername=Trim(network.ComputerName) 
+set network=Nothing 
+set wmi=GetObject("WINMGMTS:" & "{ImpersonationLevel=Impersonate,AuthenticationLevel=Pkt}!\\" & computername & "\Root\CIMV2") 
+set ColSettings=wmi.ExecQuery ("SELECT * FROM Win32_Processor") 
+for each processor In ColSettings 
+	if processor.AddressWidth=32 then
 		USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
 	end if
-Next 
+next 
 
 
 ' input and output files
 infiles=Array(_
 	"config.windows.mk",_
-	"include\\rudiments\\private\\config.windows.h",_
+	configwindowsh,_
 	"src\\Makefile.in",_
 	"include\\Makefile.in",_
 	"bin\\rudiments-config.in",_
