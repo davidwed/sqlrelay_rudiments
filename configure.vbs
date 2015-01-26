@@ -380,7 +380,12 @@ set cmd=WshShell.exec("cl")
 stdout=cmd.StdOut.ReadAll()
 stderr=cmd.StdErr.ReadLine()
 parts=split(stderr)
-version=parts(6)
+version=""
+for i=lbound(parts) to ubound(parts)
+	if parts(i)="Version" then
+		version=parts(i+1)
+	end if
+next
 parts=split(version,".")
 version=parts(0)
 configwindowsh="include\\rudiments\\private\\config.windows.h"
