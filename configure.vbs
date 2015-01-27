@@ -388,11 +388,11 @@ for i=lbound(parts) to ubound(parts)
 next
 parts=split(version,".")
 version=parts(0)
-configwindowsh="include\\rudiments\\private\\config.vc2010.h"
+configwindowsh="include\\rudiments\\private\\config.vs2010.h"
 if version<16 and version>=14 then
-	configwindowsh="include\\rudiments\\private\\config.vc2005.h"
+	configwindowsh="include\\rudiments\\private\\config.vs2005.h"
 else
-	configwindowsh="include\\rudiments\\private\\config.vc5.h"
+	configwindowsh="include\\rudiments\\private\\config.vs5.h"
 end if
 
 
