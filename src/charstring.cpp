@@ -1690,8 +1690,10 @@ ssize_t charstring::printf(char *buffer, size_t length,
 }
 
 #if !defined(RUDIMENTS_HAVE_VSNPRINTF) && \
+	!defined(RUDIMENTS_HAVE__VSNPRINTF) && \
 	!defined(RUDIMENTS_HAVE___VSNPRINTF) && \
-	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+	!defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF) && \
+	!defined(RUDIMENTS_HAVE_UNDEFINED_VSNPRINTF_S)
 // This is quite a hack...
 //
 // Old enough systems (like linux libc4) don't provide vsnprintf but do provide
