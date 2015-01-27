@@ -653,6 +653,11 @@ bool file::truncate(off64_t length) const {
 			result=::ftruncate(fd(),length);
 		#elif defined(RUDIMENTS_HAVE__CHSIZE_S)
 			result=_chsize_s(fd(),length);
+		#elif defined(RUDIMENTS_HAVE_SETENDOFFILE)
+			return (setPositionRelativeToBeginning(0)!=-1 &&
+				SetEndOfFile((HANDLE)
+					getHandleFromFileDescriptor(fd()))==
+					TRUE);
 		#else
 			#error no ftruncate or anything like it
 		#endif

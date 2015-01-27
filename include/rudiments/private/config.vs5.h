@@ -317,7 +317,7 @@
 /* #undef RUDIMENTS_HAVE_FTOK */
 
 /* Some systems have ftruncate */
-#define RUDIMENTS_HAVE_FTRUNCATE 1
+/* #undef RUDIMENTS_HAVE_FTRUNCATE */
 
 /* Some systems have GenerateConsoleCtrlEvent */
 #define RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT 1
