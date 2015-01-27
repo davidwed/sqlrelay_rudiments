@@ -614,7 +614,7 @@
 /* #undef RUDIMENTS_HAVE_LOCALTIME_R */
 
 /* Some systems have localtime_s */
-#define RUDIMENTS_HAVE_LOCALTIME_S 1
+/* #undef RUDIMENTS_HAVE_LOCALTIME_S */
 
 /* Some systems have LockFileEx */
 #define RUDIMENTS_HAVE_LOCKFILEEX 1

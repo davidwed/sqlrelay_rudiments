@@ -423,16 +423,21 @@ bool datetime::getSystemDateAndTime() {
 		FILETIME	ft;
 		GetSystemTimeAsFileTime(&ft);
 
-		// convert to a single 64-bit number
-		uint64_t	t=ft.dwHighDateTime;
-		t<<=32;
-		t|=ft.dwLowDateTime;
+		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			// convert to a single 64-bit number
+			uint64_t	t=ft.dwHighDateTime;
+			t<<=32;
+			t|=ft.dwLowDateTime;
 
-		// convert to microseconds
-		t/=10;
+			// convert to microseconds
+			t/=10;
 
-		// convert to number of microseconds since Jan 1, 1970 UTC.
-		t-=11644473600000000ULL;
+			// subtract microseconds between 1601 and 1970
+			t-=11644473600000000ULL;
+		#else
+			// FIXME: implement this...
+			uint32_t	t=0;
+		#endif
 
 		return initialize(t/1000000,t%1000000);
 	#else
