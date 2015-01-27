@@ -416,15 +416,15 @@ SDKLIBS=""
 ' VS2002 - VS2005 don't come with an SDK
 ' assume v6.0A (which comes with VS2008)
 if version<=14 and version>12 then
-	SDKINCLUDES="/I""C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Include"""
-	SDKLIBS="/LIBPATH:""C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Lib"""
+	SDKINCLUDES="/I""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"""
+	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib"""
 
 ' VS6 and lower don't come with an SDK and don't support SDK v6.X
 ' assume that a version that they do support is installed in the
 ' default location
 elseif version<=12 then
-	SDKINCLUDES="/I""C:\\Program Files\\Microsoft SDK\\include"""
-	SDKLIBS="/LIBPATH:""C:\\Program Files\\Microsoft SDK\\Lib"""
+	SDKINCLUDES="/I""C:\Program Files\Microsoft SDK\include"""
+	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDK\Lib"""
 end if
 
 
