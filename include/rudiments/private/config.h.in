@@ -916,6 +916,9 @@
 /* Some systems have setegid but dont define it in a header file */
 #undef RUDIMENTS_HAVE_SETEGID_BUT_NOT_DEFINED
 
+/* Some systems have SetEndOfFile */
+#undef RUDIMENTS_HAVE_SETENDOFFILE
+
 /* Some systems have SetEntriesInAcl */
 #undef RUDIMENTS_HAVE_SETENTRIESINACL
 

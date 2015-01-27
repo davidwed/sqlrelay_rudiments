@@ -2478,6 +2478,13 @@ AC_TRY_COMPILE([
 #endif],
 _chsize_s(0,0);,AC_DEFINE(RUDIMENTS_HAVE__CHSIZE_S,1,Some systems have _chsize_s) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for _chsize_s)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+SetEndOfFile(0);,AC_DEFINE(RUDIMENTS_HAVE_SETENDOFFILE,1,Some systems have SetEndOfFile) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for link)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
