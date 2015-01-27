@@ -22,6 +22,10 @@
 	refactored stringbuffer to use bytebuffer::write/appendFormatted
 		directly instead of charstring::parseNumber
 	implemented dynamicarray and staticarray classes
+	refactored build process to use nmake and be compatible with many
+		different versions of MS Visual Studio
+	updated vsnprintf_s calls and defined _TRUNCATE for platforms where
+		it's not defined
 
 0.49 - combined passswdentry and shadowentry classes into userentry class
 	updated file::sync() to use FlushFileBuffers directly
