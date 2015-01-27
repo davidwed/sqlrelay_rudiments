@@ -54,10 +54,18 @@
 	#define	_UINT32_T 1
 #endif
 #ifndef RUDIMENTS_HAVE_INT64_T
-	typedef	signed long long	int64_t;
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		typedef	signed long long	int64_t;
+	#else
+		typedef	signed long		int64_t;
+	#endif
 #endif
 #ifndef RUDIMENTS_HAVE_UINT64_T
-	typedef	unsigned long long	uint64_t;
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		typedef	unsigned long long	uint64_t;
+	#else
+		typedef	unsigned long		uint64_t;
+	#endif
 #endif
 
 #endif
