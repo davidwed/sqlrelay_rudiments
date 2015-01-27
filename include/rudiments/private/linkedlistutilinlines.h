@@ -59,7 +59,11 @@ void _linkedlistutil_print(int32_t value) {
 
 RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(int64_t value) {
-	stdoutput.printf("%lld",(long long)value);
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		stdoutput.printf("%lld",(long long)value);
+	#else
+		stdoutput.printf("%ld",(long)value);
+	#endif
 }
 
 RUDIMENTS_TEMPLATE_INLINE
@@ -89,7 +93,11 @@ void _linkedlistutil_print(uint32_t value) {
 
 RUDIMENTS_TEMPLATE_INLINE
 void _linkedlistutil_print(uint64_t value) {
-	stdoutput.printf("%lld",(unsigned long long)value);
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
+		stdoutput.printf("%lld",(unsigned long long)value);
+	#else
+		stdoutput.printf("%ld",(unsigned long)value);
+	#endif
 }
 
 RUDIMENTS_TEMPLATE_INLINE

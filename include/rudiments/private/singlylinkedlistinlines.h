@@ -549,7 +549,11 @@ void SINGLYLINKEDLIST_CLASS::print(uint64_t count) const {
 	uint64_t	i=0;
 	for (singlylinkedlistnode<valuetype> *current=first;
 			current && i<count; current=current->getNext()) {
-		stdoutput.printf("index %lld: ",(long long)i);
+		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			stdoutput.printf("index %lld: ",(long long)i);
+		#else
+			stdoutput.printf("index %ld: ",(long)i);
+		#endif
 		current->print();
 		stdoutput.printf("\n");
 		i++;
