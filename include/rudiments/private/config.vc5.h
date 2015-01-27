@@ -1268,7 +1268,7 @@
 #define RUDIMENTS_HAVE_VSNPRINTF 1
 
 /* Some systems have vsnprintf_s */
-#define RUDIMENTS_HAVE_VSNPRINTF_S 1
+/* #undef RUDIMENTS_HAVE_VSNPRINTF_S */
 
 /* GetDiskFreeSpace */
 #define RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE 1

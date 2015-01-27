@@ -45,10 +45,6 @@ extern "C" int __vsnprintf(char *str, size_t size,
 	#include <strings.h>
 #endif
 
-#if defined(RUDIMENTS_HAVE_VSNPRINTF_S) && !defined(_TRUNCATE)
-	#define _TRUNCATE ((size_t)-1)
-#endif
-
 const char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
