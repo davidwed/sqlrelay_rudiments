@@ -1,6 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information
 
+
 #include <rudiments/file.h>
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
@@ -11,6 +12,12 @@
 #include <rudiments/stdio.h>
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	#include <rudiments/filesystem.h>
+#endif
+
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+        // for SetSecurityDescriptorControl
+        #define _WIN32_WINNT 0x0500
+	#include <windows.h>
 #endif
 
 // for struct stat
@@ -44,12 +51,6 @@
 #ifdef RUDIMENTS_HAVE_IO_H
 	#undef _POSIX_
 	#include <io.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
-        // for SetSecurityDescriptorControl
-        #define _WIN32_WINNT 0x0500
-
-	#include <windows.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SDDL_H
 	#include <sddl.h>
