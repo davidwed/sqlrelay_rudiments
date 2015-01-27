@@ -388,12 +388,45 @@ for i=lbound(parts) to ubound(parts)
 next
 parts=split(version,".")
 version=parts(0)
+
+
+
+' determine config.h template...
+
+' default to VS2008 and up
 configwindowsh="include\\rudiments\\private\\config.vs2010.h"
-if version<16 and version>=14 then
+
+' VS2002 - VS2008
+if version<=15 and version>12 then
 	configwindowsh="include\\rudiments\\private\\config.vs2005.h"
-else
+
+' VS6 and lower
+elseif version<=12 then
 	configwindowsh="include\\rudiments\\private\\config.vs5.h"
 end if
+
+
+
+' determine SDK headers and libs... (FIXME: make this configurable)
+
+' VS2008 and up come with an SDK and are pre-configured to use them
+SDKINCLUDES=""
+SDKLIBS=""
+
+' VS2002 - VS2005 don't come with an SDK
+' assume v6.0A (which comes with VS2008)
+if version<=14 and version>12 then
+	SDKINCLUDES="/I""C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Include"""
+	SDKLIBS="/LIBPATH:""C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Lib"""
+
+' VS6 and lower don't come with an SDK and don't support SDK v6.X
+' assume that a version that they do support is installed in the
+' default location
+elseif version<=12 then
+	SDKINCLUDES="/I""C:\\Program Files\\Microsoft SDK\\include"""
+	SDKLIBS="/LIBPATH:""C:\\Program Files\\Microsoft SDK\\Lib"""
+end if
+
 
 
 ' get 32/64-bit operating system
@@ -458,6 +491,7 @@ for i=lbound(infiles) to ubound(infiles)
 
 	' flags
 	content=replace(content,"@_USE_32BIT_TIME_T@",USE_32BIT_TIME_T,1,-1,0)
+	content=replace(content,"@SDKINCLUDES@",SDKINCLUDES,1,-1,0)
 
 	' libraries
 	content=replace(content,"@SOCKETLIBS@",SOCKETLIBS,1,-1,0)
@@ -475,6 +509,7 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@CRTLIB@",CRTLIB,1,-1,0)
 	content=replace(content,"@DLLIB@",DLLIB,1,-1,0)
 	content=replace(content,"@GETPGIDLIB@",GETPGIDLIB,1,-1,0)
+	content=replace(content,"@SDKLIBS@",SDKLIBS,1,-1,0)
 
 	' extension
 	content=replace(content,"@EXE@",EXE,1,-1,0)

@@ -119,7 +119,7 @@
 #define RUDIMENTS_HAVE_ACCCTRL_H 1
 
 /* Most systems have access() */
-/* #undef RUDIMENTS_HAVE_ACCESS */
+#define RUDIMENTS_HAVE_ACCESS 1
 
 /* Some systems have Aclapi.h */
 #define RUDIMENTS_HAVE_ACLAPI_H 1
@@ -317,7 +317,7 @@
 /* #undef RUDIMENTS_HAVE_FTOK */
 
 /* Some systems have ftruncate */
-/* #undef RUDIMENTS_HAVE_FTRUNCATE */
+#define RUDIMENTS_HAVE_FTRUNCATE 1
 
 /* Some systems have GenerateConsoleCtrlEvent */
 #define RUDIMENTS_HAVE_GENERATECONSOLECTRLEVENT 1
@@ -338,7 +338,7 @@
 /* #undef RUDIMENTS_HAVE_GETEGID */
 
 /* Some systems have getenv */
-/* #undef RUDIMENTS_HAVE_GETENV */
+#define RUDIMENTS_HAVE_GETENV 1
 
 /* Some systems have geteuid */
 /* #undef RUDIMENTS_HAVE_GETEUID */
@@ -1037,7 +1037,7 @@
 /* #undef RUDIMENTS_HAVE_STRERROR_R */
 
 /* Some systems have strerror_s */
-#define RUDIMENTS_HAVE_STRERROR_S 1
+/* #undef RUDIMENTS_HAVE_STRERROR_S */
 
 /* Some systems have strings.h */
 /* #undef RUDIMENTS_HAVE_STRINGS_H */
@@ -1298,10 +1298,10 @@
 #define RUDIMENTS_HAVE_WSADUPLICATESOCKET 1
 
 /* Some systems have _access_s() */
-#define RUDIMENTS_HAVE__ACCESS_S 1
+/* #undef RUDIMENTS_HAVE__ACCESS_S */
 
 /* Some systems have _chsize_s */
-#define RUDIMENTS_HAVE__CHSIZE_S 1
+/* #undef RUDIMENTS_HAVE__CHSIZE_S */
 
 /* Some systems have _close */
 #define RUDIMENTS_HAVE__CLOSE 1
@@ -1313,7 +1313,7 @@
 #define RUDIMENTS_HAVE__DUP2 1
 
 /* Some systems have _dupenv_s */
-#define RUDIMENTS_HAVE__DUPENV_S 1
+/* #undef RUDIMENTS_HAVE__DUPENV_S */
 
 /* Some systems have _lseek */
 #define RUDIMENTS_HAVE__LSEEK 1
