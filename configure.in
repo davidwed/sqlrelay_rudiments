@@ -1251,6 +1251,10 @@ AC_MSG_CHECKING(for tzname)
 AC_TRY_COMPILE([#include <time.h>],
 const char * const *c=tzname;,AC_DEFINE(RUDIMENTS_HAS_TZNAME,1,Some systems have tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for _tzname)
+AC_TRY_COMPILE([#include <time.h>],
+const char * const *c=_tzname;,AC_DEFINE(RUDIMENTS_HAS__TZNAME,1,Some systems have _tzname) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for _get_tzname)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>

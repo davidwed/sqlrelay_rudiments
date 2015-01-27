@@ -103,6 +103,9 @@
 /* Some systems have _timezone */
 #undef RUDIMENTS_HAS__TIMEZONE
 
+/* Some systems have _tzname */
+#undef RUDIMENTS_HAS__TZNAME
+
 /* Some systems have _tzset */
 #undef RUDIMENTS_HAS__TZSET
 

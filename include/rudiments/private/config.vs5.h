@@ -95,13 +95,16 @@
 /* #undef RUDIMENTS_HAS_TZSET */
 
 /* Some systems have _get_timezone */
-#define RUDIMENTS_HAS__GET_TIMEZONE 1
+/* #undef RUDIMENTS_HAS__GET_TIMEZONE */
 
 /* Some systems have _get_tzname */
-#define RUDIMENTS_HAS__GET_TZNAME 1
+/* #undef RUDIMENTS_HAS__GET_TZNAME */
 
 /* Some systems have _timezone */
-/* #undef RUDIMENTS_HAS__TIMEZONE */
+#define RUDIMENTS_HAS__TIMEZONE 1
+
+/* Some systems have _tzname */
+#define RUDIMENTS_HAS__TZNAME 1
 
 /* Some systems have _tzset */
 #define RUDIMENTS_HAS__TZSET 1

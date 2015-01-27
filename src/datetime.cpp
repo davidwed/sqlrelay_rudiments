@@ -762,6 +762,8 @@ const char *datetime::getTzName(uint8_t index) {
 				sizeof(pvt->_timezonename),
 				index);
 		return pvt->_timezonename;
+	#elif defined(RUDIMENTS_HAS__TZNAME)
+		return _tzname[index];
 	#elif defined(RUDIMENTS_HAS_TZNAME)
 		return tzname[index];
 	#else
