@@ -1231,7 +1231,7 @@
 /* Some systems have uname */
 #undef RUDIMENTS_HAVE_UNAME
 
-/* Some systems have __vsnprintf */
+/* Some systems have __vsnprintf but its not defined */
 #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF
 
 /* Some systems have unistd.h */
@@ -1330,13 +1330,16 @@
 /* Some systems have _unlink */
 #undef RUDIMENTS_HAVE__UNLINK
 
+/* Some systems have _vsnprintf */
+#undef RUDIMENTS_HAVE__VSNPRINTF
+
 /* Some systems have _write */
 #undef RUDIMENTS_HAVE__WRITE
 
 /* Some systems have __bswap64 */
 #undef RUDIMENTS_HAVE___BSWAP64
 
-/* Some systems have __vsnprintf but its not defined */
+/* Some systems have __vsnprintf */
 #undef RUDIMENTS_HAVE___VSNPRINTF
 
 /* iov_base is char * */

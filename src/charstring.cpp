@@ -1820,11 +1820,13 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		buf=b;
 		buflen=sizeof(b);
 	}
-	#if defined(RUDIMENTS_HAVE___VSNPRINTF) || \
+	#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
+		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
+	#elif defined(RUDIMENTS_HAVE___VSNPRINTF) || \
 		defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
-	#elif defined(RUDIMENTS_HAVE_VSNPRINTF_S)
-		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
+	#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
+		ssize_t	size=_vsnprintf(buf,buflen,format,*argp);
 	#else
 		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
 	#endif
@@ -1839,11 +1841,13 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		// FIXME: for large strings this can be incredibly slow
 		buflen=buflen+16;
 		buf=new char[buflen];
-		#if defined(RUDIMENTS_HAVE___VSNPRINTF) || \
+		#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
+			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
+		#elif defined(RUDIMENTS_HAVE___VSNPRINTF) || \
 			defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 			size=__vsnprintf(buf,buflen,format,*argp);
-		#elif defined(RUDIMENTS_HAVE_VSNPRINTF_S)
-			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
+		#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
+			size=_vsnprintf(buf,buflen,format,*argp);
 		#else
 			size=vsnprintf(buf,buflen,format,*argp);
 		#endif

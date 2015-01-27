@@ -2030,7 +2030,7 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDARG_H
 	#include <stdarg.h>
 #endif
 #include <stdio.h>],
-va_list a; __vsnprintf(0,0,0,a);,[HAVE___VSNPRINTF="yes"; AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE___VSNPRINTF,1,Some systems have __vsnprintf but its not defined)], AC_MSG_RESULT(no))
+va_list a; __vsnprintf(0,0,0,a);,[HAVE___VSNPRINTF="yes"; AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE___VSNPRINTF,1,Some systems have __vsnprintf)], AC_MSG_RESULT(no))
 
 if ( test -z "$HAVE___VSNPRINTF" )
 then
@@ -2040,8 +2040,15 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 #endif
 #include <stdio.h>
 extern "C" int __vsnprintf(char *, size_t, const char *, va_list);],
-va_list a; __vsnprintf(0,0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF,1,Some systems have __vsnprintf), AC_MSG_RESULT(no))
+va_list a; __vsnprintf(0,0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF,1,Some systems have __vsnprintf but its not defined), AC_MSG_RESULT(no))
 fi
+
+AC_MSG_CHECKING(for _vsnprintf)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDARG_H
+	#include <stdarg.h>
+#endif
+#include <stdio.h>],
+va_list a; _vsnprintf(0,0,0,a);,[AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE__VSNPRINTF,1,Some systems have _vsnprintf)], AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for vdprintf)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H

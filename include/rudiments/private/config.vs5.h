@@ -1237,6 +1237,9 @@
 /* Some systems have uname */
 /* #undef RUDIMENTS_HAVE_UNAME */
 
+/* Some systems have __vsnprintf but its not defined */
+/* #undef RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF */
+
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */
 
@@ -1265,7 +1268,7 @@
 /* #undef RUDIMENTS_HAVE_VDPRINTF */
 
 /* Most systems have vsnprintf */
-#define RUDIMENTS_HAVE_VSNPRINTF 1
+/* #undef RUDIMENTS_HAVE_VSNPRINTF */
 
 /* Some systems have vsnprintf_s */
 /* #undef RUDIMENTS_HAVE_VSNPRINTF_S */
@@ -1332,6 +1335,9 @@
 
 /* Some systems have _unlink */
 #define RUDIMENTS_HAVE__UNLINK 1
+
+/* Some systems have _vsnprintf */
+#define RUDIMENTS_HAVE__VSNPRINTF 1
 
 /* Some systems have _write */
 #define RUDIMENTS_HAVE__WRITE 1
