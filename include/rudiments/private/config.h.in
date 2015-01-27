@@ -616,6 +616,9 @@
 /* Some systems have LockFileEx */
 #undef RUDIMENTS_HAVE_LOCKFILEEX
 
+/* Most systems have long long */
+#undef RUDIMENTS_HAVE_LONG_LONG
+
 /* Some systems have lrand48 */
 #undef RUDIMENTS_HAVE_LRAND48
 

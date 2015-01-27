@@ -363,8 +363,7 @@ char *charstring::convertAmount(int64_t amount) {
 	int64_t	amt=abs(amount);
 	printf(amountstr,length,
 			"$%s%lld.%02lld",negative,
-			(long long)(amt/100),
-			(long long)(amt-(amt/100*100)));
+			amt/100,amt-(amt/100*100));
 	return amountstr;
 }
 
