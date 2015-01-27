@@ -117,12 +117,20 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 				if (protection&PROT_WRITE) {
 					mapprot=PAGE_EXECUTE_READWRITE;
 					viewprot=viewprotwrite|
+						#ifdef FILE_MAP_EXECUTE
 							FILE_MAP_EXECUTE;
+						#else
+							SECTION_MAP_EXECUTE;
+						#endif
 				} else {
 					mapprot=PAGE_EXECUTE_READWRITE;
 					mapprot=PAGE_EXECUTE_READ;
 					viewprot=FILE_MAP_READ|
+						#ifdef FILE_MAP_EXECUTE
 							FILE_MAP_EXECUTE;
+						#else
+							SECTION_MAP_EXECUTE;
+						#endif
 				}
 			}
 		} else if (protection&PROT_READ) {

@@ -16,14 +16,16 @@
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
+#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	// for SetSecurityDescriptorControl
+	#define _WIN32_WINNT 0x0500
+	#include <windows.h>
+#endif
 #ifdef RUDIMENTS_HAVE_SYS_STAT_H
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
-#endif
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SDDL_H
 	#include <sddl.h>

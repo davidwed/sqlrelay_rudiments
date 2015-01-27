@@ -1628,11 +1628,15 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 	#elif defined(RUDIMENTS_HAVE_OSSWAPHOSTTOLITTLEINT64)
 		return OSSwapHostToLittleInt64(value);
 	#else
-		return
-		(((uint64_t)hostToNet(
-			(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
-		((uint64_t)hostToNet(
-			(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
+		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			return
+			(((uint64_t)hostToNet(
+				(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
+			((uint64_t)hostToNet(
+				(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
+		#else
+			return htonl(value);
+		#endif
 	#endif
 }
 
@@ -1662,11 +1666,15 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 	#elif defined(RUDIMENTS_HAVE_OSSWAPLITTLETOHOSTINT64)
 		return OSSwapLittleToHostInt64(value);
 	#else
-		return
-		(((uint64_t)netToHost(
-			(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
-		((uint64_t)netToHost(
-			(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
+		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			return
+			(((uint64_t)netToHost(
+				(uint32_t)(value&0x00000000FFFFFFFFLL)))<<32)|
+			((uint64_t)netToHost(
+				(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
+		#else
+			return ntohl(value);
+		#endif
 	#endif
 }
 
@@ -2416,7 +2424,8 @@ void filedescriptor::printBits(unsigned char *bits, uint64_t size) {
 	}
 }
 
-#ifdef _WIN32
+// FIXME: add a specific test for _set_invalid_parameter_handler
+#if defined(_WIN32) && defined(RUDIMENTS_HAVE_LONG_LONG)
 static void invalidParameterHandler(const wchar_t *expression,
 					const wchar_t *function,
 					const wchar_t *file,
@@ -2427,7 +2436,8 @@ static void invalidParameterHandler(const wchar_t *expression,
 #endif
 
 void *filedescriptor::getHandleFromFileDescriptor(int32_t fd) {
-	#ifdef _WIN32
+	// FIXME: add a specific test for _set_invalid_parameter_handler
+	#if defined(_WIN32) && defined(RUDIMENTS_HAVE_LONG_LONG)
 		_invalid_parameter_handler	oldiph=
 			_set_invalid_parameter_handler(invalidParameterHandler);
 		intptr_t	handle=_get_osfhandle(fd);

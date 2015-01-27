@@ -10,6 +10,11 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 
+#ifdef _WIN32
+        // for GetNativeSystemInfo
+        #define _WIN32_WINNT 0x0501
+#endif
+
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H

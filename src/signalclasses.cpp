@@ -19,6 +19,8 @@
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
+	// for Create/DeleteTimerQueueTimer
+	#define _WIN32_WINNT 0x0500
 	#include <windows.h>
 #endif
 
