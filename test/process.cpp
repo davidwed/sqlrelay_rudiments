@@ -8,7 +8,11 @@
 #include <rudiments/snooze.h>
 
 #ifdef _WIN32
-const char	*cmd="c:\\cygwin64\\bin\\ls.exe";
+	#ifdef _USE_32BIT_TIME_T
+		const char	*cmd="c:\\cygwin\\bin\\ls.exe";
+	#else
+		const char	*cmd="c:\\cygwin64\\bin\\ls.exe";
+	#endif
 #else
 const char	*cmd="/bin/ls";
 #endif
