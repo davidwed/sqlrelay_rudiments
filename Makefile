@@ -9,11 +9,6 @@ clean:
 	cd src $(AND) $(MAKE) clean
 	cd test $(AND) $(MAKE) clean
 	cd examples $(AND) $(MAKE) clean
-	$(RMTREE) msvc/Debug
-	$(RMTREE) msvc/Release
-	$(RMTREE) msvc/DebugCLR
-	$(RMTREE) msvc/ReleaseCLR
-	$(RMTREE) msvc/x64
 
 install:
 	cd src $(AND) $(MAKE) install
@@ -34,5 +29,5 @@ uninstall:
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
 distclean: clean
-	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/librudiments.opensdf msvc/librudiments.sdf msvc/librudiments.suo
+	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/rudiments.opensdf msvc/rudiments.sdf msvc/rudiments.suo
 	$(RMTREE) autom4te.cache

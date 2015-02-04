@@ -8,9 +8,9 @@
 
 int main(int argc, const char **argv) {
 
-	char	*name=sys::getOperatingSystemName();
-	stdoutput.printf("OS Name		: %s\n",name);
-	delete[] name;
+	char	*osname=sys::getOperatingSystemName();
+	stdoutput.printf("OS Name		: %s\n",osname);
+	delete[] osname;
 
 	char	*release=sys::getOperatingSystemRelease();
 	stdoutput.printf("OS Release	: %s\n",release);
