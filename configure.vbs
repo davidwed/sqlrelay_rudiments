@@ -1,3 +1,20 @@
+' command line arguments
+OPTCPPFLAGS="/O2"
+DEBUGCPPFLAGS="/MD"
+DEBUGLDFLAGS=""
+for i=0 to WScript.Arguments.Count-1
+
+	arg=Wscript.Arguments.Item(i)
+
+	if arg="--enable-small-code" then
+		OPTCPPFLAGS="/O1"
+	elseif arg="--enable-debug" then
+		DEBUGCPPFLAGS="/Zi /MDd /D _DEBUG"
+		DEBUGLDFLAGS="/debug"
+	end if
+next
+
+
 ' source, object and header files
 srcs="winsock.cpp "+_
 	"character.cpp "+_
@@ -490,6 +507,9 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@datadir@",datadir,1,-1,0)
 
 	' flags
+	content=replace(content,"@OPTCPPFLAGS@",OPTCPPFLAGS,1,-1,0)
+	content=replace(content,"@DEBUGCPPFLAGS@",DEBUGCPPFLAGS,1,-1,0)
+	content=replace(content,"@DEBUGLDFLAGS@",DEBUGLDFLAGS,1,-1,0)
 	content=replace(content,"@_USE_32BIT_TIME_T@",USE_32BIT_TIME_T,1,-1,0)
 	content=replace(content,"@SDKINCLUDES@",SDKINCLUDES,1,-1,0)
 
