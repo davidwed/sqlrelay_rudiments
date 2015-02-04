@@ -45,9 +45,11 @@
 
 <p>To build on a unix-like platform, Rudiments requires a working compiler toolchain and the make utility.</p>
 
-<p>If OpenSSL and/or the Perl Compatible Regular Expression libraries are present then the build process will detect them and include support for them but they are not required.</p>
+<p>If OpenSSL and/or the Perl Compatible Regular Expression library are present on a unix-like platform then the build process will detect them and include support for them but they are not required.</p>
 
-<p>To build natively on Windows, you need to install Microsoft Visual Studio or Microsoft Visual Studio Express.</p>
+<p>To build natively on Windows, you need to install Microsoft Visual Studio or Microsoft Visual Studio Express.  Versions 2005 and greater should work.</p>
+
+<p>OpenSSL and the Perl Compatible Regular Expressions library are not currently supported on Windows.</p>
 
 
 <br>
@@ -138,7 +140,7 @@ make uninstall
 
 <p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
 
-<p>If you intend to build on Unix, Linux or Cygwin then download the tar.gz file.  For a native Windows installation, download the zip file.</p>
+<p>For a native Windows installation, download the zip file.</p>
 
 <a name="winextracting"></a>
 <span class="heading2">Extracting Rudiments</span>
@@ -150,34 +152,15 @@ make uninstall
 <a name="winbuilding"></a>
 <span class="heading2">Building Rudiments</span>
 
-<p>To build Rudiments natively on Windows, open the Visual Studio Command Prompt and navigate to the directory that was created when Rudiments was extracted.</p>
+<p>To build Rudiments on Windows, open the Visual Studio Command Prompt.</p>
 
-<p>There should be a file named <i>make.batch</i> in that directory.  Rename this file to <i>make.bat</i>.  It is named with the .batch extension because various mail services don't allow .bat files to be emailed around, even if they are inside of an archive.  To get around this, the file must manually be renamed.</p>
+<p>To build a 32-bit version of Rudiments, open the Visual Studio Command Prompt for x86.  To build a 64-bit version of Rudiments, open the Visual Studio Command Prompt for x64.</p>
 
-<p>There are 4 build options.  Rudiments can be built as 32-bit or 64-bit binaries, and with or without Common Language Runtime (CLR) support.  There are advantages and disadvantages to building each way.</p>
-
-<p>To build 32-bit without CLR support, run:</p>
+<p>Navigate to the directory that was created when Rudiments was extracted, and execute the following commands:</p>
 
 <blockquote><b>
-make
-</b></blockquote>
-
-<p>To build 32-bit with CLR support, run:</p>
-
-<blockquote><b>
-make clr
-</b></blockquote>
-
-<p>To build 64-bit without CLR support, run:</p>
-
-<blockquote><b>
-make 64
-</b></blockquote>
-
-<p>To build 64-bit with CLR support, run:</p>
-
-<blockquote><b>
-make clr64
+configure.vbs<br>
+nmake
 </b></blockquote>
 
 <a name="installing"></a>
@@ -185,22 +168,16 @@ make clr64
 
 <p>By default, on Windows, everything is installed under C:\Program Files\Firstworks.  You should either create that directory and give yourself full access permissions or install as Administrator.</p>
 
-<p>To install 32-bit Rudiments run:</p>
+<p>To install Rudiments run:</p>
 
 <blockquote><b>
-make install
-</b></blockquote>
-
-<p>To install 64-bit Rudiments run:</p>
-
-<blockquote><b>
-make install64
+nmake install
 </b></blockquote>
 
 <p>To uninstall Rudiments run:</p>
 
 <blockquote><b>
-make uninstall
+nmake uninstall
 </b></blockquote>
 
 </body>
