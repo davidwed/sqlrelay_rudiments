@@ -332,7 +332,7 @@ privateheaders5="server.h "+_
 	"unixsocketserver.h "+_
 	"unixsocketserverincludes.h "+_
 	"bytebuffer.h "+_
-	"bytebufferincludes.h "+_
+	"bytebufferincludes.h "
 privateheaders6="xmldom.h "+_
 	"xmldomincludes.h "+_
 	"xmldomnode.h "+_
