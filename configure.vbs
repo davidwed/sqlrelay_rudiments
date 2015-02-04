@@ -204,7 +204,7 @@ headers="resultcodes.h "+_
 	"socketserver.h "+_
 	"socketclient.h"
 
-privateheaders="config.h "+_
+privateheaders0="config.h "+_
 	"rudimentsinlines.h "+_
 	"inttypes.h "+_
 	"new.h "+_
@@ -225,8 +225,8 @@ privateheaders="config.h "+_
 	"dictionarynode.h "+_
 	"dynamicarray.h "+_
 	"dynamicarrayincludes.h "+_
-	"dynamicarrayinlines.h "+_
-	"staticarray.h "+_
+	"dynamicarrayinlines.h "
+privateheaders1="staticarray.h "+_
 	"staticarrayinlines.h "+_
 	"characterincludes.h "+_
 	"charstring.h "+_
@@ -247,8 +247,8 @@ privateheaders="config.h "+_
 	"dtd.h "+_
 	"dtdincludes.h "+_
 	"dynamiclib.h "+_
-	"dynamiclibincludes.h "+_
-	"environment.h "+_
+	"dynamiclibincludes.h "
+privateheaders2="environment.h "+_
 	"environmentincludes.h "+_
 	"errorincludes.h "+_
 	"file.h "+_
@@ -267,8 +267,8 @@ privateheaders="config.h "+_
 	"inetsocketserver.h "+_
 	"inetsocketserverincludes.h "+_
 	"intervaltimer.h "+_
-	"intervaltimerincludes.h "+_
-	"listener.h "+_
+	"intervaltimerincludes.h "
+privateheaders3="listener.h "+_
 	"listenerincludes.h "+_
 	"filedestination.h "+_
 	"logdestination.h "+_
@@ -288,8 +288,8 @@ privateheaders="config.h "+_
 	"thread.h "+_
 	"threadincludes.h "+_
 	"threadmutex.h "+_
-	"threadmutexincludes.h "+_
-	"parameterstring.h "+_
+	"threadmutexincludes.h "
+privateheaders4="parameterstring.h "+_
 	"parameterstringincludes.h "+_
 	"userentry.h "+_
 	"userentryincludes.h "+_
@@ -311,8 +311,8 @@ privateheaders="config.h "+_
 	"serialport.h "+_
 	"serialportincludes.h "+_
 	"serialportprofile.h "+_
-	"serialportprofileincludes.h "+_
-	"server.h "+_
+	"serialportprofileincludes.h "
+privateheaders5="server.h "+_
 	"serverincludes.h "+_
 	"serviceentry.h "+_
 	"serviceentryincludes.h "+_
@@ -333,7 +333,7 @@ privateheaders="config.h "+_
 	"unixsocketserverincludes.h "+_
 	"bytebuffer.h "+_
 	"bytebufferincludes.h "+_
-	"xmldom.h "+_
+privateheaders6="xmldom.h "+_
 	"xmldomincludes.h "+_
 	"xmldomnode.h "+_
 	"xmldomnodeincludes.h "+_
@@ -492,7 +492,13 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@SRCS@",srcs,1,-1,0)
 	content=replace(content,"@LOBJS@",lobjs,1,-1,0)
 	content=replace(content,"@HEADERS@",headers,1,-1,0)
-	content=replace(content,"@PRIVATEHEADERS@",privateheaders,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS0@",privateheaders0,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS1@",privateheaders1,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS2@",privateheaders2,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS3@",privateheaders3,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS4@",privateheaders4,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS5@",privateheaders5,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS6@",privateheaders6,1,-1,0)
 
 	' version
 	content=replace(content,"@RUDIMENTS_VERSION@",RUDIMENTS_VERSION,1,-1,0)
