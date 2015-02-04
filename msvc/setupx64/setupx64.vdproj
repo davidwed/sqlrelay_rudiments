@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_069491F32B884E4694C8FA87661F274D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0790C66EB44D462AB0414C2AFC1BECCA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -219,12 +225,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2BBA376E0375459BBDF338767FE4A345"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_2C39962E4B8F4C12B73B3A70E8362220"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -346,6 +346,12 @@
         "Entry"
         {
         "MsmKey" = "8:_44A71FC1246747CE91AA021A2ACF8D3F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_44DA32F53E8F4445BF623327EC220794"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -567,6 +573,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6B9CF965FDD942F7A400ADCE277DDD69"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6F160E2D3D6741C4B4DDA6531011F8F5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -627,12 +639,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7D2B6A2C1630484DAB9B9582E7D9E5DE"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7D2B7824B3EC44E7A4BFA61CCF38193B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -652,6 +658,18 @@
         "Entry"
         {
         "MsmKey" = "8:_7E078766576149A0A80E3792744FC013"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E25C4CDA6D04B6FB3AAE3069E7A73D2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E5E07000F5F4665818E24FDCC25913F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1203,7 +1221,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EA978488F97046429591F42BFF37CA03"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_ECAB614720264F71AC4577D4515F1E04"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED17285E315747ED90A83B2800D5C60B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1402,7 +1432,7 @@
         {
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_006267E0DE354D8ABB10E7E8C4C73D5F"
             {
-            "SourcePath" = "8:..\\x64\\Release\\librudiments.dll"
+            "SourcePath" = "8:..\\..\\src\\librudiments.dll"
             "TargetName" = "8:librudiments.dll"
             "Tag" = "8:"
             "Folder" = "8:_3C29242C8E7F4ED2BA06492D4252E2EE"
@@ -1486,6 +1516,26 @@
             "TargetName" = "8:dynamiclibincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_069491F32B884E4694C8FA87661F274D"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\staticarray.h"
+            "TargetName" = "8:staticarray.h"
+            "Tag" = "8:"
+            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2060,26 +2110,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2BBA376E0375459BBDF338767FE4A345"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\networkinterfaces.h"
-            "TargetName" = "8:networkinterfaces.h"
-            "Tag" = "8:"
-            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2C39962E4B8F4C12B73B3A70E8362220"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\unixsocketutil.h"
@@ -2486,6 +2516,26 @@
             "TargetName" = "8:datetime.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_44DA32F53E8F4445BF623327EC220794"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\staticarrayinlines.h"
+            "TargetName" = "8:staticarrayinlines.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -3220,6 +3270,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B9CF965FDD942F7A400ADCE277DDD69"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\dynamicarray.h"
+            "TargetName" = "8:dynamicarray.h"
+            "Tag" = "8:"
+            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F160E2D3D6741C4B4DDA6531011F8F5"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\math.h"
@@ -3420,26 +3490,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D2B6A2C1630484DAB9B9582E7D9E5DE"
-            {
-            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\networkinterface.h"
-            "TargetName" = "8:networkinterface.h"
-            "Tag" = "8:"
-            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D2B7824B3EC44E7A4BFA61CCF38193B"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\parameterstring.h"
@@ -3504,6 +3554,46 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\socketclient.h"
             "TargetName" = "8:socketclient.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E25C4CDA6D04B6FB3AAE3069E7A73D2"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\dynamicarrayincludes.h"
+            "TargetName" = "8:dynamicarrayincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E5E07000F5F4665818E24FDCC25913F"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\dynamicarrayinlines.h"
+            "TargetName" = "8:dynamicarrayinlines.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -4562,7 +4652,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C05B52A0AEBB4A50835481EF693E2712"
             {
-            "SourcePath" = "8:..\\x64\\Release\\librudiments.lib"
+            "SourcePath" = "8:..\\..\\src\\librudiments.lib"
             "TargetName" = "8:librudiments.lib"
             "Tag" = "8:"
             "Folder" = "8:_62F4F3B6B56243D3A85B51D7C7655D86"
@@ -5300,12 +5390,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA978488F97046429591F42BFF37CA03"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\staticarray.h"
+            "TargetName" = "8:staticarray.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ECAB614720264F71AC4577D4515F1E04"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\error.h"
             "TargetName" = "8:error.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED17285E315747ED90A83B2800D5C60B"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\dynamicarray.h"
+            "TargetName" = "8:dynamicarray.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5741,7 +5871,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Firstworks Rudiments (64-bit)"
         "ProductCode" = "8:{4FFAFBD0-B9F1-4069-A124-14DC1A1ABBBF}"
-        "PackageCode" = "8:{BEF8AEF3-051B-47F5-A95A-7A7BBA9D5116}"
+        "PackageCode" = "8:{DED6A65A-8B3D-4693-9BAA-92DA67BB7453}"
         "UpgradeCode" = "8:{D16853E8-6A60-4842-B9FC-1C6EB9CAC827}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
