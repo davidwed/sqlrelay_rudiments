@@ -15541,11 +15541,13 @@ $as_echo "no" >&6; }
 esac
 
 
+RUDIMENTS_HAVE_SCO=""
 CRTLIB=""
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 6.0.0" >&5
 $as_echo_n "checking for SCO OSR < 6.0.0... " >&6; }
 if ( test "`uname -s`" = "SCO_SV" )
 then
+	RUDIMENTS_HAVE_SCO="yes"
 
 
 $as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
@@ -20637,6 +20639,8 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+if ( test "$RUDIMENTS_HAVE_SCO" != "yes" -o "$CXX" != "CC" )
+then
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for long long type" >&5
 $as_echo_n "checking for long long type... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -20660,6 +20664,7 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for true/false" >&5
 $as_echo_n "checking for true/false... " >&6; }

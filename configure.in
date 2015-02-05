@@ -1013,9 +1013,14 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #endif],
 [uint64_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT64_T,1,Some systems have uint64_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+dnl SCO CC just throws a warning when you use long long,
+dnl but it doesn't support it
+if ( test "$RUDIMENTS_HAVE_SCO" != "yes" -o "$CXX" != "CC" )
+then
 AC_MSG_CHECKING(for long long type)
 AC_TRY_COMPILE([],
 [long long i;],AC_DEFINE(RUDIMENTS_HAVE_LONG_LONG,1,Most systems have long long) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+fi
 
 AC_MSG_CHECKING(for true/false)
 AC_TRY_COMPILE([],

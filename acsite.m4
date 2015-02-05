@@ -589,10 +589,12 @@ esac
 
 AC_DEFUN([FW_CHECK_SCO_OSR],
 [
+RUDIMENTS_HAVE_SCO=""
 CRTLIB=""
 AC_MSG_CHECKING(for SCO OSR < 6.0.0)
 if ( test "`uname -s`" = "SCO_SV" )
 then
+	RUDIMENTS_HAVE_SCO="yes"
 
   	AC_DEFINE(RUDIMENTS_HAVE_SCO_AVENRUN,1,SCO has /dev/table/avenrun instead of getloadavg)
 	if ( test "`uname -v | tr -d '.'`" -lt "600" )
