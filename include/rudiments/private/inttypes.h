@@ -68,4 +68,9 @@
 	#endif
 #endif
 
+#ifndef RUDIMENTS_HAVE_TRUE_FALSE
+	#define true 1
+	#define false 0
+#endif
+
 #endif

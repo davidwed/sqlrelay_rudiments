@@ -1207,6 +1207,9 @@
 /* Some systems have tlhelp32.h */
 #undef RUDIMENTS_HAVE_TLHELP32_H
 
+/* Most systems have true/false */
+#undef RUDIMENTS_HAVE_TRUE_FALSE
+
 /* Some systems have truncate */
 #undef RUDIMENTS_HAVE_TRUNCATE
 
