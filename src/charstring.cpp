@@ -870,8 +870,7 @@ size_t charstring::length(const char *string) {
 }
 
 size_t charstring::length(const unsigned char *string) {
-	// FIXME: I'd think a static_cast would work here...
-	return length(reinterpret_cast<const char *>(string));
+	return length((const char *)(string));
 }
 
 void charstring::zero(char *str, size_t size) {
@@ -1089,9 +1088,7 @@ const char *charstring::findFirstOrEnd(const char *haystack,
 }
 
 char *charstring::findFirstOrEnd(char *haystack, const char *needle) {
-	return const_cast<char *>(findFirstOrEnd(
-					const_cast<const char *>(haystack),
-					needle));
+	return (char *)(findFirstOrEnd((const char *)(haystack),needle));
 }
 
 const char *charstring::findLast(const char *haystack, char needle) {
@@ -1099,32 +1096,23 @@ const char *charstring::findLast(const char *haystack, char needle) {
 }
 
 char *charstring::findFirst(char *haystack, const char *needle) {
-	return const_cast<char *>(findFirst(
-					const_cast<const char *>(haystack),
-					needle));
+	return (char *)(findFirst((const char *)(haystack),needle));
 }
 
 char *charstring::findFirst(char *haystack, char needle) {
-	return const_cast<char *>(findFirst(
-					const_cast<const char *>(haystack),
-					needle));
+	return (char *)(findFirst((const char *)(haystack),needle));
 }
 
 char *charstring::findLast(char *haystack, const char *needle) {
-	return const_cast<char *>(findLast(
-					const_cast<const char *>(haystack),
-					needle));
+	return (char *)(findLast((const char *)(haystack),needle));
 }
 
 char *charstring::findLast(char *haystack, char needle) {
-	return const_cast<char *>(findLast(
-					const_cast<const char *>(haystack),
-					needle));
+	return (char *)(findLast((const char *)(haystack),needle));
 }
 
 const char *charstring::findFirstOfSet(const char *haystack, const char *set) {
-	return const_cast<char *>(findFirstOfSet(
-					const_cast<char *>(haystack),set));
+	return (char *)(findFirstOfSet((char *)(haystack),set));
 }
 
 char *charstring::findFirstOfSet(char *haystack, const char *set) {
@@ -1147,8 +1135,7 @@ char *charstring::findFirstOfSet(char *haystack, const char *set) {
 
 const char *charstring::findFirstOfSetOrEnd(const char *haystack,
 							const char *set) {
-	return const_cast<char *>(findFirstOfSetOrEnd(
-					const_cast<char *>(haystack),set));
+	return (char *)(findFirstOfSetOrEnd((char *)(haystack),set));
 }
 
 char *charstring::findFirstOfSetOrEnd(char *haystack, const char *set) {
@@ -1264,7 +1251,7 @@ long double charstring::toFloat(const char *string, char **endptr) {
 	#ifdef RUDIMENTS_HAVE_STRTOLD
 	return (string)?strtold(string,endptr):0.0;
 	#else
-	return (string)?static_cast<long double>(strtod(string,endptr)):0.0;
+	return (string)?(long double)(strtod(string,endptr)):0.0;
 	#endif
 }
 
