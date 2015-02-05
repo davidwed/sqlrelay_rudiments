@@ -69,7 +69,87 @@
 #endif
 
 #ifndef RUDIMENTS_HAVE_BOOL
-	typedef	char	bool;
+	class bool {
+		public:
+			bool(const bool &b) {
+				value=b.value;
+			}
+			bool(const long &b) {
+				value=b;
+			}
+			bool(const int &b) {
+				value=b;
+			}
+			bool(const short &b) {
+				value=b;
+			}
+			bool(const char &b) {
+				value=b;
+			}
+			bool(const unsigned long &b) {
+				value=b;
+			}
+			bool(const unsigned int &b) {
+				value=b;
+			}
+			bool(const unsigned short &b) {
+				value=b;
+			}
+			bool(const unsigned char &b) {
+				value=b;
+			}
+			bool &operator=(const bool &b) {
+				value=b.value;
+				return *this;
+			}
+			bool &operator=(const long &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const int &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const short &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const char &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const unsigned long &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const unsigned int &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const unsigned short &b) {
+				value=b;
+				return *this;
+			}
+			bool &operator=(const unsigned char &b) {
+				value=b;
+				return *this;
+			}
+			operator long() const {
+				return value;
+			}
+			int operator!() {
+				value=!value;
+				return value;
+			}
+			int operator==(const bool &b) {
+				return value==b.value;
+			}
+			int operator!=(const bool &b) {
+				return value!=b.value;
+			}
+		private:
+			long	value;
+	};
 #endif
 #ifndef RUDIMENTS_HAVE_TRUE_FALSE
 	#define true 1
