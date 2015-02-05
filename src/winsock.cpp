@@ -1,6 +1,7 @@
 // Copyright (c) 2011 David Muse
 // See the COPYING file for more information
 
+#include <rudiments/private/inttypes.h>
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
