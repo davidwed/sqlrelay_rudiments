@@ -100,6 +100,7 @@ all: $(PROGS)
 clean:
 	$(LTCLEAN) $(RM) $(PROGS) \
 		*.exe \
+		*.manifest \
 		*.ilk \
 		*.idb \
 		*.pdb \

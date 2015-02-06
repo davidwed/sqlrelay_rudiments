@@ -142,6 +142,9 @@
 /* Some systems dont have st_blksize in struct stat */
 /* #undef RUDIMENTS_HAVE_BLKSIZE_T */
 
+/* Most systems have bool */
+#define RUDIMENTS_HAVE_BOOL 1
+
 /* Some systems have BRoster::_ShutDown */
 /* #undef RUDIMENTS_HAVE_BROSTER__SHUTDOWN */
 
@@ -1386,9 +1389,6 @@
 
 /* Hack for gcc on SCO OSR6 */
 /* #undef _CFRONT_3_0 */
-
-/* Some systems dont have bool */
-/* #undef bool */
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
