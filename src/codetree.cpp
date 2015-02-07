@@ -6,7 +6,7 @@
 #include <rudiments/stdio.h>
 
 
-#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#if defined(_MSC_VER) && (_MSC_VER <= 1300)
 
 // degenerate debug macros for really old windows compilers
 static void debugPrintIndent(uint8_t level) {}

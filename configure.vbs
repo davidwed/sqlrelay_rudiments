@@ -413,9 +413,13 @@ version=parts(0)
 ' default to VS2008 and up
 configwindowsh="include\\rudiments\\private\\config.vs2010.h"
 
-' VS2002 - VS2008
-if version<=15 and version>12 then
+' VS2005 - VS2008
+if version<=15 and version>13 then
 	configwindowsh="include\\rudiments\\private\\config.vs2005.h"
+
+' VS2002 - VS2003 (VS.NET)
+elseif version=13 then
+	configwindowsh="include\\rudiments\\private\\config.vs2002.h"
 
 ' VS6 and lower
 elseif version<=12 then
@@ -430,11 +434,15 @@ end if
 SDKINCLUDES=""
 SDKLIBS=""
 
-' VS2002 - VS2005 don't come with an SDK
+' VS2005 doesn't come with an SDK
 ' assume v6.0A (which comes with VS2008)
-if version<=14 and version>12 then
-	SDKINCLUDES="/I""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"""
-	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib"""
+if version<=14 and version>13 then
+	'SDKINCLUDES="/I""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"""
+	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib"""
+
+' VS2002 - VS2003 (VS.NET) don't come with an SDK but it doesn't seem to matter
+elseif version=13 then
+	' don't do anything
 
 ' VS6 and lower don't come with an SDK and don't support SDK v6.X
 ' assume that a version that they do support is installed in the
