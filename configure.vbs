@@ -481,8 +481,9 @@ elseif version<=11 then
 	' older SDK's might work too
 
 	' 5.1.2600.2180
-	SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Include"""
-	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Lib"""
+	' (this doesn't actually work)
+	'SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Include"""
+	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Lib"""
 
 	' newer SDK's give link errors
 
