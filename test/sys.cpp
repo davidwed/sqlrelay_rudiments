@@ -6,6 +6,12 @@
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 
+#ifdef RUDIMENTS_HAVE_LONG_LONG
+	#define LONG_LONG long long
+#else
+	#define LONG_LONG long
+#endif
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -38,107 +44,107 @@ int main(int argc, const char **argv) {
 	//sys::sync();
 
 	stdoutput.printf("Max Cmd Line Arg Length			: %lld\n",
-		(long long)sys::getMaxCommandLineArgumentLength());
+		(LONG_LONG)sys::getMaxCommandLineArgumentLength());
 
 	stdoutput.printf("Max Processes Per User			: %lld\n",
-			(long long)sys::getMaxProcessesPerUser());
+			(LONG_LONG)sys::getMaxProcessesPerUser());
 
 	stdoutput.printf("Max Host Name Length			: %lld\n",
-			(long long)sys::getMaxHostNameLength());
+			(LONG_LONG)sys::getMaxHostNameLength());
 
 	stdoutput.printf("Max Login Name Length			: %lld\n",
-			(long long)sys::getMaxLoginNameLength());
+			(LONG_LONG)sys::getMaxLoginNameLength());
 
 	stdoutput.printf("Clock Ticks Per Second			: %lld\n",
-			(long long)sys::getClockTicksPerSecond());
+			(LONG_LONG)sys::getClockTicksPerSecond());
 
 	stdoutput.printf("Max Open Files Per Process		: %lld\n",
-		(long long)sys::getMaxOpenFilesPerProcess());
+		(LONG_LONG)sys::getMaxOpenFilesPerProcess());
 
 	stdoutput.printf("Page Size				: %lld\n",
-			(long long)sys::getPageSize());
+			(LONG_LONG)sys::getPageSize());
 
 	stdoutput.printf("Max Open Streams Per Process		: %lld\n",
-		(long long)sys::getMaxOpenStreamsPerProcess());
+		(LONG_LONG)sys::getMaxOpenStreamsPerProcess());
 
 	stdoutput.printf("Max Symlink Loops			: %lld\n",
-			(long long)sys::getMaxSymlinkLoops());
+			(LONG_LONG)sys::getMaxSymlinkLoops());
 
 	stdoutput.printf("Max Terminal Device Name Length		: %lld\n",
-		(long long)sys::getMaxTerminalDeviceNameLength());
+		(LONG_LONG)sys::getMaxTerminalDeviceNameLength());
 
 	stdoutput.printf("Max Timezone Name Length		: %lld\n",
-		(long long)sys::getMaxTimezoneNameLength());
+		(LONG_LONG)sys::getMaxTimezoneNameLength());
 
 	stdoutput.printf("Max Line Length				: %lld\n",
-			(long long)sys::getMaxLineLength());
+			(LONG_LONG)sys::getMaxLineLength());
 
 	stdoutput.printf("Physical Page Count			: %lld\n",
-			(long long)sys::getPhysicalPageCount());
+			(LONG_LONG)sys::getPhysicalPageCount());
 
 	stdoutput.printf("Available Physical Page Count		: %lld\n",
-		(long long)sys::getAvailablePhysicalPageCount());
+		(LONG_LONG)sys::getAvailablePhysicalPageCount());
 
 	stdoutput.printf("Processor Count				: %lld\n",
-			(long long)sys::getProcessorCount());
+			(LONG_LONG)sys::getProcessorCount());
 
 	stdoutput.printf("Max Processor Count			: %lld\n",
-			(long long)sys::getMaxProcessorCount());
+			(LONG_LONG)sys::getMaxProcessorCount());
 
 	stdoutput.printf("Processors Online			: %lld\n",
-			(long long)sys::getProcessorsOnline());
+			(LONG_LONG)sys::getProcessorsOnline());
 
 	stdoutput.printf("Max Supplemental Groups Per User	: %lld\n",
-	(long long)sys::getMaxSupplementalGroupsPerUser());
+	(LONG_LONG)sys::getMaxSupplementalGroupsPerUser());
 
 	stdoutput.printf("Max Delay Timer Expirations		: %lld\n",
-		(long long)sys::getMaxDelayTimerExpirations());
+		(LONG_LONG)sys::getMaxDelayTimerExpirations());
 
 	stdoutput.printf("Max Realtime Signals			: %lld\n",
-			(long long)sys::getMaxRealtimeSignals());
+			(LONG_LONG)sys::getMaxRealtimeSignals());
 
 	stdoutput.printf("Max Sempahores Per Process		: %lld\n",
-		(long long)sys::getMaxSemaphoresPerProcess());
+		(LONG_LONG)sys::getMaxSemaphoresPerProcess());
 
 	stdoutput.printf("Max Semaphore Value			: %lld\n",
-			(long long)sys::getMaxSemaphoreValue());
+			(LONG_LONG)sys::getMaxSemaphoreValue());
 
 	stdoutput.printf("Max Signal Queue Length			: %lld\n",
-		(long long)sys::getMaxSignalQueueLength());
+		(LONG_LONG)sys::getMaxSignalQueueLength());
 
 	stdoutput.printf("Max Timers Per Process			: %lld\n",
-			(long long)sys::getMaxTimersPerProcess());
+			(LONG_LONG)sys::getMaxTimersPerProcess());
 
 	stdoutput.printf("Suggested Group Entry Buffer Size	: %lld\n",
-	(long long)sys::getSuggestedGroupEntryBufferSize());
+	(LONG_LONG)sys::getSuggestedGroupEntryBufferSize());
 
 	stdoutput.printf("Suggested Passwd Entry Buffer Size	: %lld\n",
-	(long long)sys::getSuggestedPasswordEntryBufferSize());
+	(LONG_LONG)sys::getSuggestedPasswordEntryBufferSize());
 
 	stdoutput.printf("Min Thread Stack Size			: %lld\n",
-			(long long)sys::getMinThreadStackSize());
+			(LONG_LONG)sys::getMinThreadStackSize());
 
 	stdoutput.printf("Max Threads Per Process			: %lld\n",
-			(long long)sys::getMaxThreadsPerProcess());
+			(LONG_LONG)sys::getMaxThreadsPerProcess());
 
 	stdoutput.printf("Thread Destructor Iterations		: %lld\n",
-		(long long)sys::getThreadDestructorIterations());
+		(LONG_LONG)sys::getThreadDestructorIterations());
 
 	stdoutput.printf("Max Thread Keys				: %lld\n",
-			(long long)sys::getMaxThreadKeys());
+			(LONG_LONG)sys::getMaxThreadKeys());
 
 	stdoutput.printf("Max At-Exit Functions			: %lld\n",
-			(long long)sys::getMaxAtExitFunctions());
+			(LONG_LONG)sys::getMaxAtExitFunctions());
 
 	stdoutput.printf("CPUSet Size				: %lld\n",
-			(long long)sys::getCpuSetSize());
+			(LONG_LONG)sys::getCpuSetSize());
 
 	stdoutput.printf("Max Password Length			: %lld\n",
-			(long long)sys::getMaxPasswordLength());
+			(LONG_LONG)sys::getMaxPasswordLength());
 
 	stdoutput.printf("Max Log Name Length			: %lld\n",
-			(long long)sys::getMaxLogNameLength());
+			(LONG_LONG)sys::getMaxLogNameLength());
 
 	stdoutput.printf("Max Process ID				: %lld\n",
-			(long long)sys::getMaxProcessId());
+			(LONG_LONG)sys::getMaxProcessId());
 }

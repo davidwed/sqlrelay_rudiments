@@ -509,15 +509,19 @@ int main(int argc, const char **argv) {
 						(uint16_t)0xC0C0);
 	uint32_t	v32=filedescriptor::hostToNet(
 						(uint32_t)0xC0C0C0C0);
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
 	uint64_t	v64=filedescriptor::hostToNet(
 					(uint64_t)0xC0C0C0C0C0C0C0C0ULL);
+	#endif
 	char	sv8=-1*0x01;
 	int16_t	sv16=filedescriptor::hostToNet((uint16_t)
 						(int16_t)(-1*0x0101));
 	int32_t	sv32=filedescriptor::hostToNet((uint32_t)
 						(int32_t)(-1*0x01010101));
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
 	int64_t	sv64=filedescriptor::hostToNet((uint64_t)
 					(int64_t)(-1*0x0101010101010101LL));
+	#endif
 	unsigned char	v8s[]={0xC0,0xC0,0xC0,0xC0};
 	stdoutput.printBits(v8);
 	stdoutput.printf("\n");
@@ -525,16 +529,20 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 	stdoutput.printBits(v32);
 	stdoutput.printf("\n");
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
 	stdoutput.printBits(v64);
 	stdoutput.printf("\n");
+	#endif
 	stdoutput.printBits(sv8);
 	stdoutput.printf("\n");
 	stdoutput.printBits(sv16);
 	stdoutput.printf("\n");
 	stdoutput.printBits(sv32);
 	stdoutput.printf("\n");
+	#ifdef RUDIMENTS_HAVE_LONG_LONG
 	stdoutput.printBits(sv64);
 	stdoutput.printf("\n");
+	#endif
 	stdoutput.printBits(v8s,sizeof(v8s));
 	stdoutput.printf("\n");
 

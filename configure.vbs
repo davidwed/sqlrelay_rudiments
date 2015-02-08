@@ -373,7 +373,7 @@ CLOCKNANOSLEEPLIB=""
 SHMOPENLIB=""
 CRYPTLIB=""
 INETATONLIB=""
-NETAPI32LIB="ws2_32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"
+NETAPI32LIB="ws2_32.lib netapi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib uuid.lib"
 BELIB=""
 GNULIB=""
 CRTLIB=""
@@ -413,11 +413,11 @@ version=parts(0)
 ' default to VS2008 and up
 configwindowsh="include\\rudiments\\private\\config.vs2010.h"
 
-' VS2005 - VS2008
+' VS2005 and VS2008
 if version<=15 and version>13 then
 	configwindowsh="include\\rudiments\\private\\config.vs2005.h"
 
-' VS2002 - VS2003 (VS.NET)
+' VS2002 and VS2003
 elseif version=13 then
 	configwindowsh="include\\rudiments\\private\\config.vs2002.h"
 
@@ -430,26 +430,55 @@ end if
 
 ' determine SDK headers and libs... (FIXME: make this configurable)
 
-' VS2008 and up come with an SDK and are pre-configured to use them
+' VS2002, VS2003 and VS2008 and up come with a platform SDK
 SDKINCLUDES=""
 SDKLIBS=""
 
-' VS2005 doesn't come with an SDK
-' assume v6.0A (which comes with VS2008)
-if version<=14 and version>13 then
+' VS2005 doesn't come with an SDK and there are several that are compatible
+if version=14 then
+
+	' older SDK's have various issues
+
+	' 5.2.3700.0
+	'SDKINCLUDES="/I""C:\Program Files\Microsoft SDK\include"""
+	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDK\Lib"""
+
+	' 5.2.3790.1830.15
+	SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK\Include"""
+	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK\Lib"""
+
+	' 5.2.3790.2075.51
+	'SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include"""
+	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib"""
+
+	' 6.0A (comes with VC2008)
 	'SDKINCLUDES="/I""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"""
 	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib"""
 
-' VS2002 - VS2003 (VS.NET) don't come with an SDK but it doesn't seem to matter
-elseif version=13 then
-	' don't do anything
+	' not sure about newer SDK's
 
-' VS6 and lower don't come with an SDK and don't support SDK v6.X
-' assume that a version that they do support is installed in the
-' default location
-elseif version<=12 then
+' VS6 doesn't come with a platform SDK
+elseif version=12 then
+
+	' older SDK's might work too
+
+	' 5.2.3700.0
 	SDKINCLUDES="/I""C:\Program Files\Microsoft SDK\include"""
 	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDK\Lib"""
+
+	' not sure about newer SDK's
+
+' VS5 and lower don't come with a platform SDK
+elseif version<=11 then
+
+	' older SDK's might work too
+
+	' 5.1.2600.2180
+	SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Include"""
+	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Lib"""
+
+	' newer SDK's give link errors
+
 end if
 
 
@@ -462,7 +491,7 @@ set network=WScript.CreateObject("WScript.Network")
 computername=Trim(network.ComputerName) 
 set network=Nothing 
 set wmi=GetObject("WINMGMTS:" & "{ImpersonationLevel=Impersonate,AuthenticationLevel=Pkt}!\\" & computername & "\Root\CIMV2") 
-set ColSettings=wmi.ExecQuery ("SELECT * FROM Win32_Processor") 
+set ColSettings=wmi.ExecQuery("SELECT * FROM Win32_Processor") 
 for each processor In ColSettings 
 	if processor.AddressWidth=32 then
 		USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
