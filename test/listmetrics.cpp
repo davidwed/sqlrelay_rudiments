@@ -46,7 +46,8 @@ int main(int argc, char **argv) {
 
 	stdoutput.printf("linkedlist:\n");
 
-	for (uint16_t j=0; j<1; j++) {
+	uint16_t	j;
+	for (j=0; j<1; j++) {
 
 		stdoutput.printf("  %s\n",sorttitles[j]);
 
@@ -84,7 +85,7 @@ int main(int argc, char **argv) {
 
 	stdoutput.printf("singlylinkedlist:\n");
 
-	for (uint16_t j=0; j<1; j++) {
+	for (j=0; j<1; j++) {
 
 		stdoutput.printf("  %s\n",sorttitles[j]);
 

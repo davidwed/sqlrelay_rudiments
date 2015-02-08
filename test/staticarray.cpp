@@ -47,7 +47,8 @@ int main(int argc, const char **argv) {
 	// set/check values
 	stdoutput.printf("set values...\n");
 	uint32_t	count=COUNT;
-	for (uint32_t i=0; i<count; i++) {
+	uint32_t	i;
+	for (i=0; i<count; i++) {
 		char	*val=charstring::parseNumber(i);
 		charstring::copy(sa[i].str,val);
 		delete[] val;
@@ -55,23 +56,23 @@ int main(int argc, const char **argv) {
 	}
 	test("get values, getLength()",(uint32_t)sa.getLength()==count);
 	bool	success=true;
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
 		success=!charstring::compare(sa[i].str,val);
 		delete[] val;
 	}
 	test("get values, string",success);
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		success=(sa[i].uintval==i);
 	}
 	test("get values, int",success);
-	for (uint32_t i=count; success && i>0; i--) {
+	for (i=count; success && i>0; i--) {
 		char	*val=charstring::parseNumber(i-1);
 		success=!charstring::compare(sa[i-1].str,val);
 		delete[] val;
 	}
 	test("get values, string (backwards)",success);
-	for (uint32_t i=count; success && i>0; i--) {
+	for (i=count; success && i>0; i--) {
 		success=(sa[i-1].uintval==i-1);
 	}
 	test("get values, int (backwards)",success);
@@ -94,19 +95,19 @@ int main(int argc, const char **argv) {
 	// set/check values
 	stdoutput.printf("get values...\n");
 	success=true;
-	for (uint32_t i=0; i<count; i++) {
+	for (i=0; i<count; i++) {
 		success=(sa2[i].getValue()==1);
 	}
 	test("get values, default",success);
 	test("get values, getLength()",(uint32_t)sa2.getLength()==count);
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		sa2[i].setValue(2);
 	}
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		success=(sa2[i].getValue()==2);
 	}
 	test("get values, forwards",success);
-	for (uint32_t i=count; success && i>0; i--) {
+	for (i=count; success && i>0; i--) {
 		success=(sa2[i-1].getValue()==2);
 	}
 	test("get values, backwards",success);
@@ -129,21 +130,21 @@ int main(int argc, const char **argv) {
 	// set/check values
 	stdoutput.printf("get values...\n");
 	success=true;
-	for (uint32_t i=0; i<count; i++) {
+	for (i=0; i<count; i++) {
 		sa3[i]=new testclass();
 	}
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		success=(sa3[i]->getValue()==1);
 	}
 	test("get values, default",success);
-	for (uint32_t i=0; i<count; i++) {
+	for (i=0; i<count; i++) {
 		sa3[i]->setValue(2);
 	}
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		success=(sa3[i]->getValue()==2);
 	}
 	test("get values, forwards",success);
-	for (uint32_t i=count; success && i>0; i--) {
+	for (i=count; success && i>0; i--) {
 		success=(sa3[i-1]->getValue()==2);
 	}
 	test("get values, backwards",success);
@@ -151,7 +152,7 @@ int main(int argc, const char **argv) {
 
 	// clear
 	stdoutput.printf("clear...\n");
-	for (uint32_t i=0; i<count; i++) {
+	for (i=0; i<count; i++) {
 		delete sa3[i];
 	}
 	sa3.clear();
@@ -169,18 +170,18 @@ int main(int argc, const char **argv) {
 	// set/check values
 	stdoutput.printf("get values...\n");
 	success=true;
-	for (uint32_t i=0; i<count; i++) {
+	for (i=0; i<count; i++) {
 		for (uint32_t j=0; j<count; j++) {
 			sa4[i][j]=i*count+j;
 		}
 	}
-	for (uint32_t i=0; success && i<count; i++) {
+	for (i=0; success && i<count; i++) {
 		for (uint32_t j=0; success && j<count; j++) {
 			success=(sa4[i][j]==i*count+j);
 		}
 	}
 	test("get values, forwards",success);
-	for (uint32_t i=count; success && i>0; i--) {
+	for (i=count; success && i>0; i--) {
 		for (uint32_t j=count; success && j>0; j--) {
 			success=(sa4[i-1][j-1]==(i-1)*count+(j-1));
 		}

@@ -191,10 +191,10 @@ int main(int argc, const char **argv) {
 	test("detach(), getEnd()",bb.getEnd()==0);
 	test("detach(), getActualSize()",bb.getActualSize()==45);
 	bool	validdata=true;
-	for (uint64_t i=0; i<100; i=i+10) {
-		if (bytestring::compare(detachedbuffer+i,"1234567890",10)) {
+	for (uint64_t j=0; j<100; j=j+10) {
+		if (bytestring::compare(detachedbuffer+j,"1234567890",10)) {
 			stdoutput.printf("	"
-				"data invalid at position %lld\n",i);
+				"data invalid at position %lld\n",j);
 			validdata=false;
 			break;
 		}
@@ -251,8 +251,8 @@ int main(int argc, const char **argv) {
 	// initial contents
 	stdoutput.printf("initial contents\n");
 	unsigned char	*initialcontents=new unsigned char[100];
-	for (uint16_t i=0; i<10; i=i+10) {
-		bytestring::copy(initialcontents+i,"1234567890",10);
+	for (uint16_t k=0; k<10; k=k+10) {
+		bytestring::copy(initialcontents+k,"1234567890",10);
 	}
 	unsigned char	*iccopy=
 		(unsigned char *)bytestring::duplicate(initialcontents,100);
@@ -283,18 +283,18 @@ int main(int argc, const char **argv) {
 	uint64_t	size=1024*1024*10;
 	unsigned char	*data=(unsigned char *)"1234567890";
 	stdoutput.printf("%hd, %lld byte writes\n",count,size);
-	for (uint16_t i=0; i<count; i++) {
+	for (uint16_t l=0; l<count; l++) {
 
-		for (uint64_t i=0; i<size/10; i++) {
+		for (uint64_t m=0; m<size/10; m++) {
 			bb.write(data,10);
 		}
 
 		const unsigned char	*buffer=bb.getBuffer();
 		bool	validdata=true;
-		for (uint64_t i=0; i<size; i=i+10) {
-			if (bytestring::compare(buffer+i,data,10)) {
+		for (uint64_t n=0; n<size; n=n+10) {
+			if (bytestring::compare(buffer+n,data,10)) {
 				stdoutput.printf("	"
-					"data invalid at position %lld\n",i);
+					"data invalid at position %lld\n",n);
 				validdata=false;
 				break;
 			}
@@ -306,12 +306,12 @@ int main(int argc, const char **argv) {
 
 		unsigned char	buf[10];
 		validdata=true;
-		for (uint64_t i=0; i<size; i=i+10) {
-			bb.setPosition(i);
+		for (uint64_t o=0; o<size; o=o+10) {
+			bb.setPosition(o);
 			bb.read(buf,10);
 			if (bytestring::compare(buf,data,10)) {
 				stdoutput.printf("	"
-					"data invalid at position %lld\n",i);
+					"data invalid at position %lld\n",o);
 				validdata=false;
 				break;
 			}

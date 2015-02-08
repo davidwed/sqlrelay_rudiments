@@ -26,9 +26,9 @@ int main(int argc, const char **argv) {
 	int32_t	lower[]={100,-1000,-100};
 	int32_t	upper[]={1000,-100,100};
 
-	for (uint16_t i=0; i<3; i++) {
-		int32_t	bottom=lower[i];
-		int32_t	top=upper[i];
+	for (uint16_t j=0; j<3; j++) {
+		int32_t	bottom=lower[j];
+		int32_t	top=upper[j];
         	stdoutput.printf("Random numbers between %d and %d:\n",
 								bottom,top);
         	stdoutput.printf(" % 4d",
@@ -40,11 +40,11 @@ int main(int argc, const char **argv) {
         	stdoutput.printf(" % 4d\n",scalednumber);
 		randomnumber	r;
 		r.setSeed(seed);
-		for (uint16_t i=0; i<100; i++) {
+		for (uint16_t j=0; j<100; j++) {
 			int32_t	number=0;
         		r.generateScaledNumber(bottom,top,&number);
         		stdoutput.printf(" % 4d",number);
-			if (!((i+1)%10)) {
+			if (!((j+1)%10)) {
         			stdoutput.printf("\n");
 			}
 		}
@@ -56,16 +56,16 @@ int main(int argc, const char **argv) {
 	datetime	start;
 	start.getSystemDateAndTime();
 	r.setSeed(0);
-	for (int64_t i=0; i<randomnumber::getRandMax(); i++) {
+	for (int64_t k=0; k<randomnumber::getRandMax(); k++) {
 		uint32_t	result;
 		if (!r.generateNumber(&result)) {
-        		stdoutput.printf("generateNumber failed: %lld\n",i);
+        		stdoutput.printf("generateNumber failed: %lld\n",k);
 			break;
 		} else {
-			if (i<10) {
+			if (k<10) {
         			stdoutput.printf("%lld: %lld\n",
-							i,(uint64_t)result);
-			} else if (i==10) {
+							k,(uint64_t)result);
+			} else if (k==10) {
         			stdoutput.printf("...\n");
 			}
 		}

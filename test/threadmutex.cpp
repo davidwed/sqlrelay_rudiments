@@ -88,9 +88,9 @@ int main(int argc, const char **argv) {
 	#endif
 
 	// create threads
-	for (uint8_t i=0; i<5; i++) {
-		if (!t[i].create()) {
-			stdoutput.printf(" %d: create failed\n",i);
+	for (uint8_t j=0; j<5; j++) {
+		if (!t[j].create()) {
+			stdoutput.printf(" %d: create failed\n",j);
 		}
 	}
 
@@ -102,12 +102,12 @@ int main(int argc, const char **argv) {
 	#endif
 
 	// join threads
-	for (uint8_t i=0; i<5; i++) {
+	for (uint8_t k=0; k<5; k++) {
 		int32_t	tstatus=-1;
-		if (!t[i].join(&tstatus)) {
-			stdoutput.printf(" %d: join failed\n",i);
+		if (!t[k].join(&tstatus)) {
+			stdoutput.printf(" %d: join failed\n",k);
 		}
-		stdoutput.printf("t%d status: %d\n",i,tstatus);
+		stdoutput.printf("t%d status: %d\n",k,tstatus);
 	}
 
 	stdoutput.printf("done\n");
