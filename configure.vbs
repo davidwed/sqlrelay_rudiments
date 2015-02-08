@@ -419,13 +419,14 @@ end if
 set cmd=WshShell.exec("%comspec% /c ver")
 stdout=cmd.StdOut.ReadAll()
 stderr=cmd.StdErr.ReadLine()
-parts=split(stdout," ")
-lastparts=split(parts(3),"]")
-osversion=split(lastparts(0),".")
-hexversion="0x0"&osversion(0)&"0"&osversion(1)
+parts0=split(stdout,"[")
+parts1=split(parts0(1)," ")
+parts2=split(parts1(1),"]")
+parts3=split(parts2(0),".")
+hexversion="0x0"&parts3(0)&"0"&parts3(1)
 winver=""
 win32windows=""
-win32winnt=""
+win32winnt=hexversion
 
 wscript.echo stdout
 wscript.echo hexversion
