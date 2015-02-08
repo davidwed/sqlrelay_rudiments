@@ -391,7 +391,7 @@ set fso=CreateObject("Scripting.FileSystemObject")
 top_builddir=fso.GetAbsolutePathName(".")
 
 
-' determine VC++ version
+' determine VC++ version and architecture
 set WshShell=WScript.CreateObject("WScript.Shell")
 set cmd=WshShell.exec("cl")
 stdout=cmd.StdOut.ReadAll()
@@ -405,6 +405,13 @@ for i=lbound(parts) to ubound(parts)
 next
 parts=split(version,".")
 version=parts(0)
+
+' determine VC++ architecture
+USE_32BIT_TIME_T=""
+arch=parts(ubound(parts))
+if arch="80x86" then
+	USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
+end if
 
 
 
@@ -481,22 +488,6 @@ elseif version<=11 then
 
 end if
 
-
-
-' get 32/64-bit operating system
-' FIXME: this needs to determine whether the compiler generates
-' 32-bit or 64-bit code rather than the architecture of the OS
-USE_32BIT_TIME_T=""
-set network=WScript.CreateObject("WScript.Network") 
-computername=Trim(network.ComputerName) 
-set network=Nothing 
-set wmi=GetObject("WINMGMTS:" & "{ImpersonationLevel=Impersonate,AuthenticationLevel=Pkt}!\\" & computername & "\Root\CIMV2") 
-set ColSettings=wmi.ExecQuery("SELECT * FROM Win32_Processor") 
-for each processor In ColSettings 
-	if processor.AddressWidth=32 then
-		USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
-	end if
-next 
 
 
 ' input and output files
