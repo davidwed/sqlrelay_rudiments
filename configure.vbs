@@ -424,12 +424,12 @@ configwindowsh="include\\rudiments\\private\\config.vs2010.h"
 if version<=15 and version>13 then
 	configwindowsh="include\\rudiments\\private\\config.vs2005.h"
 
-' VS2002 and VS2003
-elseif version=13 then
-	configwindowsh="include\\rudiments\\private\\config.vs2002.h"
+' VC6, VS2002 and VS2003
+elseif version=13 or version=12 then
+	configwindowsh="include\\rudiments\\private\\config.vs6.h"
 
-' VS6 and lower
-elseif version<=12 then
+' VS5 and lower
+elseif version<=11 then
 	configwindowsh="include\\rudiments\\private\\config.vs5.h"
 end if
 
