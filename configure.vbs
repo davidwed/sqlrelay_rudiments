@@ -415,6 +415,23 @@ end if
 
 
 
+' determine OS Version number
+set cmd=WshShell.exec("%comspec% /c ver")
+stdout=cmd.StdOut.ReadAll()
+stderr=cmd.StdErr.ReadLine()
+parts=split(stdout," ")
+lastparts=split(parts(3),"]")
+osversion=split(lastparts(0),".")
+hexversion="0x0"&osversion(0)&"0"&osversion(1)
+winver=""
+win32windows=""
+win32winnt=""
+
+wscript.echo stdout
+wscript.echo hexversion
+
+
+
 ' determine config.h template...
 
 ' default to VS2008 and up
