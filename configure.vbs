@@ -397,6 +397,7 @@ set cmd=WshShell.exec("cl")
 stdout=cmd.StdOut.ReadAll()
 stderr=cmd.StdErr.ReadLine()
 parts=split(stderr)
+arch=parts(ubound(parts))
 version=""
 for i=lbound(parts) to ubound(parts)
 	if parts(i)="Version" then
@@ -408,7 +409,6 @@ version=parts(0)
 
 ' determine VC++ architecture
 USE_32BIT_TIME_T=""
-arch=parts(ubound(parts))
 if arch="80x86" then
 	USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
 end if
