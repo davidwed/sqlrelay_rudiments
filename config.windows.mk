@@ -12,7 +12,7 @@ docdir = $(datadir)\doc\rudiments
 
 # command separator
 AND = &
-#AND = ¶
+#AND = 
 
 # shell
 SHELL =
