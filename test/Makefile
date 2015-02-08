@@ -5,7 +5,7 @@ include ../config.mk
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(DEBUGLIB)
 
-PROGS = server \
+PROGS0 = server \
 	listener \
 	inetsocketclient \
 	unixsocketclient \
@@ -24,8 +24,9 @@ PROGS = server \
 	semaphoreset1 \
 	semaphoreset2 \
 	charstring \
-	datetime \
-	dictionary \
+	datetime
+
+PROGS1= dictionary \
 	environment \
 	file \
 	filesystem \
@@ -44,8 +45,9 @@ PROGS = server \
 	serialport \
 	shmfile \
 	chat \
-	crypt \
-	dynamicarray \
+	crypt
+
+PROGS2= dynamicarray \
 	staticarray \
 	dynamiclib \
 	error \
@@ -63,8 +65,9 @@ PROGS = server \
 	oneshotsvr \
 	oneshotclnt \
 	lock1 \
-	lock2 \
-	handoff1 \
+	lock2
+
+PROGS3= handoff1 \
 	handoff2 \
 	handoffclient \
 	nonhandoff1 \
@@ -82,10 +85,11 @@ PROGS = server \
 	sys \
 	reboot \
 	halt \
-	shutdown \
-	server.pem
+	shutdown
 
-#ALLSTATIC=-all-static
+PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
+
+#ALLSTATIC=-all-static 
 
 .SUFFIXES: .lo .obj
 
@@ -95,24 +99,14 @@ PROGS = server \
 .cpp.obj:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
-all: $(PROGS)
+all: $(PROGS) server.pem
 
 clean:
-	$(LTCLEAN) $(RM) $(PROGS) \
-		*.exe \
-		*.ilk \
-		*.idb \
-		*.pdb \
-		*.manifest \
-		*.lo \
-		*.o \
-		*.obj \
-		test.log \
-		testfile \
-		test.xml \
-		ca.pem \
-		server.pem \
-		client.pem
+	$(LTCLEAN) $(RM) $(PROGS0)
+	$(LTCLEAN) $(RM) $(PROGS1)
+	$(LTCLEAN) $(RM) $(PROGS2)
+	$(LTCLEAN) $(RM) $(PROGS3)
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile test.xml ca.pem server.pem client.pem
 	cd certificates $(AND) $(MAKE) clean
 
 server: server.cpp server.$(OBJ) 

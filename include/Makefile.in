@@ -2,7 +2,10 @@ top_builddir = ..
 
 include ../config.mk
 
-HEADERS = @HEADERS@
+HEADERS0 = @HEADERS0@
+HEADERS1 = @HEADERS1@
+HEADERS2 = @HEADERS2@
+HEADERS3 = @HEADERS3@
 PRIVATEHEADERS0 = @PRIVATEHEADERS0@
 PRIVATEHEADERS1 = @PRIVATEHEADERS1@
 PRIVATEHEADERS2 = @PRIVATEHEADERS2@
@@ -10,13 +13,17 @@ PRIVATEHEADERS3 = @PRIVATEHEADERS3@
 PRIVATEHEADERS4 = @PRIVATEHEADERS4@
 PRIVATEHEADERS5 = @PRIVATEHEADERS5@
 PRIVATEHEADERS6 = @PRIVATEHEADERS6@
+PRIVATEHEADERS7 = @PRIVATEHEADERS7@
 
 all:
 
 install:
 	$(MKINSTALLDIRS) $(includedir)/rudiments
 	$(MKINSTALLDIRS) $(includedir)/rudiments/private
-	cd rudiments $(AND) $(CP) $(HEADERS) $(includedir)/rudiments
+	cd rudiments $(AND) $(CP) $(HEADERS0) $(includedir)/rudiments
+	cd rudiments $(AND) $(CP) $(HEADERS1) $(includedir)/rudiments
+	cd rudiments $(AND) $(CP) $(HEADERS2) $(includedir)/rudiments
+	cd rudiments $(AND) $(CP) $(HEADERS3) $(includedir)/rudiments
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS0) $(includedir)/rudiments/private
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS1) $(includedir)/rudiments/private
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS2) $(includedir)/rudiments/private
@@ -24,6 +31,7 @@ install:
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS4) $(includedir)/rudiments/private
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS5) $(includedir)/rudiments/private
 	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS6) $(includedir)/rudiments/private
+	cd rudiments $(AND) cd private $(AND) $(CP) $(PRIVATEHEADERS7) $(includedir)/rudiments/private
 	$(CHMOD) 644 $(includedir)/rudiments/*.h $(includedir)/rudiments/private/*.h
 
 uninstall:

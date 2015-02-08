@@ -5,7 +5,7 @@ include ../config.mk
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB)
 
-PROGS = \
+PROGS0 = \
 	character$(EXE) \
 	charstring$(EXE) \
 	chat$(EXE) \
@@ -26,6 +26,8 @@ PROGS = \
 	inetsocketclient$(EXE) \
 	inetsocketserver$(EXE) \
 	intervaltimer$(EXE) \
+
+PROGS1 = \
 	linkedlist$(EXE) \
 	listener$(EXE) \
 	logger$(EXE) \
@@ -46,6 +48,8 @@ PROGS = \
 	rpcentry$(EXE) \
 	serialport$(EXE) \
 	serialportprofile$(EXE) \
+
+PROGS2 = \
 	serviceentry$(EXE) \
 	sharedmemory1$(EXE) \
 	sharedmemory2$(EXE) \
@@ -62,6 +66,8 @@ PROGS = \
 	xmlsax$(EXE) \
 	codetree$(EXE)
 
+PROGS = $(PROGS0) $(PROGS1) $(PROGS2)
+
 .SUFFIXES: .$(OBJ) .obj
 
 .cpp.lo:
@@ -73,7 +79,10 @@ PROGS = \
 all: $(PROGS)
 
 clean:
-	$(LTCLEAN) $(RM) $(PROGS) *.lo *.o *.obj
+	$(LTCLEAN) $(RM) $(PROGS0)
+	$(LTCLEAN) $(RM) $(PROGS1)
+	$(LTCLEAN) $(RM) $(PROGS2)
+	$(LTCLEAN) $(RM) *.lo *.o *.obj
 
 character$(EXE): character.cpp character.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ character.$(OBJ) $(LIBS)

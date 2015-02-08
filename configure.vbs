@@ -136,7 +136,7 @@ lobjs="winsock.obj "+_
 	"socketserver.obj "+_
 	"socketclient.obj"
 
-headers="resultcodes.h "+_
+headers0="resultcodes.h "+_
 	"linkedlist.h "+_
 	"singlylinkedlist.h "+_
 	"dictionary.h "+_
@@ -155,8 +155,8 @@ headers="resultcodes.h "+_
 	"dynamiclib.h "+_
 	"environment.h "+_
 	"error.h "+_
-	"file.h "+_
-	"filedescriptor.h "+_
+	"file.h "
+headers1="filedescriptor.h "+_
 	"stdio.h "+_
 	"filesystem.h "+_
 	"groupentry.h "+_
@@ -175,8 +175,8 @@ headers="resultcodes.h "+_
 	"parameterstring.h "+_
 	"userentry.h "+_
 	"permissions.h "+_
-	"process.h "+_
-	"protocolentry.h "+_
+	"process.h "
+headers2="protocolentry.h "+_
 	"randomnumber.h "+_
 	"bytestring.h "+_
 	"regularexpression.h "+_
@@ -194,8 +194,8 @@ headers="resultcodes.h "+_
 	"sys.h "+_
 	"unixsocketclient.h "+_
 	"unixsocketserver.h "+_
-	"bytebuffer.h "+_
-	"xmldom.h "+_
+	"bytebuffer.h "
+headers3="xmldom.h "+_
 	"xmldomnode.h "+_
 	"xmlsax.h "+_
 	"codetree.h "+_
@@ -222,11 +222,11 @@ privateheaders0="config.h "+_
 	"dictionary.h "+_
 	"dictionaryincludes.h "+_
 	"dictionaryinlines.h "+_
-	"dictionarynode.h "+_
-	"dynamicarray.h "+_
+	"dictionarynode.h "
+privateheaders1="dynamicarray.h "+_
 	"dynamicarrayincludes.h "+_
-	"dynamicarrayinlines.h "
-privateheaders1="staticarray.h "+_
+	"dynamicarrayinlines.h "+_
+	"staticarray.h "+_
 	"staticarrayinlines.h "+_
 	"characterincludes.h "+_
 	"charstring.h "+_
@@ -241,14 +241,14 @@ privateheaders1="staticarray.h "+_
 	"datetime.h "+_
 	"datetimeincludes.h "+_
 	"device.h "+_
-	"deviceincludes.h "+_
-	"directory.h "+_
+	"deviceincludes.h "
+privateheaders2="directory.h "+_
 	"directoryincludes.h "+_
 	"dtd.h "+_
 	"dtdincludes.h "+_
 	"dynamiclib.h "+_
-	"dynamiclibincludes.h "
-privateheaders2="environment.h "+_
+	"dynamiclibincludes.h "+_
+	"environment.h "+_
 	"environmentincludes.h "+_
 	"errorincludes.h "+_
 	"file.h "+_
@@ -261,14 +261,14 @@ privateheaders2="environment.h "+_
 	"groupentry.h "+_
 	"groupentryincludes.h "+_
 	"hostentry.h "+_
-	"hostentryincludes.h "+_
-	"inetsocketclient.h "+_
+	"hostentryincludes.h "
+privateheaders3="inetsocketclient.h "+_
 	"inetsocketclientincludes.h "+_
 	"inetsocketserver.h "+_
 	"inetsocketserverincludes.h "+_
 	"intervaltimer.h "+_
-	"intervaltimerincludes.h "
-privateheaders3="listener.h "+_
+	"intervaltimerincludes.h "+_
+	"listener.h "+_
 	"listenerincludes.h "+_
 	"filedestination.h "+_
 	"logdestination.h "+_
@@ -280,16 +280,16 @@ privateheaders3="listener.h "+_
 	"memorymap.h "+_
 	"memorymapincludes.h "+_
 	"memorypool.h "+_
-	"memorypoolincludes.h "+_
-	"modemclient.h "+_
+	"memorypoolincludes.h "
+privateheaders4="modemclient.h "+_
 	"modemclientincludes.h "+_
 	"modemserver.h "+_
 	"modemserverincludes.h "+_
 	"thread.h "+_
 	"threadincludes.h "+_
 	"threadmutex.h "+_
-	"threadmutexincludes.h "
-privateheaders4="parameterstring.h "+_
+	"threadmutexincludes.h "+_
+	"parameterstring.h "+_
 	"parameterstringincludes.h "+_
 	"userentry.h "+_
 	"userentryincludes.h "+_
@@ -300,8 +300,8 @@ privateheaders4="parameterstring.h "+_
 	"protocolentry.h "+_
 	"protocolentryincludes.h "+_
 	"randomnumber.h "+_
-	"randomnumberincludes.h "+_
-	"bytestringincludes.h "+_
+	"randomnumberincludes.h "
+privateheaders5="bytestringincludes.h "+_
 	"regularexpression.h "+_
 	"regularexpressionincludes.h "+_
 	"rpcentry.h "+_
@@ -311,16 +311,16 @@ privateheaders4="parameterstring.h "+_
 	"serialport.h "+_
 	"serialportincludes.h "+_
 	"serialportprofile.h "+_
-	"serialportprofileincludes.h "
-privateheaders5="server.h "+_
+	"serialportprofileincludes.h "+_
+	"server.h "+_
 	"serverincludes.h "+_
 	"serviceentry.h "+_
 	"serviceentryincludes.h "+_
 	"sharedmemory.h "+_
 	"sharedmemoryincludes.h "+_
 	"shmfile.h "+_
-	"shmfileincludes.h "+_
-	"signalhandler.h "+_
+	"shmfileincludes.h "
+privateheaders6="signalhandler.h "+_
 	"signalset.h "+_
 	"signalclassesincludes.h "+_
 	"snoozeincludes.h "+_
@@ -332,14 +332,14 @@ privateheaders5="server.h "+_
 	"unixsocketserver.h "+_
 	"unixsocketserverincludes.h "+_
 	"bytebuffer.h "+_
-	"bytebufferincludes.h "
-privateheaders6="xmldom.h "+_
+	"bytebufferincludes.h "+_
+	"xmldom.h "+_
 	"xmldomincludes.h "+_
 	"xmldomnode.h "+_
 	"xmldomnodeincludes.h "+_
 	"xmlsax.h "+_
-	"xmlsaxincludes.h "+_
-	"codetree.h "+_
+	"xmlsaxincludes.h "
+privateheaders7="codetree.h "+_
 	"codetreeincludes.h "+_
 	"inetsocketutil.h "+_
 	"inetsocketutilincludes.h "+_
@@ -519,7 +519,10 @@ for i=lbound(infiles) to ubound(infiles)
 	' source, object and header files
 	content=replace(content,"@SRCS@",srcs,1,-1,0)
 	content=replace(content,"@LOBJS@",lobjs,1,-1,0)
-	content=replace(content,"@HEADERS@",headers,1,-1,0)
+	content=replace(content,"@HEADERS0@",headers0,1,-1,0)
+	content=replace(content,"@HEADERS1@",headers1,1,-1,0)
+	content=replace(content,"@HEADERS2@",headers2,1,-1,0)
+	content=replace(content,"@HEADERS3@",headers3,1,-1,0)
 	content=replace(content,"@PRIVATEHEADERS0@",privateheaders0,1,-1,0)
 	content=replace(content,"@PRIVATEHEADERS1@",privateheaders1,1,-1,0)
 	content=replace(content,"@PRIVATEHEADERS2@",privateheaders2,1,-1,0)
@@ -527,6 +530,7 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@PRIVATEHEADERS4@",privateheaders4,1,-1,0)
 	content=replace(content,"@PRIVATEHEADERS5@",privateheaders5,1,-1,0)
 	content=replace(content,"@PRIVATEHEADERS6@",privateheaders6,1,-1,0)
+	content=replace(content,"@PRIVATEHEADERS7@",privateheaders7,1,-1,0)
 
 	' version
 	content=replace(content,"@RUDIMENTS_VERSION@",RUDIMENTS_VERSION,1,-1,0)
