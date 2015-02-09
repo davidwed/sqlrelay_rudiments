@@ -43,16 +43,16 @@ LIBEXT = dll
 
 # install commands
 LTINSTALL =
-CP = cscript @top_builddir@\cp.vbs
+CP = cscript /nologo @top_builddir@\cp.vbs
 CHMOD = echo
-MKINSTALLDIRS = cscript @top_builddir@\mkinstalldirs.vbs
+MKINSTALLDIRS = cscript /nologo @top_builddir@\mkinstalldirs.vbs
 LTFINISH = echo
 
 # uninstall/clean commands
 LTUNINSTALL =
 LTCLEAN =
-RM = cscript @top_builddir@\rm.vbs
-RMTREE = cscript @top_builddir@\rmtree.vbs
+RM = cscript /nologo @top_builddir@\rm.vbs
+RMTREE = cscript /nologo @top_builddir@\rmtree.vbs
 
 # ssl library
 SSLLIBS = @SSLLIBS@
