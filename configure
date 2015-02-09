@@ -636,6 +636,7 @@ LIBOBJS
 EXTRACPPFLAGS
 LOBJS
 SRCS
+PRIVATEHEADERS7
 PRIVATEHEADERS6
 PRIVATEHEADERS5
 PRIVATEHEADERS4
@@ -643,7 +644,10 @@ PRIVATEHEADERS3
 PRIVATEHEADERS2
 PRIVATEHEADERS1
 PRIVATEHEADERS0
-HEADERS
+HEADERS3
+HEADERS2
+HEADERS1
+HEADERS0
 SONAME_VERSION_INFO
 RUDIMENTS_VERSION
 GETPGIDLIB
@@ -30929,21 +30933,25 @@ SONAME_VERSION_INFO="1:0:0"
 
 
 
-HEADERS="resultcodes.h linkedlist.h singlylinkedlist.h dictionary.h dynamicarray.h staticarray.h"
-PRIVATEHEADERS0="config.h rudimentsinlines.h inttypes.h new.h"
-PRIVATEHEADERS1="winsock.h dll.h"
-PRIVATEHEADERS2="linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h linkedlistutilinlines.h"
-PRIVATEHEADERS3="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlistinlines.h singlylinkedlistnode.h"
-PRIVATEHEADERS4="dictionary.h dictionaryincludes.h dictionaryinlines.h dictionarynode.h"
-PRIVATEHEADERS5="dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h"
-PRIVATEHEADERS6="staticarray.h staticarrayinlines.h"
+HEADERS0="resultcodes.h"
+HEADERS1="linkedlist.h singlylinkedlist.h"
+HEADERS2="dictionary.h"
+HEADERS3="dynamicarray.h staticarray.h"
+PRIVATEHEADERS0="config.h"
+PRIVATEHEADERS1="rudimentsinlines.h inttypes.h new.h"
+PRIVATEHEADERS2="winsock.h dll.h"
+PRIVATEHEADERS3="linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h linkedlistutilinlines.h"
+PRIVATEHEADERS4="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlistinlines.h singlylinkedlistnode.h"
+PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h dictionarynode.h"
+PRIVATEHEADERS6="dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h"
+PRIVATEHEADERS7="staticarray.h staticarrayinlines.h"
 SRCS="winsock.cpp"
 LOBJS="winsock.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )
 then
-	HEADERS="$HEADERS character.h"
+	HEADERS1="$HEADERS1 character.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 characterincludes.h"
 	SRCS="$SRCS character.cpp"
 	LOBJS="$LOBJS character.lo"
@@ -30951,7 +30959,7 @@ fi
 
 if ( test "$INCLUDE_CHARSTRING" = "1" )
 then
-	HEADERS="$HEADERS charstring.h"
+	HEADERS1="$HEADERS1 charstring.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 charstring.h charstringincludes.h"
 	SRCS="$SRCS charstring.cpp"
 	LOBJS="$LOBJS charstring.lo"
@@ -30959,7 +30967,7 @@ fi
 
 if ( test "$INCLUDE_CHAT" = "1" )
 then
-	HEADERS="$HEADERS chat.h"
+	HEADERS1="$HEADERS1 chat.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 chat.h chatincludes.h"
 	SRCS="$SRCS chat.cpp"
 	LOBJS="$LOBJS chat.lo"
@@ -30967,7 +30975,7 @@ fi
 
 if ( test "$INCLUDE_CLIENT" = "1" )
 then
-	HEADERS="$HEADERS client.h"
+	HEADERS1="$HEADERS1 client.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 client.h clientincludes.h"
 	SRCS="$SRCS client.cpp"
 	LOBJS="$LOBJS client.lo"
@@ -30975,7 +30983,7 @@ fi
 
 if ( test "$INCLUDE_COMMANDLINE" = "1" )
 then
-	HEADERS="$HEADERS commandline.h"
+	HEADERS1="$HEADERS1 commandline.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 commandline.h commandlineincludes.h"
 	SRCS="$SRCS commandline.cpp"
 	LOBJS="$LOBJS commandline.lo"
@@ -30983,7 +30991,7 @@ fi
 
 if ( test "$INCLUDE_CRYPT" = "1" )
 then
-	HEADERS="$HEADERS crypt.h"
+	HEADERS1="$HEADERS1 crypt.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 cryptincludes.h"
 	SRCS="$SRCS crypt.cpp"
 	LOBJS="$LOBJS crypt.lo"
@@ -30991,7 +30999,7 @@ fi
 
 if ( test "$INCLUDE_DATETIME" = "1" )
 then
-	HEADERS="$HEADERS datetime.h"
+	HEADERS1="$HEADERS1 datetime.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 datetime.h datetimeincludes.h"
 	SRCS="$SRCS datetime.cpp"
 	LOBJS="$LOBJS datetime.lo"
@@ -30999,7 +31007,7 @@ fi
 
 if ( test "$INCLUDE_DEVICE" = "1" )
 then
-	HEADERS="$HEADERS device.h"
+	HEADERS1="$HEADERS1 device.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 device.h deviceincludes.h"
 	SRCS="$SRCS device.cpp"
 	LOBJS="$LOBJS device.lo"
@@ -31007,7 +31015,7 @@ fi
 
 if ( test "$INCLUDE_DIRECTORY" = "1" )
 then
-	HEADERS="$HEADERS directory.h"
+	HEADERS1="$HEADERS1 directory.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 directory.h directoryincludes.h"
 	SRCS="$SRCS directory.cpp"
 	LOBJS="$LOBJS directory.lo"
@@ -31015,7 +31023,7 @@ fi
 
 if ( test "$INCLUDE_DTD" = "1" )
 then
-	HEADERS="$HEADERS dtd.h"
+	HEADERS1="$HEADERS1 dtd.h"
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 dtd.h dtdincludes.h"
 	SRCS="$SRCS dtd.cpp"
 	LOBJS="$LOBJS dtd.lo"
@@ -31023,7 +31031,7 @@ fi
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )
 then
-	HEADERS="$HEADERS dynamiclib.h"
+	HEADERS1="$HEADERS1 dynamiclib.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 dynamiclib.h dynamiclibincludes.h"
 	SRCS="$SRCS dynamiclib.cpp"
 	LOBJS="$LOBJS dynamiclib.lo"
@@ -31031,7 +31039,7 @@ fi
 
 if ( test "$INCLUDE_ENVIRONMENT" = "1" )
 then
-	HEADERS="$HEADERS environment.h"
+	HEADERS1="$HEADERS1 environment.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 environment.h environmentincludes.h"
 	SRCS="$SRCS environment.cpp"
 	LOBJS="$LOBJS environment.lo"
@@ -31039,7 +31047,7 @@ fi
 
 if ( test "$INCLUDE_ERROR" = "1" )
 then
-	HEADERS="$HEADERS error.h"
+	HEADERS1="$HEADERS1 error.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 errorincludes.h"
 	SRCS="$SRCS error.cpp"
 	LOBJS="$LOBJS error.lo"
@@ -31047,7 +31055,7 @@ fi
 
 if ( test "$INCLUDE_FILE" = "1" )
 then
-	HEADERS="$HEADERS file.h"
+	HEADERS1="$HEADERS1 file.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 file.h fileincludes.h"
 	SRCS="$SRCS file.cpp"
 	LOBJS="$LOBJS file.lo"
@@ -31055,7 +31063,7 @@ fi
 
 if ( test "$INCLUDE_FILEDESCRIPTOR" = "1" )
 then
-	HEADERS="$HEADERS filedescriptor.h stdio.h"
+	HEADERS1="$HEADERS1 filedescriptor.h stdio.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 filedescriptor.h filedescriptorincludes.h stdio.h"
 	SRCS="$SRCS filedescriptor.cpp stdio.cpp"
 	LOBJS="$LOBJS filedescriptor.lo stdio.lo"
@@ -31063,7 +31071,7 @@ fi
 
 if ( test "$INCLUDE_FILESYSTEM" = "1" )
 then
-	HEADERS="$HEADERS filesystem.h"
+	HEADERS1="$HEADERS1 filesystem.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 filesystem.h filesystemincludes.h"
 	SRCS="$SRCS filesystem.cpp"
 	LOBJS="$LOBJS filesystem.lo"
@@ -31071,7 +31079,7 @@ fi
 
 if ( test "$INCLUDE_GROUPENTRY" = "1" )
 then
-	HEADERS="$HEADERS groupentry.h"
+	HEADERS1="$HEADERS1 groupentry.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 groupentry.h groupentryincludes.h"
 	SRCS="$SRCS groupentry.cpp"
 	LOBJS="$LOBJS groupentry.lo"
@@ -31079,7 +31087,7 @@ fi
 
 if ( test "$INCLUDE_HOSTENTRY" = "1" )
 then
-	HEADERS="$HEADERS hostentry.h"
+	HEADERS1="$HEADERS1 hostentry.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 hostentry.h hostentryincludes.h"
 	SRCS="$SRCS hostentry.cpp"
 	LOBJS="$LOBJS hostentry.lo"
@@ -31087,7 +31095,7 @@ fi
 
 if ( test "$INCLUDE_INETCLIENT" = "1" )
 then
-	HEADERS="$HEADERS inetsocketclient.h"
+	HEADERS1="$HEADERS1 inetsocketclient.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 inetsocketclient.h inetsocketclientincludes.h"
 	SRCS="$SRCS inetsocketclient.cpp"
 	LOBJS="$LOBJS inetsocketclient.lo"
@@ -31096,7 +31104,7 @@ fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" )
 then
-	HEADERS="$HEADERS inetsocketserver.h"
+	HEADERS1="$HEADERS1 inetsocketserver.h"
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 inetsocketserver.h inetsocketserverincludes.h"
 	SRCS="$SRCS inetsocketserver.cpp"
 	LOBJS="$LOBJS inetsocketserver.lo"
@@ -31105,7 +31113,7 @@ fi
 
 if ( test "$INCLUDE_INTERVALTIMER" = "1" )
 then
-	HEADERS="$HEADERS intervaltimer.h"
+	HEADERS1="$HEADERS1 intervaltimer.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 intervaltimer.h intervaltimerincludes.h"
 	SRCS="$SRCS intervaltimer.cpp"
 	LOBJS="$LOBJS intervaltimer.lo"
@@ -31113,7 +31121,7 @@ fi
 
 if ( test "$INCLUDE_LISTENER" = "1" )
 then
-	HEADERS="$HEADERS listener.h"
+	HEADERS1="$HEADERS1 listener.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 listener.h listenerincludes.h"
 	SRCS="$SRCS listener.cpp"
 	LOBJS="$LOBJS listener.lo"
@@ -31121,7 +31129,7 @@ fi
 
 if ( test "$INCLUDE_LOGGER" = "1" )
 then
-	HEADERS="$HEADERS logger.h"
+	HEADERS1="$HEADERS1 logger.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 filedestination.h logdestination.h logger.h stderrdestination.h stdoutdestination.h syslogdestination.h loggerincludes.h"
 	SRCS="$SRCS logger.cpp"
 	LOBJS="$LOBJS logger.lo"
@@ -31129,7 +31137,7 @@ fi
 
 if ( test "$INCLUDE_MATH" = "1" )
 then
-	HEADERS="$HEADERS math.h"
+	HEADERS1="$HEADERS1 math.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 mathincludes.h mathinlines.h"
 	SRCS="$SRCS math.cpp"
 	LOBJS="$LOBJS math.lo"
@@ -31137,7 +31145,7 @@ fi
 
 if ( test "$INCLUDE_MEMORYMAP" = "1" )
 then
-	HEADERS="$HEADERS memorymap.h"
+	HEADERS1="$HEADERS1 memorymap.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 memorymap.h memorymapincludes.h"
 	SRCS="$SRCS memorymap.cpp"
 	LOBJS="$LOBJS memorymap.lo"
@@ -31145,7 +31153,7 @@ fi
 
 if ( test "$INCLUDE_MEMORYPOOL" = "1" )
 then
-	HEADERS="$HEADERS memorypool.h"
+	HEADERS1="$HEADERS1 memorypool.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 memorypool.h memorypoolincludes.h"
 	SRCS="$SRCS memorypool.cpp"
 	LOBJS="$LOBJS memorypool.lo"
@@ -31153,7 +31161,7 @@ fi
 
 if ( test "$INCLUDE_MODEMCLIENT" = "1" )
 then
-	HEADERS="$HEADERS modemclient.h"
+	HEADERS1="$HEADERS1 modemclient.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 modemclient.h modemclientincludes.h"
 	SRCS="$SRCS modemclient.cpp"
 	LOBJS="$LOBJS modemclient.lo"
@@ -31162,7 +31170,7 @@ fi
 
 if ( test "$INCLUDE_MODEMSERVER" = "1" )
 then
-	HEADERS="$HEADERS modemserver.h"
+	HEADERS1="$HEADERS1 modemserver.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 modemserver.h modemserverincludes.h"
 	SRCS="$SRCS modemserver.cpp"
 	LOBJS="$LOBJS modemserver.lo"
@@ -31171,7 +31179,7 @@ fi
 
 if ( test "$INCLUDE_THREAD" = "1" )
 then
-	HEADERS="$HEADERS thread.h"
+	HEADERS1="$HEADERS1 thread.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 thread.h threadincludes.h"
 	SRCS="$SRCS thread.cpp"
 	LOBJS="$LOBJS thread.lo"
@@ -31179,7 +31187,7 @@ fi
 
 if ( test "$INCLUDE_THREADMUTEX" = "1" )
 then
-	HEADERS="$HEADERS threadmutex.h"
+	HEADERS1="$HEADERS1 threadmutex.h"
 	PRIVATEHEADERS3="$PRIVATEHEADERS3 threadmutex.h threadmutexincludes.h"
 	SRCS="$SRCS threadmutex.cpp"
 	LOBJS="$LOBJS threadmutex.lo"
@@ -31187,7 +31195,7 @@ fi
 
 if ( test "$INCLUDE_PARAMETERSTRING" = "1" )
 then
-	HEADERS="$HEADERS parameterstring.h"
+	HEADERS2="$HEADERS2 parameterstring.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 parameterstring.h parameterstringincludes.h"
 	SRCS="$SRCS parameterstring.cpp"
 	LOBJS="$LOBJS parameterstring.lo"
@@ -31195,7 +31203,7 @@ fi
 
 if ( test "$INCLUDE_USERENTRY" = "1" )
 then
-	HEADERS="$HEADERS userentry.h"
+	HEADERS2="$HEADERS2 userentry.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 userentry.h userentryincludes.h"
 	SRCS="$SRCS userentry.cpp"
 	LOBJS="$LOBJS userentry.lo"
@@ -31203,7 +31211,7 @@ fi
 
 if ( test "$INCLUDE_PERMISSIONS" = "1" )
 then
-	HEADERS="$HEADERS permissions.h"
+	HEADERS2="$HEADERS2 permissions.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 permissions.h permissionsincludes.h"
 	SRCS="$SRCS permissions.cpp"
 	LOBJS="$LOBJS permissions.lo"
@@ -31211,7 +31219,7 @@ fi
 
 if ( test "$INCLUDE_PROCESS" = "1" )
 then
-	HEADERS="$HEADERS process.h"
+	HEADERS2="$HEADERS2 process.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 process.h processincludes.h"
 	SRCS="$SRCS process.cpp"
 	LOBJS="$LOBJS process.lo"
@@ -31219,7 +31227,7 @@ fi
 
 if ( test "$INCLUDE_PROTOCOLENTRY" = "1" )
 then
-	HEADERS="$HEADERS protocolentry.h"
+	HEADERS2="$HEADERS2 protocolentry.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 protocolentry.h protocolentryincludes.h"
 	SRCS="$SRCS protocolentry.cpp"
 	LOBJS="$LOBJS protocolentry.lo"
@@ -31227,7 +31235,7 @@ fi
 
 if ( test "$INCLUDE_RANDOMNUMBER" = "1" )
 then
-	HEADERS="$HEADERS randomnumber.h"
+	HEADERS2="$HEADERS2 randomnumber.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 randomnumber.h randomnumberincludes.h"
 	SRCS="$SRCS randomnumber.cpp"
 	LOBJS="$LOBJS randomnumber.lo"
@@ -31235,7 +31243,7 @@ fi
 
 if ( test "$INCLUDE_BYTESTRING" = "1" )
 then
-	HEADERS="$HEADERS bytestring.h"
+	HEADERS2="$HEADERS2 bytestring.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 bytestringincludes.h"
 	SRCS="$SRCS bytestring.cpp"
 	LOBJS="$LOBJS bytestring.lo"
@@ -31243,7 +31251,7 @@ fi
 
 if ( test "$INCLUDE_REGULAREXPRESSION" = "1" )
 then
-	HEADERS="$HEADERS regularexpression.h"
+	HEADERS2="$HEADERS2 regularexpression.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 regularexpression.h regularexpressionincludes.h"
 	SRCS="$SRCS regularexpression.cpp"
 	LOBJS="$LOBJS regularexpression.lo"
@@ -31257,7 +31265,7 @@ fi
 
 if ( test "$INCLUDE_RPCENTRY" = "1" )
 then
-	HEADERS="$HEADERS rpcentry.h"
+	HEADERS2="$HEADERS2 rpcentry.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 rpcentry.h rpcentryincludes.h"
 	SRCS="$SRCS rpcentry.cpp"
 	LOBJS="$LOBJS rpcentry.lo"
@@ -31265,7 +31273,7 @@ fi
 
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )
 then
-	HEADERS="$HEADERS semaphoreset.h"
+	HEADERS2="$HEADERS2 semaphoreset.h"
 	PRIVATEHEADERS4="$PRIVATEHEADERS4 semaphoreset.h semaphoresetincludes.h"
 	SRCS="$SRCS semaphoreset.cpp"
 	LOBJS="$LOBJS semaphoreset.lo"
@@ -31273,7 +31281,7 @@ fi
 
 if ( test "$INCLUDE_SERIALPORT" = "1" )
 then
-	HEADERS="$HEADERS serialport.h"
+	HEADERS2="$HEADERS2 serialport.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 serialport.h serialportincludes.h"
 	SRCS="$SRCS serialport.cpp"
 	LOBJS="$LOBJS serialport.lo"
@@ -31281,7 +31289,7 @@ fi
 
 if ( test "$INCLUDE_SERIALPORTPROFILE" = "1" )
 then
-	HEADERS="$HEADERS serialportprofile.h"
+	HEADERS2="$HEADERS2 serialportprofile.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 serialportprofile.h serialportprofileincludes.h"
 	SRCS="$SRCS serialportprofile.cpp"
 	LOBJS="$LOBJS serialportprofile.lo"
@@ -31289,7 +31297,7 @@ fi
 
 if ( test "$INCLUDE_SERVER" = "1" )
 then
-	HEADERS="$HEADERS server.h"
+	HEADERS2="$HEADERS2 server.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 server.h serverincludes.h"
 	SRCS="$SRCS server.cpp"
 	LOBJS="$LOBJS server.lo"
@@ -31297,7 +31305,7 @@ fi
 
 if ( test "$INCLUDE_SERVICEENTRY" = "1" )
 then
-	HEADERS="$HEADERS serviceentry.h"
+	HEADERS2="$HEADERS2 serviceentry.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 serviceentry.h serviceentryincludes.h"
 	SRCS="$SRCS serviceentry.cpp"
 	LOBJS="$LOBJS serviceentry.lo"
@@ -31305,7 +31313,7 @@ fi
 
 if ( test "$INCLUDE_SHAREDMEMORY" = "1" )
 then
-	HEADERS="$HEADERS sharedmemory.h"
+	HEADERS2="$HEADERS2 sharedmemory.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 sharedmemory.h sharedmemoryincludes.h"
 	SRCS="$SRCS sharedmemory.cpp"
 	LOBJS="$LOBJS sharedmemory.lo"
@@ -31313,7 +31321,7 @@ fi
 
 if ( test "$INCLUDE_SHMFILE" = "1" )
 then
-	HEADERS="$HEADERS shmfile.h"
+	HEADERS2="$HEADERS2 shmfile.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 shmfile.h shmfileincludes.h"
 	SRCS="$SRCS shmfile.cpp"
 	LOBJS="$LOBJS shmfile.lo"
@@ -31321,7 +31329,7 @@ fi
 
 if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
 then
-	HEADERS="$HEADERS signalclasses.h"
+	HEADERS2="$HEADERS2 signalclasses.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 signalhandler.h signalset.h signalclassesincludes.h"
 	SRCS="$SRCS signalclasses.cpp"
 	LOBJS="$LOBJS signalclasses.lo"
@@ -31329,7 +31337,7 @@ fi
 
 if ( test "$INCLUDE_SNOOZE" = "1" )
 then
-	HEADERS="$HEADERS snooze.h"
+	HEADERS2="$HEADERS2 snooze.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 snoozeincludes.h"
 	SRCS="$SRCS snooze.cpp"
 	LOBJS="$LOBJS snooze.lo"
@@ -31337,7 +31345,7 @@ fi
 
 if ( test "$INCLUDE_STRINGBUFFER" = "1" )
 then
-	HEADERS="$HEADERS stringbuffer.h"
+	HEADERS2="$HEADERS2 stringbuffer.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 stringbuffer.h stringbufferincludes.h"
 	SRCS="$SRCS stringbuffer.cpp"
 	LOBJS="$LOBJS stringbuffer.lo"
@@ -31345,7 +31353,7 @@ fi
 
 if ( test "$INCLUDE_SYSTEM" = "1" )
 then
-	HEADERS="$HEADERS sys.h"
+	HEADERS2="$HEADERS2 sys.h"
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 sysincludes.h"
 	SRCS="$SRCS sys.cpp"
 	LOBJS="$LOBJS sys.lo"
@@ -31353,7 +31361,7 @@ fi
 
 if ( test "$INCLUDE_UNIXCLIENT" = "1" )
 then
-	HEADERS="$HEADERS unixsocketclient.h"
+	HEADERS3="$HEADERS3 unixsocketclient.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 unixsocketclient.h unixsocketclientincludes.h"
 	SRCS="$SRCS unixsocketclient.cpp"
 	LOBJS="$LOBJS unixsocketclient.lo"
@@ -31362,7 +31370,7 @@ fi
 
 if ( test "$INCLUDE_UNIXSERVER" = "1" )
 then
-	HEADERS="$HEADERS unixsocketserver.h"
+	HEADERS3="$HEADERS3 unixsocketserver.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 unixsocketserver.h unixsocketserverincludes.h"
 	SRCS="$SRCS unixsocketserver.cpp"
 	LOBJS="$LOBJS unixsocketserver.lo"
@@ -31371,7 +31379,7 @@ fi
 
 if ( test "$INCLUDE_BYTEBUFFER" = "1" )
 then
-	HEADERS="$HEADERS bytebuffer.h"
+	HEADERS3="$HEADERS3 bytebuffer.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 bytebuffer.h bytebufferincludes.h"
 	SRCS="$SRCS bytebuffer.cpp"
 	LOBJS="$LOBJS bytebuffer.lo"
@@ -31379,7 +31387,7 @@ fi
 
 if ( test "$INCLUDE_XMLDOM" = "1" )
 then
-	HEADERS="$HEADERS xmldom.h xmldomnode.h"
+	HEADERS3="$HEADERS3 xmldom.h xmldomnode.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldom.h xmldomincludes.h xmldomnode.h xmldomnodeincludes.h"
 	SRCS="$SRCS xmldom.cpp xmldomnode.cpp"
 	LOBJS="$LOBJS xmldom.lo xmldomnode.lo"
@@ -31387,7 +31395,7 @@ fi
 
 if ( test "$INCLUDE_XMLSAX" = "1" )
 then
-	HEADERS="$HEADERS xmlsax.h"
+	HEADERS3="$HEADERS3 xmlsax.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmlsax.h xmlsaxincludes.h"
 	SRCS="$SRCS xmlsax.cpp"
 	LOBJS="$LOBJS xmlsax.lo"
@@ -31395,7 +31403,7 @@ fi
 
 if ( test "$INCLUDE_CODETREE" = "1" )
 then
-	HEADERS="$HEADERS codetree.h"
+	HEADERS3="$HEADERS3 codetree.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 codetree.h codetreeincludes.h"
 	SRCS="$SRCS codetree.cpp"
 	LOBJS="$LOBJS codetree.lo"
@@ -31403,7 +31411,7 @@ fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_INETCLIENT" = "1" )
 then
-	HEADERS="$HEADERS inetsocketutil.h"
+	HEADERS3="$HEADERS3 inetsocketutil.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 inetsocketutil.h inetsocketutilincludes.h"
 	SRCS="$SRCS inetsocketutil.cpp"
 	LOBJS="$LOBJS inetsocketutil.lo"
@@ -31411,7 +31419,7 @@ fi
 
 if ( test "$INCLUDE_UNIXSERVER" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
 then
-	HEADERS="$HEADERS unixsocketutil.h"
+	HEADERS3="$HEADERS3 unixsocketutil.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 unixsocketutil.h unixsocketutilincludes.h"
 	SRCS="$SRCS unixsocketutil.cpp"
 	LOBJS="$LOBJS unixsocketutil.lo"
@@ -31419,7 +31427,7 @@ fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_UNIXSERVER" = "1" )
 then
-	HEADERS="$HEADERS socketserver.h"
+	HEADERS3="$HEADERS3 socketserver.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 socketserver.h socketserverincludes.h"
 	SRCS="$SRCS socketserver.cpp"
 	LOBJS="$LOBJS socketserver.lo"
@@ -31427,7 +31435,7 @@ fi
 
 if ( test "$INCLUDE_INETCLIENT" = "1" -o "$INCLUDE_UNIXCLIENT" = "1" )
 then
-	HEADERS="$HEADERS socketclient.h"
+	HEADERS3="$HEADERS3 socketclient.h"
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 socketclient.h socketclientincludes.h"
 	SRCS="$SRCS socketclient.cpp"
 	LOBJS="$LOBJS socketclient.lo"
@@ -31439,6 +31447,10 @@ then
 	SRCS="$SRCS modemutil.cpp"
 	LOBJS="$LOBJS modemutil.lo"
 fi
+
+
+
+
 
 
 
