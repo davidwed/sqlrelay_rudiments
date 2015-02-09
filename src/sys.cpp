@@ -949,34 +949,40 @@ int64_t sys::getCpuSetSize() {
 	#if defined(_SC_CPUSET_SIZE)
 		return sysConf(_SC_CPUSET_SIZE);
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+        	#if _WIN32_WINNT>=0x0501
 
-		// 0 for 32-bit systems
-		SYSTEM_INFO	sysinfo;
-		GetNativeSystemInfo((LPSYSTEM_INFO)&sysinfo);
-		if (sysinfo.wProcessorArchitecture!=
-				PROCESSOR_ARCHITECTURE_AMD64 &&
-			sysinfo.wProcessorArchitecture!=
-				PROCESSOR_ARCHITECTURE_IA64) {
-			return 0;
-		}
-
-		// 64 on 64-bit Windows 7 and Windows Server 2008 R2 and up
-		// 0 on older versions...
-
-		// get the os version info
-		// (yes, this craziness is how you have to do it)
-		OSVERSIONINFOEX	info;
-		bytestring::zero(&info,sizeof(info));
-		info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
-		if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
-			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
-			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
-				return -1;
+			// 0 for 32-bit systems
+			SYSTEM_INFO	sysinfo;
+			GetNativeSystemInfo((LPSYSTEM_INFO)&sysinfo);
+			if (sysinfo.wProcessorArchitecture!=
+					PROCESSOR_ARCHITECTURE_AMD64 &&
+				sysinfo.wProcessorArchitecture!=
+					PROCESSOR_ARCHITECTURE_IA64) {
+				return 0;
 			}
-		}
 
-		// Windows 7 and 2008R2 are 6.1
-		return (info.dwMajorVersion>=6 && info.dwMinorVersion>=1)?64:0;
+			// 64 on 64-bit Windows 7 and Windows Server 2008 R2
+			// and up 0 on older versions...
+
+			// get the os version info
+			// (yes, this craziness is how you have to do it)
+			OSVERSIONINFOEX	info;
+			bytestring::zero(&info,sizeof(info));
+			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
+			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+				info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
+				if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
+					return -1;
+				}
+			}
+
+			// Windows 7 and 2008R2 are 6.1
+			return (info.dwMajorVersion>=6 &&
+					info.dwMinorVersion>=1)?64:0;
+		#else
+			// 0 for systems older than WinXP
+			return 0;
+		#endif
 	#else
 		error::setErrorNumber(ENOSYS);
 		return -1;
