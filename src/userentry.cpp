@@ -519,6 +519,8 @@ bool userentry::initialize(const char *username, uid_t userid) {
 
 #else
 
+	#if _WIN32_WINNT>=0x0500
+
 	delete[] pvt->_name;
 	pvt->_name=NULL;
 	pvt->_primarygroupid=-1;
@@ -601,6 +603,13 @@ bool userentry::initialize(const char *username, uid_t userid) {
 		return false;
 	}
 	return true;
+
+	#else
+
+	// FIXME: implement for WinNT
+	return false;
+
+	#endif
 #endif
 }
 

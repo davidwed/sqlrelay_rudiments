@@ -314,6 +314,8 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
 #else
 
+	#if _WIN32_WINNT>=0x0500
+
 	// clear old buffers
 	delete[] pvt->_name;
 	pvt->_name=NULL;
@@ -405,6 +407,13 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		return false;
 	}
 	return true;
+
+	#else
+
+	// FIXME: implement for WinNT
+	return false;
+
+	#endif
 #endif
 }
 

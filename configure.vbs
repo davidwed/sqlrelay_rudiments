@@ -419,11 +419,16 @@ end if
 set cmd=WshShell.exec("%comspec% /c ver")
 stdout=cmd.StdOut.ReadAll()
 stderr=cmd.StdErr.ReadLine()
-parts0=split(stdout,"[")
-parts1=split(parts0(1)," ")
-parts2=split(parts1(1),"]")
-parts3=split(parts2(0),".")
-hexversion="0x0"&parts3(0)&"0"&parts3(1)
+hexversion=""
+if instr(stdout,"Windows NT Version 4.0")>0 then
+	hexversion="0x0400"
+else
+	parts0=split(stdout,"[")
+	parts1=split(parts0(1)," ")
+	parts2=split(parts1(1),"]")
+	parts3=split(parts2(0),".")
+	hexversion="0x0"&parts3(0)&"0"&parts3(1)
+end if
 
 ' in general, we need to set WIN32WINNT to the hexversion
 WINVER=""

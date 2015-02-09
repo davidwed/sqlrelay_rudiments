@@ -277,6 +277,7 @@ void file::openInternal(const char *name, int32_t flags,
 					FILE_SHARE_WRITE,
 					&satt,cdisp,attrs,NULL);
 		LocalFree(psd);
+		LocalFree(dacl);
 
 		#else
 
@@ -288,7 +289,6 @@ void file::openInternal(const char *name, int32_t flags,
 					NULL,cdisp,attrs,NULL);
 		#endif
 
-		LocalFree(dacl);
 		if (fh==INVALID_HANDLE_VALUE) {
 			fd(-1);
 			return;
@@ -1093,6 +1093,8 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
+		#if _WIN32_WINNT>=0x0500
+
 		// get the file handle
 		HANDLE	fh=(HANDLE)getHandleFromFileDescriptor(fd());
 		if (fh==INVALID_HANDLE_VALUE) {
@@ -1188,6 +1190,13 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 		LocalFree(newsdesc);
 		CloseHandle(th);
 		return true;
+
+		#else
+
+		// FIXME: implement for WinNT
+		return false;
+
+		#endif
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

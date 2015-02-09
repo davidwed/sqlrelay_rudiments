@@ -73,6 +73,7 @@ pid_t process::getParentProcessId() {
 	#ifdef RUDIMENTS_HAVE_GETPPID
 		return getppid();
 	#elif RUDIMENTS_HAVE_PROCESS32FIRST
+		#if _WIN32_WINNT>=0x0500
 		HANDLE	snap=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
 		if (snap==INVALID_HANDLE_VALUE) {
 			return -1;
@@ -91,6 +92,10 @@ pid_t process::getParentProcessId() {
 		}
 		CloseHandle(snap);
 		return ppid;
+		#else
+		// FIXME: implement for WinNT
+		return 0;
+		#endif
 	#else
 		#error no getppid or anything like it
 	#endif

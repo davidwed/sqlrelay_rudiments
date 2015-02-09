@@ -376,6 +376,8 @@ void sys::sync() {
 #if defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
 static bool shutDownWindows(bool reboot) {
 
+	#if _WIN32_WINNT>=0x0600
+
 	// make sure the curernt thread has permissions
 	// to shut down the system...
 
@@ -415,6 +417,13 @@ static bool shutDownWindows(bool reboot) {
 			SHTDN_REASON_MAJOR_OTHER|
 			SHTDN_REASON_MINOR_OTHER|
 			SHTDN_REASON_FLAG_PLANNED)!=0;
+
+	#else
+
+	// FIXME: implement for platforms prior to Vista
+	return false;
+
+	#endif
 }
 #endif
 
