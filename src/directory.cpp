@@ -26,8 +26,6 @@
 	#include <sys/stat.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
-	// for SetSecurityDescriptorControl
-	#define _WIN32_WINNT 0x0500
 	#include <windows.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SDDL_H
@@ -280,6 +278,8 @@ char *directory::getChildName(uint64_t index) {
 bool directory::create(const char *path, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_CREATEDIRECTORY)
 
+		#if _WIN32_WINNT>=0x0500
+
 		// create security descriptor
 		PSECURITY_DESCRIPTOR	psd=
 			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,
@@ -311,6 +311,13 @@ bool directory::create(const char *path, mode_t perms) {
 		// clean up
 		LocalFree(dacl);
 		LocalFree(psd);
+
+		#else
+
+		// create directory
+		bool	retval=(CreateDirectory(path,NULL)==TRUE);
+
+		#endif
 
 		return retval;
 	#else

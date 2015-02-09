@@ -19,8 +19,6 @@
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
-	// for Create/DeleteTimerQueueTimer
-	#define _WIN32_WINNT 0x0500
 	#include <windows.h>
 #endif
 
@@ -611,6 +609,7 @@ VOID signalhandlerprivate::_alarmHandler(PVOID parameter,
 
 uint32_t signalmanager::alarm(uint32_t seconds) {
 	#if defined(RUDIMENTS_HAVE_CREATETIMERQUEUETIMER)
+		#if _WIN32_WINNT>=0x0500
 		if (signalhandlerprivate::_timer!=INVALID_HANDLE_VALUE) {
 			DeleteTimerQueueTimer(
 				NULL,signalhandlerprivate::_timer,NULL);
@@ -625,6 +624,9 @@ uint32_t signalmanager::alarm(uint32_t seconds) {
 			// FIXME: there ought to be some way to return failure
 			return 0;
 		}
+		#else
+			// FIXME: how to do this on older windows?
+		#endif
 		return 0;
 	#elif defined(RUDIMENTS_HAVE_ALARM)
 		return ::alarm(seconds);

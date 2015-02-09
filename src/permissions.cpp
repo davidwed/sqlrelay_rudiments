@@ -17,8 +17,6 @@
 	#include <stdlib.h>
 #endif
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
-	// for SetSecurityDescriptorControl
-	#define _WIN32_WINNT 0x0500
 	#include <windows.h>
 #endif
 #ifdef RUDIMENTS_HAVE_SYS_STAT_H

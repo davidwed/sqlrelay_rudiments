@@ -10,11 +10,6 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 
-#ifdef _WIN32
-        // for GetNativeSystemInfo
-        #define _WIN32_WINNT 0x0501
-#endif
-
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -162,26 +157,29 @@ char *sys::getOperatingSystemArchitecture() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
 	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
+        	#if _WIN32_WINNT>=0x0501
+			SYSTEM_INFO	info;
+			GetNativeSystemInfo((LPSYSTEM_INFO)&info);
 
-		SYSTEM_INFO	info;
-		GetNativeSystemInfo((LPSYSTEM_INFO)&info);
-
-		char	*arch=NULL;
-		switch (info.wProcessorArchitecture) {
-			case PROCESSOR_ARCHITECTURE_AMD64:
-				arch=charstring::duplicate("amd64");
-				break;
-			case PROCESSOR_ARCHITECTURE_IA64:
-				arch=charstring::duplicate("x86_64");
-				break;
-			case PROCESSOR_ARCHITECTURE_INTEL:
-				arch=charstring::duplicate("x86");
-				break;
-			case PROCESSOR_ARCHITECTURE_UNKNOWN:
-				arch=charstring::duplicate("Unknown");
-				break;
-		}
-		return arch;
+			char	*arch=NULL;
+			switch (info.wProcessorArchitecture) {
+				case PROCESSOR_ARCHITECTURE_AMD64:
+					arch=charstring::duplicate("amd64");
+					break;
+				case PROCESSOR_ARCHITECTURE_IA64:
+					arch=charstring::duplicate("x86_64");
+					break;
+				case PROCESSOR_ARCHITECTURE_INTEL:
+					arch=charstring::duplicate("x86");
+					break;
+				case PROCESSOR_ARCHITECTURE_UNKNOWN:
+					arch=charstring::duplicate("Unknown");
+					break;
+			}
+			return arch;
+		#else
+			return charstring::duplicate("x86");
+		#endif
 	#else
 		error::setErrorNumber(ENOSYS);
 		return NULL;

@@ -424,12 +424,47 @@ parts1=split(parts0(1)," ")
 parts2=split(parts1(1),"]")
 parts3=split(parts2(0),".")
 hexversion="0x0"&parts3(0)&"0"&parts3(1)
-winver=""
-win32windows=""
-win32winnt=hexversion
 
-wscript.echo stdout
-wscript.echo hexversion
+' in general, we need to set WIN32WINNT to the hexversion
+WINVER=""
+WIN32WINDOWS=""
+WIN32WINNT=hexversion
+
+' but, for OS'es older than WinXP we have to do some special things...
+
+' for Win2k and WinNT4, set WINVER also
+if hexversion="0x0500" or hexversion="0x0400" then
+	WINVER=hexversion
+
+' for WinME, set WIN32WINDOWS and unset WIN32WINNT
+elseif hexversion="0x0490" then
+	WIN32WINDOWS=hexversion
+	WIN32WINNT=""
+
+' for Win98, set WIN32WINDOWS and WINVER and unset WIN32WINNT
+elseif hexversion="0x0410" then
+	WIN32WINDOWS=hexversion
+	WINVER=hexversion
+	WIN32WINNT=""
+
+' for Win95, set WINVER and unset WIN32WINNT
+elseif hexversion="0x0400" then
+	WINVER=hexversion
+	WIN32WINNT=""
+
+' FIXME: not sure about WinNT3X, Win3X or below
+end if
+
+' add /D and macro name
+if WINVER<>"" then
+	WINVER="/D WINVER="&WINVER
+end if
+if WIN32WINDOWS<>"" then
+	WIN32WINDOWS="/D _WIN32_WINDOWS="&WIN32WINDOWS
+end if
+if WIN32WINNT<>"" then
+	WIN32WINNT="/D _WIN32_WINNT="&WIN32WINNT
+end if
 
 
 
@@ -569,6 +604,9 @@ for i=lbound(infiles) to ubound(infiles)
 	content=replace(content,"@DEBUGLDFLAGS@",DEBUGLDFLAGS,1,-1,0)
 	content=replace(content,"@_USE_32BIT_TIME_T@",USE_32BIT_TIME_T,1,-1,0)
 	content=replace(content,"@SDKINCLUDES@",SDKINCLUDES,1,-1,0)
+	content=replace(content,"@WINVER@",WINVER,1,-1,0)
+	content=replace(content,"@WIN32WINDOWS@",WIN32WINDOWS,1,-1,0)
+	content=replace(content,"@WIN32WINNT@",WIN32WINNT,1,-1,0)
 
 	' libraries
 	content=replace(content,"@SOCKETLIBS@",SOCKETLIBS,1,-1,0)
