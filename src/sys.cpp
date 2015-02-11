@@ -376,7 +376,7 @@ void sys::sync() {
 #if defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
 static bool shutDownWindows(bool reboot) {
 
-	#if _WIN32_WINNT>=0x0600
+	#if _WIN32_WINNT>=0x0501
 
 	// make sure the curernt thread has permissions
 	// to shut down the system...
