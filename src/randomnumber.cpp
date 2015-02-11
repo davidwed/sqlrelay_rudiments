@@ -39,7 +39,7 @@ randomnumber::randomnumber() {
 	pvt=new randomnumberprivate;
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		#if _WIN32_WINNT>=0x0500
+		#if _WIN32_WINNT>=0x0501
 		pvt->hprov=NULL;
 		pvt->acquired=CryptAcquireContext(
 					&pvt->hprov,NULL,
@@ -57,7 +57,7 @@ randomnumber::randomnumber() {
 randomnumber::~randomnumber() {
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		#if _WIN32_WINNT>=0x0500
+		#if _WIN32_WINNT>=0x0501
 		if (pvt->acquired) {
 			CryptReleaseContext(pvt->hprov,0);
 		}
@@ -124,7 +124,7 @@ bool randomnumber::setSeed(uint32_t seed) {
 bool randomnumber::generateNumber(uint32_t *result) {
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		#if _WIN32_WINNT>=0x0500
+		#if _WIN32_WINNT>=0x0501
 		if (pvt->acquired &&
 			CryptGenRandom(pvt->hprov,4,(BYTE *)&pvt->seed)) {
 			*result=pvt->seed;

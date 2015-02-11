@@ -427,6 +427,9 @@ else
 	parts1=split(parts0(1)," ")
 	parts2=split(parts1(1),"]")
 	parts3=split(parts2(0),".")
+	if parts3(1)="00" then
+		parts3(1)="0"
+	end if
 	hexversion="0x0"&parts3(0)&"0"&parts3(1)
 end if
 

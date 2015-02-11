@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #ifdef _WIN32
-	const char	*ls="icacls tempfile";
+	const char	*ls="cacls tempfile";
 #else
 	const char	*ls="ls -l tempfile";
 #endif
