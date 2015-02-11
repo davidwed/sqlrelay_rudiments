@@ -9,7 +9,9 @@ int main(int argc, const char **argv) {
 
 	// display the contents of xmls.xml
 	xmldom	x;
-	x.parseFile("xmls.xml");
+	if (!x.parseFile("xmls.xml")) {
+		stdoutput.printf("failed to parse xmls.xml\n");
+	}
 
 	xmldomnode	*testnode=x.getRootNode()->getFirstTagChild("test");
 	testnode->deleteChild(1);

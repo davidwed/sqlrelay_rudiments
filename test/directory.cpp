@@ -34,6 +34,7 @@ int main(int argc, const char **argv) {
 	}
 
 	stdoutput.printf("%lld entries\n",d.getChildCount());
+	d.close();
 
 	char	*cwd=directory::getCurrentWorkingDirectory();
 	stdoutput.printf("cwd=%s\n",cwd);

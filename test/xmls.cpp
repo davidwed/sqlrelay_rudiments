@@ -7,6 +7,8 @@
 class myxmlsax : public xmlsax {
 	public:
 				myxmlsax();
+		bool		parseFile(const char *filename);
+		bool		parseString(const char *string);
 		const char	*getString();
 	private:
 		bool	xmlVersionStart();
@@ -29,6 +31,16 @@ class myxmlsax : public xmlsax {
 
 myxmlsax::myxmlsax() : xmlsax() {
 	ind=0;
+}
+
+bool	myxmlsax::parseFile(const char *filename) {
+	str.clear();
+	return xmlsax::parseFile(filename);
+}
+
+bool	myxmlsax::parseString(const char *string) {
+	str.clear();
+	return xmlsax::parseString(string);
 }
 
 bool	myxmlsax::xmlVersionStart() {
@@ -133,9 +145,13 @@ int main(int argc, const char **argv) {
 <![CDATA[ test [ test [ test [test]]]]]>\n\
 </test>\n\
 ");
-	stdoutput.printf("=====================================================\n");
-	x.parseFile("xmls.xml");
 	stdoutput.printf("%s\n",x.getString());
+	stdoutput.printf("=====================================================\n");
+	if (!x.parseFile("xmls.xml")) {
+		stdoutput.printf("failed to parse xmls.xml\n");
+	}
+	stdoutput.printf("%s\n",x.getString());
+	stdoutput.printf("=====================================================\n");
 
 	// bad strings
 	stdoutput.printf("bad xml: %d %d %d %d %d %d %d\n",

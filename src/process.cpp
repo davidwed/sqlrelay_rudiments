@@ -406,6 +406,12 @@ pid_t process::spawn(const char *command,
 			delete[] dirs;
 		}
 
+		// get the short form of the fully qualified command
+		// (this will work on older versions of windows)
+		char	shortcommand[32768];
+		GetShortPathName(fqcommand,shortcommand,sizeof(shortcommand));
+		delete[] fqcommand;
+
 		// Create the command line from the args...
 		// CreateProcess must be able to modify the command line (for
 		// some reason, and there's no indication as to whether it could
@@ -446,11 +452,14 @@ pid_t process::spawn(const char *command,
 		PROCESS_INFORMATION	pi;
 		bytestring::zero(&si,sizeof(si));
 		bytestring::zero(&pi,sizeof(pi));
-		bool	success=(CreateProcess(fqcommand,commandline,
+		bool	success=(CreateProcess(shortcommand,commandline,
 					NULL,NULL,TRUE,
 					(detached)?CREATE_NEW_PROCESS_GROUP:0,
 					NULL,NULL,&si,&pi)==TRUE);
-		delete[] fqcommand;
+		if (!success) {
+			stdoutput.printf("%s\n",shortcommand);
+			stdoutput.printf("error: %s\n",error::getNativeErrorString());
+		}
 		return (success)?pi.dwProcessId:-1;
 	#else
 		error::setErrorNumber(ENOSYS);

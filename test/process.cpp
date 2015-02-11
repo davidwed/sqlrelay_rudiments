@@ -8,15 +8,12 @@
 #include <rudiments/snooze.h>
 
 #ifdef _WIN32
-	#ifdef _USE_32BIT_TIME_T
-		const char	*cmd="c:\\cygwin\\bin\\ls.exe";
-	#else
-		const char	*cmd="c:\\cygwin64\\bin\\ls.exe";
-	#endif
+	const char	*cmd="ls.bat";
+	const char	*args[]={"ls","..\\",NULL};
 #else
-const char	*cmd="/bin/ls";
+	const char	*cmd="/bin/ls";
+	const char	*args[]={"ls","../",NULL};
 #endif
-const char	*args[]={"ls","../",NULL};
 
 int main(int argc, const char **argv) {
 

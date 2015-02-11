@@ -25,13 +25,13 @@ class RUDIMENTS_DLLSPEC xmlsax {
 		 *  when tags, attributes, text, etc. are encountered.
 		 *
 		 *  Returns true on success or false otherwise. */
-		bool		parseFile(const char *filename);
+		virtual bool	parseFile(const char *filename);
 
 		/** Parses "string"  and calls the appropriate callback
 		 *  when tags, attributes, text, etc. are encountered.
 		 *
 		 *  Returns true on success or false otherwise. */
-		bool		parseString(const char *string);
+		virtual bool	parseString(const char *string);
 
 		/** If parseFile() or parseString() fails, this method
 		 *  returns the error that caused the failure. */
