@@ -109,8 +109,12 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 		bool	wait(int32_t index);
 
 		/** Wait on the "index"'th semaphore in the set until
-		 *  "seconds" and "nanoseconds" elapse.  Returns false
-		 *  and sets errno to EAGAIN if a timeout occurs.
+		 *  "seconds" and "nanoseconds" elapse.  If both "seconds"
+		 *  and "nanoseconds" are 0 then the wait falls through
+		 *  immediately unless the semaphore had already been
+		 *  signaled.  If either "seconds" or "nanoseconds" are
+		 *  negative then the timeout is ignored.
+		 *  Returns false and sets errno to EAGAIN if a timeout occurs.
 		 *  Returns false if the system doesn't support timed
 		 *  semaphore operations. */
 		bool	wait(int32_t index, int32_t seconds,
@@ -125,9 +129,13 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 		bool	waitWithUndo(int32_t index);
 
 		/** Wait on the "index"'th semaphore in the set until
-		 *  "seconds" and "nanoseconds" elapse.  Undo the wait
-		 *  when the program exits.  Returns false and sets
-		 *  errno to EAGAIN if a timeout occurs.
+		 *  "seconds" and "nanoseconds" elapse.  If both "seconds"
+		 *  and "nanoseconds" are 0 then the wait falls through
+		 *  immediately unless the semaphore had already been
+		 *  signaled.  If either "seconds" or "nanoseconds" are
+		 *  negative then the timeout is ignored.
+		 *  Undo the wait when the program exits.
+		 *  Returns false and sets errno to EAGAIN if a timeout occurs.
 		 *  Returns false if the system doesn't support timed
 		 *  semaphore operations. */
 		bool	waitWithUndo(int32_t index,
