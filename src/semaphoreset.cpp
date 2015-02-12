@@ -157,6 +157,9 @@ bool semaphoreset::wait(int32_t index) {
 }
 
 bool semaphoreset::wait(int32_t index, int32_t seconds, int32_t nanoseconds) {
+	if (seconds<0 || nanoseconds<0) {
+		return wait(index);
+	}
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semTimedOp(pvt->_waitop[index],seconds,nanoseconds);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
@@ -186,6 +189,9 @@ bool semaphoreset::waitWithUndo(int32_t index) {
 
 bool semaphoreset::waitWithUndo(int32_t index,
 				int32_t seconds, int32_t nanoseconds) {
+	if (seconds<0 || nanoseconds<0) {
+		return waitWithUndo(index);
+	}
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		return semTimedOp(pvt->_waitwithundoop[index],
 						seconds,nanoseconds);

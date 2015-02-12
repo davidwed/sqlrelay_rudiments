@@ -27,6 +27,8 @@
 	updated vsnprintf_s calls for platforms where it's not defined
 	added configure test for bool and true/false and definitions for
 		platforms that don't define them
+	updated timed semaphore waits - if seconds or nanoseconds are negative
+		then the timed wait acts like an un-timed wait
 
 0.49 - combined passswdentry and shadowentry classes into userentry class
 	updated file::sync() to use FlushFileBuffers directly
