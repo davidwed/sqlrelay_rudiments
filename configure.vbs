@@ -507,15 +507,15 @@ if version=14 then
 
 	' older SDK's have various issues
 
-	' 5.2.3700.0
+	' 5.2.3700.0 - Microsoft Platform SDK February 2003
 	'SDKINCLUDES="/I""C:\Program Files\Microsoft SDK\include"""
 	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDK\Lib"""
 
-	' 5.2.3790.1830.15
+	' 5.2.3790.1830.15 - Windows Server 2003 SP1 Platform SDK
 	SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK\Include"""
 	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK\Lib"""
 
-	' 5.2.3790.2075.51
+	' 5.2.3790.2075.51 - Windows Server 2003 R2 Platform SDK
 	'SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include"""
 	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib"""
 
@@ -530,7 +530,7 @@ elseif version=12 then
 
 	' older SDK's might work too
 
-	' 5.2.3700.0
+	' 5.2.3700.0 - Microsoft Platform SDK February 2003
 	SDKINCLUDES="/I""C:\Program Files\Microsoft SDK\include"""
 	SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft SDK\Lib"""
 
@@ -541,7 +541,7 @@ elseif version<=11 then
 
 	' older SDK's might work too
 
-	' 5.1.2600.2180
+	' 5.1.2600.2180 - Microsoft Platform SDK for Windows XP SP2
 	' (this doesn't actually work)
 	'SDKINCLUDES="/I""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Include"""
 	'SDKLIBS="/LIBPATH:""C:\Program Files\Microsoft Platform SDK for Windows XP SP2\Lib"""
