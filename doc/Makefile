@@ -20,7 +20,10 @@ install:
 	$(CHMOD) 644 $(docdir)/*.html
 	$(CHMOD) 644 $(docdir)/*.gif
 	$(CHMOD) 644 $(docdir)/css/*
-	$(CHMOD) 644 $(docdir)/classes/html/*
+	$(CHMOD) 644 $(docdir)/classes/html/*.html
+	$(CHMOD) 644 $(docdir)/classes/html/*.png
+	$(CHMOD) 644 $(docdir)/classes/html/*.css
+	$(CHMOD) 644 $(docdir)/classes/html/*.js
 	$(CHMOD) 644 $(docdir)/programming/*.html
 
 uninstall:
