@@ -2184,8 +2184,8 @@ const char *filedescriptor::getType() const {
 char *filedescriptor::getPeerAddress() const {
 
 	// initialize a socket address structure
-	struct sockaddr_in	clientsin;
-	socklen_t		size=sizeof(clientsin);
+	struct sockaddr_in			clientsin;
+	RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE	size=sizeof(clientsin);
 	bytestring::zero(&clientsin,sizeof(clientsin));
 
 	// get the peer address
