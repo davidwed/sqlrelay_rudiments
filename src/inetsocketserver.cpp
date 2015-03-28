@@ -148,8 +148,8 @@ bool inetsocketserver::bind() {
 	if (!*_port()) {
 
 		// initialize a socket address structure
-		sockaddr_in	socknamesin;
-		socklen_t	size=sizeof(socknamesin);
+		sockaddr_in			socknamesin;
+		RUDIMENTS_SOCKLEN_OR_SIZE_T	size=sizeof(socknamesin);
 		bytestring::zero(&socknamesin,sizeof(socknamesin));
 
 		int32_t	result;
@@ -178,8 +178,8 @@ bool inetsocketserver::listen(int32_t backlog) {
 filedescriptor *inetsocketserver::accept() {
 
 	// initialize a socket address structure
-	sockaddr_in	clientsin;
-	socklen_t	size=sizeof(clientsin);
+	sockaddr_in			clientsin;
+	RUDIMENTS_SOCKLEN_OR_SIZE_T	size=sizeof(clientsin);
 	bytestring::zero(&clientsin,sizeof(clientsin));
 
 	// accept on the socket

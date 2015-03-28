@@ -61,9 +61,6 @@
 /* ioctl/FIONBIO doesn't work on some systems */
 /* #undef RUDIMENTS_DISABLE_FIONBIO */
 
-/* getsockopt has a socklen_t * on most systems */
-#define RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE socklen_t
-
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 
@@ -1380,6 +1377,9 @@
 
 /* Use small rather than fast code */
 /* #undef RUDIMENTS_SMALL_CODE */
+
+/* getsockopt has a socklen_t * on most systems */
+#define RUDIMENTS_SOCKLEN_OR_SIZE_T socklen_t
 
 /* SSL_read/write can use a void * parameter instead of char * */
 /* #undef RUDIMENTS_SSL_VOID_PTR */
