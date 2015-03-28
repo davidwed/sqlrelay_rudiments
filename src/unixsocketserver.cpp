@@ -175,8 +175,8 @@ filedescriptor *unixsocketserver::accept() {
 	return pvt->_iss.accept();
 #else
 	// initialize a socket address structure
-	sockaddr_un	clientsun;
-	socklen_t	size=sizeof(clientsun);
+	sockaddr_un			clientsun;
+	RUDIMENTS_SOCKLEN_OR_SIZE_T	size=sizeof(clientsun);
 	bytestring::zero(&clientsun,sizeof(clientsun));
 
 	// accept on the socket

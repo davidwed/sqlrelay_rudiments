@@ -96,9 +96,9 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 	#if defined(RUDIMENTS_HAVE_MMAP)
 		do {
 			pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
-		} while (pvt->_data==MAP_FAILED &&
+		} while (pvt->_data==(void *)MAP_FAILED &&
 				error::getErrorNumber()==EINTR);
-		return (pvt->_data!=MAP_FAILED);
+		return (pvt->_data!=(void *)MAP_FAILED);
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
 		// calculate max mapping size and offset
