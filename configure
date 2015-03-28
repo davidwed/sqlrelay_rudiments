@@ -22572,6 +22572,44 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if getsockopt has a size_t * parameter" >&5
+$as_echo_n "checking if getsockopt has a size_t * parameter... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#else
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+#endif
+int
+main ()
+{
+size_t *ptr; getsockopt(0,0,0,0,ptr);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE size_t" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+
+$as_echo "#define RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE socklen_t" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
 HAVE_INET_ATON="no"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_aton" >&5
 $as_echo_n "checking for inet_aton... " >&6; }

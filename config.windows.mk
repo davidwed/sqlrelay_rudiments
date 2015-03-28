@@ -1,6 +1,7 @@
 RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
 SONAME_VERSION_INFO =
 
+# installation directories
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@

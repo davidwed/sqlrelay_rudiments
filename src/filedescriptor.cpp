@@ -2208,10 +2208,18 @@ char *filedescriptor::getPeerAddress() const {
 int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
 				void *optval, socklen_t *optlen) {
 	int32_t	result;
+	RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE	tempoptlen;
+	if (optlen) {
+		tempoptlen=*optlen;
+	}
 	do {
 		result=getsockopt(pvt->_fd,level,optname,
-			(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,optlen);
+			(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,
+			&tempoptlen);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (optlen) {
+		*optlen=tempoptlen;
+	}
 	return result;
 }
 

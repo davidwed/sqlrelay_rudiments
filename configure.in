@@ -1487,6 +1487,22 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 void *ptr; getsockopt(0,0,0,ptr,0);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, void *, getsockopt has a void * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE, char *, getsockopt has a void * on most systems ) AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(if getsockopt has a size_t * parameter)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+	#include <winsock2.h>
+#else
+	#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+		#include <sys/types.h>
+	#endif
+	#ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
+		#include <sys/socket.h>
+	#endif
+#endif],
+size_t *ptr; getsockopt(0,0,0,0,ptr);,AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE, size_t, getsockopt has a socklen_t * on most systems ) AC_MSG_RESULT(yes), AC_DEFINE(RUDIMENTS_GETSOCKOPT_OPTLEN_TYPE, socklen_t, getsockopt has a socklen_t * on most systems ) AC_MSG_RESULT(no))
+
 HAVE_INET_ATON="no"
 AC_MSG_CHECKING(for inet_aton)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H

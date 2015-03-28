@@ -1,6 +1,7 @@
 RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
 SONAME_VERSION_INFO = @SONAME_VERSION_INFO@
 
+# installation directories
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
@@ -37,6 +38,7 @@ LINK = @CXX@
 AR = @AR@
 LDFLAGS = @LDFLAGS@
 LINKFLAGS = -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
+MODLINKFLAGS = -rpath $(libdir) -avoid-version -module -no-undefined
 LIBPATH = -L
 LIB = -l
 INSTALLLIB = installlib
