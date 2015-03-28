@@ -20,7 +20,25 @@ install:
 	$(CHMOD) 644 $(docdir)/*.html
 	$(CHMOD) 644 $(docdir)/*.gif
 	$(CHMOD) 644 $(docdir)/css/*
-	$(CHMOD) 644 $(docdir)/classes/html/*.html
+	$(CHMOD) 644 $(docdir)/classes/html/a*.html
+	$(CHMOD) 644 $(docdir)/classes/html/b*.html
+	$(CHMOD) 644 $(docdir)/classes/html/c*.html
+	$(CHMOD) 644 $(docdir)/classes/html/d*.html
+	$(CHMOD) 644 $(docdir)/classes/html/e*.html
+	$(CHMOD) 644 $(docdir)/classes/html/f*.html
+	$(CHMOD) 644 $(docdir)/classes/html/g*.html
+	$(CHMOD) 644 $(docdir)/classes/html/h*.html
+	$(CHMOD) 644 $(docdir)/classes/html/i*.html
+	$(CHMOD) 644 $(docdir)/classes/html/l*.html
+	$(CHMOD) 644 $(docdir)/classes/html/m*.html
+	$(CHMOD) 644 $(docdir)/classes/html/n*.html
+	$(CHMOD) 644 $(docdir)/classes/html/p*.html
+	$(CHMOD) 644 $(docdir)/classes/html/r*.html
+	$(CHMOD) 644 $(docdir)/classes/html/s*.html
+	$(CHMOD) 644 $(docdir)/classes/html/t*.html
+	$(CHMOD) 644 $(docdir)/classes/html/u*.html
+	$(CHMOD) 644 $(docdir)/classes/html/w*.html
+	$(CHMOD) 644 $(docdir)/classes/html/x*.html
 	$(CHMOD) 644 $(docdir)/classes/html/*.png
 	$(CHMOD) 644 $(docdir)/classes/html/*.css
 	$(CHMOD) 644 $(docdir)/classes/html/*.js
