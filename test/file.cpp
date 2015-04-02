@@ -15,19 +15,6 @@ static file f;
 
 int main(int argc, const char **argv) {
 
-uint32_t i=0;
-for (;;) {
-	if (f.getFileDescriptor()==-1) {
-		f.dontGetCurrentPropertiesOnOpen();
-		f.open(debugfile,O_WRONLY|O_APPEND|O_CREAT,permissions::evalPermString("rw-r--r--"));
-	}
-	f.printf("%d:%s:%s():%d:\n",i,__FILE__,__FUNCTION__,__LINE__);
-	i++;
-}
-f.close();
-
-process::exit(0);
-
 	// remove the file (in case it already exists)
 	file::remove("testfile");
 
