@@ -191,31 +191,40 @@ void file::openInternal(const char *name, int32_t flags,
 		// open the file so that the access mode can include WRITE_DAC
 		// and WRITE_OWNER, which are not set when using _open.
 
-		// create security descriptor
-		PSECURITY_DESCRIPTOR	psd=
-			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,
-					SECURITY_DESCRIPTOR_MIN_LENGTH);
-		if (!InitializeSecurityDescriptor(psd,
-					SECURITY_DESCRIPTOR_REVISION)) {
-			fd(-1);
-			LocalFree(psd);
-			return;
-		}
-		void	*dacl=permissions::permOctalToDacl(perms,true);
-		if (!SetSecurityDescriptorDacl(psd,TRUE,(PACL)dacl,FALSE) ||
-			!SetSecurityDescriptorControl(psd,
-					SE_DACL_PROTECTED,SE_DACL_PROTECTED)) {
-			fd(-1);
-			LocalFree(dacl);
-			LocalFree(psd);
-			return;
-		}
+		PSECURITY_DESCRIPTOR	psd=NULL;
+		void			*dacl=NULL;
+		PSECURITY_ATTRIBUTES	psatt=NULL;
 
-		// create security attributes
-		SECURITY_ATTRIBUTES	satt;
-		satt.nLength=sizeof(SECURITY_ATTRIBUTES);
-		satt.lpSecurityDescriptor=psd;
-		satt.bInheritHandle=TRUE;
+		if (flags&O_CREAT) {
+
+			// create security descriptor
+			psd=(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,
+					SECURITY_DESCRIPTOR_MIN_LENGTH);
+			if (!InitializeSecurityDescriptor(psd,
+					SECURITY_DESCRIPTOR_REVISION)) {
+				fd(-1);
+				LocalFree(psd);
+				return;
+			}
+			dacl=permissions::permOctalToDacl(perms,true);
+			if (!SetSecurityDescriptorDacl(psd,TRUE,
+						(PACL)dacl,FALSE) ||
+				!SetSecurityDescriptorControl(psd,
+						SE_DACL_PROTECTED,
+						SE_DACL_PROTECTED)) {
+				fd(-1);
+				LocalFree(dacl);
+				LocalFree(psd);
+				return;
+			}
+
+			// create security attributes
+			SECURITY_ATTRIBUTES	satt;
+			satt.nLength=sizeof(SECURITY_ATTRIBUTES);
+			satt.lpSecurityDescriptor=psd;
+			satt.bInheritHandle=TRUE;
+			psatt=&satt;
+		}
 
 		#endif
 
@@ -275,7 +284,7 @@ void file::openInternal(const char *name, int32_t flags,
 					FILE_SHARE_DELETE|
 					FILE_SHARE_READ|
 					FILE_SHARE_WRITE,
-					&satt,cdisp,attrs,NULL);
+					psatt,cdisp,attrs,NULL);
 		LocalFree(psd);
 		LocalFree(dacl);
 

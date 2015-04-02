@@ -7,7 +7,7 @@
 /* #undef HAVE_DLFCN_H */
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#define HAVE_INTTYPES_H 1
+/* #undef HAVE_INTTYPES_H */
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
@@ -563,7 +563,7 @@
 #define RUDIMENTS_HAVE_INT8_T 1
 
 /* Some systems have inttypes.h */
-#define RUDIMENTS_HAVE_INTTYPES_H 1
+/* #undef RUDIMENTS_HAVE_INTTYPES_H */
 
 /* Some systems have in_addr_t type */
 /* #undef RUDIMENTS_HAVE_IN_ADDR_T */
