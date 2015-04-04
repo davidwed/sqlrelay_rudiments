@@ -1009,6 +1009,13 @@ int32_t charstring::compareIgnoringCase(const char *str1,
 			ptr2++;
 			count++;
 		}
+		if (count<size) {
+			if (*ptr1 && !*ptr2) {
+				return *ptr1;
+			} else if (*ptr2 && !*ptr1) {
+				return -(*ptr2);
+			}
+		}
 		return 0;
 	#endif
 }
