@@ -10,6 +10,8 @@
 #ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 	#define _WINSOCKAPI_
 	#include <windows.h>
+#endif
+#ifndef RUDIMENTS_HAVE_MMAP
 	#define	PROT_NONE	0
 	#define	PROT_EXEC	1
 	#define	PROT_READ	2
