@@ -20,10 +20,8 @@ class xmlsaxprivate {
 		bool		_mmapped;
 		off64_t		_filesize;
 		off64_t		_optblocksize;
-		#ifdef RUDIMENTS_HAVE_MMAP
 		memorymap	_mm;
 		off64_t		_fileoffset;
-		#endif
 		uint32_t	_line;
 		stringbuffer	_err;
 
@@ -51,9 +49,7 @@ void xmlsax::reset() {
 	pvt->_ptr=NULL;
 	pvt->_endptr=NULL;
 	pvt->_filesize=0;
-#ifdef RUDIMENTS_HAVE_MMAP
 	pvt->_fileoffset=0;
-#endif
 	pvt->_mmapped=false;
 	pvt->_line=1;
 }
@@ -122,13 +118,11 @@ bool xmlsax::parseFile(const char *filename) {
 		// offsets as well, then we must use an even multiple of
 		// the memory page size.  Use the page size unless the 
 		// transfer size is an even multiple of it.
-		#ifdef RUDIMENTS_HAVE_MMAP
-			off64_t	pagesize=sys::getPageSize();
-			if (pagesize>pvt->_optblocksize ||
-				pvt->_optblocksize%pagesize) {
-				pvt->_optblocksize=pagesize;
-			}
-		#endif
+		off64_t	pagesize=sys::getPageSize();
+		if (pagesize>pvt->_optblocksize ||
+			pvt->_optblocksize%pagesize) {
+			pvt->_optblocksize=pagesize;
+		}
 
 		// get the file size
 		pvt->_filesize=pvt->_fl.getSize();
@@ -142,21 +136,17 @@ bool xmlsax::parseFile(const char *filename) {
 		// will be set to NULL from the previous call to reset() and
 		// will cause getCharacter() to read from the file rather than
 		// the map when parse() calls it.
-		#ifdef RUDIMENTS_HAVE_MMAP
-			pvt->_fileoffset=0;
-			pvt->_mmapped=true;
-			mapFile();
-		#endif
+		pvt->_fileoffset=0;
+		pvt->_mmapped=true;
+		mapFile();
 
 		// parse the file
 		retval=parse();
 
 		// unmap the file, if necessary
-		#ifdef RUDIMENTS_HAVE_MMAP
-			if (pvt->_ptr) {
-				pvt->_mm.detach();
-			}
-		#endif
+		if (pvt->_ptr) {
+			pvt->_mm.detach();
+		}
 	}
 
 	// close and return
@@ -828,11 +818,9 @@ char xmlsax::getCharacter() {
 		}
 		ch=*(pvt->_ptr);
 		(pvt->_ptr)++;
-		#ifdef RUDIMENTS_HAVE_MMAP
 		if (pvt->_mmapped) {
 			pvt->_fileoffset++;
 		}
-		#endif
 	} else {
 		if (pvt->_fl.read(&ch)!=sizeof(char)) {
 			return '\0';
@@ -869,7 +857,6 @@ const char *xmlsax::getError() {
 
 bool xmlsax::mapFile() {
 
-#ifdef RUDIMENTS_HAVE_MMAP
 	if (pvt->_fileoffset) {
 		pvt->_mm.detach();
 	}
@@ -889,6 +876,5 @@ bool xmlsax::mapFile() {
 		pvt->_endptr=pvt->_ptr+len;
 		return true;
 	}
-#endif
 	return false;
 }
