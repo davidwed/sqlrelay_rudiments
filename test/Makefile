@@ -260,7 +260,7 @@ bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytebuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 xmls: xmls.cpp xmls.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmls.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmls.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS) -lefence
 
 xmld: xmld.cpp xmld.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmld.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
