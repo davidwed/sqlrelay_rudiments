@@ -418,12 +418,12 @@ bool datetime::getSystemDateAndTime() {
 		return initialize(tv.tv_sec,tv.tv_usec);
 	#elif defined(RUDIMENTS_HAVE_GETSYSTEMTIMEASFILETIME)
 
-		// FILETIME contains the number of 100 nanosecond intervals
-		// since Jan 1, 1601 UTC.
-		FILETIME	ft;
-		GetSystemTimeAsFileTime(&ft);
-
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			// FILETIME contains the number of 100 nanosecond
+			// intervals since Jan 1, 1601 UTC.
+			FILETIME	ft;
+			GetSystemTimeAsFileTime(&ft);
+
 			// convert to a single 64-bit number
 			uint64_t	t=ft.dwHighDateTime;
 			t<<=32;
@@ -434,12 +434,23 @@ bool datetime::getSystemDateAndTime() {
 
 			// subtract microseconds between 1601 and 1970
 			t-=11644473600000000ULL;
-		#else
-			// FIXME: implement this...
-			uint32_t	t=0;
-		#endif
 
-		return initialize(t/1000000,t%1000000);
+			return initialize(t/1000000,t%1000000);
+		#else
+			SYSTEMTIME	st;
+			GetLocalTime(&st);
+
+			stringbuffer	str;
+			str.append(st.wMonth)->append('/');
+			str.append(st.wDay)->append('/');
+			str.append(st.wYear)->append(' ');
+			str.append(st.wHour)->append(':');
+			str.append(st.wMinute)->append(':');
+			str.append(st.wSecond)->append('.');
+			str.append(st.wMilliseconds*1000);
+
+			return initialize(str.getString());
+		#endif
 	#else
 		return initialize(time(NULL));
 	#endif

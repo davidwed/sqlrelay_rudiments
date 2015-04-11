@@ -1005,7 +1005,6 @@ bool file::lock(int32_t method, int16_t type,
 		lck.l_len=len;
 		return !fCntl(method,reinterpret_cast<long>(&lck));
 	#elif defined(RUDIMENTS_HAVE_LOCKFILEEX)
-		// how do I specify read vs. write/write?
 		off64_t	cur=getCurrentPosition();
 		if (cur==-1) {
 			return false;
@@ -1023,14 +1022,16 @@ bool file::lock(int32_t method, int16_t type,
 		ol.Offset=lockstart.LowPart;
 		ol.OffsetHigh=lockstart.HighPart;
 		LARGE_INTEGER	locklength;
-		locklength.QuadPart=len;
+		locklength.QuadPart=(len)?len:MAXDWORD;
+		DWORD	flags=
+			((type&F_WRLCK)?LOCKFILE_EXCLUSIVE_LOCK:0)|
+			((method==F_SETLK)?LOCKFILE_FAIL_IMMEDIATELY:0);
 		return LockFileEx((HANDLE)getHandleFromFileDescriptor(fd()),
-					(method==F_SETLK)?
-						LOCKFILE_FAIL_IMMEDIATELY:0,
+					flags,
 					0,
 					locklength.LowPart,
 					locklength.HighPart,
-					&ol)!=0;
+					&ol)!=FALSE;
 	#else
 		#error no fcntl, LockFile or anything like it
 	#endif

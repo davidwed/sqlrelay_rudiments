@@ -55,6 +55,9 @@
 	#include <poll.h>
 #endif
 
+// disable this for now
+#undef RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT
+
 struct fddata_t {
 	filedescriptor	*fd;
 	bool		read;
@@ -87,6 +90,8 @@ class listenerprivate {
 			struct pollfd		*_fds;
 		#elif defined(RUDIMENTS_HAVE_POLL)
 			struct pollfd		*_fds;
+		#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+			HANDLE 			_cp;
 		#endif
 };
 
@@ -108,6 +113,8 @@ listener::listener() {
 		pvt->_fds=NULL;
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		pvt->_fds=NULL;
+	#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+		pvt->_cp=NULL;
 	#endif
 }
 
@@ -133,6 +140,8 @@ void listener::cleanUp() {
 		delete[] pvt->_fds;
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		delete[] pvt->_fds;
+	#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+		CloseHandle(pvt->_cp);
 	#endif
 }
 
@@ -236,7 +245,8 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 	#elif defined(RUDIMENTS_HAVE_KQUEUE) || \
 			defined(RUDIMENTS_HAVE_EPOLL) || \
 			defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
-			defined(RUDIMENTS_HAVE_POLL)
+			defined(RUDIMENTS_HAVE_POLL) || \
+			defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
 		// only rebuild if dirty when using other methods
 		if (pvt->_dirty) {
 			if (!rebuildMonitorList()) {
@@ -252,7 +262,8 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		ts.tv_nsec=usec*1000;
 		struct timespec	*tsptr=(sec>-1 && usec>-1)?&ts:NULL;
 	#elif defined(RUDIMENTS_HAVE_EPOLL)
-		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
+		int32_t	timeout=(sec>-1 && usec>-1)?
+					(sec*1000)+(usec/1000):-1;
 	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
 		struct timespec	ts;
 		ts.tv_sec=sec;
@@ -265,7 +276,11 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 		// In theory, any negative value will cause poll to wait
 		// forever, but certain implementations (such as glibc-2.0.7)
 		// require it to be -1.
-		int32_t	timeout=(sec>-1 && usec>-1)?(sec*1000)+(usec/1000):-1;
+		int32_t	timeout=(sec>-1 && usec>-1)?
+					(sec*1000)+(usec/1000):-1;
+	#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+		int32_t	timeout=(sec>-1 && usec>-1)?
+					(sec*1000)+(usec/1000):INFINITE;
 	#else
 		timeval	tv;
 		timeval	*tvptr=(sec>-1 && usec>-1)?&tv:NULL;
@@ -274,7 +289,8 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 	#if (defined(RUDIMENTS_HAVE_KQUEUE) || \
 			defined(RUDIMENTS_HAVE_EPOLL) || \
 			defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H) || \
-			defined(RUDIMENTS_HAVE_POLL)) && \
+			defined(RUDIMENTS_HAVE_POLL) || \
+			defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)) && \
 			!defined(RUDIMENTS_HAVE_PORT_CREATE)
 		uint64_t	fdcount=pvt->_fdlist.getLength();
 	#endif
@@ -314,6 +330,16 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 			// wait for non-blocking io
 			result=poll(pvt->_fds,fdcount,timeout);
+
+		#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+
+			// wait for an operation to complete
+			DWORD		bytes;
+			filedescriptor	*fd;
+			OVERLAPPED	*overlapped;
+			result=(GetQueuedCompletionStatus(pvt->_cp,&bytes,
+						(ULONG_PTR *)&fd,
+						&overlapped,timeout)==TRUE);
 
 		#else
 
@@ -475,6 +501,18 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 						}
 					}
 				}
+
+			#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+
+				// FIXME: how to determine read vs. write?
+				if (true) {
+					// read...
+					pvt->_readreadylist.append(fd);
+				} else {
+					// write...
+					pvt->_writereadylist.append(fd);
+				}
+
 			#else
 				for (linkedlistnode< fddata_t * > *node=
 						pvt->_fdlist.getFirst();
@@ -547,6 +585,8 @@ bool listener::rebuildMonitorList() {
 		pvt->_fds=new struct pollfd[fdcount];
 	#elif defined(RUDIMENTS_HAVE_POLL)
 		pvt->_fds=new struct pollfd[fdcount];
+	#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+		pvt->_cp=CreateIoCompletionPort(INVALID_HANDLE_VALUE,NULL,0,0);
 	#endif
 
 	// set up the fd's to be monitored and how to monitor them
@@ -622,6 +662,24 @@ bool listener::rebuildMonitorList() {
 				pvt->_fds[fdcount].events|=POLLOUT;
 			}
 			pvt->_fds[fdcount].revents=0;
+
+		#elif defined(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT)
+
+			// FIXME: read/write flag?
+			if (node->getValue()->read) {
+				// zero-byte non-blocking read?
+			}
+			if (node->getValue()->write) {
+				// zero-byte non-blocking write?
+			}
+			filedescriptor	*fd=node->getValue()->fd;
+			pvt->_cp=CreateIoCompletionPort(
+					(HANDLE)
+					fd->getHandleFromFileDescriptor(
+						fd->getFileDescriptor()),
+					pvt->_cp,
+					(ULONG_PTR)node->getValue()->fd,
+					0);
 
 		#endif
 
