@@ -2430,6 +2430,16 @@ port_getn(0,0,0,0,0);
 ],
 AC_DEFINE(RUDIMENTS_HAVE_PORT_CREATE,1,Some systems have port_create) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING([for CreateIoCompletionPort])
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_WINDOWS_H)
+	#include <windows.h>
+#endif
+],[
+CreateIoCompletionPort(0,0,0,0);
+],
+AC_DEFINE(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT,1,Some systems have CreateIoCompletionPort) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
 FW_CHECK_SHM_OPEN
 
 AC_MSG_CHECKING(for ioctlsocket)
