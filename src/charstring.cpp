@@ -1818,9 +1818,16 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	}
 	#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
 		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
-	#elif defined(RUDIMENTS_HAVE___VSNPRINTF) || \
-		defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+	#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
 		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+	#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+		// Solaris 2.5.1 (and maybe others) return buflen if
+		// truncation occurs.  In that case, simulate systems
+		// that return -1 if truncation occurs.
+		if (size==(ssize_t)buflen-1) {
+			size=-1;
+		}
 	#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
 		ssize_t	size=_vsnprintf(buf,buflen,format,*argp);
 	#else
@@ -1839,9 +1846,16 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		buf=new char[buflen];
 		#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
 			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
-		#elif defined(RUDIMENTS_HAVE___VSNPRINTF) || \
-			defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+		#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
 			size=__vsnprintf(buf,buflen,format,*argp);
+		#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
+			size=__vsnprintf(buf,buflen,format,*argp);
+			// Solaris 2.5.1 (and maybe others) return buflen if
+			// truncation occurs.  In that case, simulate systems
+			// that return -1 if truncation occurs.
+			if (size==(ssize_t)buflen-1) {
+				size=-1;
+			}
 		#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
 			size=_vsnprintf(buf,buflen,format,*argp);
 		#else
