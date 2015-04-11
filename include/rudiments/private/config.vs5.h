@@ -208,6 +208,9 @@
 /* Some systems have CreateFileMapping */
 #define RUDIMENTS_HAVE_CREATE_FILE_MAPPING 1
 
+/* Some systems have CreateIoCompletionPort */
+#define RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT 1
+
 /* CreateMutex function exists */
 #define RUDIMENTS_HAVE_CREATE_MUTEX 1
 
