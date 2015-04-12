@@ -1820,6 +1820,10 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
 	#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
 		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+	#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
+		ssize_t	size=_vsnprintf(buf,buflen,format,*argp);
+	#elif defined(RUDIMENTS_HAVE_VSNPRINTF)
+		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
 	#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
 		// Solaris 2.5.1 (and maybe others) return buflen if
@@ -1828,10 +1832,8 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		if (size==(ssize_t)buflen-1) {
 			size=-1;
 		}
-	#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
-		ssize_t	size=_vsnprintf(buf,buflen,format,*argp);
 	#else
-		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
+		#error no vsnprintf or anything like it
 	#endif
 
 	// Some implementations (SCO OSR6, Redhat 5.2, probably others) return
@@ -1848,6 +1850,10 @@ ssize_t charstring::printf(char *buffer, size_t length,
 			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
 		#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
 			size=__vsnprintf(buf,buflen,format,*argp);
+		#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
+			size=_vsnprintf(buf,buflen,format,*argp);
+		#elif defined(RUDIMENTS_HAVE_VSNPRINTF)
+			size=vsnprintf(buf,buflen,format,*argp);
 		#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
 			size=__vsnprintf(buf,buflen,format,*argp);
 			// Solaris 2.5.1 (and maybe others) return buflen if
@@ -1856,10 +1862,8 @@ ssize_t charstring::printf(char *buffer, size_t length,
 			if (size==(ssize_t)buflen-1) {
 				size=-1;
 			}
-		#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
-			size=_vsnprintf(buf,buflen,format,*argp);
 		#else
-			size=vsnprintf(buf,buflen,format,*argp);
+			#error no vsnprintf or anything like it
 		#endif
 		if (size>-1) {
 			charstring::copy(buffer,buf,length);
