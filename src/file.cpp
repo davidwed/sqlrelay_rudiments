@@ -1084,12 +1084,12 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 			return false;
 		}
 		LARGE_INTEGER	locklength;
-		locklength.QuadPart=len;
+		locklength.QuadPart=(len)?len:MAXDWORD;
 		return UnlockFile((HANDLE)getHandleFromFileDescriptor(fd()),
 					lockstart.LowPart,
 					lockstart.HighPart,
 					locklength.LowPart,
-					locklength.HighPart)!=0;
+					locklength.HighPart)!=FALSE;
 	#else
 		#error no fcntl, UnlockFile or anything like it
 	#endif
