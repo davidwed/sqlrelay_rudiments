@@ -2056,20 +2056,22 @@ bool filedescriptor::passSocket(int32_t sock) const {
 	}
 
 	// duplicate the socket
-	WSAPROTOCOL_INFO	wsapi;
-	bool	success=!WSADuplicateSocket((SOCKET)sock,otherpid,&wsapi);
+	WSAPROTOCOL_INFO	wpinfo;
+	if (WSADuplicateSocket((SOCKET)sock,otherpid,&wpinfo)) {
+		return false;
+	}
 
 	// write the wsaprotocol_info to the other side
-	if (write((void *)&wsapi,sizeof(WSAPROTOCOL_INFO))!=
-					sizeof(WSAPROTOCOL_INFO)) {
+	if (write((void *)&wpinfo,sizeof(wpinfo))!=sizeof(wpinfo)) {
 		return false;
 	}
 
-	// tell the other process that we're done
-	if (write(true)!=sizeof(bool)) {
+	// get result from the other process
+	bool	result;
+	if (read(&result)!=sizeof(bool)) {
 		return false;
 	}
-	return success;
+	return result;
 #else
 	return passFileDescriptor(sock);
 #endif
@@ -2092,18 +2094,21 @@ bool filedescriptor::receiveSocket(int32_t *sock) const {
 	}
 
 	// read a wsaprotocol_info from the other side
-	WSAPROTOCOL_INFO	wsapi;
-	if (read((void *)&wsapi,sizeof(WSAPROTOCOL_INFO))!=
-					sizeof(WSAPROTOCOL_INFO)) {
+	WSAPROTOCOL_INFO	wpinfo;
+	if (read((void *)&wpinfo,sizeof(wpinfo))!=sizeof(wpinfo)) {
 		return false;
 	}
 
 	// create the socket
-	*sock=WSASocket(AF_INET,SOCK_STREAM,IPPROTO_TCP,&wsapi,0,0);
+	*sock=WSASocket(AF_INET,SOCK_STREAM,IPPROTO_TCP,
+					&wpinfo,0,WSA_FLAG_OVERLAPPED);
+	bool	result=(*sock!=INVALID_SOCKET);
 
-	// get done from the other process
-	bool	done;
-	return read(&done)==sizeof(bool);
+	// tell the other process how it went
+	if (write(result)!=sizeof(bool)) {
+		return false;
+	}
+	return result;
 #else
 	return receiveFileDescriptor(sock);
 #endif

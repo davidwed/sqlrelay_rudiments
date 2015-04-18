@@ -41,7 +41,7 @@ thread::thread() {
 		pvt->_thr=0;
 		pthread_attr_init(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		pvt->_thr=0;
+		pvt->_thr=INVALID_HANDLE_VALUE;
 		pvt->_stacksize=sys::getMinThreadStackSize();
 	#endif
 	pvt->_function=NULL;
@@ -54,7 +54,9 @@ thread::~thread() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pthread_attr_destroy(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		CloseHandle(pvt->_thr);
+		if (pvt->_thr!=INVALID_HANDLE_VALUE) {
+			CloseHandle(pvt->_thr);
+		}
 	#endif
 	delete pvt;
 }
@@ -183,7 +185,9 @@ bool thread::detach() {
 		error::setErrorNumber(result);
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		return (CloseHandle(pvt->_thr)==TRUE);
+		bool	result=(CloseHandle(pvt->_thr)==TRUE);
+		pvt->_thr=INVALID_HANDLE_VALUE;
+		return result;
 	#else
 		error::setErrorNumber(ENOSYS);
 		return false;

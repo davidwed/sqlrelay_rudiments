@@ -5,7 +5,6 @@
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
 	#include <rudiments/charstring.h>

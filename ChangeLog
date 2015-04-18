@@ -36,6 +36,7 @@
 	fixed charstring::printf on Solaris 2.5.1
 	fixed datetime::getSystemDateAndTime() for Windows without 64-bit
 		integers
+	fixed potential double-CloseHandle in thread class
 
 0.49 - combined passswdentry and shadowentry classes into userentry class
 	updated file::sync() to use FlushFileBuffers directly
