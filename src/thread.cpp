@@ -117,7 +117,7 @@ bool thread::create() {
 		pvt->_thr=CreateThread(NULL,pvt->_stacksize,
 					(LPTHREAD_START_ROUTINE)pvt->_function,
 					pvt->_arg,0,NULL);
-		if (pvt->_thr!=NULL) {
+		if (pvt->_thr!=NULL && pvt->_thr!=INVALID_HANDLE_VALUE) {
 			pvt->_needtojoin=true;
 			return true;
 		}
@@ -185,7 +185,10 @@ bool thread::detach() {
 		error::setErrorNumber(result);
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		bool	result=(CloseHandle(pvt->_thr)==TRUE);
+		bool	result=true;(CloseHandle(pvt->_thr)==TRUE);
+		if (pvt->_thr!=INVALID_HANDLE_VALUE) {
+			result=(CloseHandle(pvt->_thr)==TRUE);
+		}
 		pvt->_thr=INVALID_HANDLE_VALUE;
 		return result;
 	#else
