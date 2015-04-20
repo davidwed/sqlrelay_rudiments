@@ -1,0 +1,111 @@
+RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
+SONAME_VERSION_INFO = @SONAME_VERSION_INFO@
+
+# installation directories
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+includedir = @includedir@
+libdir = @libdir@
+mandir = @mandir@
+datadir = @datadir@
+docdir = ${datadir}/doc/rudiments
+
+# command separator
+AND = ;
+
+# shell
+SHELL = @SHELL@
+
+# libtool command
+LIBTOOL = @LIBTOOL@
+
+# compile commands
+LTCOMPILE = $(LIBTOOL) --mode=compile
+CXX = @CXX@
+COMPILE = -c
+OUT = -o 
+BASECPPFLAGS = @WALL@ @WERROR@ @WNOLONGDOUBLE@ @WNOFORMAT@ @WNOOVERLOADEDVIRTUAL@ @CPPFLAGS@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@
+EXPORTSCPPFLAGS =
+EXTRACPPFLAGS = @EXTRACPPFLAGS@
+CXXFLAGS = @CXXFLAGS@ @PIPE@
+INC = -I
+OBJ = lo
+
+# linker flags
+LTLINK = $(LIBTOOL) --mode=link
+LINK = @CXX@
+AR = @AR@
+LDFLAGS = @LDFLAGS@
+LINKFLAGS = -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
+MODLINKFLAGS = -rpath $(libdir) -avoid-version -module -no-undefined
+LIBPATH = -L
+LIB = -l
+INSTALLLIB = installlib
+UNINSTALLLIB = uninstalllib
+DLLEXT = 
+LIBEXT = la
+
+# install commands
+LTINSTALL = $(LIBTOOL) --mode=install
+CP = cp
+CHMOD = chmod
+MKINSTALLDIRS = $(top_builddir)/mkinstalldirs
+LTFINISH = $(LIBTOOL) --mode=finish
+
+# uninstall/clean commands
+LTUNINSTALL = $(LIBTOOL) --mode=uninstall
+LTCLEAN = $(LIBTOOL) --mode=clean
+RM = rm -f
+RMTREE = rm -rf
+
+# ssl library
+SSLLIBS = @SSLLIBS@
+
+# regular expression library
+PCRELIBS = @PCRELIBS@
+
+# socket library
+SOCKETLIBS = @SOCKETLIBS@
+
+# pthreads library
+PTHREADLIB = @PTHREADLIB@
+
+# nanosleep library
+NANOSLEEPLIB = @NANOSLEEPLIB@
+
+# clock_nanosleep library
+CLOCKNANOSLEEPLIB = @CLOCKNANOSLEEPLIB@
+
+# shmopen library
+SHMOPENLIB = @SHMOPENLIB@
+
+# crypt library
+CRYPTLIB = @CRYPTLIB@
+
+# inet_aton library
+INETATONLIB = @INETATONLIB@
+
+# netapi32 library
+NETAPI32LIB = @NETAPI32LIB@
+
+# dl library
+DLLIB = @DLLIB@
+
+# be library
+BELIB = @BELIB@
+
+# gnu library
+GNULIB = @GNULIB@
+
+# crt library
+CRTLIB = @CRTLIB@
+
+# getpgid library
+GETPGIDLIB = @GETPGIDLIB@
+
+# rudiments library (for tests)
+RUDIMENTSLIB = -L$(top_builddir)/src -lrudiments
+
+# Microsoft-specific stuff
+EXE = @EXE@
