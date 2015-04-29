@@ -1,3 +1,5 @@
+0.51 -
+
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
 	improved xml printing for text nodes
