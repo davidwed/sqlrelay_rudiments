@@ -10,6 +10,7 @@
 	(defined(__USLC__) && !defined(__GNUC__))
 
 	// degenerate debug macros for really incapable compilers
+	// (old microsoft compilers, unixware native compiler)
 	static void debugPrintIndent(uint8_t level) {}
 	static void debugPrintf(uint8_t level, const char *format, ...) {}
 	static void debugSafePrint(uint8_t level, const char *string) {}
