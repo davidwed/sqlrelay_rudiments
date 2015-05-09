@@ -8,23 +8,23 @@
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1300)
 
-// degenerate debug macros for really old windows compilers
-static void debugPrintIndent(uint8_t level) {}
-static void debugPrintf(uint8_t level, const char *format, ...) {}
-static void debugSafePrint(uint8_t level, const char *string) {}
-static void debugSafePrintLength(uint8_t level, const char *string,
+	// degenerate debug macros for really incapable compilers
+	static void debugPrintIndent(uint8_t level) {}
+	static void debugPrintf(uint8_t level, const char *format, ...) {}
+	static void debugSafePrint(uint8_t level, const char *string) {}
+	static void debugSafePrintLength(uint8_t level, const char *string,
 							uint32_t length) {}
 #else
 
-// working debug macros for more modern compilers
-#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_depth; i++) { stdoutput.printf(" "); } }
-#ifdef _MSC_VER
-	#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS,__VA_ARGS__); stdoutput.flush(); }
-#else
-	#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS); stdoutput.flush(); }
-#endif
-#define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string); }
-#define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string,length); }
+	// working debug macros for more modern compilers
+	#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_depth; i++) { stdoutput.printf(" "); } }
+	#ifdef _MSC_VER
+		#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS,__VA_ARGS__); stdoutput.flush(); }
+	#else
+		#define debugPrintf(level,ARGS...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS); stdoutput.flush(); }
+	#endif
+	#define debugSafePrint(level,string) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string); }
+	#define debugSafePrintLength(level,string,length) if (pvt->_debuglevel>=level) { stdoutput.safePrint(string,length); }
 
 #endif
 
