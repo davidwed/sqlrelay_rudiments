@@ -1253,6 +1253,10 @@ AC_MSG_CHECKING(for set_real_time_clock)
 AC_TRY_LINK([#include <os/kernel/OS.h>],
 set_real_time_clock(0);,AC_DEFINE(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK,1,Some systems have set_real_time_clock) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for clock_settime)
+AC_TRY_LINK([#include <time.h>],
+clock_settime(0,0);,AC_DEFINE(RUDIMENTS_HAVE_CLOCK_SETTIME,1,Some systems have clock_settime) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for tzset)
 AC_TRY_COMPILE([#include <time.h>],
 tzset();,AC_DEFINE(RUDIMENTS_HAS_TZSET,1,Some systems have tzset) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))

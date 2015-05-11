@@ -458,15 +458,7 @@ bool datetime::getSystemDateAndTime() {
 
 bool datetime::setSystemDateAndTime() {
 	// FIXME: should set /etc/localtime (or /etc/TZ) and TZ env var too...
-	#if defined(RUDIMENTS_HAVE_SETTIMEOFDAY)
-		timeval	tv;
-		tv.tv_sec=pvt->_epoch;
-		tv.tv_usec=pvt->_usec;
-		return !settimeofday(&tv,NULL);
-	#elif defined(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK)
-		set_real_time_clock(pvt->_epoch);
-		return true;
-	#elif defined(RUDIMENTS_HAVE_SETSYSTEMTIME)
+	#if defined(RUDIMENTS_HAVE_SETSYSTEMTIME)
 		SYSTEMTIME	st;
 		st.wYear=pvt->_year+1900;
 		st.wMonth=pvt->_mon+1;
@@ -477,6 +469,19 @@ bool datetime::setSystemDateAndTime() {
 		st.wSecond=pvt->_sec;
 		st.wMilliseconds=pvt->_usec/1000;
 		return SetSystemTime(&st)!=0;
+	#elif defined(RUDIMENTS_HAVE_SETTIMEOFDAY)
+		timeval	tv;
+		tv.tv_sec=pvt->_epoch;
+		tv.tv_usec=pvt->_usec;
+		return !settimeofday(&tv,NULL);
+	#elif defined(RUDIMENTS_HAVE_CLOCK_SETTIME)
+		timespec	ts;
+		ts.tv_sec=pvt->_epoch;
+		ts.tv_nsec=pvt->_usec*1000;
+		return !clock_settime(CLOCK_REALTIME,&ts);
+	#elif defined(RUDIMENTS_HAVE_SET_REAL_TIME_CLOCK)
+		set_real_time_clock(pvt->_epoch);
+		return true;
 	#else
 		#error no settimeofday or anything like it
 	#endif

@@ -169,6 +169,9 @@
 /* Some systems have clock_nanosleep */
 #undef RUDIMENTS_HAVE_CLOCK_NANOSLEEP
 
+/* Some systems have clock_settime */
+#undef RUDIMENTS_HAVE_CLOCK_SETTIME
+
 /* Some systems have close */
 #undef RUDIMENTS_HAVE_CLOSE
 

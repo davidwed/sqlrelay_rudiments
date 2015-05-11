@@ -1,5 +1,7 @@
 0.51 - added missing inline qualifiers to dynamicarray/staticarray method
-	implementations
+		implementations
+	added test for clock_settime, datetime class uses it if other set-time
+		functions aren't available
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
