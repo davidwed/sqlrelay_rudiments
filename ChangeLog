@@ -1,15 +1,21 @@
 0.51 - added missing inline qualifiers to dynamicarray/staticarray method
 		implementations
 	added test for clock_settime, datetime class uses it if other set-time
-		functions aren't available
-	directory::fpathConf falls back to MAX_PATH code if fpathconf exists
+		functions aren't available, returns false and sets
+		errno=ENOSYS if no set-time function is available
+	directory::fpathConf now falls back to MAX_PATH code if fpathconf exists
 		but there's dirfd() or anything like it
-	file::createFifo returns false and sets errno=ENOSYS if the platform
-		doesn't support mkfifo or CreateNamedPipe
-	file::generateKey on VMS return -1 and sets errno=ENOSYS on VMS
+	file::createFifo returns false and sets errno=ENOSYS on platforms that
+		don't support fifo's now
+	file::generateKey returns -1 and sets errno=ENOSYS on VMS now
+	file::createHardLink returns -1 and sets errno=ENOSYS on platforms
+		don't support hard links now
 	fixed missing breaks in stdio::flush
 	userentry::getPassword/getRealName return NULL on VMS now
-	unix sockets are faked on VMS now too
+	unix sockets are faked on VMS now
+	threadmutex is built and installed now whether or not threads are
+		supported, but if threads are not supported, its methods
+		are degenerate and return success
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

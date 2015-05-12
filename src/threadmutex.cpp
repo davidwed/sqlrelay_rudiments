@@ -129,18 +129,15 @@ threadmutex::~threadmutex() {
 }
 
 bool threadmutex::lock() {
-	error::setErrorNumber(ENOSYS);
-	return false;
+	return true;
 }
 
 bool threadmutex::tryLock() {
-	error::setErrorNumber(ENOSYS);
-	return false;
+	return true;
 }
 
 bool threadmutex::unlock() {
-	error::setErrorNumber(ENOSYS);
-	return false;
+	return true;
 }
 
 void *threadmutex::getInternalMutexStructure() {

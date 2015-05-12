@@ -4,6 +4,7 @@
 #include <rudiments/datetime.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/error.h>
 #if defined(RUDIMENTS_HAVE_RTC_SET_TIME) || \
 		defined(RUDIMENTS_HAVE_RTC_GET_TIME)
 	#include <rudiments/file.h>
@@ -483,7 +484,8 @@ bool datetime::setSystemDateAndTime() {
 		set_real_time_clock(pvt->_epoch);
 		return true;
 	#else
-		#error no settimeofday or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 

@@ -1286,7 +1286,8 @@ bool file::createHardLink(const char *oldpath, const char *newpath) {
 		}
 		return retval;
 	#else
-		#error no link or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
@@ -1471,7 +1472,8 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		// return the result
 		return retval;
 	#else
-		#error no utimes or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 

@@ -366,7 +366,8 @@ bool filesystem::getCurrentProperties() {
 		}
 		return true;
 	#else
-		#error no fstatvfs, fstatfs or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 

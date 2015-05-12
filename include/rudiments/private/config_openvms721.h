@@ -170,7 +170,7 @@
 #undef RUDIMENTS_HAVE_CLOCK_NANOSLEEP
 
 /* Some systems have clock_settime */
-#define RUDIMENTS_HAVE_CLOCK_SETTIME 1
+#undef RUDIMENTS_HAVE_CLOCK_SETTIME
 
 /* Some systems have close */
 #define RUDIMENTS_HAVE_CLOSE 1
@@ -287,7 +287,7 @@
 #define RUDIMENTS_HAVE_FCHMOD 1
 
 /* Some systems have fchown */
-#define RUDIMENTS_HAVE_FCHOWN 1
+#undef RUDIMENTS_HAVE_FCHOWN
 
 /* Some systems have fcntl */
 #define RUDIMENTS_HAVE_FCNTL 1
@@ -335,7 +335,7 @@
 #undef RUDIMENTS_HAVE_GETACE
 
 /* Some systems have getaddrinfo */
-#define RUDIMENTS_HAVE_GETADDRINFO 1
+#undef RUDIMENTS_HAVE_GETADDRINFO
 
 /* Some systems have GetCurrentDirectory */
 #undef RUDIMENTS_HAVE_GETCURRENTDIRECTORY
@@ -362,22 +362,22 @@
 #define RUDIMENTS_HAVE_GETGID 1
 
 /* Some systems have getgrgid_r */
-#define RUDIMENTS_HAVE_GETGRGID_R 1
+#undef RUDIMENTS_HAVE_GETGRGID_R
 
 /* Some systems have getgrgid_r */
 #undef RUDIMENTS_HAVE_GETGRGID_R_4
 
 /* Some systems have getgrgid_r */
-#define RUDIMENTS_HAVE_GETGRGID_R_5 1
+#undef RUDIMENTS_HAVE_GETGRGID_R_5
 
 /* Some systems have getgrnam_r */
-#define RUDIMENTS_HAVE_GETGRNAM_R 1
+#undef RUDIMENTS_HAVE_GETGRNAM_R
 
 /* Some systems have getgrnam_r */
 #undef RUDIMENTS_HAVE_GETGRNAM_R_4
 
 /* Some systems have getgrnam_r */
-#define RUDIMENTS_HAVE_GETGRNAM_R_5 1
+#undef RUDIMENTS_HAVE_GETGRNAM_R_5
 
 /* Some systems have gethostbyaddr_r */
 #define RUDIMENTS_HAVE_GETHOSTBYADDR_R 1
@@ -596,7 +596,7 @@
 #define RUDIMENTS_HAVE_LIMITS_H 1
 
 /* Some systems have link */
-#define RUDIMENTS_HAVE_LINK 1
+#undef RUDIMENTS_HAVE_LINK
 
 /* Linux libc4 style statfs */
 #undef RUDIMENTS_HAVE_LINUX_LIBC4_STATFS
@@ -737,7 +737,7 @@
 #undef RUDIMENTS_HAVE_MUNMAP_CADDR_T
 
 /* Some systems have nanosleep */
-#define RUDIMENTS_HAVE_NANOSLEEP 1
+#undef RUDIMENTS_HAVE_NANOSLEEP
 
 /* NetBSD style statfs */
 #undef RUDIMENTS_HAVE_NETBSD_STATFS
@@ -797,7 +797,7 @@
 #define RUDIMENTS_HAVE_PIPE 1
 
 /* Some systems have poll */
-#define RUDIMENTS_HAVE_POLL 1
+#undef RUDIMENTS_HAVE_POLL
 
 /* Some systems have poll.h */
 #define RUDIMENTS_HAVE_POLL_H 1
@@ -854,16 +854,16 @@
 #undef RUDIMENTS_HAVE_RANDOM_R
 
 /* Some systems have rand_r */
-#define RUDIMENTS_HAVE_RAND_R 1
+#undef RUDIMENTS_HAVE_RAND_R
 
 /* Some systems have read */
 #define RUDIMENTS_HAVE_READ 1
 
 /* Some systems have readdir_r */
-#define RUDIMENTS_HAVE_READDIR_R 1
+#undef RUDIMENTS_HAVE_READDIR_R
 
 /* Some systems have readlink */
-#define RUDIMENTS_HAVE_READLINK 1
+#undef RUDIMENTS_HAVE_READLINK
 
 /* Some systems have reboot with 1 argument */
 #undef RUDIMENTS_HAVE_REBOOT_1
@@ -1088,7 +1088,7 @@
 #undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_SYS_TIME_H
 
 /* Some systems have struct timespec in time.h */
-#define RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H 1
+#undef RUDIMENTS_HAVE_STRUCT_TIMESPEC_IN_TIME_H
 
 /* Some systems have struct timeval */
 #define RUDIMENTS_HAVE_STRUCT_TIMEVAL 1
@@ -1109,7 +1109,7 @@
 #undef RUDIMENTS_HAVE_SWAP_INT64
 
 /* Some systems have symlink */
-#define RUDIMENTS_HAVE_SYMLINK 1
+#undef RUDIMENTS_HAVE_SYMLINK
 
 /* Some systems have sync */
 #define RUDIMENTS_HAVE_SYNC 1
@@ -1262,13 +1262,13 @@
 #define RUDIMENTS_HAVE_UNSETENV 1
 
 /* Some systems have utime */
-#define RUDIMENTS_HAVE_UTIME 1
+#undef RUDIMENTS_HAVE_UTIME
 
 /* Some systems have utimes with char * argument */
 #undef RUDIMENTS_HAVE_UTIMES_CHAR
 
 /* Some systems have utimes with const char * argument */
-#define RUDIMENTS_HAVE_UTIMES_CONST_CHAR 1
+#undef RUDIMENTS_HAVE_UTIMES_CONST_CHAR
 
 /* Some systems have utime.h */
 #define RUDIMENTS_HAVE_UTIME_H 1
@@ -1280,7 +1280,7 @@
 #undef RUDIMENTS_HAVE_VDPRINTF
 
 /* Most systems have vsnprintf */
-#define RUDIMENTS_HAVE_VSNPRINTF 1
+#undef RUDIMENTS_HAVE_VSNPRINTF
 
 /* Some systems have vsnprintf_s */
 #undef RUDIMENTS_HAVE_VSNPRINTF_S

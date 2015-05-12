@@ -2534,7 +2534,7 @@ fi
 
 # Check whether --enable-threads was given.
 if test "${enable_threads+set}" = set; then :
-  enableval=$enable_threads; ENABLE_RUDIMENTS_THREADS="no"; INCLUDE_THREAD="0"; INCLUDE_THREADMUTEX="0"
+  enableval=$enable_threads; ENABLE_RUDIMENTS_THREADS="no"; INCLUDE_THREAD="0"
 else
   ENABLE_RUDIMENTS_THREADS="yes"
 fi
