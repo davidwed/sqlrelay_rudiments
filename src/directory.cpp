@@ -486,7 +486,10 @@ bool directory::canAccessLongFileNames() {
 }
 
 int64_t directory::fpathConf(int32_t name) {
-	#if defined(RUDIMENTS_HAVE_FPATHCONF)
+	#if defined(RUDIMENTS_HAVE_FPATHCONF) && \
+			defined(RUDIMENTS_HAVE_DIRFD) && \
+			defined(RUDIMENTS_HAVE_DIR_DD_FD) && \
+			defined(RUDIMENTS_HAVE_DIR_D_FD)
 		int64_t	result;
 		do {
 			result=fpathconf(
@@ -496,8 +499,6 @@ int64_t directory::fpathConf(int32_t name) {
 						pvt->_dir->dd_fd
 					#elif defined(RUDIMENTS_HAVE_DIR_D_FD)
 						pvt->_dir->d_fd
-					#else
-						#error need dirfd replacement
 					#endif
 					,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

@@ -119,7 +119,7 @@
 #undef RUDIMENTS_HAVE_ACCCTRL_H
 
 /* Most systems have access() */
-#undef RUDIMENTS_HAVE_ACCESS
+#define RUDIMENTS_HAVE_ACCESS 1
 
 /* Some systems have aclapi.h */
 #undef RUDIMENTS_HAVE_ACLAPI_H
@@ -272,7 +272,7 @@
 #undef RUDIMENTS_HAVE_DUPLICATEHANDLE
 
 /* Some systems define environ in unistd.h */
-#define RUDIMENTS_HAVE_ENVIRON 1
+#undef RUDIMENTS_HAVE_ENVIRON
 
 /* Some systems have epoll */
 #undef RUDIMENTS_HAVE_EPOLL

@@ -1511,7 +1511,8 @@ bool file::createFifo(const char *filename, mode_t perms) {
 		CloseHandle(handle);
 		return true;
 	#else
-		#error no mkfifo or anything like it
+		error::setErrorNumber(ENOSYS);
+		return false;
 	#endif
 }
 
