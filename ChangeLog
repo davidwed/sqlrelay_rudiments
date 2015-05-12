@@ -18,6 +18,7 @@
 		are degenerate and return success
 	filesystem::getCurrentProperties() returns false and sets errno=ENOSYS
 		on VMS now
+	implemented degenerate groupentry for VMS
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

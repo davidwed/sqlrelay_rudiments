@@ -284,7 +284,7 @@
 #define RUDIMENTS_HAVE_EXECVP 1
 
 /* Some systems have fchmod */
-#define RUDIMENTS_HAVE_FCHMOD 1
+#undef RUDIMENTS_HAVE_FCHMOD
 
 /* Some systems have fchown */
 #undef RUDIMENTS_HAVE_FCHOWN
@@ -551,7 +551,7 @@
 #define RUDIMENTS_HAVE_INET_ADDR 1
 
 /* Some systems have inet_aton */
-#define RUDIMENTS_HAVE_INET_ATON 1
+#undef RUDIMENTS_HAVE_INET_ATON
 
 /* Some systems have InitiateSystemShutdownEx */
 #undef RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX

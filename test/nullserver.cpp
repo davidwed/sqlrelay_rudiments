@@ -8,9 +8,6 @@
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
-// for NULL
-#include <stdio.h>
-
 class myserver : public inetsocketserver {
 	public:
 			myserver() : inetsocketserver() {}

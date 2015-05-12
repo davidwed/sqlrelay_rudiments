@@ -2,6 +2,9 @@
 // See the COPYING file for more information
 
 #include <rudiments/groupentry.h>
+
+#ifndef __VMS
+
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
@@ -433,3 +436,71 @@ char *groupentry::getSid(const char *groupname) {
 	return (grp.initialize(groupname))?
 			charstring::duplicate(grp.getSid()):NULL;
 }
+
+#else
+
+groupentry::groupentry() {
+}
+
+groupentry::groupentry(const groupentry &g) {
+}
+
+groupentry &groupentry::operator=(const groupentry &g) {
+	return *this;
+}
+
+groupentry::~groupentry() {
+}
+
+const char *groupentry::getName() const {
+	return NULL;
+}
+
+gid_t groupentry::getGroupId() const {
+	return 0;
+}
+
+const char * const *groupentry::getMembers() const {
+	return NULL;
+}
+
+const char *groupentry::getSid() const {
+	return NULL;
+}
+
+bool groupentry::platformSupportsFormalSid() {
+	return false;
+}
+
+bool groupentry::needsMutex() {
+	return true;
+}
+
+void groupentry::setMutex(threadmutex *mtx) {
+}
+
+bool groupentry::initialize(const char *groupname) {
+	return initialize(groupname,0);
+}
+
+bool groupentry::initialize(gid_t groupid) {
+	return initialize(NULL,groupid);
+}
+
+bool groupentry::initialize(const char *groupname, gid_t groupid) {
+	return true;
+}
+
+gid_t groupentry::getGroupId(const char *groupname) {
+	return 0;
+}
+
+char *groupentry::getName(gid_t groupid) {
+	return NULL;
+}
+
+char *groupentry::getSid(const char *groupname) {
+	return NULL;
+}
+
+#endif
