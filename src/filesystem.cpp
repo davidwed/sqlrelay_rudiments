@@ -292,8 +292,9 @@ bool filesystem::close() {
 }
 
 bool filesystem::getCurrentProperties() {
-	#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
-			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)
+	#if (defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS) || \
+			defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATFS)) && \
+			!defined(__VMS)
 
 		int32_t	result;
 		do {

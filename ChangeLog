@@ -16,6 +16,8 @@
 	threadmutex is built and installed now whether or not threads are
 		supported, but if threads are not supported, its methods
 		are degenerate and return success
+	filesystem::getCurrentProperties() returns false and sets errno=ENOSYS
+		on VMS now
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
