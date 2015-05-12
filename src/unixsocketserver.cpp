@@ -8,7 +8,7 @@
 #include <rudiments/file.h>
 #include <rudiments/process.h>
 #include <rudiments/error.h>
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	#include <rudiments/inetsocketserver.h>
 #endif
 
@@ -18,7 +18,7 @@ class unixsocketserverprivate {
 	friend class unixsocketserver;
 	private:
 		mode_t	_mask;
-		#ifdef _WIN32
+		#if defined(_WIN32) || defined(__VMS)
 			inetsocketserver	_iss;
 		#endif
 };
@@ -26,7 +26,7 @@ class unixsocketserverprivate {
 unixsocketserver::unixsocketserver() : socketserver(), unixsocketutil() {
 	pvt=new unixsocketserverprivate;
 	pvt->_mask=0;
-	#ifdef _WIN32
+	#if defined(_WIN32) || defined(__VMS)
 		translateByteOrder();
 	#endif
 	type("unixsocketserver");
@@ -44,7 +44,7 @@ unixsocketserver &unixsocketserver::operator=(const unixsocketserver &u) {
 		socketserver::operator=(u);
 		unixsocketutil::operator=(u);
 		pvt->_mask=u.pvt->_mask;
-		#ifdef _WIN32
+		#if defined(_WIN32) || defined(__VMS)
 			pvt->_iss=u.pvt->_iss;
 		#endif
 	}
@@ -59,7 +59,7 @@ unixsocketserver::~unixsocketserver() {
 	// closesocket() must be called rather than close() to prevent a crash.
 	// If close() is called here, it will eventually call this method's
 	// lowLevelClose() rather than filedescriptor::lowLevelClose().
-	#ifdef _WIN32
+	#if defined(_WIN32) || defined(__VMS)
 		// However, on windows, we're faking unix sockets using inet
 		// sockets, and the actual inet socket will be closed during
 		// the delete below, so don't close anything here, just set the
@@ -82,7 +82,7 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 		return false;
 	}
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	if (pvt->_iss.initialize("127.0.0.1",filenameToPort(filename))) {
 		fd(pvt->_iss.getFileDescriptor());
 		return true;
@@ -131,7 +131,7 @@ bool unixsocketserver::listen(const char *filename, mode_t mask,
 
 bool unixsocketserver::bind() {
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	return pvt->_iss.bind();
 #else
 	// set umask and store old umask
@@ -158,7 +158,7 @@ bool unixsocketserver::bind() {
 
 bool unixsocketserver::listen(int32_t backlog) {
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	return pvt->_iss.listen(backlog);
 #else
 	int32_t	result;
@@ -171,7 +171,7 @@ bool unixsocketserver::listen(int32_t backlog) {
 
 filedescriptor *unixsocketserver::accept() {
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	return pvt->_iss.accept();
 #else
 	// initialize a socket address structure

@@ -8,6 +8,8 @@
 		doesn't support mkfifo or CreateNamedPipe
 	file::generateKey on VMS return -1 and sets errno=ENOSYS on VMS
 	fixed missing breaks in stdio::flush
+	userentry::getPassword/getRealName return NULL on VMS now
+	unix sockets are faked on VMS now too
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

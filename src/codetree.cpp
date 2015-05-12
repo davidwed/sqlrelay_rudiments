@@ -7,10 +7,11 @@
 
 
 #if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || \
-	(defined(__USLC__) && !defined(__GNUC__))
+	(defined(__USLC__) && !defined(__GNUC__)) || \
+	defined(__VMS)
 
 	// degenerate debug macros for really incapable compilers
-	// (old microsoft compilers, unixware native compiler)
+	// (old microsoft compilers, unixware native compiler, openvms compiler)
 	static void debugPrintIndent(uint8_t level) {}
 	static void debugPrintf(uint8_t level, const char *format, ...) {}
 	static void debugSafePrint(uint8_t level, const char *string) {}

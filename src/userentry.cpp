@@ -225,7 +225,11 @@ const char *userentry::getName() const {
 
 const char *userentry::getPassword() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return (pvt->_pwd)?pvt->_pwd->pw_passwd:NULL;
+	#ifndef __VMS
+		return (pvt->_pwd)?pvt->_pwd->pw_passwd:NULL;
+	#else
+		return NULL;
+	#endif
 #else
 	return pvt->_password;
 #endif
@@ -329,7 +333,11 @@ gid_t userentry::getPrimaryGroupId() const {
 
 const char *userentry::getRealName() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	return (pvt->_pwd)?pvt->_pwd->pw_gecos:NULL;
+	#ifndef __VMS
+		return (pvt->_pwd)?pvt->_pwd->pw_gecos:NULL;
+	#else
+		return NULL;
+	#endif
 #else
 	return pvt->_realname;
 #endif

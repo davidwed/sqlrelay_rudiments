@@ -1794,6 +1794,10 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 	// (except for the NULL terminator)
 	return safebuffersize;
 }
+
+// now we can say that we have vsnprintf
+#define RUDIMENTS_HAVE_VSNPRINTF 1
+
 #endif
 
 ssize_t charstring::printf(char *buffer, size_t length,

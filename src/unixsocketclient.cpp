@@ -5,7 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	#include <rudiments/inetsocketclient.h>
 #endif
 
@@ -14,14 +14,14 @@
 class unixsocketclientprivate {
 	friend class unixsocketclient;
 	private:
-		#ifdef _WIN32
+		#if defined(_WIN32) || defined(__VMS)
 			inetsocketclient	_isc;
 		#endif
 };
 
 unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
 	pvt=new unixsocketclientprivate;
-	#ifdef _WIN32
+	#if defined(_WIN32) || defined(__VMS)
 		translateByteOrder();
 	#endif
 	type("unixsocketclient");
@@ -37,7 +37,7 @@ unixsocketclient &unixsocketclient::operator=(const unixsocketclient &u) {
 	if (this!=&u) {
 		socketclient::operator=(u);
 		unixsocketutil::operator=(u);
-		#ifdef _WIN32
+		#if defined(_WIN32) || defined(__VMS)
 			pvt->_isc=u.pvt->_isc;
 		#endif
 	}
@@ -54,7 +54,7 @@ unixsocketclient::~unixsocketclient() {
 	// lowLevelClose() rather than filedescriptor::lowLevelClose().
 	close();
 	delete pvt;
-	#ifdef _WIN32
+	#if defined(_WIN32) || defined(__VMS)
 		fd(-1);
 	#endif
 }
@@ -75,7 +75,7 @@ void unixsocketclient::initialize(const char *filename,
 						uint32_t tries) {
 	unixsocketutil::initialize(filename);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
-	#ifdef _WIN32
+	#if defined(_WIN32) || defined(__VMS)
 		pvt->_isc.initialize("127.0.0.1",
 					filenameToPort(filename),
 					timeoutsec,timeoutusec,
@@ -107,7 +107,7 @@ void unixsocketclient::initialize(constnamevaluepairs *cd) {
 
 int32_t unixsocketclient::connect() {
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__VMS)
 	int32_t	result=pvt->_isc.connect();
 	if (result>-1) {
 		fd(pvt->_isc.getFileDescriptor());
@@ -170,7 +170,7 @@ int32_t unixsocketclient::connect() {
 }
 
 bool unixsocketclient::close() {
-	#ifdef _WIN32
+	#if defined(_WIN32) || defined(__VMS)
 		pvt->_isc.close();
 		fd(-1);
 	#endif
