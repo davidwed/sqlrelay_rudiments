@@ -979,7 +979,8 @@ uint64_t file::getInode() const {
 	#if defined(RUDIMENTS_HAVE_GETFILEINFORMATIONBYHANDLE)
 		return pvt->_inode;
 	#else
-		return pvt->_st.st_ino;
+		// some platforms (OpenVMS) require this cast
+		return (uint64_t)pvt->_st.st_ino;
 	#endif
 }
 

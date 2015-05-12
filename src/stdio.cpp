@@ -13,10 +13,13 @@ bool stdiofiledescriptor::flush() {
 	switch (fd()) {
 		case 0:
 			strm=stdin;
+			break;
 		case 1:
 			strm=stdout;
+			break;
 		case 2:
 			strm=stderr;
+			break;
 		default:
 			return false;
 	}

@@ -710,7 +710,7 @@
 #undef RUDIMENTS_HAVE_MPROTECT_CADDR_T
 
 /* Some msghdr structs have a msg_accrights member */
-#define RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS 1
+#undef RUDIMENTS_HAVE_MSGHDR_MSG_ACCRIGHTS
 
 /* Some msghdr structs have a msg_controllen member */
 #define RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN 1
@@ -1361,7 +1361,7 @@
 #undef RUDIMENTS_HAVE___VSNPRINTF
 
 /* iov_base is char * */
-#define RUDIMENTS_IOV_BASE_TYPE 1
+#define RUDIMENTS_IOV_BASE_TYPE char *
 
 /* Some systems have swab but dont define it */
 #undef RUDIMENTS_MUST_DEFINE_SWAB
@@ -1438,3 +1438,4 @@
 
 #define __CRTL_VER 70320000
 #define socklen_t size_t
+#define _SOCKADDR_LEN
