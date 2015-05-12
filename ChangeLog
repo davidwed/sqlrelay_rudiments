@@ -6,6 +6,7 @@
 		but there's dirfd() or anything like it
 	file::createFifo returns false and sets errno=ENOSYS if the platform
 		doesn't support mkfifo or CreateNamedPipe
+	file::generateKey on VMS return -1 and sets errno=ENOSYS on VMS
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

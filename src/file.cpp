@@ -1764,13 +1764,13 @@ char *file::eightDotThree(const char *filename) {
 }
 
 key_t file::generateKey(const char *filename, int32_t id) {
-#ifdef RUDIMENTS_HAVE_FTOK
+#if defined(RUDIMENTS_HAVE_FTOK)
 	#ifdef RUDIMENTS_HAVE_CONST_CHAR_FTOK
 		return ::ftok(filename,id);
 	#else
 		return ::ftok(const_cast<char *>(filename),id);
 	#endif
-#else
+#elif !defined( __VMS)
 	file	f;
 	if (!f.open(filename,O_RDONLY)) {
 		return -1;
@@ -1778,6 +1778,9 @@ key_t file::generateKey(const char *filename, int32_t id) {
 	return (key_t)((f.getInode() & 0xffff) |
 			((f.getDevice() & 0xff) << 16) |
 			((id & 0xff)  << 24));
+#else
+	error::setErrorNumber(ENOSYS);
+	return -1;
 #endif
 }
 
