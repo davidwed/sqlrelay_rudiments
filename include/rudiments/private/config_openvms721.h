@@ -137,10 +137,10 @@
 #undef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
 
 /* Some systems dont have st_blocks in struct stat */
-#define RUDIMENTS_HAVE_BLKCNT_T 1
+#undef RUDIMENTS_HAVE_BLKCNT_T
 
 /* Some systems dont have st_blksize in struct stat */
-#define RUDIMENTS_HAVE_BLKSIZE_T 1
+#undef RUDIMENTS_HAVE_BLKSIZE_T
 
 /* Most systems have bool */
 #define RUDIMENTS_HAVE_BOOL 1
@@ -419,7 +419,7 @@
 #define RUDIMENTS_HAVE_GETPAGESIZE 1
 
 /* Some systems have getpgid */
-#define RUDIMENTS_HAVE_GETPGID 1
+#undef RUDIMENTS_HAVE_GETPGID
 
 /* Some systems have getpid */
 #define RUDIMENTS_HAVE_GETPID 1
@@ -509,7 +509,7 @@
 #undef RUDIMENTS_HAVE_GETSERVBYPORT_R_6
 
 /* Some systems have getsid */
-#define RUDIMENTS_HAVE_GETSID 1
+#undef RUDIMENTS_HAVE_GETSID
 
 /* Some systems have getspnam */
 #undef RUDIMENTS_HAVE_GETSPNAM
@@ -935,7 +935,7 @@
 #define RUDIMENTS_HAVE_SETENV 1
 
 /* Some systems have seteuid */
-#define RUDIMENTS_HAVE_SETEUID 1
+#undef RUDIMENTS_HAVE_SETEUID
 
 /* Some systems have seteuid but dont define it in a header file */
 #undef RUDIMENTS_HAVE_SETEUID_BUT_NOT_DEFINED
@@ -953,19 +953,19 @@
 #define RUDIMENTS_HAVE_SETITIMER 1
 
 /* Some systems have setpgid */
-#define RUDIMENTS_HAVE_SETPGID 1
+#undef RUDIMENTS_HAVE_SETPGID
 
 /* Some systems have setregid */
-#define RUDIMENTS_HAVE_SETREGID 1
+#undef RUDIMENTS_HAVE_SETREGID
 
 /* Some systems have setreuid */
-#define RUDIMENTS_HAVE_SETREUID 1
+#undef RUDIMENTS_HAVE_SETREUID
 
 /* Some systems have SetSecurityInfo */
 #undef RUDIMENTS_HAVE_SETSECURITYINFO
 
 /* Some systems have setsid */
-#define RUDIMENTS_HAVE_SETSID 1
+#undef RUDIMENTS_HAVE_SETSID
 
 /* Some systems have SetSystemTime */
 #undef RUDIMENTS_HAVE_SETSYSTEMTIME
