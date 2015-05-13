@@ -2761,6 +2761,14 @@ AC_MSG_CHECKING(for fdopen)
 AC_TRY_LINK([#include <stdio.h>],
 fdopen(0,"w");,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FDOPEN,1,Some systems have fdopen), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for FILE->_fileno)
+AC_TRY_LINK([#include <stdio.h>],
+FILE f; f._fileno=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE_FILENO,1,Some systems have FILE->_fileno), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for FILE->__filedes)
+AC_TRY_LINK([#include <stdio.h>],
+FILE f; f.__filedes=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE_FILEDES,1,Some systems have FILE->__filedes), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
