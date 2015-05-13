@@ -304,6 +304,15 @@
 /* Some systems have FD_CLOEXEC */
 /* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
 
+/* Some systems have FILE->_file */
+#define RUDIMENTS_HAVE_FILE_FILE 1
+
+/* Some systems have FILE->__filedes */
+/* #undef RUDIMENTS_HAVE_FILE_FILEDES */
+
+/* Some systems have FILE->_fileno */
+/* #undef RUDIMENTS_HAVE_FILE_FILENO */
+
 /* Some systems have FindFirstFile */
 #define RUDIMENTS_HAVE_FINDFIRSTFILE 1
 
