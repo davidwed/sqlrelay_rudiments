@@ -2349,7 +2349,9 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 
 			// otherwise use vfprintf, if we can
 			FILE	*f=NULL;
-			if (pvt->_fd==1) {
+			if (pvt->_fd==0) {
+				f=stdin;
+			} else if (pvt->_fd==1) {
 				f=stdout;
 			} else if (pvt->_fd==2) {
 				f=stderr;
@@ -2367,7 +2369,7 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 				size=vfprintf(stdout,format,*argp);
 				fflush(stdout);
 
-				if (pvt->_fd>2) {
+				if (f!=stdin && f!=stdout && f!=stderr) {
 					// We need to free f but we don't want
 					// fclose() to close pvt->_fd.  There's
 					// no standard way of doing this though.
