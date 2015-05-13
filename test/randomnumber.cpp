@@ -56,16 +56,16 @@ int main(int argc, const char **argv) {
 	datetime	start;
 	start.getSystemDateAndTime();
 	r.setSeed(0);
-	for (int64_t k=0; k<randomnumber::getRandMax(); k++) {
+	for (int64_t l=0; l<randomnumber::getRandMax(); l++) {
 		uint32_t	result;
 		if (!r.generateNumber(&result)) {
-        		stdoutput.printf("generateNumber failed: %lld\n",k);
+        		stdoutput.printf("generateNumber failed: %lld\n",l);
 			break;
 		} else {
-			if (k<10) {
-        			stdoutput.printf("%lld: %lld\n",
-							k,(uint64_t)result);
-			} else if (k==10) {
+			if (l<10) {
+        			stdoutput.printf("%lld: ",l);
+        			stdoutput.printf("%ld\n",result);
+			} else if (l==10) {
         			stdoutput.printf("...\n");
 			}
 		}

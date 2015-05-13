@@ -21,6 +21,8 @@
 	implemented degenerate groupentry for VMS
 	fixed file::getBlockCount() crash that could occur if the filesystem's
 		block size was reported as 0
+	tweaked copy constructors and = operators in staticarray/dynamicarray
+		classes to work with older compilers
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

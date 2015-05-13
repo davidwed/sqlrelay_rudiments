@@ -17,7 +17,20 @@ staticarray<valuetype,length>::staticarray(const staticarray<valuetype,length> &
 	len=v.len;
 	data=new valuetype[len];
 	for (uint64_t i=0; i<len; i++) {
-		*data[i]=*v.data[i];
+
+		// Why not just:
+		//	*data[i]=*v.data[i];
+		//
+		// Some compilers get confused and think that
+		//	*data[i]=*v.data[i]
+		//		means
+		//	*((data[i])->operator=(*v.data[i]))
+		// and no carefully placed parentheses help.
+		//
+		// This silliness sorts out the problem.
+		valuetype	*a=&(data[i]);
+		valuetype	*b=&(v.data[i]);
+		*a=*b;
 	}
 }
 
@@ -29,7 +42,20 @@ staticarray<valuetype,length> &staticarray<valuetype,length>::operator=(
 		len=v.len;
 		data=new valuetype[len];
 		for (uint64_t i=0; i<len; i++) {
-			*data[i]=*v.data[i];
+
+			// Why not just:
+			//	*data[i]=*v.data[i];
+			//
+			// Some compilers get confused and think that
+			//	*data[i]=*v.data[i]
+			//		means
+			//	*((data[i])->operator=(*v.data[i]))
+			// and no carefully placed parentheses help.
+			//
+			// This silliness sorts out the problem.
+			valuetype	*a=&(data[i]);
+			valuetype	*b=&(v.data[i]);
+			*a=*b;
 		}
 	}
 	return *this;

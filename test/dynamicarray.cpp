@@ -45,7 +45,8 @@ int main(int argc, const char **argv) {
 
 	// set/check values
 	stdoutput.printf("set values...\n");
-	uint32_t	count=1024*1024;
+	//uint32_t	count=1024*1024;
+	uint32_t	count=1024;
 	uint32_t	i;
 	for (i=0; i<count; i++) {
 		char	*val=charstring::parseNumber(i);
@@ -93,7 +94,8 @@ int main(int argc, const char **argv) {
 
 	// set/check values
 	stdoutput.printf("get values...\n");
-	count=1024*1024;
+	//count=1024*1024;
+	count=1024;
 	success=true;
 	for (i=0; i<count; i++) {
 		success=(da2[i].getValue()==1);
@@ -129,7 +131,8 @@ int main(int argc, const char **argv) {
 
 	// set/check values
 	stdoutput.printf("get values...\n");
-	count=1024*1024;
+	//count=1024*1024;
+	count=1024;
 	success=true;
 	for (i=0; i<count; i++) {
 		da3[i]=new testclass();

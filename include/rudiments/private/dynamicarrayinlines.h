@@ -52,9 +52,25 @@ RUDIMENTS_TEMPLATE_INLINE
 void dynamicarray<valuetype>::dynamicarrayClone(
 				const dynamicarray<valuetype> &v) {
 
+	dynamicarray<valuetype>	*vconst=(dynamicarray<valuetype> *)&v;
+
 	// clone the data
 	for (uint64_t i=0; i<v.getLength(); i++) {
-		this[i]=v[i];
+
+		// Why not just:
+		//	this[i]=v[i];
+		//
+		// Some compilers don't allow v[] because the operator[] method
+		// isn't const, but v is.
+		//
+		// Also, some compilers get confused and think that
+		//	this[i]=v[i]
+		//		means
+		//	(this[i])->operator=(v[i])
+		// and no carefully placed parentheses help.
+		//
+		// This silliness sorts both issues out.
+		this.find(i)=((dynamicarray<valuetype> *)&v)->find(i);
 	}
 
 	// clone sizes and positions
