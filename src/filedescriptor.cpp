@@ -2366,8 +2366,8 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 			}
 
 			if (f) {
-				size=vfprintf(stdout,format,*argp);
-				fflush(stdout);
+				size=vfprintf(f,format,*argp);
+				fflush(f);
 
 				if (f!=stdin && f!=stdout && f!=stderr) {
 					// We need to free f but we don't want
