@@ -52,8 +52,6 @@ RUDIMENTS_TEMPLATE_INLINE
 void dynamicarray<valuetype>::dynamicarrayClone(
 				const dynamicarray<valuetype> &v) {
 
-	dynamicarray<valuetype>	*vconst=(dynamicarray<valuetype> *)&v;
-
 	// clone the data
 	for (uint64_t i=0; i<v.getLength(); i++) {
 

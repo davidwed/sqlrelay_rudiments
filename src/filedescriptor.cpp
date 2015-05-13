@@ -2335,31 +2335,81 @@ size_t filedescriptor::printf(const char *format, ...) {
 
 size_t filedescriptor::printf(const char *format, va_list *argp) {
 
-	// If we're not buffering writes and the system supports vdprintf then
-	// go ahead and use it, it's a lot more efficient than vsnprintf'ing
-	// to a buffer and writing that.
-	#ifdef RUDIMENTS_HAVE_VDPRINTF
+	// If we're not buffering writes...
 	if (!pvt->_writebuffer) {
-		return vdprintf(pvt->_fd,format,*argp);
-	}
-	#endif
+		#ifdef RUDIMENTS_HAVE_VDPRINTF
+			// if system supports vdprintf then go ahead and use
+			// it, it's a lot more efficient than vsnprintf'ing
+			// to a buffer and writing that.
+			return vdprintf(pvt->_fd,format,*argp);
+		#else
+			// otherwise use vfprintf, for the most common cases
+			if (pvt->_fd==1) {
+				return vfprintf(stdout,format,*argp);
+			} else if (pvt->_fd==2) {
+				return vfprintf(stderr,format,*argp);
+			}
 
-	// If we are buffering writes though, don't use vdprintf because it
+			// If fdopen is available then use it and vfprintf
+			// together.  Unfortunately we can't (reliably) on
+			// Windows because it won't work if the filedescriptor
+			// is a socket.
+			#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
+			else {
+				FILE	*f=fdopen(pvt->_fd,"a");
+				if (f) {
+					ssize_t	size=vfprintf(f,format,*argp);
+
+					// This fflush() ought not to be
+					// necessary, but it is, at least with
+					// linux libc4.  Oddly, it's not
+					// necessary when using stdout/stderr,
+					// but is with a generic FILE *.
+					// Strange.
+					fflush(f);
+
+					// We don't want fclose() to close
+					// pvt->_fd.  There's no standard
+					// way of doing this though.
+					//
+					// Setting the file descriptor member
+					// to -1 is generally reliable.
+					#if defined(RUDIMENTS_HAVE_FILE_FILENO)
+						f->_fileno=-1;
+					#elif defined(RUDIMENTS_HAVE_FILE_FILE)
+						f->_file=-1;
+					#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
+						f->__filedes=-1;
+					#else
+						#error no FILE->_fileno or anything like it
+					#endif
+
+					fclose(f);
+
+					return size;
+				}
+			}
+			#endif
+		#endif
+	}
+
+	// If we are buffering writes though, don't use the above because it
 	// would bypass the buffer.
 
-	// If vasprintf is available, then use it, otherwise play games with
+	// Use vasprintf if it is available, otherwise play games with
 	// charstring::printf().
 	char	*buffer=NULL;
 	ssize_t	size=0;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
-	size=vasprintf(&buffer,format,*argp);
+		size=vasprintf(&buffer,format,*argp);
 	#else
-	// Some compilers throw a warning if they see "printf(NULL..." at all,
-	// whether it's the global function printf() or one that you've defined
-	// yourself.  Using buffer here works around that.
-	size=charstring::printf(buffer,0,format,argp);
-	buffer=new char[size+1];
-	size=charstring::printf(buffer,size+1,format,argp);
+		// Some compilers throw a warning if they see "printf(NULL..."
+		// at all, whether it's the global function printf() or one
+		// that you've defined yourself.  Using buffer here works
+		// around that.
+		size=charstring::printf(buffer,0,format,argp);
+		buffer=new char[size+1];
+		size=charstring::printf(buffer,size+1,format,argp);
 	#endif
 	write(buffer,size);
 	delete[] buffer;
