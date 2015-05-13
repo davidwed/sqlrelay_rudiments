@@ -304,6 +304,9 @@
 /* Some systems have FD_CLOEXEC */
 #undef RUDIMENTS_HAVE_FD_CLOEXEC
 
+/* Some systems have FILE->_file */
+#undef RUDIMENTS_HAVE_FILE_FILE
+
 /* Some systems have FILE->__filedes */
 #undef RUDIMENTS_HAVE_FILE_FILEDES
 
