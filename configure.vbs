@@ -554,7 +554,7 @@ end if
 
 ' input and output files
 infiles=Array(_
-	"config.windows.mk",_
+	"config_windows.mk",_
 	configwindowsh,_
 	"src\\Makefile.in",_
 	"include\\Makefile.in",_
