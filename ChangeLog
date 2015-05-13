@@ -24,6 +24,9 @@
 	tweaked copy constructors and = operators in staticarray/dynamicarray
 		classes to work with older compilers
 	disabled -Werror for gcc < 2.7
+	updated filedescriptor::printf to use fprintf or fdopen/vfprintf when
+		possible in leiu of falling back to vasprintf or vsprintf with
+		a scratch file
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

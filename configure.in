@@ -2757,6 +2757,10 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 SetEntriesInAcl(0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_SETENTRIESINACL,1,Some systems have SetEntriesInAcl) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for fdopen)
+AC_TRY_LINK([#include <stdio.h>],
+fdopen(0,"w");,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FDOPEN,1,Some systems have fdopen), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

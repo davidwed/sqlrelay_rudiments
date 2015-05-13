@@ -298,6 +298,9 @@
 /* Some systems have fdatasync */
 /* #undef RUDIMENTS_HAVE_FDATASYNC */
 
+/* Some systems have fdopen */
+/* #undef RUDIMENTS_HAVE_FDOPEN */
+
 /* Some systems have FD_CLOEXEC */
 /* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
 
