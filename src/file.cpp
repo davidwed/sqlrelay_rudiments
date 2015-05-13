@@ -861,8 +861,9 @@ blkcnt_t file::getBlockCount() const {
 	#ifdef RUDIMENTS_HAVE_BLKCNT_T
 		return pvt->_st.st_blocks;
 	#else
-		off64_t	size=getSize();
-		return (size)?(size/getBlockSize()+1):0;
+		off64_t		size=getSize();
+		bklsize_t	blksize=getBlockSize()
+		return (size && blksize)?(size/blksize+1):0;
 	#endif
 }
 

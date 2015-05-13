@@ -19,6 +19,8 @@
 	filesystem::getCurrentProperties() returns false and sets errno=ENOSYS
 		on VMS now
 	implemented degenerate groupentry for VMS
+	fixed file::getBlockCount() crash that could occur if the filesystem's
+		block size was reported as 0
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
