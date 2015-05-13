@@ -862,7 +862,7 @@ blkcnt_t file::getBlockCount() const {
 		return pvt->_st.st_blocks;
 	#else
 		off64_t		size=getSize();
-		bklsize_t	blksize=getBlockSize()
+		bklsize_t	blksize=getBlockSize();
 		return (size && blksize)?(size/blksize+1):0;
 	#endif
 }
