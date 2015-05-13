@@ -40,11 +40,11 @@ int main(int argc, const char **argv) {
         	stdoutput.printf(" % 4d\n",scalednumber);
 		randomnumber	r;
 		r.setSeed(seed);
-		for (uint16_t j=0; j<100; j++) {
+		for (uint16_t k=0; k<100; k++) {
 			int32_t	number=0;
         		r.generateScaledNumber(bottom,top,&number);
         		stdoutput.printf(" % 4d",number);
-			if (!((j+1)%10)) {
+			if (!((k+1)%10)) {
         			stdoutput.printf("\n");
 			}
 		}
