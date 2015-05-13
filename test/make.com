@@ -35,8 +35,6 @@ $ cxxlink /exe=daemon.exe daemon.obj,-
  [-.src]librudiments.olb/library
 $ cxxlink /exe=datetime.exe datetime.obj,-
  [-.src]librudiments.olb/library
-$ cxxlink /exe=device.exe device.obj,-
- [-.src]librudiments.olb/library
 $ cxxlink /exe=dictionary.exe dictionary.obj,-
  [-.src]librudiments.olb/library
 $ cxxlink /exe=directory.exe directory.obj,-
