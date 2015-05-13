@@ -2377,7 +2377,11 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 					#if defined(RUDIMENTS_HAVE_FILE_FILENO)
 						f->_fileno=-1;
 					#elif defined(RUDIMENTS_HAVE_FILE_FILE)
+						#ifdef __VMS
+						((struct _iobuf *)f)->_file=-1;
+						#else
 						f->_file=-1;
+						#endif
 					#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
 						f->__filedes=-1;
 					#else
