@@ -242,6 +242,14 @@ case $host_os in
 	*)
 		;;
 esac
+
+dnl disable -Werror with gcc < 2.7 because they misinterpret placement new
+CXX_VERSION=`$CXX --version | tr -d '.' | cut -c1-2`
+if ( test "$CXX_VERSION" -le "27" )
+then
+	WERROR=""
+fi
+
 AC_SUBST(WERROR)
 
 if ( test -n "$WERROR" )

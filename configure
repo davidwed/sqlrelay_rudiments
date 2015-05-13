@@ -15771,6 +15771,13 @@ case $host_os in
 		;;
 esac
 
+CXX_VERSION=`$CXX --version | tr -d '.' | cut -c1-2`
+if ( test "$CXX_VERSION" -le "27" )
+then
+	WERROR=""
+fi
+
+
 
 if ( test -n "$WERROR" )
 then
