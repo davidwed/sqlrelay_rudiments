@@ -68,7 +68,7 @@ void dynamicarray<valuetype>::dynamicarrayClone(
 		// and no carefully placed parentheses help.
 		//
 		// This silliness sorts both issues out.
-		this.find(i)=((dynamicarray<valuetype> *)&v)->find(i);
+		this->find(i)=((dynamicarray<valuetype> *)&v)->find(i);
 	}
 
 	// clone sizes and positions
