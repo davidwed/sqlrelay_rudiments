@@ -1276,9 +1276,6 @@
 /* Some systems have unsetenv */
 #undef RUDIMENTS_HAVE_UNSETENV
 
-/* Some systems have unsigned char FILE->_file */
-#undef RUDIMENTS_HAVE_UNSIGNED_CHAR_FILE_FILE
-
 /* Some systems have utime */
 #undef RUDIMENTS_HAVE_UTIME
 
