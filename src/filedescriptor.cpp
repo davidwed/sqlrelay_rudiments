@@ -2370,58 +2370,53 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 				fflush(f);
 
 				if (f!=stdin && f!=stdout && f!=stderr) {
+
 					// We need to free f but we don't want
 					// fclose() to close pvt->_fd.  There's
 					// no standard way of doing this though.
 					//
-					// Setting the file descriptor member
-					// to -1 is generally reliable.
+					// Setting f's file descriptor member
+					// to -1 is generally reliable, though
+					// that's tricky too...
+
 					#if defined(RUDIMENTS_HAVE_FILE_FILENO)
-						f->_fileno=-1;
+						#define FD f->_fileno
 					#elif defined(RUDIMENTS_HAVE_FILE_FILE)
 						#ifdef __VMS
-						((struct _iobuf *)f)->_file=-1;
+							#define FD \
+							((struct _iobuf *)f)->\
+							_file
 						#else
-						// The size and signedness of
-						// f->_file varies a bit.  This
-						// is the only way to handle
-						// all variations without the
-						// compiler throwing errors.
-						if (sizeof(f->_file)==1) {
-							int8_t	i8=-1;
-							bytestring::copy(
-								&(f->_file),
-								&i8,1);
-						} else
-						if (sizeof(f->_file)==2) {
-							int16_t i16=-1;
-							bytestring::copy(
-								&(f->_file),
-								&i16,2);
-						} else
-						if (sizeof(f->_file)==3) {
-							int32_t i32=-1;
-							bytestring::copy(
-								&(f->_file),
-								&i32,3);
-						} else
-						if (sizeof(f->_file)==4) {
-							int64_t i64=-1;
-							bytestring::copy(
-								&(f->_file),
-								&i64,4);
-						}
+							#define FD f->_file
 						#endif
 					#elif defined(RUDIMENTS_HAVE_FILE__FILE)
-						// for unixware, __file is
-						// an unsigned char
-						f->__file=(unsigned char)-1;
+						#define FD f->__file
 					#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
-						f->__filedes=-1;
+						#define FD f->__filedes
 					#else
 						#error no FILE->_fileno or anything like it
 					#endif
 
+					// The size and signedness of
+					// FD varies a bit.  This
+					// is the only way to handle
+					// all variations without the
+					// compiler throwing errors.
+					if (sizeof(FD)==1) {
+						int8_t	i8=-1;
+						bytestring::copy(&(FD),&i8,1);
+					} else if (sizeof(FD)==2) {
+						int16_t i16=-1;
+						bytestring::copy(&(FD),&i16,2);
+					} else if (sizeof(FD)==4) {
+						int32_t i32=-1;
+						bytestring::copy(&(FD),&i32,4);
+					} else if (sizeof(FD)==8) {
+						int64_t i64=-1;
+						bytestring::copy(&(FD),&i64,8);
+					}
+
+					// ok, now close f
 					fclose(f);
 				}
 			}
