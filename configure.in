@@ -2769,6 +2769,10 @@ AC_MSG_CHECKING(for FILE->_file)
 AC_TRY_LINK([#include <stdio.h>],
 FILE f; f._file=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE_FILE,1,Some systems have FILE->_file), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for unsigned char FILE->_file)
+AC_TRY_LINK([#include <stdio.h>],
+FILE f; f._file=0; unsigned char a=f._file;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_UNSIGNED_CHAR_FILE_FILE,1,Some systems have unsigned char FILE->_file), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for FILE->__file)
 AC_TRY_LINK([#include <stdio.h>],
 FILE f; f.__file=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE__FILE,1,Some systems have FILE->__file), AC_MSG_RESULT(no))
