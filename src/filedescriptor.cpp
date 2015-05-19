@@ -2363,6 +2363,13 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 			#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
 			else {
 				f=fdopen(pvt->_fd,"a");
+
+				// Some platforms (Unixware) don't like "a"
+				// with some types of file descriptors, so if
+				// "a" fails, then try "w".
+				if (!f) {
+					f=fdopen(pvt->_fd,"w");
+				}
 			}
 
 			if (f) {
