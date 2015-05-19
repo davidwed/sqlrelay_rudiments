@@ -311,7 +311,10 @@
 /* #undef RUDIMENTS_HAVE_FILE_FILEDES */
 
 /* Some systems have FILE->_fileno */
-/* #define RUDIMENTS_HAVE_FILE_FILENO */
+/* #undef RUDIMENTS_HAVE_FILE_FILENO */
+
+/* Some systems have FILE->__file */
+/* #undef RUDIMENTS_HAVE_FILE__FILE */
 
 /* Some systems have FindFirstFile */
 #undef RUDIMENTS_HAVE_FINDFIRSTFILE
