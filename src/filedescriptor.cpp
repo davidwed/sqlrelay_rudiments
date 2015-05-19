@@ -2384,6 +2384,10 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 						#else
 						f->_file=-1;
 						#endif
+					#elif defined(RUDIMENTS_HAVE_FILE__FILE)
+						// for unixware, __file is
+						// an unsigned char
+						f->__file=(unsigned char)-1;
 					#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
 						f->__filedes=-1;
 					#else
