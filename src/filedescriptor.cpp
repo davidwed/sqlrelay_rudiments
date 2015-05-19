@@ -2382,7 +2382,35 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 						#ifdef __VMS
 						((struct _iobuf *)f)->_file=-1;
 						#else
-						f->_file=-1;
+						// The size and signedness of
+						// f->_file varies a bit.  This
+						// is the only way to handle
+						// all variations without the
+						// compiler throwing errors.
+						if (sizeof(f->_file)==1) {
+							int8_t	i8=-1;
+							bytestring::copy(
+								&(f->_file),
+								&i8,1);
+						} else
+						if (sizeof(f->_file)==2) {
+							int16_t i16=-1;
+							bytestring::copy(
+								&(f->_file),
+								&i16,2);
+						} else
+						if (sizeof(f->_file)==3) {
+							int32_t i32=-1;
+							bytestring::copy(
+								&(f->_file),
+								&i32,3);
+						} else
+						if (sizeof(f->_file)==4) {
+							int64_t i64=-1;
+							bytestring::copy(
+								&(f->_file),
+								&i64,4);
+						}
 						#endif
 					#elif defined(RUDIMENTS_HAVE_FILE__FILE)
 						// for unixware, __file is
