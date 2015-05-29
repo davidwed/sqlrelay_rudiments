@@ -1081,3 +1081,13 @@ bool sys::signalsInterruptSystemCalls() {
 		return true;
 	#endif
 }
+
+char sys::getDirectorySeparator() {
+	#if defined(_WIN32)
+		return '\\';
+	#elif defined(__VMS)
+		return '.';
+	#else
+		return '/';
+	#endif
+}

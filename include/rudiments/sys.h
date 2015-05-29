@@ -269,6 +269,10 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  platform and false if signals do not interrupt system
 		 *  calls.  */
 		static	bool	signalsInterruptSystemCalls();
+
+		/** Returns the character used to separate directories in a
+		 *  path. */
+		static	char	getDirectorySeparator();
 };
 
 #endif
