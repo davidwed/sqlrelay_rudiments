@@ -2400,6 +2400,8 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 						#define FD f->__file
 					#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
 						#define FD f->__filedes
+					#elif defined(RUDIMENTS_HAVE_FILE__FD)
+						#define FD f->_fd
 					#else
 						#error no FILE->_fileno or anything like it
 					#endif

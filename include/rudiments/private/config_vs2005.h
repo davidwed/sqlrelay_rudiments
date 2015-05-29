@@ -313,6 +313,9 @@
 /* Some systems have FILE->_fileno */
 /* #undef RUDIMENTS_HAVE_FILE_FILENO */
 
+/* Some systems have FILE->_fd */
+/* #undef RUDIMENTS_HAVE_FILE__FD */
+
 /* Some systems have FILE->__file */
 /* #undef RUDIMENTS_HAVE_FILE__FILE */
 

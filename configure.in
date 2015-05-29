@@ -2777,6 +2777,10 @@ AC_MSG_CHECKING(for FILE->__filedes)
 AC_TRY_LINK([#include <stdio.h>],
 FILE f; f.__filedes=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE_FILEDES,1,Some systems have FILE->__filedes), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for FILE->_fd)
+AC_TRY_LINK([#include <stdio.h>],
+FILE f; f._fd=0;,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_FILE__FD,1,Some systems have FILE->_fd), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
