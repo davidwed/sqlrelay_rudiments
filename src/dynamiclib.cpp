@@ -57,7 +57,7 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			(loaddependencies)?0:DONT_RESOLVE_DLL_REFERENCES);
 		return (pvt->_handle)?true:false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -76,7 +76,7 @@ bool dynamiclib::close() {
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		retval=(FreeLibrary(pvt->_handle)==TRUE);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 	#endif
 	pvt->_handle=NULL;
 	return retval;
@@ -96,7 +96,7 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
 		return (void *)GetProcAddress(pvt->_handle,symbol);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -132,7 +132,7 @@ char *dynamiclib::getError() const {
 				NULL);
 		return retval;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }

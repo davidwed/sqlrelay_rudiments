@@ -61,6 +61,9 @@
 /* ioctl/FIONBIO doesn't work on some systems */
 /* #undef RUDIMENTS_DISABLE_FIONBIO */
 
+/* Enable runtime notification of methods that set ENOSYS */
+/* #undef RUDIMENTS_ENOSYS_NOTIFY */
+
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 

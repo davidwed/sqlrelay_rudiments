@@ -367,7 +367,7 @@ bool filesystem::getCurrentProperties() {
 		}
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

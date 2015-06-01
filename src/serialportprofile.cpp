@@ -411,7 +411,7 @@ bool serialportprofile::blockJobControlOutput() {
 	#ifdef LOBLK
 		return GET_FLAG(c_cflag,LOBLK);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -426,7 +426,7 @@ bool serialportprofile::hardwareFlowControl() {
 	#elif defined(CCTS_OFLOW)
 		return GET_FLAG(c_cflag,CRTS_OFLOW);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -509,7 +509,7 @@ bool serialportprofile::escapedUpperCase() {
 	#ifdef XCASE
 		return GET_FLAG(c_lflag,XCASE);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -538,7 +538,7 @@ bool serialportprofile::echoControlCharacters() {
 	#ifdef ECHOCTL
 		return GET_FLAG(c_lflag,ECHOCTL);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -547,7 +547,7 @@ bool serialportprofile::echoErasedCharacter() {
 	#ifdef ECHOPRT
 		return GET_FLAG(c_lflag,ECHOPRT);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -556,7 +556,7 @@ bool serialportprofile::emulateKill() {
 	#ifdef ECHOKE
 		return GET_FLAG(c_lflag,ECHOKE);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -569,7 +569,7 @@ bool serialportprofile::retypePendingCharacters() {
 	#ifdef PENDIN
 		return GET_FLAG(c_lflag,PENDIN);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -690,7 +690,7 @@ bool serialportprofile::lowerCase() {
 	#ifdef IUCLC
 		return GET_FLAG(c_iflag,IUCLC);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -699,7 +699,7 @@ bool serialportprofile::bellIfLineTooLong() {
 	#ifdef IMAXBEL
 		return GET_FLAG(c_iflag,IMAXBEL);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -840,7 +840,7 @@ bool serialportprofile::outputUpperCase() {
 	#ifdef OLCUC
 		return GET_FLAG(c_oflag,OLCUC);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -853,7 +853,7 @@ bool serialportprofile::discardEndOfTransmission() {
 	#ifdef ONOEOT
 		return GET_FLAG(c_oflag,ONOEOT);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -862,7 +862,7 @@ bool serialportprofile::mapCarriageReturnToNewLineOnOutput() {
 	#ifdef OCRNL
 		return GET_FLAG(c_oflag,OCRNL);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -871,7 +871,7 @@ bool serialportprofile::dontOutputCarriageReturnAtColumnZero() {
 	#ifdef ONOCR
 		return GET_FLAG(c_oflag,ONOCR);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -880,7 +880,7 @@ bool serialportprofile::mapNewLineToCarriageReturnOnOutput() {
 	#ifdef ONLRET
 		return GET_FLAG(c_oflag,ONLRET);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -889,7 +889,7 @@ bool serialportprofile::useFillCharactersForDelay() {
 	#ifdef OFILL
 		return GET_FLAG(c_oflag,OFILL);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -898,7 +898,7 @@ bool serialportprofile::useDelForFill() {
 	#ifdef OFDEL
 		return GET_FLAG(c_oflag,OFDEL);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1112,7 +1112,7 @@ unsigned char serialportprofile::secondEndOfLineCharacter() {
 	#ifdef VEOL2
 		return GET_CHAR(VEOL2);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1123,7 +1123,7 @@ unsigned char serialportprofile::switchCharacer() {
 	#elif defined(VSWTC)
 		return GET_CHAR(VSWTC);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1144,7 +1144,7 @@ unsigned char serialportprofile::delayedSuspendCharacter() {
 	#ifdef VDSUSP
 		return GET_CHAR(VDSUSP);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1153,7 +1153,7 @@ unsigned char serialportprofile::literalNextCharcter() {
 	#ifdef VLNEXT
 		return GET_CHAR(VLNEXT);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1162,7 +1162,7 @@ unsigned char serialportprofile::wordEraseCharcter() {
 	#ifdef VWERASE
 		return GET_CHAR(VWERASE);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1171,7 +1171,7 @@ unsigned char serialportprofile::reprintCharacter() {
 	#ifdef VREPRINT
 		return GET_CHAR(VREPRINT);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1180,7 +1180,7 @@ unsigned char serialportprofile::discardPendingOutputCharacter() {
 	#ifdef VDISCARD
 		return GET_CHAR(VDISCARD);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1189,7 +1189,7 @@ unsigned char serialportprofile::statusRequestCharacter() {
 	#ifdef VSTATUS
 		return GET_CHAR(VSTATUS);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }

@@ -162,7 +162,7 @@ bool socketserver::setLingerOnClose(int32_t timeout, int32_t onoff) {
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&ling,
 					sizeof(struct linger));
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

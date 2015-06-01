@@ -30,6 +30,8 @@
 	added sys::getDirectorySeparator()
 	fixed trailing-slash-followed-by-quote issue when building windows
 		command lines
+	added --enable-enosys-notify configure option for runtime notifcations
+		when methods set ENOSYS
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

@@ -90,7 +90,7 @@ char *sys::getOperatingSystemName() {
 	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
 		return charstring::duplicate("Windows");
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -107,7 +107,7 @@ char *sys::getOperatingSystemRelease() {
 		// for windows, just return the same as the version number
 		return getOperatingSystemVersion();
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -143,7 +143,7 @@ char *sys::getOperatingSystemVersion() {
 		// return the version number
 		return retval.detachString();
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -181,7 +181,7 @@ char *sys::getOperatingSystemArchitecture() {
 			return charstring::duplicate("x86");
 		#endif
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -226,7 +226,7 @@ char *sys::getHostName() {
 		// for any other error, return null
 		return NULL;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -250,7 +250,7 @@ bool sys::setHostName(const char *hostname, uint64_t hostnamelen) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -299,7 +299,7 @@ bool sys::getLoadAverages(double *oneminuteaverage,
 		// try /proc/loadavg as a last-ditch effort
 		device	loadavg;
 		if (!loadavg.open("/proc/loadavg",O_RDONLY)) {
-			error::setErrorNumber(ENOSYS);
+			RUDIMENTS_SET_ENOSYS
 			return false;
 		}
 
@@ -463,7 +463,7 @@ bool sys::halt() {
 	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
 		return shutDownWindows(false);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -532,7 +532,7 @@ bool sys::shutDown() {
 	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
 		return shutDownWindows(false);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -572,7 +572,7 @@ bool sys::reboot() {
 	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
 		return shutDownWindows(true);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -601,7 +601,7 @@ int64_t sys::getMaxCommandLineArgumentLength() {
 		return (info.dwMajorVersion>=5 &&
 				info.dwMinorVersion>=1)?8191:2047;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -610,7 +610,7 @@ int64_t sys::getMaxProcessesPerUser() {
 	#if defined(_SC_CHILD_MAX)
 		return sysConf(_SC_CHILD_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -624,7 +624,7 @@ int64_t sys::getMaxHostNameLength() {
 		// NETBIOS name
 		return 15;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -636,7 +636,7 @@ int64_t sys::getMaxLoginNameLength() {
 		// 20 characters on windows (pre-dns suffix)
 		return 20;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -648,7 +648,7 @@ int64_t sys::getClockTicksPerSecond() {
 		// this is a macro on windows
 		return CLOCKS_PER_SEC;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -657,7 +657,7 @@ int64_t sys::getMaxOpenFilesPerProcess() {
 	#if defined(_SC_OPEN_MAX)
 		return sysConf(_SC_OPEN_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -688,7 +688,7 @@ int64_t sys::getMaxOpenStreamsPerProcess() {
 	#if defined(_SC_STREAM_MAX)
 		return sysConf(_SC_STREAM_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -697,7 +697,7 @@ int64_t sys::getMaxSymlinkLoops() {
 	#if defined(_SC_SYMLOOP_MAX)
 		return sysConf(_SC_SYMLOOP_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -706,7 +706,7 @@ int64_t sys::getMaxTerminalDeviceNameLength() {
 	#if defined(_SC_TTY_NAME_MAX)
 		return sysConf(_SC_TTY_NAME_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -718,7 +718,7 @@ int64_t sys::getMaxTimezoneNameLength() {
 		// 256 on windows
 		return 256;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -727,7 +727,7 @@ int64_t sys::getMaxLineLength() {
 	#if defined(_SC_LINE_MAX)
 		return sysConf(_SC_LINE_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -736,7 +736,7 @@ int64_t sys::getPhysicalPageCount() {
 	#if defined(_SC_PHYS_PAGES)
 		return sysConf(_SC_PHYS_PAGES);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -745,7 +745,7 @@ int64_t sys::getAvailablePhysicalPageCount() {
 	#if defined(_SC_AVPHYS_PAGES)
 		return sysConf(_SC_AVPHYS_PAGES);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -790,7 +790,7 @@ int64_t sys::getProcessorCount() {
 
 		return count;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -799,7 +799,7 @@ int64_t sys::getMaxProcessorCount() {
 	#if defined(_SC_NPROCESSORS_MAX)
 		return sysConf(_SC_NPROCESSORS_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -816,7 +816,7 @@ int64_t sys::getMaxSupplementalGroupsPerUser() {
 	#if defined(_SC_NGROUPS_MAX)
 		return sysConf(_SC_NGROUPS_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -825,7 +825,7 @@ int64_t sys::getMaxDelayTimerExpirations() {
 	#if defined(_SC_DELAYTIMER_MAX)
 		return sysConf(_SC_DELAYTIMER_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -834,7 +834,7 @@ int64_t sys::getMaxRealtimeSignals() {
 	#if defined(_SC_RTSIG_MAX)
 		return sysConf(_SC_RTSIG_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -847,7 +847,7 @@ int64_t sys::getMaxSemaphoresPerProcess() {
 		// per-process) though available memory limits it too
 		return 16777216;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -859,7 +859,7 @@ int64_t sys::getMaxSemaphoreValue() {
 		// on windows it's 2^31-1
 		return 2147483647;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -868,7 +868,7 @@ int64_t sys::getMaxSignalQueueLength() {
 	#if defined(_SC_SIGQUEUE_MAX)
 		return sysConf(_SC_SIGQUEUE_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -877,7 +877,7 @@ int64_t sys::getMaxTimersPerProcess() {
 	#if defined(_SC_TIMER_MAX)
 		return sysConf(_SC_TIMER_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -913,7 +913,7 @@ int64_t sys::getMinThreadStackSize() {
 		// guess we'll return 1MB for now.
 		return 1048576;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -922,7 +922,7 @@ int64_t sys::getMaxThreadsPerProcess() {
 	#if defined(_SC_THREAD_THREADS_MAX)
 		return sysConf(_SC_THREAD_THREADS_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -931,7 +931,7 @@ int64_t sys::getThreadDestructorIterations() {
 	#if defined(_SC_THREAD_DESTRUCTOR_ITERATIONS)
 		return sysConf(_SC_THREAD_DESTRUCTOR_ITERATIONS);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -940,7 +940,7 @@ int64_t sys::getMaxThreadKeys() {
 	#if defined(_SC_THREAD_KEYS_MAX)
 		return sysConf(_SC_THREAD_KEYS_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -949,7 +949,7 @@ int64_t sys::getMaxAtExitFunctions() {
 	#if defined(_SC_ATEXIT_MAX)
 		return sysConf(_SC_ATEXIT_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -993,7 +993,7 @@ int64_t sys::getCpuSetSize() {
 			return 0;
 		#endif
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -1033,7 +1033,7 @@ int64_t sys::getMaxPasswordLength() {
 		// Vista is 6.0
 		return 127;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -1042,7 +1042,7 @@ int64_t sys::getMaxLogNameLength() {
 	#if defined(_SC_LOGNAME_MAX)
 		return sysConf(_SC_LOGNAME_MAX);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -1056,7 +1056,7 @@ int64_t sys::getMaxProcessId() {
 		// maximum PID ought to be 0xFFFFFFFC
 		return 0xFFFFFFFC;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -1069,7 +1069,7 @@ int64_t sys::sysConf(int32_t name) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }

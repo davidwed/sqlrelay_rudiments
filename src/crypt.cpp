@@ -42,7 +42,7 @@ char *crypt::encrypt(const char *password, const char *salt) {
 		}
 		return retval;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }

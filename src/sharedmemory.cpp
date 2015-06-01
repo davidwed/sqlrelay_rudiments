@@ -104,7 +104,7 @@ bool sharedmemory::forceRemove() {
 		return (UnmapViewOfFile(pvt->_shmptr)==TRUE &&
 					CloseHandle(pvt->_map)==TRUE);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -127,7 +127,7 @@ bool sharedmemory::setUserId(uid_t uid) {
 		setds.shm_perm.uid=uid;
 		return shmControl(pvt->_shmid,IPC_SET,&setds);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -138,7 +138,7 @@ bool sharedmemory::setGroupId(gid_t gid) {
 		setds.shm_perm.gid=gid;
 		return shmControl(pvt->_shmid,IPC_SET,&setds);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -149,7 +149,7 @@ bool sharedmemory::setPermissions(mode_t permissions) {
 		setds.shm_perm.mode=permissions;
 		return shmControl(pvt->_shmid,IPC_SET,&setds);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -161,7 +161,7 @@ uid_t sharedmemory::getUserId() {
 			return getds.shm_perm.uid;
 		}
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 	#endif
 	return (uid_t)-1;
 }
@@ -173,7 +173,7 @@ gid_t sharedmemory::getGroupId() {
 			return getds.shm_perm.gid;
 		}
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 	#endif
 	return (gid_t)-1;
 }
@@ -185,7 +185,7 @@ mode_t sharedmemory::getPermissions() {
 			return getds.shm_perm.mode;
 		}
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 	#endif
 	return 0;
 }
@@ -246,7 +246,7 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 			return false;
 		}
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 
@@ -302,7 +302,7 @@ bool sharedmemory::attach(key_t key, size_t size) {
 		}
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -385,7 +385,7 @@ bool sharedmemory::createOrAttach(key_t key, size_t size, mode_t permissions) {
 			return true;
 		}
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 	#endif
 	return false;
 }

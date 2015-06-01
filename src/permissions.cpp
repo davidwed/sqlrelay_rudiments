@@ -149,7 +149,7 @@ bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 
 		return success;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -194,7 +194,7 @@ bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 
 		return success;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

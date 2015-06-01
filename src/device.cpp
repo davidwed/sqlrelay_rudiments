@@ -51,7 +51,7 @@ bool device::createDeviceNode(const char *filename, bool blockdevice,
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

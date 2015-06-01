@@ -130,7 +130,7 @@ bool semaphoreset::forceRemove() {
 		// destroyed when the last process that held it open exits
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -150,7 +150,7 @@ bool semaphoreset::wait(int32_t index) {
 		return (WaitForSingleObject(pvt->_sems[index],INFINITE)==
 								WAIT_OBJECT_0);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -169,7 +169,7 @@ bool semaphoreset::wait(int32_t index, int32_t seconds, int32_t nanoseconds) {
 		}
 		return (result==WAIT_OBJECT_0);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -181,7 +181,7 @@ bool semaphoreset::waitWithUndo(int32_t index) {
 		// no such thing as undo on windows
 		return wait(index);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -198,7 +198,7 @@ bool semaphoreset::waitWithUndo(int32_t index,
 		// no such thing as undo on windows
 		return wait(index,seconds,nanoseconds);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -209,7 +209,7 @@ bool semaphoreset::signal(int32_t index) {
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return (ReleaseSemaphore(pvt->_sems[index],1,NULL)!=0);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -221,7 +221,7 @@ bool semaphoreset::signalWithUndo(int32_t index) {
 		// no such thing as undo on windows
 		return signal(index);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -260,11 +260,11 @@ int32_t semaphoreset::getValue(int32_t index) {
 			}
 		}
 		if (retval==-1) {
-			error::setErrorNumber(ENOSYS);
+			RUDIMENTS_SET_ENOSYS
 		}
 		return retval;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -292,7 +292,7 @@ bool semaphoreset::setValue(int32_t index, int32_t value) {
 		}
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -303,10 +303,10 @@ int32_t semaphoreset::getWaitingForZero(int32_t index) {
 		return semControl(pvt,index,GETZCNT,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -317,10 +317,10 @@ int32_t semaphoreset::getWaitingForIncrement(int32_t index) {
 		return semControl(pvt,index,GETNCNT,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -416,10 +416,10 @@ bool semaphoreset::setUserId(uid_t uid) {
 		return !semControl(pvt,0,IPC_SET,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -433,10 +433,10 @@ bool semaphoreset::setGroupId(gid_t gid) {
 		return !semControl(pvt,0,IPC_SET,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -460,10 +460,10 @@ bool semaphoreset::setPermissions(mode_t permissions) {
 		return !semControl(pvt,0,IPC_SET,&semctlun);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -485,10 +485,10 @@ uid_t semaphoreset::getUserId() {
 		return (uid_t)-1;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return (uid_t)-1;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return (uid_t)-1;
 	#endif
 }
@@ -510,10 +510,10 @@ gid_t semaphoreset::getGroupId() {
 		return (uid_t)-1;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return (gid_t)-1;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return (gid_t)-1;
 	#endif
 }
@@ -529,10 +529,10 @@ mode_t semaphoreset::getPermissions() {
 		return 0;
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		// FIXME: there's got to be a way to do this...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -624,7 +624,7 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 		return true;
 
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -642,7 +642,7 @@ int32_t semaphoreset::semControl(semaphoresetprivate *pvt, int32_t semnum,
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -659,7 +659,7 @@ bool semaphoreset::semOp(struct sembuf *sops) {
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -680,7 +680,7 @@ bool semaphoreset::semTimedOp(struct sembuf *sops,
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return 1;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

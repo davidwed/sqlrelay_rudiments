@@ -542,7 +542,7 @@ bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 		
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -590,7 +590,7 @@ bool signalmanager::raiseSignal(int32_t signum) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -631,7 +631,7 @@ uint32_t signalmanager::alarm(uint32_t seconds) {
 	#elif defined(RUDIMENTS_HAVE_ALARM)
 		return ::alarm(seconds);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -685,7 +685,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 		}
 		return result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -700,7 +700,7 @@ bool signalmanager::waitForSignals(const signalset *sset) {
 		}
 	#else
 		// see sendSignal above...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -714,7 +714,7 @@ bool signalmanager::examineBlockedSignals(signalset *sset) {
 		return !result;
 	#else
 		// see sendSignal above...
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -838,7 +838,7 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 				return true;
 			#endif
 		}
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#elif defined(RUDIMENTS_HAVE_SIGACTION)
 		struct sigaction	oldaction;
@@ -873,7 +873,7 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 		}
 		return (prev!=SIG_ERR);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

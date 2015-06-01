@@ -185,7 +185,7 @@ bool rpcentry::initialize(const char *rpcname, int32_t number) {
 				:getrpcbynumber(number)))!=NULL) &&
 			!(remutex && !remutex->unlock()));
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

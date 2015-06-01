@@ -111,7 +111,7 @@ pid_t process::getProcessGroupId(pid_t pid) {
 	#else
 		// minix doesn't have the notion of process groups
 		// windows does, but they don't appear to have ID's
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -130,7 +130,7 @@ bool process::setProcessGroupId(pid_t pid, pid_t pgid) {
 	#else
 		// minix doesn't have the notion of process groups
 		// windows does, but they don't appear to have ID's
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -144,7 +144,7 @@ pid_t process::getSessionId(pid_t pid) {
 		return getsid(pid);
 	#else
 		// windows doesn't have the notion of sessions
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -154,7 +154,7 @@ pid_t process::newSession() {
 		return setsid();
 	#else
 		// windows doesn't have the notion of sessions
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -186,7 +186,7 @@ uid_t process::getEffectiveUserId() {
 		return geteuid();
 	#else
 		// windows doesn't have the notion of effective user id's
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -195,7 +195,7 @@ bool process::setUserId(uid_t uid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
 		return !setuid(uid);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -216,7 +216,7 @@ bool process::setEffectiveUserId(uid_t uid) {
 		return !syscall(SYS_seteuid,uid);
 	#else
 		// windows doesn't have the notion of effective user id's
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -249,7 +249,7 @@ gid_t process::getEffectiveGroupId() {
 		return getegid();
 	#else
 		// windows doesn't have the notion of effective group id's
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -258,7 +258,7 @@ bool process::setGroupId(gid_t gid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
 		return !setgid(gid);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -277,7 +277,7 @@ bool process::setEffectiveGroupId(gid_t gid) {
 		return !setegid(gid);
 	#else
 		// windows doesn't have the notion of effective group id's
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -294,7 +294,7 @@ mode_t process::setFileCreationMask(mode_t mask) {
 	#if defined(RUDIMENTS_HAVE_UMASK)
 		return ::umask(mask);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -315,7 +315,7 @@ pid_t process::fork() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -337,7 +337,7 @@ bool process::exec(const char *command, const char * const *args) {
 		}
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -476,7 +476,7 @@ pid_t process::spawn(const char *command,
 		}
 		return (success)?pi.dwProcessId:-1;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -679,7 +679,7 @@ pid_t process::getChildStateChange(pid_t pid,
 					int32_t *signum,
 					bool *coredump) {
 #ifdef _WIN32
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return -1;
 #else
 

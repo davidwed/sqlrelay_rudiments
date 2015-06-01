@@ -79,7 +79,7 @@ bool thread::setStackSize(size_t stacksize) {
 		pvt->_stacksize=stacksize;
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -97,7 +97,7 @@ bool thread::getStackSize(size_t *stacksize) {
 		*stacksize=pvt->_stacksize;
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -123,7 +123,7 @@ bool thread::create() {
 		}
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -134,7 +134,7 @@ void thread::exit(int32_t *status) {
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		ExitThread((DWORD)*status);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 	#endif
 }
 
@@ -169,7 +169,7 @@ bool thread::join(int32_t *status) {
 		pvt->_needtojoin=false;
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -192,7 +192,7 @@ bool thread::detach() {
 		pvt->_thr=INVALID_HANDLE_VALUE;
 		return result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -202,10 +202,10 @@ bool thread::cancel() {
 		return !pthread_cancel(pvt->_thr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		// FIXME: implement this for windows
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -215,10 +215,10 @@ bool thread::raiseSignal(int32_t signum) {
 		return !pthread_kill(pvt->_thr,signum);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		// FIXME: implement this for windows
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

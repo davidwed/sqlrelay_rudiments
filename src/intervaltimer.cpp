@@ -109,7 +109,7 @@ bool intervaltimer::start(int32_t *seconds, int32_t *microseconds) const {
 		}
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -130,7 +130,7 @@ bool intervaltimer::getTimeRemaining(int32_t *seconds,
 		}
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

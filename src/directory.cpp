@@ -405,7 +405,7 @@ bool directory::changeRoot(const char *path) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -462,7 +462,7 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
 		}
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -514,7 +514,7 @@ int64_t directory::fpathConf(int32_t name) {
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
 		}
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }

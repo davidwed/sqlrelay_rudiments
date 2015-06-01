@@ -484,7 +484,7 @@ bool datetime::setSystemDateAndTime() {
 		set_real_time_clock(pvt->_epoch);
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

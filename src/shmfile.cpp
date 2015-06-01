@@ -47,7 +47,7 @@ void shmfile::openInternal(const char *name, int32_t flags,
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		fd(result);
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		fd(-1);
 	#endif
 }
@@ -60,7 +60,7 @@ bool shmfile::remove(const char *filename) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

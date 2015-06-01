@@ -769,6 +769,7 @@ enable_option_checking
 enable_small_code
 enable_debug
 enable_profiling
+enable_enosys_notify
 with_system_libtool
 enable_inlines
 with_pthread_prefix
@@ -1471,6 +1472,7 @@ Optional Features:
   --enable-small-code     optimize for small code size
   --enable-debug          compile with -g option
   --enable-profiling      compile with -pg option
+  --enable-enosys-notify  enable runtime notification of methods that set ENOSYS
   --enable-inlines        use inline methods
   --disable-ssl           Disable SSL support
   --disable-pcre          Don't use PCRE for regular expressions
@@ -2456,6 +2458,13 @@ else
   CXXFLAGS="$CXXFLAGS"
 fi
 
+# Check whether --enable-enosys-notify was given.
+if test "${enable_enosys_notify+set}" = set; then :
+  enableval=$enable_enosys_notify; RUDIMENTS_ENOSYS_NOTIFY="yes"
+else
+  RUDIMENTS_ENOSYS_NOTIFY=""
+fi
+
 
 # Check whether --with-system-libtool was given.
 if test "${with_system_libtool+set}" = set; then :
@@ -2948,6 +2957,14 @@ if ( test "$ENABLE_RUDIMENTS_INLINES" = "yes" ); then
 
 cat >>confdefs.h <<_ACEOF
 #define ENABLE_RUDIMENTS_INLINES 1
+_ACEOF
+
+fi
+
+if ( test "$RUDIMENTS_ENOSYS_NOTIFY" = "yes" ); then
+
+cat >>confdefs.h <<_ACEOF
+#define RUDIMENTS_ENOSYS_NOTIFY 1
 _ACEOF
 
 fi
@@ -31697,7 +31714,6 @@ then
 	SRCS="$SRCS modemutil.cpp"
 	LOBJS="$LOBJS modemutil.lo"
 fi
-
 
 
 

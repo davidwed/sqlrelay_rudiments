@@ -1850,7 +1850,7 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 	// send done flag
 	return retval;
 #else
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return false;
 #endif
 }
@@ -2035,7 +2035,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 	}
 	return false;
 #else
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return false;
 #endif
 }
@@ -2129,7 +2129,7 @@ bool filedescriptor::setNoDelay(int32_t onoff) {
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&value,
 				(socklen_t)sizeof(int));
 #else
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return false;
 #endif
 }
@@ -2166,7 +2166,7 @@ bool filedescriptor::disableIPv4() {
 	return setSockOpt(IPPROTO_IPV6,IPV6_V6ONLY,
 		(void *)&no,static_cast<socklen_t>(sizeof(int32_t)))!=-1;
 #else
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return false;
 #endif
 }
@@ -2177,7 +2177,7 @@ bool filedescriptor::enableIPv4() {
 	return setSockOpt(IPPROTO_IPV6,IPV6_V6ONLY,
 		(void *)&yes,static_cast<socklen_t>(sizeof(int32_t)))!=-1;
 #else
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return false;
 #endif
 }

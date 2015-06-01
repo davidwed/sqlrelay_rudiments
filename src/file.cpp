@@ -1218,7 +1218,7 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 
 		#endif
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1287,7 +1287,7 @@ bool file::createHardLink(const char *oldpath, const char *newpath) {
 		}
 		return retval;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1300,7 +1300,7 @@ bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return !result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1350,7 +1350,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 			}
 		}
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -1473,7 +1473,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		// return the result
 		return retval;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1515,7 +1515,7 @@ bool file::createFifo(const char *filename, mode_t perms) {
 		CloseHandle(handle);
 		return true;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1783,7 +1783,7 @@ key_t file::generateKey(const char *filename, int32_t id) {
 			((f.getDevice() & 0xff) << 16) |
 			((id & 0xff)  << 24));
 #else
-	error::setErrorNumber(ENOSYS);
+	RUDIMENTS_SET_ENOSYS
 	return -1;
 #endif
 }
@@ -1818,7 +1818,7 @@ int64_t file::pathConf(const char *path, int32_t name) {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
@@ -1831,7 +1831,7 @@ int64_t file::fpathConf(int32_t name) const {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#else
-		error::setErrorNumber(ENOSYS);
+		RUDIMENTS_SET_ENOSYS
 		return -1;
 	#endif
 }
