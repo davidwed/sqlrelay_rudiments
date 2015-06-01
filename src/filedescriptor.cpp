@@ -1151,8 +1151,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	}
 
 	#ifdef DEBUG_READ
-	debugPrintf("%d: safeRead(%d,",
-			(int)process::getProcessId(),(int)pvt->_fd);
+	debugPrintf("%d: safeRead(%d,(attempting %d bytes)",
+			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
 	#endif
 
 	// The result of SSL_read may be undefined if count=0
