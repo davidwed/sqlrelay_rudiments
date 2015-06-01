@@ -459,7 +459,6 @@ pid_t process::spawn(const char *command,
 				totalsize=totalsize+size;
 			}
 		}
-stdoutput.printf("commandline: %s\n\n",commandline);
 
 		// create the new process and return it's pid on success
 		STARTUPINFO		si;
