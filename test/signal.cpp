@@ -7,18 +7,18 @@
 bool	gotsigterm=false;
 
 #ifdef SIGFPE
-void handleSigfpe(int sig) {
+void handleSigfpe(int32_t sig) {
 	stdoutput.printf("Got a SIGFPE!\n");
 }
 #endif
 
-void handleSigterm(int sig) {
+void handleSigterm(int32_t sig) {
 	stdoutput.printf("Got a SIGTERM!\n");
 	gotsigterm=true;
 }
 
 #ifdef SIGALRM
-void handleAlarm(int sig) {
+void handleAlarm(int32_t sig) {
 	stdoutput.printf("alarm!\n");
 }
 #endif

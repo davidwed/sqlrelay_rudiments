@@ -11,7 +11,7 @@ int	main(int argc, char **argv) {
 
 	// append values to the list, displaying the list after each append
 	stdoutput.printf("append(0)\n");
-	intl.append(0);
+	intl.append((int32_t)0);
 	intl.print();
 	stdoutput.printf("length: %d\n",intl.getLength());
 

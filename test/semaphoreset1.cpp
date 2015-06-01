@@ -20,7 +20,7 @@ void test() {
 
 	// Create a semaphore set keyed to sem containing 2 individual
 	// semaphores.  Initialize them to 0 and 1 respectively.
-	int     vals[2]={0,1};
+	int32_t	vals[2]={0,1};
 	semaphoreset	sem;
 	if (!sem.create(file::generateKey("sem",1),
 			permissions::evalPermString("rw-------"),2,vals)) {

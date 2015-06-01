@@ -8,7 +8,7 @@
 #include <rudiments/stdio.h>
 
 // define a function to shut down the process cleanly
-void shutDown(int sig) {
+void shutDown(int32_t sig) {
 
 	stdoutput.printf("%d: shutting down with signal %d\n",
 					process::getProcessId(),sig);
@@ -18,7 +18,7 @@ void shutDown(int sig) {
 	process::exit(0);
 }
 
-void crash(int sig) {
+void crash(int32_t sig) {
 
 	stdoutput.printf("%d: crashing with signal %d\n",
 					process::getProcessId(),sig);

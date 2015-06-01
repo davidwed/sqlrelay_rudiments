@@ -187,7 +187,7 @@ void myserver::listen() {
 myserver	*mysvr;
 
 // define a function to shut down the process cleanly
-void shutDown(int sig) {
+void shutDown(int32_t sig) {
 	stdoutput.printf("shutting down\n");
 	mysvr->close();
 	delete mysvr;
