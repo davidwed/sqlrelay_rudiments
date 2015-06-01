@@ -16,7 +16,7 @@
 	#include <signal.h>
 #endif
 
-void alarmhandler(int sig) {
+void alarmhandler(int32_t sig) {
 	stdoutput.printf("alarm!\n");
 }
 

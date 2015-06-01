@@ -4,7 +4,7 @@
 #include <rudiments/logger.h>
 #include <rudiments/permissions.h>
 #ifdef RUDIMENTS_HAVE_SYSLOG_H
-	#include <sys/syslog.h>
+	#include <syslog.h>
 #endif
 
 int main(int argc, const char **argv) {
