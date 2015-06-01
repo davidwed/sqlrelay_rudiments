@@ -344,14 +344,27 @@ bool process::exec(const char *command, const char * const *args) {
 
 #if defined(RUDIMENTS_HAVE_CREATE_PROCESS)
 static char *quoteArg(const char *arg) {
+
 	// put quotes around args that contain spaces...
 	if (!charstring::contains(arg," ")) {
 		return charstring::duplicate(arg);
 	}
-	char	*quotedarg=new char[charstring::length(arg)+3];
+
+	size_t	quotedarglen=charstring::length(arg);
+	char	*quotedarg=new char[charstring::length(arg)+4];
+
 	charstring::copy(quotedarg,"\"");
 	charstring::append(quotedarg,arg);
+
+	// if the last character is a backslash, then escape it using another
+	// backslash, otherwise windows will think that the trailing \"
+	// means "include a literal quote"
+	if (arg[quotedarglen-1]=='\\') {
+		charstring::append(quotedarg,"\\");
+	}
+
 	charstring::append(quotedarg,"\"");
+
 	return quotedarg;
 }
 #endif
@@ -446,6 +459,7 @@ pid_t process::spawn(const char *command,
 				totalsize=totalsize+size;
 			}
 		}
+stdoutput.printf("commandline: %s\n\n",commandline);
 
 		// create the new process and return it's pid on success
 		STARTUPINFO		si;
@@ -458,7 +472,8 @@ pid_t process::spawn(const char *command,
 					NULL,NULL,&si,&pi)==TRUE);
 		if (!success) {
 			stdoutput.printf("%s\n",shortcommand);
-			stdoutput.printf("error: %s\n",error::getNativeErrorString());
+			stdoutput.printf("error: %s\n",
+					error::getNativeErrorString());
 		}
 		return (success)?pi.dwProcessId:-1;
 	#else

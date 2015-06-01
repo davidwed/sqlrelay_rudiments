@@ -28,6 +28,8 @@
 		possible in leiu of falling back to vasprintf or vsprintf with
 		a scratch file
 	added sys::getDirectorySeparator()
+	fixed trailing-slash-followed-by-quote issue when building windows
+		command lines
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
