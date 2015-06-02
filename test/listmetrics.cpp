@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 	uint32_t	seed=randomnumber::getSeed();
 	scaledvalues=new int32_t[listsize];
 	unscldvalues=new int32_t[listsize];
-	for (uint32_t i=0; i<listsize; i++) {
+	for (int32_t i=0; i<listsize; i++) {
 		seed=randomnumber::generateNumber(seed);
 		scaledvalues[i]=randomnumber::scaleNumber(seed,0,10);
 		unscldvalues[i]=seed;
