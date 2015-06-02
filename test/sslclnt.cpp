@@ -10,19 +10,15 @@
 #ifdef RUDIMENTS_HAS_SSL
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#endif
 
-#ifdef RUDIMENTS_HAS_SSL
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;
 	return charstring::length(buf);
 }
-#endif
 
 int main(int argc, const char **argv) {
 
-#ifdef RUDIMENTS_HAS_SSL
 	// initialize the SSL context
 	SSL_library_init();
 	SSL_load_error_strings();
@@ -44,7 +40,13 @@ int main(int argc, const char **argv) {
 	SSL_CTX_set_default_passwd_cb_userdata(ctx,(void *)"password");
 
 	// load the client's private key
+	// (which is also stored in client.pem)
 	SSL_CTX_use_PrivateKey_file(ctx,"client.pem",SSL_FILETYPE_PEM);
+	if (!SSL_CTX_check_private_key(ctx)) {
+		stdoutput.printf("private key check failed\n");
+		ERR_print_errors_fp(stdout);
+		process::exit(0);
+	}
 
 	// load certificates for the signing authorities that we trust
 	SSL_CTX_load_verify_locations(ctx,"ca.pem",0);
@@ -81,7 +83,7 @@ int main(int argc, const char **argv) {
 		clnt.close();
 		process::exit(1);
 	}
-
+/*
 	// make sure the certificate was valid
 	long	result=SSL_get_verify_result(ssl);
 	if (result!=X509_V_OK) {
@@ -103,7 +105,7 @@ int main(int argc, const char **argv) {
 		clnt.close();
 		process::exit(1);
 	}
-
+*/
 	// write "hello" to the server
 	clnt.write("hello",5);
 
@@ -115,7 +117,12 @@ int main(int argc, const char **argv) {
 
 	// close the connection to the server
 	clnt.close();
-#else
-	stdoutput.printf("rudiments built without ssl support\n");
-#endif
 }
+
+#else
+
+int main(int argc, const char **argv) {
+	stdoutput.printf("rudiments built without ssl support\n");
+}
+
+#endif

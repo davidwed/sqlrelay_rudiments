@@ -33,6 +33,7 @@ certificates/client.pem: requests/client.csr
 
 certificatechains/client.pem: certificates/client.pem certificates/ca.pem
 	cat certificates/client.pem > certificatechains/client.pem
+	cat keys/client.key >> certificatechains/client.pem
 	cat certificates/ca.pem >> certificatechains/client.pem
 
 keys/server.key:
@@ -46,4 +47,5 @@ certificates/server.pem: requests/server.csr
 
 certificatechains/server.pem: certificates/server.pem certificates/ca.pem
 	cat certificates/server.pem > certificatechains/server.pem
+	cat keys/server.key >> certificatechains/server.pem
 	cat certificates/ca.pem >> certificatechains/server.pem

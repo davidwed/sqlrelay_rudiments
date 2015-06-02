@@ -478,7 +478,7 @@ end if
 
 ' determine config.h template...
 
-' default to VS2008 and up
+' default to VS2010 and up
 configwindowsh="include\\rudiments\\private\\config_vs2010.h"
 
 ' VS2005 and VS2008

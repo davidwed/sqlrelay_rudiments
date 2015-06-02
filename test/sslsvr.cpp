@@ -12,9 +12,7 @@
 #ifdef RUDIMENTS_HAS_SSL
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#endif
 
-#ifdef RUDIMENTS_HAS_SSL
 int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 	charstring::copy(buf,(char *)userdata,size);
 	buf[size-1]=(char)NULL;
@@ -68,7 +66,13 @@ void myserver::listen() {
 	SSL_CTX_set_default_passwd_cb_userdata(ctx,(void *)"password");
 
 	// load the server's private key
+	// (which is also stored in server.pem)
 	SSL_CTX_use_PrivateKey_file(ctx,"server.pem",SSL_FILETYPE_PEM);
+	if (!SSL_CTX_check_private_key(ctx)) {
+		stdoutput.printf("private key check failed\n");
+		ERR_print_errors_fp(stdout);
+		return;
+	}
 
 	// Instruct the server to request the client's certificate.  Servers
 	// always send certificates to clients, but in order for a client to
@@ -102,7 +106,7 @@ void myserver::listen() {
 	// listen on inet socket port 8000
 	if (!inetsocketserver::listen(NULL,8000,15)) {
 		stdoutput.printf("couldn't listen on port 8000\n");
-		process::exit(0);
+		return;
 	}
 
 	// loop...
@@ -178,7 +182,6 @@ void myserver::listen() {
 		}
 
 		// close the socket and clean up
-		clientsock->close();
 		delete clientsock;
 	}
 }
@@ -194,11 +197,9 @@ void shutDown(int32_t sig) {
 	file::remove("svr.pid");
 	process::exit(0);
 }
-#endif
 
 int main(int argc, const char **argv) {
 
-#ifdef RUDIMENTS_HAS_SSL
 	mysvr=new myserver();
 
 	// set up signal handlers for clean shutdown
@@ -207,7 +208,12 @@ int main(int argc, const char **argv) {
 	process::handleCrash(shutDown);
 
 	mysvr->listen();
-#else
-	stdoutput.printf("rudiments built without ssl support\n");
-#endif
 }
+
+#else
+
+int main(int argc, const char **argv) {
+	stdoutput.printf("rudiments built without ssl support\n");
+}
+
+#endif

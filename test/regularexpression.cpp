@@ -37,7 +37,8 @@ int main(int argc, const char **argv) {
 	}
 
         // If you need to match over and over...
-        regularexpression       re(mtc);
+        regularexpression       re;
+	re.compile(mtc);
         str="Hello!";
         if (re.match(str)) {
                 stdoutput.printf(
@@ -141,6 +142,30 @@ int main(int argc, const char **argv) {
 	printMatches(&re);
 
 	str="Dave, Dave, Dave!";
+        if (re.match(str)) {
+                stdoutput.printf(
+			"The string \"%s\" contains \"%s\"\n",str,mtc);
+        } else {
+                stdoutput.printf(
+			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
+        }
+	printMatches(&re);
+
+	mtc="(\\w+) (\\w+)";
+	re.compile(mtc);
+	str="hello world";
+        if (re.match(str)) {
+                stdoutput.printf(
+			"The string \"%s\" contains \"%s\"\n",str,mtc);
+        } else {
+                stdoutput.printf(
+			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
+        }
+	printMatches(&re);
+
+	mtc="(\\w+) (\\w+)";
+	re.compile(mtc);
+	str="hello world hello world";
         if (re.match(str)) {
                 stdoutput.printf(
 			"The string \"%s\" contains \"%s\"\n",str,mtc);

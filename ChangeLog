@@ -34,6 +34,7 @@
 		when methods set ENOSYS
 	cleared errno before each EINTR loop
 	fixed sys::sync() segfault
+	fixed ssl tests
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

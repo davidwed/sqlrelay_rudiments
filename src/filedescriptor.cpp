@@ -2381,11 +2381,14 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 					f=fdopen(pvt->_fd,"w");
 				}
 			}
+			#endif
 
 			if (f) {
 				size=vfprintf(f,format,*argp);
 				fflush(f);
 
+				#if defined(RUDIMENTS_HAVE_FDOPEN) && \
+							!defined(_WIN32)
 				if (f!=stdin && f!=stdout && f!=stderr) {
 
 					// We need to free f but we don't want
@@ -2438,10 +2441,10 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 					// ok, now close f
 					fclose(f);
 				}
+				#endif
 			}
 
 			return size;
-			#endif
 		#endif
 	}
 
