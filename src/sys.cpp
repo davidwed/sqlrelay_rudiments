@@ -328,7 +328,7 @@ bool sys::getLoadAverages(double *oneminuteaverage,
 
 void sys::sync() {
 	#if defined(RUDIMENTS_HAVE_SYNC)
-		sync();
+		::sync();
 	#elif defined(RUDIMENTS_HAVE_FLUSHFILEBUFFERS)
 
 		// FIXME: for some reason GetLogicalDrives doesn't return file
