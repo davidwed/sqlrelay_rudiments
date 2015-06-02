@@ -899,7 +899,7 @@ void filedescriptor::dontAllowShortWrites() {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
-						int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) const {
 
 	// initialize a buffer
 	int32_t	buffersize=512;

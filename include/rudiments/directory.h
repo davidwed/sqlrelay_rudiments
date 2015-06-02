@@ -50,13 +50,12 @@ class RUDIMENTS_DLLSPEC directory {
 		 *  buffer. */
 		char	*getChildName(uint64_t index);
 
-		/** Returns the length of the longest file name
-		 *  that can be created in directory "pathname". */
+		/** Returns the length of the longest file name that can be
+		 *  created in the currently open directory . */
 		int64_t	maxFileNameLength();
 
-		/** Returns the length of the longest relative
-		 *  path name that can be created under the
-		 *  directory "pathname". */
+		/** Returns the length of the longest relative path name that
+		 *  can be created in the currently open directory . */
 		int64_t	maxPathLength();
 
 		/** Returns true if an attempt to access a
