@@ -119,6 +119,7 @@ int32_t unixsocketclient::connect() {
 	charstring::copy(_sun()->sun_path,_filename());
 
 	// create a unix socket
+	error::clearError();
 	do {
 		fd(::socket(AF_UNIX,SOCK_STREAM,0));
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);

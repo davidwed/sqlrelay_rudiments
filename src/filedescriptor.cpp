@@ -360,6 +360,7 @@ void filedescriptor::setFileDescriptor(int32_t filedesc) {
 
 int32_t filedescriptor::duplicate() const {
 	int32_t	result;
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__DUP)
 			result=_dup(pvt->_fd);
@@ -374,6 +375,7 @@ int32_t filedescriptor::duplicate() const {
 
 bool filedescriptor::duplicate(int32_t newfd) const {
 	int32_t	result;
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__DUP2)
 			result=_dup2(pvt->_fd,newfd);
@@ -798,6 +800,7 @@ bool filedescriptor::close() {
 #endif
 	if (pvt->_fd!=-1) {
 		int32_t	result;
+		error::clearError();
 		do {
 			result=lowLevelClose();
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1687,6 +1690,7 @@ int32_t filedescriptor::getSSLResult() const {
 int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
 	#ifdef RUDIMENTS_HAVE_FCNTL
 		int32_t	result;
+		error::clearError();
 		do {
 			result=fcntl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedfcntl && result==-1 &&
@@ -1700,6 +1704,7 @@ int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
 int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#ifdef RUDIMENTS_HAVE_IOCTL
 		int32_t	result;
+		error::clearError();
 		do {
 			result=ioctl(pvt->_fd,cmd,arg);
 		} while (pvt->_retryinterruptedioctl && result==-1 &&
@@ -1781,6 +1786,7 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 
 	// finally, send the msghdr
 	int32_t	result;
+	error::clearError();
 	do {
 		result=sendmsg(pvt->_fd,&messageheader,0);
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
@@ -1902,6 +1908,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 
 	// receive the msghdr
 	int32_t	result;
+	error::clearError();
 	do {
 		// wait 120 seconds for data to come in
 		// FIXME: this should be configurable
@@ -2195,6 +2202,7 @@ char *filedescriptor::getPeerAddress() const {
 
 	// get the peer address
 	int32_t	result;
+	error::clearError();
 	do {
 		result=getpeername(pvt->_fd,
 				reinterpret_cast<struct sockaddr *>(&clientsin),
@@ -2217,6 +2225,7 @@ int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
 	if (optlen) {
 		tempoptlen=*optlen;
 	}
+	error::clearError();
 	do {
 		result=getsockopt(pvt->_fd,level,optname,
 			(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)optval,
@@ -2231,6 +2240,7 @@ int32_t filedescriptor::getSockOpt(int32_t level, int32_t optname,
 int32_t filedescriptor::setSockOpt(int32_t level, int32_t optname,
 				const void *optval, socklen_t optlen) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=setsockopt(pvt->_fd,level,optname,
 			(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)optval,optlen);

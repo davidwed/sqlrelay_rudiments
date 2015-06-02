@@ -117,6 +117,7 @@ bool filesystem::initialize(const char *path) {
 	}
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		pvt->_closeflag=true;
+		error::clearError();
 		do {
 			#if defined(RUDIMENTS_HAVE__OPEN)
 				pvt->_fd=_open(path,O_RDONLY);
@@ -271,6 +272,7 @@ bool filesystem::close() {
 	int32_t	result=0;
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		if (pvt->_fd>-1 && pvt->_closeflag) {
+			error::clearError();
 			do {
 				#if defined(RUDIMENTS_HAVE__CLOSE)
 					result=_close(pvt->_fd);
@@ -297,6 +299,7 @@ bool filesystem::getCurrentProperties() {
 			!defined(__VMS)
 
 		int32_t	result;
+		error::clearError();
 		do {
 			#if defined(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS)
 				result=fstatvfs(pvt->_fd,&pvt->_st);

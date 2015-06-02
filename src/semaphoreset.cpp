@@ -542,6 +542,7 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 
 		int32_t	result;
+		error::clearError();
 		do {
 			result=semget(key,nsems,semflg);
 		} while (result==-1 &&
@@ -633,6 +634,7 @@ int32_t semaphoreset::semControl(semaphoresetprivate *pvt, int32_t semnum,
 						int32_t cmd, semun *semctlun) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=semctl(pvt->_semid,semnum,cmd,*semctlun);
 		} while (result==-1 &&
@@ -650,6 +652,7 @@ int32_t semaphoreset::semControl(semaphoresetprivate *pvt, int32_t semnum,
 bool semaphoreset::semOp(struct sembuf *sops) {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=semop(pvt->_semid,sops,1);
 		} while (result==-1 &&
@@ -671,6 +674,7 @@ bool semaphoreset::semTimedOp(struct sembuf *sops,
 		timespec	ts;
 		ts.tv_sec=seconds;
 		ts.tv_nsec=nanoseconds;
+		error::clearError();
 		do {
 			result=semtimedop(pvt->_semid,sops,1,&ts);
 		} while (result==-1 &&

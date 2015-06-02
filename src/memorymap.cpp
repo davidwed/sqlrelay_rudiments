@@ -94,6 +94,7 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 					int32_t protection, int32_t flags) {
 	pvt->_length=len;
 	#if defined(RUDIMENTS_HAVE_MMAP)
+		error::clearError();
 		do {
 			pvt->_data=mmap(NULL,len,protection,flags,fd,offset);
 		} while (pvt->_data==(void *)MAP_FAILED &&
@@ -174,6 +175,7 @@ bool memorymap::detach() {
 		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		#if defined(RUDIMENTS_HAVE_MMAP)
 			int32_t	result;
+			error::clearError();
 			do {
 				result=munmap(
 					reinterpret_cast<MUNMAP_ADDRCAST>
@@ -202,6 +204,7 @@ bool memorymap::setProtection(off64_t offset, size_t len, int32_t protection) {
 		unsigned char	*ptr=
 			(static_cast<unsigned char *>(pvt->_data))+offset;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=mprotect(
 				reinterpret_cast<MPROTECT_ADDRCAST>(ptr),
@@ -232,6 +235,7 @@ bool memorymap::sync(off64_t offset, size_t len,
 		unsigned char	*ptr=
 			(static_cast<unsigned char *>(pvt->_data))+offset;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=msync(reinterpret_cast<MSYNC_ADDRCAST>(ptr),len,
 					((immediate)?MS_SYNC:MS_ASYNC)|
@@ -313,6 +317,7 @@ bool memorymap::lock(off64_t offset, size_t len) {
 		unsigned char	*ptr=
 			(static_cast<unsigned char *>(pvt->_data))+offset;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=mlock(reinterpret_cast<MLOCK_ADDRCAST>(ptr),len);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -332,6 +337,7 @@ bool memorymap::unlock(off64_t offset, size_t len) {
 		unsigned char	*ptr=
 			(static_cast<unsigned char *>(pvt->_data))+offset;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=munlock(
 				reinterpret_cast<MUNLOCK_ADDRCAST>(ptr),
@@ -364,6 +370,7 @@ bool memorymap::inMemory(off64_t offset, size_t len) {
 		unsigned char	*ptr=
 			(static_cast<unsigned char *>(pvt->_data))+offset;
 		int32_t		result;
+		error::clearError();
 		do {
 			result=mincore(
 				reinterpret_cast<MINCORE_ADDRCAST>(ptr),
@@ -420,6 +427,7 @@ bool memorymap::lockAllFuture() {
 bool memorymap::unlockAll() {
 	#ifdef RUDIMENTS_HAVE_MUNLOCKALL
 		int32_t	result;
+		error::clearError();
 		do {
 			result=munlockall();
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -433,6 +441,7 @@ bool memorymap::unlockAll() {
 bool memorymap::mAdvise(unsigned char *start, size_t length, int32_t advice) {
 	#if defined(RUDIMENTS_HAVE_MADVISE)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=madvise(
 				reinterpret_cast<MADVISE_ADDRCAST>(start),
@@ -448,6 +457,7 @@ bool memorymap::mAdvise(unsigned char *start, size_t length, int32_t advice) {
 bool memorymap::mLockAll(int32_t flags) {
 	#ifdef RUDIMENTS_HAVE_MLOCKALL
 		int32_t	result;
+		error::clearError();
 		do {
 			result=mlockall(flags);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

@@ -97,6 +97,7 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 	charstring::copy(_sun()->sun_path,filename);
 
 	// create the socket
+	error::clearError();
 	do {
 		fd(::socket(AF_UNIX,SOCK_STREAM,0));
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);
@@ -140,6 +141,7 @@ bool unixsocketserver::bind() {
 	// bind the socket
 	bool	retval=true;
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::bind(fd(),
 			reinterpret_cast<struct sockaddr *>(_sun()),
@@ -162,6 +164,7 @@ bool unixsocketserver::listen(int32_t backlog) {
 	return pvt->_iss.listen(backlog);
 #else
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -181,6 +184,7 @@ filedescriptor *unixsocketserver::accept() {
 
 	// accept on the socket
 	int32_t	clientsock;
+	error::clearError();
 	do {
 		clientsock=::accept(fd(),
 				reinterpret_cast<struct sockaddr *>(

@@ -127,6 +127,7 @@ bool socketserver::isUsingNonBlockingMode() const {
 int32_t socketserver::ioCtl(int32_t cmd, void *arg) const {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=ioctlsocket(fd(),cmd,(u_long *)arg);
 		} while (getRetryInterruptedIoctl() && result==-1 &&
@@ -176,6 +177,7 @@ bool socketserver::setReuseAddresses(int32_t onoff) {
 
 bool socketserver::listen(int32_t backlog) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

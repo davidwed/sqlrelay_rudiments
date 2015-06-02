@@ -48,6 +48,7 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 			flag|=RTLD_GLOBAL;
 		}
 		#endif
+		error::clearError();
 		do {
 			pvt->_handle=dlopen(library,flag);
 		} while (!pvt->_handle && error::getErrorNumber()==EINTR);
@@ -69,6 +70,7 @@ bool dynamiclib::close() {
 	bool	retval=false;
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=dlclose(pvt->_handle);
 		} while (result!=0 && error::getErrorNumber()==EINTR);
@@ -85,6 +87,7 @@ bool dynamiclib::close() {
 void *dynamiclib::getSymbol(const char *symbol) const {
 	#if defined(RUDIMENTS_HAVE_DLOPEN)
 		void	*symhandle;
+		error::clearError();
 		do {
 			// What's this char * cast all about?
 			// Really old versions of dlsym (linux libc5) define
@@ -107,6 +110,7 @@ char *dynamiclib::getError() const {
 			return NULL;
 		}
 		const char	*err;
+		error::clearError();
 		do {
 			err=dlerror();
 		} while (!err && error::getErrorNumber()==EINTR);

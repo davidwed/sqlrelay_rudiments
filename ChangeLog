@@ -32,6 +32,8 @@
 		command lines
 	added --enable-enosys-notify configure option for runtime notifcations
 		when methods set ENOSYS
+	cleared errno before each EINTR loop
+	fixed sys::sync() segfault
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

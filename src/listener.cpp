@@ -294,6 +294,7 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 			!defined(RUDIMENTS_HAVE_PORT_CREATE)
 		uint64_t	fdcount=pvt->_fdlist.getLength();
 	#endif
+	error::clearError();
 	for (;;) {
 
 		#if defined(RUDIMENTS_HAVE_KQUEUE)

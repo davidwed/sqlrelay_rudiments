@@ -83,6 +83,7 @@ char *sys::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -99,6 +100,7 @@ char *sys::getOperatingSystemRelease() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -116,6 +118,7 @@ char *sys::getOperatingSystemVersion() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -152,6 +155,7 @@ char *sys::getOperatingSystemArchitecture() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -206,6 +210,7 @@ char *sys::getHostName() {
 
 			// try to get the name, retry if
 			// the system call was interrupted
+			error::clearError();
 			do {
 				result=gethostname(name,namelen);
 			} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -240,6 +245,7 @@ bool sys::setHostName(const char *hostname, uint64_t hostnamelen) {
 		defined(RUDIMENTS_HAVE_MISSING_SETHOSTNAME_DECLARATION)
 		winsock::initWinsock();
 		int32_t	result;
+		error::clearError();
 		do {
 			// Some systems (Solaris) have a char *, rather than
 			// const char * for the first parameter.  Nothing will
@@ -1064,6 +1070,7 @@ int64_t sys::getMaxProcessId() {
 int64_t sys::sysConf(int32_t name) {
 	#if defined(RUDIMENTS_HAVE_SYSCONF)
 		int64_t	result;
+		error::clearError();
 		do {
 			result=sysconf(name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

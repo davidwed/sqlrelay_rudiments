@@ -152,6 +152,7 @@ int32_t inetsocketclient::connect() {
 		// get the address info for the given address/port
 		addrinfo	*ai=NULL;
 		int32_t		result;
+		error::clearError();
 		do {
 			error::clearError();
 			result=getaddrinfo(_address(),portstr,&hints,&ai);
@@ -237,6 +238,7 @@ int32_t inetsocketclient::connect() {
 				addrinfo	*ainfo=addrlistnode->getValue();
 
 				// create an inet socket
+				error::clearError();
 				do {
 					fd(::socket(ainfo->ai_family,
 							ainfo->ai_socktype,
@@ -333,6 +335,7 @@ int32_t inetsocketclient::connect() {
 						addr,he.getAddressLength());
 
 				// create an inet socket
+				error::clearError();
 				do {
 					fd(::socket(AF_INET,
 							SOCK_STREAM,

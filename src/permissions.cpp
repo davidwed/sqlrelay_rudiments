@@ -157,6 +157,7 @@ bool permissions::setFilePermissions(const char *filename, mode_t perms) {
 bool permissions::setFilePermissions(int32_t fd, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_FCHMOD)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=fchmod(fd,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

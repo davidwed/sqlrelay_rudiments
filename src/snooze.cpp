@@ -104,6 +104,7 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 		bool	keepgoing=true;
 		if (timetosnooze.tv_sec) {
 			uint32_t	remainder=timetosnooze.tv_sec;
+			error::clearError();
 			do {
 				remainder=::sleep(remainder);
 			} while (error::getErrorNumber()==EINTR);

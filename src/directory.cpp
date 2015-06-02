@@ -121,6 +121,7 @@ bool directory::open(const char *path) {
 		pvt->_onfirst=true;
 		return (pvt->_dir!=INVALID_HANDLE_VALUE);
 	#else
+		error::clearError();
 		do {
 			pvt->_dir=opendir(path);
 		} while (pvt->_dir==NULL && error::getErrorNumber()==EINTR);
@@ -173,10 +174,10 @@ char *directory::read() {
 		#endif
 		dirent	*result;
 		int32_t	rdresult;
+		error::clearError();
 		do {
 			rdresult=readdir_r(pvt->_dir,entry,&result);
-		} while (rdresult==-1 &&
-				error::getErrorNumber()==EINTR);
+		} while (rdresult==-1 && error::getErrorNumber()==EINTR);
 		if (rdresult || !result) {
 			delete[] entry;
 			return NULL;
@@ -194,6 +195,7 @@ char *directory::read() {
 		if (_rdmutex && !_rdmutex->lock()) {
 			return NULL;
 		}
+		error::clearError();
 		do {
 			entry=readdir(pvt->_dir);
 		} while (!entry && error::getErrorNumber()==EINTR);
@@ -229,6 +231,7 @@ bool directory::close() {
 	#else
 		bool	retval=true;
 		if (pvt->_dir) {
+			error::clearError();
 			do {
 				retval=!closedir(pvt->_dir);
 			} while (!retval && error::getErrorNumber()==EINTR);
@@ -322,6 +325,7 @@ bool directory::create(const char *path, mode_t perms) {
 		return retval;
 	#else
 		int32_t	result;
+		error::clearError();
 		do {
 			#if defined(RUDIMENTS_HAVE_MKDIR_2)
 				result=mkdir(path,perms);
@@ -347,6 +351,7 @@ bool directory::remove(const char *path) {
 		return (RemoveDirectory(path)==TRUE);
 	#else
 		int32_t	result;
+		error::clearError();
 		do {
 			result=rmdir(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -369,6 +374,7 @@ char *directory::getCurrentWorkingDirectory() {
 				result=buffer;
 			}
 		#else
+			error::clearError();
 			do {
 				result=getcwd(buffer,size);
 			} while (!result && error::getErrorNumber()==EINTR);
@@ -390,6 +396,7 @@ bool directory::changeDirectory(const char *path) {
 		return (SetCurrentDirectory(path)==TRUE);
 	#else
 		int32_t	result;
+		error::clearError();
 		do {
 			result=chdir(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -400,6 +407,7 @@ bool directory::changeDirectory(const char *path) {
 bool directory::changeRoot(const char *path) {
 	#ifdef RUDIMENTS_HAVE_CHROOT
 		int32_t	result;
+		error::clearError();
 		do {
 			result=chroot(path);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -447,6 +455,7 @@ bool directory::canAccessLongFileNames(const char *pathname) {
 int64_t directory::pathConf(const char *pathname, int32_t name) {
 	#if defined(RUDIMENTS_HAVE_PATHCONF)
 		int64_t	result;
+		error::clearError();
 		do {
 			result=pathconf(pathname,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -491,6 +500,7 @@ int64_t directory::fpathConf(int32_t name) {
 			defined(RUDIMENTS_HAVE_DIR_DD_FD) && \
 			defined(RUDIMENTS_HAVE_DIR_D_FD)
 		int64_t	result;
+		error::clearError();
 		do {
 			result=fpathconf(
 					#if defined(RUDIMENTS_HAVE_DIRFD)

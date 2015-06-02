@@ -302,6 +302,7 @@ mode_t process::setFileCreationMask(mode_t mask) {
 pid_t process::fork() {
 	#if defined(RUDIMENTS_HAVE_FORK)
 		pid_t	result;
+		error::clearError();
 		do {
 			result=::fork();
 
@@ -702,6 +703,7 @@ pid_t process::getChildStateChange(pid_t pid,
 
 	// wait
 	int32_t	childpid=-1;
+	error::clearError();
 	do {
 		// Minix 3.1.8 needs the int * cast
 		childpid=waitpid(pid,(int *)&status,options);

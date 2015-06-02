@@ -318,6 +318,7 @@ void file::openInternal(const char *name, int32_t flags,
 	#else
 
 		int32_t	result;
+		error::clearError();
 		do {
 			if (useperms) {
 				#if defined(RUDIMENTS_HAVE__OPEN)
@@ -641,6 +642,7 @@ bool file::normalAccess(off64_t start, size_t len) const {
 bool file::reserve(off64_t start, size_t len) const {
 	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
 		int32_t	result;
+		error::clearError();
 		do {
 			result=posix_fallocate(fd(),start,len);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -716,6 +718,7 @@ off64_t file::getCurrentPosition() const {
 
 off64_t file::lseek(off64_t offset, int32_t whence) const {
 	int32_t	result;
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__LSEEK)
 			result=_lseek(fd(),offset,whence);
@@ -746,6 +749,7 @@ bool file::executable(const char *filename) {
 
 bool file::accessible(const char *filename, int32_t mode) {
 	int32_t	result;
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__ACCESS_S)
 			result=_access_s(filename,mode);
@@ -760,6 +764,7 @@ bool file::accessible(const char *filename, int32_t mode) {
 
 bool file::getCurrentProperties() {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=fstat(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -827,6 +832,7 @@ bool file::getCurrentProperties() {
 
 bool file::stat(const char *filename, void *st) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::stat(filename,(struct stat *)st);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1106,6 +1112,7 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 	#if defined(RUDIMENTS_HAVE_FCHOWN)
 
 		int32_t	result;
+		error::clearError();
 		do {
 			result=fchown(fd(),uid,gid);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1244,6 +1251,7 @@ bool file::canChangeOwner() const {
 
 bool file::rename(const char *oldpath, const char *newpath) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::rename(oldpath,newpath);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1252,6 +1260,7 @@ bool file::rename(const char *oldpath, const char *newpath) {
 
 bool file::remove(const char *filename) {
 	int32_t	result;
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__UNLINK)
 			result=_unlink(filename);
@@ -1267,6 +1276,7 @@ bool file::remove(const char *filename) {
 bool file::createHardLink(const char *oldpath, const char *newpath) {
 	#if defined(RUDIMENTS_HAVE_LINK)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=link(oldpath,newpath);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1295,6 +1305,7 @@ bool file::createHardLink(const char *oldpath, const char *newpath) {
 bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 	#if defined(RUDIMENTS_HAVE_SYMLINK)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=symlink(oldpath,newpath);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1316,6 +1327,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 
 			// read the path into the buffer
 			int32_t	len;
+			error::clearError();
 			do {
 				len=::readlink(filename,buffer,buffersize);
 			} while (len==-1 && error::getErrorNumber()==EINTR);
@@ -1358,6 +1370,7 @@ char *file::resolveSymbolicLink(const char *filename) {
 bool file::sync() const {
 	#if defined(RUDIMENTS_HAVE_FSYNC)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=fsync(fd());
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1375,6 +1388,7 @@ bool file::sync() const {
 bool file::dataSync() const {
 	#ifdef RUDIMENTS_HAVE_FDATASYNC
 		int32_t	result;
+		error::clearError();
 		do {
 			result=fdatasync(fd());
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1417,6 +1431,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		tv[1].tv_sec=static_cast<long>(lastmodtime);
 		tv[1].tv_usec=0;
 		int32_t	result;
+		error::clearError();
 		do {
 			#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR)
 				result=utimes(filename,tv);
@@ -1430,6 +1445,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename,
 		tb.actime=static_cast<time_t>(lastaccesstime);
 		tb.modtime=static_cast<time_t>(lastmodtime);
 		int32_t	result;
+		error::clearError();
 		do {
 			result=utime(filename,&tb);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1482,6 +1498,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename) {
 	#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR) || \
 			defined(RUDIMENTS_HAVE_UTIMES_CHAR)
 		int32_t	result;
+		error::clearError();
 		do {
 			#if defined(RUDIMENTS_HAVE_UTIMES_CONST_CHAR)
 				result=utimes(filename,NULL);
@@ -1502,6 +1519,7 @@ bool file::setLastAccessAndModificationTimes(const char *filename) {
 bool file::createFifo(const char *filename, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_MKFIFO)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=mkfifo(filename,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1523,6 +1541,7 @@ bool file::createFifo(const char *filename, mode_t perms) {
 bool file::createPipe(filedescriptor *readfd, filedescriptor *writefd) {
 	int32_t	result;
 	int	fd[2];
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE_PIPE)
 			result=pipe(fd);
@@ -1546,6 +1565,7 @@ bool file::createPipe(filedescriptor *readfd, filedescriptor *writefd) {
 int32_t file::createTemporaryFile(char *templatefilename) {
 	#if defined(RUDIMENTS_HAVE_MKSTEMP)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=mkstemp(templatefilename);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1799,6 +1819,7 @@ int64_t file::maxLinks() const {
 bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) const {
 	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
 		int32_t	result;
+		error::clearError();
 		do {
 			result=posix_fadvise(fd(),offset,len,advice);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1813,6 +1834,7 @@ bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) const {
 int64_t file::pathConf(const char *path, int32_t name) {
 	#if defined(RUDIMENTS_HAVE_PATHCONF)
 		int64_t	result;
+		error::clearError();
 		do {
 			result=pathconf(path,name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -1826,6 +1848,7 @@ int64_t file::pathConf(const char *path, int32_t name) {
 int64_t file::fpathConf(int32_t name) const {
 	#if defined(RUDIMENTS_HAVE_FPATHCONF)
 		int64_t	result;
+		error::clearError();
 		do {
 			result=fpathconf(fd(),name);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

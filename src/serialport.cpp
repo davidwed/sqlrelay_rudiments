@@ -51,6 +51,7 @@ bool serialport::setProfileOnFlush(serialportprofile *profile) {
 
 bool serialport::drain() {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=tcdrain(fd());
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -87,6 +88,7 @@ bool serialport::transmitStart() {
 
 bool serialport::sendBreak(int32_t duration) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=tcsendbreak(fd(),duration);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -96,6 +98,7 @@ bool serialport::sendBreak(int32_t duration) {
 bool serialport::getProfile(serialportprofile *profile) {
 	termios	tio;
 	int32_t	result;
+	error::clearError();
 	do {
 		result=tcgetattr(fd(),&tio);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -108,6 +111,7 @@ bool serialport::getProfile(serialportprofile *profile) {
 
 bool serialport::tcSetAttr(int32_t optional_actions, termios *termios_p) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=tcsetattr(fd(),optional_actions,termios_p);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -116,6 +120,7 @@ bool serialport::tcSetAttr(int32_t optional_actions, termios *termios_p) {
 
 bool serialport::tcFlush(int32_t queue_selector) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=tcflush(fd(),queue_selector);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -124,6 +129,7 @@ bool serialport::tcFlush(int32_t queue_selector) {
 
 bool serialport::tcFlow(int32_t action) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=tcflow(fd(),action);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

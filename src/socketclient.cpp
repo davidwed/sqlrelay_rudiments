@@ -143,6 +143,7 @@ bool socketclient::isUsingNonBlockingMode() const {
 int32_t socketclient::ioCtl(int32_t cmd, void *arg) const {
 	#if defined(RUDIMENTS_HAVE_IOCTLSOCKET)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=ioctlsocket(fd(),cmd,(u_long *)arg);
 		} while (getRetryInterruptedIoctl() && result==-1 &&
@@ -275,6 +276,7 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 		// If getpeername() fails then the
 		// connect was unsuccessful.
 		size=sizeof(peeraddr);
+		error::clearError();
 		do {
 			bytestring::zero(&peeraddr,size);
 			result=getpeername(fd(),&peeraddr,&size);

@@ -62,6 +62,7 @@ void filedestination::write(const char *string) {
 
 void stdoutdestination::write(const char *string) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=stdoutput.write(string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -69,6 +70,7 @@ void stdoutdestination::write(const char *string) {
 
 void stderrdestination::write(const char *string) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=stderror.write(string,charstring::length(string));
 	} while (result==-1 && error::getErrorNumber()==EINTR);

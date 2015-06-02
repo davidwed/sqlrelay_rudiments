@@ -291,6 +291,7 @@ int32_t signalset::signalIsInSet(int32_t signum) const {
 bool signalmanager::sendSignal(pid_t processid, int32_t signum) {
 	#ifdef RUDIMENTS_HAVE_KILL
 		int32_t	result;
+		error::clearError();
 		do {
 			result=kill(processid,signum);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -585,6 +586,7 @@ bool signalmanager::raiseSignal(int32_t signum) {
 		return false;
 	#elif defined(RUDIMENTS_HAVE_RAISE)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=raise(signum);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -665,6 +667,7 @@ bool signalmanager::ignoreSignals(const signalset *sset) {
 		return result;
 	#elif defined(RUDIMENTS_HAVE_SIGACTION)
 		int32_t	result;
+		error::clearError();
 		do {
 			#ifdef RUDIMENTS_HAVE_PTHREAD_SIGMASK
 				result=pthread_sigmask(SIG_SETMASK,
@@ -708,6 +711,7 @@ bool signalmanager::waitForSignals(const signalset *sset) {
 bool signalmanager::examineBlockedSignals(signalset *sset) {
 	#ifdef RUDIMENTS_HAVE_KILL
 		int32_t	result;
+		error::clearError();
 		do {
 			result=sigpending(&sset->pvt->_sigset);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -858,6 +862,7 @@ bool signalhandler::handleSignal(int32_t signum, signalhandler *oldhandler) {
 			pvt->_handlerstruct.sa_handler=
 					(void(*)(void))pvt->_handler;
 		#endif
+		error::clearError();
 		do {
 			result=sigaction(signum,&pvt->_handlerstruct,
 								&oldaction);

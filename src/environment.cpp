@@ -67,6 +67,7 @@ bool environment::setValue(const char *variable, const char *value) {
 	charstring::append(pestr,"=");
 	charstring::append(pestr,value);
 	int32_t	result;
+	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__PUTENV)
 			result=_putenv(pestr);
@@ -112,11 +113,8 @@ const char *environment::getValue(const char *variable) {
 	if (_envmutex && !_envmutex->lock()) {
 		return retval;
 	}
+	error::clearError();
 	do {
-		// reset errno, it could still be set to EINTR from a previous
-		// system call and cause an infinite loop
-		error::clearError();
-
 		#if defined(RUDIMENTS_HAVE__DUPENV_S)
 			// FIXME: _dupenv_s is meant to be thread-safe and this
 			// usage certainly isn't.  This just emulates the
@@ -147,6 +145,7 @@ bool environment::setValue(const char *variable, const char *value) {
 	if (_envmutex && !_envmutex->lock()) {
 		return retval;
 	}
+	error::clearError();
 	do {
 		retval=!setenv(variable,value,1);
 	} while (!retval && error::getErrorNumber()==EINTR);

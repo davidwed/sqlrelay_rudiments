@@ -28,6 +28,7 @@
 
 static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=shmget(key,size,shmflag);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -36,6 +37,7 @@ static int32_t shmGet(key_t key, size_t size, int32_t shmflag) {
 
 static void *shmAttach(int32_t id) {
 	void	*result;
+	error::clearError();
 	do {
 		result=shmat(id,0,0);
 	} while (reinterpret_cast<int64_t>(result)==-1 &&
@@ -45,6 +47,7 @@ static void *shmAttach(int32_t id) {
 
 static bool shmControl(int32_t id, int32_t cmd, shmid_ds *buf) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=shmctl(id,cmd,buf);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

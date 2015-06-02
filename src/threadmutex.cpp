@@ -32,6 +32,7 @@ threadmutex::threadmutex() {
 
 	pvt=new threadmutexprivate;
 	pvt->_mut=new pthread_mutex_t;
+	error::clearError();
 	do {} while (pthread_mutex_init(pvt->_mut,NULL)==-1 &&
 				error::getErrorNumber()==EINTR);
 	pvt->_destroy=true;
@@ -44,6 +45,7 @@ threadmutex::threadmutex(void *mut) {
 }
 
 threadmutex::~threadmutex() {
+	error::clearError();
 	do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
 				error::getErrorNumber()==EINTR);
 	if (pvt->_destroy) {
@@ -54,6 +56,7 @@ threadmutex::~threadmutex() {
 
 bool threadmutex::lock() {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=pthread_mutex_lock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -62,6 +65,7 @@ bool threadmutex::lock() {
 
 bool threadmutex::tryLock() {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=pthread_mutex_trylock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -70,6 +74,7 @@ bool threadmutex::tryLock() {
 
 bool threadmutex::unlock() {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=pthread_mutex_unlock(pvt->_mut);
 	} while (result==-1 && error::getErrorNumber()==EINTR);

@@ -106,6 +106,7 @@ bool inetsocketserver::initialize(const char *address, uint16_t port) {
 	}
 
 	// create the socket
+	error::clearError();
 	do {
 		fd(::socket(AF_INET,SOCK_STREAM,0));
 	} while (fd()==-1 && error::getErrorNumber()==EINTR);
@@ -136,6 +137,7 @@ bool inetsocketserver::bind() {
 
 	// bind the socket
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::bind(fd(),reinterpret_cast<struct sockaddr *>(_sin()),
 							sizeof(sockaddr_in));
@@ -153,6 +155,7 @@ bool inetsocketserver::bind() {
 		bytestring::zero(&socknamesin,sizeof(socknamesin));
 
 		int32_t	result;
+		error::clearError();
 		do {
 			result=getsockname(fd(),
 				reinterpret_cast<struct sockaddr *>
@@ -169,6 +172,7 @@ bool inetsocketserver::bind() {
 
 bool inetsocketserver::listen(int32_t backlog) {
 	int32_t	result;
+	error::clearError();
 	do {
 		result=::listen(fd(),backlog);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -184,6 +188,7 @@ filedescriptor *inetsocketserver::accept() {
 
 	// accept on the socket
 	int32_t	clientsock;
+	error::clearError();
 	do {
 		clientsock=::accept(fd(),
 				reinterpret_cast<struct sockaddr *>(&clientsin),

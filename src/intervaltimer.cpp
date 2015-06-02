@@ -95,6 +95,7 @@ bool intervaltimer::start(int32_t *seconds, int32_t *microseconds) const {
 	#ifdef RUDIMENTS_HAVE_SETITIMER
 		itimerval	oldval;
 		int32_t		result;
+		error::clearError();
 		do {
 			// Solaris 8 complains if the 2nd argument isn't cast
 			result=setitimer(pvt->_which,
@@ -119,6 +120,7 @@ bool intervaltimer::getTimeRemaining(int32_t *seconds,
 	#ifdef RUDIMENTS_HAVE_SETITIMER
 		itimerval	val;
 		int32_t	result;
+		error::clearError();
 		do {
 			result=getitimer(pvt->_which,&val);
 		} while (result==-1 && error::getErrorNumber()==EINTR);

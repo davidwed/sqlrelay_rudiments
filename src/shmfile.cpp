@@ -42,6 +42,7 @@ void shmfile::openInternal(const char *name, int32_t flags,
 				mode_t perms, bool useperms) {
 	#if defined(RUDIMENTS_HAVE_SHM_OPEN)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=shm_open(name,flags,perms);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
@@ -55,6 +56,7 @@ void shmfile::openInternal(const char *name, int32_t flags,
 bool shmfile::remove(const char *filename) {
 	#if defined(RUDIMENTS_HAVE_SHM_OPEN)
 		int32_t	result;
+		error::clearError();
 		do {
 			result=shm_unlink(filename);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
