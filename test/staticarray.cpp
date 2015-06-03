@@ -39,9 +39,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("staticarray:\n");
 
 	// Create a staticarray
-	staticarray<struct test,COUNT>	sa;
+	staticarray<struct test,COUNT>	sa1;
 	stdoutput.printf("create <test>...\n");
-	test("create, getLength()",sa.getLength()==COUNT);
+	test("create, getLength()",sa1.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -50,38 +50,93 @@ int main(int argc, const char **argv) {
 	uint32_t	i;
 	for (i=0; i<count; i++) {
 		char	*val=charstring::parseNumber(i);
-		charstring::copy(sa[i].str,val);
+		charstring::copy(sa1[i].str,val);
 		delete[] val;
-		sa[i].uintval=i;
+		sa1[i].uintval=i;
 	}
-	test("get values, getLength()",(uint32_t)sa.getLength()==count);
+	test("get values, getLength()",(uint32_t)sa1.getLength()==count);
 	bool	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
-		success=!charstring::compare(sa[i].str,val);
+		success=!charstring::compare(sa1[i].str,val);
 		delete[] val;
 	}
 	test("get values, string",success);
 	for (i=0; success && i<count; i++) {
-		success=(sa[i].uintval==i);
+		success=(sa1[i].uintval==i);
 	}
 	test("get values, int",success);
 	for (i=count; success && i>0; i--) {
 		char	*val=charstring::parseNumber(i-1);
-		success=!charstring::compare(sa[i-1].str,val);
+		success=!charstring::compare(sa1[i-1].str,val);
 		delete[] val;
 	}
 	test("get values, string (backwards)",success);
 	for (i=count; success && i>0; i--) {
-		success=(sa[i-1].uintval==i-1);
+		success=(sa1[i-1].uintval==i-1);
+	}
+	test("get values, int (backwards)",success);
+	stdoutput.printf("\n");
+
+	// copy using =
+	stdoutput.printf("copy (using =)...\n");
+	staticarray<struct test,COUNT>	sa1copy1;
+	sa1copy1=sa1;
+	test("get values, getLength()",(uint32_t)sa1copy1.getLength()==count);
+	success=true;
+	for (i=0; success && i<count; i++) {
+		char	*val=charstring::parseNumber(i);
+		success=!charstring::compare(sa1copy1[i].str,val);
+		delete[] val;
+	}
+	test("get values, string",success);
+	for (i=0; success && i<count; i++) {
+		success=(sa1copy1[i].uintval==i);
+	}
+	test("get values, int",success);
+	for (i=count; success && i>0; i--) {
+		char	*val=charstring::parseNumber(i-1);
+		success=!charstring::compare(sa1copy1[i-1].str,val);
+		delete[] val;
+	}
+	test("get values, string (backwards)",success);
+	for (i=count; success && i>0; i--) {
+		success=(sa1copy1[i-1].uintval==i-1);
+	}
+	test("get values, int (backwards)",success);
+	stdoutput.printf("\n");
+
+	// copy using constructor
+	stdoutput.printf("copy (using constructor)...\n");
+	staticarray<struct test,COUNT>	sa1copy2(sa1);
+	test("get values, getLength()",(uint32_t)sa1copy2.getLength()==count);
+	success=true;
+	for (i=0; success && i<count; i++) {
+		char	*val=charstring::parseNumber(i);
+		success=!charstring::compare(sa1copy2[i].str,val);
+		delete[] val;
+	}
+	test("get values, string",success);
+	for (i=0; success && i<count; i++) {
+		success=(sa1copy2[i].uintval==i);
+	}
+	test("get values, int",success);
+	for (i=count; success && i>0; i--) {
+		char	*val=charstring::parseNumber(i-1);
+		success=!charstring::compare(sa1copy2[i-1].str,val);
+		delete[] val;
+	}
+	test("get values, string (backwards)",success);
+	for (i=count; success && i>0; i--) {
+		success=(sa1copy2[i-1].uintval==i-1);
 	}
 	test("get values, int (backwards)",success);
 	stdoutput.printf("\n");
 
 	// clear
 	stdoutput.printf("clear...\n");
-	sa.clear();
-	test("clear, getLength()",sa.getLength()==COUNT);
+	sa1.clear();
+	test("clear, getLength()",sa1.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 

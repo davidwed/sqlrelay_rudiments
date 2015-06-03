@@ -20,6 +20,7 @@ dynamicarray<valuetype>::dynamicarray(uint64_t initialsize,
 template< class valuetype >
 RUDIMENTS_TEMPLATE_INLINE
 dynamicarray<valuetype>::dynamicarray(const dynamicarray<valuetype> &v) {
+	init(v.initial,v.extsize);
 	dynamicarrayClone(v);
 }
 
@@ -29,6 +30,7 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 					const dynamicarray<valuetype> &v) {
 	if (this!=&v) {
 		clearExtentList();
+		init(v.initial,v.extsize);
 		dynamicarrayClone(v);
 	}
 	return *this;
@@ -52,6 +54,15 @@ RUDIMENTS_TEMPLATE_INLINE
 void dynamicarray<valuetype>::dynamicarrayClone(
 				const dynamicarray<valuetype> &v) {
 
+	// extend storage to fit (do this before setting size)
+	extend(v.len);
+
+	// clone sizes and positions
+	size=v.size;
+	len=v.len;
+	initial=v.initial;
+	extsize=v.extsize;
+
 	// clone the data
 	for (uint64_t i=0; i<v.getLength(); i++) {
 
@@ -68,14 +79,10 @@ void dynamicarray<valuetype>::dynamicarrayClone(
 		// and no carefully placed parentheses help.
 		//
 		// This silliness sorts both issues out.
-		this->find(i)=((dynamicarray<valuetype> *)&v)->find(i);
+		find(i)=((dynamicarray<valuetype> *)&v)->find(i);
 	}
 
-	// clone sizes and positions
-	size=v.size;
-	len=v.len;
-	initial=v.initial;
-	extsize=v.extsize;
+	// clone positions
 	curind=v.curind;
 	curext=extents.getFirst();
 	for (uint64_t eind=0; eind<curind; eind++) {

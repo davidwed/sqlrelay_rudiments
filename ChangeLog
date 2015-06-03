@@ -43,6 +43,7 @@
 		Windows
 	added sys::getAllocationGranularity, updated code to use it instead
 		of getPageSize, in most cases
+	fixed copy-constructor/=-operator bugs in dynamicarray class
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

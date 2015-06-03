@@ -40,9 +40,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("dynamicarray:\n");
 
 	// Create a dynamicarray
-	dynamicarray<struct test>	da(25,10);
+	dynamicarray<struct test>	da1(25,10);
 	stdoutput.printf("create <test>...\n");
-	test("create, getLength()",da.getLength()==0);
+	test("create, getLength()",da1.getLength()==0);
 	stdoutput.printf("\n");
 
 	// set/check values
@@ -51,38 +51,93 @@ int main(int argc, const char **argv) {
 	uint32_t	i;
 	for (i=0; i<count; i++) {
 		char	*val=charstring::parseNumber(i);
-		charstring::copy(da[i].str,val);
+		charstring::copy(da1[i].str,val);
 		delete[] val;
-		da[i].uintval=i;
+		da1[i].uintval=i;
 	}
-	test("get values, getLength()",(uint32_t)da.getLength()==count);
+	test("get values, getLength()",(uint32_t)da1.getLength()==count);
 	bool	success=true;
 	for (i=0; success && i<count; i++) {
 		char	*val=charstring::parseNumber(i);
-		success=!charstring::compare(da[i].str,val);
+		success=!charstring::compare(da1[i].str,val);
 		delete[] val;
 	}
 	test("get values, string",success);
 	for (i=0; success && i<count; i++) {
-		success=(da[i].uintval==i);
+		success=(da1[i].uintval==i);
 	}
 	test("get values, int",success);
 	for (i=count; success && i>0; i--) {
 		char	*val=charstring::parseNumber(i-1);
-		success=!charstring::compare(da[i-1].str,val);
+		success=!charstring::compare(da1[i-1].str,val);
 		delete[] val;
 	}
 	test("get values, string (backwards)",success);
 	for (i=count; success && i>0; i--) {
-		success=(da[i-1].uintval==i-1);
+		success=(da1[i-1].uintval==i-1);
+	}
+	test("get values, int (backwards)",success);
+	stdoutput.printf("\n");
+
+	// copy using =
+	stdoutput.printf("copy (using =)...\n");
+	dynamicarray<struct test>	da1copy1(25,10);
+	da1copy1=da1;
+	test("get values, getLength()",(uint32_t)da1copy1.getLength()==count);
+	success=true;
+	for (i=0; success && i<count; i++) {
+		char	*val=charstring::parseNumber(i);
+		success=!charstring::compare(da1copy1[i].str,val);
+		delete[] val;
+	}
+	test("get values, string",success);
+	for (i=0; success && i<count; i++) {
+		success=(da1copy1[i].uintval==i);
+	}
+	test("get values, int",success);
+	for (i=count; success && i>0; i--) {
+		char	*val=charstring::parseNumber(i-1);
+		success=!charstring::compare(da1copy1[i-1].str,val);
+		delete[] val;
+	}
+	test("get values, string (backwards)",success);
+	for (i=count; success && i>0; i--) {
+		success=(da1copy1[i-1].uintval==i-1);
+	}
+	test("get values, int (backwards)",success);
+	stdoutput.printf("\n");
+
+	// copy using constructor
+	stdoutput.printf("copy (using constructor)...\n");
+	dynamicarray<struct test>	da1copy2(da1);
+	test("get values, getLength()",(uint32_t)da1copy2.getLength()==count);
+	success=true;
+	for (i=0; success && i<count; i++) {
+		char	*val=charstring::parseNumber(i);
+		success=!charstring::compare(da1copy2[i].str,val);
+		delete[] val;
+	}
+	test("get values, string",success);
+	for (i=0; success && i<count; i++) {
+		success=(da1copy2[i].uintval==i);
+	}
+	test("get values, int",success);
+	for (i=count; success && i>0; i--) {
+		char	*val=charstring::parseNumber(i-1);
+		success=!charstring::compare(da1copy2[i-1].str,val);
+		delete[] val;
+	}
+	test("get values, string (backwards)",success);
+	for (i=count; success && i>0; i--) {
+		success=(da1copy2[i-1].uintval==i-1);
 	}
 	test("get values, int (backwards)",success);
 	stdoutput.printf("\n");
 
 	// clear
 	stdoutput.printf("clear...\n");
-	da.clear();
-	test("clear, getLength()",da.getLength()==0);
+	da1.clear();
+	test("clear, getLength()",da1.getLength()==0);
 	stdoutput.printf("\n");
 
 

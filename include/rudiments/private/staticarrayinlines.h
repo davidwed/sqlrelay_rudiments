@@ -13,7 +13,8 @@ staticarray<valuetype,length>::staticarray() {
 
 template< class valuetype, uint64_t length >
 RUDIMENTS_TEMPLATE_INLINE
-staticarray<valuetype,length>::staticarray(const staticarray<valuetype,length> &v) {
+staticarray<valuetype,length>::staticarray(
+				const staticarray<valuetype,length> &v) {
 	len=v.len;
 	data=new valuetype[len];
 	for (uint64_t i=0; i<len; i++) {
