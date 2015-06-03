@@ -111,8 +111,21 @@ class RUDIMENTS_DLLSPEC sys {
 		static	int64_t	getMaxOpenFilesPerProcess();
 
 		/** Returns the page size, in bytes.
+		 *  NOTE: If you're looking for the minimum number of bytes
+		 *  that a programs address space can be extended by, see
+		 *  getAllocationGranularity() instead.  On most platforms
+		 *  it's the same as the page size, but it's different on
+		 *  Windows, for example,
 		 *  Returns -1 if not supported by the system. */
 		static	int32_t	getPageSize();
+
+		/** Returns the allocation granularity, in bytes.
+		 *  Allocation granularity is the minimum number of bytes
+		 *  that a program's address space can be extended by.
+		 *  It's usually the same as the page size, but not on
+		 *  Windows, for example.
+		 *  Returns -1 if not supported by the system. */
+		static	int32_t	getAllocationGranularity();
 
 		/** Returns the maximum number of streams that a single process
  		 *  can have open simultaneously.
