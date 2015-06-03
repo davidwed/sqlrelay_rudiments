@@ -1874,10 +1874,12 @@ ssize_t charstring::printf(char *buffer, size_t length,
 	//
 	// For systems like those, we'll simulate the expected behavior...
 	buflen=length;
+	size_t	inc=16;
 	while (size==-1) {
-		// FIXME: for large strings this can be incredibly slow
-		buflen=buflen+16;
+
+		buflen=buflen+inc;
 		buf=new char[buflen];
+
 		#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
 			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
 		#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
@@ -1901,6 +1903,14 @@ ssize_t charstring::printf(char *buffer, size_t length,
 			charstring::copy(buffer,buf,length);
 		}
 		delete[] buf;
+
+		// adjust how quickly the buffer grows
+		// (this can certainly be optimized further)
+		inc=inc*2;
+		if (inc>1024) {
+			inc=1024;
+		}
+
 	}
 	return size;
 }
