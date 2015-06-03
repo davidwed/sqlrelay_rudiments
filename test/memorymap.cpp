@@ -20,7 +20,7 @@ int main(int argc, const char **argv) {
 	// loop, mapping and printing blocks of the file
 	memorymap	mm;
 	off64_t		offset=0;
-	size_t		len=sys::getPageSize();
+	size_t		len=sys::getAllocationGranularity();
 	bool		done=false;
 	do {
 		if (offset) {

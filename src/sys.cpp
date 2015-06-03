@@ -676,12 +676,22 @@ int32_t sys::getPageSize() {
 	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGE_SIZE)
 		return sysConf(_SC_PAGE_SIZE);
 	#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
-		// FIXME:
-		// Technically dwPageSize is the page size, but when calling
-		// this method, allocation granularity is most likely what
-		// people want.  Ideally there should be two methods and
-		// getAllocationGranularity should return getPageSize for
-		// non-Windows platforms.
+		SYSTEM_INFO	systeminfo;
+		GetSystemInfo(&systeminfo);
+		return systeminfo.dwPageSize;
+	#else
+		#error no getpagesize or anything like it
+	#endif
+}
+
+int32_t sys::getAllocationGranularity() {
+	#if defined(RUDIMENTS_HAVE_GETPAGESIZE)
+		return getpagesize();
+	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGESIZE)
+		return sysConf(_SC_PAGESIZE);
+	#elif defined(RUDIMENTS_HAVE_SYSCONF) && defined(_SC_PAGE_SIZE)
+		return sysConf(_SC_PAGE_SIZE);
+	#elif defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
 		SYSTEM_INFO	systeminfo;
 		GetSystemInfo(&systeminfo);
 		return systeminfo.dwAllocationGranularity;
@@ -741,6 +751,13 @@ int64_t sys::getMaxLineLength() {
 int64_t sys::getPhysicalPageCount() {
 	#if defined(_SC_PHYS_PAGES)
 		return sysConf(_SC_PHYS_PAGES);
+	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX)
+		MEMORYSTATUSEX	ms;
+		ms.dwLength=sizeof(ms);
+		if (GlobalMemoryStatusEx(&ms)==TRUE) {
+			return ms.ullTotalPhys/getPageSize();
+		}
+		return -1;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return -1;
@@ -750,6 +767,13 @@ int64_t sys::getPhysicalPageCount() {
 int64_t sys::getAvailablePhysicalPageCount() {
 	#if defined(_SC_AVPHYS_PAGES)
 		return sysConf(_SC_AVPHYS_PAGES);
+	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX)
+		MEMORYSTATUSEX	ms;
+		ms.dwLength=sizeof(ms);
+		if (GlobalMemoryStatusEx(&ms)==TRUE) {
+			return ms.ullAvailPhys/getPageSize();
+		}
+		return -1;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return -1;

@@ -88,17 +88,7 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	if (fs.initialize(filename)) {
 		optblocksize=fs.getOptimumTransferBlockSize();
 	} else {
-		#if defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
-			// On windows, sys::getPageSize returns
-			// dwAllocationGranularity, not dwPageSize,
-			// so call GetSystemInfo directly here in
-			// that case.
-			SYSTEM_INFO	systeminfo;
-			GetSystemInfo(&systeminfo);
-			optblocksize=systeminfo.dwPageSize;
-		#else
-			optblocksize=sys::getPageSize();
-		#endif
+		optblocksize=sys::getPageSize();
 	}
 	file	fl;
 	if (!fl.open(filename,O_WRONLY|O_CREAT|O_TRUNC,perms)) {

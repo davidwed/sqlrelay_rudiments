@@ -116,12 +116,12 @@ bool xmlsax::parseFile(const char *filename) {
 
 		// If we're memory mapping, since we'll use this for the
 		// offsets as well, then we must use an even multiple of
-		// the memory page size.  Use the page size unless the 
-		// transfer size is an even multiple of it.
-		off64_t	pagesize=sys::getPageSize();
-		if (pagesize>pvt->_optblocksize ||
-			pvt->_optblocksize%pagesize) {
-			pvt->_optblocksize=pagesize;
+		// the allocation granularity.  Use the allocation granularity
+		// unless the transfer size is an even multiple of it.
+		off64_t	allocgran=sys::getAllocationGranularity();
+		if (allocgran>pvt->_optblocksize ||
+			pvt->_optblocksize%allocgran) {
+			pvt->_optblocksize=allocgran;
 		}
 
 		// get the file size

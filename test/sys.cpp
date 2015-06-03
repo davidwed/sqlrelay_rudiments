@@ -64,6 +64,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Page Size				: %lld\n",
 			(LONG_LONG)sys::getPageSize());
 
+	stdoutput.printf("Allocation Granularity			: %lld\n",
+			(LONG_LONG)sys::getAllocationGranularity());
+
 	stdoutput.printf("Max Open Streams Per Process		: %lld\n",
 		(LONG_LONG)sys::getMaxOpenStreamsPerProcess());
 
