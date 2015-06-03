@@ -81,7 +81,6 @@ PROGS3= handoff1 \
 	inetsvrbench \
 	nullserver \
 	logger \
-	intervaltimer \
 	sys \
 	reboot \
 	halt \
@@ -267,9 +266,6 @@ xmld: xmld.cpp xmld.$(OBJ)
 
 xmlentities: xmlentities.cpp xmlentities.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmlentities.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-intervaltimer: intervaltimer.cpp intervaltimer.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) intervaltimer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 inetclntbench: inetclntbench.cpp inetclntbench.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetclntbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

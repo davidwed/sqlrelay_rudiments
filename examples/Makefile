@@ -25,7 +25,6 @@ PROGS0 = \
 	hostentry$(EXE) \
 	inetsocketclient$(EXE) \
 	inetsocketserver$(EXE) \
-	intervaltimer$(EXE) \
 
 PROGS1 = \
 	linkedlist$(EXE) \
@@ -140,9 +139,6 @@ inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
 
 inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ inetsocketserver.$(OBJ) $(LIBS)
-
-intervaltimer$(EXE): intervaltimer.cpp intervaltimer.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ intervaltimer.$(OBJ) $(LIBS)
 
 linkedlist$(EXE): linkedlist.cpp linkedlist.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ linkedlist.$(OBJ) $(LIBS)

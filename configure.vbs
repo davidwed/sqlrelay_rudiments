@@ -38,7 +38,6 @@ srcs="winsock.cpp "+_
 	"hostentry.cpp "+_
 	"inetsocketclient.cpp "+_
 	"inetsocketserver.cpp "+_
-	"intervaltimer.cpp "+_
 	"listener.cpp "+_
 	"logger.cpp "+_
 	"memorymap.cpp "+_
@@ -98,7 +97,6 @@ lobjs="winsock.obj "+_
 	"hostentry.obj "+_
 	"inetsocketclient.obj "+_
 	"inetsocketserver.obj "+_
-	"intervaltimer.obj "+_
 	"listener.obj "+_
 	"logger.obj "+_
 	"memorymap.obj "+_
@@ -163,7 +161,6 @@ headers1="filedescriptor.h "+_
 	"hostentry.h "+_
 	"inetsocketclient.h "+_
 	"inetsocketserver.h "+_
-	"intervaltimer.h "+_
 	"listener.h "+_
 	"logger.h "+_
 	"memorymap.h "+_
@@ -266,8 +263,6 @@ privateheaders3="inetsocketclient.h "+_
 	"inetsocketclientincludes.h "+_
 	"inetsocketserver.h "+_
 	"inetsocketserverincludes.h "+_
-	"intervaltimer.h "+_
-	"intervaltimerincludes.h "+_
 	"listener.h "+_
 	"listenerincludes.h "+_
 	"filedestination.h "+_

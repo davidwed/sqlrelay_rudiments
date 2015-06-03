@@ -144,10 +144,6 @@ AC_ARG_ENABLE(inetserver,
 	[  --disable-inetserver    Don't build inetserver class],
 	INCLUDE_INETSERVER="0",
 	INCLUDE_INETSERVER="1")
-AC_ARG_ENABLE(intervaltimer,
-	[  --disable-intervaltimer Don't build intervaltimer class],
-	INCLUDE_INTERVALTIMER="0",
-	INCLUDE_INTERVALTIMER="1")
 AC_ARG_ENABLE(listener,
 	[  --disable-listener      Don't build listener class],
 	INCLUDE_LISTENER="0",
@@ -3640,14 +3636,6 @@ then
 	SRCS="$SRCS inetsocketserver.cpp"
 	LOBJS="$LOBJS inetsocketserver.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETSERVER"
-fi
-
-if ( test "$INCLUDE_INTERVALTIMER" = "1" )
-then
-	HEADERS1="$HEADERS1 intervaltimer.h"
-	PRIVATEHEADERS3="$PRIVATEHEADERS3 intervaltimer.h intervaltimerincludes.h"
-	SRCS="$SRCS intervaltimer.cpp"
-	LOBJS="$LOBJS intervaltimer.lo"
 fi
 
 if ( test "$INCLUDE_LISTENER" = "1" )

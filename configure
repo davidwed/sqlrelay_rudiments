@@ -801,7 +801,6 @@ enable_groupentry
 enable_hostentry
 enable_inetclient
 enable_inetserver
-enable_intervaltimer
 enable_listener
 enable_logger
 enable_math
@@ -1498,7 +1497,6 @@ Optional Features:
   --disable-hostentry     Don't build hostentry class
   --disable-inetclient    Don't build inetclient class
   --disable-inetserver    Don't build inetserver class
-  --disable-intervaltimer Don't build intervaltimer class
   --disable-listener      Don't build listener class
   --disable-logger        Don't build logger class
   --disable-math          Don't build math class
@@ -2687,13 +2685,6 @@ if test "${enable_inetserver+set}" = set; then :
   enableval=$enable_inetserver; INCLUDE_INETSERVER="0"
 else
   INCLUDE_INETSERVER="1"
-fi
-
-# Check whether --enable-intervaltimer was given.
-if test "${enable_intervaltimer+set}" = set; then :
-  enableval=$enable_intervaltimer; INCLUDE_INTERVALTIMER="0"
-else
-  INCLUDE_INTERVALTIMER="1"
 fi
 
 # Check whether --enable-listener was given.
@@ -31376,14 +31367,6 @@ then
 	SRCS="$SRCS inetsocketserver.cpp"
 	LOBJS="$LOBJS inetsocketserver.lo"
 	EXTRACPPFLAGS="$EXTRACPPFLAGS -DINCLUDE_INETSERVER"
-fi
-
-if ( test "$INCLUDE_INTERVALTIMER" = "1" )
-then
-	HEADERS1="$HEADERS1 intervaltimer.h"
-	PRIVATEHEADERS3="$PRIVATEHEADERS3 intervaltimer.h intervaltimerincludes.h"
-	SRCS="$SRCS intervaltimer.cpp"
-	LOBJS="$LOBJS intervaltimer.lo"
 fi
 
 if ( test "$INCLUDE_LISTENER" = "1" )
