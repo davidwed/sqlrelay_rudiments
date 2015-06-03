@@ -1698,37 +1698,38 @@ ssize_t charstring::printf(char *buffer, size_t length,
 // LGPL-compatible libraries.  Tried it.  Too much work.
 //
 // vsnprintf could be implemented using vsprintf but a large enough buffer to
-// vsprintf to safely must be created.
+// vsprintf to safely must be created.  What is "large enough" though?
 //
 // I could implement a format string parser that calculates the buffer
 // size.  Tried it.  Also too much work.
 // 
-// Short of that, the only safe thing to do is vfprintf to a scratch file,
-// find out how many characters were written and then do the same to a string.
+// Short of that, the only safe thing to do is vfprintf to a file, find out how
+// many characters were written and then do the same to a string.
 // 
 // That's taking the long way around for sure.
 //
-// I tried writing to /dev/null but vsprintf to /dev/null returns 0.  I
-// should have expected that actually.  Unless there's some sort of personal-
-// ramdisk that I don't know about, it appears we have to use an actual file.
+// /dev/null is the obvious choice, so we'll try that first.  But, some
+// implementations of vsprintf return 0 when writing to /dev/null.  Or, maybe
+// some implementations of /dev/null return 0 when anything is written to them.
+// Either way, if using /dev/null fails, we fall back to a scratch file.
 //
 // I'm not even going to benchmark to find out how poorly this performs.
 // Hopefully disk-caching will help it out.  Also, if you happen to be using
 // a ram-based /tmp then that will help too.  Systems old enough to need this
 // probably aren't though.
 //
-// There are, of course, security concerns.  Anyone with the right permissions
-// can read the scratch file.  Someone could delete it, and on some systems
-// that could cause problems.
+// There are, of course, security concerns with the scratch file.  Anyone with
+// the right permissions can read the scratch file.  Someone could delete it,
+// and on some systems that could cause problems.
 //
 // The scratch file uses the PID of the current process for uniqueness.  This
 // could cause race conditions in multi-threaded programs, but chances are if
 // your system doesn't have vsnprintf, then it doesn't have thread support
 // either.
 //
-// The process, while terribly inefficient, should be clean.  It only creates
-// one scratch file per process and cleans it up at exit, unless the program
-// crashes or is killed with -9.
+// While terribly inefficient, the scratch file process should be clean.  It
+// only creates one scratch file per process and cleans it up at exit, unless
+// the program crashes or is killed with -9.
 
 static char	*scratchfile=NULL;
 static FILE	*scratch=NULL;
@@ -1748,46 +1749,34 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 	if (!scratch) {
 
 		// first try /dev/null
-		if (file::writeable("/dev/null")) {
-
-			scratchfile=charstring::duplicate("/dev/null");
-			scratch=fopen(scratchfile,"w+");
-
-			if (scratch) {
-
-				// writing to /dev/null returns 0 or -1 on
-				// some platforms
-				if (fprintf(scratch,"test")!=4) {
-					fclose(scratch);
-					scratch=NULL;
-					delete[] scratchfile;
-				}
-
-			} else {
+		scratchfile=charstring::duplicate("/dev/null");
+		scratch=fopen(scratchfile,"w");
+		if (scratch) {
+			// writing to /dev/null returns 0 or -1 on
+			// some platforms
+			if (fprintf(scratch,"test")!=4) {
+				fclose(scratch);
+				scratch=NULL;
 				delete[] scratchfile;
 			}
+		} else {
+			delete[] scratchfile;
 		}
 
 		// if that fails then try /tmp/scratch.pid
 		if (!scratch) {
-
 			scratchfile=new char[20];
 			charstring::copy(scratchfile,"/tmp/scratch.");
 			charstring::append(scratchfile,
 					(uint64_t)process::getProcessId());
-
 			scratch=fopen(scratchfile,"w+");
-			if (!scratch) {
+			if (scratch) {
+				atexit((void (*)(void))removeScratch);
+				rewind(scratch);
+			} else {
 				delete[] scratchfile;
-				scratchfile=NULL;
 				return -1;
 			}
-
-			// remove the scratch file at exit
-			atexit((void (*)(void))removeScratch);
-
-			// rewind the scratch file
-			rewind(scratch);
 		}
 	}
 
