@@ -1746,21 +1746,51 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 
 	// open a scratch file if it's not already open
 	if (!scratch) {
-		scratchfile=new char[20];
-		charstring::copy(scratchfile,"/tmp/scratch.");
-		charstring::append(scratchfile,
-					(uint64_t)process::getProcessId());
-		scratch=fopen(scratchfile,"w+");
-		if (!scratch) {
-			delete[] scratchfile;
-			scratchfile=NULL;
-			return -1;
+
+		// first try /dev/null
+		if (file::writeable("/dev/null")) {
+
+			scratchfile=charstring::duplicate("/dev/null");
+			scratch=fopen(scratchfile,"w+");
+
+			if (scratch) {
+
+				// writing to /dev/null returns 0 or -1 on
+				// some platforms
+				if (fprintf(scratch,"test")!=4) {
+					fclose(scratch);
+					scratch=NULL;
+					delete[] scratchfile;
+				}
+
+			} else {
+				delete[] scratchfile;
+			}
 		}
-		atexit((void (*)(void))removeScratch);
+
+		// if that fails then try /tmp/scratch.pid
+		if (!scratch) {
+
+			scratchfile=new char[20];
+			charstring::copy(scratchfile,"/tmp/scratch.");
+			charstring::append(scratchfile,
+					(uint64_t)process::getProcessId());
+
+			scratch=fopen(scratchfile,"w+");
+			if (!scratch) {
+				delete[] scratchfile;
+				scratchfile=NULL;
+				return -1;
+			}
+
+			// remove the scratch file at exit
+			atexit((void (*)(void))removeScratch);
+
+			// rewind the scratch file
+			rewind(scratch);
+		}
 	}
 
-	// rewind the scratch file
-	rewind(scratch);
 
 	// write to the scratch file so we can
 	// figure out how much space we need
