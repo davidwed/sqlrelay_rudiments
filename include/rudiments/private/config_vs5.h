@@ -562,6 +562,9 @@
 /* Some systems have GetVersionEx */
 #define RUDIMENTS_HAVE_GETVERSIONEX 1
 
+/* Some systems have GlobalMemoryStatusEx */
+#define RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX 1
+
 /* Some systems have HANDLE_FLAG_INHERIT */
 #define RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT 1
 

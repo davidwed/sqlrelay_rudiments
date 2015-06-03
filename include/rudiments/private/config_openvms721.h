@@ -562,6 +562,9 @@
 /* Some systems have GetVersionEx */
 #undef RUDIMENTS_HAVE_GETVERSIONEX
 
+/* Some systems have GlobalMemoryStatusEx */
+#undef RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX
+
 /* Some systems have HANDLE_FLAG_INHERIT */
 #undef RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT
 

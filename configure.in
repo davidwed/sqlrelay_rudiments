@@ -3299,6 +3299,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 GetSystemInfo(NULL),AC_DEFINE(RUDIMENTS_HAVE_GETSYSTEMINFO,1,Some systems have GetSystemInfo) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for GlobalMemoryStatusEx)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+GlobalMemoryStatusEx(NULL),AC_DEFINE(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX,1,Some systems have GlobalMemoryStatusEx) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for GetLogicalProcessorInformation)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
