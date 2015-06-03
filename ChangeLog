@@ -25,8 +25,9 @@
 		classes to work with older compilers
 	disabled -Werror for gcc < 2.7
 	updated filedescriptor::printf to use fprintf or fdopen/vfprintf when
-		possible in leiu of falling back to vasprintf or vsprintf with
-		a scratch file
+		possible in leiu of falling back to charstring::printf
+	updated charstring::printf to try the null device before falling back
+		to a scratch file
 	added sys::getDirectorySeparator()
 	fixed trailing-slash-followed-by-quote issue when building windows
 		command lines

@@ -1708,15 +1708,16 @@ ssize_t charstring::printf(char *buffer, size_t length,
 // 
 // That's taking the long way around for sure.
 //
-// /dev/null is the obvious choice, so we'll try that first.  But, some
-// implementations of vsprintf return 0 when writing to /dev/null.  Or, maybe
-// some implementations of /dev/null return 0 when anything is written to them.
-// Either way, if using /dev/null fails, we fall back to a scratch file.
+// The null device is the obvious choice, so we'll try that first.  But, some
+// implementations of vsprintf return 0 when writing to the null device.  Or,
+// maybe some implementations of the null device return 0 when anything is
+// written to them.  Either way, if using the null device fails, we fall back
+// to a scratch file.
 //
 // I'm not even going to benchmark to find out how poorly this performs.
 // Hopefully disk-caching will help it out.  Also, if you happen to be using
-// a ram-based /tmp then that will help too.  Systems old enough to need this
-// probably aren't though.
+// a ram-based temporary directory then that will help too.  Systems old enough
+// to need this probably aren't though.
 //
 // There are, of course, security concerns with the scratch file.  Anyone with
 // the right permissions can read the scratch file.  Someone could delete it,
@@ -1748,12 +1749,20 @@ static ssize_t vsnprintf(char *buffer, size_t length,
 	// open a scratch file if it's not already open
 	if (!scratch) {
 
-		// first try /dev/null
-		scratchfile=charstring::duplicate("/dev/null");
+		// first try the null device
+		scratchfile=charstring::duplicate(
+					#if defined(_WIN32)
+						"\Device\Null"
+					#elif defined(__VMS)
+						"NLA0:"
+					#else
+						"/dev/null"
+					#endif
+						);
 		scratch=fopen(scratchfile,"w");
 		if (scratch) {
-			// writing to /dev/null returns 0 or -1 on
-			// some platforms
+			// writing to the null device returns
+			// 0 or -1 on some platforms
 			if (fprintf(scratch,"test")!=4) {
 				fclose(scratch);
 				scratch=NULL;
