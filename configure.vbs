@@ -473,11 +473,15 @@ end if
 
 ' determine config.h template...
 
-' default to VS2010 and up
-configwindowsh="include\\rudiments\\private\\config_vs2010.h"
+' default to VS2013
+configwindowsh="include\\rudiments\\private\\config_vs2013.h"
+
+' VS2010 and VS2012
+if version<=17 and version>15 then
+	configwindowsh="include\\rudiments\\private\\config_vs2010.h"
 
 ' VS2005 and VS2008
-if version<=15 and version>13 then
+elseif version<=15 and version>13 then
 	configwindowsh="include\\rudiments\\private\\config_vs2005.h"
 
 ' VC6, VS2002 and VS2003
