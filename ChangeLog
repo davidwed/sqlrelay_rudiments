@@ -39,6 +39,10 @@
 	fixed sys::sync() segfault
 	fixed ssl tests
 	removed intervaltimer class
+	updated sys::getPhysicalPageCount/getAvailablePhysicalPageCount for
+		Windows
+	added sys::getAllocationGranularity, updated code to use it instead
+		of getPageSize, in most cases
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
