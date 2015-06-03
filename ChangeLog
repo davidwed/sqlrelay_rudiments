@@ -24,10 +24,12 @@
 	tweaked copy constructors and = operators in staticarray/dynamicarray
 		classes to work with older compilers
 	disabled -Werror for gcc < 2.7
-	updated filedescriptor::printf to use fprintf or fdopen/vfprintf when
-		possible in leiu of falling back to charstring::printf
-	updated charstring::printf to try the null device before falling back
-		to a scratch file
+	filedescriptor::printf uses fprintf or fdopen/vfprintf when possible,
+		in leiu of falling back to charstring::printf
+	charstring::printf tries the null device before falling back to a
+		scratch file
+	the rate at which charstring::printf expands its buffer is now
+		exponential up to 1024 bytes
 	added sys::getDirectorySeparator()
 	fixed trailing-slash-followed-by-quote issue when building windows
 		command lines

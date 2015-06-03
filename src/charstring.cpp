@@ -1910,7 +1910,6 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		if (inc>1024) {
 			inc=1024;
 		}
-
 	}
 	return size;
 }
