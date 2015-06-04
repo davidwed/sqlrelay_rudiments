@@ -752,11 +752,13 @@ int64_t sys::getPhysicalPageCount() {
 	#if defined(_SC_PHYS_PAGES)
 		return sysConf(_SC_PHYS_PAGES);
 	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX)
+		#if _WIN32_WINNT>=0x0501
 		MEMORYSTATUSEX	ms;
 		ms.dwLength=sizeof(ms);
 		if (GlobalMemoryStatusEx(&ms)==TRUE) {
 			return ms.ullTotalPhys/getPageSize();
 		}
+		#endif
 		return -1;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -768,11 +770,13 @@ int64_t sys::getAvailablePhysicalPageCount() {
 	#if defined(_SC_AVPHYS_PAGES)
 		return sysConf(_SC_AVPHYS_PAGES);
 	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX)
+		#if _WIN32_WINNT>=0x0501
 		MEMORYSTATUSEX	ms;
 		ms.dwLength=sizeof(ms);
 		if (GlobalMemoryStatusEx(&ms)==TRUE) {
 			return ms.ullAvailPhys/getPageSize();
 		}
+		#endif
 		return -1;
 	#else
 		RUDIMENTS_SET_ENOSYS
