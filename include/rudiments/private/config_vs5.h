@@ -437,7 +437,7 @@
 #define RUDIMENTS_HAVE_GETNAMEINFO 1
 
 /* Some systems have GetNativeSystemInfo */
-#define RUDIMENTS_HAVE_GETNATIVESYSTEMINFO 1
+/* #undef RUDIMENTS_HAVE_GETNATIVESYSTEMINFO */
 
 /* Some systems have getpagesize */
 /* #undef RUDIMENTS_HAVE_GETPAGESIZE */
