@@ -57,7 +57,9 @@ class RUDIMENTS_DLLSPEC groupentry {
 		 *  platformSupportsFormalSid method returns false, the value
 		 *  returned is just a string representation of the number
 		 *  returned by getGroupId(). */
-		const char	*getSid() const;
+		const char	*getSidString() const;
+		const void	*getSid() const;
+		uint64_t	getSidSize() const;
 
 		/** Returns a NULL-terminated list of the
 		 *  names of the members of the group. */
@@ -80,7 +82,8 @@ class RUDIMENTS_DLLSPEC groupentry {
 		static char	*getName(gid_t groupid);
 
 		/** Convenience method.
-		 *  Returns the SID of the group specified by "groupname".
+		 *  Returns a string representation of the SID (security id) of
+		 *  the group specified by "groupname".
 		 *  See non-static version of this method for more information.
 		 *
 		 *  Note that the return value is allocated internally and
@@ -88,7 +91,7 @@ class RUDIMENTS_DLLSPEC groupentry {
 		 *
 		 *  Returns NULL if an error occurred or if "groupname" is
 		 *  invalid.  */
-		static char	*getSid(const char *groupname);
+		static char	*getSidString(const char *groupname);
 
 		/** Returns true if the platform supports a formal group SID
 		 *  (security id) and false if not.

@@ -60,7 +60,9 @@ class RUDIMENTS_DLLSPEC userentry {
 		 *  platformSupportsFormalSid method returns false, the value
 		 *  returned is just a string representation of the number
 		 *  returned by getUserId(). */
-		const char	*getSid() const;
+		const char	*getSidString() const;
+		const void	*getSid() const;
+		uint64_t	getSidSize() const;
 
 		/** Returns the primary group id of this user. */
 		gid_t		getPrimaryGroupId() const;
@@ -125,7 +127,8 @@ class RUDIMENTS_DLLSPEC userentry {
 		static uid_t	getUserId(const char *username);
 
 		/** Convenience method.
-		 *  Returns the SID of the user specified by "username".
+		 *  Returns a string representation of the SID (security id) of
+		 *  the user specified by "username".
 		 *  See non-static version of this method for more information.
 		 *
 		 *  Note that the return value is allocated internally and
@@ -133,7 +136,7 @@ class RUDIMENTS_DLLSPEC userentry {
 		 *
 		 *  Returns NULL if an error occurred or if "username" is
 		 *  invalid.  */
-		static char	*getSid(const char *username);
+		static char	*getSidString(const char *username);
 
 		/** Returns true if the platform supports a formal user SID
 		 *  (security id) and false if not.

@@ -25,9 +25,6 @@
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
-#ifdef RUDIMENTS_HAVE_SDDL_H
-	#include <sddl.h>
-#endif
 #ifdef RUDIMENTS_HAVE_ACLAPI_H
 	#include <aclapi.h>
 #endif
@@ -406,8 +403,9 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		ea[1].Trustee.TrusteeType=TRUSTEE_IS_GROUP;
 		groupentry	grpent;
 		grpent.initialize(process::getRealGroupId());
-		PSID		groupsid=NULL;
-		ConvertStringSidToSid(grpent.getSid(),&groupsid);
+		PSID	groupsid=(PSID)bytestring::duplicate(
+							grpent.getSid(),
+							grpent.getSidSize());
 		ea[1].Trustee.ptstrName=(LPSTR)groupsid;
 
 		// owner
@@ -418,8 +416,9 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		ea[2].Trustee.TrusteeType=TRUSTEE_IS_USER;
 		userentry	usrent;
 		usrent.initialize(process::getRealUserId());
-		PSID		ownersid=NULL;
-		ConvertStringSidToSid(usrent.getSid(),&ownersid);
+		PSID	ownersid=(PSID)bytestring::duplicate(
+							usrent.getSid(),
+							usrent.getSidSize());
 		ea[2].Trustee.ptstrName=(LPSTR)ownersid;
 
 		// set access permissions
@@ -495,26 +494,31 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 
 		// get the user and convert to an sid
 		userentry	usrent;
-		PSID		usersid=NULL;
-		if (!usrent.initialize(process::getRealUserId()) ||
-			ConvertStringSidToSid(usrent.getSid(),
-						&usersid)!=TRUE) {
+		if (!usrent.initialize(process::getRealUserId())) {
 			return perms;
 		}
+		PSID	usersid=(PSID)bytestring::duplicate(
+							usrent.getSid(),
+							usrent.getSidSize());
 
 		// get the group and convert to an sid
 		groupentry	grpent;
-		PSID		groupsid=NULL;
-		if (!grpent.initialize(process::getRealGroupId()) ||
-			ConvertStringSidToSid(grpent.getSid(),
-						&groupsid)!=TRUE) {
+		if (!grpent.initialize(process::getRealGroupId())) {
 			return perms;
 		}
+		PSID	groupsid=(PSID)bytestring::duplicate(
+							grpent.getSid(),
+							grpent.getSidSize());
 
 		// get the sid for others
 		// ("S-1-1-0" is the well known SID for "World")
-		PSID	otherssid=NULL;
-		if (ConvertStringSidToSid("S-1-1-0",&otherssid)!=TRUE) {
+		PSID	otherssid;
+		SID_IDENTIFIER_AUTHORITY	worldsia=
+						SECURITY_WORLD_SID_AUTHORITY;
+		if (AllocateAndInitializeSid(&worldsia,1,
+						SECURITY_WORLD_RID,
+						0,0,0,0,0,0,0,
+						&otherssid)!=TRUE) {
 			return perms;
 		}
 

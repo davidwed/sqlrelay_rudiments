@@ -19,7 +19,7 @@ void print(groupentry *grent) {
 	for (i=0; grent->getMembers() && grent->getMembers()[i]; i++) {
 		stdoutput.printf("		%s\n",grent->getMembers()[i]);
 	}
-	stdoutput.printf("	SID:		%s\n",grent->getSid());
+	stdoutput.printf("	SID:		%s\n",grent->getSidString());
 	stdoutput.printf("\n");
 }
 

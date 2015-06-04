@@ -39,13 +39,17 @@ class groupentryprivate {
 				group		_grpbuffer;
 				char		*_buffer;
 			#endif
-			char	*_sid;
+			char		*_sidstr;
+			const char	*_sid;
+			size_t		sidsize;
 		#else
-			char			*_name;
-			char			**_members;
-			DWORD			_membercount;
-			CHAR			*_sid;
-			gid_t			_gid;
+			char		*_name;
+			char		**_members;
+			DWORD		_membercount;
+			CHAR		*_sidstr;
+			PSID		_sid;
+			DWORD		_sidsize;
+			gid_t		_gid;
 		#endif
 };
 
@@ -92,12 +96,15 @@ static CHAR *unicodeToAscii(const WCHAR *in) {
 static gid_t	gid=0;
 struct namesid {
 	char	*name;
-	char	*sid;
+	char	*sidstr;
+	PSID	sid;
+	DWORD	sidsize;
 };
 static dictionary< gid_t, namesid * >	gidmap;
 // FIXME: clean up with init and exit methods like environment class
 
-static gid_t addGidMapping(const char *name, const char *sid) {
+static gid_t addGidMapping(const char *name,
+				const char *sidstr, PSID sid, DWORD sidsize) {
 
 	// check for existing mapping (by name only)
 	for (linkedlistnode< dictionarynode< gid_t, namesid * > *>
@@ -106,8 +113,11 @@ static gid_t addGidMapping(const char *name, const char *sid) {
 		namesid	*ns=node->getValue()->getValue();
 		if (!charstring::compare(name,ns->name)) {
 			// reset the sid
-			delete[] ns->sid;
-			ns->sid=charstring::duplicate(sid);
+			delete[] ns->sidstr;
+			ns->sidstr=charstring::duplicate(sidstr);
+			delete[] (BYTE *)ns->sid;
+			ns->sid=bytestring::duplicate(sid,sidsize);
+			ns->sidsize=sidsize;
 			return node->getValue()->getKey();
 		}
 	}
@@ -115,7 +125,9 @@ static gid_t addGidMapping(const char *name, const char *sid) {
 	// create a new entry
 	namesid	*ns=new namesid;
 	ns->name=charstring::duplicate(name);
-	ns->sid=charstring::duplicate(sid);
+	ns->sidstr=charstring::duplicate(sidstr);
+	ns->sid=bytestring::duplicate(sid,sidsize);
+	ns->sidsize=sidsize;
 
 	if (gemutex) {
 		gemutex->lock();
@@ -146,7 +158,9 @@ groupentry::groupentry() {
 	pvt->_membercount=0;
 	pvt->_gid=(gid_t)-1;
 #endif
+	pvt->_sidstr=NULL;
 	pvt->_sid=NULL;
+	pvt->_sidsize=0;
 }
 
 groupentry::groupentry(const groupentry &g) {
@@ -167,14 +181,15 @@ groupentry::~groupentry() {
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		delete[] pvt->_buffer;
 	#endif
-	delete[] pvt->_sid;
+	delete[] pvt->_sidstr;
 #else
 	delete[] pvt->_name;
 	for (DWORD i=0; i<pvt->_membercount; i++) {
 		delete[] pvt->_members[i];
 	}
 	delete[] pvt->_members;
-	LocalFree(pvt->_sid);
+	LocalFree(pvt->_sidstr);
+	delete[] (BYTE *)pvt->_sid;
 #endif
 	delete pvt;
 }
@@ -203,19 +218,57 @@ const char * const *groupentry::getMembers() const {
 #endif
 }
 
-const char *groupentry::getSid() const {
+const char *groupentry::getSidString() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-	if (!pvt->_sid) {
+	if (!pvt->_sidstr) {
 		if (pvt->_grp) {
-			pvt->_sid=charstring::parseNumber(
+			pvt->_sidstr=charstring::parseNumber(
 						(int64_t)pvt->_grp->gr_gid);
 		} else {
-			pvt->_sid=charstring::duplicate("-1");
+			pvt->_sidstr=charstring::duplicate("-1");
 		}
+		pvt->_sid=pvt->_sidstr;
+		pvt->_sidsize=charstring::length(pvt->_sidstr);
+	}
+	return pvt->_sidstr;
+#else
+	return pvt->_sidstr;
+#endif
+}
+
+const void *groupentry::getSid() const {
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
+	if (!pvt->_sidstr) {
+		if (pvt->_pwd) {
+			pvt->_sidstr=charstring::parseNumber(
+						(int64_t)pvt->_pwd->pw_uid);
+		} else {
+			pvt->_sidstr=charstring::duplicate("-1");
+		}
+		pvt->_sid=pvt->_sidstr;
+		pvt->_sidsize=charstring::length(pvt->_sidstr);
 	}
 	return pvt->_sid;
 #else
 	return pvt->_sid;
+#endif
+}
+
+uint64_t groupentry::getSidSize() const {
+#ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
+	if (!pvt->_sidstr) {
+		if (pvt->_pwd) {
+			pvt->_sidstr=charstring::parseNumber(
+						(int64_t)pvt->_pwd->pw_uid);
+		} else {
+			pvt->_sidstr=charstring::duplicate("-1");
+		}
+		pvt->_sid=pvt->_sidstr;
+		pvt->_sidsize=charstring::length(pvt->_sidstr);
+	}
+	return pvt->_sidsize;
+#else
+	return pvt->_sidsize;
 #endif
 }
 
@@ -256,6 +309,11 @@ bool groupentry::initialize(gid_t groupid) {
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 
+	// init buffers
+	delete[] pvt->_sidstr;
+	pvt->_sidstr=NULL;
+	pvt->_sid=NULL;
+	pvt->_sidsize=0;
 	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		if (pvt->_grp) {
@@ -317,8 +375,6 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
 #else
 
-	#if _WIN32_WINNT>=0x0500
-
 	// clear old buffers
 	delete[] pvt->_name;
 	pvt->_name=NULL;
@@ -328,29 +384,34 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 	delete[] pvt->_members;
 	pvt->_members=NULL;
 	pvt->_membercount=0;
-	LocalFree(pvt->_sid);
+	LocalFree(pvt->_sidstr);
+	pvt->_sidstr=NULL;
+	delete[] (BYTE *)pvt->_sid;
 	pvt->_sid=NULL;
+	pvt->_sidsize=0;
 	pvt->_gid=(gid_t)-1;
 
 	if (groupname) {
 
 		// get the group's SID
-		DWORD		sidsize=0;
 		DWORD		dnsize=0;
 		SID_NAME_USE	peuse;
 		LookupAccountName(NULL,groupname,
-					NULL,&sidsize,
+					NULL,&pvt->_sidsize,
 					NULL,&dnsize,&peuse);
-		PSID	sid=(PSID)new BYTE[sidsize];
-		bytestring::zero(sid,sidsize);
+		pvt->_sid=(PSID)new BYTE[pvt->_sidsize];
+		bytestring::zero(pvt->_sid,pvt->_sidsize);
 		CHAR	*dn=new CHAR[dnsize];
 		bytestring::zero(dn,dnsize);
 		bool	failed=(LookupAccountName(NULL,groupname,
-						sid,&sidsize,
+						pvt->_sid,&pvt->_sidsize,
 						dn,&dnsize,&peuse)==FALSE ||
-				IsValidSid(sid)==FALSE ||
-				ConvertSidToStringSid(sid,&pvt->_sid)==FALSE);
-		delete[] (BYTE *)sid;
+				IsValidSid(pvt->_sid)==FALSE
+				#if _WIN32_WINNT>=0x0500
+				|| ConvertSidToStringSid(pvt->_sid,
+						&pvt->_sidstr)==FALSE
+				#endif
+				);
 		delete[] dn;
 		if (failed) {
 			return false;
@@ -398,7 +459,8 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		NetApiBufferFree(membersbuffer);
 
 		// add mapping
-		pvt->_gid=addGidMapping(pvt->_name,pvt->_sid);
+		pvt->_gid=addGidMapping(pvt->_name,pvt->_sidstr,
+					pvt->_sid,pvt->_sidsize);
 
 	} else {
 
@@ -410,13 +472,6 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		return false;
 	}
 	return true;
-
-	#else
-
-	// FIXME: implement for WinNT
-	return false;
-
-	#endif
 #endif
 }
 
@@ -431,10 +486,10 @@ char *groupentry::getName(gid_t groupid) {
 			charstring::duplicate(grp.getName()):NULL;
 }
 
-char *groupentry::getSid(const char *groupname) {
+char *groupentry::getSidString(const char *groupname) {
 	groupentry	grp;
 	return (grp.initialize(groupname))?
-			charstring::duplicate(grp.getSid()):NULL;
+			charstring::duplicate(grp.getSidString()):NULL;
 }
 
 #else
@@ -464,7 +519,7 @@ const char * const *groupentry::getMembers() const {
 	return NULL;
 }
 
-const char *groupentry::getSid() const {
+const char *groupentry::getSidString() const {
 	return NULL;
 }
 
@@ -499,7 +554,7 @@ char *groupentry::getName(gid_t groupid) {
 	return NULL;
 }
 
-char *groupentry::getSid(const char *groupname) {
+char *groupentry::getSidString(const char *groupname) {
 	return NULL;
 }
 

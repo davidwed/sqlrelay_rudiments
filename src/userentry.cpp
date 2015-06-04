@@ -49,7 +49,9 @@ class userentryprivate {
 				passwd	_pwdbuffer;
 				char	*_pwdcharbuffer;
 			#endif
-			char	*_sid;
+			char		*_sidstr;
+			const char	*_sid;
+			size_t		sidsize;
 			#ifdef RUDIMENTS_HAVE_SHADOW
 				spwd	*_sp;
 				#if defined(RUDIMENTS_HAVE_GETSPNAM_R)
@@ -63,7 +65,9 @@ class userentryprivate {
 			gid_t		_primarygroupid;
 			char		*_realname;
 			char		*_homedir;
-			CHAR		*_sid;
+			CHAR		*_sidstr;
+			PSID		_sid;
+			DWORD		_sidsize;
 			uid_t		_uid;
 		#endif
 };
@@ -113,12 +117,15 @@ static CHAR *unicodeToAscii(const WCHAR *in) {
 static uid_t	uid=0;
 struct namesid {
 	char	*name;
-	char	*sid;
+	char	*sidstr;
+	PSID	sid;
+	DWORD	sidsize;
 };
 static dictionary< uid_t, namesid * >	uidmap;
 // FIXME: clean up with init and exit methods like environment class
 
-static uid_t addUidMapping(const char *name, const char *sid) {
+static uid_t addUidMapping(const char *name,
+				const char *sidstr, PSID sid, DWORD sidsize) {
 
 	// check for existing mapping (by name only)
 	for (linkedlistnode< dictionarynode< uid_t, namesid * > *>
@@ -127,8 +134,11 @@ static uid_t addUidMapping(const char *name, const char *sid) {
 		namesid	*ns=node->getValue()->getValue();
 		if (!charstring::compare(name,ns->name)) {
 			// reset the sid
-			delete[] ns->sid;
-			ns->sid=charstring::duplicate(sid);
+			delete[] ns->sidstr;
+			ns->sidstr=charstring::duplicate(sidstr);
+			delete[] (BYTE *)ns->sid;
+			ns->sid=bytestring::duplicate(sid,sidsize);
+			ns->sidsize=sidsize;
 			return node->getValue()->getKey();
 		}
 	}
@@ -136,7 +146,9 @@ static uid_t addUidMapping(const char *name, const char *sid) {
 	// create a new entry
 	namesid	*ns=new namesid;
 	ns->name=charstring::duplicate(name);
-	ns->sid=charstring::duplicate(sid);
+	ns->sidstr=charstring::duplicate(sidstr);
+	ns->sid=bytestring::duplicate(sid,sidsize);
+	ns->sidsize=sidsize;
 
 	if (uemutex) {
 		uemutex->lock();
@@ -178,7 +190,9 @@ userentry::userentry() {
 	pvt->_homedir=NULL;
 	pvt->_uid=(uid_t)-1;
 #endif
+	pvt->_sidstr=NULL;
 	pvt->_sid=NULL;
+	pvt->_sidsize=0;
 }
 
 userentry::userentry(const userentry &p) {
@@ -204,13 +218,14 @@ userentry::~userentry() {
 			delete[] pvt->_spcharbuffer;
 		#endif
 	#endif
-	delete[] pvt->_sid;
+	delete[] pvt->_sidstr;
 #else
 	delete[] pvt->_name;
 	delete[] pvt->_password;
 	delete[] pvt->_realname;
 	delete[] pvt->_homedir;
-	LocalFree(pvt->_sid);
+	LocalFree(pvt->_sidstr);
+	delete[] (BYTE *)pvt->_sid;
 #endif
 	delete pvt;
 }
@@ -307,19 +322,57 @@ uid_t userentry::getUserId() const {
 #endif
 }
 
-const char *userentry::getSid() const {
+const char *userentry::getSidString() const {
 #ifndef RUDIMENTS_HAVE_NETUSERGETINFO
-	if (!pvt->_sid) {
+	if (!pvt->_sidstr) {
 		if (pvt->_pwd) {
-			pvt->_sid=charstring::parseNumber(
+			pvt->_sidstr=charstring::parseNumber(
 						(int64_t)pvt->_pwd->pw_uid);
 		} else {
-			pvt->_sid=charstring::duplicate("-1");
+			pvt->_sidstr=charstring::duplicate("-1");
 		}
+		pvt->_sid=pvt->_sidstr;
+		pvt->_sidsize=charstring::length(pvt->_sidstr);
+	}
+	return pvt->_sidstr;
+#else
+	return pvt->_sidstr;
+#endif
+}
+
+const void *userentry::getSid() const {
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
+	if (!pvt->_sidstr) {
+		if (pvt->_pwd) {
+			pvt->_sidstr=charstring::parseNumber(
+						(int64_t)pvt->_pwd->pw_uid);
+		} else {
+			pvt->_sidstr=charstring::duplicate("-1");
+		}
+		pvt->_sid=pvt->_sidstr;
+		pvt->_sidsize=charstrint::length(pvt->_sidstr);
 	}
 	return pvt->_sid;
 #else
 	return pvt->_sid;
+#endif
+}
+
+uint64_t userentry::getSidSize() const {
+#ifndef RUDIMENTS_HAVE_NETUSERGETINFO
+	if (!pvt->_sidstr) {
+		if (pvt->_pwd) {
+			pvt->_sidstr=charstring::parseNumber(
+						(int64_t)pvt->_pwd->pw_uid);
+		} else {
+			pvt->_sidstr=charstring::duplicate("-1");
+		}
+		pvt->_sid=pvt->_sidstr;
+		pvt->_sidsize=charstrint::length(pvt->_sidstr);
+	}
+	return pvt->_sidsize;
+#else
+	return pvt->_sidsize;
 #endif
 }
 
@@ -403,8 +456,10 @@ bool userentry::initialize(const char *username, uid_t userid) {
 	bool	success=false;
 
 	// init buffers
-	delete[] pvt->_sid;
+	delete[] pvt->_sidstr;
+	pvt->_sidstr=NULL;
 	pvt->_sid=NULL;
+	pvt->_sidsize=0;
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
 		if (pvt->_pwd) {
@@ -527,8 +582,6 @@ bool userentry::initialize(const char *username, uid_t userid) {
 
 #else
 
-	#if _WIN32_WINNT>=0x0500
-
 	delete[] pvt->_name;
 	pvt->_name=NULL;
 	pvt->_primarygroupid=-1;
@@ -538,29 +591,34 @@ bool userentry::initialize(const char *username, uid_t userid) {
 	pvt->_password=NULL;
 	delete[] pvt->_homedir;
 	pvt->_homedir=NULL;
-	LocalFree(pvt->_sid);
+	LocalFree(pvt->_sidstr);
+	pvt->_sidstr=NULL;
+	delete[] (BYTE *)pvt->_sid;
 	pvt->_sid=NULL;
+	pvt->_sidsize=0;
 	pvt->_uid=(uid_t)-1;
 
 	if (username) {	
 
 		// get the user's SID
-		DWORD		sidsize=0;
 		DWORD		dnsize=0;
 		SID_NAME_USE	peuse;
 		LookupAccountName(NULL,username,
-					NULL,&sidsize,
+					NULL,&pvt->_sidsize,
 					NULL,&dnsize,&peuse);
-		PSID	sid=(PSID)new BYTE[sidsize];
-		bytestring::zero(sid,sidsize);
+		pvt->_sid=(PSID)new BYTE[pvt->_sidsize];
+		bytestring::zero(pvt->_sid,pvt->_sidsize);
 		CHAR	*dn=new CHAR[dnsize];
 		bytestring::zero(dn,dnsize);
 		bool	failed=(LookupAccountName(NULL,username,
-						sid,&sidsize,
+						pvt->_sid,&pvt->_sidsize,
 						dn,&dnsize,&peuse)==FALSE ||
-				IsValidSid(sid)==FALSE ||
-				ConvertSidToStringSid(sid,&pvt->_sid)==FALSE);
-		delete[] (BYTE *)sid;
+				IsValidSid(pvt->_sid)==FALSE
+				#if _WIN32_WINNT>=0x0500
+				|| ConvertSidToStringSid(pvt->_sid,
+						&pvt->_sidstr)==FALSE
+				#endif
+				);
 		delete[] dn;
 		if (failed) {
 			return false;
@@ -599,7 +657,8 @@ bool userentry::initialize(const char *username, uid_t userid) {
 		pvt->_primarygroupid=groupentry::getGroupId("None");
 
 		// add mapping
-		pvt->_uid=addUidMapping(pvt->_name,pvt->_sid);
+		pvt->_uid=addUidMapping(pvt->_name,pvt->_sidstr,
+					pvt->_sid,pvt->_sidsize);
 
 	} else {
 
@@ -611,13 +670,6 @@ bool userentry::initialize(const char *username, uid_t userid) {
 		return false;
 	}
 	return true;
-
-	#else
-
-	// FIXME: implement for WinNT
-	return false;
-
-	#endif
 #endif
 }
 
@@ -632,8 +684,8 @@ uid_t userentry::getUserId(const char *username) {
 	return (pwd.initialize(username))?pwd.getUserId():(uid_t)-1;
 }
 
-char *userentry::getSid(const char *username) {
+char *userentry::getSidString(const char *username) {
 	userentry	pwd;
 	return (pwd.initialize(username))?
-			charstring::duplicate(pwd.getSid()):NULL;
+			charstring::duplicate(pwd.getSidString()):NULL;
 }

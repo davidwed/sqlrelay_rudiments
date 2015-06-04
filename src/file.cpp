@@ -1143,10 +1143,11 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 		if (!ue.initialize(uid) || !ge.initialize(gid)) {
 			return false;
 		}
-		PSID	usid=NULL;
-		PSID	gsid=NULL;
-		ConvertStringSidToSid(ue.getSid(),&usid);
-		ConvertStringSidToSid(ge.getSid(),&gsid);
+		// FIXME: do these need to be freed?
+		PSID	usid=(PSID)bytestring::duplicate(ue.getSid(),
+							ue.getSidSize());
+		PSID	gsid=(PSID)bytestring::duplicate(ge.getSid(),
+							ge.getSidSize());
 
 		// build trustees
 		TRUSTEE ut;

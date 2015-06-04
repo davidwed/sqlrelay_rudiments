@@ -35,8 +35,10 @@ void print(userentry *uent) {
 					uent->getDaysOfInactivityAllowed());
 	stdoutput.printf("	Expiration Date:	%d\n",
 						uent->getExpirationDate());
-	stdoutput.printf("	Flag:			%d\n",uent->getFlag());
-	stdoutput.printf("	SID:			%s\n",uent->getSid());
+	stdoutput.printf("	Flag:			%d\n",
+						uent->getFlag());
+	stdoutput.printf("	SID:			%s\n",
+						uent->getSidString());
 	stdoutput.printf("\n");
 }
 
