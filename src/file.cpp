@@ -798,7 +798,7 @@ bool file::getCurrentProperties() {
 	#endif
 	#if defined(RUDIMENTS_HAVE_GETSECURITYINFO)
 
-		#if _WIN32_WINNT>=0x0501
+		#if _WIN32_WINNT>=0x0500
 
 		// On Windows, the st_mode isn't set correctly.  Get the DACL
 		// of the file and convert it to a mode_t using
