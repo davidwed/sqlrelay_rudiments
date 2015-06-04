@@ -3447,6 +3447,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 InitiateSystemShutdownEx("","",0,0,0,0),AC_DEFINE(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX,1,Some systems have InitiateSystemShutdownEx) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for ExitWindowsEx)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+	#include <windows.h>
+#endif],
+ExitWindowsEx(0,0),AC_DEFINE(RUDIMENTS_HAVE_EXITWINDOWSEX,1,Some systems have ExitWindowsEx) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

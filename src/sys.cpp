@@ -160,32 +160,32 @@ char *sys::getOperatingSystemArchitecture() {
 			result=uname(&u);
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
-	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
-        	#if _WIN32_WINNT>=0x0501
-			SYSTEM_INFO	info;
-			GetNativeSystemInfo((LPSYSTEM_INFO)&info);
+	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO) || \
+			defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
 
-			char	*arch=NULL;
-			switch (info.wProcessorArchitecture) {
-				case PROCESSOR_ARCHITECTURE_AMD64:
-					arch=charstring::duplicate("amd64");
-					break;
-				case PROCESSOR_ARCHITECTURE_IA64:
-					arch=charstring::duplicate("x86_64");
-					break;
-				case PROCESSOR_ARCHITECTURE_INTEL:
-					arch=charstring::duplicate("x86");
-					break;
-				case PROCESSOR_ARCHITECTURE_UNKNOWN:
-					arch=charstring::duplicate("Unknown");
-					break;
-			}
-			return arch;
+		SYSTEM_INFO	info;
+        	#if _WIN32_WINNT>=0x0501
+			GetNativeSystemInfo((LPSYSTEM_INFO)&info);
 		#else
-			return charstring::duplicate("x86");
+			GetSystemInfo(&info);
 		#endif
-	#elif defined(_WIN32)
-		return charstring::duplicate("x86");
+
+		char	*arch=NULL;
+		switch (info.wProcessorArchitecture) {
+			case PROCESSOR_ARCHITECTURE_AMD64:
+				arch=charstring::duplicate("amd64");
+				break;
+			case PROCESSOR_ARCHITECTURE_IA64:
+				arch=charstring::duplicate("x86_64");
+				break;
+			case PROCESSOR_ARCHITECTURE_INTEL:
+				arch=charstring::duplicate("x86");
+				break;
+			case PROCESSOR_ARCHITECTURE_UNKNOWN:
+				arch=charstring::duplicate("Unknown");
+				break;
+		}
+		return arch;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return NULL;
@@ -381,10 +381,8 @@ void sys::sync() {
 	#endif
 }
 
-#if defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+#ifdef _WIN32
 static bool shutDownWindows(bool reboot) {
-
-	#if _WIN32_WINNT>=0x0500
 
 	// make sure the curernt thread has permissions
 	// to shut down the system...
@@ -416,21 +414,26 @@ static bool shutDownWindows(bool reboot) {
 		return false;
 	}
 
-	// FIXME: Arguably this should check to see if the calling user
-	// is the interactive user and run ExitWindowsEx instead of
-	// InitiateSystemShutdownEx if it is.
-	return InitiateSystemShutdownEx(
-			NULL,NULL,0,FALSE,
-			(reboot)?TRUE:FALSE,
-			SHTDN_REASON_MAJOR_OTHER|
-			SHTDN_REASON_MINOR_OTHER|
-			SHTDN_REASON_FLAG_PLANNED)!=0;
+	#if defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX) || \
+				defined(RUDIMENTS_HAVE_EXITWINDOWSEX)
 
-	#else
-
-	// FIXME: implement for platforms prior to XP
-	return false;
-
+		#if _WIN32_WINNT>=0x0500
+		// FIXME: Arguably this should check to see if the calling user
+		// is the interactive user and just run ExitWindowsEx instead of
+		// InitiateSystemShutdownEx if it is.
+		return InitiateSystemShutdownEx(
+				NULL,NULL,0,FALSE,
+				(reboot)?TRUE:FALSE,
+				SHTDN_REASON_MAJOR_OTHER|
+				SHTDN_REASON_MINOR_OTHER|
+				SHTDN_REASON_FLAG_PLANNED)!=0;
+		#else
+		return ExitWindowsEx(
+				(reboot)?EWX_REBOOT:EWX_POWEROFF,
+				SHTDN_REASON_MAJOR_OTHER|
+				SHTDN_REASON_MINOR_OTHER|
+				SHTDN_REASON_FLAG_PLANNED)==TRUE;
+		#endif
 	#endif
 }
 #endif
@@ -468,7 +471,7 @@ bool sys::halt() {
 	#elif defined(RUDIMENTS_HAVE_BROSTER__SHUTDOWN)
 		_kern_shutdown(false);
 		return true;
-	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+	#elif defined(_WIN32)
 		return shutDownWindows(false);
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -537,7 +540,7 @@ bool sys::shutDown() {
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);
 		return (rosterprivate.ShutDown(false,false,true)==B_OK);
-	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+	#elif defined(_WIN32)
 		return shutDownWindows(false);
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -577,7 +580,7 @@ bool sys::reboot() {
 		BRoster			roster;
 		BRoster::Private	rosterprivate(&roster);
 		return (rosterprivate.ShutDown(true,false,true)==B_OK);
-	#elif defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
+	#elif defined(_WIN32)
 		return shutDownWindows(true);
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -789,7 +792,12 @@ int64_t sys::getAvailablePhysicalPageCount() {
 int64_t sys::getProcessorCount() {
 	#if defined(_SC_NPROCESSORS_CONF)
 		return sysConf(_SC_NPROCESSORS_CONF);
-	#elif defined(RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION)
+	#elif defined(RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION) || \
+			defined(RUDIMENTS_HAVE_GETSYSTEMINFO)
+
+		// It turns out that GetLogicalProcessorInformation isn't
+		// actually available until WinXP, even though it's declared
+		// in the headers for all platforms...
 
         	#if _WIN32_WINNT>=0x0501
 
@@ -830,8 +838,11 @@ int64_t sys::getProcessorCount() {
 
 		#else
 
-		// FIXME: implement for platforms prior to XP
-		return false;
+		// I'm not sure if this reports cores and hyperthreads as
+		// processors, but it's the best we can do.
+		SYSTEM_INFO	systeminfo;
+		GetSystemInfo(&systeminfo);
+		return systeminfo.dwNumberOfProcessors;
 
 		#endif
 	#else
@@ -1002,39 +1013,19 @@ int64_t sys::getMaxAtExitFunctions() {
 int64_t sys::getCpuSetSize() {
 	#if defined(_SC_CPUSET_SIZE)
 		return sysConf(_SC_CPUSET_SIZE);
-	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
-        	#if _WIN32_WINNT>=0x0501
+	#elif defined(_WIN32)
 
-			// 0 for 32-bit systems
+		// 64 for 64-bit Windows 7/Server 2008 R2,
+		// 0 for other platforms...
+
+        	#if _WIN32_WINNT>=0x0601
 			SYSTEM_INFO	sysinfo;
 			GetNativeSystemInfo((LPSYSTEM_INFO)&sysinfo);
-			if (sysinfo.wProcessorArchitecture!=
-					PROCESSOR_ARCHITECTURE_AMD64 &&
-				sysinfo.wProcessorArchitecture!=
-					PROCESSOR_ARCHITECTURE_IA64) {
-				return 0;
-			}
-
-			// 64 on 64-bit Windows 7 and Windows Server 2008 R2
-			// and up 0 on older versions...
-
-			// get the os version info
-			// (yes, this craziness is how you have to do it)
-			OSVERSIONINFOEX	info;
-			bytestring::zero(&info,sizeof(info));
-			info.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX);
-			if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
-				info.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
-				if (!GetVersionEx((LPOSVERSIONINFO)&info)) {
-					return -1;
-				}
-			}
-
-			// Windows 7 and 2008R2 are 6.1
-			return (info.dwMajorVersion>=6 &&
-					info.dwMinorVersion>=1)?64:0;
+			return (sysinfo.wProcessorArchitecture==
+					PROCESSOR_ARCHITECTURE_AMD64 ||
+				sysinfo.wProcessorArchitecture==
+					PROCESSOR_ARCHITECTURE_IA64)?64:0;
 		#else
-			// 0 for systems older than WinXP
 			return 0;
 		#endif
 	#else
