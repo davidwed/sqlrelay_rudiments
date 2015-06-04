@@ -161,7 +161,7 @@ char *sys::getOperatingSystemArchitecture() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
 	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
-        	#if _WIN32_WINNT>=0x0501
+        	#if _WIN32_WINNT>=0x0500
 			SYSTEM_INFO	info;
 			GetNativeSystemInfo((LPSYSTEM_INFO)&info);
 
