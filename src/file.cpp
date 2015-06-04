@@ -1100,8 +1100,6 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 
 	#elif defined(RUDIMENTS_HAVE_SETSECURITYINFO)
 
-		#if _WIN32_WINNT>=0x0500
-
 		// get the file handle
 		HANDLE	fh=(HANDLE)getHandleFromFileDescriptor(fd());
 		if (fh==INVALID_HANDLE_VALUE) {
@@ -1198,13 +1196,6 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 		LocalFree(newsdesc);
 		CloseHandle(th);
 		return true;
-
-		#else
-
-		// FIXME: implement for WinNT
-		return false;
-
-		#endif
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;
