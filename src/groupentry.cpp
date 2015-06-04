@@ -41,7 +41,7 @@ class groupentryprivate {
 			#endif
 			char		*_sidstr;
 			const char	*_sid;
-			size_t		sidsize;
+			size_t		_sidsize;
 		#else
 			char		*_name;
 			char		**_members;
@@ -239,9 +239,9 @@ const char *groupentry::getSidString() const {
 const void *groupentry::getSid() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sidstr) {
-		if (pvt->_pwd) {
+		if (pvt->_grp) {
 			pvt->_sidstr=charstring::parseNumber(
-						(int64_t)pvt->_pwd->pw_uid);
+						(int64_t)pvt->_grp->gr_gid);
 		} else {
 			pvt->_sidstr=charstring::duplicate("-1");
 		}
@@ -257,9 +257,9 @@ const void *groupentry::getSid() const {
 uint64_t groupentry::getSidSize() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 	if (!pvt->_sidstr) {
-		if (pvt->_pwd) {
+		if (pvt->_grp) {
 			pvt->_sidstr=charstring::parseNumber(
-						(int64_t)pvt->_pwd->pw_uid);
+						(int64_t)pvt->_grp->gr_gid);
 		} else {
 			pvt->_sidstr=charstring::duplicate("-1");
 		}

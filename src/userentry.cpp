@@ -51,7 +51,7 @@ class userentryprivate {
 			#endif
 			char		*_sidstr;
 			const char	*_sid;
-			size_t		sidsize;
+			size_t		_sidsize;
 			#ifdef RUDIMENTS_HAVE_SHADOW
 				spwd	*_sp;
 				#if defined(RUDIMENTS_HAVE_GETSPNAM_R)
@@ -350,7 +350,7 @@ const void *userentry::getSid() const {
 			pvt->_sidstr=charstring::duplicate("-1");
 		}
 		pvt->_sid=pvt->_sidstr;
-		pvt->_sidsize=charstrint::length(pvt->_sidstr);
+		pvt->_sidsize=charstring::length(pvt->_sidstr);
 	}
 	return pvt->_sid;
 #else
@@ -368,7 +368,7 @@ uint64_t userentry::getSidSize() const {
 			pvt->_sidstr=charstring::duplicate("-1");
 		}
 		pvt->_sid=pvt->_sidstr;
-		pvt->_sidsize=charstrint::length(pvt->_sidstr);
+		pvt->_sidsize=charstring::length(pvt->_sidstr);
 	}
 	return pvt->_sidsize;
 #else

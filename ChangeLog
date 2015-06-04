@@ -45,6 +45,7 @@
 		of getPageSize, in most cases
 	fixed copy-constructor/=-operator bugs in dynamicarray class
 	added config_vs2013.h for VS 2013
+	fixed several permissions-related issues for WinNT 4
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
