@@ -181,6 +181,8 @@ void file::openInternal(const char *name, int32_t flags,
 
 	#ifdef RUDIMENTS_HAVE_CREATEFILE
 
+		// FIXME: remove this when permissions::permOctalToDacl()
+		// works on NT4
 		#if _WIN32_WINNT>=0x0500
 
 		// On Windows, when creating a file, in order to set permissions
@@ -208,10 +210,13 @@ void file::openInternal(const char *name, int32_t flags,
 			}
 			dacl=permissions::permOctalToDacl(perms,true);
 			if (!SetSecurityDescriptorDacl(psd,TRUE,
-						(PACL)dacl,FALSE) ||
-				!SetSecurityDescriptorControl(psd,
+						(PACL)dacl,FALSE)
+				#if _WIN32_WINNT>=0x0500
+				|| !SetSecurityDescriptorControl(psd,
 						SE_DACL_PROTECTED,
-						SE_DACL_PROTECTED)) {
+						SE_DACL_PROTECTED)
+				#endif
+				) {
 				fd(-1);
 				LocalFree(dacl);
 				LocalFree(psd);
@@ -277,6 +282,8 @@ void file::openInternal(const char *name, int32_t flags,
 			attrs=FILE_FLAG_BACKUP_SEMANTICS;
 		}
 
+		// FIXME: remove this when permissions::permOctalToDacl()
+		// works on NT4
 		#if _WIN32_WINNT>=0x0500
 
 		// create/open the file
@@ -798,10 +805,12 @@ bool file::getCurrentProperties() {
 	#endif
 	#if defined(RUDIMENTS_HAVE_GETSECURITYINFO)
 
+		// FIXME: remove this when permissions::daclToPermOctal()
+		// works on NT4
 		#if _WIN32_WINNT>=0x0500
 
 		// On Windows, the st_mode isn't set correctly.  Get the DACL
-		// of the file and convert it to a mode_t using
+		// of the file and convert it to a mode_t...
 
 		// get the security information
 		PACL			dacl=NULL;
