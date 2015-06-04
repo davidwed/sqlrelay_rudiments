@@ -426,7 +426,7 @@ static bool shutDownWindows(bool reboot) {
 
 	#else
 
-	// FIXME: implement for platforms prior to Vista
+	// FIXME: implement for platforms prior to XP
 	return false;
 
 	#endif
@@ -789,6 +789,8 @@ int64_t sys::getProcessorCount() {
 		return sysConf(_SC_NPROCESSORS_CONF);
 	#elif defined(RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION)
 
+        	#if _WIN32_WINNT>=0x0501
+
 		// get the array of info about the processors
 		PSYSTEM_LOGICAL_PROCESSOR_INFORMATION	buffer=NULL;
 		DWORD					bufferlen=0;
@@ -823,6 +825,13 @@ int64_t sys::getProcessorCount() {
 		free(buffer);
 
 		return count;
+
+		#else
+
+		// FIXME: implement for platforms prior to XP
+		return false;
+
+		#endif
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return -1;

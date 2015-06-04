@@ -428,7 +428,7 @@
 /* #undef RUDIMENTS_HAVE_GETLOADAVG */
 
 /* Some systems have GetLogicalProcessorInformation */
-/* #undef RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION */
+#define RUDIMENTS_HAVE_GETLOGICALPROCESSORINFORMATION 1
 
 /* Some systems have getnameinfo */
 #define RUDIMENTS_HAVE_GETNAMEINFO 1
