@@ -178,10 +178,6 @@ void file::openInternal(const char *name, int32_t flags,
 
 	#ifdef RUDIMENTS_HAVE_CREATEFILE
 
-		// FIXME: remove this when permissions::permOctalToDacl()
-		// works on NT4
-		#if _WIN32_WINNT>=0x0500
-
 		// On Windows, when creating a file, in order to set permissions
 		// other than just owner read/write, the CreateFile method must
 		// be used rather than just plain _open.
@@ -227,8 +223,6 @@ void file::openInternal(const char *name, int32_t flags,
 			satt.bInheritHandle=TRUE;
 			psatt=&satt;
 		}
-
-		#endif
 
 		// Determine the access and share modes.
 		// O_RDONLY, O_WRONLY and O_RDWR are usually 0, 1 and 2.
@@ -279,28 +273,19 @@ void file::openInternal(const char *name, int32_t flags,
 			attrs=FILE_FLAG_BACKUP_SEMANTICS;
 		}
 
-		// FIXME: remove this when permissions::permOctalToDacl()
-		// works on NT4
-		#if _WIN32_WINNT>=0x0500
-
 		// create/open the file
 		HANDLE	fh=CreateFile(name,accessmode,
 					FILE_SHARE_DELETE|
 					FILE_SHARE_READ|
 					FILE_SHARE_WRITE,
-					psatt,cdisp,attrs,NULL);
+					#if _WIN32_WINNT>=0x0500
+					psatt,
+					#else
+					NULL,
+					#endif
+					cdisp,attrs,NULL);
 		LocalFree(psd);
 		LocalFree(dacl);
-
-		#else
-
-		// create/open the file
-		HANDLE	fh=CreateFile(name,accessmode,
-					FILE_SHARE_DELETE|
-					FILE_SHARE_READ|
-					FILE_SHARE_WRITE,
-					NULL,cdisp,attrs,NULL);
-		#endif
 
 		if (fh==INVALID_HANDLE_VALUE) {
 			fd(-1);

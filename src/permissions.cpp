@@ -361,8 +361,6 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 
 	#ifdef RUDIMENTS_HAVE_SETENTRIESINACL
 
-		#if _WIN32_WINNT>=0x0500
-
 		// FIXME: how?
 		// P - protected: ignore perms from higher
 		//			up the inheritance tree
@@ -467,13 +465,6 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 
 		// return the acl
 		return (void *)pacl;
-
-		#else
-
-		// FIXME: implement for WinNT
-		return NULL;
-
-		#endif
 	#else
 		return NULL;
 	#endif
@@ -489,8 +480,6 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 	mode_t	perms=0;
 
 	#ifdef RUDIMENTS_HAVE_GETACE
-
-		#if _WIN32_WINNT>=0x0500
 
 		// get the user and convert to an sid
 		userentry	usrent;
@@ -669,12 +658,6 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 		LocalFree(usersid);
 		LocalFree(groupsid);
 		LocalFree(otherssid);
-
-		#else
-
-		// FIXME: implement for WinNT
-
-		#endif
 	#endif
 
 	// return permissions
