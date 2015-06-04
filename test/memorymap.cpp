@@ -6,7 +6,6 @@
 #include <rudiments/memorymap.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
-#include <rudiments/error.h>
 
 int main(int argc, const char **argv) {
 

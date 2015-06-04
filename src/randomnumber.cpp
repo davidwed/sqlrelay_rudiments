@@ -5,6 +5,7 @@
 #include <rudiments/device.h>
 #include <rudiments/datetime.h>
 #include <rudiments/process.h>
+#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -39,31 +40,27 @@ randomnumber::randomnumber() {
 	pvt=new randomnumberprivate;
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		#if _WIN32_WINNT>=0x0500
 		pvt->hprov=NULL;
 		pvt->acquired=CryptAcquireContext(
 					&pvt->hprov,NULL,
 					MS_DEF_PROV,PROV_RSA_FULL,
-					CRYPT_VERIFYCONTEXT|CRYPT_SILENT);
+					CRYPT_VERIFYCONTEXT
+					#if _WIN32_WINNT>0x0400
+					|CRYPT_SILENT
+					#endif
+					);
 		if (!pvt->acquired) {
 			return;
 		}
-		#else
-		// FIXME: implement for WinNT
-		#endif
 	#endif
 }
 
 randomnumber::~randomnumber() {
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		#if _WIN32_WINNT>=0x0500
 		if (pvt->acquired) {
 			CryptReleaseContext(pvt->hprov,0);
 		}
-		#else
-		// FIXME: implement for WinNT
-		#endif
 	#endif
 
 	delete pvt;
@@ -124,17 +121,12 @@ bool randomnumber::setSeed(uint32_t seed) {
 bool randomnumber::generateNumber(uint32_t *result) {
 
 	#if defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		#if _WIN32_WINNT>=0x0500
 		if (pvt->acquired &&
 			CryptGenRandom(pvt->hprov,4,(BYTE *)&pvt->seed)) {
 			*result=pvt->seed;
 			return true;
 		}
 		return false;
-		#else
-		// FIXME: implement for WinNT
-		return false;
-		#endif
 	#elif defined(RUDIMENTS_HAVE_ARC4RANDOM)
 		*result=arc4random();
 		return true;
