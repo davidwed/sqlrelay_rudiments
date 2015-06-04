@@ -161,7 +161,7 @@ char *sys::getOperatingSystemArchitecture() {
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return (result==-1)?NULL:charstring::duplicate(u.machine);
 	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
-        	#if _WIN32_WINNT>=0x0500
+        	#if _WIN32_WINNT>=0x0501
 			SYSTEM_INFO	info;
 			GetNativeSystemInfo((LPSYSTEM_INFO)&info);
 
@@ -382,7 +382,7 @@ void sys::sync() {
 #if defined(RUDIMENTS_HAVE_INITIATESYSTEMSHUTDOWNEX)
 static bool shutDownWindows(bool reboot) {
 
-	#if _WIN32_WINNT>=0x0501
+	#if _WIN32_WINNT>=0x0500
 
 	// make sure the curernt thread has permissions
 	// to shut down the system...
@@ -752,7 +752,7 @@ int64_t sys::getPhysicalPageCount() {
 	#if defined(_SC_PHYS_PAGES)
 		return sysConf(_SC_PHYS_PAGES);
 	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX)
-		#if _WIN32_WINNT>=0x0501
+		#if _WIN32_WINNT>=0x0500
 		MEMORYSTATUSEX	ms;
 		ms.dwLength=sizeof(ms);
 		if (GlobalMemoryStatusEx(&ms)==TRUE) {
@@ -770,7 +770,7 @@ int64_t sys::getAvailablePhysicalPageCount() {
 	#if defined(_SC_AVPHYS_PAGES)
 		return sysConf(_SC_AVPHYS_PAGES);
 	#elif defined(RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX)
-		#if _WIN32_WINNT>=0x0501
+		#if _WIN32_WINNT>=0x0500
 		MEMORYSTATUSEX	ms;
 		ms.dwLength=sizeof(ms);
 		if (GlobalMemoryStatusEx(&ms)==TRUE) {
@@ -1000,7 +1000,7 @@ int64_t sys::getMaxAtExitFunctions() {
 int64_t sys::getCpuSetSize() {
 	#if defined(_SC_CPUSET_SIZE)
 		return sysConf(_SC_CPUSET_SIZE);
-	#elif defined(RUDIMENTS_HAVE_GETVERSIONEX)
+	#elif defined(RUDIMENTS_HAVE_GETNATIVESYSTEMINFO)
         	#if _WIN32_WINNT>=0x0501
 
 			// 0 for 32-bit systems
