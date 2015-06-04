@@ -484,7 +484,7 @@ if version<=17 and version>15 then
 elseif version<=15 and version>13 then
 	configwindowsh="include\\rudiments\\private\\config_vs2005.h"
 
-' VC6, VS2002 and VS2003
+' VC6, VS2002 and VS2003 (.NET)
 elseif version=13 or version=12 then
 	configwindowsh="include\\rudiments\\private\\config_vs6.h"
 
