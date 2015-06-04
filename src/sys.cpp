@@ -184,6 +184,8 @@ char *sys::getOperatingSystemArchitecture() {
 		#else
 			return charstring::duplicate("x86");
 		#endif
+	#elif defined(_WIN32)
+		return charstring::duplicate("x86");
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return NULL;
