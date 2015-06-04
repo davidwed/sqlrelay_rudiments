@@ -28,9 +28,6 @@
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
 #endif
-#ifdef RUDIMENTS_HAVE_SDDL_H
-	#include <sddl.h>
-#endif
 
 #if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 	// windows doesn't define these, but we need them

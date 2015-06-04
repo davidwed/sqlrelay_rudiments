@@ -50,9 +50,6 @@
 	#undef _POSIX_
 	#include <io.h>
 #endif
-#ifdef RUDIMENTS_HAVE_SDDL_H
-	#include <sddl.h>
-#endif
 #ifdef RUDIMENTS_HAVE_ACLAPI_H
 	#include <aclapi.h>
 #endif
