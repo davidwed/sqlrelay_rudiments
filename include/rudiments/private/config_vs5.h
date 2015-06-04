@@ -917,7 +917,7 @@
 /* #undef RUDIMENTS_HAVE_SCO_AVENRUN */
 
 /* Some systems have sddl.h */
-#define RUDIMENTS_HAVE_SDDL_H 1
+/* #undef RUDIMENTS_HAVE_SDDL_H */
 
 /* Some systems have semget */
 /* #undef RUDIMENTS_HAVE_SEMGET */
