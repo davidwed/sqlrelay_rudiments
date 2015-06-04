@@ -2553,13 +2553,19 @@ static void invalidParameterHandler(const wchar_t *expression,
 #endif
 
 void *filedescriptor::getHandleFromFileDescriptor(int32_t fd) {
-	// FIXME: add a specific test for _set_invalid_parameter_handler
-	#if defined(_WIN32) && defined(RUDIMENTS_HAVE_LONG_LONG)
+	#if defined(_WIN32)
+		// FIXME: add a specific test for _set_invalid_parameter_handler
+		#if defined(RUDIMENTS_HAVE_LONG_LONG)
 		_invalid_parameter_handler	oldiph=
 			_set_invalid_parameter_handler(invalidParameterHandler);
 		intptr_t	handle=_get_osfhandle(fd);
 		_set_invalid_parameter_handler(oldiph);
 		return (void *)handle;
+		#else
+		// this is dangerous, and can crash if fd is invalid,
+		// but I'm not sure what else to do
+		return (void *)_get_osfhandle(fd);
+		#endif
 	#else
 		return NULL;
 	#endif

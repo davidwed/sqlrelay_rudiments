@@ -278,8 +278,6 @@ char *directory::getChildName(uint64_t index) {
 bool directory::create(const char *path, mode_t perms) {
 	#if defined(RUDIMENTS_HAVE_CREATEDIRECTORY)
 
-		#if _WIN32_WINNT>=0x0500
-
 		// create security descriptor
 		PSECURITY_DESCRIPTOR	psd=
 			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,
@@ -290,10 +288,13 @@ bool directory::create(const char *path, mode_t perms) {
 			return false;
 		}
 		void	*dacl=permissions::permOctalToDacl(perms,true);
-		if (!SetSecurityDescriptorDacl(psd,TRUE,(PACL)dacl,FALSE) ||
-			!SetSecurityDescriptorControl(psd,
+		if (!SetSecurityDescriptorDacl(psd,TRUE,(PACL)dacl,FALSE)
+			#if _WIN32_WINNT>=0x0500
+			|| !SetSecurityDescriptorControl(psd,
 				SE_DACL_PROTECTED|SE_DACL_AUTO_INHERITED,
-				SE_DACL_PROTECTED|SE_DACL_AUTO_INHERITED)) {
+				SE_DACL_PROTECTED|SE_DACL_AUTO_INHERITED)
+			#endif
+			) {
 			LocalFree(dacl);
 			LocalFree(psd);
 			return false;
@@ -311,13 +312,6 @@ bool directory::create(const char *path, mode_t perms) {
 		// clean up
 		LocalFree(dacl);
 		LocalFree(psd);
-
-		#else
-
-		// create directory
-		bool	retval=(CreateDirectory(path,NULL)==TRUE);
-
-		#endif
 
 		return retval;
 	#else
