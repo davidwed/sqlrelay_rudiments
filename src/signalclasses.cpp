@@ -610,25 +610,20 @@ VOID signalhandlerprivate::_alarmHandler(PVOID parameter,
 #endif
 
 uint32_t signalmanager::alarm(uint32_t seconds) {
-	#if defined(RUDIMENTS_HAVE_CREATETIMERQUEUETIMER)
-		#if _WIN32_WINNT>=0x0500
+	#if defined(RUDIMENTS_HAVE_CREATETIMERQUEUETIMER) && \
+						_WIN32_WINNT>=0x0500
 		if (signalhandlerprivate::_timer!=INVALID_HANDLE_VALUE) {
 			DeleteTimerQueueTimer(
 				NULL,signalhandlerprivate::_timer,NULL);
 			signalhandlerprivate::_timer=INVALID_HANDLE_VALUE;
 		}
-		if (seconds &&
+		if (seconds) {
 			CreateTimerQueueTimer(
 					&signalhandlerprivate::_timer,NULL,
 					signalhandlerprivate::_alarmHandler,
 					NULL,seconds*1000,
-					0,WT_EXECUTEONLYONCE)==FALSE) {
-			// FIXME: there ought to be some way to return failure
-			return 0;
+					0,WT_EXECUTEONLYONCE);
 		}
-		#else
-			// FIXME: how to do this on older windows?
-		#endif
 		return 0;
 	#elif defined(RUDIMENTS_HAVE_ALARM)
 		return ::alarm(seconds);
