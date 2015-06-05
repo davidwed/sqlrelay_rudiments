@@ -69,11 +69,47 @@ pid_t process::getProcessId() {
 	#endif
 }
 
+#if RUDIMENTS_HAVE_PROCESS32FIRST && _WIN32_WINNT<0x0500
+struct PROCESS_BASIC_INFORMATION {
+	DWORD		Reserved1;
+	DWORD		PebBaseAddress;
+	PVOID		Reserved2[2];
+	ULONG_PTR	UniqueProcessId;
+	PVOID		Reserved3;
+};
+
+enum PROCESSINFOCLASS {
+	ProcessBasicInformation,
+	ProcessQuotaLimits,
+	ProcessIoCounters,
+	ProcessVmCounters,
+	ProcessTimes,
+	ProcessBasePriority,
+	ProcessRaisePriority,
+	ProcessDebugPort,
+	ProcessExceptionPort,
+	ProcessAccessToken,
+	ProcessLdtInformation,
+	ProcessLdtSize,
+	ProcessDefaultHardErrorMode,
+	ProcessIoPortHandlers,
+	ProcessPooledUsageAndLimits,
+	ProcessWorkingSetWatch,
+	ProcessUserModeIOPL,
+	ProcessEnableAlignmentFaultFixup,
+	ProcessPriorityClass,
+	MaxProcessInfoClass
+};
+#endif
+
 pid_t process::getParentProcessId() {
 	#ifdef RUDIMENTS_HAVE_GETPPID
 		return getppid();
 	#elif RUDIMENTS_HAVE_PROCESS32FIRST
+
 		#if _WIN32_WINNT>=0x0500
+
+		// For Win2K and up we can use CreateToolhelp32Snapshot...
 		HANDLE	snap=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
 		if (snap==INVALID_HANDLE_VALUE) {
 			return -1;
@@ -92,9 +128,51 @@ pid_t process::getParentProcessId() {
 		}
 		CloseHandle(snap);
 		return ppid;
+
 		#else
-		// FIXME: implement for WinNT
-		return 0;
+
+		// For WinNT 4 and lower we have to use
+		// NtQueryInformationProcess...
+
+		// load ntdll
+		HMODULE	lib=LoadLibrary("NTDLL");
+		if (!lib) {
+			return 0;
+		}
+
+		// load the function
+		NTSTATUS (*NtQueryInformationProcess)(HANDLE,
+				PROCESSINFOCLASS,PVOID,ULONG,PULONG)=
+			(NTSTATUS (*)(HANDLE,
+				PROCESSINFOCLASS,PVOID,ULONG,PULONG))
+				GetProcAddress(lib,"NtQueryInformationProcess");
+		if (!proc) {
+			return 0;
+		}
+
+		// open the current process
+		HANDLE	proc=OpenProcess(PROCESS_QUERY_INFORMATION,
+							FALSE,getProcessId());
+		if (!proc) {
+			return false;
+		}
+
+		// get info about the current process
+		PROCESS_BASIC_INFORMATION	pbi;
+		ULONG				ulRetLen;
+		ULONG				ppid=0;
+		if (!NtQueryInformationProcess(proc,
+					ProcessBasicInformation,
+					(void*)&pbi,
+					sizeof(PROCESS_BASIC_INFORMATION),
+					&ulRetLen)) {
+            		ppid=(ULONG)pbi.InheritedFromUniqueProcessId;
+		}
+
+		// close the current process
+		CloseHandle(proc);
+
+		return ppid;
 		#endif
 	#else
 		#error no getppid or anything like it
