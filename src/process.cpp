@@ -155,7 +155,7 @@ pid_t process::newSession() {
 	#endif
 }
 
-uid_t process::getRealUserId() {
+uid_t process::getUserId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getuid();
 	#elif defined(RUDIMENTS_HAVE_GETUSERNAME)
@@ -225,7 +225,7 @@ bool process::setRealAndEffectiveUserId(uid_t uid, uid_t euid) {
 	#endif
 }
 
-gid_t process::getRealGroupId() {
+gid_t process::getGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETUID)
 		return getgid();
 	#elif defined(RUDIMENTS_HAVE_GETUSERNAME)
@@ -233,7 +233,7 @@ gid_t process::getRealGroupId() {
 		// but we can return the primary group of the user associated
 		// with the thread
 		userentry	uent;
-		uent.initialize(getRealUserId());
+		uent.initialize(getUserId());
 		return uent.getPrimaryGroupId();
 	#else
 		#error no getgid or anything like it
@@ -516,6 +516,14 @@ void process::exit(int32_t status) {
 
 void process::exitImmediately(int32_t status) {
 	_exit(status);
+}
+
+bool process::atExit(void (*function)(void)) {
+	#ifdef RUDIMENTS_HAVE_ATEXIT
+		return !atexit(function);
+	#else
+		return false;
+	#endif
 }
 
 bool process::createPidFile(const char *filename, mode_t permissions) {

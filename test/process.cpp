@@ -26,11 +26,11 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Session ID		: %d\n",
 					process::getSessionId());
 	stdoutput.printf("Real User ID		: %d\n",
-					process::getRealUserId());
+					process::getUserId());
 	stdoutput.printf("Effective User ID	: %d\n",
 					process::getEffectiveUserId());
 	stdoutput.printf("Real Group ID		: %d\n",
-					process::getRealGroupId());
+					process::getGroupId());
 	stdoutput.printf("Effective Group ID	: %d\n",
 					process::getEffectiveGroupId());
 	stdoutput.printf("Create PID File	: %d\n",

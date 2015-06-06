@@ -3277,6 +3277,13 @@ AC_TRY_LINK([
 #endif],
 setsid(),AC_DEFINE(RUDIMENTS_HAVE_SETSID,1,Some systems have setsid) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for atexit)
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+atexit(0),AC_DEFINE(RUDIMENTS_HAVE_ATEXIT,1,Some systems have atexit) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 echo "******************************"
 
 

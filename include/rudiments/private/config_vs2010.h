@@ -136,6 +136,9 @@
 /* Some systems have arpa/inet.h */
 /* #undef RUDIMENTS_HAVE_ARPA_INET_H */
 
+/* Some systems have atexit */
+#define RUDIMENTS_HAVE_ATEXIT 1
+
 /* SCO OSR < 5.0.7 has an incorrect struct msghdr definition */
 /* #undef RUDIMENTS_HAVE_BAD_SCO_MSGHDR */
 

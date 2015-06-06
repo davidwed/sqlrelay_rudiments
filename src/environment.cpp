@@ -4,7 +4,7 @@
 #include <rudiments/environment.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
+#include <rudiments/process.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -38,7 +38,7 @@ void environment::init() {
 	// chaos.  Ideally this should be called when the dll is unloaded but
 	// that's tricky to do too.  For now it's just disabled.
 	#ifndef _WIN32
-		atexit((void (*)(void))environment::exit);
+		process::atExit((void (*)(void))environment::exit);
 	#endif
 }
 

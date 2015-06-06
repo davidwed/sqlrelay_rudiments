@@ -14,7 +14,8 @@ enum childstatechange {
 };
 
 /** The process class provides methods for accessing information about and
- *  controlling the currently running process. */
+ *  controlling processes, including methods for forking, spawning and
+ *  executing child processes. */
 class RUDIMENTS_DLLSPEC process {
 	public:
 
@@ -56,7 +57,7 @@ class RUDIMENTS_DLLSPEC process {
 		static	pid_t	newSession();
 
 		/** Returns the real user id of the current process. */
-		static	uid_t	getRealUserId();
+		static	uid_t	getUserId();
 
 		/** Returns the effective user id of the current process. */
 		static	uid_t	getEffectiveUserId();
@@ -92,7 +93,7 @@ class RUDIMENTS_DLLSPEC process {
 								uid_t euid);
 
 		/** Returns the real group id of the current process. */
-		static	gid_t	getRealGroupId();
+		static	gid_t	getGroupId();
 
 		/** Returns the effective group id of the current process. */
 		static	gid_t	getEffectiveGroupId();
@@ -173,7 +174,7 @@ class RUDIMENTS_DLLSPEC process {
 		 *  creates a new session, changes directory to / and sets the
 		 *  file creation mask to 0.  Use this method to "fork your
 		 *  process into the background."  Returns true on success and
-		 *  false upon failure. */
+		 *  false on failure. */
 		static bool	detach();
 
 		/** Terminates the calling process and sets the exit status to
@@ -185,6 +186,11 @@ class RUDIMENTS_DLLSPEC process {
 		  * the exit status to "status". */
 		static void	exitImmediately(int32_t status);
 
+		/** Registers "function" to be called when the process
+		 *  exits normally.  Returns true on success and false on
+		 *  failure. */
+		static bool	atExit(void (*function)(void));
+		
 		/** Calls exitOnShutDown(), exitOnCrash() and
 		 *  waitForChildren() below. */
 		static	void	exitOnCrashOrShutDown();

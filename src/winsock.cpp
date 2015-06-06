@@ -3,6 +3,7 @@
 
 #include <rudiments/private/inttypes.h>
 #include <rudiments/private/winsock.h>
+#include <rudiments/process.h>
 
 #ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	threadmutex	winsock::_winsockmutex;
@@ -22,7 +23,8 @@ bool winsock::initWinsock() {
 					WSACleanup();
 					result=1;
 				} else {
-					atexit(winsock::shutDownWinsock);
+					process::atExit(
+						winsock::shutDownWinsock);
 				}
 			}
 			_winsockmutex.unlock();

@@ -39,7 +39,10 @@ PROGS1 = \
 	parameterstring$(EXE) \
 	userentry$(EXE) \
 	permissions$(EXE) \
-	process$(EXE) \
+	process-info$(EXE) \
+	process-exit$(EXE) \
+	process-atexit$(EXE) \
+	process-exitimmediately$(EXE) \
 	protocolentry$(EXE) \
 	randomnumber$(EXE) \
 	bytestring$(EXE) \
@@ -176,8 +179,29 @@ userentry$(EXE): userentry.cpp userentry.$(OBJ)
 permissions$(EXE): permissions.cpp permissions.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ permissions.$(OBJ) $(LIBS)
 
-process$(EXE): process.cpp process.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process.$(OBJ) $(LIBS)
+process-info$(EXE): process-info.cpp process-info.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-info.$(OBJ) $(LIBS)
+
+process-exit$(EXE): process-exit.cpp process-exit.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-exit.$(OBJ) $(LIBS)
+
+process-atexit$(EXE): process-atexit.cpp process-atexit.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-atexit.$(OBJ) $(LIBS)
+
+process-exitimmediately$(EXE): process-exitimmediately.cpp process-exitimmediately.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-exitimmediately.$(OBJ) $(LIBS)
+
+process-exitoncrash$(EXE): process-exitoncrash.cpp process-exitoncrash.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-exitoncrash.$(OBJ) $(LIBS)
+
+process-handlecrash$(EXE): process-handlecrash.cpp process-handlecrash.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-handlecrash.$(OBJ) $(LIBS)
+
+process-exitonshutdown$(EXE): process-exitonshutdown.cpp process-exitonshutdown.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-exitonshutdown.$(OBJ) $(LIBS)
+
+process-handleshutdown$(EXE): process-handleshutdown.cpp process-handleshutdown.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-handleshutdown.$(OBJ) $(LIBS)
 
 protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
