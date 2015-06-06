@@ -64,23 +64,30 @@ class RUDIMENTS_DLLSPEC process {
 
 		/** Sets the effective user id of the current process to uid.
 		 *  If the effective user id is root, the real and saved user
-		 *  id's are also set.
+		 *  ids are also set.
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setUserId(uid_t uid);
 
 		/** Sets the effective user id of the current process to the
  		 *  user id of "username".  If the effective user id is root,
- 		 *  the real and saved user id's are also set.
+ 		 *  the real and saved user ids are also set.
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setUser(const char *username);
 
 		/** Sets the effective user id of the current process to uid.
-		 *  Does not set the real or saved user id's.
+		 *  Does not set the real or saved user ids.
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setEffectiveUserId(uid_t uid);
+
+		/** Sets the effective user id of the current process to the
+ 		 *  user id of "username".  Does not set the real or saved
+ 		 *  user ids.
+		 *
+		 *  Returns true on success and false on failure. */
+		static bool	setEffectiveUser(const char *username);
 
 		/** Sets the real user id of the current process to uid and the
 		 *  effective user id of the current process to euid.  If the
@@ -100,23 +107,30 @@ class RUDIMENTS_DLLSPEC process {
 
 		/** Sets the effective group id of the current process to gid.
 		 *  If the effective group id is root, the real and saved group
-		 *  id's are also set.
+		 *  ids are also set.
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setGroupId(gid_t gid);
 
 		/** Sets the effective group id of the current process to the
  		 *  group id of "groupname".  If the effective group id is root,
- 		 *  the real and saved group id's are also set.
+ 		 *  the real and saved group ids are also set.
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setGroup(const char *groupname);
 
 		/** Sets the effective group id of the current process to gid.
-		 *  Does not set the real or saved group id's.
+		 *  Does not set the real or saved group ids.
 		 *
 		 *  Returns true on success and false on failure. */
 		static bool	setEffectiveGroupId(gid_t gid);
+
+		/** Sets the effective group id of the current process to the
+ 		 *  group id of "groupname".  Does not set the real or saved
+ 		 *  group ids.
+		 *
+		 *  Returns true on success and false on failure. */
+		static bool	setEffectiveGroup(const char *groupname);
 
 		/** Sets the real group id of the current process to gid and
 		 *  the effective group id of the current process to egid.  If

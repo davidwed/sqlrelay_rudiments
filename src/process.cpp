@@ -217,6 +217,11 @@ bool process::setEffectiveUserId(uid_t uid) {
 	#endif
 }
 
+bool process::setEffectiveUser(const char *username) {
+	uid_t	userid=userentry::getUserId(username);
+	return (userid!=(uid_t)-1)?setEffectiveUserId(userid):true;
+}
+
 bool process::setRealAndEffectiveUserId(uid_t uid, uid_t euid) {
 	#if defined(RUDIMENTS_HAVE_SETREUID)
 		return !setreuid(uid,euid);
@@ -276,6 +281,11 @@ bool process::setEffectiveGroupId(gid_t gid) {
 		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
+}
+
+bool process::setEffectiveGroup(const char *groupname) {
+	gid_t	groupid=groupentry::getGroupId(groupname);
+	return (groupid!=(gid_t)-1)?setEffectiveGroupId(groupid):true;
 }
 
 bool process::setRealAndEffectiveGroupId(gid_t gid, gid_t egid) {

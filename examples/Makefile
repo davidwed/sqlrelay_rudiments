@@ -43,6 +43,11 @@ PROGS1 = \
 	process-exit$(EXE) \
 	process-atexit$(EXE) \
 	process-exitimmediately$(EXE) \
+	process-exitoncrash$(EXE) \
+	process-handlecrash$(EXE) \
+	process-exitonshutdown$(EXE) \
+	process-handleshutdown$(EXE) \
+	process-setuidgid$(EXE) \
 	protocolentry$(EXE) \
 	randomnumber$(EXE) \
 	bytestring$(EXE) \
@@ -202,6 +207,15 @@ process-exitonshutdown$(EXE): process-exitonshutdown.cpp process-exitonshutdown.
 
 process-handleshutdown$(EXE): process-handleshutdown.cpp process-handleshutdown.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ process-handleshutdown.$(OBJ) $(LIBS)
+
+process-setuidgid$(EXE): process-setuidgid.cpp process-setuidgid.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-setuidgid.$(OBJ) $(LIBS)
+
+process-seteuidgid$(EXE): process-seteuidgid.cpp process-seteuidgid.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-seteuidgid.$(OBJ) $(LIBS)
+
+process-setreuidgid$(EXE): process-setreuidgid.cpp process-setreuidgid.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-setreuidgid.$(OBJ) $(LIBS)
 
 protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
