@@ -31,10 +31,10 @@ const char *commandline::getValue(const char *arg) const {
 
 		// arg can be "arg" "-arg" or "--arg"
 		if (realarg[0]=='-') {
-			realarg=realarg+1;
+			realarg++;
 		}
 		if (realarg[0]=='-') {
-			realarg=realarg+1;
+			realarg++;
 		}
 		size_t	realarglen=charstring::length(realarg);
 
@@ -68,19 +68,26 @@ bool commandline::found(const char *arg) const {
 
 		// arg can be "arg" "-arg" or "--arg"
 		if (realarg[0]=='-') {
-			realarg=realarg+1;
+			realarg++;
 		}
 		if (realarg[0]=='-') {
-			realarg=realarg+1;
+			realarg++;
 		}
 		size_t	realarglen=charstring::length(realarg);
 
 		for (int32_t i=1; i<pvt->_argc; i++) {
 
-			// look for "-arg value" or "--arg=value"
-			if ((pvt->_argv[i][0]=='-' &&
+			// look for "-arg", "--arg", or "--arg=value"
+			if (
+				(pvt->_argv[i][0]=='-' &&
 				!charstring::compare(
 						pvt->_argv[i]+1,realarg)) ||
+
+				(!charstring::compare(
+						pvt->_argv[i],"--",2) &&
+				!charstring::compare(
+						pvt->_argv[i]+2,realarg)) ||
+
 				(charstring::length(pvt->_argv[i])>=
 							realarglen+3 &&
 					!charstring::compare(pvt->_argv[i],

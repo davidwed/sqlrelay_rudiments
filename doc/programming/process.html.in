@@ -146,6 +146,7 @@
 <li>The exec() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
 <li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
 <li>The process calling exec() won't execute any code past its call to exec().  As such, it doesn't need to call exit().</p>
+<li>Due to differences in implementations for different paltforms, it should not be assumed that the exec'ed process will have the same process ID as the process that called the exec() method.</p>
 </ul>
 
 <blockquote class="code">
@@ -162,7 +163,7 @@
 
 <p>On unix-like systems, when a process creates a child process, the parent process must "wait on the child process" or the child process will become a "zombie" and persist in the list of running processes, even though it has exited, until the parent process also exits.</p>
 
-<p>This is not an issue on non-unix-like systems.</p>
+<p>This does not happen on non-unix-like systems.</p>
 
 <p>The waitForChildren() method causes the program to automatically "wait on child processes".  The dontWaitForChildren() method disables this behavior.</p>
 
@@ -183,6 +184,12 @@
 <blockquote class="code">
 @process-detach.cpp.html@
 </blockquote>
+
+<p>Note that running "in the background" may have different meanings and consequences on different platforms.</p>
+
+<p>On all platforms, once a process has called detach(), if it was run from a terminal, the terminal that it was run from will display a new prompt, and new commands may be run.</p>
+
+<p>On unix-like platforms, once a process has called detach(), it is safe to close the tty that the process was run from.  On Windows platforms though, closing the console that the process was run from will kill the process unless Windows-specific functions are called to dissociate it from the console, create a new console, and associate it with that console.</p>
 
 </body>
 </html>
