@@ -11,7 +11,9 @@
 
 <p>As these classes are ultimately instances of the filedescriptor class, many I/O methods are available, but the most commonly used are read(), write() and printf().  The printf() method features all of the formatting capabilities of the standard C printf() function.</p>
 
+<blockquote class="code">
 @stdio.cpp.html@
+</blockquote>
 
 </body>
 </html>

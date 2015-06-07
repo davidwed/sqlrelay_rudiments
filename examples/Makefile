@@ -48,6 +48,12 @@ PROGS1 = \
 	process-exitonshutdown$(EXE) \
 	process-handleshutdown$(EXE) \
 	process-setuidgid$(EXE) \
+	process-seteuidgid$(EXE) \
+	process-spawn$(EXE) \
+	process-fork$(EXE) \
+	process-forkexec$(EXE) \
+	process-zombie$(EXE) \
+	process-detach$(EXE) \
 	protocolentry$(EXE) \
 	randomnumber$(EXE) \
 	bytestring$(EXE) \
@@ -214,8 +220,20 @@ process-setuidgid$(EXE): process-setuidgid.cpp process-setuidgid.$(OBJ)
 process-seteuidgid$(EXE): process-seteuidgid.cpp process-seteuidgid.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ process-seteuidgid.$(OBJ) $(LIBS)
 
-process-setreuidgid$(EXE): process-setreuidgid.cpp process-setreuidgid.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-setreuidgid.$(OBJ) $(LIBS)
+process-spawn$(EXE): process-spawn.cpp process-spawn.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-spawn.$(OBJ) $(LIBS)
+
+process-fork$(EXE): process-fork.cpp process-fork.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-fork.$(OBJ) $(LIBS)
+
+process-forkexec$(EXE): process-forkexec.cpp process-forkexec.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-forkexec.$(OBJ) $(LIBS)
+
+process-zombie$(EXE): process-zombie.cpp process-zombie.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-zombie.$(OBJ) $(LIBS)
+
+process-detach$(EXE): process-detach.cpp process-detach.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ process-detach.$(OBJ) $(LIBS)
 
 protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)

@@ -13,8 +13,8 @@ enum childstatechange {
 	CONTINUED_CHILDSTATECHANGE
 };
 
-/** The process class provides methods for accessing information about and
- *  controlling processes, including methods for forking, spawning and
+/** The process class provides static methods for accessing information about
+ *  and controlling processes, including methods for forking, spawning and
  *  executing child processes. */
 class RUDIMENTS_DLLSPEC process {
 	public:

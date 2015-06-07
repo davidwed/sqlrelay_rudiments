@@ -11,12 +11,4 @@ int main(int argc, const char **argv) {
 					process::getProcessGroupId());
 	stdoutput.printf("Session ID		: %d\n",
 					process::getSessionId());
-	stdoutput.printf("Real User ID		: %d\n",
-					process::getRealUserId());
-	stdoutput.printf("Effective User ID	: %d\n",
-					process::getEffectiveUserId());
-	stdoutput.printf("Real Group ID		: %d\n",
-					process::getRealGroupId());
-	stdoutput.printf("Effective Group ID	: %d\n",
-					process::getEffectiveGroupId());
 }

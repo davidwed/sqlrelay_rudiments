@@ -8,8 +8,8 @@
 
 class environmentprivate;
 
-/** The environment class provides methods for accessing and manipulating
- *  environment variables. */
+/** The environment class provides static methods for accessing and
+ *  manipulating environment variables. */
 class RUDIMENTS_DLLSPEC environment {
 	public:
 		/** Returns the value of "variable". */

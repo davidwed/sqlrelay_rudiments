@@ -16,7 +16,7 @@ buildparts:
 	done
 	for i in `/bin/ls parts/*.html`; \
 	do \
-		sed -i -e "s/<html>//" -e "s/<head>//" -e "s/<title>.*<\/title>//" -e "s/<meta.*//" -e "s/<\/head>//" -e "s/<body.*//" -e "s/<\/body>//" -e "s/<\/html>//" $$i; \
+		sed -i -e "/<html>/d" -e "/<head>/d" -e "/<title>.*<\/title>/d" -e "/<meta.*/d" -e "/<\/head>/d" -e "/<body.*/d" -e "/<\/body>/d" -e "/<\/html>/d" -e "/<\!DOCTYPE/d" $$i; \
 	done
 
 html:

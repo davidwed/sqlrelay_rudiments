@@ -1,4 +1,4 @@
-// Copyright (c) 2004 David Muse
+// Copyright (c) 2004-2015 David Muse
 // See the COPYING file for more information
 
 #include <rudiments/private/config.h>
@@ -48,21 +48,22 @@
 #endif
 
 bool snooze::macrosnooze(uint32_t seconds) {
-	return nanosnooze(seconds,0,NULL,NULL);
+	return nanosnooze(seconds,0,NULL,NULL,true);
 }
 
-bool snooze::macrosnooze(uint32_t seconds, uint32_t *remainingseconds) {
-	return nanosnooze(seconds,0,remainingseconds,NULL);
+bool snooze::macrosnooze(uint32_t seconds, uint32_t *secondsremaining) {
+	return nanosnooze(seconds,0,secondsremaining,NULL,false);
 }
 
 bool snooze::microsnooze(uint32_t seconds, uint32_t microseconds) {
-	return nanosnooze(seconds,microseconds*1000,NULL,NULL);
+	return nanosnooze(seconds,microseconds*1000,NULL,NULL,true);
 }
 
 bool snooze::microsnooze(uint32_t seconds, uint32_t microseconds,
 		uint32_t *secondsremaining, uint32_t *microsecondsremaining) {
 	bool	retval=nanosnooze(seconds,microseconds*1000,
-					secondsremaining,microsecondsremaining);
+					secondsremaining,microsecondsremaining,
+					false);
 	if (microsecondsremaining) {
 		*microsecondsremaining=(*microsecondsremaining)/1000;
 	}
@@ -70,12 +71,20 @@ bool snooze::microsnooze(uint32_t seconds, uint32_t microseconds,
 }
 
 bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds) {
-	return nanosnooze(seconds,nanoseconds,NULL,NULL);
+	return nanosnooze(seconds,nanoseconds,NULL,NULL,true);
 }
 
 bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 				uint32_t *secondsremaining,
 				uint32_t *nanosecondsremaining) {
+	return nanosnooze(seconds,nanoseconds,
+				secondsremaining,nanosecondsremaining,false);
+}
+
+bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
+				uint32_t *secondsremaining,
+				uint32_t *nanosecondsremaining,
+				bool autoresume) {
 
 	timespec	timetosnooze;
 	timetosnooze.tv_sec=seconds;
@@ -84,14 +93,38 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 	timespec	timeremaining;
 
 	bool	retval=false;
-	#ifdef RUDIMENTS_HAVE_NANOSLEEP
-		retval=!::nanosleep(&timetosnooze,&timeremaining);
-	#elif RUDIMENTS_HAVE_CLOCK_NANOSLEEP
-		retval=!clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
-					&timetosnooze,&timeremaining);
+	#if defined(RUDIMENTS_HAVE_NANOSLEEP) || \
+		defined(RUDIMENTS_HAVE_CLOCK_NANOSLEEP)
+
+		while (!retval) {
+			error::clearError();
+			if (
+				#if defined(RUDIMENTS_HAVE_NANOSLEEP)
+				::nanosleep(&timetosnooze,&timeremaining)
+				#elif defined(RUDIMENTS_HAVE_CLOCK_NANOSLEEP)
+				clock_nanosleep(CLOCK_REALTIME,TIME_ABSTIME,
+						&timetosnooze,&timeremaining)
+				#endif
+				) {
+			
+				if (autoresume &&
+					error::getErrorNumber()==EINTR) {
+					timetosnooze.tv_sec=
+						timeremaining.tv_sec;
+					timetosnooze.tv_nsec=
+						timeremaining.tv_nsec;
+				} else {
+					break;
+				}
+			} else {
+				retval=true;
+			}
+		}
+
 	#elif RUDIMENTS_HAVE_WINDOWS_SLEEP
-		// on windows, we only have millisecond resolution and we
-		// can't send the remaining time back
+		// on windows, we only have millisecond resolution, the sleep
+		// can't be interrupted, and so there's no remaining time to
+		// send back
 		Sleep(timetosnooze.tv_sec*1000+timetosnooze.tv_nsec/1000000);
 
 		// set timeremaining to 0
@@ -104,10 +137,10 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 		bool	keepgoing=true;
 		if (timetosnooze.tv_sec) {
 			uint32_t	remainder=timetosnooze.tv_sec;
-			error::clearError();
 			do {
+				error::clearError();
 				remainder=::sleep(remainder);
-			} while (error::getErrorNumber()==EINTR);
+			} while (autoresume && error::getErrorNumber()==EINTR);
 			if (remainder) {
 				timeremaining.tv_sec=remainder;
 				timeremaining.tv_nsec=timetosnooze.tv_nsec;

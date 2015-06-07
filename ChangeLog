@@ -51,6 +51,7 @@
 	changed process::getRealUser/GroupId to getUser/GroupId to match
 		setUser/Groupid
 	added process::setEffectiveUser/Group methods
+	fixed and documented auto-resume behavior in snooze methods
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

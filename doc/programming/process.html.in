@@ -15,103 +15,174 @@
 <li><a href="#uidgid">Setting User and Group</a></li>
 <li><a href="#spawn">Running Other Processes</a></li>
 <li><a href="#zombie">Managing Zombie Processes</a></li>
+<li><a href="#detach">Detaching</a></li>
 </ul>
 
-<a name="intro"><h3>Introduction</h3></a>
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
 
-<p>The process class provides methods for accessing information about and controlling processes, including methods for forking, spawning and executing child processes.</p>
+<p>The <a href="../classes/html/classprocess.html">process class</a> provides static methods for accessing information about and controlling processes, including methods for forking, spawning and executing child processes.</p>
 
-<a name="info"><h3>Process Information</h3></a>
+<br>
+<a name="info"></a>
+<h3>Process Information</h3>
 
 <p>The following program prints various ID's associated with the process.</p>
 
+<blockquote class="code">
 @process-info.cpp.html@
+</blockquote>
 
-<a name="exit"><h3>Exiting</h3></a>
+<br>
+<a name="exit"></a>
+<h3>Exiting</h3>
 
 <p>The process class also provides methods for managing how a program exits.</p>
 
 <p>The exit() method allows you to set an exit status.  Traditionally, an exit status of 0 indicates that the program exited normally and 1 (or any other number) indicates that an error occurred.</p>
 
+<blockquote class="code">
 @process-exit.cpp.html@
+</blockquote>
 
 <p>The atExit() method allows you to register functions that will be called when the program exits.  Multiple functions may be registered.  Functions are called in the reverse of the order of their registration.</p>
 
+<blockquote class="code">
 @process-atexit.cpp.html@
+</blockquote>
 
 <p>The exitImmediately() allows the program to terminate immediately, bypassing any functions registered to run at exit.</p>
 
+<blockquote class="code">
 @process-exitimmediately.cpp.html@
+</blockquote>
 
-<a name="abnormalshutdown"><h3>Abnormal Shutdown</h3></a>
+<br>
+<a name="abnormalshutdown"></a>
+<h3>Abnormal Shutdown</h3>
 
 <p>The process class also provides methods for managing various abnormal shutdown conditions such as a crash or termination by another process.</p>
 
 <p>Ordinarily, if a program encounters a floating point exception, illegal instruction, segmentation fault, bus error, or a few other unusual conditions, it will "crash", display a short message indicating why, and possibly offer to debug the program.  The exitOnCrash() method causes the program to exit more gracefully when one of these conditions occurs by "waiting on child processes" (see <a href="#zombie">Managing Zombie Processes</a> below), calling functions registered with atExit(), and setting the exit status to 1, indicating that an error occurred.</p>
 
+<blockquote class="code">
 @process-exitoncrash.cpp.html@
+</blockquote>
 
 <p>However, if you want to do something different when the program crashes, then you can use the handleCrash() method to specify a function to run when the program crashes.</p>
 
+<blockquote class="code">
 @process-handlecrash.cpp.html@
+</blockquote>
 
-<p>Ordinarily, if a program is shut down by another process, it will exit immediately.  The exitOnShutdown() method causes the program exit more gracefully when it is shut down by "waiting on child processes" (see <a href="#zombie">Managing Zombie Processes</a> below), calling functions registered with atExit(), and setting the exit status to 0, indicating that no error occurred.</p>
+<p>Ordinarily, if a program is shut down, either aborted using ctrl-C or killed, it will exit immediately.  The exitOnShutdown() method causes the program exit more gracefully when it is shut down by "waiting on child processes" (see <a href="#zombie">Managing Zombie Processes</a> below), calling functions registered with atExit(), and setting the exit status to 0, indicating that no error occurred.</p>
 
+<blockquote class="code">
 @process-exitonshutdown.cpp.html@
-
-<p>To test this program, you must run it in one terminal window and kill it from another.</p>
+</blockquote>
 
 <p>However, if you want to do something different when the program is shut down, then you can use the handleShutDown() method to specify a function to run when the program is shut down.</p>
 
+<blockquote class="code">
 @process-handleshutdown.cpp.html@
+</blockquote>
 
-<p>To test this program, you must run it in one terminal window and kill it from another.</p>
-
-<a name="uidgid"><h3>Setting User and Group</h3></a>
+<br>
+<a name="uidgid"></a>
+<h3>Setting User and Group</h3>
 
 <p>The process class also provides methods for changing who the current process is running as.  Both the "real" and "effective" user and group can be set.</p>
 
 <p>The "real" user corresponds to who the user logged in as.  The "real" group corresponds to that user's default group.  The "real" user and group can only be changed if the user is logged in as root (or the equivalent on non-unix-like platforms).</p>
 
+<blockquote class="code">
 @process-setuidgid.cpp.html@
+</blockquote>
 
-<p>The "effective" user can be only be changed if the program is running as root.  This could be either because the user logged in as root, or because the program's permissions are configures so that it always runs as root.  The "effective" grup can be changed to any group if the program is running as root.  Otherwise the "effective" group can be changed to any group that the user is a member of.</p>
+<p>The "effective" user can be only be changed if the program is running as root.  This could be either because the user logged in as root, or because the program's permissions are configured so that it always runs as root.  The "effective" group can be changed to any group that the user is a member of.</p>
 
+<blockquote class="code">
 @process-seteuidgid.cpp.html@
+</blockquote>
 
-<p>It's also possible to set the real and effective user and group at the same time rather than making separate calls.</p>
+<p>Note that some platforms don't have the notion of an effective user and group.  On those platforms, the methods for setting and getting the effective user and group fail.</p>
 
-@process-setreuidgid.cpp.html@
-
-<a name="spawn"><h3>Running Other Processes</h3></a>
+<br>
+<a name="spawn"></a>
+<h3>Running Other Processes</h3>
 
 <p>The process class also provides methods for running other processes.</p>
 
 <p>The spawn() method allows you to spawn a child process.</p>
 
+<blockquote class="code">
 @process-spawn.cpp.html@
+</blockquote>
+
+<p>There are several things to note when using spawn():</p>
+
+<ul>
+<li>The spawn() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
+<li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
+<li>The parent process doesn't wait for the child process to finish executing, but rather continues executing itself, right away.</li>
+</ul>
 
 <p>The fork() method allows you to fork the current process.  I.e. to create a child process that is an copy of the current process' address space, open file descriptors, and other things.</p>
 
 <p>Note though, that fork() only works on unix-like systems and does not work on Windows and other non-unix-like systems.  The supportsFork() method returns true or false, indicating whether fork is supported or not.</p>
 
+<p>In the parent process, fork() returns the process-id of the child process.  In the child process, fork() returns 0.</p>
+
+<blockquote class="code">
 @process-fork.cpp.html@
+</blockquote>
 
 <p>The exec() method allows you to replace the currently running process with a new process.  This is useful if you want to fork a child process which needs to do a few things and then just run another process.</p>
 
-@process-forkexec.cpp.html@
+<p>There are several things to note when using exec():</p>
 
-<a name="zombie"><h3>Managing Zombie Processes</h3></a>
+<ul>
+<li>The exec() method will search the user's PATH for the specified program.  The full pathname of the program to run need not be specified unless it is located outside of the user's PATH.</li>
+<li>Even though the program is specified, the first argument passed to it should be the name of the program.</li>
+<li>The process calling exec() won't execute any code past its call to exec().  As such, it doesn't need to call exit().</p>
+</ul>
+
+<blockquote class="code">
+@process-forkexec.cpp.html@
+</blockquote>
+
+<p>It's also worth noting that this same thing could be accomplished by calling spawn(), followed by exit(), instead of exec().  However, on unix-like systems, simply calling exec() is lighter weight.</p>
+
+<br>
+<a name="zombie"></a>
+<h3>Managing Zombie Processes</h3>
 
 <p>The process class also provides methods for managing zombie processes.</p>
 
-<p>On unix-like systems, when a process creates a child process, the parent process must "wait on the child process" or the child process will become a "zombie" and persist in the list of running processes, even though it has exited.  This is not an issue on non-unix-like systems.</p>
+<p>On unix-like systems, when a process creates a child process, the parent process must "wait on the child process" or the child process will become a "zombie" and persist in the list of running processes, even though it has exited, until the parent process also exits.</p>
 
-<p>The waitForChildren() method causes the program to automatically "wait on child processes".  The dontWaitForChildrem() method disables this behavior.</p>
+<p>This is not an issue on non-unix-like systems.</p>
 
+<p>The waitForChildren() method causes the program to automatically "wait on child processes".  The dontWaitForChildren() method disables this behavior.</p>
+
+<blockquote class="code">
 @process-zombie.cpp.html@
+</blockquote>
 
-<p>Alternatively, the process can register a signal handler for the SIGCHLD signal and call getChildStateChange() to "wait on child processes".  See <a href="signal.html">Using the signal classes</a> for more information on how to do this.  The supportsGetChildStateChange method returns true or false, indicating whether this method is supported or not.</p>
+<p>As an alternative to calling waitForChildren(), the process can register a signal handler for the SIGCHLD signal and call getChildStateChange() to "wait on child processes".  See <a href="signal.html">Using the signal classes</a> for more information on how to do this.  The supportsGetChildStateChange method returns true or false, indicating whether this method is supported or not.</p>
+
+<br>
+<a name="detaching"></a>
+<h3>Detaching</h3>
+
+<p>The process class also provides a method for detaching from the controlling terminal.</p>
+
+<p>This is useful for programs which need to continue running "in the background".  Note that once a program detaches, it cannot be shut down using ctrl-C.  It must be killed.</p>
+
+<blockquote class="code">
+@process-detach.cpp.html@
+</blockquote>
 
 </body>
 </html>

@@ -31670,7 +31670,7 @@ fi
 if ( test "$INCLUDE_SNOOZE" = "1" )
 then
 	HEADERS2="$HEADERS2 snooze.h"
-	PRIVATEHEADERS5="$PRIVATEHEADERS5 snoozeincludes.h"
+	PRIVATEHEADERS5="$PRIVATEHEADERS5 snooze.h snoozeincludes.h"
 	SRCS="$SRCS snooze.cpp"
 	LOBJS="$LOBJS snooze.lo"
 fi

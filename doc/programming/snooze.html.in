@@ -7,9 +7,15 @@
 
 <span class="heading">Using the snooze class</span><br><br>
 
-<p>...</p>
+<p>The <a href="../classes/html/classsnooze.html">snooze class</a> provides static methods for suspending process execution.</p>
 
+<p>Processes may be suspended for times specified in second, microsecond or nanosecond granularity.  Methods for snoozing come in two varieties: snoozes which return when interruped, and snoozes which automatically resume when interrupted.  The methods which return when interrupted also return the time that remained at the point that they were interrupted.</p>
+
+<blockquote class="code">
 @snooze.cpp.html@
+</blockquote>
+
+<p>It is safe to pass NULL in for the secondsremaining, microsecondsremaining, and nanosecondsremaining parameters.  This is useful if you want the snooze to be interruptable, but you don't care about the amount of time remaining after it was interrupted.</p>
 
 </body>
 </html>

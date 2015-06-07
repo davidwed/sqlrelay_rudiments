@@ -8,11 +8,11 @@
 <a name="environment"></a>
 <span class="heading">Using the environment class</span><br><br>
 
-<p>The environment class allows you to get or set the value of environment
-variables.  The following example gets, sets and resets the environment
-variable TEST.</p>
+<p>The <a href="">environment class</a> provides methods for accessing and manipulating environment variables.</p>
 
+<blockquote class="code">
 @environment.cpp.html@
+</blockquote>
 
 </html>
 </body>
