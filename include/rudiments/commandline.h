@@ -23,19 +23,12 @@ class RUDIMENTS_DLLSPEC commandline {
 		 * 	-arg value
 		 *  or
 		 * 	--arg=value
-		 *  on the command line and returns value.
-		 *	
-		 *  The "arg" parameter may be specified as
-		 *  any of "arg", "-arg" or "--arg". */
+		 *  on the command line and returns value. */
 		const char	*getValue(const char *arg) const;
 
-		/** Returns true if "-arg", "-arg value", "--arg" or
-		 *  "--arg=value" was found on the command line and false if it
-		 *  was not found.  This is useful for processing command line
-		 *  switches.
-		 *
-		 *  The "arg" parameter may be specified as any of "arg",
-		 *  "-arg" or "--arg". */
+		/** Returns true if "-arg", "--arg" or "--arg=value" was found
+		 *  on the command line and false if it was not found.  This is
+		 *  useful for processing command line switches. */
 		bool	found(const char *arg) const;
 
 	#include <rudiments/private/commandline.h>
