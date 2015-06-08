@@ -574,6 +574,9 @@ void charstring::leftJustify(char *str, int32_t length) {
 
 	// count leading spaces
 	int32_t	spaces=countLeadingSpaces(str,length);
+	if (spaces==0){
+		return;
+	}
 
 	// replace characters
 	int32_t	index;
@@ -588,23 +591,14 @@ void charstring::leftJustify(char *str, int32_t length) {
 	}
 }
 
-
-void charstring::rightPad(char *str, int32_t lngth, char padchar, bool fill) {
+void charstring::rightJustify(char *str, int32_t length) {
 
 	if (!str) {
 		return;
 	}
 	
-	if (fill) {
-		int32_t valuelength=length(str);
-		for(; valuelength<lngth; valuelength++){
-			str[valuelength]=' ';
-		}
-		str[valuelength]='\0';
-	}
-
 	// count trailing spaces
-	int32_t	spaces=countTrailingSpaces(str,lngth);
+	int32_t	spaces=countTrailingSpaces(str,length);
 	if (spaces==0){
 		return;
 	}
@@ -612,19 +606,14 @@ void charstring::rightPad(char *str, int32_t lngth, char padchar, bool fill) {
 	// replace characters
 	int32_t	index;
 	int32_t	stop=spaces-1;
-	for (index=lngth-1; index>stop; index--) {
+	for (index=length-1; index>stop; index--) {
 		str[index]=str[index-spaces];
 	}
 
 	// right-pad with spaces
 	for (; index>-1; index--) {
-		str[index]=padchar;
+		str[index]=' ';
 	}
-}
-
-void charstring::rightJustify(char *str, int32_t length) {
-
-	rightPad(str,length,' ',false);
 }
 
 void charstring::center(char *str, int32_t length) {
@@ -1640,8 +1629,8 @@ void charstring::deobfuscate(char *str) {
 	}
 }
 
-char *charstring::padString(const char *str, char padchar,
-				int16_t direction, uint64_t totallength) {
+char *charstring::pad(const char *str, char padchar,
+			int16_t direction, uint64_t totallength) {
 
 	if (totallength==0) {
 		return NULL;

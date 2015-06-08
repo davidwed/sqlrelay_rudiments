@@ -10,11 +10,11 @@ int main(int argc, const char **argv) {
 
 
 	// snooze for 2 seconds, auto-recovering from interruptions
-	stdoutput.printf("snoozing for 2 seconds...\n");
+	stdoutput.write("snoozing for 2 seconds...\n");
 	snooze::macrosnooze(2);
 
 	// snooze for 2 seconds, allowing interruptions
-	stdoutput.printf("snoozing for 2 seconds (interruptable)...\n");
+	stdoutput.write("snoozing for 2 seconds (interruptable)...\n");
 	if (!snooze::macrosnooze(2,&remainingseconds)) {
 		stdoutput.printf("interrupted... %d seconds remained\n",
 							remainingseconds);
@@ -22,11 +22,11 @@ int main(int argc, const char **argv) {
 
 
 	// snooze for 200 microseconds, auto-recovering from interruptions
-	stdoutput.printf("snoozing for 200 microseconds...\n");
+	stdoutput.write("snoozing for 200 microseconds...\n");
 	snooze::microsnooze(0,200);
 
 	// snooze for 200 microseconds, allowing interruptions
-	stdoutput.printf("snoozing for 200 microseconds (interruptable)...\n");
+	stdoutput.write("snoozing for 200 microseconds (interruptable)...\n");
 	if (!snooze::microsnooze(0,200,
 				&remainingseconds,
 				&remainingmicroseconds)) {
@@ -38,11 +38,11 @@ int main(int argc, const char **argv) {
 
 
 	// snooze for 200 nanoseconds, auto-recovering from interruptions
-	stdoutput.printf("snoozing for 200 nanoseconds...\n");
+	stdoutput.write("snoozing for 200 nanoseconds...\n");
 	snooze::nanosnooze(0,200);
 
 	// snooze for 200 nanoseconds, allowing interruptions
-	stdoutput.printf("snoozing for 200 nanoseconds (interruptable)...\n");
+	stdoutput.write("snoozing for 200 nanoseconds (interruptable)...\n");
 	if (!snooze::nanosnooze(0,200,
 				&remainingseconds,
 				&remainingnanoseconds)) {

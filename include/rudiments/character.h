@@ -6,7 +6,7 @@
 
 #include <rudiments/private/characterincludes.h>
 
-/** The character class provides methods for evaluating and manipulating
+/** The character class provides static methods for evaluating and manipulating
  *  characters. */
 class RUDIMENTS_DLLSPEC character {
 	public:
@@ -72,10 +72,6 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns true if "c" is in the set of
 		 *  characters in "set" and false otherwise. */
 		static bool	inSet(char c, const char *set);
-
-		/** Prints "c" if it is a printable character
-		 *  or the hex value otherwise. */
-		static void	safePrint(char c);
 };
 
 #endif

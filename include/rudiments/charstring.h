@@ -6,10 +6,13 @@
 
 #include <rudiments/private/charstringincludes.h>
 
-/** The charstring class provides methods for manipulating strings.
+/** The charstring class provides static methods for manipulating C-style
+ *  character strings.
  * 
- *  Unlike the functions in string.h, these methods are NULL safe.  If any of
- *  the pointer arguments are NULL, your application will not crash. */
+ *  In addition to some unique methods, analogs for the standard C string
+ *  functions are provided.  However, unline the standard C string functions,
+ *  the charstring methods are NULL safe.  Your application will not crash if a
+ *  NULL is passed in for a string, and instead, give intuitive results. */
 class RUDIMENTS_DLLSPEC charstring {
 	public:
 
@@ -613,19 +616,6 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	void	leftJustify(char *str, int32_t length);
 
 		/** Moves trailing spaces to the beginning of "str" for
-		 *  "length" characters and replaces them with the
-		 *  padchar.
-		 * 
-		 *  Example when padchar is X:
-		 *       "hello      " -> "XXXXXXhello"
-		 *  Example when padchar is X and lngth is 10 and fill
-		 *  is true:  "hello" -> "XXXXhello"
-		 *  Example when padchar is X and lngth is 10 and fill
-		 *  is false:  "hello " -> " hello"  */
-		static  void    rightPad(char *str, int32_t lngth,
-					char padchar, bool fill);
-
-		/** Moves trailing spaces to the beginning of "str" for
 		 *  "length" characters.
 		 *  
 		 *  Example: "   hello   " -> "      hello"  */
@@ -720,7 +710,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
 		 *  this method allocates a buffer internally and returns it.
 		 *  The calling program must deallocate this buffer. */
-		static char	*padString(const char *string,
+		static char	*pad(const char *string,
 						char padchar,
 						int16_t direction,
 						uint64_t totallength);

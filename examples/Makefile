@@ -6,8 +6,13 @@ CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(SHMOPENLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB)
 
 PROGS0 = \
-	character$(EXE) \
-	charstring$(EXE) \
+	character-isxxx$(EXE) \
+	character-toxxx$(EXE) \
+	character-isnet$(EXE) \
+	charstring-copy$(EXE) \
+	charstring-compare$(EXE) \
+	charstring-find$(EXE) \
+	charstring-transform$(EXE) \
 	chat$(EXE) \
 	commandline$(EXE) \
 	complexinetsocketserver$(EXE) \
@@ -97,11 +102,26 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) *.lo *.o *.obj
 
-character$(EXE): character.cpp character.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ character.$(OBJ) $(LIBS)
+character-isxxx$(EXE): character-isxxx.cpp character-isxxx.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)
 
-charstring$(EXE): charstring.cpp charstring.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring.$(OBJ) $(LIBS)
+character-toxxx$(EXE): character-toxxx.cpp character-toxxx.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ character-toxxx.$(OBJ) $(LIBS)
+
+character-inset$(EXE): character-inset.cpp character-inset.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ character-inset.$(OBJ) $(LIBS)
+
+charstring-copy$(EXE): charstring-copy.cpp charstring-copy.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-copy.$(OBJ) $(LIBS)
+
+charstring-compare$(EXE): charstring-compare.cpp charstring-compare.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-compare.$(OBJ) $(LIBS)
+
+charstring-find$(EXE): charstring-find.cpp charstring-find.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-find.$(OBJ) $(LIBS)
+
+charstring-transform$(EXE): charstring-transform.cpp charstring-transform.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-transform.$(OBJ) $(LIBS)
 
 chat$(EXE): chat.cpp chat.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ chat.$(OBJ) $(LIBS)

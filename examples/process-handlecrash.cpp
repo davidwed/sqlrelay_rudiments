@@ -3,7 +3,7 @@
 
 // define a function to run when a crash occurs
 void shutDown(int32_t signal) {
-	stdoutput.printf("shutting down gracefully...\n");
+	stdoutput.write("shutting down gracefully...\n");
 	process::exit(1);
 }
 

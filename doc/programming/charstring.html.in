@@ -7,9 +7,35 @@
 
 <span class="heading">Using the charstring class</span><br><br>
 
-<p>The charstring class contains some commonly needed string manipulation and evaluation functions.  Below is some code illustrating the use of the string class.</p>
+<p>The <a href="../classes/html/classcharstring.html">charstring class</a> provides static methods for manipulating C-style character strings.</p>
 
-@charstring.cpp.html@
+<p>In addition to some unique methods, analogs for the standard C string functions are provided.  However, unline the standard C string functions, the charstring methods are NULL safe.  Your application will not crash if a NULL is passed in for a string, and instead, give intuitive results.</p>
+
+<p>The charstring class provides methods for zeroing, duplicating, appending and copying data to character strings, and determining their lengths.</p>
+
+<blockquote class="code">
+@charstring-copy.cpp.html@
+</blockquote>
+
+<p>The charstring class also provides methods for performing various character string comparisons.</p>
+
+<blockquote class="code">
+@charstring-compare.cpp.html@
+</blockquote>
+
+<p>The charstring class also provides methods for finding characters or other character strings within character strings.</p>
+
+<p>The findFirst()/findFirstOfSet() and findLast() methods return the first/last instance of a character/string/set within a string, or NULL if no match is found.</p>
+
+<blockquote class="code">
+@charstring-find.cpp.html@
+</blockquote>
+
+<p>The charstring class also provides methods for transforming character strings.</p>
+
+<blockquote class="code">
+@charstring-transform.cpp.html@
+</blockquote>
 
 </body>
 </html>
