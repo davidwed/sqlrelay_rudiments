@@ -37,7 +37,6 @@
 </script>
 <font face="monospace">
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/bytestring.h&gt;</font><br>
-<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
 <br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
@@ -93,9 +92,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;after copying 0-8, swapping bytes:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&nbsp;&nbsp;&quot;</font>);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.safePrint(buffer,<font color="#a52a2a"><b>sizeof</b></font>(buffer));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">0</font>);<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
@@ -116,7 +112,6 @@
 </script>
 <font face="monospace">
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/bytestring.h&gt;</font><br>
-<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
 <br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
@@ -150,8 +145,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;does 1/2 buffer1 = 1/2 buffer2?&nbsp;&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(!bytestring::compare(buffer1,buffer2,<font color="#a52a2a"><b>sizeof</b></font>(buffer1)/<font color="#ff00ff">2</font>))?<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;yes&quot;</font>:<font color="#ff00ff">&quot;no&quot;</font>);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">0</font>);<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
@@ -174,7 +167,6 @@
 </script>
 <font face="monospace">
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/bytestring.h&gt;</font><br>
-<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
 <br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
@@ -221,9 +213,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.safePrint(lastzerotwozero,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>sizeof</b></font>(buffer)-(lastzerotwozero-buffer));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">0</font>);<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->

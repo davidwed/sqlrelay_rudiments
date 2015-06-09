@@ -1,5 +1,4 @@
 #include <rudiments/bytestring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -33,6 +32,4 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("  does 1/2 buffer1 = 1/2 buffer2?  %s\n\n",
 		(!bytestring::compare(buffer1,buffer2,sizeof(buffer1)/2))?
 								"yes":"no");
-
-	process::exit(0);
 }

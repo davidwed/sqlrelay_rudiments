@@ -8,19 +8,33 @@
 <a name="datetime"></a>
 <span class="heading">Using the datetime class</span><br><br>
 
-<p>One of the most difficult things to do in a Posix environment is deal with dates and times.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
+<p>The <a href="../classes/html/classdatetime.html">datetime class</a> represents a date/time combination and provides methods for getting and setting dates and times, converting date/time formats and accessing various date/time values.</p>
 
-<p>The datetime class allows you to query and set the system clock. If your platform has a working real-time-clock (/dev/rtc), then you can query or set the hardware clock as well.  Note that your program must run as root in order to set the system or hardware clock.  Since it is common for the system clock to be set to the local time zone and the hardware clock to be set to GMT, a method is provided for converting the hardware clock time to the system's time zone.</p>
+<p>Dealing with dates and times is classically one of the most difficult things to do on a computer.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
 
-<p>Additionally there is a method for switching the time zone of the time currently represented in the class.</p>
+<p>The datetime class provides basic methods for getting the system date and time, and returning it in various formats.</p>
 
-<p>The datetime class also provides methods for converting between several common ways of representing time.  Such as a formatted string, the number of seconds since 1970 and "struct tm".</p>
+<blockquote class="code">
+@datetime-basic.cpp.html@
+</blockquote>
 
-<p>There are also methods for adding discrete amounts of time to the time currently stored in the class.  You can, for example add 150 seconds to "12:30:50 01/02/2003 EST" and get "12:32:20 01/02/2003 EST".  You can add negative numbers to subtract time.</p>
+<p>An instance of the datetime class can be initialized from many different sources: the system clock, a formatted string, or from the number of seconds (and optionally microseconds) since 1970.</p>
 
-<p>Below is some code illustrating the use of the datetime class.</p>
+<blockquote class="code">
+@datetime-init.cpp.html@
+</blockquote>
 
-@datetime.cpp.html@
+<p>The datetime class also provides methods for doing date math.</p>
+
+<blockquote class="code">
+@datetime-math.cpp.html@
+</blockquote>
+
+<p>The datetime class also provides methods for converting between timezones.</p>
+
+<blockquote class="code">
+@datetime-tz.cpp.html@
+</blockquote>
 
 </body>
 </html>

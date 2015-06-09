@@ -1,5 +1,4 @@
 #include <rudiments/charstring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -68,6 +67,4 @@ int main(int argc, const char **argv) {
 
 	charstring::deobfuscate(data);
 	stdoutput.printf("deobfuscated data:\n  %s\n",data);
-
-	process::exit(0);
 }

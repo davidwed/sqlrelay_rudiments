@@ -7,9 +7,11 @@
 
 <span class="heading">Using the crypt class</span><br><br>
 
-<p>...</p>
+<p>The <a href="../classes/html/classcrypt.html">crypt class</a> provides a static encryption method that is commonly used for password encryption.</p>
 
+<blockquote class="code">
 @crypt.cpp.html@
+</blockquote>
 
 </body>
 </html>

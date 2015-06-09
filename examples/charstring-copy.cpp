@@ -1,5 +1,4 @@
 #include <rudiments/charstring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -107,6 +106,4 @@ int main(int argc, const char **argv) {
 								partialdup);
 	delete[] completedup;
 	delete[] partialdup;
-
-	process::exit(0);
 }

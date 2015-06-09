@@ -1,5 +1,4 @@
 #include <rudiments/charstring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -62,6 +61,4 @@ int main(int argc, const char **argv) {
 	char	*dollars=charstring::convertAmount(pennies);
 	stdoutput.printf("%s as pennies: %lld\n",dollarstr,pennies);
 	stdoutput.printf("%lld pennies as dollars: %s\n",pennies,dollars);
-
-	process::exit(0);
 }

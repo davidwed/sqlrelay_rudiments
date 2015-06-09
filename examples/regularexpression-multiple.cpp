@@ -1,5 +1,4 @@
 #include <rudiments/regularexpression.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -24,6 +23,4 @@ int main(int argc, const char **argv) {
 					i,re.getSubstringEndOffset(i));
 		stdoutput.printf("\"%s\"\n",re.getSubstringEnd(i));
 	}
-
-	process::exit(0);
 }

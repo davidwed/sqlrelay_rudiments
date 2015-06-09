@@ -8,18 +8,13 @@
 <a name="datetime"></a>
 <span class="heading">Using the datetime class</span><br><br>
 
-<p>One of the most difficult things to do in a Posix environment is deal with dates and times.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
+<p>The <a href="../classes/html/classdatetime.html">datetime class</a> represents a date/time combination and provides methods for getting and setting dates and times, converting date/time formats and accessing various date/time values.</p>
 
-<p>The datetime class allows you to query and set the system clock. If your platform has a working real-time-clock (/dev/rtc), then you can query or set the hardware clock as well.  Note that your program must run as root in order to set the system or hardware clock.  Since it is common for the system clock to be set to the local time zone and the hardware clock to be set to GMT, a method is provided for converting the hardware clock time to the system's time zone.</p>
+<p>Dealing with dates and times is classically one of the most difficult things to do on a computer.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
 
-<p>Additionally there is a method for switching the time zone of the time currently represented in the class.</p>
+<p>The datetime class provides basic methods for getting the system date and time, and returning it in various formats.</p>
 
-<p>The datetime class also provides methods for converting between several common ways of representing time.  Such as a formatted string, the number of seconds since 1970 and "struct tm".</p>
-
-<p>There are also methods for adding discrete amounts of time to the time currently stored in the class.  You can, for example add 150 seconds to "12:30:50 01/02/2003 EST" and get "12:32:20 01/02/2003 EST".  You can add negative numbers to subtract time.</p>
-
-<p>Below is some code illustrating the use of the datetime class.</p>
-
+<blockquote class="code">
 
 <script type='text/javascript'>
 <!--
@@ -27,10 +22,171 @@
 -->
 </script>
 <font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize an instance of datetime to the current system date/time</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getSystemDateAndTime();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// the components of the date/time are avaialble in various formats...</font><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// as a string</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// including microseconds</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// as the number of seconds since 1970</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;seconds since 1970:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getEpoch());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// broken down</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;date/time: &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%02d</font><font color="#ff00ff">/</font><font color="#6a5acd">%02d</font><font color="#ff00ff">/</font><font color="#6a5acd">%04d</font><font color="#ff00ff">&nbsp;</font><font color="#6a5acd">%02d</font><font color="#ff00ff">:</font><font color="#6a5acd">%02d</font><font color="#ff00ff">:</font><font color="#6a5acd">%02d</font><font color="#ff00ff">.</font><font color="#6a5acd">%06d</font><font color="#ff00ff">&nbsp;</font><font color="#6a5acd">%s</font><font color="#ff00ff">&nbsp;(</font><font color="#6a5acd">%d</font><font color="#ff00ff">)</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getMonth(),dt.getDayOfMonth(),dt.getYear(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getHour(),dt.getMinutes(),dt.getSeconds(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getMicroseconds(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getTimeZoneString(),dt.getTimeZoneOffset());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// additional date information</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;date: &quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#ff00ff">&nbsp;(</font><font color="#6a5acd">%s</font><font color="#ff00ff">)&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">,&nbsp;</font><font color="#6a5acd">%04d</font><font color="#ff00ff">&nbsp;&quot;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;(day&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;of year) (day&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;of week)</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getMonthName(),dt.getMonthAbbreviation(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getDayOfMonth(),dt.getYear(),dt.getDayOfYear(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getDayOfWeek());<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>An instance of the datetime class can be initialized from many different sources: the system clock, a formatted string, or from the number of seconds (and optionally microseconds) since 1970.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from system date/time</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getSystemDateAndTime();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;system date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from a formatted string</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.initialize(<font color="#ff00ff">&quot;01/02/2000 03:04:05 EDT&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;formatted string:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from the number of seconds since 1970</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.initialize(<font color="#ff00ff">40000000</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;seconds since 1970:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from the number of seconds and microseconds since 1970</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.initialize(<font color="#ff00ff">40000000</font>,<font color="#ff00ff">100</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;sec/usec since 1970:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>The datetime class also provides methods for doing date math.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from system date/time</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getSystemDateAndTime();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;current date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// add three years, months, days,</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// hours, minutes, seconds, and microseconds</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addYears(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMonths(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addDays(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addHours(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMinutes(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addSeconds(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMicroseconds(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;new date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// subtract three years, months, days,</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// hours, minutes, seconds, and microseconds</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addYears(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMonths(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addDays(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addHours(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMinutes(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addSeconds(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.addMicroseconds(-<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;original date/time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString(<font color="#ff00ff">true</font>));<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>The datetime class also provides methods for converting between timezones.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/datetime.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datetime&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// initialize from system date/time</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.getSystemDateAndTime();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;local time:&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,dt.getString());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// get time zone abbreviations and offsets</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;*tzabbr=datetime::getTimeZoneAbbreviations();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>int32_t</b></font>&nbsp;*tzoff=datetime::getTimeZoneOffsets();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// show the current time in different timezones around the world...</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>while</b></font>&nbsp;(*tzabbr &amp;&amp; *tzabbr[<font color="#ff00ff">0</font>]) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// convert timezone</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dt.adjustTimeZone(*tzabbr);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">% 14s</font><font color="#ff00ff">&nbsp;(</font><font color="#6a5acd">% 6d</font><font color="#ff00ff">&nbsp;sec from GMT):&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*tzabbr,*tzoff,dt.getString());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tzabbr++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tzoff++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
 
 </body>
 </html>

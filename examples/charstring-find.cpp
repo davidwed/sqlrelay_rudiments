@@ -1,5 +1,4 @@
 #include <rudiments/charstring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -23,6 +22,4 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("  the last \"and\" is	: \"%s\"\n",lastand);
 	stdoutput.printf("  the first number is	: \"%s\"\n",firstnum);
 	stdoutput.write('\n');
-
-	process::exit(0);
 }

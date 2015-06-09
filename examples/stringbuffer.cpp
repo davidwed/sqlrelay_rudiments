@@ -1,5 +1,4 @@
 #include <rudiments/stringbuffer.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -50,6 +49,4 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 	delete[] str;
-
-	process::exit(0);
 }

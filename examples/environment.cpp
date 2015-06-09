@@ -1,5 +1,4 @@
 #include <rudiments/environment.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -34,6 +33,4 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("%s\n",*v);
 	}
 	stdoutput.write('\n');
-
-	process::exit(0);
 }

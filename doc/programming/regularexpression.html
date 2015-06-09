@@ -11,6 +11,8 @@
 
 <p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
 
+<p>The regularexpression class provides a static match() method which is useful for a quick yes/no comparison.</p>
+
 <blockquote class="code">
 
 <script type='text/javascript'>
@@ -20,32 +22,42 @@
 </script>
 <font face="monospace">
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/regularexpression.h&gt;</font><br>
-<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
 <font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
 <br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// use the static method for a quick yes or no match...</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*string=<font color="#ff00ff">&quot;void f(int a, bool b) { exit(0); }&quot;</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*pattern=<font color="#ff00ff">&quot;(void|int|bool).*f</font><font color="#6a5acd">\\</font><font color="#ff00ff">(.*</font><font color="#6a5acd">\\</font><font color="#ff00ff">) { .* }&quot;</font>;<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;quick match against&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pattern);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*matches;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(regularexpression::match(string,pattern)) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;matches</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,string);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matches=<font color="#ff00ff">&quot;matches&quot;</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;doesn't match</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,string);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matches=<font color="#ff00ff">&quot;doesn't match&quot;</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&nbsp;&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,string,matches,pattern);<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>For patterns that need to be matched over and over, create an instance of the regularexpression class, compile() the pattern, and call match() to compare it to different strings.  The optional study() method can also be used to improve performance with complex patterns.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/regularexpression.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
 <br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// compile expressions that need to be matched over and over...</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// (study complex patterns for better performance)</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regularexpression&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.compile(pattern);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.study();<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;compiled match against&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pattern);<br>
-<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*pattern=<font color="#ff00ff">&quot;(void|int|bool).*f</font><font color="#6a5acd">\\</font><font color="#ff00ff">(.*</font><font color="#6a5acd">\\</font><font color="#ff00ff">) { .* }&quot;</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;strings[]={<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;class t { public: int f(int a); void f(int a, bool b); };&quot;</font>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;void f(int a, bool b) { exit(0); }&quot;</font>,<br>
@@ -53,21 +65,46 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;struct m { int a; int b; int c; };&quot;</font>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">NULL</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regularexpression&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.compile(pattern);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.study();<br>
+<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;*s=strings; *s; s++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*matches;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(re.match(*s,pattern)) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;matches</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*s);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matches=<font color="#ff00ff">&quot;does match&quot;</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;doesn't match</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*s);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matches=<font color="#ff00ff">&quot;doesn't match&quot;</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#ff00ff">&nbsp;&nbsp;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n</font><font color="#6a5acd">%s</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,*s,matches,pattern);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubStringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/regularexpression.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
 <br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
 <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*string=<font color="#ff00ff">&quot;hello there everyone&quot;</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*pattern=<font color="#ff00ff">&quot;(</font><font color="#6a5acd">\\</font><font color="#ff00ff">w+) (</font><font color="#6a5acd">\\</font><font color="#ff00ff">w+)&quot;</font>;<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// some patterns produce multiple matches...</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string=<font color="#ff00ff">&quot;hello there everyone&quot;</font>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pattern=<font color="#ff00ff">&quot;(</font><font color="#6a5acd">\\</font><font color="#ff00ff">w+) (</font><font color="#6a5acd">\\</font><font color="#ff00ff">w+)&quot;</font>;<br>
-<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regularexpression&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.compile(pattern);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.match(string);<br>
 <br>
@@ -75,18 +112,21 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string,pattern,re.getSubstringCount());<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int32_t</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;re.getSubstringCount(); i++) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;match&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;starts at:&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i,re.getSubstringStart(i));<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;match&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;ends at&nbsp;&nbsp;:&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i,re.getSubstringEnd(i));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;match&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;starts at offset&nbsp;</font><font color="#6a5acd">%2d</font><font color="#ff00ff">: &quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i,re.getSubstringStartOffset(i));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,re.getSubstringStart(i));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;match&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;ends at offset&nbsp;</font><font color="#6a5acd">%2d</font><font color="#ff00ff">&nbsp;&nbsp;: &quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i,re.getSubstringEndOffset(i));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,re.getSubstringEnd(i));<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">0</font>);<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<p>Note that only unique matches are returned.  If the exact same pattern of characters is found at multiple locations in the same string, only the first instance of that pattern is returned.</p>
 
 </body>
 </html>

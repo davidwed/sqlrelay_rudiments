@@ -11,9 +11,25 @@
 
 <p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
 
+<p>The regularexpression class provides a static match() method which is useful for a quick yes/no comparison.</p>
+
 <blockquote class="code">
-@regularexpression.cpp.html@
+@regularexpression-static.cpp.html@
 </blockquote>
+
+<p>For patterns that need to be matched over and over, create an instance of the regularexpression class, compile() the pattern, and call match() to compare it to different strings.  The optional study() method can also be used to improve performance with complex patterns.</p>
+
+<blockquote class="code">
+@regularexpression-compile.cpp.html@
+</blockquote>
+
+<p>Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubStringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.</p>
+
+<blockquote class="code">
+@regularexpression-multiple.cpp.html@
+</blockquote>
+
+<p>Note that only unique matches are returned.  If the exact same pattern of characters is found at multiple locations in the same string, only the first instance of that pattern is returned.</p>
 
 </body>
 </html>

@@ -16,6 +16,4 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("now running as effetive user id %d, group id %d\n",
 					process::getEffectiveUserId(),
 					process::getEffectiveGroupId());
-
-	process::exit(0);
 }

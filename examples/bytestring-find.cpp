@@ -1,5 +1,4 @@
 #include <rudiments/bytestring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -46,7 +45,4 @@ int main(int argc, const char **argv) {
 	stdoutput.safePrint(lastzerotwozero,
 				sizeof(buffer)-(lastzerotwozero-buffer));
 	stdoutput.write("\n\n");
-	
-
-	process::exit(0);
 }

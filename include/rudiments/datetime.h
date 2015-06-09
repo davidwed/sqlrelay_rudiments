@@ -14,47 +14,6 @@ class datetimeprivate;
 class RUDIMENTS_DLLSPEC datetime {
 	public:
 
-		/** Takes "seconds" since the epoch (the number of seconds
-		 *  since 1970) and returns a string in
-		 *  "mm/dd/yyyy hh:mm:ss TZN" format.
-		 *	
-		 *  Note that this method allocates a buffer to return the
-		 *  string in which must be deleted by the calling program. */
-		static char	*getString(time_t seconds);
-
-		/** Takes "seconds" since the epoch (the number of seconds
-		 *  since 1970) and "microseconds" and returns a string in
-		 *  "mm/dd/yyyy hh:mm:ss:uuu TZN" format.
-		 *	
-		 *  Note that this method allocates a buffer to return the
-		 *  string in which must be deleted by the calling program. */
-		static char	*getString(time_t seconds, time_t microseconds);
-
-		/** Takes "tmstruct", a pointer to a platform-specific time
-		 *  structure (struct tm * on unix) and returns a string in
-		 *  "mm/dd/yyyy hh:mm:ss TZN" format.
-		 *	
-		 *  Note that this method allocates a buffer to return the
-		 *  string in which must be deleted by the calling program. */
-		static char	*getString(const void *tmstruct);
-
-		/** Parses "datestring" which must be of the format:
-		 *  "mm/dd/yyyy hh:mm:ss TZN" and returns the number of seconds
-		 *  since 1970 (the epoch).
-		 *	
-		 * Note that TZN must be a valid timezone.  Otherwise
-		 * GMT is assumed. */
-		static time_t	getEpoch(const char *datestring);
-
-		/** Takes "tmstruct", a pointer to a platform-specific 
-		 *  time structure (struct tm * on unix) and returns the number
-		 *  of seconds since 1970 (the eopch).
-		 *	
-		 *  Note that in "tmstruct", the timezone and GMT offset must
-		 *  be set to valid values.  Otherwise GMT is assumed. */
-		static time_t	getEpoch(const void *tmstruct);
-
-
 		/** Creates an instance of the datetime class. */
 		datetime();
 
@@ -331,6 +290,46 @@ class RUDIMENTS_DLLSPEC datetime {
 		 *  formatted like: "00/00/0000 00:00:00" optionally
 		 *  followed by a space and a timezone. */
 		static bool	validDateTime(const char *string);
+
+		/** Takes "seconds" since the epoch (the number of seconds
+		 *  since 1970) and returns a string in
+		 *  "mm/dd/yyyy hh:mm:ss TZN" format.
+		 *	
+		 *  Note that this method allocates a buffer to return the
+		 *  string in which must be deleted by the calling program. */
+		static char	*getString(time_t seconds);
+
+		/** Takes "seconds" since the epoch (the number of seconds
+		 *  since 1970) and "microseconds" and returns a string in
+		 *  "mm/dd/yyyy hh:mm:ss:uuu TZN" format.
+		 *	
+		 *  Note that this method allocates a buffer to return the
+		 *  string in which must be deleted by the calling program. */
+		static char	*getString(time_t seconds, time_t microseconds);
+
+		/** Takes "tmstruct", a pointer to a platform-specific time
+		 *  structure (struct tm * on unix) and returns a string in
+		 *  "mm/dd/yyyy hh:mm:ss TZN" format.
+		 *	
+		 *  Note that this method allocates a buffer to return the
+		 *  string in which must be deleted by the calling program. */
+		static char	*getString(const void *tmstruct);
+
+		/** Parses "datestring" which must be of the format:
+		 *  "mm/dd/yyyy hh:mm:ss TZN" and returns the number of seconds
+		 *  since 1970 (the epoch).
+		 *	
+		 * Note that TZN must be a valid timezone.  Otherwise
+		 * GMT is assumed. */
+		static time_t	getEpoch(const char *datestring);
+
+		/** Takes "tmstruct", a pointer to a platform-specific 
+		 *  time structure (struct tm * on unix) and returns the number
+		 *  of seconds since 1970 (the eopch).
+		 *	
+		 *  Note that in "tmstruct", the timezone and GMT offset must
+		 *  be set to valid values.  Otherwise GMT is assumed. */
+		static time_t	getEpoch(const void *tmstruct);
 
 
 		/** Many of the functions that the datetime class uses

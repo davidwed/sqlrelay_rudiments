@@ -1,5 +1,4 @@
 #include <rudiments/charstring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -90,6 +89,4 @@ int main(int argc, const char **argv) {
 	char	*centerpadded=charstring::pad(unpaddedtext,' ',0,15);
 	stdoutput.printf("center padded text: \"%s\"\n",centerpadded);
 	delete[] centerpadded;
-
-	process::exit(0);
 }

@@ -1,5 +1,4 @@
 #include <rudiments/commandline.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -18,6 +17,4 @@ int main(int argc, const char **argv) {
 
 	// print the greeting
 	stdoutput.printf("%s %s\n",greeting,name);
-
-	process::exit(0);
 }

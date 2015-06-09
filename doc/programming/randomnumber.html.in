@@ -7,9 +7,27 @@
 
 <span class="heading">Using the randomnumber class</span><br><br>
 
-<p>Functions for generating random numbers vary from platform to platform.  The randomnumber class attempts to rectify this situation.  Below is some code illustrating the use of the randomnumber class.</p>
+<p>The <a href="../classes/html/classrandomnumber.html">randomnumber class</a> provides methods for generating and scaling random numbers.</p>
 
-@randomnumber.cpp.html@
+<p>Superfluous background:</p>
+
+<p>There is no such thing as true randomness.   Many random number generators just return values from a highly divergent series.  Others collect "entropy" from system hardware returning numbers that are actually associated with system activity but in an indiscernible way.  In most cases, entropy-based systems are just used to seed systems that return values from a highly divergnet series.</p>
+
+<p>If there is only one running process generating random numbers using a highly divergent series, successive calls to generateNumber() will never return the same value until all numbers between 0 and the number returned by getRandMax() (usually 2^31-1 but could be 2^32-1 or 2^15-1 on some systems) have been returned.  At that point, the entire sequence will repeat.</p>
+
+<p>Calls to the methods that generate scaled numbers may return the same value before all numbers in the range have been returned because they just scale down unique numbers returned from a larger range.</p>
+
+<p>The randomnumber class provides several static methods that are useful if you need to generate a few numbers here and there.</p>
+
+<blockquote class="code">
+@randomnumber-static.cpp.html@
+</blockquote>
+
+<p>If you need to generate lots of numbers though, you should create an instance, seed it, and use it over and over to generate numbers.</p>
+
+<blockquote class="code">
+@randomnumber-multiple.cpp.html@
+</blockquote>
 
 </body>
 </html>

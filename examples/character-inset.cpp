@@ -1,5 +1,4 @@
 #include <rudiments/character.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -13,6 +12,4 @@ int main(int argc, const char **argv) {
 				c,set,
 				(character::inSet(c,set))?"yes":"no");
 	}
-
-	process::exit(0);
 }

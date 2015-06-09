@@ -20,7 +20,10 @@ PROGS0 = \
 	commandline$(EXE) \
 	complexinetsocketserver$(EXE) \
 	crypt$(EXE) \
-	datetime$(EXE) \
+	datetime-basic$(EXE) \
+	datetime-init$(EXE) \
+	datetime-math$(EXE) \
+	datetime-tz$(EXE) \
 	device$(EXE) \
 	dictionary$(EXE) \
 	directory$(EXE) \
@@ -63,12 +66,13 @@ PROGS1 = \
 	process-zombie$(EXE) \
 	process-detach$(EXE) \
 	protocolentry$(EXE) \
-	randomnumber$(EXE) \
+	randomnumber-static$(EXE) \
+	randomnumber-multiple$(EXE) \
 	bytestring-copy$(EXE) \
 	bytestring-compare$(EXE) \
 	bytestring-find$(EXE) \
 	regularexpression-static$(EXE) \
-	regularexpression-compiled$(EXE) \
+	regularexpression-compile$(EXE) \
 	regularexpression-multiple$(EXE) \
 	rpcentry$(EXE) \
 	serialport$(EXE) \
@@ -154,8 +158,17 @@ complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserv
 crypt$(EXE): crypt.cpp crypt.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ crypt.$(OBJ) $(LIBS)
 
-datetime$(EXE): datetime.cpp datetime.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ datetime.$(OBJ) $(LIBS)
+datetime-basic$(EXE): datetime-basic.cpp datetime-basic.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ datetime-basic.$(OBJ) $(LIBS)
+
+datetime-init$(EXE): datetime-init.cpp datetime-init.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ datetime-init.$(OBJ) $(LIBS)
+
+datetime-math$(EXE): datetime-math.cpp datetime-math.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ datetime-math.$(OBJ) $(LIBS)
+
+datetime-tz$(EXE): datetime-tz.cpp datetime-tz.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ datetime-tz.$(OBJ) $(LIBS)
 
 device$(EXE): device.cpp device.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ device.$(OBJ) $(LIBS)
@@ -274,8 +287,11 @@ process-detach$(EXE): process-detach.cpp process-detach.$(OBJ)
 protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
 
-randomnumber$(EXE): randomnumber.cpp randomnumber.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ randomnumber.$(OBJ) $(LIBS)
+randomnumber-static$(EXE): randomnumber-static.cpp randomnumber-static.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ randomnumber-static.$(OBJ) $(LIBS)
+
+randomnumber-multiple$(EXE): randomnumber-multiple.cpp randomnumber-multiple.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ randomnumber-multiple.$(OBJ) $(LIBS)
 
 bytestring-copy$(EXE): bytestring-copy.cpp bytestring-copy.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ bytestring-copy.$(OBJ) $(LIBS)

@@ -1,5 +1,4 @@
 #include <rudiments/regularexpression.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -28,6 +27,4 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("%s\n  %s\n%s\n\n",*s,matches,pattern);
 	}
-
-	process::exit(0);
 }

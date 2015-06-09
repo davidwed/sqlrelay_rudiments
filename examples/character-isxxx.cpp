@@ -1,5 +1,4 @@
 #include <rudiments/character.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -40,6 +39,4 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("	is ascii		: %s\n",
 				(character::isAscii(c))?"yes":"no");
 	}
-
-	process::exit(0);
 }

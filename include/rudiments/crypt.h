@@ -6,8 +6,8 @@
 
 #include <rudiments/private/cryptincludes.h>
 
-/** The crypt class provides an encryption method that is commonly used for
- *  password encryption. */
+/** The crypt class provides a static encryption method that is commonly used
+ *  for password encryption. */
 class RUDIMENTS_DLLSPEC crypt {
 	public:
 

@@ -1,5 +1,4 @@
 #include <rudiments/bytestring.h>
-#include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -55,7 +54,4 @@ int main(int argc, const char **argv) {
 	stdoutput.write("after copying 0-8, swapping bytes:\n  ");
 	stdoutput.safePrint(buffer,sizeof(buffer));
 	stdoutput.write("\n\n");
-	
-
-	process::exit(0);
 }
