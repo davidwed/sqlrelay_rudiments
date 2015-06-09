@@ -7,8 +7,11 @@
 
 <span class="heading">Using the regularexpression class</span><br><br>
 
-<p>Regular expressions allow a programmer to perform complex string matching but methods for using regular expressions vary from platform to platform.  The regularexpression class attempts to rectify this situation.  Below is some code illustrating the use of the regularexpression class.</p>
+<p>The <a href="../classes/html/classregularexpression.html">regularexpression</a> class provides methods for making comparisons between text and regular expressions.</p>
 
+<p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
+
+<blockquote class="code">
 
 <script type='text/javascript'>
 <!--
@@ -16,10 +19,74 @@
 -->
 </script>
 <font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/regularexpression.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/process.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// use the static method for a quick yes or no match...</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*string=<font color="#ff00ff">&quot;void f(int a, bool b) { exit(0); }&quot;</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*pattern=<font color="#ff00ff">&quot;(void|int|bool).*f</font><font color="#6a5acd">\\</font><font color="#ff00ff">(.*</font><font color="#6a5acd">\\</font><font color="#ff00ff">) { .* }&quot;</font>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;quick match against&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pattern);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(regularexpression::match(string,pattern)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;matches</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,string);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;doesn't match</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,string);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// compile expressions that need to be matched over and over...</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// (study complex patterns for better performance)</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regularexpression&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.compile(pattern);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.study();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;compiled match against&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,pattern);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;strings[]={<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;class t { public: int f(int a); void f(int a, bool b); };&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;void f(int a, bool b) { exit(0); }&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;int f(int a) { printf(</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">hello</font><font color="#6a5acd">\\</font><font color="#ff00ff">n</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">); }&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;struct m { int a; int b; int c; };&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">NULL</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;*&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;*s=strings; *s; s++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>if</b></font>&nbsp;(re.match(*s,pattern)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;matches</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*s);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<font color="#a52a2a"><b>else</b></font>&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;doesn't match</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,*s);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// some patterns produce multiple matches...</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string=<font color="#ff00ff">&quot;hello there everyone&quot;</font>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pattern=<font color="#ff00ff">&quot;(</font><font color="#6a5acd">\\</font><font color="#ff00ff">w+) (</font><font color="#6a5acd">\\</font><font color="#ff00ff">w+)&quot;</font>;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.compile(pattern);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re.match(string);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;matches&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;</font><font color="#ff00ff">&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;times</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;string,pattern,re.getSubstringCount());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int32_t</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;re.getSubstringCount(); i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;match&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;starts at:&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i,re.getSubstringStart(i));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;&nbsp;&nbsp;match&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;ends at&nbsp;&nbsp;:&nbsp;</font><font color="#6a5acd">\&quot;</font><font color="#6a5acd">%s</font><font color="#6a5acd">\&quot;\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i,re.getSubstringEnd(i));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">0</font>);<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
+</blockquote>
 
 </body>
 </html>

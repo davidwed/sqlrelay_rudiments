@@ -8,7 +8,7 @@
 
 class regularexpressionprivate;
 
-/** The regular expression class provides methods for making comparisons
+/** The regularexpression class provides methods for making comparisons
  *  between text and regular expressions.
  * 
  *  Regular expressions are complex, powerful, used in command line

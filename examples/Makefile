@@ -67,7 +67,9 @@ PROGS1 = \
 	bytestring-copy$(EXE) \
 	bytestring-compare$(EXE) \
 	bytestring-find$(EXE) \
-	regularexpression$(EXE) \
+	regularexpression-static$(EXE) \
+	regularexpression-compiled$(EXE) \
+	regularexpression-multiple$(EXE) \
 	rpcentry$(EXE) \
 	serialport$(EXE) \
 	serialportprofile$(EXE) \
@@ -284,8 +286,14 @@ bytestring-compare$(EXE): bytestring-compare.cpp bytestring-compare.$(OBJ)
 bytestring-find$(EXE): bytestring-find.cpp bytestring-find.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ bytestring-find.$(OBJ) $(LIBS)
 
-regularexpression$(EXE): regularexpression.cpp regularexpression.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ regularexpression.$(OBJ) $(LIBS)
+regularexpression-static$(EXE): regularexpression-static.cpp regularexpression-static.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ regularexpression-static.$(OBJ) $(LIBS)
+
+regularexpression-compile$(EXE): regularexpression-compile.cpp regularexpression-compile.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ regularexpression-compile.$(OBJ) $(LIBS)
+
+regularexpression-multiple$(EXE): regularexpression-multiple.cpp regularexpression-multiple.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ regularexpression-multiple.$(OBJ) $(LIBS)
 
 rpcentry$(EXE): rpcentry.cpp rpcentry.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ rpcentry.$(OBJ) $(LIBS)

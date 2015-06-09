@@ -7,9 +7,13 @@
 
 <span class="heading">Using the regularexpression class</span><br><br>
 
-<p>Regular expressions allow a programmer to perform complex string matching but methods for using regular expressions vary from platform to platform.  The regularexpression class attempts to rectify this situation.  Below is some code illustrating the use of the regularexpression class.</p>
+<p>The <a href="../classes/html/classregularexpression.html">regularexpression</a> class provides methods for making comparisons between text and regular expressions.</p>
 
+<p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
+
+<blockquote class="code">
 @regularexpression.cpp.html@
+</blockquote>
 
 </body>
 </html>

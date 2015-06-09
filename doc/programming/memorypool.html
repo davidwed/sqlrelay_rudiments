@@ -7,14 +7,11 @@
 
 <span class="heading">Using the memorypool class</span><br><br>
 
-<p>The memorypool class implements a pool of memory that starts with an initial buffer and grows dynamically as needed.  Each time the pool is freed, the dynamic buffers are deallocated.  After a configurable number of free's, the initial buffer is resized to the average amount of memory that was requested between free's since the last time it resized.</p>
+<p>The <a href="../classes/html/classmemorypool.html">memorypool class</a> provides methods for creating and using a memory pool.</p>
 
-<p>The memorypool class is especially useful for applications that do the same task over and over where varying amounts of memory are required during each iteration.  The class is particularly efficient in cases where memory requirements are fairly constant between iterations with sporadic requirements for lots of memory or where the memory requirements steadily get larger or smaller across iterations.</p>
+<p>If you have an iterative process that requires variable amounts of memory for each iteration, using a memory pool can perform better than allocating memory on-demand and consume less memory than allocating static buffers that are large enough to accommodate the maximum amount of data you may have to store.</p>
 
-<p>Using a memorypool can be faster than allocating memory on demand, then deallocating it later and more efficient than using static buffers that are large enough to contain the largest possible data.</p>
-
-<p>The following code connects to a server on the local machine and reads variable/value pairs from it.</p>
-
+<blockquote class="code">
 
 <script type='text/javascript'>
 <!--
@@ -23,9 +20,12 @@
 </script>
 <font face="monospace">
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">//&nbsp;</font><span style="background-color: #ffff00"><font color="#0000ff">FIXME</font></span><font color="#0000ff">: develop example...</font><br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
+</blockquote>
 
 </body>
 </html>
