@@ -18,9 +18,9 @@
 <a name="intro"></a>
 <h3>Introduction</h3>
 
-<p>The bytestring class provides static methods for operating on byte strings.</p>
+<p>The bytestring class provides methods for manipulating byte strings.</p>
 
-<p>Unlike the functions in sys/string.h, these methods are NULL safe.  If any of the pointer arguments are NULL, your application will not crash.</p>
+<p>In addition to some unique methods, analogs for the standard C "memory" functions are provided.  However, unlike the standard C functions, the bytestring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.</p>
 
 <br>
 <a name="manip"></a>
