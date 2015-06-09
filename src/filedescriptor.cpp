@@ -2470,9 +2470,21 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 	return size;
 }
 
+void filedescriptor::safePrint(char c) {
+	return safePrint((unsigned char)c);
+}
+
+void filedescriptor::safePrint(const char *string, int32_t length) {
+	return safePrint((const unsigned char *)string,length);
+}
+
+void filedescriptor::safePrint(const char *string) {
+	return safePrint((const unsigned char *)string);
+}
+
 static char hex[17]="0123456789ABCDEF";
 
-void filedescriptor::safePrint(char c) {
+void filedescriptor::safePrint(unsigned char c) {
 	if (c=='\r') {
 		printf("\\r");
 	} else if (c=='\n') {
@@ -2487,16 +2499,16 @@ void filedescriptor::safePrint(char c) {
 	}
 }
 
-void filedescriptor::safePrint(const char *string, int32_t length) {
-	const char	*ch=string;
+void filedescriptor::safePrint(const unsigned char *string, int32_t length) {
+	const unsigned char	*ch=string;
 	for (int32_t i=0; i<length; i++) {
 		safePrint(*ch);
 		ch++;
 	}
 }
 
-void filedescriptor::safePrint(const char *string) {
-	safePrint(string,charstring::length(string));
+void filedescriptor::safePrint(const unsigned char *string) {
+	safePrint(string,charstring::length((const char *)string));
 }
 
 void filedescriptor::printBits(unsigned char value) {

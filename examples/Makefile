@@ -8,7 +8,7 @@ LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(N
 PROGS0 = \
 	character-isxxx$(EXE) \
 	character-toxxx$(EXE) \
-	character-isnet$(EXE) \
+	character-inset$(EXE) \
 	charstring-copy$(EXE) \
 	charstring-compare$(EXE) \
 	charstring-find$(EXE) \

@@ -85,16 +85,16 @@ int32_t bytestring::compare(const void *s1, const void *s2, size_t size) {
 
 const void *bytestring::findFirst(const void *haystack,
 				unsigned char needle, size_t size) {
-	return (haystack && needle)?memchr(haystack,needle,size):NULL;
+	return (haystack)?memchr(haystack,needle,size):NULL;
 }
 
 const void *bytestring::findLast(const void *haystack,
 				unsigned char needle, size_t size) {
 	#ifdef RUDIMENTS_HAVE_MEMRCHR
-		return (haystack && needle)?
+		return (haystack)?
 			memrchr(haystack,needle,size):NULL;
 	#else
-		if (haystack && needle) {
+		if (haystack) {
 			unsigned char	realneedle=needle;
 			for (const unsigned char *ptr=
 				(static_cast<const unsigned char *>(haystack))+

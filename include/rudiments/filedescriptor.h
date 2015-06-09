@@ -350,6 +350,24 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  non-printing character then it is printed as a hex value of
 		 *  the format: (0x0a).  Carriage returns, line feeds and tabs
 		 *  are printed as \n, \r and \t. */
+		void	safePrint(unsigned char c);
+
+		/** Prints "str" to the filedescriptor, however all non-printing
+		 *  characters are printed as hex values of the format: (0x0a)
+		 *  and carriage returns, line feeds and tabs are printed as
+		 *  \n, \r and \t. */
+		void	safePrint(const unsigned char *str);
+
+		/** Prints "length" characters of "str" to the filedescriptor,
+		 *  however all non-printing characters are printed as hex
+		 *  values of the format: (0x0a) and carriage returns, line
+		 *  feeds and tabs are printed as \n, \r and \t. */
+		void	safePrint(const unsigned char *str, int32_t length);
+
+		/** Prints "c" to the filedescriptor, however if "c" is
+		 *  non-printing character then it is printed as a hex value of
+		 *  the format: (0x0a).  Carriage returns, line feeds and tabs
+		 *  are printed as \n, \r and \t. */
 		void	safePrint(char c);
 
 		/** Prints "str" to the filedescriptor, however all non-printing

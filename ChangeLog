@@ -56,6 +56,9 @@
 		values
 	removed redundant charstring::rightPad()
 	renamed charstring::padString() to charstring::pad()
+	added safePrint methods that take unsigned char arguments
+	fixed bytestring::findFirst() with unsigned char needle,
+		when needle is 0
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
