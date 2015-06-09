@@ -13,6 +13,9 @@ PROGS0 = \
 	charstring-compare$(EXE) \
 	charstring-find$(EXE) \
 	charstring-transform$(EXE) \
+	charstring-split$(EXE) \
+	charstring-numbers$(EXE) \
+	charstring-encode$(EXE) \
 	chat$(EXE) \
 	commandline$(EXE) \
 	complexinetsocketserver$(EXE) \
@@ -61,7 +64,9 @@ PROGS1 = \
 	process-detach$(EXE) \
 	protocolentry$(EXE) \
 	randomnumber$(EXE) \
-	bytestring$(EXE) \
+	bytestring-copy$(EXE) \
+	bytestring-compare$(EXE) \
+	bytestring-find$(EXE) \
 	regularexpression$(EXE) \
 	rpcentry$(EXE) \
 	serialport$(EXE) \
@@ -122,6 +127,15 @@ charstring-find$(EXE): charstring-find.cpp charstring-find.$(OBJ)
 
 charstring-transform$(EXE): charstring-transform.cpp charstring-transform.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ charstring-transform.$(OBJ) $(LIBS)
+
+charstring-split$(EXE): charstring-split.cpp charstring-split.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-split.$(OBJ) $(LIBS)
+
+charstring-numbers$(EXE): charstring-numbers.cpp charstring-numbers.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-numbers.$(OBJ) $(LIBS)
+
+charstring-encode$(EXE): charstring-encode.cpp charstring-encode.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ charstring-encode.$(OBJ) $(LIBS)
 
 chat$(EXE): chat.cpp chat.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ chat.$(OBJ) $(LIBS)
@@ -261,8 +275,14 @@ protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
 randomnumber$(EXE): randomnumber.cpp randomnumber.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ randomnumber.$(OBJ) $(LIBS)
 
-bytestring$(EXE): bytestring.cpp bytestring.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ bytestring.$(OBJ) $(LIBS)
+bytestring-copy$(EXE): bytestring-copy.cpp bytestring-copy.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ bytestring-copy.$(OBJ) $(LIBS)
+
+bytestring-compare$(EXE): bytestring-compare.cpp bytestring-compare.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ bytestring-compare.$(OBJ) $(LIBS)
+
+bytestring-find$(EXE): bytestring-find.cpp bytestring-find.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ bytestring-find.$(OBJ) $(LIBS)
 
 regularexpression$(EXE): regularexpression.cpp regularexpression.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ regularexpression.$(OBJ) $(LIBS)

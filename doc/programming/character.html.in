@@ -7,7 +7,22 @@
 
 <span class="heading">Using the character class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#isxxx">Analyzing Characters</a></li>
+<li><a href="#toxxx">Transforming Characters</a></li>
+<li><a href="#inset">Member of a Set</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classcharacter.h">character class</a> provides static methods for evaluating and manipulating characters.</p>
+
+<br>
+<a name="isxxx"></a>
+<h3>Analyzing Characters</h3>
 
 <p>Methods are provided for determining if a character is alphabetic, alphanumeric, lower case, upper case, etc.</p>
 
@@ -15,13 +30,21 @@
 @character-isxxx.cpp.html@
 </blockquote>
 
+<br>
+<a name="toxxx"></a>
+<h3>Transforming Characters</h3>
+
 <p>Methods are also provided for transforming the character to upper or lower case, and to 7-bit ascii, by stripping off the high order bit.</p>
 
 <blockquote class="code">
 @character-toxxx.cpp.html@
 </blockquote>
 
-<p>An inSet() method is also provided which returns true if the specified character is in the specified set of characters and false otherwise.</p>
+<br>
+<a name="inset"></a>
+<h3>Member of a Set</h3>
+
+<p>An inSet() method is also provided which returns true if the specified character is a member of the specified set of characters and false otherwise.</p>
 
 <blockquote class="code">
 @character-inset.cpp.html@

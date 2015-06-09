@@ -7,9 +7,21 @@
 
 <span class="heading">Using the stringbuffer class</span><br><br>
 
-<p>The stringbuffer class allows you to manipulate strings of arbitrary length.  You can append data to a stringbuffer or write data at arbitrary positions in the buffer.</p>
+<p>The <a href="../classes/html/classstringbuffer.html">stringbuffer class</a> can be used to store strings of arbitrary length.</p>
 
+<p>Internally, the class stores this data in a series of extents which are coalesced when getString() or detachString() are called.  The size of the initial and incremental extents may be defined in the constructor, if desired.</p>
+
+<p>When cleared, all extents are freed except for the initial extent.</p>
+
+<p>It is generally more efficient to reuse the same stringbuffer over and over than to allocate a new one for each operation.</p>
+
+<p>The stringbuffer class provides methods for appending data, writing to arbitrary locations, clearing and truncating the buffer, getting the data stored in the buffer as a C-style string, getting the length of the string, and detaching the data from the buffer as a C-style string.</p>
+
+<p>When data is detached, it is no longer associated with the buffer and must be freed by the calling program.</p>
+
+<blockquote class="code">
 @stringbuffer.cpp.html@
+</blockquote>
 
 </body>
 </html>

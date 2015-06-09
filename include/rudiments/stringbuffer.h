@@ -12,9 +12,10 @@ class stringbufferprivate;
  *
  *  Internally, the class stores this data in a series of extents which are
  *  coalesced when getString() or detachString() are called.  The size of the
- *  initial and incremental extents may be defined in the constructor.
+ *  initial and incremental extents may be defined in the constructor, if
+ *  desired.
  *
- *  When cleared, all extents except for the initial extent are freed.
+ *  When cleared, all extents are freed except for the initial extent.
  *
  *  It is generally more efficient to reuse the same stringbuffer over and
  *  over than to allocate a new one for each operation. */

@@ -6,10 +6,12 @@
 
 #include <rudiments/private/bytestringincludes.h>
 
-/** The bytestring class provides methods for operating on byte strings.
+/** The bytestring class provides methods for manipulating byte strings.
  * 
- *  Unlike the functions in sys/string.h, these methods are NULL safe.  If any
- *  of the pointer arguments are NULL, your application will not crash. */
+ *  In addition to some unique methods, analogs for the standard C "memory"
+ *  functions are provided.  However, unlike the standard C functions, the
+ *  bytestring methods are NULL safe.  Your application will not crash if a
+ *  NULL is passed in, and instead, will give intuitive results. */
 class RUDIMENTS_DLLSPEC bytestring {
 	public:
 

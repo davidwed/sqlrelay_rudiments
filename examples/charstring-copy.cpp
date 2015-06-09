@@ -82,12 +82,28 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 
+	// zero the buffer again
+	charstring::zero(buffer,sizeof(buffer));
+
+
+	// print formatted data to the buffer
+	charstring::printf(buffer,sizeof(buffer),"%s, %05d, %7.4f",
+						"hello",100,123.4567);
+	stdoutput.printf("buffer: %s\n",buffer);
+	stdoutput.write('\n');
+
+
+	// get length
+	stdoutput.printf("length(buffer)=%d\n",charstring::length(buffer));
+	stdoutput.write('\n');
+
+
 	// duplicate a string
 	char	*completedup=charstring::duplicate("Hello there!");
 	char	*partialdup=charstring::duplicate("Hello there!",5);
 	stdoutput.printf("complete duplicate of \"Hello there!\": \"%s\"\n",
 								completedup);
-	stdoutput.printf("partial duplicate of \"Hello there!\":  \"%s\"\n",
+	stdoutput.printf(" partial duplicate of \"Hello there!\": \"%s\"\n",
 								partialdup);
 	delete[] completedup;
 	delete[] partialdup;

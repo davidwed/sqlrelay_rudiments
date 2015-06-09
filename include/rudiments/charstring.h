@@ -10,9 +10,9 @@
  *  character strings.
  * 
  *  In addition to some unique methods, analogs for the standard C string
- *  functions are provided.  However, unline the standard C string functions,
+ *  functions are provided.  However, unlike the standard C string functions,
  *  the charstring methods are NULL safe.  Your application will not crash if a
- *  NULL is passed in for a string, and instead, give intuitive results. */
+ *  NULL is passed in, and instead, will give intuitive results. */
 class RUDIMENTS_DLLSPEC charstring {
 	public:
 
@@ -609,6 +609,13 @@ class RUDIMENTS_DLLSPEC charstring {
 						unsigned char **output,
 						uint64_t *outputsize);
 
+		/** Obfuscates "str" by adding 128 to each character. */
+		static void	obfuscate(char *str);
+
+		/** Deobfuscates "str" which was obfusacted using the
+		 *  obfuscate method of this class. */
+		static void	deobfuscate(char *str);
+
 		/** Moves leading spaces to the end of "str" for
 		 *  "length" characters.
 		 *
@@ -625,6 +632,16 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Example: "hello      " -> "   hello   "  */
 		static	void	center(char *str, int32_t length);
+
+		/** Returns a copy of "string", padded with "padchar" to a
+		 *  length of "totallength".  Set "direction" to -1 to
+		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
+		 *  this method allocates a buffer internally and returns it.
+		 *  The calling program must deallocate this buffer. */
+		static char	*pad(const char *string,
+						char padchar,
+						int16_t direction,
+						uint64_t totallength);
 
 		/** Parses "string" of length "stringlength" delimited by
 		 *  "delimiter" of length "delimiterlength" and allocates
@@ -697,23 +714,6 @@ class RUDIMENTS_DLLSPEC charstring {
 		static char	*insertString(const char *dest,
 						const char *src,
 						uint64_t index);
-
-		/** Obfuscates "str" by adding 128 to each character. */
-		static void	obfuscate(char *str);
-
-		/** Deobfuscates "str" which was obfusacted using the
-		 *  obfuscate method of this class. */
-		static void	deobfuscate(char *str);
-
-		/** Returns a copy of "string", padded with "padchar" to a
-		 *  length of "totallength".  Set "direction" to -1 to
-		 *  left-pad, 0 to center-pad and 1 to right-pad.  Note that
-		 *  this method allocates a buffer internally and returns it.
-		 *  The calling program must deallocate this buffer. */
-		static char	*pad(const char *string,
-						char padchar,
-						int16_t direction,
-						uint64_t totallength);
 
 		/** Appends "..." to "buffer" of length "length" using
 		 *  "format" which should comply with standard printf

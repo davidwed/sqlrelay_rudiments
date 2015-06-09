@@ -7,21 +7,48 @@
 
 <span class="heading">Using the charstring class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#manip">Manipulating Character Strings</a></li>
+<li><a href="#comp">Comparing Character Strings</a></li>
+<li><a href="#find">Finding Data in Character Strings</a></li>
+<li><a href="#trans">Transforming Character Strings</a></li>
+<li><a href="#parsing">Parsing Character Strings</a></li>
+<li><a href="#conversion">Converting Numbers and Amounts</a></li>
+<li><a href="#encoding">Encoding Character Strings</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classcharstring.html">charstring class</a> provides static methods for manipulating C-style character strings.</p>
 
-<p>In addition to some unique methods, analogs for the standard C string functions are provided.  However, unline the standard C string functions, the charstring methods are NULL safe.  Your application will not crash if a NULL is passed in for a string, and instead, give intuitive results.</p>
+<p>In addition to some unique methods, analogs for the standard C string functions are provided.  However, unlike the standard C string functions, the charstring methods are NULL safe.  Your application will not crash if a NULL is passed in, and instead, will give intuitive results.</p>
 
-<p>The charstring class provides methods for zeroing, duplicating, appending and copying data to character strings, and determining their lengths.</p>
+<br>
+<a name="manip"></a>
+<h3>Manipulating Character Strings</h3>
+
+<p>The charstring class provides methods for zeroing, duplicating, appending, copying data to, printing formatted data to, and determining the lengths of character strings.</p>
 
 <blockquote class="code">
 @charstring-copy.cpp.html@
 </blockquote>
+
+<br>
+<a name="comp"></a>
+<h3>Comparing Character Strings</h3>
 
 <p>The charstring class also provides methods for performing various character string comparisons.</p>
 
 <blockquote class="code">
 @charstring-compare.cpp.html@
 </blockquote>
+
+<br>
+<a name="find"></a>
+<h3>Finding Data in Character Strings</h3>
 
 <p>The charstring class also provides methods for finding characters or other character strings within character strings.</p>
 
@@ -31,10 +58,44 @@
 @charstring-find.cpp.html@
 </blockquote>
 
+<br>
+<a href="trans"></a>
+<h3>Transforming Character Strings</h3>
+
 <p>The charstring class also provides methods for transforming character strings.</p>
 
 <blockquote class="code">
 @charstring-transform.cpp.html@
+</blockquote>
+
+<br>
+<a name="parsing"></a>
+<h3>Parsing Character Strings</h3>
+
+<p>The charstring class also provides methods for splitting character strings, finding substrings and inserting text into a character string.</p>
+
+<blockquote class="code">
+@charstring-split.cpp.html@
+</blockquote>
+
+<br>
+<a name="conversion"></a>
+<h3>Converting Numbers and Amounts</h3>
+
+<p>The charstring class also provides methods for converting numbers and dollar amounts to and from character strings.</p>
+
+<blockquote class="code">
+@charstring-numbers.cpp.html@
+</blockquote>
+
+<br>
+<a name="encoding"></a>
+<h3>Encoding Character Strings</h3>
+
+<p>The charstring class also provides methods for escaping, encoding and obfuscating character strings.</p>
+
+<blockquote class="code">
+@charstring-encode.cpp.html@
 </blockquote>
 
 </body>

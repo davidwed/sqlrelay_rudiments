@@ -7,9 +7,52 @@
 
 <span class="heading">Using the bytestring class</span><br><br>
 
-<p>...</p>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#manip">Manipulating Byte Strings</a></li>
+<li><a href="#comp">Comparing Byte Strings</a></li>
+<li><a href="#find">Finding Data in Byte Strings</a></li>
+</ul>
 
-@bytestring.cpp.html@
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The bytestring class provides static methods for operating on byte strings.</p>
+
+<p>Unlike the functions in sys/string.h, these methods are NULL safe.  If any of the pointer arguments are NULL, your application will not crash.</p>
+
+<br>
+<a name="manip"></a>
+<h3>Manipulating Byte Strings</h3>
+
+<p>The bytestring class provides methods for zeroing, initializing, duplicating, and copying byte strings.</p>
+
+<blockquote class="code">
+@bytestring-copy.cpp.html@
+</blockquote>
+
+<br>
+<a name="comp"></a>
+<h3>Comparing Byte Strings</h3>
+
+<p>The bytestring class also provides a compare() method for comparing two byte strings.</p>
+
+<blockquote class="code">
+@bytestring-compare.cpp.html@
+</blockquote>
+
+<br>
+<a name="find"></a>
+<h3>Finding Data in Byte Strings</h3>
+
+<p>The charstring class also provides methods for finding characters or other character strings within character strings.</p>
+
+<p>The findFirst() and findLast() methods return the first/last instance of a character or byte string within a byte string, or NULL if no match is found.</p>
+
+<blockquote class="code">
+@bytestring-find.cpp.html@
+</blockquote>
 
 </body>
 </html>
