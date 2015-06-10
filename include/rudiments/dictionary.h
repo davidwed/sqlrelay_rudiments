@@ -95,7 +95,11 @@ class dictionary {
 		 *  found. */
 		dictionarynode<keytype,valuetype> *detach(keytype key);
 
-		/** Returns a list of the keys in the dictionary. */
+		/** Returns a list of the keys in the dictionary.
+		 *
+		 *  Note that the linkedlist returned is allocated internally
+		 *  and returned.  The calling program must delete the
+		 *  linkedlist. */
 		linkedlist< keytype > *getKeys();
 
 		/** Returns the list used internally. */
