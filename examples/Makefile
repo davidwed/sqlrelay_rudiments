@@ -94,7 +94,7 @@ PROGS2 = \
 	singlylinkedlist-find$(EXE) \
 	singlylinkedlist-sort$(EXE) \
 	singlylinkedlist-iterate$(EXE) \
-	linkedlist-types$(EXE) \
+	singlylinkedlist-types$(EXE) \
 	snooze$(EXE) \
 	stdio$(EXE) \
 	stringbuffer$(EXE) \
