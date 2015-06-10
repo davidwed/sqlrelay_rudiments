@@ -25,7 +25,8 @@ PROGS0 = \
 	datetime-math$(EXE) \
 	datetime-tz$(EXE) \
 	device$(EXE) \
-	dictionary$(EXE) \
+	dictionary-const$(EXE) \
+	dictionary-nonconst$(EXE) \
 	directory$(EXE) \
 	dynamiclib$(EXE) \
 	environment$(EXE) \
@@ -184,8 +185,11 @@ datetime-tz$(EXE): datetime-tz.cpp datetime-tz.$(OBJ)
 device$(EXE): device.cpp device.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ device.$(OBJ) $(LIBS)
 
-dictionary$(EXE): dictionary.cpp dictionary.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ dictionary.$(OBJ) $(LIBS)
+dictionary-const$(EXE): dictionary-const.cpp dictionary-const.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ dictionary-const.$(OBJ) $(LIBS)
+
+dictionary-nonconst$(EXE): dictionary-nonconst.cpp dictionary-nonconst.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ dictionary-nonconst.$(OBJ) $(LIBS)
 
 dynamiclib$(EXE): dynamiclib.cpp dynamiclib.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ dynamiclib.$(OBJ) $(LIBS)

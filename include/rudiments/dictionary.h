@@ -47,11 +47,11 @@ class dictionarynode {
 /** The dictionary class allows you to store arbitrary numbers of key/value
  *  pairs.
  * 
- *  Each dictionary is composed of a list of dictionarynodes.  Each
+ *  Each dictionary is composed of a set of dictionarynodes.  Each
  *  dictionarynode contains the key and value.
  *
  *  Internally, the dictionary class uses a linkedlist to store the values
- *  though this is potentially inefficient and may change in a future
+ *  though this is potentially inefficient though, and may change in a future
  *  version. */
 template <class keytype, class valuetype>
 class dictionary {
