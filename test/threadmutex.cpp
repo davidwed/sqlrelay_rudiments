@@ -77,7 +77,7 @@ int main(int argc, const char **argv) {
 	for (uint8_t i=0; i<5; i++) {
 		a[i].th=&t[i];
 		a[i].id=i;
-		t[i].setFunction((void*(*)(void*))count,&a[i]);
+		t[i].setFunction((void*(*)(void*))count);
 	}
 
 	// lock mutex
@@ -89,7 +89,7 @@ int main(int argc, const char **argv) {
 
 	// create threads
 	for (uint8_t j=0; j<5; j++) {
-		if (!t[j].create()) {
+		if (!t[j].create(&a[j])) {
 			stdoutput.printf(" %d: create failed\n",j);
 		}
 	}

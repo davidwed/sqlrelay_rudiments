@@ -51,7 +51,8 @@ PROGS1 = \
 	memorypool$(EXE) \
 	modemclient$(EXE) \
 	modemserver$(EXE) \
-	thread$(EXE) \
+	thread-join$(EXE) \
+	thread-detach$(EXE) \
 	threadmutex$(EXE) \
 	parameterstring$(EXE) \
 	userentry$(EXE) \
@@ -254,8 +255,11 @@ modemclient$(EXE): modemclient.cpp modemclient.$(OBJ)
 modemserver$(EXE): modemserver.cpp modemserver.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ modemserver.$(OBJ) $(LIBS)
 
-thread$(EXE): thread.cpp thread.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ thread.$(OBJ) $(LIBS)
+thread-join$(EXE): thread-join.cpp thread-join.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ thread-join.$(OBJ) $(LIBS)
+
+thread-detach$(EXE): thread-detach.cpp thread-detach.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ thread-detach.$(OBJ) $(LIBS)
 
 threadmutex$(EXE): threadmutex.cpp threadmutex.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ threadmutex.$(OBJ) $(LIBS)

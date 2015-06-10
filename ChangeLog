@@ -61,6 +61,8 @@
 		when needle is 0
 	fixed bugs in linkedlist::moveBefore/moveAfter
 	fixed bugs in singlylinkedlist::removeAll()
+	removed arg parameter from thread::setFunction(), added
+		thread::setArgument(), and added thread::create(arg)
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

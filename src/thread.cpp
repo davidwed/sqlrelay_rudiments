@@ -61,8 +61,11 @@ thread::~thread() {
 	delete pvt;
 }
 
-void thread::setFunction(void *(*function)(void *), void *arg) {
+void thread::setFunction(void *(*function)(void *)) {
 	pvt->_function=function;
+}
+
+void thread::setArgument(void *arg) {
 	pvt->_arg=arg;
 }
 
@@ -103,6 +106,11 @@ bool thread::getStackSize(size_t *stacksize) {
 }
 
 bool thread::create() {
+	return create(NULL);
+}
+
+bool thread::create(void *arg) {
+	pvt->_arg=arg;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();
 		int	result=pthread_create(&pvt->_thr,&pvt->_attr,

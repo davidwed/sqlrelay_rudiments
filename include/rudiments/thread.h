@@ -19,7 +19,11 @@ class RUDIMENTS_DLLSPEC thread {
 
 		/** Defines the function that will be run when create() is
 		 *  called. */
-		void	setFunction(void *(*function)(void *), void *arg);
+		void	setFunction(void *(*function)(void *));
+
+		/** Defines the argument that will be passed to the function
+		 *  when create() is called. */
+		void	setArgument(void *arg);
 
 		/** Sets this thread's stack size to "stacksize".  Returns true
 		 *  on success and false if an error occurred. */
@@ -30,9 +34,16 @@ class RUDIMENTS_DLLSPEC thread {
 		bool	getStackSize(size_t *stacksize);
 
 		/** Starts a new thread by running whatever function was set
-		 *  by the setFunction() method.  Returns true on success
-		 *  and false if an error occurred. */
+		 *  by the setFunction() method and passing that function
+		 *  whatever argument was set by the setArgument() method.
+		 *  Returns true on success and false if an error occurred. */
 		bool	create();
+
+		/** Starts a new thread by running whatever function was set
+		 *  by the setFunction() method, passing that function argument
+		 *  "arg".  Returns true on success and false if an error
+		 *  occurred. */
+		bool	create(void *arg);
 
 		/** Causes a thread to exit with the value stored in the
 		 *  location pointed to by "status".  If another thread is

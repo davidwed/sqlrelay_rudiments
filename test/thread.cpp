@@ -35,26 +35,28 @@ int main(int argc, const char **argv) {
 
 	// create thread 1
 	thread	t1;
+	t1.setFunction((void *(*)(void *))count);
+
 	struct args	a1;
 	a1.th=&t1;
 	a1.id=1;
 	a1.detach=false;
-	t1.setFunction((void*(*)(void*))count,&a1);
 
 	// create thread 2
 	thread	t2;
+	t2.setFunction((void *(*)(void *))count);
+
 	struct args	a2;
 	a2.th=&t2;
 	a2.id=2;
 	a2.detach=false;
-	t2.setFunction((void*(*)(void*))count,&a2);
 
 	// run threads in attached mode
 	stdoutput.printf("attached:\n");
-	if (!t1.create()) {
+	if (!t1.create(&a1)) {
 		stdoutput.printf(" 1: create failed\n");
 	}
-	if (!t2.create()) {
+	if (!t2.create(&a2)) {
 		stdoutput.printf(" 2: create failed\n");
 	}
 
@@ -78,10 +80,10 @@ int main(int argc, const char **argv) {
 
 	// run threads in detached mode
 	stdoutput.printf("detached:\n");
-	if (!t1.create()) {
+	if (!t1.create(&a1)) {
 		stdoutput.printf(" 1: create failed\n");
 	}
-	if (!t2.create()) {
+	if (!t2.create(&a2)) {
 		stdoutput.printf(" 2: create failed\n");
 	}
 
