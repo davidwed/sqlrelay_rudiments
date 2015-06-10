@@ -7,11 +7,45 @@
 
 <span class="heading">Using the linkedlist class</span><br><br>
 
-<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
+<p>The linkedlist class allows you to store an arbitrary number of values in a doubly-linked list.  Since the linkedlist class is template-based, you can store arbitrary types of values.</p>
 
-<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
+<p>Each linkedlist is composed of a series of linkedlistnodes.  Each linkedlistnode contains a value.</p>
 
-@linkedlist.cpp.html@
+<p>The linkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
+
+<blockquote class="code">
+@linkedlist-values.cpp.html@
+</blockquote>
+
+<p>The linkedlist class also provides methods for manipulating list nodes directly.</p>
+
+<blockquote class="code">
+@linkedlist-nodes.cpp.html@
+</blockquote>
+
+<p>The linkedlist class also provides methods for sorting the list.</p>
+
+<p>Methods for both insertion and heap sort are provided.  Insertion sort is slow, for large lists, but doesn't require any additional memory.  Heap sort is fast, even for large lists, but requires additional memory.</p>
+
+<blockquote class="code">
+@linkedlist-sort.cpp.html@
+</blockquote>
+
+<p>The linkedlist class also provides methods for manually iterating through the list.</p>
+
+<blockquote class="code">
+@linkedlist-iterate.cpp.html@
+</blockquote>
+
+<p>Since the linkedlist class is template-based, it can store any type of data.</p>
+
+<p>Note that the print() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
+
+<p>Note also that the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they must be deleted manually.  They will not be deleted automatically when the list is cleared.</p>
+
+<blockquote class="code">
+@linkedlist-types.cpp.html@
+</blockquote>
 
 </body>
 </html>

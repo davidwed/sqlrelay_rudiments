@@ -1,17 +1,61 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the linkedlist class</title>
+<title>firstworks   Programming with Rudiments using the singlylinkedlist class</title>
 <link href="../css/styles.css" rel="stylesheet">
 </head>
 <body>
 
-<span class="heading">Using the linkedlist class</span><br><br>
+<span class="heading">Using the singlylinkedlist class</span><br><br>
 
-<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
+<p>The <a href="../classes/html/classsinglylinkedlist.html">singlylinkedlist class</a> allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.</p>
 
-<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
+<p>Each singlylinkedlist is composed of a series of singlylinkedlistnodes.  Each singlylinkedlistnode contains a value.</p>
 
-@linkedlist.cpp.html@
+<p>This class is similar to the <a href="../classes/html/classlinkedlist.html">linkedlist class</a> but uses less memory and many of its operations are faster.</p>
+
+<p>However, the move, detach and remove operations are much slower.  If your application must run these operations regularly, you should consider using the linkedlist class instead.</p>
+
+<p>The singlylinkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
+
+<p>Note that unlike the linkedlist class, there is no method for inserting a value before another value, only a method for inserting a value after another value.</p>
+
+<blockquote class="code">
+@singlylinkedlist-values.cpp.html@
+</blockquote>
+
+<p>The singlylinkedlist class also provides methods for manipulating list nodes directly.</p>
+
+<p>Note that unlike the linkedlist class, there are no methods for inserting or moving a node before another node, only methods for inserting and moving a node after another node.</p>
+
+<blockquote class="code">
+@singlylinkedlist-nodes.cpp.html@
+</blockquote>
+
+<p>The singlylinkedlist class also provides methods for sorting the list.</p>
+
+<p>Methods for both insertion and heap sort are provided.  Insertion sort is slow, for large lists, but doesn't require any additional memory.  Heap sort is fast, even for large lists, but requires additional memory.</p>
+
+<blockquote class="code">
+@singlylinkedlist-sort.cpp.html@
+</blockquote>
+
+<p>The singlylinkedlist class also provides methods for manually iterating through the list.</p>
+
+<p>Note, that unlike the linkedlistnode class, the singlylinkedlistnode class does not have a getPrevious() method.  Thus, it is impossible to iterate backwards through a singlylinkedlist.</p>
+
+<blockquote class="code">
+@singlylinkedlist-iterate.cpp.html@
+</blockquote>
+
+<p>Since the singlylinkedlist class is template-based, it can store any type of data.</p>
+
+<p>Note that the print() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
+
+<p>Note also that the singlylinkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they must be deleted manually.  They will not be deleted automatically when the list is cleared.</p>
+
+<blockquote class="code">
+@singlylinkedlist-types.cpp.html@
+</blockquote>
 
 </body>
 </html>

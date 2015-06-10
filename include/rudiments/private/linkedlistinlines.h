@@ -139,32 +139,11 @@ void LINKEDLIST_CLASS::move(linkedlistnode<valuetype> *node,
 		return;
 	}
 
-	if (nodetomove==first) {
-		first=nodetomove->getNext();
-	} else if (nodetomove==last) {
-		last=nodetomove->getPrevious();
-	}
-	if (nodetomove->getPrevious()) {
-		nodetomove->getPrevious()->setNext(nodetomove->getNext());
-	}
-	if (nodetomove->getNext()) {
-		nodetomove->getNext()->setPrevious(nodetomove->getPrevious());
-	}
-
+	detach(nodetomove);
 	if (before) {
-		nodetomove->setNext(node);
-		nodetomove->setPrevious(node->getPrevious());
-		node->setPrevious(nodetomove);
-		if (node==first) {
-			first=nodetomove;
-		}
+		insertBefore(node,nodetomove);
 	} else {
-		nodetomove->setNext(node->getNext());
-		nodetomove->setPrevious(node);
-		node->setNext(nodetomove);
-		if (node==last) {
-			last=nodetomove;
-		}
+		insertAfter(node,nodetomove);
 	}
 }
 

@@ -38,7 +38,12 @@ PROGS0 = \
 	inetsocketserver$(EXE) \
 
 PROGS1 = \
-	linkedlist$(EXE) \
+	linkedlist-values$(EXE) \
+	linkedlist-nodes$(EXE) \
+	linkedlist-find$(EXE) \
+	linkedlist-sort$(EXE) \
+	linkedlist-iterate$(EXE) \
+	linkedlist-types$(EXE) \
 	listener$(EXE) \
 	logger$(EXE) \
 	memorymap$(EXE) \
@@ -84,6 +89,12 @@ PROGS2 = \
 	sharedmemory2$(EXE) \
 	shmfile$(EXE) \
 	signal$(EXE) \
+	singlylinkedlist-values$(EXE) \
+	singlylinkedlist-nodes$(EXE) \
+	singlylinkedlist-find$(EXE) \
+	singlylinkedlist-sort$(EXE) \
+	singlylinkedlist-iterate$(EXE) \
+	linkedlist-types$(EXE) \
 	snooze$(EXE) \
 	stdio$(EXE) \
 	stringbuffer$(EXE) \
@@ -203,8 +214,23 @@ inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
 inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ inetsocketserver.$(OBJ) $(LIBS)
 
-linkedlist$(EXE): linkedlist.cpp linkedlist.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist.$(OBJ) $(LIBS)
+linkedlist-values$(EXE): linkedlist-values.cpp linkedlist-values.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-values.$(OBJ) $(LIBS)
+
+linkedlist-nodes$(EXE): linkedlist-nodes.cpp linkedlist-nodes.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-nodes.$(OBJ) $(LIBS)
+
+linkedlist-find$(EXE): linkedlist-find.cpp linkedlist-find.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-find.$(OBJ) $(LIBS)
+
+linkedlist-sort$(EXE): linkedlist-sort.cpp linkedlist-sort.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-sort.$(OBJ) $(LIBS)
+
+linkedlist-iterate$(EXE): linkedlist-iterate.cpp linkedlist-iterate.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-iterate.$(OBJ) $(LIBS)
+
+linkedlist-types$(EXE): linkedlist-types.cpp linkedlist-types.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-types.$(OBJ) $(LIBS)
 
 listener$(EXE): listener.cpp listener.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ listener.$(OBJ) $(LIBS)
@@ -334,6 +360,24 @@ shmfile$(EXE): shmfile.cpp shmfile.$(OBJ)
 
 signal$(EXE): signal.cpp signal.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ signal.$(OBJ) $(LIBS)
+
+singlylinkedlist-values$(EXE): singlylinkedlist-values.cpp singlylinkedlist-values.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-values.$(OBJ) $(LIBS)
+
+singlylinkedlist-nodes$(EXE): singlylinkedlist-nodes.cpp singlylinkedlist-nodes.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-nodes.$(OBJ) $(LIBS)
+
+singlylinkedlist-find$(EXE): singlylinkedlist-find.cpp singlylinkedlist-find.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-find.$(OBJ) $(LIBS)
+
+singlylinkedlist-sort$(EXE): singlylinkedlist-sort.cpp singlylinkedlist-sort.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-sort.$(OBJ) $(LIBS)
+
+singlylinkedlist-iterate$(EXE): singlylinkedlist-iterate.cpp singlylinkedlist-iterate.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-iterate.$(OBJ) $(LIBS)
+
+singlylinkedlist-types$(EXE): singlylinkedlist-types.cpp singlylinkedlist-types.$(OBJ)
+	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-types.$(OBJ) $(LIBS)
 
 snooze$(EXE): snooze.cpp snooze.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ snooze.$(OBJ) $(LIBS)

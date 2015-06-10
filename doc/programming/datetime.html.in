@@ -30,7 +30,7 @@
 @datetime-math.cpp.html@
 </blockquote>
 
-<p>The datetime class also provides methods for converting between timezones.</p>
+<p>The datetime class also provides methods for getting information about timezones and converting date/times between timezones.</p>
 
 <blockquote class="code">
 @datetime-tz.cpp.html@

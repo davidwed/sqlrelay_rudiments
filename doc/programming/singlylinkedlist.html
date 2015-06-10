@@ -1,16 +1,25 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the linkedlist class</title>
+<title>firstworks   Programming with Rudiments using the singlylinkedlist class</title>
 <link href="../css/styles.css" rel="stylesheet">
 </head>
 <body>
 
-<span class="heading">Using the linkedlist class</span><br><br>
+<span class="heading">Using the singlylinkedlist class</span><br><br>
 
-<p>The linkedlist class allows you to store arbitrary data in a doubly-linked list.</p>
+<p>The <a href="../classes/html/classsinglylinkedlist.html">singlylinkedlist class</a> allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.</p>
 
-<p>Since lists of strings are commonly used, a stringlist typedef is provided for convenience as well.</p>
+<p>Each singlylinkedlist is composed of a series of singlylinkedlistnodes.  Each singlylinkedlistnode contains a value.</p>
 
+<p>This class is similar to the <a href="../classes/html/classlinkedlist.html">linkedlist class</a> but uses less memory and many of its operations are faster.</p>
+
+<p>However, the move, detach and remove operations are much slower.  If your application must run these operations regularly, you should consider using the linkedlist class instead.</p>
+
+<p>The singlylinkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
+
+<p>Note that unlike the linkedlist class, there is no method for inserting a value before another value, only a method for inserting a value after another value.</p>
+
+<blockquote class="code">
 
 <script type='text/javascript'>
 <!--
@@ -18,10 +27,286 @@
 -->
 </script>
 <font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/singlylinkedlist.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
 <font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// apppend values to the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(<font color="#ff00ff">6</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(<font color="#ff00ff">7</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// prepend values to the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#ff00ff">2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#ff00ff">1</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(-<font color="#ff00ff">1</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(-<font color="#ff00ff">2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(-<font color="#ff00ff">2</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(-<font color="#ff00ff">2</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// insert values before and after other values</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.insertAfter(sll.find(<font color="#ff00ff">2</font>),<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.insertAfter(sll.find(<font color="#ff00ff">3</font>),<font color="#ff00ff">4</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove values from the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.remove(-<font color="#ff00ff">1</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// remove all of a particular value from the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.removeAll(-<font color="#ff00ff">2</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// length</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;The list contains&nbsp;</font><font color="#6a5acd">%lld</font><font color="#ff00ff">&nbsp;nodes.</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,sll.getLength());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;Current contents:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the first 3 values in the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;First 3 values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.print(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clear the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.clear();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;The list contains&nbsp;</font><font color="#6a5acd">%lld</font><font color="#ff00ff">&nbsp;nodes after clearing it.</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.getLength());<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>The singlylinkedlist class also provides methods for manipulating list nodes directly.</p>
+
+<p>Note that unlike the linkedlist class, there are no methods for inserting or moving a node before another node, only methods for inserting and moving a node after another node.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/singlylinkedlist.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// apppend nodes to the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">5</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">6</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">7</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// prepend nodes to the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">2</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">1</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">0</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// insert nodes</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.insertAfter(sll.find(<font color="#ff00ff">2</font>),<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">3</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.insertAfter(sll.find(<font color="#ff00ff">3</font>),<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">4</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// move nodes around</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">8</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">9</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.prepend(<font color="#a52a2a"><b>new</b></font>&nbsp;singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;(<font color="#ff00ff">10</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.moveAfter(sll.find(<font color="#ff00ff">7</font>),sll.find(<font color="#ff00ff">8</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.moveAfter(sll.find(<font color="#ff00ff">8</font>),sll.find(<font color="#ff00ff">9</font>));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.moveAfter(sll.find(<font color="#ff00ff">9</font>),sll.find(<font color="#ff00ff">10</font>));<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// length</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;The list contains&nbsp;</font><font color="#6a5acd">%lld</font><font color="#ff00ff">&nbsp;nodes.</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>,sll.getLength());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;Current contents:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the first 3 values in the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;First 3 values:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.print(<font color="#ff00ff">3</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>The singlylinkedlist class also provides methods for sorting the list.</p>
+
+<p>Methods for both insertion and heap sort are provided.  Insertion sort is slow, for large lists, but doesn't require any additional memory.  Heap sort is fast, even for large lists, but requires additional memory.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/singlylinkedlist.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/randomnumber.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllis;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllhs;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// generate random numbers and append them to the lists</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;randomnumber&nbsp;&nbsp;&nbsp;&nbsp;rr;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rr.setSeed(randomnumber::getSeed());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;generating numbers...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>uint16_t</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20000</font>; i++) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>uint32_t</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rr.generateNumber(&amp;num);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllis.append(num);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllhs.append(num);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// sort one list using insertion sort</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;sorting using insertion sort...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllis.insertionSort();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// sort one list using heap sort</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;sorting using heap sort...</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllhs.heapSort();<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the lists</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;insertion sorted list</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllis.print(<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;...</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;heap sorted list</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sllhs.print(<font color="#ff00ff">5</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;...</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>The singlylinkedlist class also provides methods for manually iterating through the list.</p>
+
+<p>Note, that unlike the linkedlistnode class, the singlylinkedlistnode class does not have a getPrevious() method.  Thus, it is impossible to iterate backwards through a singlylinkedlist.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/singlylinkedlist.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// apppend values to the list</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>uint32_t</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sll.append(i);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the list forwards, all on one line</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(singlylinkedlistnode&lt;<font color="#2e8b57"><b>uint32_t</b></font>&gt; *n=sll.getFirst();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n; n=n-&gt;getNext()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&nbsp;&quot;</font>,n-&gt;getValue());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n\n</font><font color="#ff00ff">&quot;</font>);<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
+
+<p>Since the singlylinkedlist class is template-based, it can store any type of data.</p>
+
+<p>Note that the print() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
+
+<p>Note also that the singlylinkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they must be deleted manually.  They will not be deleted automatically when the list is cleared.</p>
+
+<blockquote class="code">
+
+<script type='text/javascript'>
+<!--
+
+-->
+</script>
+<font face="monospace">
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/singlylinkedlist.h&gt;</font><br>
+<font color="#800080">#include&nbsp;</font><font color="#ff00ff">&lt;rudiments/stdio.h&gt;</font><br>
+<br>
+<br>
+<font color="#0000ff">// Define a simple class.&nbsp;&nbsp;Instances of it will be stored in a list later.</font><br>
+<font color="#2e8b57"><b>class</b></font>&nbsp;myclass {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>public</b></font>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myclass(<font color="#2e8b57"><b>int64_t</b></font>&nbsp;v) { value=v; }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>void</b></font>&nbsp;&nbsp;&nbsp;&nbsp;print() { stdoutput.printf(<font color="#ff00ff">&quot;value:&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,value); }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>private</b></font>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>int64_t</b></font>&nbsp;value;<br>
+};<br>
+<br>
+<br>
+<font color="#2e8b57"><b>int</b></font>&nbsp;main(<font color="#2e8b57"><b>int</b></font>&nbsp;argc,&nbsp;<font color="#2e8b57"><b>const</b></font>&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;**argv) {<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// lists of various types</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>int16_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i16sll;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;<font color="#2e8b57"><b>int64_t</b></font>&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i64sll;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;* &gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssll;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;singlylinkedlist&lt; myclass * &gt;&nbsp;&nbsp; osll;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// populate the lists</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>int64_t</b></font>&nbsp;i=<font color="#ff00ff">0</font>; i&lt;<font color="#ff00ff">20</font>; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i16sll.append(i);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i64sll.append(i);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssll.append(charstring::parseNumber(i));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;osll.append(<font color="#a52a2a"><b>new</b></font>&nbsp;myclass(i));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print the lists of primitive types</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;list of 16-bit integers:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i16sll.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;list of 64-bit integers:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i16sll.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;list of strings:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i16sll.print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// manually print the list of objects</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;list of objects:</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(singlylinkedlistnode&lt; myclass * &gt; *n=osll.getFirst();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n; n=n-&gt;getNext()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n-&gt;getValue()-&gt;print();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.write(<font color="#6a5acd">'\n'</font>);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// clean up</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(singlylinkedlistnode&lt;&nbsp;<font color="#2e8b57"><b>char</b></font>&nbsp;* &gt; *n=ssll.getFirst();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n; n=n-&gt;getNext()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>[] n-&gt;getValue();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(singlylinkedlistnode&lt; myclass * &gt; *n=osll.getFirst();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n; n=n-&gt;getNext()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>delete</b></font>&nbsp;n-&gt;getValue();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</font>
+<!-- vim: set foldmethod=manual : -->
+</blockquote>
 
 </body>
 </html>

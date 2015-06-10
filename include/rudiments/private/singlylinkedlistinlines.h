@@ -187,9 +187,12 @@ bool SINGLYLINKEDLIST_CLASS::remove(valuetype value) {
 SINGLYLINKEDLIST_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool SINGLYLINKEDLIST_CLASS::removeAll(valuetype value) {
+	if (!first) {
+		return true;
+	}
 	bool	retval=false;
 	singlylinkedlistnode<valuetype> *current=first;
-	if (!current->compare(value)) {
+	while (!current->compare(value)) {
 		retval=true;
 		if (first==last) {
 			first=NULL;
