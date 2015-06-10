@@ -40,7 +40,7 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	// declare the threads and assign each a function to run
+	// create the threads and assign each a function to run
 	thread	t1;
 	thread	t2;
 	t1.setFunction((void *(*)(void *))countUp);
@@ -57,9 +57,9 @@ int main(int argc, const char **argv) {
 	a2.id=2;
 	a2.max=200;
 
-	// create the threads
-	t1.create(&a1);
-	t2.create(&a2);
+	// run the threads
+	t1.run(&a1);
+	t2.run(&a2);
 
 	// join the threads
 	int32_t	t1status=-1;

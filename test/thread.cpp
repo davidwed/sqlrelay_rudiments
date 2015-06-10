@@ -53,10 +53,10 @@ int main(int argc, const char **argv) {
 
 	// run threads in attached mode
 	stdoutput.printf("attached:\n");
-	if (!t1.create(&a1)) {
+	if (!t1.run(&a1)) {
 		stdoutput.printf(" 1: create failed\n");
 	}
-	if (!t2.create(&a2)) {
+	if (!t2.run(&a2)) {
 		stdoutput.printf(" 2: create failed\n");
 	}
 
@@ -80,10 +80,10 @@ int main(int argc, const char **argv) {
 
 	// run threads in detached mode
 	stdoutput.printf("detached:\n");
-	if (!t1.create(&a1)) {
+	if (!t1.run(&a1)) {
 		stdoutput.printf(" 1: create failed\n");
 	}
-	if (!t2.create(&a2)) {
+	if (!t2.run(&a2)) {
 		stdoutput.printf(" 2: create failed\n");
 	}
 

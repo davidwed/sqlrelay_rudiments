@@ -105,11 +105,11 @@ bool thread::getStackSize(size_t *stacksize) {
 	#endif
 }
 
-bool thread::create() {
-	return create(NULL);
+bool thread::run() {
+	return run(NULL);
 }
 
-bool thread::create(void *arg) {
+bool thread::run(void *arg) {
 	pvt->_arg=arg;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();

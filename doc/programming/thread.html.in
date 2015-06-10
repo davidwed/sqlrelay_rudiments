@@ -7,9 +7,17 @@
 
 <span class="heading">Using the thread class</span><br><br>
 
-<p>...</p>
+<p>The <a href="../classes/html/classthread.html">thread class</a> provides a simple thread implementation.</p>
 
-@thread.cpp.html@
+<p>In this implementation, a thread 
+
+<blockquote class="code">
+@thread-join.cpp.html@
+</blockquote>
+
+<blockquote class="code">
+@thread-detach.cpp.html@
+</blockquote>
 
 </body>
 </html>

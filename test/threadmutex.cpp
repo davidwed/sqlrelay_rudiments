@@ -87,10 +87,10 @@ int main(int argc, const char **argv) {
 		sem->wait(1);
 	#endif
 
-	// create threads
+	// run threads
 	for (uint8_t j=0; j<5; j++) {
-		if (!t[j].create(&a[j])) {
-			stdoutput.printf(" %d: create failed\n",j);
+		if (!t[j].run(&a[j])) {
+			stdoutput.printf(" %d: run failed\n",j);
 		}
 	}
 

@@ -17,12 +17,12 @@ class RUDIMENTS_DLLSPEC thread {
 		/** Deletes this instance of the thread class. */
 		virtual	~thread();
 
-		/** Defines the function that will be run when create() is
+		/** Defines the function that will be run when run() is
 		 *  called. */
 		void	setFunction(void *(*function)(void *));
 
 		/** Defines the argument that will be passed to the function
-		 *  when create() is called. */
+		 *  when run() is called. */
 		void	setArgument(void *arg);
 
 		/** Sets this thread's stack size to "stacksize".  Returns true
@@ -37,13 +37,13 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  by the setFunction() method and passing that function
 		 *  whatever argument was set by the setArgument() method.
 		 *  Returns true on success and false if an error occurred. */
-		bool	create();
+		bool	run();
 
 		/** Starts a new thread by running whatever function was set
 		 *  by the setFunction() method, passing that function argument
 		 *  "arg".  Returns true on success and false if an error
 		 *  occurred. */
-		bool	create(void *arg);
+		bool	run(void *arg);
 
 		/** Causes a thread to exit with the value stored in the
 		 *  location pointed to by "status".  If another thread is
@@ -52,7 +52,7 @@ class RUDIMENTS_DLLSPEC thread {
 		void	exit(int32_t *status);
 
 		/** Waits for the function set by setFunction() and run by
-		 *  create() to call exit() or return.  This method should be
+		 *  run() to call exit() or return.  This method should be
 		 *  called by a second thread.  If non-NULL, "status" will be
 		 *  set to the exit status of the thread.  Returns true on
 		 *  success and false if an error occurred. */
