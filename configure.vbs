@@ -58,7 +58,6 @@ srcs="winsock.cpp "+_
 	"server.cpp "+_
 	"serviceentry.cpp "+_
 	"sharedmemory.cpp "+_
-	"shmfile.cpp "+_
 	"signalclasses.cpp "+_
 	"snooze.cpp "+_
 	"stringbuffer.cpp "+_
@@ -117,7 +116,6 @@ lobjs="winsock.obj "+_
 	"server.obj "+_
 	"serviceentry.obj "+_
 	"sharedmemory.obj "+_
-	"shmfile.obj "+_
 	"signalclasses.obj "+_
 	"snooze.obj "+_
 	"stringbuffer.obj "+_
@@ -184,7 +182,6 @@ headers2="protocolentry.h "+_
 	"server.h "+_
 	"serviceentry.h "+_
 	"sharedmemory.h "+_
-	"shmfile.h "+_
 	"signalclasses.h "+_
 	"snooze.h "+_
 	"stringbuffer.h "+_
@@ -312,9 +309,7 @@ privateheaders5="bytestringincludes.h "+_
 	"serviceentry.h "+_
 	"serviceentryincludes.h "+_
 	"sharedmemory.h "+_
-	"sharedmemoryincludes.h "+_
-	"shmfile.h "+_
-	"shmfileincludes.h "
+	"sharedmemoryincludes.h "
 privateheaders6="signalhandler.h "+_
 	"signalset.h "+_
 	"signalclassesincludes.h "+_

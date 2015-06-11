@@ -652,8 +652,6 @@ SONAME_VERSION_INFO
 RUDIMENTS_VERSION
 GETPGIDLIB
 DLLIB
-HAS_SHM_OPEN
-SHMOPENLIB
 HAS_MEMORYMAP
 CRYPTLIB
 CLOCKNANOSLEEPLIB
@@ -825,7 +823,6 @@ enable_serialportprofile
 enable_server
 enable_serviceentry
 enable_sharedmemory
-enable_shmfile
 enable_signalclasses
 enable_snooze
 enable_stringbuffer
@@ -1521,7 +1518,6 @@ Optional Features:
   --disable-server        Don't build server class
   --disable-serviceentry  Don't build serviceentry class
   --disable-sharedmemory  Don't build sharedmemory
-  --disable-shmfile       Don't build shmfile class
   --disable-signalclasses Don't build signalclasses
   --disable-snooze        Don't build snooze class
   --disable-stringbuffer  Don't build stringbuffer class
@@ -2854,13 +2850,6 @@ if test "${enable_sharedmemory+set}" = set; then :
   enableval=$enable_sharedmemory; INCLUDE_SHAREDMEMORY="0"
 else
   INCLUDE_SHAREDMEMORY="1"
-fi
-
-# Check whether --enable-shmfile was given.
-if test "${enable_shmfile+set}" = set; then :
-  enableval=$enable_shmfile; INCLUDE_SHMFILE="0"
-else
-  INCLUDE_SHMFILE="1"
 fi
 
 # Check whether --enable-signalclasses was given.
@@ -27729,71 +27718,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-
-
-	HAS_SHM_OPEN="no"
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for shm_open" >&5
-$as_echo_n "checking for shm_open... " >&6; }
-
-	DONE=""
-	for i in "" "-lrt"
-	do
-
-SAVECPPFLAGS="$CPPFLAGS"
-SAVELIBS="$LIBS"
-SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS"
-LIBS="$i"
-LD_LIBRARY_PATH=""
-export LD_LIBRARY_PATH
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#include <sys/mman.h>
-int
-main ()
-{
-shm_open(NULL,0,0);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  SHMOPENLIB="$i"; DONE="yes"; HAS_SHM_OPEN="yes"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-CPPFLAGS="$SAVECPPFLAGS"
-LIBS="$SAVELIBS"
-LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-		if ( test -n "$DONE" )
-		then
-			break
-		fi
-	done
-
-	if ( test -n "$DONE" )
-	then
-
-$as_echo "#define RUDIMENTS_HAVE_SHM_OPEN 1" >>confdefs.h
-
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	fi
-
-
-
-
+FW_CHECK_SHM_OPEN
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ioctlsocket" >&5
 $as_echo_n "checking for ioctlsocket... " >&6; }
@@ -31649,14 +31574,6 @@ then
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 sharedmemory.h sharedmemoryincludes.h"
 	SRCS="$SRCS sharedmemory.cpp"
 	LOBJS="$LOBJS sharedmemory.lo"
-fi
-
-if ( test "$INCLUDE_SHMFILE" = "1" )
-then
-	HEADERS2="$HEADERS2 shmfile.h"
-	PRIVATEHEADERS5="$PRIVATEHEADERS5 shmfile.h shmfileincludes.h"
-	SRCS="$SRCS shmfile.cpp"
-	LOBJS="$LOBJS shmfile.lo"
 fi
 
 if ( test "$INCLUDE_SIGNALCLASSES" = "1" )

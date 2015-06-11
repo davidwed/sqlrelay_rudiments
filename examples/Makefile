@@ -89,7 +89,6 @@ PROGS2 = \
 	serviceentry$(EXE) \
 	sharedmemory1$(EXE) \
 	sharedmemory2$(EXE) \
-	shmfile$(EXE) \
 	signal$(EXE) \
 	singlylinkedlist-values$(EXE) \
 	singlylinkedlist-nodes$(EXE) \
@@ -362,9 +361,6 @@ sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.$(OBJ)
 
 sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory2.$(OBJ) $(LIBS)
-
-shmfile$(EXE): shmfile.cpp shmfile.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ shmfile.$(OBJ) $(LIBS)
 
 signal$(EXE): signal.cpp signal.$(OBJ)
 	$(LTLINK) $(CXX) $(OUT)$@ signal.$(OBJ) $(LIBS)

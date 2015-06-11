@@ -43,7 +43,6 @@ PROGS1= dictionary \
 	bytebuffer \
 	device \
 	serialport \
-	shmfile \
 	chat \
 	crypt
 
@@ -278,9 +277,6 @@ device: device.cpp device.$(OBJ)
 
 serialport: serialport.cpp serialport.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) serialport.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-shmfile: shmfile.cpp shmfile.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) shmfile.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 chat: chat.cpp chat.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) chat.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

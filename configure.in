@@ -242,10 +242,6 @@ AC_ARG_ENABLE(sharedmemory,
 	[  --disable-sharedmemory  Don't build sharedmemory],
 	INCLUDE_SHAREDMEMORY="0",
 	INCLUDE_SHAREDMEMORY="1")
-AC_ARG_ENABLE(shmfile,
-	[  --disable-shmfile       Don't build shmfile class],
-	INCLUDE_SHMFILE="0",
-	INCLUDE_SHMFILE="1")
 AC_ARG_ENABLE(signalclasses,
 	[  --disable-signalclasses Don't build signalclasses],
 	INCLUDE_SIGNALCLASSES="0",
@@ -3855,14 +3851,6 @@ then
 	PRIVATEHEADERS5="$PRIVATEHEADERS5 sharedmemory.h sharedmemoryincludes.h"
 	SRCS="$SRCS sharedmemory.cpp"
 	LOBJS="$LOBJS sharedmemory.lo"
-fi
-
-if ( test "$INCLUDE_SHMFILE" = "1" )
-then
-	HEADERS2="$HEADERS2 shmfile.h"
-	PRIVATEHEADERS5="$PRIVATEHEADERS5 shmfile.h shmfileincludes.h"
-	SRCS="$SRCS shmfile.cpp"
-	LOBJS="$LOBJS shmfile.lo"
 fi
 
 if ( test "$INCLUDE_SIGNALCLASSES" = "1" )

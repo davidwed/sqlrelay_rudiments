@@ -2145,41 +2145,6 @@ AC_DEFUN([FW_CHECK_CLOCK_NANOSLEEP],
 	AC_SUBST(CLOCKNANOSLEEPLIB)
 ])
 
-dnl check to see if shm_open is available
-AC_DEFUN([FW_CHECK_SHM_OPEN],
-[
-
-	HAS_SHM_OPEN="no"
-	AC_MSG_CHECKING(for shm_open)
-
-	DONE=""
-	for i in "" "-lrt"
-	do
-		FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#include <sys/mman.h>],[shm_open(NULL,0,0);],[$CPPFLAGS],[$i],[],[SHMOPENLIB="$i"; DONE="yes"; HAS_SHM_OPEN="yes"],[])
-		if ( test -n "$DONE" )
-		then
-			break
-		fi
-	done
-
-	if ( test -n "$DONE" )
-	then
-		AC_DEFINE(RUDIMENTS_HAVE_SHM_OPEN,1,Some systems have shm_open)
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
-
-	AC_SUBST(SHMOPENLIB)
-	AC_SUBST(HAS_SHM_OPEN)
-])
-
 dnl check to see which should be used of -lsocket, -lnsl and -lxnet
 AC_DEFUN([FW_CHECK_SOCKET_LIBS],
 [

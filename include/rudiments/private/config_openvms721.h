@@ -1015,9 +1015,6 @@
 /* Some systems have shmget */
 #undef RUDIMENTS_HAVE_SHMGET
 
-/* Some systems have shm_open */
-#define RUDIMENTS_HAVE_SHM_OPEN 1
-
 /* Some systems have sigaction */
 #define RUDIMENTS_HAVE_SIGACTION 1
 
