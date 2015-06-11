@@ -2444,8 +2444,6 @@ CreateIoCompletionPort(0,0,0,0);
 ],
 AC_DEFINE(RUDIMENTS_HAVE_CREATE_IO_COMPLETION_PORT,1,Some systems have CreateIoCompletionPort) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-FW_CHECK_SHM_OPEN
-
 AC_MSG_CHECKING(for ioctlsocket)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINSOCK2_H
 	#include <winsock2.h>

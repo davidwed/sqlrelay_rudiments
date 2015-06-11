@@ -27718,8 +27718,6 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-FW_CHECK_SHM_OPEN
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ioctlsocket" >&5
 $as_echo_n "checking for ioctlsocket... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

@@ -73,9 +73,6 @@ NANOSLEEPLIB = @NANOSLEEPLIB@
 # clock_nanosleep library
 CLOCKNANOSLEEPLIB = @CLOCKNANOSLEEPLIB@
 
-# shmopen library
-SHMOPENLIB = @SHMOPENLIB@
-
 # crypt library
 CRYPTLIB = @CRYPTLIB@
 
