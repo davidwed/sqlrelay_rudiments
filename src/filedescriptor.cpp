@@ -2471,15 +2471,15 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 }
 
 void filedescriptor::safePrint(char c) {
-	return safePrint((unsigned char)c);
+	safePrint((unsigned char)c);
 }
 
 void filedescriptor::safePrint(const char *string, int32_t length) {
-	return safePrint((const unsigned char *)string,length);
+	safePrint((const unsigned char *)string,length);
 }
 
 void filedescriptor::safePrint(const char *string) {
-	return safePrint((const unsigned char *)string);
+	safePrint((const unsigned char *)string);
 }
 
 static char hex[17]="0123456789ABCDEF";
