@@ -8,9 +8,25 @@
 <a name="datetime"></a>
 <span class="heading">Using the datetime class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#formats">Output Formats</a></li>
+<li><a href="#sources">Date/Time Sources</a></li>
+<li><a href="#math">Date Math</a></li>
+<li><a href="#timezones">Timezones</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classdatetime.html">datetime class</a> represents a date/time combination and provides methods for getting and setting dates and times, converting date/time formats and accessing various date/time values.</p>
 
 <p>Dealing with dates and times is classically one of the most difficult things to do on a computer.  The "standard" functions and structures associated with dates and times are complex, vary widely from platform to platform and in many cases are not thread safe.  The datetime class attempts to rectify this situation.</p>
+
+<br>
+<a name="formats"></a>
+<h3>Output Formats</h3>
 
 <p>The datetime class provides basic methods for getting the system date and time, and returning it in various formats.</p>
 
@@ -62,6 +78,10 @@
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
+<br>
+<a name="sources"></a>
+<h3>Date/Time Sources</h3>
+
 <p>An instance of the datetime class can be initialized from many different sources: the system clock, a formatted string, or from the number of seconds (and optionally microseconds) since 1970.</p>
 
 <blockquote class="code">
@@ -98,6 +118,10 @@
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<br>
+<a name="math"></a>
+<h3>Date Math</h3>
 
 <p>The datetime class also provides methods for doing date math.</p>
 
@@ -145,6 +169,10 @@
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<br>
+<a name="timezones"></a>
+<h3>Timezones</h3>
 
 <p>The datetime class also provides methods for getting information about timezones and converting date/times between timezones.</p>
 

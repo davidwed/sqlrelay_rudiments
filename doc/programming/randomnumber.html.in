@@ -7,6 +7,16 @@
 
 <span class="heading">Using the randomnumber class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#afew">Generating a Few Numbers</a></li>
+<li><a href="#lots">Generating Lots of Numbers</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classrandomnumber.html">randomnumber class</a> provides methods for generating and scaling random numbers.</p>
 
 <p>Superfluous background:</p>
@@ -17,11 +27,19 @@
 
 <p>Calls to the methods that generate scaled numbers may return the same value before all numbers in the range have been returned because they just scale down unique numbers returned from a larger range.</p>
 
+<br>
+<a name="afew"></a>
+<h3>Generating a Few Numbers</h3>
+
 <p>The randomnumber class provides several static methods that are useful if you need to generate a few numbers here and there.</p>
 
 <blockquote class="code">
 @randomnumber-static.cpp.html@
 </blockquote>
+
+<br>
+<a name="lots"></a>
+<h3>Generating Lots of Numbers</h3>
 
 <p>If you need to generate lots of numbers though, you should create an instance, seed it, and use it over and over to generate numbers.</p>
 

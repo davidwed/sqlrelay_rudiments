@@ -64,6 +64,7 @@
 	removed arg parameter from thread::setFunction(), added
 		thread::setArgument(), and added thread::create(arg)
 	changed thread::create() to thread::run()
+	wrote lots of example code and updated the programming docs
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()

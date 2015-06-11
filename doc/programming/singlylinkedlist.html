@@ -7,6 +7,19 @@
 
 <span class="heading">Using the singlylinkedlist class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#values">Manipulating Values</a></li>
+<li><a href="#nodes">Manipulating Nodes</a></li>
+<li><a href="#sort">Sorting</a></li>
+<li><a href="#iterate">Iterating Manually</a></li>
+<li><a href="#types">Data Types</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classsinglylinkedlist.html">singlylinkedlist class</a> allows you to store an arbitrary number of values in a singly-linked list.  Since the singlylinkedlist class is template-based, you can store arbitrary types of values.</p>
 
 <p>Each singlylinkedlist is composed of a series of singlylinkedlistnodes.  Each singlylinkedlistnode contains a value.</p>
@@ -14,6 +27,10 @@
 <p>This class is similar to the <a href="../classes/html/classlinkedlist.html">linkedlist class</a> but uses less memory and many of its operations are faster.</p>
 
 <p>However, the move, detach and remove operations are much slower.  If your application must run these operations regularly, you should consider using the linkedlist class instead.</p>
+
+<br>
+<a name="values"></a>
+<h3>Manipulating Values</h3>
 
 <p>The singlylinkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
 
@@ -79,6 +96,10 @@
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
+<br>
+<a name="nodes"></a>
+<h3>Manipulating Nodes</h3>
+
 <p>The singlylinkedlist class also provides methods for manipulating list nodes directly.</p>
 
 <p>Note that unlike the linkedlist class, there are no methods for inserting or moving a node before another node, only methods for inserting and moving a node after another node.</p>
@@ -137,6 +158,10 @@
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
+<br>
+<a name="sort"></a>
+<h3>Sorting</h3>
+
 <p>The singlylinkedlist class also provides methods for sorting the list.</p>
 
 <p>Methods for both insertion and heap sort are provided.  Insertion sort is slow, for large lists, but doesn't require any additional memory.  Heap sort is fast, even for large lists, but requires additional memory.</p>
@@ -194,6 +219,10 @@
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
+<br>
+<a name="iterate"></a>
+<h3>Iterating Manually</h3>
+
 <p>The singlylinkedlist class also provides methods for manually iterating through the list.</p>
 
 <p>Note, that unlike the linkedlistnode class, the singlylinkedlistnode class does not have a getPrevious() method.  Thus, it is impossible to iterate backwards through a singlylinkedlist.</p>
@@ -228,6 +257,10 @@
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<br>
+<a name="types"></a>
+<h3>Data Types</h3>
 
 <p>Since the singlylinkedlist class is template-based, it can store any type of data.</p>
 

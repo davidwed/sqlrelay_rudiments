@@ -7,13 +7,37 @@
 
 <span class="heading">Using the thread class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#ordinary">Ordinary Threads</a></li>
+<li><a href="#detach">Detached Threads</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classthread.html">thread class</a> provides a simple thread implementation.</p>
 
-<p>In this implementation, a thread 
+<p>In this implementation, each instance of the thread class corresponds to a separate thread.  The setFunction() method associates a function with the thread.  When the run() method is called, a new thread is created, and the function is run in the new therad.  An optionsl argument may be passed to the function via the run() method.</p>
+
+<p>Note that rudiments supports platforms that don't support threads, and it is possible to explicitly compile rudiments without thread support.  The supportsThreads() method returns true or false, indicating whether thread support is enabled or not.</p>
+
+<br>
+<a name="ordinary"></a>
+<h3>Ordinary Threads</h3>
+
+<p>Ordinarily, a thread runs until its function returns, or calls the exit() method.  Another thread (usually the main thread of the parent process) must call the join() method to completely dispose of the thread (analagous to "waiting on a child process") and get its exit status.</p> 
 
 <blockquote class="code">
 @thread-join.cpp.html@
 </blockquote>
+
+<br>
+<a name="detach"></a>
+<h3>Detached Threads</h3>
+
+<p>Alternatively, a thread may dissociate itself from the parent by calling the detach() method.  In this case, the thread is completely disposed of when its function returns.  The parent process will only exit when all threads have exited.  Note that if a thread calls detach(), there is no way for it to return an exit status.</p>
 
 <blockquote class="code">
 @thread-detach.cpp.html@

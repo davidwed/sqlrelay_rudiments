@@ -1,15 +1,19 @@
 <html>
 <head>
-<title>firstworks   Programming with Rudiments using the mutex class</title>
+<title>firstworks   Programming with Rudiments using the threadmutex class</title>
 <link href="../css/styles.css" rel="stylesheet">
 </head>
 <body>
 
-<span class="heading">Using the mutex class</span><br><br>
+<span class="heading">Using the threadmutex class</span><br><br>
 
-<p>...</p>
+<p>The <a href="../classes/html/classthreadmutex.html">threadmutex class</a> provides mutual exclusion locks between separate threads of a single process.</p>
 
-@mutex.cpp.html@
+<p>Intances of threadmutex can be used to protect critical sections of code or synchronize threads.</p>
+
+<blockquote class="code">
+@threadmutex.cpp.html@
+</blockquote>
 
 </body>
 </html>

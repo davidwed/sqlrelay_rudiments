@@ -9,23 +9,12 @@ struct args {
 	uint16_t	max;
 };
 
-// functions that will be spawned as a thread
-void countUp(void *args) {
+// function that will be spawned as a thread
+void count(void *args) {
 
 	struct args	*a=(struct args *)args;
 
 	for (uint16_t c=0; c<a->max; c++) {
-		stdoutput.printf("  %d: %d\n",a->id,c);
-	}
-
-	a->th->exit(&(a->id));
-}
-
-void countDown(void *args) {
-
-	struct args	*a=(struct args *)args;
-
-	for (uint16_t c=a->max; c>0; c--) {
 		stdoutput.printf("  %d: %d\n",a->id,c);
 	}
 
@@ -43,8 +32,8 @@ int main(int argc, const char **argv) {
 	// create the threads and assign each a function to run
 	thread	t1;
 	thread	t2;
-	t1.setFunction((void *(*)(void *))countUp);
-	t2.setFunction((void *(*)(void *))countDown);
+	t1.setFunction((void *(*)(void *))count);
+	t2.setFunction((void *(*)(void *))count);
 
 	// define arguments to pass to each thread
 	struct args	a1;

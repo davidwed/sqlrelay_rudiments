@@ -7,9 +7,24 @@
 
 <span class="heading">Using the regularexpression class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#quick">Quick Matches</a></li>
+<li><a href="#overandover">Matching Over and Over</a></li>
+<li><a href="#multiple">Multiple Unique Matches</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classregularexpression.html">regularexpression</a> class provides methods for making comparisons between text and regular expressions.</p>
 
 <p>Regular expressions are complex, powerful, used in command line programs like grep, sed and find, and extensively in Perl.</p>
+
+<br>
+<a name="quick"></a>
+<h3>Quick Matches</h3>
 
 <p>The regularexpression class provides a static match() method which is useful for a quick yes/no comparison.</p>
 
@@ -41,6 +56,10 @@
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<br>
+<a name="overandover"></a>
+<h3>Matching Over and Over</h3>
 
 <p>For patterns that need to be matched over and over, create an instance of the regularexpression class, compile() the pattern, and call match() to compare it to different strings.  The optional study() method can also be used to improve performance with complex patterns.</p>
 
@@ -85,6 +104,10 @@
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<br>
+<a name="multiple"></a>
+<h3>Multiple Unique Matches</h3>
 
 <p>Some patterns return multiple unique matches.  The methods getSubstringCount(), getSubstringStart()/getSubStringEnd(), and getSubstringStartOffset()/getSubstringEndOffset() can be used to get information about these matches.</p>
 

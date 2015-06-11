@@ -7,9 +7,26 @@
 
 <span class="heading">Using the linkedlist class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#values">Manipulating Values</a></li>
+<li><a href="#nodes">Manipulating Nodes</a></li>
+<li><a href="#sort">Sorting</a></li>
+<li><a href="#iterate">Iterating Manually</a></li>
+<li><a href="#types">Data Types</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classlinkedlist.html">linkedlist class</a> allows you to store an arbitrary number of values in a doubly-linked list.  Since the linkedlist class is template-based, you can store arbitrary types of values.</p>
 
 <p>Each linkedlist is composed of a series of linkedlistnodes.  Each linkedlistnode contains a value.</p>
+
+<br>
+<a name="values"></a>
+<h3>Manipulating Values</h3>
 
 <p>The linkedlist class provides methods for prepending, appending, inserting and removing values from a linked list, for finding values in the list, for getting the size of the list, clearing the list, and printing the list.</p>
 
@@ -17,11 +34,19 @@
 @linkedlist-values.cpp.html@
 </blockquote>
 
+<br>
+<a name="nodes"></a>
+<h3>Manipulating Nodes</h3>
+
 <p>The linkedlist class also provides methods for manipulating list nodes directly.</p>
 
 <blockquote class="code">
 @linkedlist-nodes.cpp.html@
 </blockquote>
+
+<br>
+<a name="sort"></a>
+<h3>Sorting</h3>
 
 <p>The linkedlist class also provides methods for sorting the list.</p>
 
@@ -31,11 +56,19 @@
 @linkedlist-sort.cpp.html@
 </blockquote>
 
+<br>
+<a name="iterate"></a>
+<h3>Iterating Manually</h3>
+
 <p>The linkedlist class also provides methods for manually iterating through the list.</p>
 
 <blockquote class="code">
 @linkedlist-iterate.cpp.html@
 </blockquote>
+
+<br>
+<a name="types"></a>
+<h3>Data Types</h3>
 
 <p>Since the linkedlist class is template-based, it can store any type of data.</p>
 
