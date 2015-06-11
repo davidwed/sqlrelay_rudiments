@@ -313,6 +313,7 @@ privateheaders5="bytestringincludes.h "+_
 privateheaders6="signalhandler.h "+_
 	"signalset.h "+_
 	"signalclassesincludes.h "+_
+	"snooze.h "+_
 	"snoozeincludes.h "+_
 	"stringbuffer.h "+_
 	"stringbufferincludes.h "+_
