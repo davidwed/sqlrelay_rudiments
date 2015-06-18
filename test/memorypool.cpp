@@ -35,7 +35,7 @@ int main(int argc, const char **argv) {
 	}
 	for (i=0; i<20; i++) {
 		char	*segment=(char *)mp->allocate(2);
-		for (int j=0; j<6; j++) {
+		for (int j=0; j<2; j++) {
 			segment[j]=(char)'A'+i;
 		}
 	}
