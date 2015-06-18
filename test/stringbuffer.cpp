@@ -169,8 +169,9 @@ int main(int argc, const char **argv) {
 
 
 	// create another buffer
-	char	*data=charstring::duplicate("1234567890");
-	sb=new stringbuffer(data,128,32);
+	char	*data=new char[128];
+	charstring::copy(data,"1234567890");
+	sb=new stringbuffer(data,sizeof(data),32);
 	stdoutput.printf("%s\n",sb->getString());
 	sb->append("1234567890");
 	stdoutput.printf("%s\n",sb->getString());
