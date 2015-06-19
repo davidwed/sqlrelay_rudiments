@@ -66,6 +66,7 @@
 	changed thread::create() to thread::run()
 	wrote lots of example code and updated the programming docs
 	removed unused shmfile class
+	fixed several LocalFree's that should have been delete[]'s
 
 0.50 - added dictionary::detach and dictionary::getValue(key)
 	added xmldom::getNullNode()
