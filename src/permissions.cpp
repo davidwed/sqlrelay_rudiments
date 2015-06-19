@@ -460,8 +460,8 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 		}
 
 		// clean up
-		LocalFree(groupsid);
-		LocalFree(ownersid);
+		delete[] groupsid;
+		delete[] ownersid;
 
 		// return the acl
 		return (void *)pacl;
