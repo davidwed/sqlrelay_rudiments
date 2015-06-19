@@ -655,8 +655,8 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 		}
 
 		// clean up
-		LocalFree(usersid);
-		LocalFree(groupsid);
+		delete[] usersid;
+		delete[] groupsid;
 		LocalFree(otherssid);
 	#endif
 
