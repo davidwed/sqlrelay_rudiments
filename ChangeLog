@@ -1,3 +1,5 @@
+0.52 -
+
 0.51 - added missing inline qualifiers to dynamicarray/staticarray method
 		implementations
 	added test for clock_settime, datetime class uses it if other set-time
