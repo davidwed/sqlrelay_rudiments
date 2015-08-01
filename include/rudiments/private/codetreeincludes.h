@@ -3,3 +3,5 @@
 
 #include <rudiments/xmldom.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/linkedlist.h>
+#include <rudiments/dictionary.h>

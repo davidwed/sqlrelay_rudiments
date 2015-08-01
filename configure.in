@@ -282,6 +282,10 @@ AC_ARG_ENABLE(codetree,
 	[  --disable-codetree      Don't build codetree class],
 	INCLUDE_CODETREE="0",
 	INCLUDE_CODETREE="1")
+AC_ARG_ENABLE(compiler,
+	[  --disable-compiler      Don't build compiler class],
+	INCLUDE_COMPILER="0",
+	INCLUDE_COMPILER="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -3931,6 +3935,14 @@ then
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 codetree.h codetreeincludes.h"
 	SRCS="$SRCS codetree.cpp"
 	LOBJS="$LOBJS codetree.lo"
+fi
+
+if ( test "$INCLUDE_COMPILER" = "1" )
+then
+	HEADERS3="$HEADERS3 compiler.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 compiler.h compilerincludes.h"
+	SRCS="$SRCS compiler.cpp"
+	LOBJS="$LOBJS compiler.lo"
 fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_INETCLIENT" = "1" )

@@ -1,4 +1,11 @@
-0.52 -
+0.52 - tweaked codetree's recursive break logic a bit
+	added compiler class
+	added case-insensitive methods to xmldomnode
+	added methods to xmldomnode that operate on descendents (as opposed to
+		just operating on direct children)
+	added methods to xmldomnode for deleting, wrapping, unwrapping
+	fixed dynamiclib::getError() bug on windows
+	tweaked -Werror detection in configure script
 
 0.51 - added missing inline qualifiers to dynamicarray/staticarray method
 		implementations

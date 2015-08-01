@@ -3,7 +3,7 @@ top_builddir = ..
 include ../config.mk
 
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
-LIBS=-L../src -lrudiments $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB)
+LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB)
 
 PROGS0 = \
 	character-isxxx$(EXE) \
@@ -41,7 +41,6 @@ PROGS0 = \
 PROGS1 = \
 	linkedlist-values$(EXE) \
 	linkedlist-nodes$(EXE) \
-	linkedlist-find$(EXE) \
 	linkedlist-sort$(EXE) \
 	linkedlist-iterate$(EXE) \
 	linkedlist-types$(EXE) \
@@ -92,7 +91,6 @@ PROGS2 = \
 	signal$(EXE) \
 	singlylinkedlist-values$(EXE) \
 	singlylinkedlist-nodes$(EXE) \
-	singlylinkedlist-find$(EXE) \
 	singlylinkedlist-sort$(EXE) \
 	singlylinkedlist-iterate$(EXE) \
 	singlylinkedlist-types$(EXE) \
@@ -109,7 +107,7 @@ PROGS2 = \
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2)
 
-.SUFFIXES: .$(OBJ) .obj
+.SUFFIXES: .lo .obj
 
 .cpp.lo:
 	$(LTCOMPILE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $< $(OUT)$@
@@ -126,289 +124,283 @@ clean:
 	$(LTCLEAN) $(RM) *.lo *.o *.obj
 
 character-isxxx$(EXE): character-isxxx.cpp character-isxxx.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)
 
 character-toxxx$(EXE): character-toxxx.cpp character-toxxx.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ character-toxxx.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ character-toxxx.$(OBJ) $(LIBS)
 
 character-inset$(EXE): character-inset.cpp character-inset.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ character-inset.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ character-inset.$(OBJ) $(LIBS)
 
 charstring-copy$(EXE): charstring-copy.cpp charstring-copy.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-copy.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-copy.$(OBJ) $(LIBS)
 
 charstring-compare$(EXE): charstring-compare.cpp charstring-compare.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-compare.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-compare.$(OBJ) $(LIBS)
 
 charstring-find$(EXE): charstring-find.cpp charstring-find.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-find.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-find.$(OBJ) $(LIBS)
 
 charstring-transform$(EXE): charstring-transform.cpp charstring-transform.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-transform.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-transform.$(OBJ) $(LIBS)
 
 charstring-split$(EXE): charstring-split.cpp charstring-split.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-split.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-split.$(OBJ) $(LIBS)
 
 charstring-numbers$(EXE): charstring-numbers.cpp charstring-numbers.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-numbers.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-numbers.$(OBJ) $(LIBS)
 
 charstring-encode$(EXE): charstring-encode.cpp charstring-encode.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ charstring-encode.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ charstring-encode.$(OBJ) $(LIBS)
 
 chat$(EXE): chat.cpp chat.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ chat.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ chat.$(OBJ) $(LIBS)
 
 clientserverfactory$(EXE): clientserverfactory.cpp clientserverfactory.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ clientserverfactory.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ clientserverfactory.$(OBJ) $(LIBS)
 
 commandline$(EXE): commandline.cpp commandline.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ commandline.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ commandline.$(OBJ) $(LIBS)
 
 complexinetsocketserver$(EXE): complexinetsocketserver.cpp complexinetsocketserver.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ complexinetsocketserver.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ complexinetsocketserver.$(OBJ) $(LIBS)
 
 crypt$(EXE): crypt.cpp crypt.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ crypt.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ crypt.$(OBJ) $(LIBS)
 
 datetime-basic$(EXE): datetime-basic.cpp datetime-basic.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ datetime-basic.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ datetime-basic.$(OBJ) $(LIBS)
 
 datetime-init$(EXE): datetime-init.cpp datetime-init.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ datetime-init.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ datetime-init.$(OBJ) $(LIBS)
 
 datetime-math$(EXE): datetime-math.cpp datetime-math.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ datetime-math.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ datetime-math.$(OBJ) $(LIBS)
 
 datetime-tz$(EXE): datetime-tz.cpp datetime-tz.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ datetime-tz.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ datetime-tz.$(OBJ) $(LIBS)
 
 device$(EXE): device.cpp device.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ device.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ device.$(OBJ) $(LIBS)
 
 dictionary-const$(EXE): dictionary-const.cpp dictionary-const.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ dictionary-const.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ dictionary-const.$(OBJ) $(LIBS)
 
 dictionary-nonconst$(EXE): dictionary-nonconst.cpp dictionary-nonconst.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ dictionary-nonconst.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ dictionary-nonconst.$(OBJ) $(LIBS)
 
 dynamiclib$(EXE): dynamiclib.cpp dynamiclib.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ dynamiclib.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ dynamiclib.$(OBJ) $(LIBS)
 
 environment$(EXE): environment.cpp environment.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ environment.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ environment.$(OBJ) $(LIBS)
 
 error$(EXE): error.cpp error.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ error.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ error.$(OBJ) $(LIBS)
 
 file$(EXE): file.cpp file.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ file.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ file.$(OBJ) $(LIBS)
 
 filesystem$(EXE): filesystem.cpp filesystem.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ filesystem.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ filesystem.$(OBJ) $(LIBS)
 
 groupentry$(EXE): groupentry.cpp groupentry.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ groupentry.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ groupentry.$(OBJ) $(LIBS)
 
 hostentry$(EXE): hostentry.cpp hostentry.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ hostentry.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ hostentry.$(OBJ) $(LIBS)
 
 inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ inetsocketclient.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ inetsocketclient.$(OBJ) $(LIBS)
 
 inetsocketserver$(EXE): inetsocketserver.cpp inetsocketserver.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ inetsocketserver.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ inetsocketserver.$(OBJ) $(LIBS)
 
 linkedlist-values$(EXE): linkedlist-values.cpp linkedlist-values.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-values.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ linkedlist-values.$(OBJ) $(LIBS)
 
 linkedlist-nodes$(EXE): linkedlist-nodes.cpp linkedlist-nodes.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-nodes.$(OBJ) $(LIBS)
-
-linkedlist-find$(EXE): linkedlist-find.cpp linkedlist-find.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-find.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ linkedlist-nodes.$(OBJ) $(LIBS)
 
 linkedlist-sort$(EXE): linkedlist-sort.cpp linkedlist-sort.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-sort.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ linkedlist-sort.$(OBJ) $(LIBS)
 
 linkedlist-iterate$(EXE): linkedlist-iterate.cpp linkedlist-iterate.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-iterate.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ linkedlist-iterate.$(OBJ) $(LIBS)
 
 linkedlist-types$(EXE): linkedlist-types.cpp linkedlist-types.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ linkedlist-types.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ linkedlist-types.$(OBJ) $(LIBS)
 
 listener$(EXE): listener.cpp listener.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ listener.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ listener.$(OBJ) $(LIBS)
 
 logger$(EXE): logger.cpp logger.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ logger.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ logger.$(OBJ) $(LIBS)
 
 memorymap$(EXE): memorymap.cpp memorymap.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ memorymap.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ memorymap.$(OBJ) $(LIBS)
 
 memorypool$(EXE): memorypool.cpp memorypool.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ memorypool.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ memorypool.$(OBJ) $(LIBS)
 
 modemclient$(EXE): modemclient.cpp modemclient.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ modemclient.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ modemclient.$(OBJ) $(LIBS)
 
 modemserver$(EXE): modemserver.cpp modemserver.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ modemserver.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ modemserver.$(OBJ) $(LIBS)
 
 thread-join$(EXE): thread-join.cpp thread-join.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ thread-join.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ thread-join.$(OBJ) $(LIBS)
 
 thread-detach$(EXE): thread-detach.cpp thread-detach.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ thread-detach.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ thread-detach.$(OBJ) $(LIBS)
 
 threadmutex$(EXE): threadmutex.cpp threadmutex.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ threadmutex.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ threadmutex.$(OBJ) $(LIBS)
 
 parameterstring$(EXE): parameterstring.cpp parameterstring.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ parameterstring.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ parameterstring.$(OBJ) $(LIBS)
 
 userentry$(EXE): userentry.cpp userentry.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ userentry.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ userentry.$(OBJ) $(LIBS)
 
 permissions$(EXE): permissions.cpp permissions.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ permissions.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ permissions.$(OBJ) $(LIBS)
 
 process-info$(EXE): process-info.cpp process-info.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-info.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-info.$(OBJ) $(LIBS)
 
 process-exit$(EXE): process-exit.cpp process-exit.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-exit.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-exit.$(OBJ) $(LIBS)
 
 process-atexit$(EXE): process-atexit.cpp process-atexit.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-atexit.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-atexit.$(OBJ) $(LIBS)
 
 process-exitimmediately$(EXE): process-exitimmediately.cpp process-exitimmediately.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-exitimmediately.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-exitimmediately.$(OBJ) $(LIBS)
 
 process-exitoncrash$(EXE): process-exitoncrash.cpp process-exitoncrash.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-exitoncrash.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-exitoncrash.$(OBJ) $(LIBS)
 
 process-handlecrash$(EXE): process-handlecrash.cpp process-handlecrash.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-handlecrash.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-handlecrash.$(OBJ) $(LIBS)
 
 process-exitonshutdown$(EXE): process-exitonshutdown.cpp process-exitonshutdown.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-exitonshutdown.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-exitonshutdown.$(OBJ) $(LIBS)
 
 process-handleshutdown$(EXE): process-handleshutdown.cpp process-handleshutdown.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-handleshutdown.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-handleshutdown.$(OBJ) $(LIBS)
 
 process-setuidgid$(EXE): process-setuidgid.cpp process-setuidgid.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-setuidgid.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-setuidgid.$(OBJ) $(LIBS)
 
 process-seteuidgid$(EXE): process-seteuidgid.cpp process-seteuidgid.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-seteuidgid.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-seteuidgid.$(OBJ) $(LIBS)
 
 process-spawn$(EXE): process-spawn.cpp process-spawn.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-spawn.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-spawn.$(OBJ) $(LIBS)
 
 process-fork$(EXE): process-fork.cpp process-fork.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-fork.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-fork.$(OBJ) $(LIBS)
 
 process-forkexec$(EXE): process-forkexec.cpp process-forkexec.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-forkexec.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-forkexec.$(OBJ) $(LIBS)
 
 process-zombie$(EXE): process-zombie.cpp process-zombie.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-zombie.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-zombie.$(OBJ) $(LIBS)
 
 process-detach$(EXE): process-detach.cpp process-detach.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ process-detach.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ process-detach.$(OBJ) $(LIBS)
 
 protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
 
 randomnumber-static$(EXE): randomnumber-static.cpp randomnumber-static.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ randomnumber-static.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ randomnumber-static.$(OBJ) $(LIBS)
 
 randomnumber-multiple$(EXE): randomnumber-multiple.cpp randomnumber-multiple.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ randomnumber-multiple.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ randomnumber-multiple.$(OBJ) $(LIBS)
 
 bytestring-copy$(EXE): bytestring-copy.cpp bytestring-copy.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ bytestring-copy.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ bytestring-copy.$(OBJ) $(LIBS)
 
 bytestring-compare$(EXE): bytestring-compare.cpp bytestring-compare.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ bytestring-compare.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ bytestring-compare.$(OBJ) $(LIBS)
 
 bytestring-find$(EXE): bytestring-find.cpp bytestring-find.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ bytestring-find.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ bytestring-find.$(OBJ) $(LIBS)
 
 regularexpression-static$(EXE): regularexpression-static.cpp regularexpression-static.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ regularexpression-static.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ regularexpression-static.$(OBJ) $(LIBS)
 
 regularexpression-compile$(EXE): regularexpression-compile.cpp regularexpression-compile.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ regularexpression-compile.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ regularexpression-compile.$(OBJ) $(LIBS)
 
 regularexpression-multiple$(EXE): regularexpression-multiple.cpp regularexpression-multiple.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ regularexpression-multiple.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ regularexpression-multiple.$(OBJ) $(LIBS)
 
 rpcentry$(EXE): rpcentry.cpp rpcentry.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ rpcentry.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ rpcentry.$(OBJ) $(LIBS)
 
 serialport$(EXE): serialport.cpp serialport.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ serialport.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ serialport.$(OBJ) $(LIBS)
 
 serialportprofile$(EXE): serialportprofile.cpp serialportprofile.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ serialportprofile.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ serialportprofile.$(OBJ) $(LIBS)
 
 serviceentry$(EXE): serviceentry.cpp serviceentry.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ serviceentry.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ serviceentry.$(OBJ) $(LIBS)
 
 sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory1.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ sharedmemory1.$(OBJ) $(LIBS)
 
 sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ sharedmemory2.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ sharedmemory2.$(OBJ) $(LIBS)
 
 signal$(EXE): signal.cpp signal.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ signal.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ signal.$(OBJ) $(LIBS)
 
 singlylinkedlist-values$(EXE): singlylinkedlist-values.cpp singlylinkedlist-values.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-values.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ singlylinkedlist-values.$(OBJ) $(LIBS)
 
 singlylinkedlist-nodes$(EXE): singlylinkedlist-nodes.cpp singlylinkedlist-nodes.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-nodes.$(OBJ) $(LIBS)
-
-singlylinkedlist-find$(EXE): singlylinkedlist-find.cpp singlylinkedlist-find.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-find.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ singlylinkedlist-nodes.$(OBJ) $(LIBS)
 
 singlylinkedlist-sort$(EXE): singlylinkedlist-sort.cpp singlylinkedlist-sort.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-sort.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ singlylinkedlist-sort.$(OBJ) $(LIBS)
 
 singlylinkedlist-iterate$(EXE): singlylinkedlist-iterate.cpp singlylinkedlist-iterate.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-iterate.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ singlylinkedlist-iterate.$(OBJ) $(LIBS)
 
 singlylinkedlist-types$(EXE): singlylinkedlist-types.cpp singlylinkedlist-types.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ singlylinkedlist-types.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ singlylinkedlist-types.$(OBJ) $(LIBS)
 
 snooze$(EXE): snooze.cpp snooze.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ snooze.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ snooze.$(OBJ) $(LIBS)
 
 stdio$(EXE): stdio.cpp stdio.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ stdio.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ stdio.$(OBJ) $(LIBS)
 
 stringbuffer$(EXE): stringbuffer.cpp stringbuffer.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ stringbuffer.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ stringbuffer.$(OBJ) $(LIBS)
 
 sys$(EXE): sys.cpp sys.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ sys.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ sys.$(OBJ) $(LIBS)
 
 unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ unixsocketclient.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ unixsocketclient.$(OBJ) $(LIBS)
 
 unixsocketserver$(EXE): unixsocketserver.cpp unixsocketserver.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ unixsocketserver.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ unixsocketserver.$(OBJ) $(LIBS)
 
 bytebuffer$(EXE): bytebuffer.cpp bytebuffer.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ bytebuffer.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ bytebuffer.$(OBJ) $(LIBS)
 
 xmldom$(EXE): xmldom.cpp xmldom.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ xmldom.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ xmldom.$(OBJ) $(LIBS)
 
 xmlsax$(EXE): xmlsax.cpp xmlsax.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ xmlsax.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ xmlsax.$(OBJ) $(LIBS)
 
 codetree$(EXE): codetree.cpp codetree.$(OBJ)
-	$(LTLINK) $(CXX) $(OUT)$@ codetree.$(OBJ) $(LIBS)
+	$(LTLINK) $(LINK) $(OUT)$@ codetree.$(OBJ) $(LIBS)

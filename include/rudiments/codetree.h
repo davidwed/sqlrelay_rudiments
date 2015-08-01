@@ -106,6 +106,13 @@ class codetreeprivate;
  *            containing terminals 0-9 that could be used to build up integers
  *            or floating point numbers.
  *
+ *    tag   - Optional.  If set to "yes" then the nonterminal will be written
+ *            back out like an xml tag, with opening and closing braces, and a
+ *            trailing slash.  The name of the nonterminal will be used as the
+ *            tag name.  Also, any attributes other than "value" that were
+ *            added to the nonterminal will also be written out.  The start,
+ *            end, and type attributes are also observed.
+ *
  *     Examples:
  *
  *         <definition name="code_block" type="block" start="{" end="}">
@@ -311,7 +318,7 @@ class codetreeprivate;
  *     </grammar>
  */
 
-class codetree {
+class RUDIMENTS_DLLSPEC codetree {
 	public:
 
 		/** Creates a new instance of the codetree class. */
@@ -343,7 +350,5 @@ class codetree {
 
 	#include <rudiments/private/codetree.h>
 };
-
-// @endcond
 
 #endif

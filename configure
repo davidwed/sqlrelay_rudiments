@@ -833,6 +833,7 @@ enable_bytebuffer
 enable_xmldom
 enable_xmlsax
 enable_codetree
+enable_compiler
 enable_shared
 enable_static
 with_pic
@@ -1528,6 +1529,7 @@ Optional Features:
   --disable-xmldom        Don't build xmldom class
   --disable-xmlsax        Don't build xmlsax class
   --disable-codetree      Don't build codetree class
+  --disable-compiler      Don't build compiler class
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -2920,6 +2922,13 @@ if test "${enable_codetree+set}" = set; then :
   enableval=$enable_codetree; INCLUDE_CODETREE="0"
 else
   INCLUDE_CODETREE="1"
+fi
+
+# Check whether --enable-compiler was given.
+if test "${enable_compiler+set}" = set; then :
+  enableval=$enable_compiler; INCLUDE_COMPILER="0"
+else
+  INCLUDE_COMPILER="1"
 fi
 
 
@@ -15768,10 +15777,19 @@ case $host_os in
 		;;
 esac
 
-CXX_VERSION=`$CXX --version 2> /dev/null | head -1 | tr -d '.' | cut -c1-2`
-if ( test "$CXX_VERSION" -lt "27" 2> /dev/null )
+if ( test -n "$WERROR" )
 then
-	WERROR=""
+
+			CXX_VERSION=`$CXX --version 2> /dev/null | head -1 | tr -d '.' | cut -c1-2`
+
+			if ( test "$CXX_VERSION" != "g+" )
+	then
+				if (  test "$CXX_VERSION" -lt "27" )
+		then
+			WERROR=""
+		fi
+	fi
+
 fi
 
 
@@ -31654,6 +31672,14 @@ then
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 codetree.h codetreeincludes.h"
 	SRCS="$SRCS codetree.cpp"
 	LOBJS="$LOBJS codetree.lo"
+fi
+
+if ( test "$INCLUDE_COMPILER" = "1" )
+then
+	HEADERS3="$HEADERS3 compiler.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 compiler.h compilerincludes.h"
+	SRCS="$SRCS compiler.cpp"
+	LOBJS="$LOBJS compiler.lo"
 fi
 
 if ( test "$INCLUDE_INETSERVER" = "1" -o "$INCLUDE_INETCLIENT" = "1" )

@@ -69,6 +69,7 @@ srcs="winsock.cpp "+_
 	"xmldomnode.cpp "+_
 	"xmlsax.cpp "+_
 	"codetree.cpp "+_
+	"compiler.cpp "+_
 	"inetsocketutil.cpp "+_
 	"unixsocketutil.cpp "+_
 	"socketserver.cpp "+_
@@ -127,6 +128,7 @@ lobjs="winsock.obj "+_
 	"xmldomnode.obj "+_
 	"xmlsax.obj "+_
 	"codetree.obj "+_
+	"compiler.obj "+_
 	"inetsocketutil.obj "+_
 	"unixsocketutil.obj "+_
 	"socketserver.obj "+_
@@ -193,6 +195,7 @@ headers3="xmldom.h "+_
 	"xmldomnode.h "+_
 	"xmlsax.h "+_
 	"codetree.h "+_
+	"compiler.h "+_
 	"inetsocketutil.h "+_
 	"unixsocketutil.h "+_
 	"socketserver.h "+_
@@ -332,6 +335,8 @@ privateheaders6="signalhandler.h "+_
 	"xmlsaxincludes.h "
 privateheaders7="codetree.h "+_
 	"codetreeincludes.h "+_
+	"compiler.h "+_
+	"compilerincludes.h "+_
 	"inetsocketutil.h "+_
 	"inetsocketutilincludes.h "+_
 	"unixsocketutil.h "+_

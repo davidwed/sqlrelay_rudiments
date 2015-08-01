@@ -90,7 +90,8 @@ bool dtd::newElement(xmldomnode *node) {
 	}
 
 	// append a carriage return just for looks
-	xmldomnode	*dtdnode=pvt->_xmldtd.getRootNode()->getChild("dtd");
+	xmldomnode	*dtdnode=
+			pvt->_xmldtd.getRootNode()->getFirstChild("dtd");
 	dtdnode->appendText("\n");
 
 	// create an "element" element and add it to the tree
@@ -225,8 +226,8 @@ bool dtd::newAttribute(xmldomnode *node) {
 	// get the appropriate element to add this attribute to
 	xmldomnode	*element=
 			pvt->_xmldtd.getRootNode()->
-				getChild("dtd")->
-				getChild("element","name",
+				getFirstChild("dtd")->
+				getFirstChild("element","name",
 					node->getAttribute((uint64_t)0)->
 					getName());
 	if (element->isNullNode()) {

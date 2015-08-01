@@ -123,7 +123,7 @@ char *dynamiclib::getError() const {
 		}
 		return retval;
 	#elif defined(RUDIMENTS_HAVE_LOADLIBRARYEX)
-		char	*retval;
+		char	*buffer;
 		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM|
 				FORMAT_MESSAGE_IGNORE_INSERTS|
 				FORMAT_MESSAGE_MAX_WIDTH_MASK|
@@ -131,9 +131,14 @@ char *dynamiclib::getError() const {
 				NULL,
 				GetLastError(),
 				MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
-				(char *)&retval,
+				(char *)&buffer,
 				0,
 				NULL);
+
+		// copy the buffer and return that so the message can be
+		// freed using delete[] rather than having to use LocalFree
+		char	*retval=charstring::duplicate(buffer);
+		LocalFree(buffer);
 		return retval;
 	#else
 		RUDIMENTS_SET_ENOSYS

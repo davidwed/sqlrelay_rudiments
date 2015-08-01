@@ -53,6 +53,7 @@ static const char	*INDENT="i";
 static const char	*DEFINITION="d";
 static const char	*NAME="n";
 static const char	*TYPE="t";
+static const char	*TAG="g";
 static const char	*START="s";
 static const char	*END="e";
 
@@ -65,6 +66,8 @@ static const char	LITERAL='l';
 static const char	LINE='e';
 static const char	BLOCK='b';
 static const char	NONE='n';
+
+static const char	YES='y';
 
 static const char	STX=0x2;
 
@@ -81,12 +84,12 @@ class grammar : public xmldom {
 		bool	attributeName(const char *name);
 		bool	attributeValue(const char *value);
 	private:
-		char	previousattribute;
+		char	currentattribute;
 		bool	hasrecursivebreak;
 };
 
 grammar::grammar() : xmldom(false) {
-	previousattribute='\0';
+	currentattribute='\0';
 	hasrecursivebreak=false;
 }
 
@@ -113,20 +116,32 @@ bool grammar::tagStart(const char *name) {
 }
 
 bool grammar::attributeName(const char *name) {
-	previousattribute=name[0];
-        char	newname[2];
-	newname[0]=name[0];
-	newname[1]='\0';
-	if (newname[0]=='r') {
+
+	// the first letters of this one collides with other names and requires
+	// special handling...
+	// tag collides with type
+	char	ch=name[0];
+	if (!charstring::compare(name,"tag")) {
+		ch=TAG[0];
+	}
+
+	currentattribute=name[0];
+
+	if (ch=='r') {
 		hasrecursivebreak=true;
 	}
+
+	// replace the name
+        char	newname[2];
+	newname[0]=ch;
+	newname[1]='\0';
 	return xmldom::attributeName(newname);
 }
 
 bool grammar::attributeValue(const char *value) {
 
 	// only modify values for the type attribute
-	if (previousattribute!=TYPE[0]) {
+	if (currentattribute!=TYPE[0]) {
 		return xmldom::attributeValue(value);
 	}
 
@@ -282,10 +297,18 @@ void codetree::buildNonTerminalNodeAssociations(xmldomnode *node) {
 
 const char codetree::getSymbolType(xmldomnode *nt) {
 	const char	*symboltype=nt->getAttributeValue(TYPE);
-	if (!charstring::length(symboltype)) {
+	if (!(symboltype && symboltype[0])) {
 		return INLINE;
 	}
 	return symboltype[0];
+}
+
+bool codetree::isTag(xmldomnode *nt) {
+	const char	*tag=nt->getAttributeValue(TAG);
+	if (!(tag && tag[0])) {
+		return false;
+	}
+	return (tag[0]==YES);
 }
 
 bool codetree::parseChild(xmldomnode *grammarnode,
@@ -639,11 +662,6 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
-	// first check for a break
-	if (parseBreakStack(codeposition)) {
-		return false;
-	}
-
 	// get the attributes of this terminal
 	const char	*value=grammarnode->getAttributeValue(VALUE);
 	size_t		valuelength=charstring::length(value);
@@ -652,6 +670,12 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (compareValue(*codeposition,value,&valuelength,casesensitive)) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
 		debugPrintIndent(4);
 		debugPrintf(4,"terminal \"");
 		debugSafePrint(4,value);
@@ -694,14 +718,15 @@ bool codetree::parseLetter(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
-	// first check for a break
-	if (parseBreakStack(codeposition)) {
-		return false;
-	}
-
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isAlphabetical((int32_t)(**codeposition))) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
 		debugPrintIndent(4);
 		debugPrintf(4,"letter found: \"%c\"\n",**codeposition);
 		if (ntbuffer) {
@@ -720,14 +745,15 @@ bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
 					const char **codeposition,
 					stringbuffer *ntbuffer) {
 
-	// first check for a break
-	if (parseBreakStack(codeposition)) {
-		return false;
-	}
-
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isLowerCase((int32_t)(**codeposition))) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
 		debugPrintIndent(4);
 		debugPrintf(4,"lower case letter found: \"%c\"\n",
 							**codeposition);
@@ -747,14 +773,15 @@ bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
 					const char **codeposition,
 					stringbuffer *ntbuffer) {
 
-	// first check for a break
-	if (parseBreakStack(codeposition)) {
-		return false;
-	}
-
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isUpperCase((int32_t)(**codeposition))) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
 		debugPrintIndent(4);
 		debugPrintf(4,"upper case letter found: \"%c\"\n",
 							**codeposition);
@@ -774,14 +801,15 @@ bool codetree::parseDigit(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
-	// first check for a break
-	if (parseBreakStack(codeposition)) {
-		return false;
-	}
-
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isDigit((int32_t)(**codeposition))) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
 		debugPrintIndent(4);
 		debugPrintf(4,"digit found: \"%c\"\n",**codeposition);
 		if (ntbuffer) {
@@ -800,17 +828,18 @@ bool codetree::parseSet(xmldomnode *grammarnode,
 				const char **codeposition,
 				stringbuffer *ntbuffer) {
 
-	// first check for a break
-	if (parseBreakStack(codeposition)) {
-		return false;
-	}
-
 	// get the set value
 	const char	*value=grammarnode->getAttributeValue(VALUE);
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::inSet((int32_t)(**codeposition),value)) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
 		debugPrintIndent(4);
 		debugPrintf(4,"set member found: \"%c\" from set \"%s\"\n",
 							**codeposition,value);
@@ -1075,7 +1104,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		return true;
 	}
 
-	// if the node doesn't have a value then get its definition
+	// get the node's definition
 	xmldomnode	*def=pvt->_grammartag->getFirstTagChild(
 							DEFINITION,NAME,
 							node->getName());
@@ -1086,25 +1115,47 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		return false;
 	}
 
-	// see if this is a block or line
+	// see if this is a block, line, and/or tag
 	const char	symboltype=getSymbolType(def);
 	bool		block=(symboltype==BLOCK);
 	bool		line=(symboltype==LINE);
+	bool		tag=isTag(def);
+
+	// does it have children
+	bool		haschildren=(node->getChildCount()>0);
+
+	// get the node's value (if it has one)
+	const char	*value=node->getAttributeValue("value");
 
 	// write the start
 	const char	*start=def->getAttributeValue(START);
-	if (line || (block && charstring::length(start))) {
+	if (line || (block && (tag || (start && start[0])))) {
 		indent(output);
 	}
 	writeStartEnd(output,start);
-	if (block && charstring::length(start)) {
+	if (tag) {
+		output->append("<")->append(node->getName());
+		for (xmldomnode *att=node->getAttribute((uint64_t)0);
+				!att->isNullNode(); att=att->getNextSibling()) {
+			if (charstring::compare(att->getName(),"value")) {
+				output->append(' ');
+				output->append(att->getName());
+				output->append("=\"");
+				output->append(att->getValue());
+				output->append('\"');
+			}
+		}
+		if (haschildren) {
+			output->append('>');
+		}
+	}
+	if (block && (tag || (start && start[0]))) {
 		output->append('\n');
 	}
 
 	// if the node has a value, just write that,
 	// otherwise write its children
-	const char	*value=node->getAttributeValue("value");
-	if (charstring::length(value)) {
+	if (value && value[0]) {
 		output->append(value);
 	} else {
 
@@ -1130,14 +1181,23 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the end
 	const char	*end=def->getAttributeValue(END);
-	if (block && charstring::length(end)) {
+	if (block && (tag || (end && end[0]))) {
 		if (output->getString()[output->getStringLength()-1]!='\n') {
 			output->append('\n');
 		}
 		indent(output);
 	}
+	if (tag) {
+		if (haschildren) {
+			output->append("</");
+			output->append(node->getName());
+			output->append('>');
+		} else {
+			output->append("/>");
+		}
+	}
 	writeStartEnd(output,end);
-	if (line || (block && charstring::length(end))) {
+	if (line || (block && (tag || (end && end[0])))) {
 		output->append('\n');
 	}
 	return true;

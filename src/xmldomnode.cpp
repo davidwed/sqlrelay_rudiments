@@ -122,30 +122,69 @@ xmldomnode *xmldomnode::getPreviousTagSibling() const {
 }
 
 xmldomnode *xmldomnode::getPreviousTagSibling(const char *name) const {
+	return getPreviousTagSibling(name,false);
+}
+
+xmldomnode *xmldomnode::getPreviousTagSiblingIgnoringCase(
+						const char *name) const {
+	return getPreviousTagSibling(name,true);
+}
+
+xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
+						bool ignorecase) const {
 	for (xmldomnode *current=getPreviousTagSibling();
 			current && !current->isNullNode();
 				current=current->getPreviousTagSibling()) {
 		const char	*nm=current->getName();
-		if ((name && nm && !charstring::compare(name,nm)) || !name) {
+		if ((name && nm &&
+			((ignorecase)?
+				!charstring::compareIgnoringCase(name,nm):
+				!charstring::compare(name,nm))) ||
+			!name) {
 			return current;
 		}
 	}
 	return pvt->_nullnode;
 }
 
-xmldomnode *xmldomnode::getPreviousTagSibling(const char *name,
+xmldomnode *xmldomnode::getPreviousTagSibling(
+					const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
+	return getPreviousTagSibling(name,attributename,attributevalue,false);
+}
+
+xmldomnode *xmldomnode::getPreviousTagSiblingIgnoringCase(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	return getPreviousTagSibling(name,attributename,attributevalue,true);
+}
+
+xmldomnode *xmldomnode::getPreviousTagSibling(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const {
 	for (xmldomnode *current=getPreviousTagSibling();
 			current && !current->isNullNode();
 				current=current->getPreviousTagSibling()) {
 		const char	*nm=current->getName();
-		if ((name && nm && !charstring::compare(name,nm)) || !name) {
-			const char	*value=current->
-						getAttribute(attributename)->
-						getValue();
+		if ((name && nm &&
+			((ignorecase)?
+				!charstring::compareIgnoringCase(name,nm):
+				!charstring::compare(name,nm))) ||
+			!name) {
+			const char	*value=current->getAttribute(
+							attributename,
+							ignorecase)->getValue();
 			if (value &&
-				!charstring::compare(value,attributevalue)) {
+				((ignorecase)?
+					!charstring::compareIgnoringCase(
+							value,attributevalue):
+					!charstring::compare(
+							value,attributevalue))
+				) {
 				return current;
 			}
 		}
@@ -165,11 +204,24 @@ xmldomnode *xmldomnode::getNextTagSibling() const {
 }
 
 xmldomnode *xmldomnode::getNextTagSibling(const char *name) const {
+	return getNextTagSibling(name,false);
+}
+
+xmldomnode *xmldomnode::getNextTagSiblingIgnoringCase(const char *name) const {
+	return getNextTagSibling(name,true);
+}
+
+xmldomnode *xmldomnode::getNextTagSibling(const char *name,
+						bool ignorecase) const {
 	for (xmldomnode *current=getNextTagSibling();
 			current && !current->isNullNode();
 				current=current->getNextTagSibling()) {
 		const char	*nm=current->getName();
-		if ((name && nm && !charstring::compare(name,nm)) || !name) {
+		if ((name && nm &&
+			((ignorecase)?
+				!charstring::compareIgnoringCase(name,nm):
+				!charstring::compare(name,nm))) ||
+			!name) {
 			return current;
 		}
 	}
@@ -179,16 +231,39 @@ xmldomnode *xmldomnode::getNextTagSibling(const char *name) const {
 xmldomnode *xmldomnode::getNextTagSibling(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
+	return getNextTagSibling(name,attributename,attributevalue,false);
+}
+
+xmldomnode *xmldomnode::getNextTagSiblingIgnoringCase(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	return getNextTagSibling(name,attributename,attributevalue,true);
+}
+
+xmldomnode *xmldomnode::getNextTagSibling(const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const {
 	for (xmldomnode *current=getNextTagSibling();
 			current && !current->isNullNode();
 				current=current->getNextTagSibling()) {
 		const char	*nm=current->getName();
-		if ((name && nm && !charstring::compare(name,nm)) || !name) {
-			const char	*value=current->
-						getAttribute(attributename)->
-						getValue();
+		if ((name && nm &&
+			((ignorecase)?
+				!charstring::compareIgnoringCase(name,nm):
+				!charstring::compare(name,nm))) ||
+			!name) {
+			const char	*value=current->getAttribute(
+							attributename,
+							ignorecase)->getValue();
 			if (value &&
-				!charstring::compare(value,attributevalue)) {
+				((ignorecase)?
+					!charstring::compareIgnoringCase(
+							value,attributevalue):
+					!charstring::compare(
+							value,attributevalue))
+				) {
 				return current;
 			}
 		}
@@ -212,45 +287,236 @@ xmldomnode *xmldomnode::getFirstTagChild() const {
 }
 
 xmldomnode *xmldomnode::getFirstTagChild(const char *name) const {
+	return getFirstTagChild(name,false);
+}
+
+xmldomnode *xmldomnode::getFirstTagChildIgnoringCase(const char *name) const {
+	return getFirstTagChild(name,true);
+}
+
+xmldomnode *xmldomnode::getFirstTagChild(const char *name,
+						bool ignorecase) const {
 	xmldomnode	*node=pvt->_firsttagchild;
-	return (node->isNullNode() ||
-		!charstring::compare(node->getName(),name))?
-			node:node->getNextTagSibling(name);
+	if (node->isNullNode() ||
+		(ignorecase)?
+			!charstring::compareIgnoringCase(node->getName(),name):
+			!charstring::compare(node->getName(),name)) {
+		return node;
+	}
+	return node->getNextTagSibling(name,ignorecase);
 }
 
 xmldomnode *xmldomnode::getFirstTagChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
-	xmldomnode	*node=getChild(name,attributename,attributevalue);
+	return getFirstTagChild(name,attributename,attributevalue,false);
+}
+
+xmldomnode *xmldomnode::getFirstTagChildIgnoringCase(const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	return getFirstTagChild(name,attributename,attributevalue,true);
+}
+
+xmldomnode *xmldomnode::getFirstTagChild(const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const {
+	xmldomnode	*node=getFirstChild(name,attributename,
+						attributevalue,ignorecase);
 	return (node->isNullNode() || node->getType()==TAG_XMLDOMNODETYPE)?
-		node:node->getNextTagSibling(name,attributename,attributevalue);
+		node:
+		node->getNextTagSibling(name,attributename,
+					attributevalue,ignorecase);
 }
 
 xmldomnode *xmldomnode::getFirstTagChildInSet(const char * const *set) const {
-	xmldomnode *child=getFirstTagChild();
+	xmldomnode	*child=getFirstTagChild();
 	if (charstring::inSet(child->getName(),set)) {
 		return child;
 	}
 	return child->getNextTagSiblingInSet(set);
 }
 
-xmldomnode *xmldomnode::getChild(const char *name,
+xmldomnode *xmldomnode::getFirstChild(const char *name,
 					const char *attributename,
 					const char *attributevalue) const {
+	return getFirstChild(name,attributename,attributevalue,false);
+}
+
+xmldomnode *xmldomnode::getFirstChildIgnoringCase(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	return getFirstChild(name,attributename,attributevalue,true);
+}
+
+xmldomnode *xmldomnode::getFirstChild(const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const {
 	for (xmldomnode *current=pvt->_firstchild;
 			!current->isNullNode(); current=current->pvt->_next) {
 		const char	*nm=current->getName();
-		if ((name && nm && !charstring::compare(name,nm)) || !name) {
-			const char	*value=current->
-						getAttribute(attributename)->
-						getValue();
+		if ((name && nm &&
+			((ignorecase)?
+				!charstring::compareIgnoringCase(name,nm):
+				!charstring::compare(name,nm))) ||
+			!name) {
+			const char	*value=current->getAttribute(
+							attributename,
+							ignorecase)->getValue();
 			if (value &&
-				!charstring::compare(value,attributevalue)) {
+				((ignorecase)?
+					!charstring::compareIgnoringCase(
+							value,attributevalue):
+					!charstring::compare(
+							value,attributevalue))
+				) {
 				return current;
 			}
 		}
 	}
 	return pvt->_nullnode;
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendent(const char *name) const {
+	return getFirstTagDescendent(name,false);
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendentIgnoringCase(
+						const char *name) const {
+	return getFirstTagDescendent(name,true);
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendent(const char *name,
+						bool ignorecase) const {
+	for (xmldomnode	*child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+
+		if ((ignorecase)?
+			!charstring::compareIgnoringCase(child->getName(),name):
+			!charstring::compare(child->getName(),name)) {
+			return child;
+		}
+
+		xmldomnode	*desc=
+				child->getFirstTagDescendent(name,ignorecase);
+		if (!desc->isNullNode()) {
+			return desc;
+		}
+	}
+	return pvt->_nullnode;
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendent(const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	return getFirstTagDescendent(name,attributename,attributevalue,false);
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendentIgnoringCase(const char *name,
+					const char *attributename,
+					const char *attributevalue) const {
+	return getFirstTagDescendent(name,attributename,attributevalue,true);
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendent(const char *name,
+					const char *attributename,
+					const char *attributevalue,
+					bool ignorecase) const {
+
+	for (xmldomnode	*child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+
+		if ((ignorecase)?
+			(!charstring::compareIgnoringCase(
+					child->getName(),name) &&
+			!charstring::compareIgnoringCase(
+					child->getAttributeValue(attributename),
+					attributevalue)):
+			(!charstring::compare(
+					child->getName(),name) &&
+			!charstring::compare(
+					child->getAttributeValue(attributename),
+					attributevalue))
+			) {
+			return child;
+		}
+
+		xmldomnode	*desc=child->getFirstTagDescendent(name,
+						attributename,attributevalue,
+						ignorecase);
+		if (!desc->isNullNode()) {
+			return desc;
+		}
+	}
+	return pvt->_nullnode;
+}
+
+xmldomnode *xmldomnode::getFirstTagDescendentInSet(
+					const char * const *set) const {
+	for (xmldomnode	*child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		if (charstring::inSet(child->getName(),set)) {
+			return child;
+		}
+		xmldomnode	*desc=child->getFirstTagDescendentInSet(set);
+		if (!desc->isNullNode()) {
+			return desc;
+		}
+	}
+	return pvt->_nullnode;
+}
+
+xmldomnode *xmldomnode::getNextTag() const {
+	return getNextTag(NULL);
+}
+
+xmldomnode *xmldomnode::getNextTag(xmldomnode *top) const {
+
+	xmldomnode	*ftc=getFirstTagChild();
+	if (!ftc->isNullNode()) {
+		return ftc;
+	}
+	xmldomnode	*nts=getNextTagSibling();
+	if (!nts->isNullNode()) {
+		return nts;
+	}
+	const xmldomnode	*ancestor=this;
+	for (;;) {
+		ancestor=ancestor->getParent();
+		if (ancestor->isNullNode() || ancestor==top) {
+			return pvt->_nullnode;
+		}
+		xmldomnode	*ancestorsib=ancestor->getNextTagSibling();
+		if (!ancestorsib->isNullNode()) {
+			return ancestorsib;
+		}
+	}
+}
+
+xmldomnode *xmldomnode::getPreviousTag() const {
+	return getPreviousTag(NULL);
+}
+
+xmldomnode *xmldomnode::getPreviousTag(xmldomnode *top) const {
+
+	xmldomnode	*nts=getPreviousTagSibling();
+	if (!nts->isNullNode()) {
+		return nts;
+	}
+	const xmldomnode	*ancestor=this;
+	for (;;) {
+		ancestor=ancestor->getParent();
+		if (ancestor->isNullNode() || ancestor==top) {
+			return pvt->_nullnode;
+		}
+		xmldomnode	*ancestorsib=ancestor->getPreviousTagSibling();
+		if (!ancestorsib->isNullNode()) {
+			return ancestorsib;
+		}
+	}
 }
 
 bool xmldomnode::insertText(const char *value, uint64_t position) {
@@ -447,15 +713,21 @@ void xmldomnode::safeAppend(stringbuffer *strb,
 	append(strb,fd,start,ch-start);
 }
 
-xmldomnode *xmldomnode::getNode(xmldomnode *first, uint64_t position,
-				const char *name, uint64_t count) const {
+xmldomnode *xmldomnode::getNode(xmldomnode *first,
+					uint64_t position,
+					const char *name,
+					bool ignorecase,
+					uint64_t count) const {
 	if (!first || position>=count) {
 		return pvt->_nullnode;
 	}
 	xmldomnode	*current=first;
 	if (name) {
 		for (uint64_t i=0; i<count; i++) {
-			if (!charstring::compare(
+			if ((ignorecase)?
+				!charstring::compareIgnoringCase(
+					current->pvt->_nodename,name):
+				!charstring::compare(
 					current->pvt->_nodename,name)) {
 				break;
 			}
@@ -478,8 +750,8 @@ bool xmldomnode::insertNode(xmldomnode *node, uint64_t position,
 	}
 	node->pvt->_parent=this;
 	node->pvt->_type=type;
-	xmldomnode	*atpos=getNode(*first,position,NULL,*count);
-	xmldomnode	*beforepos=getNode(*first,position-1,NULL,*count);
+	xmldomnode	*atpos=getNode(*first,position,NULL,false,*count);
+	xmldomnode	*beforepos=getNode(*first,position-1,NULL,false,*count);
 	if (atpos) {
 		node->pvt->_next=atpos;
 		atpos->pvt->_previous=node;
@@ -718,11 +990,19 @@ uint64_t xmldomnode::getChildCount() const {
 }
 
 xmldomnode *xmldomnode::getChild(uint64_t position) const {
-	return getNode(pvt->_firstchild,position,NULL,pvt->_childcount);
+	return getNode(pvt->_firstchild,position,NULL,false,pvt->_childcount);
 }
 
-xmldomnode *xmldomnode::getChild(const char *name) const {
-	return getNode(pvt->_firstchild,0,name,pvt->_childcount);
+xmldomnode *xmldomnode::getFirstChild(const char *name) const {
+	return getFirstChild(name,false);
+}
+
+xmldomnode *xmldomnode::getFirstChildIgnoringCase(const char *name) const {
+	return getFirstChild(name,true);
+}
+
+xmldomnode *xmldomnode::getFirstChild(const char *name, bool ignorecase) const {
+	return getNode(pvt->_firstchild,0,name,ignorecase,pvt->_childcount);
 }
 
 uint64_t xmldomnode::getAttributeCount() const {
@@ -730,11 +1010,21 @@ uint64_t xmldomnode::getAttributeCount() const {
 }
 
 xmldomnode *xmldomnode::getAttribute(uint64_t position) const {
-	return getNode(pvt->_firstattribute,position,NULL,pvt->_attributecount);
+	return getNode(pvt->_firstattribute,
+				position,NULL,false,pvt->_attributecount);
 }
 
 xmldomnode *xmldomnode::getAttribute(const char *name) const {
-	return getNode(pvt->_firstattribute,0,name,pvt->_attributecount);
+	return getAttribute(name,false);
+}
+
+xmldomnode *xmldomnode::getAttributeIgnoringCase(const char *name) const {
+	return getAttribute(name,true);
+}
+
+xmldomnode *xmldomnode::getAttribute(const char *name, bool ignorecase) const {
+	return getNode(pvt->_firstattribute,0,
+			name,ignorecase,pvt->_attributecount);
 }
 
 const char *xmldomnode::getAttributeValue(uint64_t position) const {
@@ -827,6 +1117,31 @@ bool xmldomnode::deleteChild(xmldomnode *child) {
 				&pvt->_childcount);
 }
 
+bool xmldomnode::deleteFirstChild(const char *name) {
+	return deleteFirstChild(name,false);
+}
+
+bool xmldomnode::deleteFirstChildIgnoringCase(const char *name) {
+	return deleteFirstChild(name,true);
+}
+
+bool xmldomnode::deleteFirstChild(const char *name, bool ignorecase) {
+	return deleteChild(getFirstChild(name,ignorecase));
+}
+
+bool xmldomnode::deleteFirstChild(const char *name,
+				const char *attributename,
+				const char *attributevalue) {
+	return deleteChild(getFirstChild(name,attributename,attributevalue));
+}
+
+bool xmldomnode::deleteFirstChildIgnoringCase(const char *name,
+				const char *attributename,
+				const char *attributevalue) {
+	return deleteChild(getFirstChildIgnoringCase(
+				name,attributename,attributevalue));
+}
+
 bool xmldomnode::deleteChildren() {
 	while (!pvt->_lastchild->isNullNode()) {
 		if (!deleteChild(pvt->_lastchild)) {
@@ -834,6 +1149,194 @@ bool xmldomnode::deleteChildren() {
 		}
 	}
 	return true;
+}
+
+bool xmldomnode::deleteChildren(const char *name) {
+	return deleteChildren(name,false);
+}
+
+bool xmldomnode::deleteChildrenIgnoringCase(const char *name) {
+	return deleteChildren(name,true);
+}
+
+bool xmldomnode::deleteChildren(const char *name, bool ignorecase) {
+	bool	foundone=false;
+	while (deleteFirstChild(name,ignorecase)) {
+		foundone=true;
+	}
+	return foundone;
+}
+
+bool xmldomnode::deleteChildren(const char *name,
+				const char *attributename,
+				const char *attributevalue) {
+	return deleteChildren(name,attributename,attributevalue,false);
+}
+
+bool xmldomnode::deleteChildrenIgnoringCase(const char *name,
+						const char *attributename,
+						const char *attributevalue) {
+	return deleteChildren(name,attributename,attributevalue,true);
+}
+
+bool xmldomnode::deleteChildren(const char *name,
+				const char *attributename,
+				const char *attributevalue,
+				bool ignorecase) {
+	bool	foundone=false;
+	for (;;) {
+		xmldomnode	*child=getFirstTagChild(name,
+						attributename,attributevalue,
+						ignorecase);
+		if (!child->isNullNode()) {
+			if (deleteChild(child)) {
+				foundone=true;
+			} else {
+				return false;
+			}
+		} else {
+			return foundone;
+		}
+	}
+}
+
+bool xmldomnode::deleteDescendents(const char *name) {
+	return deleteDescendents(name,false);
+}
+
+bool xmldomnode::deleteDescendentsIgnoringCase(const char *name) {
+	return deleteDescendents(name,true);
+}
+
+bool xmldomnode::deleteDescendents(const char *name, bool ignorecase) {
+
+	// delete immediate children
+	bool	foundone=deleteChildren(name,ignorecase);
+
+	// descend
+	for (xmldomnode *child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		if (child->deleteDescendents(name,ignorecase)) {
+			foundone=true;
+		}
+	}
+	return foundone;
+}
+
+bool xmldomnode::deleteDescendents(const char *name,
+				const char *attributename,
+				const char *attributevalue) {
+	return deleteDescendents(name,attributename,attributevalue,false);
+}
+
+bool xmldomnode::deleteDescendentsIgnoringCase(const char *name,
+						const char *attributename,
+						const char *attributevalue) {
+	return deleteDescendents(name,attributename,attributevalue,true);
+}
+
+bool xmldomnode::deleteDescendents(const char *name,
+				const char *attributename,
+				const char *attributevalue,
+				bool ignorecase) {
+
+	// delete immediate children
+	bool	foundone=deleteChildren(name,attributename,
+					attributevalue,ignorecase);
+
+	// descend
+	for (xmldomnode *child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		if (child->deleteDescendents(name,attributename,
+						attributevalue,ignorecase)) {
+			foundone=true;
+		}
+	}
+	return foundone;
+}
+
+bool xmldomnode::renameFirstChild(const char *oldname, const char *newname) {
+	return renameFirstChild(oldname,newname,false);
+}
+
+bool xmldomnode::renameFirstChildIgnoringCase(const char *oldname,
+						const char *newname) {
+	return renameFirstChild(oldname,newname,true);
+}
+
+bool xmldomnode::renameFirstChild(const char *oldname,
+					const char *newname,
+					bool ignorecase) {
+	xmldomnode	*child=getFirstChild(oldname,ignorecase);
+	if (!child->isNullNode()) {
+		child->setName(newname);
+		return true;
+	}
+	return false;
+}
+
+bool xmldomnode::renameChildren(const char *oldname,
+						const char *newname) {
+	return renameChildren(oldname,newname,false);
+}
+
+bool xmldomnode::renameChildrenIgnoringCase(const char *oldname,
+						const char *newname) {
+	return renameChildren(oldname,newname,true);
+}
+
+bool xmldomnode::renameChildren(const char *oldname,
+					const char *newname,
+					bool ignorecase) {
+
+	// don't do anything if the tagnames are the same
+	if ((ignorecase)?
+		!charstring::compareIgnoringCase(oldname,newname):
+		!charstring::compare(oldname,newname)) {
+		return true;
+	}
+
+	// rename children
+	bool	foundone=false;
+	for (xmldomnode *child=getChild((uint64_t)0);
+		!child->isNullNode(); child=child->getNextSibling()) {
+		if ((ignorecase)?
+			!charstring::compareIgnoringCase(
+					child->getName(),oldname):
+			!charstring::compare(
+					child->getName(),oldname)) {
+			child->setName(newname);
+			foundone=true;
+		}
+	}
+	return foundone;
+}
+
+bool xmldomnode::renameDescendents(const char *oldname,
+						const char *newname) {
+	return renameDescendents(oldname,newname,false);
+}
+
+bool xmldomnode::renameDescendentsIgnoringCase(const char *oldname,
+						const char *newname) {
+	return renameDescendents(oldname,newname,true);
+}
+
+bool xmldomnode::renameDescendents(const char *oldname,
+					const char *newname,
+					bool ignorecase) {
+
+	// rename immediate children
+	bool	foundone=renameChildren(oldname,newname,ignorecase);
+
+	// descend
+	for (xmldomnode *child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		if (child->renameDescendents(oldname,newname,ignorecase)) {
+			foundone=true;
+		}
+	}
+	return foundone;
 }
 
 bool xmldomnode::deleteAttribute(uint64_t position) {
@@ -942,7 +1445,7 @@ xmldomnode *xmldomnode::getChildByPath(const char *path) const {
 		} else if (*ptr==']') {
 
 			// get the first child
-			node=node->getChild(name.getString());
+			node=node->getFirstChild(name.getString());
 
 			// now skip until we get the specified index
 			uint64_t	index=
@@ -992,6 +1495,122 @@ void xmldomnode::setData(void *data) {
 
 void *xmldomnode::getData() {
 	return pvt->_data;
+}
+
+bool xmldomnode::unwrapChild(xmldomnode *child) {
+
+	// get the position of the specified node
+	uint64_t	position=child->getPosition();
+
+	// deparent the children
+	for (xmldomnode *grandchild=child->getChild((uint64_t)0);
+			!grandchild->isNullNode();
+			grandchild=child->getChild((uint64_t)0)) {
+
+		position++;
+		if (!child->moveChild(grandchild,this,position)) {
+			return false;
+		}
+	}
+
+	// delete the specified child
+	return deleteChild(child);
+}
+
+bool xmldomnode::unwrapFirstChild(const char *name) {
+	return unwrapFirstChild(name,false);
+}
+
+bool xmldomnode::unwrapFirstChildIgnoringCase(const char *name) {
+	return unwrapFirstChild(name,true);
+}
+
+bool xmldomnode::unwrapFirstChild(const char *name, bool ignorecase) {
+	xmldomnode	*child=getFirstTagChild(name,ignorecase);
+	if (child->isNullNode()) {
+		return false;
+	}
+	return unwrapChild(child);
+}
+
+bool xmldomnode::unwrapChildrenIgnoringCase(const char *name) {
+	return unwrapChildren(name,false);
+}
+
+bool xmldomnode::unwrapChildren(const char *name) {
+	return unwrapChildren(name,true);
+}
+
+bool xmldomnode::unwrapChildren(const char *name, bool ignorecase) {
+	bool	foundone=false;
+	while (unwrapFirstChild(name,ignorecase)) {
+		foundone=true;
+	}
+	return foundone;
+}
+
+bool xmldomnode::unwrapDescendents(const char *name) {
+	return unwrapDescendents(name,false);
+}
+
+bool xmldomnode::unwrapDescendentsIgnoringCase(const char *name) {
+	return unwrapDescendents(name,true);
+}
+
+bool xmldomnode::unwrapDescendents(const char *name, bool ignorecase) {
+
+	// unwrap immediate children
+	bool	foundone=unwrapChildren(name,ignorecase);
+
+	// descend
+	for (xmldomnode *child=getFirstTagChild();
+		!child->isNullNode(); child=child->getNextTagSibling()) {
+		if (child->unwrapDescendents(name,ignorecase)) {
+			foundone=true;
+		}
+	}
+	return foundone;
+}
+
+xmldomnode *xmldomnode::wrapChild(xmldomnode *child, const char *name) {
+	return wrapChildren(child,child,name);
+}
+
+xmldomnode *xmldomnode::wrapChildren(xmldomnode *startchild,
+						xmldomnode *endchild,
+						const char *name) {
+
+	xmldomnode	*newnode=insertTag(name,startchild->getPosition());
+	if (newnode->isNullNode()) {
+		return pvt->_nullnode;
+	}
+
+	xmldomnode	*currentchild=startchild;
+	for (;;) {
+
+		xmldomnode	*nextchild=currentchild->getNextSibling();
+
+		if (!moveChild(currentchild,newnode,newnode->getChildCount())) {
+			return pvt->_nullnode;
+		}
+
+		if (currentchild==endchild) {
+			break;
+		}
+
+		currentchild=nextchild;
+	}
+	return newnode;
+}
+
+xmldomnode *xmldomnode::wrapChildren(const char *name) {
+
+	if (!getChildCount()) {
+		return insertTag(name,0);
+	}
+
+	return wrapChildren(getChild((uint64_t)0),
+				getChild(getChildCount()-1),name);
 }
 
 xmldomnode *xmldomnode::clone() {
