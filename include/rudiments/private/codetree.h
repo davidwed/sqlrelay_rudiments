@@ -4,8 +4,8 @@
 	private:
 		void	buildNonTerminalNodeAssociations(
 					xmldomnode *node);
-		const char	getSymbolType(xmldomnode *nt);
-		bool		isTag(xmldomnode *nt);
+		char	getSymbolType(xmldomnode *nt);
+		bool	isTag(xmldomnode *nt);
 		bool	parseChild(xmldomnode *grammarnode,
 					xmldomnode *treeparent,
 					const char **codeposition,

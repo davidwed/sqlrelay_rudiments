@@ -463,7 +463,7 @@ bool compiler::process(xmldomnode *root) {
 			root->print(&stdoutput);
 		}
 		debugPrintf(1,"\n\n===================="
-				"====================\n\n")
+				"====================\n\n");
 
 		// process
 		if (!((compilerprocessor *)mod)->
