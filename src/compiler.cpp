@@ -11,7 +11,6 @@
 
 	// degenerate debug macros for really incapable compilers
 	// (old microsoft compilers, unixware native compiler, openvms compiler)
-	static void debugPrintIndent(uint8_t level) {}
 	static void debugPrintf(uint8_t level, const char *format, ...) {}
 	static void debugSafePrint(uint8_t level, const char *string) {}
 	static void debugSafePrintLength(uint8_t level, const char *string,
@@ -19,7 +18,6 @@
 #else
 
 	// working debug macros for more modern compilers
-	#define debugPrintIndent(level) if (pvt->_debuglevel>=level) { for (uint32_t i=0; i<pvt->_depth; i++) { stdoutput.printf(" "); } }
 	#ifdef _MSC_VER
 		#define debugPrintf(level,ARGS,...) if (pvt->_debuglevel>=level) { stdoutput.printf(ARGS,__VA_ARGS__); stdoutput.flush(); }
 	#else
