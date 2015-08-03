@@ -88,7 +88,10 @@ PROGS2 = \
 	serviceentry$(EXE) \
 	sharedmemory1$(EXE) \
 	sharedmemory2$(EXE) \
+	semaphoreset1$(EXE) \
+	semaphoreset2$(EXE) \
 	signal$(EXE) \
+	kill$(EXE) \
 	singlylinkedlist-values$(EXE) \
 	singlylinkedlist-nodes$(EXE) \
 	singlylinkedlist-sort$(EXE) \
@@ -98,6 +101,9 @@ PROGS2 = \
 	stdio$(EXE) \
 	stringbuffer$(EXE) \
 	sys$(EXE) \
+	reboot$(EXE) \
+	shutdown$(EXE) \
+	halt$(EXE) \
 	unixsocketclient$(EXE) \
 	unixsocketserver$(EXE) \
 	bytebuffer$(EXE) \
@@ -121,7 +127,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS0)
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
-	$(LTCLEAN) $(RM) *.lo *.o *.obj
+	$(LTCLEAN) $(RM) *.lo *.o *.obj shm
 
 character-isxxx$(EXE): character-isxxx.cpp character-isxxx.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)
@@ -357,8 +363,17 @@ sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.$(OBJ)
 sharedmemory2$(EXE): sharedmemory2.cpp sharedmemory2.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ sharedmemory2.$(OBJ) $(LIBS)
 
+semaphoreset1$(EXE): semaphoreset1.cpp semaphoreset1.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ semaphoreset1.$(OBJ) $(LIBS)
+
+semaphoreset2$(EXE): semaphoreset2.cpp semaphoreset2.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ semaphoreset2.$(OBJ) $(LIBS)
+
 signal$(EXE): signal.cpp signal.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ signal.$(OBJ) $(LIBS)
+
+kill$(EXE): kill.cpp kill.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ kill.$(OBJ) $(LIBS)
 
 singlylinkedlist-values$(EXE): singlylinkedlist-values.cpp singlylinkedlist-values.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ singlylinkedlist-values.$(OBJ) $(LIBS)
@@ -386,6 +401,15 @@ stringbuffer$(EXE): stringbuffer.cpp stringbuffer.$(OBJ)
 
 sys$(EXE): sys.cpp sys.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ sys.$(OBJ) $(LIBS)
+
+reboot$(EXE): reboot.cpp reboot.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ reboot.$(OBJ) $(LIBS)
+
+shutdown$(EXE): shutdown.cpp shutdown.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ shutdown.$(OBJ) $(LIBS)
+
+halt$(EXE): halt.cpp halt.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ halt.$(OBJ) $(LIBS)
 
 unixsocketclient$(EXE): unixsocketclient.cpp unixsocketclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ unixsocketclient.$(OBJ) $(LIBS)

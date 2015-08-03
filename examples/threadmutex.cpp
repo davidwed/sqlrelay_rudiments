@@ -19,8 +19,10 @@ void count(void *args) {
 
 	// count to 5, ten times
 	stdoutput.printf("thread %d: ",a->id);
-	for (uint16_t c=0; c<50; c++) {
-		stdoutput.printf("%d",c%10);
+	for (uint16_t oc=0; oc<10; oc++) {
+		for (uint16_t ic=0; ic<5; ic++) {
+			stdoutput.printf("%d",ic);
+		}
 	}
 	stdoutput.printf("\n");
 
