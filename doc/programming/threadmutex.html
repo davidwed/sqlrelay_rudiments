@@ -11,6 +11,8 @@
 
 <p>Intances of threadmutex can be used to protect critical sections of code or synchronize threads.</p>
 
+<p>In this example, five threads are spawned.  Each counts from 0 to 4, ten times.  A threadmutex is used to synchronize the threads so that each thread is able to finish its count without being interrupted by another thread.</p>
+
 <blockquote class="code">
 
 <script type='text/javascript'>
@@ -40,8 +42,10 @@
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// count to 5, ten times</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;thread&nbsp;</font><font color="#6a5acd">%d</font><font color="#ff00ff">: &quot;</font>,a-&gt;id);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>uint16_t</b></font>&nbsp;c=<font color="#ff00ff">0</font>; c&lt;<font color="#ff00ff">50</font>; c++) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&quot;</font>,c%<font color="#ff00ff">10</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>uint16_t</b></font>&nbsp;oc=<font color="#ff00ff">0</font>; oc&lt;<font color="#ff00ff">10</font>; oc++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#a52a2a"><b>for</b></font>&nbsp;(<font color="#2e8b57"><b>uint16_t</b></font>&nbsp;ic=<font color="#ff00ff">0</font>; ic&lt;<font color="#ff00ff">5</font>; ic++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">%d</font><font color="#ff00ff">&quot;</font>,ic);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>);<br>
 <br>

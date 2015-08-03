@@ -7,17 +7,37 @@
 
 <span class="heading">Using the sharedmemory class</span><br><br>
 
-<p>Shared memory allows seperate processes to access a common block of memory.  The standard functions and structures for managing shared memory segments are complex.  The sharedmemory class attempts to rectify this situation.  Below is some code illustrating the use of the sharedmemory class.</p>
+<p>Shared memory allows seperate processes to access a common block of memory.  The <a href="../classes/html/classsharedmemory.html">sharedmemory class</a> provides methods for creating and accessing shared memory.</p>
 
-<p>There are methods in the sharedmemory class that allow you to get and set user/group ownership and permissions of a segment that are not documented here, but they are straightforward and rarely used.</p>
+<p>This program creates a shared memory segment, copies some data into it, then goes to sleep, giving another program time to access the segment.</p>
 
-<p>This program puts some data into shared memory then goes to sleep, giving another program time to access the segment.</p>
-
+<blockquote class="code">
 @sharedmemory1.cpp.html@
+</blockquote>
 
 <p>This program reads the data from shared memory.</p>
 
+<blockquote class="code">
 @sharedmemory2.cpp.html@
+</blockquote>
+
+<p>Note that on unix-like systems, the first program should not be killed.  Shared memory segments are persistent in the kernel and remain unless specifically removed.  The sharedmemory class will remove the shared memory segment that it created when the instance of the class is destroyed, but if the first process is killed then the shared memory segment will persist and subsequent attempts to run the program will fail with a cryptic error like "File exists" or similar.</p>
+
+<p>If this happens, most unix-like systems provide utilites for examining and cleaning up shared memory segments.</p>
+
+<p>Running <i>ipcs -m</i> allows you to examine shared memory segments.  It ought to return something like:</p>
+
+<blockquote>
+<pre>
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status
+0x010114e8 190021641  dmuse      600        128        1
+</pre>
+</blockquote>
+
+<p>The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -m 190021641</i></p>
+
+<p>None of this is an issue on Windows systems.</p>
 
 </body>
 </html>

@@ -7,9 +7,33 @@
 
 <span class="heading">Using the sys class</span><br><br>
 
-<p>...</p>
+<p>The <a href="../classes/html/classsys.html">sys class</a> provides methods for accessing information about the operating system and controlling the state of the operating system.</p>
 
+<p>In this example, various bits of system information are printed out.</p>
+
+<blockquote class="code">
 @sys.cpp.html@
+</blockquote>
+
+<p>Note that not all systems support every piece of information.  If a piece of information is unsupported, then a -1 is returned.</p>
+
+<p>This example reboots the system, when run as root or Administrator.</p>
+
+<blockquote class="code">
+@reboot.cpp.html@
+</blockquote>
+
+<p>This example performs a graceful system shutdown, when run as root or Administrator.</p>
+
+<blockquote class="code">
+@shutdown.cpp.html@
+</blockquote>
+
+<p>This example performs a less-graceful system halt, when run as root or Administrator.</p>
+
+<blockquote class="code">
+@halt.cpp.html@
+</blockquote>
 
 </body>
 </html>

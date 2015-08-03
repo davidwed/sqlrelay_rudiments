@@ -8,19 +8,43 @@
 <a name="semaphoreset"></a>
 <span class="heading">Using the semaphoreset class</span><br><br>
 
-<p>Semaphores allow seperate processes or threads to synchronize activities.  The standard functions and structures for managing semaphores are complex.  The sempahoreset class attempts to rectify this situation.  Below is some code illustrating the use of the semaphoreset class.</p>
+<p>Semaphores allow seperate processes or threads to synchronize activities.  The <a href="../classes/html/classsemaphoreset.html">semaphoreset class</a> provides methods for creating and accessing semaphores.</p>
 
-<p>There are methods in the semaphoreset class that allow you to get and set user/group ownership and permissions of a semaphore set that are not documented here, but they are straightforward and rarely used.</p>
+<p>This program creates a set of semaphores and prints out 1 and 3, using the semaphores to synchronize with a second program.</p>
 
-<p>The first program prints out 1 and 3, the second program prints out 2 and 4.  They use a set of 2 semaphores to synchronize these activities.  No matter what order the programs are started in, they will always print out:</p>
+<blockquote class="code">
+@semaphoreset1.cpp.html@
+</blockquote>
 
-<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
+<p>This program attaches to the semaphore set created by the first program and prints out 2 and 4, using the semaphores to synchronize with a first program.</p>
+
+<blockquote class="code">
+@semaphoreset2.cpp.html@
+</blockquote>
 
 <p>These programs must both be run to the background.</p>
 
-@semaphoreset1.cpp.html@
+<p>No matter what order the programs are started in, they will always print out:</p>
 
-@semaphoreset2.cpp.html@
+<p>1<br>2<br>3<br>4<br>1<br>2<br>3<br>4<br>etc.</p>
+
+<p>Note that on unix-like systems, the first program should not be killed.  Semaphore sets are persistent in the kernel and remain unless specifically removed.  The semaphoreset class will remove the semaphore set that it created when the instance of the class is destroyed, but if the first process is killed then the semaphore set will persist and subsequent attempts to run the program will fail with a cryptic error like "File exists" or similar.</p>
+
+<p>If this happens, most unix-like systems provide utilites for examining and cleaning up semaphore sets.</p>
+
+<p>Running <i>ipcs -s</i> allows you to examine semaphore sets.  It ought to return something like:</p>
+
+<blockquote>
+<pre>
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems
+0x010114f4 188678177  dmuse      600        2
+</pre>
+</blockquote>
+
+<p>The shmid can then be used with the <i>ipcrm</i> utility to remove the shared memory segment.  For example: <i>ipcrm -s 188678177</i></p>
+
+<p>None of this is an issue on Windows systems.</p>
 
 </body>
 </html>

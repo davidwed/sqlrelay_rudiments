@@ -5,21 +5,33 @@
 </head>
 <body>
 
-<span class="heading">Using the cignal classes</span><br><br>
+<span class="heading">Using the signal classes</span><br><br>
 
-<p>Signals allow processes to interrupt the execution of other processes.  Signal handlers allow processes to intercept and react to the signals sent to them.</p>
+<p>Signals allow one processes to interrupt the execution of another process.</p>
 
-<p>Rudiments provides 3 classes for working with signals: signalset, signalmanager and signalhandler.
+<p>Signal handlers allow processes to intercept and react to the signals sent to them.</p>
 
-<p>A signalset is just a collection of signals.  The signalset class allows a programmer to build up a collection of signals.</p>
+<p>Rudiments provides 3 classes for working with signals: <a href="../classes/html/classsignalset.html">signalset</a>, <a href="../classes/html/classsignalmanager.html">signalmanager</a> and <a href="../classes/html/classsignalhandler.html">signalhandler</a>.
 
-<p>The signalmanager class provides methods for sending signals, ignoring signals, waiting for signals and examining blocked signals.</p>
+<p>A signal set is just a collection of signals.  The <a href="../classes/html/classsignalset.html">signalset class</a> allows a programmer to build up a collection of signals.</p>
 
-<p>The signalhandler class provides methods for catching and handling signals.</p>
+<p>The <a href="../classes/html/classsignalmanager.html">signalmanager class</a> provides methods for sending signals, ignoring signals, waiting for signals and examining blocked signals.</p>
 
-<p>Below is some code illustrating the use of all three classes.  Note that you'll have to kill this program with a -9.</p>
+<p>The <a href="../classes/html/classsignalhandler.html">signalhandler class</a> provides methods for catching and handling signals.</p>
 
+<p>This program illustrates the use of all three classes.</p>
+
+<blockquote class="code">
 @signal.cpp.html@
+</blockquote>
+
+<p>It should print out "alarm!" every 2 seconds and, if killed, should print out "Got a SIGTERM!" before exiting.  If killed with a signal other than SIGTERM (the default), then it will ignore the signal.</p>
+
+<p>Windows systems don't have signals or the <i>kill</i> program.  Signals are more-or-less simulated on Windows platforms though, and the following program provides an approximation of the <i>kill</i> program as found on unix-like systems, that should work on Windows.</p>
+
+<blockquote class="code">
+@kill.cpp.html@
+</blockquote>
 
 </body>
 </html>
