@@ -1549,7 +1549,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates the file "name" with permissions "perms". If the file already exists, it will be truncated. Returns true on success and false on failure. </p>
+<p>Creates the file "name" with permissions "perms". If the file already exists, it will be truncated. Returns true on success and false on failure.</p>
+<p>Equivalent to calling: open(name,O_CREAT|O_WRONLY|O_TRUNC,perms) </p>
 
 </div>
 </div>
@@ -2868,7 +2869,17 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Opens the file "name" using "flags". Returns true on success and false on failure. </p>
+<p>Opens the file "name" using "flags".</p>
+<p>"flags" may contain one more more of the following flags, or'ed together:</p>
+<p>O_RDONLY - Open the file in read-only mode.</p>
+<p>O_WRONLY - Open the file in write-only mode.</p>
+<p>O_RDWR - Open the file in write-only mode.</p>
+<p>O_APPEND - Set the position to the end of the file.</p>
+<p>O_TRUNC - Truncate the file. Requires O_WRONLY or O_RDWR.</p>
+<p>O_CREAT - Creates the file if it doesn't exist. See O_EXCL.</p>
+<p>O_EXCL - Requires O_CREAT. Causes O_CREAT to fail if the file already exists. Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.</p>
+<p>Many platforms support additional, platform-specific flags.</p>
+<p>Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -2901,7 +2912,18 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Opens the file "name" using "flags". If "flags" contains O_CREAT and the file doesn't already exist, it will be created with permissions "perms". Returns true on success and false on failure. </p>
+<p>Opens the file "name" using "flags".</p>
+<p>"flags" may contain one more more of the following flags, or'ed together:</p>
+<p>O_RDONLY - Open the file in read-only mode.</p>
+<p>O_WRONLY - Open the file in write-only mode.</p>
+<p>O_RDWR - Open the file in write-only mode.</p>
+<p>O_APPEND - Set the position to the end of the file.</p>
+<p>O_TRUNC - Truncate the file. Requires O_WRONLY or O_RDWR.</p>
+<p>O_CREAT - Creates the file if it doesn't exist. See O_EXCL.</p>
+<p>O_EXCL - Requires O_CREAT. Causes O_CREAT to fail if the file already exists. Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.</p>
+<p>Many platforms support additional, platform-specific flags.</p>
+<p>If "flags" contains O_CREAT and the file doesn't already exist, then it will be created with permissions "perms".</p>
+<p>Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -4002,7 +4024,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 4 2015 00:01:50 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 4 2015 13:27:21 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
