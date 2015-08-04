@@ -9,7 +9,9 @@
 
 <p>The <a href="../classes/html/classerror.html">error class</a> provides static methods for getting and setting posix and native system errors.</p>
 
-<p>On more-or-less posix-compliant systems, most system calls and C-library functions set the "posix system error" when they fail.  Posix defines a bunch of standard error codes like EINTR, ENOMEM, etc.  If an error occurs, the posix system error will be set to one of these.</p>
+<p>On more-or-less posix-compliant systems, most system calls and C-library functions set the "posix system error" when they fail.  Since rudiments uses these functions, when many rudiments methods fail, the posix system error is also set.</p>
+
+<p>Posix defines a bunch of standard error codes like EINTR, ENOMEM, etc.  If an error occurs, the posix system error will be set to one of these.</p>
 
 <p>Some platforms, like Windows have their own, "native system error" as well.  These platforms usually set both the "native system error" and "posix system error" when a system call or C-library function fails.</p>
 

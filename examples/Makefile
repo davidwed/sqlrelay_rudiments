@@ -28,6 +28,7 @@ PROGS0 = \
 	dictionary-const$(EXE) \
 	dictionary-nonconst$(EXE) \
 	directory$(EXE) \
+	dtd$(EXE) \
 	dynamiclib$(EXE) \
 	environment$(EXE) \
 	error$(EXE) \
@@ -111,7 +112,8 @@ PROGS2 = \
 	bytebuffer$(EXE) \
 	xmldom$(EXE) \
 	xmlsax$(EXE) \
-	codetree$(EXE)
+	codetree$(EXE) \
+	compiler$(EXE)
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2)
 
@@ -196,6 +198,12 @@ dictionary-const$(EXE): dictionary-const.cpp dictionary-const.$(OBJ)
 
 dictionary-nonconst$(EXE): dictionary-nonconst.cpp dictionary-nonconst.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ dictionary-nonconst.$(OBJ) $(LIBS)
+
+directory$(EXE): directory.cpp directory.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ directory.$(OBJ) $(LIBS)
+
+dtd$(EXE): dtd.cpp dtd.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ dtd.$(OBJ) $(LIBS)
 
 dynamiclib$(EXE): dynamiclib.cpp dynamiclib.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ dynamiclib.$(OBJ) $(LIBS)
@@ -436,3 +444,6 @@ xmlsax$(EXE): xmlsax.cpp xmlsax.$(OBJ)
 
 codetree$(EXE): codetree.cpp codetree.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ codetree.$(OBJ) $(LIBS)
+
+compiler$(EXE): compiler.cpp compiler.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ compiler.$(OBJ) $(LIBS)

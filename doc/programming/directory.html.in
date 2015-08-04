@@ -10,7 +10,9 @@
 
 <p>...</p>
 
+<blockquote class="code">
 @directory.cpp.html@
+</blockquote>
 
 </body>
 </html>

@@ -38,7 +38,9 @@ name='\\value\\'
 ...
 </pre>
 
+<blockquote class="code">
 @parameterstring.cpp.html@
+</blockquote>
 
 </body>
 </html>

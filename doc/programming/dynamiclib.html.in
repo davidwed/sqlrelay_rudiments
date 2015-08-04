@@ -9,7 +9,9 @@
 
 <p>...</p>
 
+<blockquote class="code">
 @dynamiclib.cpp.html@
+</blockquote>
 
 </body>
 </html>

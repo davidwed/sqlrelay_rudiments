@@ -35,7 +35,9 @@
 
 <p>The following program parses the addressbook and prints it to the screen.</p>
 
+<blockquote class="code">
 @xmldom.cpp.html@
+</blockquote>
 
 <p>Here is the output of the program above.</p>
 

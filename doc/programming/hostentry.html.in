@@ -8,13 +8,31 @@
 <a name="hostentry"></a>
 <span class="heading">Using the hostentry class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#hostname">Lookup By Hostname</a></li>
+<li><a href="#address">Lookup By Address</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classhostentry.html">hostentry class</a> provides methods for retrieveing information about hosts by hostname or address.</p>
+
+<br>
+<a name="hostname"></a>
+<h3>Lookup By Hostname</h3>
 
 <p>In this example, host information is retrieved by hostname.</p>
 
 <blockquote class="code">
 @hostentry-hostname.cpp.html@
 </blockquote>
+
+<br>
+<a name="address"></a>
+<h3>Lookup By Address</h3>
 
 <p>In this example, host information is retrieved by address.  In particular, an IPv4 address.</p>
 

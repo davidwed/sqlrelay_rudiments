@@ -7,15 +7,33 @@
 
 <span class="heading">Using the serviceentry class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#name">Lookup By Name</a></li>
+<li><a href="#number">Lookup By Number</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
 <p>The <a href="../classes/html/classserviceentry.html">serviceentry class</a> provides methods for retrieving network service definitions.  These are usually defined in a file like /etc/services on unix-like systems or C:\Windows\System32\drivers\etc\services on Windows, or are served from another source via the name-service switch.</p>
 
 <p>Services can be looked up by name or number.</p>
+
+<br>
+<a name="name"></a>
+<h3>Lookup By Name</h3>
 
 <p>In this example, information for the "smtp" service, "tcp" protocol is retrieved.</p>
 
 <blockquote class="code">
 @serviceentry-name.cpp.html@
 </blockquote>
+
+<br>
+<a name="number"></a>
+<h3>Lookup By Number</h3>
 
 <p>In this example, information for "service number 25", "tcp" protocol is retrieved.</p>
 

@@ -7,7 +7,23 @@
 
 <span class="heading">Using the sys class</span><br><br>
 
-<p>The <a href="../classes/html/classsys.html">sys class</a> provides methods for accessing information about the operating system and controlling the state of the operating system.</p>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#info">Getting System Information</a></li>
+<li><a href="#reboot">Reboot</a></li>
+<li><a href="#shutdown">Shutdown</a></li>
+<li><a href="#halt">Halt</a></li>
+</ul>
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classsys.html">sys class</a> provides methods for getting information about the operating system and controlling the state of the operating system.</p>
+
+<br>
+<a name="info"></a>
+<h3>Getting System Information</h3>
 
 <p>In this example, various bits of system information are printed out.</p>
 
@@ -195,12 +211,20 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Max Process ID&quot;</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%lld</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getMaxProcessId());<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;Directory Separator&quot;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#ff00ff">&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</font><font color="#6a5acd">%c</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys::getDirectorySeparator());<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
 <p>Note that not all systems support every piece of information.  If a piece of information is unsupported, then a -1 is returned.</p>
+
+<br>
+<a name="reboot"></a>
+<h3>Reboot</h3>
 
 <p>This example reboots the system, when run as root or Administrator.</p>
 
@@ -227,6 +251,10 @@
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
 
+<br>
+<a name="shutdown"></a>
+<h3>Shutdown</h3>
+
 <p>This example performs a graceful system shutdown, when run as root or Administrator.</p>
 
 <blockquote class="code">
@@ -251,6 +279,10 @@
 </font>
 <!-- vim: set foldmethod=manual : -->
 </blockquote>
+
+<br>
+<a name="halt"></a>
+<h3>Halt</h3>
 
 <p>This example performs a less-graceful system halt, when run as root or Administrator.</p>
 

@@ -10,7 +10,9 @@
 
 <p>...</p>
 
+<blockquote class="code">
 @serialport.cpp.html@
+</blockquote>
 
 </head>
 </body>

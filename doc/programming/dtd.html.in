@@ -9,7 +9,9 @@
 
 <p>The dtd class provides methods for parsing an XML DTD.  The result is an XML DOM tree representing the DTD.  Once parsed, the tree can be accessed using the xmldom and xmldomnode classes.</p>
 
+<blockquote class="code">
 @dtd.cpp.html@
+</blockquote>
 
 </body>
 </html>

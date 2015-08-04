@@ -10,7 +10,9 @@
 
 <p>...</p>
 
+<blockquote class="code">
 @device.cpp.html@
+</blockquote>
 
 </body>
 </html>

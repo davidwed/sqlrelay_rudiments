@@ -9,7 +9,9 @@
 
 <p>...</p>
 
+<blockquote class="code">
 @serialportprofile.cpp.html@
+</blockquote>
 
 </body>
 </html>
