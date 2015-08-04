@@ -106,7 +106,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac0ff8b449fa8ff2f9a3b501b09ad135b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcompiler.html#ac0ff8b449fa8ff2f9a3b501b09ad135b">setDebugLevel</a> (uint8_t debuglevel)</td></tr>
 <tr class="separator:ac0ff8b449fa8ff2f9a3b501b09ad135b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The compiler class provides a generic compiler framework.</p>
+<p>Though targeted at code-to-code translation (transcompiling), it could be used as the basis for any type of translation or compilation system.</p>
+<p>Translation/compilation is achieved in three steps:</p>
+<ul>
+<li>Pre-processing</li>
+<li>Processing</li>
+<li>Post-processing</li>
+</ul>
+<p>In the pre-processing step, a unit of code and optional metadata is passed through a chain of pre-processing modules. The output of each module is fed to the next as input.</p>
+<p>In the processing step, the output of the final preprocessing module is parsed by an instance of the codetree class, using the provided input grammar, producing an xmldom tree which represents the code. The tree and optional metadata is then passed through a chain of processing modules which convert the tree from representing one type of code to a tree representing another type of code. The output of the final processing module is converted back to code, using the provided output grammar.</p>
+<p>In the post-processing step, the output of the processing step is passed through a chain of post-processing modules. The output of each module is fed to the next as input. Ultimately a unit of compiled code is produced.</p>
+<p>Pre-processing modules should inherit from the compilerpreprocessor class. Processing modules should inherit from the compilerprocessor class. Post-processing modules should inherit from the compilerpostprocessor class. All modules must implement the <a class="el" href="classcompiler.html#a58b78d81ad8e4b9f605fc4eaea6cce66">process()</a> method.</p>
+<p>The pre and post-processing modules directly manipulate code and might make heavy use of the file, charstring/bytestring and stringbuffer/bytebuffer classes. The processing modules manipulate an xmldom tree representing code and would likely make heavy use of the xmldomnode class.</p>
+<p>The input and output code may be text or binary. The framework is geared toward text processing, but could be used to process binary data as well.</p>
+<p>See the codetree class for information on the grammars used to define the input and output formats. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aefa9f0f037dd6104ff4221f31d37976b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -730,7 +746,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Aug 3 2015 23:58:44 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 4 2015 00:01:50 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

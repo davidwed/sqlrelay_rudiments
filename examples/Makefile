@@ -131,7 +131,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS0)
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
-	$(LTCLEAN) $(RM) *.lo *.o *.obj shm
+	$(LTCLEAN) $(RM) *.lo *.o *.obj shm sem
 
 character-isxxx$(EXE): character-isxxx.cpp character-isxxx.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)

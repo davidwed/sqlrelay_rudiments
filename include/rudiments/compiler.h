@@ -7,6 +7,10 @@
 #include <rudiments/private/compilerincludes.h>
 
 class compilerprivate;
+class compilermodule;
+class compilerpreprocessor;
+class compilerprocessor;
+class compilerpostprocessor;
 
 /** The compiler class provides a generic compiler framework.
  *
@@ -56,11 +60,6 @@ class compilerprivate;
  *  See the codetree class for information on the grammars used to define the
  *  input and output formats.
  */
-
-class compilermodule;
-class compilerpreprocessor;
-class compilerprocessor;
-class compilerpostprocessor;
 
 class RUDIMENTS_DLLSPEC compiler {
 	public:

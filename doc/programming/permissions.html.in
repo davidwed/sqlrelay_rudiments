@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the permissions class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<a name="permissions">
+<span class="heading">Using the permissions class</span><br><br>
+
+<p>...</p>
+
+<blockquote class="code">
+@permissions.cpp.html@
+</blockquote>
+
+</body>
+</html>
