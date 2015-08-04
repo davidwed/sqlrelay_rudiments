@@ -233,7 +233,8 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 						shmname);
 		delete[] shmname;
 		if (!pvt->_map) {
-			stdoutput.printf("failed: %s\n",error::getNativeErrorString());
+			stdoutput.printf("failed: %s\n",
+						error::getNativeErrorString());
 			return false;
 		}
 

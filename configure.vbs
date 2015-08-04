@@ -53,7 +53,6 @@ srcs="winsock.cpp "+_
 	"bytestring.cpp "+_
 	"regex.cpp "+_
 	"regularexpression.cpp "+_
-	"rpcentry.cpp "+_
 	"semaphoreset.cpp "+_
 	"server.cpp "+_
 	"serviceentry.cpp "+_
@@ -112,7 +111,6 @@ lobjs="winsock.obj "+_
 	"bytestring.obj "+_
 	"regex.obj "+_
 	"regularexpression.obj "+_
-	"rpcentry.obj "+_
 	"semaphoreset.obj "+_
 	"server.obj "+_
 	"serviceentry.obj "+_
@@ -177,7 +175,6 @@ headers2="protocolentry.h "+_
 	"randomnumber.h "+_
 	"bytestring.h "+_
 	"regularexpression.h "+_
-	"rpcentry.h "+_
 	"semaphoreset.h "+_
 	"serialport.h "+_
 	"serialportprofile.h "+_
@@ -299,8 +296,6 @@ privateheaders4="modemclient.h "+_
 privateheaders5="bytestringincludes.h "+_
 	"regularexpression.h "+_
 	"regularexpressionincludes.h "+_
-	"rpcentry.h "+_
-	"rpcentryincludes.h "+_
 	"semaphoreset.h "+_
 	"semaphoresetincludes.h "+_
 	"serialport.h "+_

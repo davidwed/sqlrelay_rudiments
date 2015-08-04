@@ -7,9 +7,11 @@
 
 <span class="heading">Using the groupentry class</span><br><br>
 
-<p>The groupentry class allows you to look up entries from /etc/group or from elsewhere if you're using the Name Service Switch.</p>
+<p>The <a href="../classes/html/classgroupentry.html">groupentry class</a> provides methods for retrieving information about groups.</p>
 
+<blockquote class="code">
 @groupentry.cpp.html@
+</blockquote>
 
 </body>
 </html>

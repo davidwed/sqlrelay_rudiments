@@ -7,9 +7,21 @@
 
 <span class="heading">Using the serviceentry class</span><br><br>
 
-<p>The serviceentry class allows you to look up entries from /etc/services or from elsewhere if you're using the Name Service Switch.</p>
+<p>The <a href="../classes/html/classserviceentry.html">serviceentry class</a> provides methods for retrieving network service definitions.  These are usually defined in a file like /etc/services on unix-like systems or C:\Windows\System32\drivers\etc\services on Windows, or are served from another source via the name-service switch.</p>
 
-@serviceentry.cpp.html@
+<p>Services can be looked up by name or number.</p>
+
+<p>In this example, information for the "smtp" service, "tcp" protocol is retrieved.</p>
+
+<blockquote class="code">
+@serviceentry-name.cpp.html@
+</blockquote>
+
+<p>In this example, information for "service number 25", "tcp" protocol is retrieved.</p>
+
+<blockquote class="code">
+@serviceentry-number.cpp.html@
+</blockquote>
 
 </body>
 </html>

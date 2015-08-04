@@ -214,10 +214,6 @@ AC_ARG_ENABLE(regularexpression,
 	[  --disable-regularexpression    Don't build regularexpression],
 	INCLUDE_REGULAREXPRESSION="0",
 	INCLUDE_REGULAREXPRESSION="1")
-AC_ARG_ENABLE(rpcentry,
-	[  --disable-rpcentry      Don't build rpcentry class],
-	INCLUDE_RPCENTRY="0",
-	INCLUDE_RPCENTRY="1")
 AC_ARG_ENABLE(semaphoreset,
 	[  --disable-semaphoreset  Don't build semaphoreset],
 	INCLUDE_SEMAPHORESET="0",
@@ -1599,7 +1595,6 @@ FW_CHECK_GRP
 FW_CHECK_HOST
 FW_CHECK_PROTO
 FW_CHECK_SVC
-FW_CHECK_RPC
 
 echo "******************************"
 
@@ -3797,14 +3792,6 @@ if ( test "$USE_BUILT_IN_REGULAREXPRESSION" = "1" )
 then
 	SRCS="$SRCS regex.cpp"
 	LOBJS="$LOBJS regex.lo"
-fi
-
-if ( test "$INCLUDE_RPCENTRY" = "1" )
-then
-	HEADERS2="$HEADERS2 rpcentry.h"
-	PRIVATEHEADERS4="$PRIVATEHEADERS4 rpcentry.h rpcentryincludes.h"
-	SRCS="$SRCS rpcentry.cpp"
-	LOBJS="$LOBJS rpcentry.lo"
 fi
 
 if ( test "$INCLUDE_SEMAPHORESET" = "1" )

@@ -20,7 +20,6 @@ PROGS0 = server \
 	permissions \
 	protocolentry \
 	regularexpression \
-	rpcentry \
 	semaphoreset1 \
 	semaphoreset2 \
 	charstring \
@@ -196,9 +195,6 @@ protocolentry: protocolentry.cpp protocolentry.$(OBJ)
 
 regularexpression: regularexpression.cpp regularexpression.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) regularexpression.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-rpcentry: rpcentry.cpp rpcentry.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) rpcentry.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 semaphoreset1: semaphoreset1.cpp semaphoreset1.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) semaphoreset1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

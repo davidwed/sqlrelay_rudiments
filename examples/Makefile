@@ -34,7 +34,8 @@ PROGS0 = \
 	file$(EXE) \
 	filesystem$(EXE) \
 	groupentry$(EXE) \
-	hostentry$(EXE) \
+	hostentry-hostname$(EXE) \
+	hostentry-address$(EXE) \
 	inetsocketclient$(EXE) \
 	inetsocketserver$(EXE) \
 
@@ -71,7 +72,8 @@ PROGS1 = \
 	process-forkexec$(EXE) \
 	process-zombie$(EXE) \
 	process-detach$(EXE) \
-	protocolentry$(EXE) \
+	protocolentry-name$(EXE) \
+	protocolentry-number$(EXE) \
 	randomnumber-static$(EXE) \
 	randomnumber-multiple$(EXE) \
 	bytestring-copy$(EXE) \
@@ -80,12 +82,12 @@ PROGS1 = \
 	regularexpression-static$(EXE) \
 	regularexpression-compile$(EXE) \
 	regularexpression-multiple$(EXE) \
-	rpcentry$(EXE) \
 	serialport$(EXE) \
 	serialportprofile$(EXE) \
 
 PROGS2 = \
-	serviceentry$(EXE) \
+	serviceentry-name$(EXE) \
+	serviceentry-number$(EXE) \
 	sharedmemory1$(EXE) \
 	sharedmemory2$(EXE) \
 	semaphoreset1$(EXE) \
@@ -213,8 +215,11 @@ filesystem$(EXE): filesystem.cpp filesystem.$(OBJ)
 groupentry$(EXE): groupentry.cpp groupentry.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ groupentry.$(OBJ) $(LIBS)
 
-hostentry$(EXE): hostentry.cpp hostentry.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ hostentry.$(OBJ) $(LIBS)
+hostentry-hostname$(EXE): hostentry-hostname.cpp hostentry-hostname.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ hostentry-hostname.$(OBJ) $(LIBS)
+
+hostentry-address$(EXE): hostentry-address.cpp hostentry-address.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ hostentry-address.$(OBJ) $(LIBS)
 
 inetsocketclient$(EXE): inetsocketclient.cpp inetsocketclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ inetsocketclient.$(OBJ) $(LIBS)
@@ -318,8 +323,11 @@ process-zombie$(EXE): process-zombie.cpp process-zombie.$(OBJ)
 process-detach$(EXE): process-detach.cpp process-detach.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ process-detach.$(OBJ) $(LIBS)
 
-protocolentry$(EXE): protocolentry.cpp protocolentry.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ protocolentry.$(OBJ) $(LIBS)
+protocolentry-name$(EXE): protocolentry-name.cpp protocolentry-name.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ protocolentry-name.$(OBJ) $(LIBS)
+
+protocolentry-number$(EXE): protocolentry-number.cpp protocolentry-number.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ protocolentry-number.$(OBJ) $(LIBS)
 
 randomnumber-static$(EXE): randomnumber-static.cpp randomnumber-static.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ randomnumber-static.$(OBJ) $(LIBS)
@@ -345,17 +353,17 @@ regularexpression-compile$(EXE): regularexpression-compile.cpp regularexpression
 regularexpression-multiple$(EXE): regularexpression-multiple.cpp regularexpression-multiple.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ regularexpression-multiple.$(OBJ) $(LIBS)
 
-rpcentry$(EXE): rpcentry.cpp rpcentry.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ rpcentry.$(OBJ) $(LIBS)
-
 serialport$(EXE): serialport.cpp serialport.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ serialport.$(OBJ) $(LIBS)
 
 serialportprofile$(EXE): serialportprofile.cpp serialportprofile.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ serialportprofile.$(OBJ) $(LIBS)
 
-serviceentry$(EXE): serviceentry.cpp serviceentry.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ serviceentry.$(OBJ) $(LIBS)
+serviceentry-name$(EXE): serviceentry-name.cpp serviceentry-name.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ serviceentry-name.$(OBJ) $(LIBS)
+
+serviceentry-number$(EXE): serviceentry-number.cpp serviceentry-number.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ serviceentry-number.$(OBJ) $(LIBS)
 
 sharedmemory1$(EXE): sharedmemory1.cpp sharedmemory1.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ sharedmemory1.$(OBJ) $(LIBS)

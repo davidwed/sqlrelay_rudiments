@@ -6,6 +6,7 @@
 	added methods to xmldomnode for deleting, wrapping, unwrapping
 	fixed dynamiclib::getError() bug on windows
 	tweaked -Werror detection in configure script
+	removed rpcentry class
 
 0.51 - added missing inline qualifiers to dynamicarray/staticarray method
 		implementations

@@ -490,30 +490,6 @@
 /* Some systems have getpwuid_r */
 #undef RUDIMENTS_HAVE_GETPWUID_R_5
 
-/* Some systems have getrpcbyname */
-#undef RUDIMENTS_HAVE_GETRPCBYNAME
-
-/* Some systems have getrpcbyname_r */
-#undef RUDIMENTS_HAVE_GETRPCBYNAME_R
-
-/* Some systems have getrpcbyname_r */
-#undef RUDIMENTS_HAVE_GETRPCBYNAME_R_4
-
-/* Some systems have getrpcbyname_r */
-#undef RUDIMENTS_HAVE_GETRPCBYNAME_R_5
-
-/* Some systems have getrpcbynumber */
-#undef RUDIMENTS_HAVE_GETRPCBYNUMBER
-
-/* Some systems have getrpcbynumber_r */
-#undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R
-
-/* Some systems have getrpcbynumber_r */
-#undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_4
-
-/* Some systems have getrpcbynumber_r */
-#undef RUDIMENTS_HAVE_GETRPCBYNUMBER_R_5
-
 /* Some systems have GetSecurityInfo */
 #undef RUDIMENTS_HAVE_GETSECURITYINFO
 
@@ -912,12 +888,6 @@
 
 /* Some systems have Roster.h */
 #undef RUDIMENTS_HAVE_ROSTER_H
-
-/* Some systems have rpc/rpcent.h */
-#undef RUDIMENTS_HAVE_RPCENT_H
-
-/* Some systems have rpc/rpc.h */
-#undef RUDIMENTS_HAVE_RPC_H
 
 /* Do we have real-time-clock RTC_RD_TIME support */
 #undef RUDIMENTS_HAVE_RTC_RD_TIME

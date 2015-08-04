@@ -174,4 +174,8 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Max Process ID"
 			"				: %lld\n",
 			sys::getMaxProcessId());
+
+	stdoutput.printf("Directory Separator"
+			"			: %c\n",
+			sys::getDirectorySeparator());
 }

@@ -8,9 +8,19 @@
 <a name="hostentry"></a>
 <span class="heading">Using the hostentry class</span><br><br>
 
-<p>The hostentry class allows you to look up entries from /etc/hosts or from elsewhere if you're using the Name Service Switch.</p>
+<p>The <a href="../classes/html/classhostentry.html">hostentry class</a> provides methods for retrieveing information about hosts by hostname or address.</p>
 
-@hostentry.cpp.html@
+<p>In this example, host information is retrieved by hostname.</p>
+
+<blockquote class="code">
+@hostentry-hostname.cpp.html@
+</blockquote>
+
+<p>In this example, host information is retrieved by address.  In particular, an IPv4 address.</p>
+
+<blockquote class="code">
+@hostentry-address.cpp.html@
+</blockquote>
 
 </body>
 </html>

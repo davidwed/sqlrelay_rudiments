@@ -7,9 +7,11 @@
 
 <span class="heading">Using the userentry class</span><br><br>
 
-<p>The userentry class allows you to look up entries from /etc/passwd and /etc/shadow or from elsewhere if you're using the Name Service Switch.</p>
+<p>The <a href="../classes/html/classuserentry.html">userentry class</a> provides methods for retrieving information about users.</p>
 
+<blockquote class="code">
 @userentry.cpp.html@
+</blockquote>
 
 </body>
 </html>

@@ -8,9 +8,21 @@
 <a name="protocolentry"></a>
 <span class="heading">Using the protocolentry class</span><br><br>
 
-<p>The protocolentry class allows you to look up entries from /etc/protocols or from elsewhere if you're using the Name Service Switch.</p>
+<p>The <a href="../classes/html/classprotocolentry.html">protocolentry class</a> provides methods for retrieving network protocol definitions.  These are usually defined in a file like /etc/protocols on unix-like systems or C:\Windows\System32\drivers\etc\protocol on Windows, or are served from another source via the name-service switch.</p>
 
-@protocolentry.cpp.html@
+<p>Protocols can be looked up by name or number.</p>
+
+<p>In this example, network protocol information for the "tcp" protocol is retrieved.</p>
+
+<blockquote class="code">
+@protocolentry-name.cpp.html@
+</blockquote>
+
+<p>In this example, network protocol information for the "protocol number 6" is retrieved.</p>
+
+<blockquote class="code">
+@protocolentry-number.cpp.html@
+</blockquote>
 
 </body>
 </html>

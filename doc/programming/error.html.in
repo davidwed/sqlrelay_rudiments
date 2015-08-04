@@ -7,9 +7,23 @@
 
 <span class="heading">Using the error class</span><br><br>
 
-<p>...</p>
+<p>The <a href="../classes/html/classerror.html">error class</a> provides static methods for getting and setting posix and native system errors.</p>
 
+<p>On more-or-less posix-compliant systems, most system calls and C-library functions set the "posix system error" when they fail.  Since rudiments uses these functions, when many rudiments methods fail, the posix system error is also set.</p>
+
+<p>Posix defines a bunch of standard error codes like EINTR, ENOMEM, etc.  If an error occurs, the posix system error will be set to one of these.</p>
+
+<p>Some platforms, like Windows have their own, "native system error" as well.  These platforms usually set both the "native system error" and "posix system error" when a system call or C-library function fails.</p>
+
+<p>Both posix and native system errors can be accessed via the error class.</p>
+
+<p>For platforms that only have posix system errors, the methods for accessing the native sytem error just return the posix system error.</p>
+
+<p>In this example, the posix system error is manipulated directly.</p>
+
+<blockquote class="code">
 @error.cpp.html@
+</blockquote>
 
 </body>
 </html>

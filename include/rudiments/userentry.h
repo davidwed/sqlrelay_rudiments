@@ -61,7 +61,18 @@ class RUDIMENTS_DLLSPEC userentry {
 		 *  returned is just a string representation of the number
 		 *  returned by getUserId(). */
 		const char	*getSidString() const;
+
+		/** Returns a binary representation of the SID (security id) of
+		 *  this user.
+		 *
+		 *  Note: On platforms (like non-Windows platforms) where the
+		 *  platformSupportsFormalSid method returns false, the value
+		 *  returned is just a string representation of the number
+		 *  returned by getUserId(). */
 		const void	*getSid() const;
+
+		/** Returns the length of the binary representation of the SID
+		 *  (security id) of this user, returned by getSid(). */
 		uint64_t	getSidSize() const;
 
 		/** Returns the primary group id of this user. */
