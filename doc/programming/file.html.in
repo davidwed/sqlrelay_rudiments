@@ -8,11 +8,297 @@
 <a name="file">
 <span class="heading">Using the file class</span><br><br>
 
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#create">Creating a File</a></li>
+<li><a href="#remove">Removing a File</a></li>
+<li><a href="#open">Opening and Closing Files</a></li>
+<li><a href="#props">File Properties</a></li>
+<li><a href="#read">Read Access</a></li>
+<li><a href="#write">Write Access</a></li>
+<li><a href="#random">Random Access</a></li>
+<li><a href="#lock">File Locks</a></li>
+<li><a href="#truncate">Truncating a File</a></li>
+<li><a href="#buffers">Buffered File Access</a></li>
+<li><a href="#optimizations">Optimizing File Access</a></li>
+<li><a href="#temp">Temporary Files</a></li>
+<li><a href="#links">Links</a></li>
+<li><a href="#fifos">Fifos</a></li>
+<li><a href="#pipes">Named Pipes</a></li>
+<li><a href="#convenience">Convenience Methods</a></li>
+</ul>
+
+
+<br>
+<a name="intro"></a>
+<h3>Introduction</h3>
+
+<p>The <a href="../classes/html/classfile.html">file class</a> provides methods for creating and accessing files.</p>
+
+<p>The filedescriptor class provides methods for generic input and output to file descriptors.  The file class inherits from filedescriptor and adds methods that are specific to files.  However, when using the file class, you will likely make heavy use of filedescriptor methods such as read() and write().</p>
+
+
+<br>
+<a name="create"></a>
+<h3>Creating a File</h3>
+
+<p>The following example demonstrates the different ways to create a file.</p>
+
+<p>Note that when creating a file, the file permissions must be supplied.  Rudiments supports unix-style file permissions, even on Windows.  See the <a href="permissions.html">permissions class</a> for more information.</p>
+
+<blockquote class="code">
+@file-create.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="remove"></a>
+<h3>Removing a File</h3>
+
+<p>The file class provides a static method for removing a file.</p>
+
+<blockquote class="code">
+@file-remove.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="open"></a>
+<h3>Opening a File</h3>
+
+<p>To open a file, call one of the open() methods.</p>
+
+<p>The open() methods take the filename to open and a set of flags.</p>
+
+<p>Flags may include one or more of the following flags, or'ed together.</p>
+
+<ul>
+<li>O_RDONLY - Open the file in read-only mode.</li>
+<li>O_WRONLY - Open the file in write-only mode.</li>
+<li>O_RDWR - Open the file in write-only mode.</li>
+<li>O_APPEND - Set the position to the end of the file.</li>
+<li>O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.</li>
+<li>O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.</li>
+<li>O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the file already exists.  Without O_EXCL, O_CREAT will succeed, and just open the file, if the file already exists.</li>
+</ul>
+
+<p>Many platforms support additional, platform-specific flags.</p>
+
+<p>There are two varieties of the open() method.  They both take filename and flags.  The second also takes permissions.  If the flags include O_CREAT then the permissions are used when creating the file.  If the flags don't include O_CREAT then the permissions are ignored.</p>
+
+<p>Files are closed when the instance of the file class is deleted, or when the same instance is used to open another file, but they can also be closed manually using the close() method.</p>
+
+<p>The following example demonstrates various ways to open and close a file.</p>
+
+<blockquote class="code">
+@file-open.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="props"></a>
+<h3>File Properties</h3>
+
+<p>The file class provides methods for getting various file properties including permissions, ownership, size, type, and access and modification times.</p>
+
+<p>The following example opens a file and prints out various file properties.  Note that other classes must be used to convert the codes, ids and raw times to human-readable form.</p>
+
+<p>Note that this program depends on the existence of testfile1, so you'll have to touch it, or run one of the programs above to create it.</p>
+
+<blockquote class="code">
+@file-getprops.cpp.html@
+</blockquote>
+
+<p>There are 3 other methods worth mentioning as well:</p>
+
+<dl>
+<dt>getCurrentProperties()</dt>
+<dd>By default, the file class fetches file properties when open() or create() are called.  If a property is changed, then the old value will still be reflected when the method to get it is called, unless this method is called first.</dd>
+<dt>dontGetCurrentPropertiesOnOpen()</dt>
+<dd>By default, the file class fetches file properties when open() or create() are called.  If this method is called, then file properties will not be fetched unless getCurrentProperties() is called manually.</dd>
+<dt>getCurrentPropertiesOnOpen()</dt>
+<dd>Returns the class to its default behavior of fetching file properties when open() or create() are called.</dd>
+</dl>
+
+
+<br>
+<a name="read"></a>
+<h3>Read Access</h3>
+
+<p>The filedescriptor class (which the file class inherits from) provides read() methods to read data from files and file descriptors.</p>
+
+<p>Methods are provided for reading all primitive types directly.  This example opens a file in read-only mode and reads primitive data types from it.</p>
+
+<blockquote class="code">
+@file-read.cpp.html@
+</blockquote>
+
+<p>Methods are also provided for reading arbitrary data into buffers.  This example approximates the unix "cat" or Windows "type" utility.  It opens a file in read-only mode, reads it in chunks, and prints out each chunk.</p>
+
+<blockquote class="code">
+@cat.cpp.html@
+</blockquote>
+
+<p>A read() method is also provided that reads until it encounters a specified terminator.  This example reads a file, one line at a time, and prints out each line.</p>
+
+<blockquote class="code">
+@file-readline.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="write"></a>
+<h3>Write Access</h3>
+
+<p>The filedescriptor class (which the file class inherits from) provides write() methods to write data to files and file descriptors.</p>
+
+<p>Methods are provided for writing primitive types as well as blocks of character or binary data.  This example creates a file in write-only mode and writes various types of data to it.</p>
+
+<blockquote class="code">
+@file-write.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="random"></a>
+<h3>Random Access</h3>
+
+<p>It is possible to open a file for both reading and writing, write to it, jump around, overwrite parts, jump around some more, and read from it.</p>
+
+<p>This example illustrates random file access.</p>
+
+<blockquote class="code">
+@file-random.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="lock"></a>
+<h3>File Locks</h3>
+
 <p>...</p>
 
 <blockquote class="code">
-@file.cpp.html@
+@file-lock.cpp.html@
 </blockquote>
+
+
+<br>
+<a name="truncate"></a>
+<h3>Truncating a File</h3>
+
+<p>If you want to erase the current contents of a file, there are two options.  The first is to open the file using the O_TRUNC flag.  But, if you want to truncate the file after you've already opened it, you can use the truncate() method.</p>
+
+<blockquote class="code">
+@file-truncate.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="buffers"></a>
+<h3>Buffered File Access</h3>
+
+<p>If your program does a lot of reads and writes, then you probably want to buffer them.  There are two main reasons for this:</p>
+
+<ul>
+<li>Accessing storage is much slower than accessing memory.</li>
+<li>System calls are generally slower than library calls.</li>
+</ul>
+
+<p>Both file systems and physical storage are typically organized in blocks.  Each block is some number of bytes.  A read or write of the entire block costs the same as reading or writing a single byte.  If you use buffers that are the same size as the file system's block size, then reading or writing the entire buffer takes only marginally more time than reading or writing a single byte.</p>
+
+<p>Also, even if the kernel or disk does some kind of buffering, each read or write still requires a system call.  In effect, the program tells the kernel to do the read or write, hands control over to the kernel, waits for it to do it, and then waits for it to hand control back.  The overhead of the switching involved usually makes the whole process slower than if the program read or wrote directly from a buffer under its own control.</p>
+
+<p>Buffering always helps writes and usually helps reads.  How much is platform-specific.</p>
+
+<p>The filesystem class makes buffered I/O simple.  There are only three methods involved:</p>
+
+<dl>
+<dt>setReadBufferSize()</dt>
+<dd>Sets the size of the buffer used when reading.</dd>
+<dt>setWriteBufferSize()</dt>
+<dd>Sets the size of the buffer used when writing.</dd>
+<dt>flushWriteBuffer()</dt>
+<dd>Makes sure that any data that is buffered but hasn't been written to storage, actually gets written to storage.</dd>
+</dl>
+
+<p>Reading is completely transparent.  The read buffer is filled during the first read, and filled again when all bytes have been read from it.</p>
+
+<p>Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  However, when the program is done writing, it should call flushWriteBuffer() to make sure that any data still in the buffer is written to storage.</p>
+
+<p>The example below illustrates buffered I/O.</p>
+
+<blockquote class="code">
+@file-buffers.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="optimizations"></a>
+<h3>Optimizing File Access</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+@file-optimizations.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="temp"></a>
+<h3>Temporary Files</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+@file-temp.cpp.html@
+</blockquote>
+
+
+
+<br>
+<a name="links"></a>
+<h3>Links</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+@file-links.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="fifos"></a>
+<h3>Fifos</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+@file-fifos.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="pipes"></a>
+<h3>Named Pipes</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+@file-pipes.cpp.html@
+</blockquote>
+
+
+<br>
+<a name="convenience"></a>
+<h3>Convenience Methods</h3>
+
+<p>...</p>
+
+<blockquote class="code">
+@file-convenience.cpp.html@
+</blockquote>
+
 
 </body>
 </html>

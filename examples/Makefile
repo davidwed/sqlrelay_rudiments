@@ -32,7 +32,25 @@ PROGS0 = \
 	dynamiclib$(EXE) \
 	environment$(EXE) \
 	error$(EXE) \
-	file$(EXE) \
+	file-create$(EXE) \
+	file-remove$(EXE) \
+	file-open$(EXE) \
+	file-getprops$(EXE) \
+	file-setprops$(EXE) \
+	file-read$(EXE) \
+	cat$(EXE) \
+	file-readline$(EXE) \
+	file-write$(EXE) \
+	file-random$(EXE) \
+	file-lock$(EXE) \
+	file-truncate$(EXE) \
+	file-buffers$(EXE) \
+	file-optimizations$(EXE) \
+	file-temp$(EXE) \
+	file-links$(EXE) \
+	file-fifos$(EXE) \
+	file-pipes$(EXE) \
+	file-convenience$(EXE) \
 	filesystem$(EXE) \
 	groupentry$(EXE) \
 	hostentry-hostname$(EXE) \
@@ -131,7 +149,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS0)
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
-	$(LTCLEAN) $(RM) *.lo *.o *.obj shm sem
+	$(LTCLEAN) $(RM) *.lo *.o *.obj shm sem testfile testfile1 testfile2
 
 character-isxxx$(EXE): character-isxxx.cpp character-isxxx.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ character-isxxx.$(OBJ) $(LIBS)
@@ -214,8 +232,62 @@ environment$(EXE): environment.cpp environment.$(OBJ)
 error$(EXE): error.cpp error.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ error.$(OBJ) $(LIBS)
 
-file$(EXE): file.cpp file.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ file.$(OBJ) $(LIBS)
+file-create$(EXE): file-create.cpp file-create.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-create.$(OBJ) $(LIBS)
+
+file-remove$(EXE): file-remove.cpp file-remove.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-remove.$(OBJ) $(LIBS)
+
+file-open$(EXE): file-open.cpp file-open.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-open.$(OBJ) $(LIBS)
+
+file-getprops$(EXE): file-getprops.cpp file-getprops.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-getprops.$(OBJ) $(LIBS)
+
+file-setprops$(EXE): file-setprops.cpp file-setprops.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-setprops.$(OBJ) $(LIBS)
+
+file-read$(EXE): file-read.cpp file-read.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-read.$(OBJ) $(LIBS)
+
+cat$(EXE): cat.cpp cat.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ cat.$(OBJ) $(LIBS)
+
+file-readline$(EXE): file-readline.cpp file-readline.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-readline.$(OBJ) $(LIBS)
+
+file-write$(EXE): file-write.cpp file-write.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-write.$(OBJ) $(LIBS)
+
+file-random$(EXE): file-random.cpp file-random.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-random.$(OBJ) $(LIBS)
+
+file-lock$(EXE): file-lock.cpp file-lock.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-lock.$(OBJ) $(LIBS)
+
+file-truncate$(EXE): file-truncate.cpp file-truncate.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-truncate.$(OBJ) $(LIBS)
+
+file-buffers$(EXE): file-buffers.cpp file-buffers.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-buffers.$(OBJ) $(LIBS)
+
+file-optimizations$(EXE): file-optimizations.cpp file-optimizations.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-optimizations.$(OBJ) $(LIBS)
+
+file-temp$(EXE): file-temp.cpp file-temp.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-temp.$(OBJ) $(LIBS)
+
+file-links$(EXE): file-links.cpp file-links.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-links.$(OBJ) $(LIBS)
+
+file-fifos$(EXE): file-fifos.cpp file-fifos.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-fifos.$(OBJ) $(LIBS)
+
+file-pipes$(EXE): file-pipes.cpp file-pipes.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-pipes.$(OBJ) $(LIBS)
+
+file-convenience$(EXE): file-convenience.cpp file-convenience.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ file-convenience.$(OBJ) $(LIBS)
 
 filesystem$(EXE): filesystem.cpp filesystem.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ filesystem.$(OBJ) $(LIBS)

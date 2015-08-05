@@ -9,6 +9,7 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	#include <rudiments/filesystem.h>
@@ -1083,6 +1084,10 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) const {
 	#endif
 }
 
+bool file::setPermissions(mode_t perms) const {
+	return permissions::setFilePermissions(fd(),perms);
+}
+
 bool file::changeOwner(const char *newuser, const char *newgroup) const {
 	return changeOwner(userentry::getUserId(newuser),
 				groupentry::getGroupId(newgroup));
@@ -1200,6 +1205,10 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
+}
+
+bool file::setPermissions(const char *filename, mode_t perms) {
+	return permissions::setFilePermissions(filename,perms);
 }
 
 bool file::changeOwner(const char *filename, const char *newuser,

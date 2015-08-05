@@ -2,7 +2,7 @@ top_builddir = ../..
 
 include ../../config.mk
 
-all: buildparts html cleanparts
+all: buildparts html
 
 buildparts:
 	cd parts; \
@@ -26,6 +26,3 @@ html:
 		echo "processing $$BASENAME"; \
 		./insert.pl $$i > $$BASENAME; \
 	done
-
-cleanparts:
-	rm -f parts/*.html

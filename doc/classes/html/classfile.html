@@ -238,6 +238,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a18288f8ac59b0aa5ee2b059350a648f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52a959162e391f96811e7c872ad75156"><td class="memItemLeft" align="right" valign="top">nlink_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#a52a959162e391f96811e7c872ad75156">getNumberOfHardLinks</a> () const </td></tr>
 <tr class="separator:a52a959162e391f96811e7c872ad75156"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a274eb66d367fbb816aa04a6c32a51dde"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#a274eb66d367fbb816aa04a6c32a51dde">setPermissions</a> (mode_t perms) const </td></tr>
+<tr class="separator:a274eb66d367fbb816aa04a6c32a51dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbb9a8f0378a84db7a56380dcee00b13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#adbb9a8f0378a84db7a56380dcee00b13">changeOwner</a> (const char *newuser, const char *newgroup) const </td></tr>
 <tr class="separator:adbb9a8f0378a84db7a56380dcee00b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58cfcd0cb96b66c21fdb724d9efbb6a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#a58cfcd0cb96b66c21fdb724d9efbb6a2">changeOwner</a> (uid_t uid, gid_t gid) const </td></tr>
@@ -578,6 +580,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a85f4e907f98332e67e86b728461359a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a949fbc0e273514f03dff59936788f342"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#a949fbc0e273514f03dff59936788f342">getLastChangeTime</a> (const char *filename, time_t *ctime)</td></tr>
 <tr class="separator:a949fbc0e273514f03dff59936788f342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa61dbbbaaf6455d38da77714d5412499"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#aa61dbbbaaf6455d38da77714d5412499">setPermissions</a> (const char *filename, mode_t perms)</td></tr>
+<tr class="separator:aa61dbbbaaf6455d38da77714d5412499"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac501f76853aaefcb3223448cbd019ad3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#ac501f76853aaefcb3223448cbd019ad3">changeOwner</a> (const char *filename, const char *newuser, const char *newgroup)</td></tr>
 <tr class="separator:ac501f76853aaefcb3223448cbd019ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e120ada6b1262fdf4db5bc3aa2765ab"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfile.html#a9e120ada6b1262fdf4db5bc3aa2765ab">changeOwner</a> (const char *filename, uid_t uid, gid_t gid)</td></tr>
@@ -3277,6 +3281,58 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a274eb66d367fbb816aa04a6c32a51dde"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> file::setPermissions </td>
+          <td>(</td>
+          <td class="paramtype">mode_t&#160;</td>
+          <td class="paramname"><em>perms</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the permissions of the file to "perms". Returns true on success and false on failure. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa61dbbbaaf6455d38da77714d5412499"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classbool.html">bool</a> file::setPermissions </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">mode_t&#160;</td>
+          <td class="paramname"><em>perms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the permissions of the file to "perms". Returns true on success and false on failure. </p>
+
+</div>
+</div>
 <a class="anchor" id="aacedeb38212ac537fa4f73e5f069bad4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -4024,7 +4080,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 4 2015 13:27:21 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 4 2015 18:07:26 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -35,20 +35,71 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Deletes this instance of the file class. */
 		virtual	~file();
 
-		/** Opens the file "name" using "flags".  Returns true on
-		 *  success and false on failure. */
+		/** Opens the file "name" using "flags".
+		 *
+		 *  "flags" may contain one more more of the following flags,
+		 *  or'ed together:
+		 *
+		 *  O_RDONLY - Open the file in read-only mode.
+		 *
+		 *  O_WRONLY - Open the file in write-only mode.
+		 *
+		 *  O_RDWR - Open the file in write-only mode.
+		 *
+		 *  O_APPEND - Set the position to the end of the file.
+		 *
+		 *  O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
+		 *
+		 *  O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.
+		 *
+		 *  O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the
+		 *  		file already exists.  Without O_EXCL, O_CREAT
+		 *  		will succeed, and just open the file, if the
+		 *  		file already exists.
+		 *
+		 *  Many platforms support additional, platform-specific flags.
+		 *
+		 *  Returns true on success and false on failure. */
 		bool	open(const char *name, int32_t flags);
 
-		/** Opens the file "name" using "flags".  If "flags" contains
-		 *  O_CREAT and the file doesn't already exist, it will be
-		 *  created with permissions "perms".  Returns true on success
-		 *  and false on failure. */
+		/** Opens the file "name" using "flags".
+		 *
+		 *  "flags" may contain one more more of the following flags,
+		 *  or'ed together:
+		 *
+		 *  O_RDONLY - Open the file in read-only mode.
+		 *
+		 *  O_WRONLY - Open the file in write-only mode.
+		 *
+		 *  O_RDWR - Open the file in write-only mode.
+		 *
+		 *  O_APPEND - Set the position to the end of the file.
+		 *
+		 *  O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
+		 *
+		 *  O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.
+		 *
+		 *  O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the
+		 *  		file already exists.  Without O_EXCL, O_CREAT
+		 *  		will succeed, and just open the file, if the
+		 *  		file already exists.
+		 *
+		 *  Many platforms support additional, platform-specific flags.
+		 *
+		 *  If "flags" contains O_CREAT and the file doesn't already
+		 *  exist, then it will be created with permissions "perms".
+		 *
+		 *  Returns true on success and false on failure. */
 		bool	open(const char *name, int32_t flags, mode_t perms);
 
 		/** Creates the file "name" with permissions "perms".  If the
 		 *  file already exists, it will be truncated.  Returns true on
-		 *  success and false on failure. */
+		 *  success and false on failure.
+		 *
+		 *  Equivalent to calling:
+		 *  open(name,O_CREAT|O_WRONLY|O_TRUNC,perms) */
 		bool	create(const char *name, mode_t perms);
+
 
 		/** Allocates a string large enough to accommodate the
 		 *  contents of the currently opened file, reads the
@@ -756,6 +807,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		nlink_t		getNumberOfHardLinks() const;
 
 
+		/** Sets the permissions of the file to "perms".
+		 *  Returns true on success and false on failure. */
+		bool	setPermissions(mode_t perms) const;
+
+
 		/** Changes the user and/or group that owns the file.
 		 *  Returns true on success and false on failure. */
 		bool	changeOwner(const char *newuser,
@@ -898,6 +954,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  permissions, ownership or creating links. */
 		static bool	getLastChangeTime(const char *filename,
 							time_t *ctime);
+
+		/** Sets the permissions of the file to "perms".
+		 *  Returns true on success and false on failure. */
+		static bool	setPermissions(const char *filename,
+							mode_t perms);
 
 		/** Changes the user and/or group that owns the file.
 		 *  Returns true on success and false on failure. */
