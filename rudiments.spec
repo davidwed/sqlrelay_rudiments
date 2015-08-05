@@ -7,13 +7,6 @@ Group: Development/Libraries
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-root
 
-%if %([[ %{_vendor} == "suse" ]] && echo 1 || echo 0)
-	%define docdir %{_docdir}/%{name}
-%else
-	%define docdir %{_docdir}/%{name}-%{version}
-%endif
-
-
 %description
 Rudiments is an Open Source C++ class library providing base classes
 for things such as daemons, clients and servers, and wrapper classes
@@ -54,7 +47,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-make DESTDIR=%{buildroot} docdir=%{buildroot}%{docdir} install
+make DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name} install
 
 %post
 /sbin/ldconfig
@@ -78,7 +71,7 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/rudiments.pc
 
 %files doc
-%{docdir}
+%{_docdir}/%{name}
 %{_datadir}/licenses/%{name}
 
 %files man
