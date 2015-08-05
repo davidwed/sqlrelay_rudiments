@@ -16,8 +16,11 @@ install:
 	cd bin $(AND) $(MAKE) install
 	cd doc $(AND) $(MAKE) install
 	cd man $(AND) $(MAKE) install
+	$(MKINSTALLDIRS) $(licensedir)
+	$(CP) COPYING $(licensedir)
+	$(CHMOD) 0644 $(licensedir)/COPYING
 	$(MKINSTALLDIRS) $(libdir)/pkgconfig
-	$(CP) rudiments.pc $(libdir)/pkgconfig/rudiments.pc
+	$(CP) rudiments.pc $(libdir)/pkgconfig
 	$(CHMOD) 644 $(libdir)/pkgconfig/rudiments.pc
 
 uninstall:
@@ -26,6 +29,7 @@ uninstall:
 	cd bin $(AND) $(MAKE) uninstall
 	cd doc $(AND) $(MAKE) uninstall
 	cd man $(AND) $(MAKE) uninstall
+	$(RMTREE) $(licensedir)
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
 
 distclean: clean

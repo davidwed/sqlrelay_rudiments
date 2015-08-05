@@ -79,6 +79,7 @@ rm -rf %{buildroot}
 
 %files doc
 %{docdir}
+%{_datadir}/licenses/%{name}
 
 %files man
 %{_mandir}
