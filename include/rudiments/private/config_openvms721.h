@@ -1415,7 +1415,7 @@
 #undef RUDIMENTS_SSL_VOID_PTR
 
 /* Version */
-#define RUDIMENTS_VERSION "0.52"
+#define RUDIMENTS_VERSION "0.53"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
