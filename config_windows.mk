@@ -10,7 +10,7 @@ libdir = @libdir@
 mandir = @mandir@
 datadir = @datadir@
 docdir = $(datadir)\doc\rudiments
-licensedir = ${datadir}\licenses\rudiments
+licensedir = $(datadir)\licenses\rudiments
 
 # command separator
 AND = &
