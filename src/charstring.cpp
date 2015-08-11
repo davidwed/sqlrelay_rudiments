@@ -356,7 +356,7 @@ char *charstring::convertAmount(int64_t amount) {
 	}
 	negative[1]='\0';
 	char	*amountstr=new char[length];
-	int64_t	amt=abs(amount);
+	int64_t	amt=abs((long)amount);
 	printf(amountstr,length,
 			"$%s%lld.%02lld",negative,
 			amt/100,amt-(amt/100*100));
