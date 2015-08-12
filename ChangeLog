@@ -1,6 +1,6 @@
-0.53 - exposed codetreegrammar class
-	updated codetree class so that successive parses/writes can use the
-		same grammar without having to reload it
+0.53 - exposed codetreegrammar class and updated codetree class so that
+		successive parses/writes can use the same grammar without
+		having to reload it
 	added insert/appendXml(File) methods to xmldomnode to parse and
 		insert/append xml strings or files to a node
 
