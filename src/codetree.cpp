@@ -72,7 +72,7 @@ static const char	YES='y';
 static const char	STX=0x2;
 
 class codetreegrammarprivate {
-	friend codetreegrammar;
+	friend class codetreegrammar;
 	private:
 		char	_currentattribute;
 		bool	_hasrecursivebreak;
