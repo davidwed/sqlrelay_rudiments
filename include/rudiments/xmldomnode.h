@@ -547,12 +547,39 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  failure. */
 		xmldomnode	*insertTag(const char *tag, uint64_t position);
 
+		/** Parses "xml" and inserts the result into the list of child
+		 *  nodes at "position".  The position of the next sibling (and
+		 *  all successive siblings) is incremented as appropriate.
+		 *
+		 *  Returns true on success or false on failure. */
+		bool	insertXml(const char *xml, uint64_t position);
+
+		/** Parses file "xmlfile" and inserts the result into the list
+		 *  of child nodes at "position".  The position of the next
+		 *  sibling (and all successive siblings) is incremented as
+		 *  appropriate.
+		 *
+		 *  Returns true on success or false on failure. */
+		bool	insertXmlFile(const char *xmlfile, uint64_t position);
+
 		/** Appends a new node of type TAG_XMLDOMNODETYPE to the list
 		 *  of child nodes.
 		 *
 		 *  Returns the new node on success or the null node on
 		 *  failure. */
 		xmldomnode	*appendTag(const char *tag);
+
+		/** Parses "xml" and appends the result to the list of child
+		 *  nodes.
+		 *
+		 *  Returns true on success or false on failure. */
+		bool	appendXml(const char *xml);
+
+		/** Parses file "xml" and appends the result to the list of
+		 *  child nodes.
+		 *
+		 *  Returns true on success or false on failure. */
+		bool	appendXmlFile(const char *xmlfile);
 
 		/** Moves "child" from its current position into the
 		 *  list of child nodes for "parent" at "position".

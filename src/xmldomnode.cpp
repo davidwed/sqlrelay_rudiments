@@ -874,6 +874,14 @@ xmldomnode *xmldomnode::appendTag(const char *tag) {
 	return insertTag(tag,getChildCount());
 }
 
+bool xmldomnode::appendXml(const char *xml) {
+	return insertXml(xml,getChildCount());
+}
+
+bool xmldomnode::appendXmlFile(const char *xmlfile) {
+	return insertXmlFile(xmlfile,getChildCount());
+}
+
 bool xmldomnode::appendText(const char *value) {
 	return insertText(value,getChildCount());
 }
@@ -1079,7 +1087,7 @@ bool xmldomnode::insertChild(xmldomnode *child, uint64_t position) {
 				&pvt->_childcount);
 }
 
-xmldomnode	*xmldomnode::insertTag(const char *tag, uint64_t position) {
+xmldomnode *xmldomnode::insertTag(const char *tag, uint64_t position) {
 	xmldomnode	*child=new xmldomnode(pvt->_dom,
 					pvt->_nullnode,
 					TAG_XMLDOMNODETYPE,
@@ -1093,6 +1101,14 @@ xmldomnode	*xmldomnode::insertTag(const char *tag, uint64_t position) {
 	}
 	delete child;
 	return pvt->_nullnode;
+}
+
+bool xmldomnode::insertXml(const char *xml, uint64_t position) {
+	return pvt->_dom->parseString(xml,this,position);
+}
+
+bool xmldomnode::insertXmlFile(const char *xmlfile, uint64_t position) {
+	return pvt->_dom->parseFile(xmlfile,this,position);
 }
 
 bool xmldomnode::insertAttribute(xmldomnode *attribute, uint64_t position) {

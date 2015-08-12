@@ -26,6 +26,9 @@ class xmldomprivate {
 		bool			_stringcacheenabled;
 		linkedlist< char * >	_strlist;
 		linkedlist< uint64_t >	_refcountlist;
+
+		xmldomnode		*_top;
+		uint64_t		_topposition;
 };
 
 xmldom::xmldom() : xmlsax() {
@@ -44,6 +47,8 @@ void xmldom::init(bool stringcacheenabled) {
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
 	pvt->_stringcacheenabled=stringcacheenabled;
+	pvt->_top=NULL;
+	pvt->_topposition=0;
 }
 
 xmldom::~xmldom() {
@@ -59,12 +64,36 @@ xmldom::~xmldom() {
 }
 
 bool xmldom::parseFile(const char *filename) {
-	reset();
+	return parseFile(filename,NULL,0);
+}
+
+bool xmldom::parseFile(const char *filename,
+				xmldomnode *parent, uint64_t position) {
+	if (parent) {
+		pvt->_currentparent=parent;
+		pvt->_currentattribute=NULL;
+		pvt->_top=parent;
+		pvt->_topposition=position;
+	} else {
+		reset();
+	}
 	return xmlsax::parseFile(filename);
 }
 
 bool xmldom::parseString(const char *string) {
-	reset();
+	return parseString(string,NULL,0);
+}
+
+bool xmldom::parseString(const char *string,
+				xmldomnode *parent, uint64_t position) {
+	if (parent) {
+		pvt->_currentparent=parent;
+		pvt->_currentattribute=NULL;
+		pvt->_top=parent;
+		pvt->_topposition=position;
+	} else {
+		reset();
+	}
 	return xmlsax::parseString(string);
 }
 
@@ -76,6 +105,8 @@ void xmldom::reset() {
 	}
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
+	pvt->_top=NULL;
+	pvt->_topposition=0;
 }
 
 bool xmldom::stringCacheEnabled() {
@@ -131,8 +162,7 @@ bool xmldom::tagStart(const char *name) {
 	xmldomnode	*tagnode=new xmldomnode(this,pvt->_nullnode);
 	tagnode->setName(name);
 	tagnode->setType(TAG_XMLDOMNODETYPE);
-	pvt->_currentparent->insertChild(tagnode,
-				pvt->_currentparent->getChildCount());
+	insertChild(tagnode);
 	pvt->_currentparent=tagnode;
 	return true;
 }
@@ -163,8 +193,7 @@ bool xmldom::text(const char *string) {
 	textnode->setName("text");
 	textnode->setValue(string);
 	textnode->setType(TEXT_XMLDOMNODETYPE);
-	pvt->_currentparent->insertChild(textnode,
-				pvt->_currentparent->getChildCount());
+	insertChild(textnode);
 	return true;
 }
 
@@ -180,8 +209,7 @@ bool xmldom::comment(const char *string) {
 	commentnode->setName("comment");
 	commentnode->setValue(string);
 	commentnode->setType(COMMENT_XMLDOMNODETYPE);
-	pvt->_currentparent->insertChild(commentnode,
-				pvt->_currentparent->getChildCount());
+	insertChild(commentnode);
 	return true;
 }
 
@@ -191,8 +219,7 @@ bool xmldom::cdata(const char *string) {
 	cdatanode->setName("cdata");
 	cdatanode->setValue(string);
 	cdatanode->setType(CDATA_XMLDOMNODETYPE);
-	pvt->_currentparent->insertChild(cdatanode,
-				pvt->_currentparent->getChildCount());
+	insertChild(cdatanode);
 	return true;
 }
 
@@ -237,4 +264,13 @@ void xmldom::unCacheString(const char *string) {
 		strnode=strnode->getNext();
 		refnode=refnode->getNext();
 	}
+}
+
+void xmldom::insertChild(xmldomnode *child) {
+	uint64_t	pos=pvt->_currentparent->getChildCount();
+	if (pvt->_currentparent==pvt->_top) {
+		pos=pvt->_topposition;
+		pvt->_topposition++;
+	}
+	pvt->_currentparent->insertChild(child,pos);
 }

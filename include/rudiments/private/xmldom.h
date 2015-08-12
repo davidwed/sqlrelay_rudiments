@@ -20,4 +20,13 @@
 			const char	*cacheString(const char *string);
 			void		unCacheString(const char *string);
 
+	private:
+			bool	parseFile(const char *string,
+						xmldomnode *parent,
+						uint64_t position);
+			bool	parseString(const char *string,
+						xmldomnode *parent,
+						uint64_t position);
+			void	insertChild(xmldomnode *child);
+
 			xmldomprivate	*pvt;
