@@ -176,6 +176,26 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define SSIZE_MAX 32767
 #endif
 
+// most platforms FILE struct have a member for the file descriptor,
+// try to find it...
+// some platforms, like solaris 11.2 hide it altogether
+#undef FD
+#if defined(RUDIMENTS_HAVE_FILE_FILENO)
+	#define FD f->_fileno
+#elif defined(RUDIMENTS_HAVE_FILE_FILE)
+	#ifdef __VMS
+		#define FD ((struct _iobuf *)f)->_file
+	#else
+		#define FD f->_file
+	#endif
+#elif defined(RUDIMENTS_HAVE_FILE__FILE)
+	#define FD f->__file
+#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
+	#define FD f->__filedes
+#elif defined(RUDIMENTS_HAVE_FILE__FD)
+	#define FD f->_fd
+#endif
+
 class filedescriptorprivate {
 	friend class filedescriptor;
 	private:
@@ -2370,7 +2390,8 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 			// Use fdopen if it's available.  Unfortunately we
 			// can't (reliably) on Windows because it won't work
 			// if the filedescriptor is a socket.
-			#if defined(RUDIMENTS_HAVE_FDOPEN) && !defined(_WIN32)
+			#if defined(RUDIMENTS_HAVE_FDOPEN) && \
+				defined(FD) && !defined(_WIN32)
 			else {
 				f=fdopen(pvt->_fd,"a");
 
@@ -2388,7 +2409,7 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 				fflush(f);
 
 				#if defined(RUDIMENTS_HAVE_FDOPEN) && \
-							!defined(_WIN32)
+					defined(FD) && !defined(_WIN32)
 				if (f!=stdin && f!=stdout && f!=stderr) {
 
 					// We need to free f but we don't want
@@ -2398,26 +2419,6 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 					// Setting f's file descriptor member
 					// to -1 is generally reliable, though
 					// that's tricky too...
-
-					#if defined(RUDIMENTS_HAVE_FILE_FILENO)
-						#define FD f->_fileno
-					#elif defined(RUDIMENTS_HAVE_FILE_FILE)
-						#ifdef __VMS
-							#define FD \
-							((struct _iobuf *)f)->\
-							_file
-						#else
-							#define FD f->_file
-						#endif
-					#elif defined(RUDIMENTS_HAVE_FILE__FILE)
-						#define FD f->__file
-					#elif defined(RUDIMENTS_HAVE_FILE_FILEDES)
-						#define FD f->__filedes
-					#elif defined(RUDIMENTS_HAVE_FILE__FD)
-						#define FD f->_fd
-					#else
-						#error no FILE->_fileno or anything like it
-					#endif
 
 					// The size and signedness of
 					// FD varies a bit.  This

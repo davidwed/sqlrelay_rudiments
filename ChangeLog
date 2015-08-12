@@ -3,6 +3,8 @@
 		having to reload it
 	added insert/appendXml(File) methods to xmldomnode to parse and
 		insert/append xml strings or files to a node
+	fixed FD->fileno detection for solaris 11.2
+		(which doesn't have it at all)
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class
