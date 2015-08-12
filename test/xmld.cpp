@@ -22,4 +22,15 @@ int main(int argc, const char **argv) {
 	delete xml;
 
 	x.writeFile("test.xml",permissions::evalPermString("rw-r--r--"));
+
+	stdoutput.printf("\n\n===============================\n\n");
+
+	x.parseString("<xml>\n<tag1/><tag2/></xml>");
+	x.getRootNode()->getFirstTagChild("xml")->
+				getFirstTagChild("tag1")->
+				appendXml("<tag11/><tag12/>");
+	x.getRootNode()->getFirstTagChild("xml")->
+				getFirstTagChild("tag2")->
+				appendXml("<tag21/><tag22/>");
+	x.getRootNode()->print(&stdoutput);
 }
