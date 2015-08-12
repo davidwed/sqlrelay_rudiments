@@ -370,21 +370,19 @@ class RUDIMENTS_DLLSPEC codetree {
 	#include <rudiments/private/codetree.h>
 };
 
-/** A child class of xmldom that disables the string cache and replaces
- *  tag and attribute names with single-letter representations of them to
- *  improve performance. */
+class codetreegrammarprivate;
+
+/** A child class of xmldom with various codetree-specific optimizations. */
 class codetreegrammar : public xmldom {
 	friend class codetree;
 	public:
-			codetreegrammar();
-	private:
-		bool	hasRecursiveBreak();
-		bool	tagStart(const char *name);
-		bool	attributeName(const char *name);
-		bool	attributeValue(const char *value);
+		/** Creates a new instance of the codetreegrammar class. */
+		codetreegrammar();
 
-		char	currentattribute;
-		bool	hasrecursivebreak;
+		/** Deletes this instance of the codetreegrammar class. */
+		~codetreegrammar();
+
+	#include <rudiments/private/codetreegrammar.h>
 };
 
 #endif

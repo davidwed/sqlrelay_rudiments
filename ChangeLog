@@ -1,4 +1,6 @@
-0.53 - 
+0.53 - exposed codetreegrammar class
+	updated codetree class so that successive parses/writes can use the
+		same grammar without having to reload it
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class

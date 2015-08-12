@@ -31068,7 +31068,7 @@ fi
 if ( test "$INCLUDE_CODETREE" = "1" )
 then
 	HEADERS3="$HEADERS3 codetree.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 codetree.h codetreeincludes.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 codetree.h codetreeincludes.h codetreegrammar.h"
 	SRCS="$SRCS codetree.cpp"
 	LOBJS="$LOBJS codetree.lo"
 fi

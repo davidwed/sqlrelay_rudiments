@@ -71,10 +71,21 @@ static const char	YES='y';
 
 static const char	STX=0x2;
 
+class codetreegrammarprivate {
+	friend codetreegrammar;
+	private:
+		char	_currentattribute;
+		bool	_hasrecursivebreak;
+};
 
 codetreegrammar::codetreegrammar() : xmldom(false) {
-	currentattribute='\0';
-	hasrecursivebreak=false;
+	pvt=new codetreegrammarprivate;
+	pvt->_currentattribute='\0';
+	pvt->_hasrecursivebreak=false;
+}
+
+codetreegrammar::~codetreegrammar() {
+	delete pvt;
 }
 
 bool codetreegrammar::tagStart(const char *name) {
@@ -109,10 +120,10 @@ bool codetreegrammar::attributeName(const char *name) {
 		ch=TAG[0];
 	}
 
-	currentattribute=name[0];
+	pvt->_currentattribute=name[0];
 
 	if (ch=='r') {
-		hasrecursivebreak=true;
+		pvt->_hasrecursivebreak=true;
 	}
 
 	// replace the name
@@ -125,7 +136,7 @@ bool codetreegrammar::attributeName(const char *name) {
 bool codetreegrammar::attributeValue(const char *value) {
 
 	// only modify values for the type attribute
-	if (currentattribute!=TYPE[0]) {
+	if (pvt->_currentattribute!=TYPE[0]) {
 		return xmldom::attributeValue(value);
 	}
 
@@ -145,7 +156,7 @@ bool codetreegrammar::attributeValue(const char *value) {
 }
 
 bool codetreegrammar::hasRecursiveBreak() {
-	return hasrecursivebreak;
+	return pvt->_hasrecursivebreak;
 }
 
 struct break_t {

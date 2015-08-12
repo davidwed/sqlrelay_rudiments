@@ -330,6 +330,7 @@ privateheaders6="signalhandler.h "+_
 	"xmlsaxincludes.h "
 privateheaders7="codetree.h "+_
 	"codetreeincludes.h "+_
+	"codetreegrammar.h "+_
 	"compiler.h "+_
 	"compilerincludes.h "+_
 	"inetsocketutil.h "+_
