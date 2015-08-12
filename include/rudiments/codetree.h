@@ -6,6 +6,7 @@
 
 #include <rudiments/private/codetreeincludes.h>
 
+class codetreegrammar;
 class codetreeprivate;
 
 /** The codetree class implements a generic parser that can parse source code
@@ -338,6 +339,17 @@ class RUDIMENTS_DLLSPEC codetree {
 					xmldomnode *output,
 					const char **codeposition);
 
+		/** Parses "input" using "grammar", starting with "startsymbol",
+		 *  creates an XML represenataion of the code and appends it as
+		 *  children to "output".  Returns true if parsing succeeded
+		 *  and false otherwise.  If parsing fails, "codeposition" is
+		 *  set to the location in the code that parsing failed. */
+		bool	parse(const char *input,
+					codetreegrammar *grammar,
+					const char *startsymbol,
+					xmldomnode *output,
+					const char **codeposition);
+
 		/** Interprets the XML representation of the code "input" using
 		 *  "grammar" and appends it as code to "output".  Returns true
 		 *  if this succeeds and false otherwise. */
@@ -345,10 +357,34 @@ class RUDIMENTS_DLLSPEC codetree {
 					const char *grammar,
 					stringbuffer *output);
 
+		/** Interprets the XML representation of the code "input" using
+		 *  "grammar" and appends it as code to "output".  Returns true
+		 *  if this succeeds and false otherwise. */
+		bool	write(xmldomnode *input,
+					codetreegrammar *grammar,
+					stringbuffer *output);
+
 		/** Sets the debug level.  Debug is written to standard out. */
 		void	setDebugLevel(uint8_t debuglevel);
 
 	#include <rudiments/private/codetree.h>
+};
+
+/** A child class of xmldom that disables the string cache and replaces
+ *  tag and attribute names with single-letter representations of them to
+ *  improve performance. */
+class codetreegrammar : public xmldom {
+	friend class codetree;
+	public:
+			codetreegrammar();
+	private:
+		bool	hasRecursiveBreak();
+		bool	tagStart(const char *name);
+		bool	attributeName(const char *name);
+		bool	attributeValue(const char *value);
+
+		char	currentattribute;
+		bool	hasrecursivebreak;
 };
 
 #endif

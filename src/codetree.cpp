@@ -72,28 +72,12 @@ static const char	YES='y';
 static const char	STX=0x2;
 
 
-// create a child class of xmldom that disables the string cache and replaces
-// tag and attribute names with single-letter representations of them to
-// improve performance
-class grammar : public xmldom {
-	public:
-			grammar();
-		bool	hasRecursiveBreak();
-	protected:
-		bool	tagStart(const char *name);
-		bool	attributeName(const char *name);
-		bool	attributeValue(const char *value);
-	private:
-		char	currentattribute;
-		bool	hasrecursivebreak;
-};
-
-grammar::grammar() : xmldom(false) {
+codetreegrammar::codetreegrammar() : xmldom(false) {
 	currentattribute='\0';
 	hasrecursivebreak=false;
 }
 
-bool grammar::tagStart(const char *name) {
+bool codetreegrammar::tagStart(const char *name) {
 
 	// get the first letter of the name
 	char	ch=name[0];
@@ -115,7 +99,7 @@ bool grammar::tagStart(const char *name) {
 	return xmldom::tagStart(newname);
 }
 
-bool grammar::attributeName(const char *name) {
+bool codetreegrammar::attributeName(const char *name) {
 
 	// the first letters of this one collides with other names and requires
 	// special handling...
@@ -138,7 +122,7 @@ bool grammar::attributeName(const char *name) {
 	return xmldom::attributeName(newname);
 }
 
-bool grammar::attributeValue(const char *value) {
+bool codetreegrammar::attributeValue(const char *value) {
 
 	// only modify values for the type attribute
 	if (currentattribute!=TYPE[0]) {
@@ -160,7 +144,7 @@ bool grammar::attributeValue(const char *value) {
 	return xmldom::attributeValue(newvalue);
 }
 
-bool grammar::hasRecursiveBreak() {
+bool codetreegrammar::hasRecursiveBreak() {
 	return hasrecursivebreak;
 }
 
@@ -174,19 +158,19 @@ struct break_t {
 class codetreeprivate {
 	friend class codetree;
 	private:
-		grammar		_grammar;
-		xmldomnode	*_grammartag;
-		bool		_error;
-		uint32_t	_depth;
-		const char	*_indentstring;
-		size_t		_indentlength;
-		bool		_previousparsechildretval;
-		const char	*_beginningofinput;
-		const char	*_finalcodeposition;
-		uint8_t		_debuglevel;
-		stringbuffer	_excbuffer;
-		xmldomnode	*_excnode;
-		bool		_endofstring;
+		codetreegrammar		_grammar;
+		xmldomnode		*_grammartag;
+		bool			_error;
+		uint32_t		_depth;
+		const char		*_indentstring;
+		size_t			_indentlength;
+		bool			_previousparsechildretval;
+		const char		*_beginningofinput;
+		const char		*_finalcodeposition;
+		uint8_t			_debuglevel;
+		stringbuffer		_excbuffer;
+		xmldomnode		*_excnode;
+		bool			_endofstring;
 
 		bool					_break;
 		linkedlist< linkedlist< break_t * > * >	_breakstack;
@@ -228,7 +212,19 @@ bool codetree::parse(const char *input,
 	if (!pvt->_grammar.parseString(grammar)) {
 		return false;
 	}
-	pvt->_grammartag=pvt->_grammar.getRootNode()->getFirstTagChild(GRAMMAR);
+
+	// parse
+	return parse(input,&pvt->_grammar,startsymbol,output,codeposition);
+}
+
+bool codetree::parse(const char *input,
+			codetreegrammar *grammar,
+			const char *startsymbol,
+			xmldomnode *output,
+			const char **codeposition) {
+
+	// verify the grammar
+	pvt->_grammartag=grammar->getRootNode()->getFirstTagChild(GRAMMAR);
 	if (pvt->_grammartag->isNullNode()) {
 		return false;
 	}
@@ -1064,11 +1060,26 @@ bool codetree::write(xmldomnode *input,
 		return false;
 	}
 
-	// load grammar
+	// load the input grammar
 	if (!pvt->_grammar.parseString(grammar)) {
 		return false;
 	}
-	pvt->_grammartag=pvt->_grammar.getRootNode()->getFirstTagChild(GRAMMAR);
+
+	// parse
+	return write(input,&pvt->_grammar,output);
+}
+
+bool codetree::write(xmldomnode *input,
+			codetreegrammar *grammar,
+			stringbuffer *output) {
+
+	// if we have an empty input, just return
+	if (!input || input->isNullNode()) {
+		return false;
+	}
+
+	// verify the grammar
+	pvt->_grammartag=grammar->getRootNode()->getFirstTagChild(GRAMMAR);
 	if (pvt->_grammartag->isNullNode()) {
 		return false;
 	}
