@@ -356,7 +356,12 @@ char *charstring::convertAmount(int64_t amount) {
 	}
 	negative[1]='\0';
 	char	*amountstr=new char[length];
-	int64_t	amt=abs((long)amount);
+	int64_t	amt;
+	#ifdef RUDIMENTS_HAVE_LLABS
+		amt=llabs((long long)amount);
+	#else
+		amt=abs((long)amount);
+	#endif
 	printf(amountstr,length,
 			"$%s%lld.%02lld",negative,
 			amt/100,amt-(amt/100*100));

@@ -640,6 +640,9 @@
 /* Linux style statfs */
 /* #undef RUDIMENTS_HAVE_LINUX_STATFS */
 
+/* Some systems have llabs */
+/* #undef RUDIMENTS_HAVE_LLABS */
+
 /* Some systems have lm.h */
 #define RUDIMENTS_HAVE_LM_H 1
 

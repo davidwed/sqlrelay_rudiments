@@ -2101,6 +2101,12 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 #include <stdio.h>],
 va_list a; vasprintf(0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VASPRINTF,1,Some systems have vasprintf), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for llabs)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif],
+long long a; llabs(a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_LLABS,1,Some systems have llabs), AC_MSG_RESULT(no))
+
 echo "******************************"
 
 
@@ -3280,7 +3286,7 @@ atexit(0),AC_DEFINE(RUDIMENTS_HAVE_ATEXIT,1,Some systems have atexit) AC_MSG_RES
 echo "******************************"
 
 
-dnl Checks for syste functions
+dnl Checks for system functions
 echo
 echo "***** System Functions *******"
 
