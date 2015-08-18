@@ -16,8 +16,9 @@ class xmldomnodeprivate {
 		xmldom		*_dom;
 		bool		_cascade;
 		xmldomnodetype	_type;
-		const char	*_nodename;
-		const char	*_nodevalue;
+		const char	*_namespace;
+		const char	*_name;
+		const char	*_value;
 		xmldomnode	*_parent;
 		xmldomnode	*_next;
 		xmldomnode	*_nexttag;
@@ -66,8 +67,9 @@ void xmldomnode::init(xmldomnode *nullnode) {
 	pvt->_attributecount=0;
 	pvt->_cascade=true;
 	pvt->_isnullnode=false;
-	pvt->_nodename=NULL;
-	pvt->_nodevalue=NULL;
+	pvt->_namespace=NULL;
+	pvt->_name=NULL;
+	pvt->_value=NULL;
 	pvt->_data=NULL;
 }
 
@@ -90,11 +92,12 @@ xmldomnode::~xmldomnode() {
 		current=pvt->_lastattribute;
 	}
 	if (pvt->_dom->stringCacheEnabled()) {
-		pvt->_dom->unCacheString(pvt->_nodename);
-		pvt->_dom->unCacheString(pvt->_nodevalue);
+		pvt->_dom->unCacheString(pvt->_name);
+		pvt->_dom->unCacheString(pvt->_value);
 	} else {
-		delete[] (char *)pvt->_nodename;
-		delete[] (char *)pvt->_nodevalue;
+		delete[] (char *)pvt->_namespace;
+		delete[] (char *)pvt->_name;
+		delete[] (char *)pvt->_value;
 	}
 	delete pvt;
 }
@@ -561,7 +564,7 @@ void xmldomnode::xml(stringbuffer *strb,
 			}
 		}
 		append(strb,fd,"<");
-		safeAppend(strb,fd,pvt->_nodename);
+		safeAppend(strb,fd,pvt->_name);
 		current=pvt->_firstattribute;
 		for (uint64_t i=0; i<pvt->_attributecount; i++) {
 			append(strb,fd," ");
@@ -597,15 +600,15 @@ void xmldomnode::xml(stringbuffer *strb,
 				}
 			}
 			append(strb,fd,"</");
-			safeAppend(strb,fd,pvt->_nodename);
+			safeAppend(strb,fd,pvt->_name);
 			append(strb,fd,">");
 			if (indent && indentlevel) {
 				append(strb,fd,"\n");
 			}
 		} else {
-			if (pvt->_nodename[0]=='?') {
+			if (pvt->_name[0]=='?') {
 				append(strb,fd,"?>");
-			} else if (pvt->_nodename[0]=='!') {
+			} else if (pvt->_name[0]=='!') {
 				append(strb,fd,">");
 			} else {
 				append(strb,fd,"/>");
@@ -615,25 +618,25 @@ void xmldomnode::xml(stringbuffer *strb,
 			}
 		}
 	} else if (pvt->_type==TEXT_XMLDOMNODETYPE) {
-		safeAppend(strb,fd,pvt->_nodevalue);
+		safeAppend(strb,fd,pvt->_value);
 	} else if (pvt->_type==ATTRIBUTE_XMLDOMNODETYPE) {
-		if (pvt->_parent->pvt->_nodename[0]=='!') {
+		if (pvt->_parent->pvt->_name[0]=='!') {
 			append(strb,fd,"\"");
-			safeAppend(strb,fd,pvt->_nodevalue);
+			safeAppend(strb,fd,pvt->_value);
 			append(strb,fd,"\"");
 		} else {
-			safeAppend(strb,fd,pvt->_nodename);
+			safeAppend(strb,fd,pvt->_name);
 			append(strb,fd,"=\"");
-			safeAppend(strb,fd,pvt->_nodevalue);
+			safeAppend(strb,fd,pvt->_value);
 			append(strb,fd,"\"");
 		}
 	} else if (pvt->_type==COMMENT_XMLDOMNODETYPE) {
 		append(strb,fd,"<!--");
-		safeAppend(strb,fd,pvt->_nodevalue);
+		safeAppend(strb,fd,pvt->_value);
 		append(strb,fd,"-->");
 	} else if (pvt->_type==CDATA_XMLDOMNODETYPE) {
 		append(strb,fd,"<![CDATA[");
-		safeAppend(strb,fd,pvt->_nodevalue);
+		safeAppend(strb,fd,pvt->_value);
 		append(strb,fd,"]]>");
 	}
 }
@@ -726,9 +729,9 @@ xmldomnode *xmldomnode::getNode(xmldomnode *first,
 		for (uint64_t i=0; i<count; i++) {
 			if ((ignorecase)?
 				!charstring::compareIgnoringCase(
-					current->pvt->_nodename,name):
+					current->pvt->_name,name):
 				!charstring::compare(
-					current->pvt->_nodename,name)) {
+					current->pvt->_name,name)) {
 				break;
 			}
 			current=current->pvt->_next;
@@ -808,7 +811,7 @@ xmldomnode *xmldomnode::unlinkNode(xmldomnode *node,
 	if (node || name) {
 		while (current && !current->isNullNode() &&
 			((name && charstring::compare(
-					current->pvt->_nodename,name)) ||
+					current->pvt->_name,name)) ||
 			(node && current!=node))) {
 			current=current->pvt->_next;
 		}
@@ -944,12 +947,16 @@ xmldomnodetype xmldomnode::getType() const {
 	return pvt->_type;
 }
 
+const char *xmldomnode::getNamespace() const {
+	return pvt->_namespace;
+}
+
 const char *xmldomnode::getName() const {
-	return pvt->_nodename;
+	return pvt->_name;
 }
 
 const char *xmldomnode::getValue() const {
-	return pvt->_nodevalue;
+	return pvt->_value;
 }
 
 xmldom *xmldomnode::getTree() const {
@@ -1047,23 +1054,33 @@ void xmldomnode::setType(xmldomnodetype type) {
 	pvt->_type=type;
 }
 
+void xmldomnode::setNamespace(const char *namesp) {
+	if (pvt->_dom->stringCacheEnabled()) {
+		pvt->_dom->unCacheString(pvt->_namespace);
+		pvt->_namespace=pvt->_dom->cacheString(namesp);
+	} else {
+		delete[] (char *)pvt->_namespace;
+		pvt->_namespace=charstring::duplicate(namesp);
+	}
+}
+
 void xmldomnode::setName(const char *name) {
 	if (pvt->_dom->stringCacheEnabled()) {
-		pvt->_dom->unCacheString(pvt->_nodename);
-		pvt->_nodename=pvt->_dom->cacheString(name);
+		pvt->_dom->unCacheString(pvt->_name);
+		pvt->_name=pvt->_dom->cacheString(name);
 	} else {
-		delete[] (char *)pvt->_nodename;
-		pvt->_nodename=charstring::duplicate(name);
+		delete[] (char *)pvt->_name;
+		pvt->_name=charstring::duplicate(name);
 	}
 }
 
 void xmldomnode::setValue(const char *value) {
 	if (pvt->_dom->stringCacheEnabled()) {
-		pvt->_dom->unCacheString(pvt->_nodevalue);
-		pvt->_nodevalue=pvt->_dom->cacheString(value);
+		pvt->_dom->unCacheString(pvt->_value);
+		pvt->_value=pvt->_dom->cacheString(value);
 	} else {
-		delete[] (char *)pvt->_nodevalue;
-		pvt->_nodevalue=charstring::duplicate(value);
+		delete[] (char *)pvt->_value;
+		pvt->_value=charstring::duplicate(value);
 	}
 }
 

@@ -168,6 +168,9 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		/** Returns the node type. */
 		xmldomnodetype	getType() const;
 
+		/** Returns the node namespace. */
+		const char	*getNamespace() const;
+
 		/** Returns the node name. */
 		const char	*getName() const;
 
@@ -514,6 +517,9 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 
 		/** Sets the node type to "type". */
 		void	setType(xmldomnodetype type);
+
+		/** Sets the node namespace to "namesp". */
+		void	setNamespace(const char *namesp);
 
 		/** Sets the node name to "name". */
 		void	setName(const char *name);
