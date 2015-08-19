@@ -31,9 +31,10 @@ class xmldomnodeprivate;
  * 	a comment
  * 	a segment of CDATA
  * 
- *  Each node may contain the following data, though for some node types, the
- *  data container is unused:
+ *  Each node may contain the following data:
+ *  (For some node types, the data container is unused and set to NULL)
  *  	type
+ *  	namespace
  *  	name
  *  	value
  *  	parent node
@@ -46,6 +47,7 @@ class xmldomnodeprivate;
  * 
  *  	For the document root:
  *  		type - ROOT_XMLDOMNODETYPE
+ *  		namespace - unused
  *  		name - "document"
  *  		value - unused
  *  		parent node - unused
@@ -57,6 +59,7 @@ class xmldomnodeprivate;
  * 
  *  	For a tag:
  *  		type - TAG_XMLDOMNODETYPE
+ *  		namespace - the tag namespace
  *  		name - the tag name
  *  		value - unused
  *  		parent node - the parent tag or document root
@@ -70,6 +73,7 @@ class xmldomnodeprivate;
  * 
  *  	For a tag attribute:
  *  		type - ATTRIBUTE_XMLDOMNODETYPE
+ *  		namespace - unused
  *  		name - the attribute name
  *  		value - the attribute value
  *  		    (note that for tags with standalone
@@ -82,6 +86,7 @@ class xmldomnodeprivate;
  * 
  *  	For a segment of text:
  *  		type - TEXT_XMLDOMNODETYPE
+ *  		namespace - unused
  *  		name - "text"
  *  		value - the text itself
  *  		parent node - the tag containing the text
@@ -92,6 +97,7 @@ class xmldomnodeprivate;
  * 
  *  	For a comment:
  *  		type - COMMENT_XMLDOMNODETYPE
+ *  		namespace - unused
  *  		name - "comment"
  *  		value - the comment itself
  *  		parent node - the tag containing the comment
@@ -104,6 +110,7 @@ class xmldomnodeprivate;
  * 
  *  	For a segment of cdata:
  *  		type - CDATA_XMLDOMNODETYPE
+ *  		namespace - unused
  *  		name - "cdata"
  *  		value - the cdata itself
  *  		parent node - the tag containing the cdata
@@ -156,9 +163,10 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 			~xmldomnode();
 
 
-		/** Creates a special "null node" whose parent, next sibling
-		 *  and previous siblings point back to itself.  This special
-		 *  node should be passed in when creating new xmldomnodes.
+		/** Creates a special "null node" whose parent, next sibling,
+		 *  previous sibling, and child point back to itself.  This
+		 *  special node should be passed in when creating new
+		 *  xmldomnodes.
 		 * 
 		 *  This method allocates xmldomnode internally and passes a
 		 *  pointer back.  The calling program must ultimately
