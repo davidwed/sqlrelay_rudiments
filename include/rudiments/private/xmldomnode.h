@@ -151,6 +151,13 @@
 		void		safeAppend(stringbuffer *strb,
 						filedescriptor *fd,
 						const char *str) const;
+		bool		match(xmldomnode *node,
+						const char *ns,
+						const char *name,
+						bool ignorecase) const;
+		bool		match(xmldomnode *node,
+						const char *ns,
+						const char * const *set) const;
 
 				xmldomnode(const xmldomnode &x);
 		xmldomnode	&operator=(const xmldomnode &x);
