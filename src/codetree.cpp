@@ -251,7 +251,7 @@ bool codetree::parse(const char *input,
 	pvt->_excnode=new xmldomnode(output->getTree(),
 					output->getNullNode(),
 					TAG_XMLDOMNODETYPE,
-					"excnode",NULL);
+					NULL,"excnode",NULL);
 
 	// re-init the error
 	pvt->_error=false;
@@ -941,7 +941,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 			codenode=new xmldomnode(treeparent->getTree(),
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
-						name,NULL);
+						NULL,name,NULL);
 		}
 		if (symboltype==LITERAL) {
 			localntbuffer=new stringbuffer;
