@@ -5,46 +5,59 @@
 		void		init(xmldomnode *nullnode);
 		xmldomnode	*getNode(xmldomnode *first,
 					uint64_t position,
+					const char *ns,
 					const char *name,
 					bool ignorecase,
 					uint64_t count) const;
 		xmldomnode	*getAttribute(
 					const char *name,
 					bool ignorecase) const;
-		xmldomnode	*getFirstChild(const char *name,
+		xmldomnode	*getFirstChild(
+					const char *ns,
+					const char *name,
 					bool ignorecase) const;
-		xmldomnode	*getFirstChild(const char *name,
+		xmldomnode	*getFirstChild(
+					const char *ns,
+					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
 		xmldomnode	*getFirstTagChild(
+					const char *ns,
 					const char *name,
 					bool ignorecase) const;
 		xmldomnode	*getFirstTagChild(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
 		xmldomnode	*getPreviousTagSibling(
+					const char *ns,
 					const char *name,
 					bool ignorecase) const;
 		xmldomnode	*getPreviousTagSibling(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
 		xmldomnode	*getNextTagSibling(
+					const char *ns,
 					const char *name,
 					bool ignorecase) const;
 		xmldomnode	*getNextTagSibling(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase) const;
 		xmldomnode	*getFirstTagDescendent(
+					const char *ns,
 					const char *name,
 					bool ignorecase) const;
 		xmldomnode	*getFirstTagDescendent(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
@@ -56,43 +69,57 @@
 					xmldomnode **last,
 					uint64_t *count);
 		bool		deleteFirstChild(
+					const char *ns,
 					const char *name,
 					bool ignorecase);
 		bool		deleteChildren(
+					const char *ns,
 					const char *name,
 					bool ignorecase);
 		bool		deleteChildren(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase);
 		bool		deleteDescendents(
+					const char *ns,
 					const char *name,
 					bool ignorecase);
 		bool		deleteDescendents(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue,
 					bool ignorecase);
 		bool		unwrapFirstChild(
+					const char *ns,
 					const char *name,
 					bool ignorecase);
 		bool		unwrapChildren(
+					const char *ns,
 					const char *name,
 					bool ignorecase);
 		bool		unwrapDescendents(
+					const char *ns,
 					const char *name,
 					bool ignorecase);
 		bool		renameFirstChild(
+					const char *oldns,
 					const char *oldname,
+					const char *newns,
 					const char *newname,
 					bool ignorecase);
 		bool		renameChildren(
+					const char *oldns,
 					const char *oldname,
+					const char *newns,
 					const char *newname,
 					bool ignorecase);
 		bool		renameDescendents(
+					const char *oldns,
 					const char *oldname,
+					const char *newns,
 					const char *newname,
 					bool ignorecase);
 		bool		deleteNode(xmldomnode *node,

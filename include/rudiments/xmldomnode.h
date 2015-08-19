@@ -138,7 +138,9 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 			xmldomnode(xmldom *dom,
 					xmldomnode *nullnode,
 					xmldomnodetype type,
-					const char *name, const char *value);
+					const char *ns,
+					const char *name,
+					const char *value);
 
 			/** Deletes the node, all attribute nodes and
 			 *  optionally all child nodes, recursively. */
@@ -165,16 +167,16 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		void		dontCascadeOnDelete();
 
 
-		/** Returns the node type. */
+		/** Returns the type of the node. */
 		xmldomnodetype	getType() const;
 
-		/** Returns the node namespace. */
+		/** Returns the namespace of the node. */
 		const char	*getNamespace() const;
 
-		/** Returns the node name. */
+		/** Returns the name of the node. */
 		const char	*getName() const;
 
-		/** Returns the node value. */
+		/** Returns the value of node. */
 		const char	*getValue() const;
 
 
@@ -204,10 +206,24 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  nullnode if not found. */
 		xmldomnode	*getPreviousTagSibling(const char *name) const;
 
+		/** Returns the previous sibling node in namespace
+		 *  "ns" named "name" whose type is TAG_XMLDOMNODE or the
+		 *  nullnode if not found. */
+		xmldomnode	*getPreviousTagSibling(
+						const char *ns,
+						const char *name) const;
+
 		/** Returns the previous sibling node named "name"
 		 *  (ignoring case) whose type is TAG_XMLDOMNODE or the
 		 *  nullnode if not found. */
 		xmldomnode	*getPreviousTagSiblingIgnoringCase(
+						const char *name) const;
+
+		/** Returns the previous sibling node in namespace
+		 *  "napesp" named "name" (both ignoring case) whose type is
+		 *  TAG_XMLDOMNODE or the nullnode if not found. */
+		xmldomnode	*getPreviousTagSiblingIgnoringCase(
+						const char *ns,
 						const char *name) const;
 
 		/** Returns the previous sibling node named
@@ -224,6 +240,21 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue) const;
 
+		/** Returns the previous sibling node in namespace
+		 *  "ns" named "name" with an attribute named
+		 *  "attributename" with value "attributevalue"
+		 *  whose type is TAG_XMLDOMNODE.  If "name" is
+		 *  null, then the name of the child node is not
+		 *  checked, and the first child node with any
+		 *  name (with matching attribute name/value)
+		 *  will be returned.  If no match is found,
+		 *  nullnode is returned. */
+		xmldomnode	*getPreviousTagSibling(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
 		/** Returns the previous sibling node named
 		 *  "name" (ignoring case) with an attribute named
 		 *  "attributename" with value "attributevalue"
@@ -233,6 +264,21 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  name (with matching attribute name/value) will be
 		 *  returned.  If no match is found, nullnode is returned. */
 		xmldomnode	*getPreviousTagSiblingIgnoringCase(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
+		/** Returns the previous sibling node in namespace
+		 *  "ns" (ignoring case) named "name" (ignoring case)
+		 *  with an attribute named "attributename" with value
+		 *  "attributevalue" (both ignoring case) whose type is
+		 *  TAG_XMLDOMNODE.  If "name" is null, then the name of
+		 *  the child node is not checked, and the first child
+		 *  node with any name (with matching attribute name/value)
+		 *  will be returned.  If no match is found, nullnode is
+		 *  returned. */
+		xmldomnode	*getPreviousTagSiblingIgnoringCase(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue) const;
@@ -251,10 +297,23 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  if not found. */
 		xmldomnode	*getNextTagSibling(const char *name) const;
 
-		/** Returns the next sibling node named "name" (ignoring case)
-		 *  whose type is TAG_XMLDOMNODE or the nullnode
+		/** Returns the next sibling node in namespace "ns"
+		 *  named "name" whose type is TAG_XMLDOMNODE or the nullnode
 		 *  if not found. */
+		xmldomnode	*getNextTagSibling(const char *ns,
+							const char *name) const;
+
+		/** Returns the next sibling node named "name"
+		 *  (ignoring case) whose type is TAG_XMLDOMNODE
+		 *  or the nullnode if not found. */
 		xmldomnode	*getNextTagSiblingIgnoringCase(
+						const char *name) const;
+
+		/** Returns the next sibling node in namespace "ns"
+		 *  named "name" (both ignoring case) whose type is
+		 *  TAG_XMLDOMNODE or the nullnode if not found. */
+		xmldomnode	*getNextTagSiblingIgnoringCase(
+						const char *ns,
 						const char *name) const;
 
 		/** Returns the next sibling node named "name"
@@ -267,6 +326,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  will be returned.  If no match is found,
 		 *  nullnode is returned. */
 		xmldomnode	*getNextTagSibling(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
+		/** Returns the next sibling node in namespace
+		 *  "ns" named "name" with an attribute named
+		 *  "attributename" with value "attributevalue" whose
+		 *  type is TAG_XMLDOMNODE.  If "name" is null, then the
+		 *  name of the child node is not checked, and the first
+		 *  child node with any name (with matching attribute
+		 *  name/value) will be returned.  If no match is found,
+		 *  nullnode is returned. */
+		xmldomnode	*getNextTagSibling(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue) const;
@@ -284,11 +357,34 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue) const;
 
+		/** Returns the next sibling node in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case) with an
+		 *  attribute named "attributename" with value "attributevalue"
+		 *  (both ignoring case) whose type is TAG_XMLDOMNODE.
+		 *  If "name" is null, then the name of the child node is not
+		 *  checked, and the first child node with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		xmldomnode	*getNextTagSiblingIgnoringCase(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
 		/** Returns the next sibling node whose type is TAG_XMLDOMNODE
 		 *  and whose name matches one of the members of the
 		 *  NULL-terminated array "set".  If no match is found,
 		 *  nullnode is returned. */
 		xmldomnode	*getNextTagSiblingInSet(
+					const char * const *set) const;
+
+		/** Returns the next sibling node in namespace "ns"
+		 *  whose name matches one of the members of the
+		 *  NULL-terminated array "set" and whose type is
+		 *  TAG_XMLDOMNODE.  If no match is found, nullnode is
+		 *  returned. */
+		xmldomnode	*getNextTagSiblingInSet(
+					const char *ns,
 					const char * const *set) const;
 
 
@@ -299,9 +395,21 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  or the nullnode if not found. */
 		xmldomnode	*getFirstChild(const char *name) const;
 
+		/** Returns the firest child node in namespace "ns"
+		 *  named "name" or the nullnode if not found. */
+		xmldomnode	*getFirstChild(const char *ns,
+						const char *name) const;
+
 		/** Returns the child node named "name" (ignoring case)
 		 *  or the nullnode if not found. */
 		xmldomnode	*getFirstChildIgnoringCase(
+						const char *name) const;
+
+		/** Returns the child node in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case)
+		 *  or the nullnode if not found. */
+		xmldomnode	*getFirstChildIgnoringCase(
+						const char *ns,
 						const char *name) const;
 
 		/** Returns the child node at index "position"
@@ -321,6 +429,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 						const char *attributevalue)
 						const;
 
+		/** Returns the first child node in namespace "ns"
+		 *  named "name" with an attribute named "attributename" with
+		 *  value "attributevalue".  If "name" is null,
+		 *  then the name of the child node is not
+		 *  checked, and the first child node with any
+		 *  name (with matching attribute name/value)
+		 *  will be returned.  If no match is found,
+		 *  nullnode is returned. */
+		xmldomnode	*getFirstChild(const char *ns,
+						const char *name,
+						const char *attributename,
+						const char *attributevalue)
+						const;
+
 		/** Returns the first child node named "name"
 		 *  (ignoring case) with an attribute named
 		 *  "attributename" with value "attributevalue"
@@ -330,6 +452,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  attribute name/value) will be returned.  If no
 		 *  match is found, nullnode is returned. */
 		xmldomnode	*getFirstChildIgnoringCase(
+						const char *name,
+						const char *attributename,
+						const char *attributevalue)
+						const;
+
+		/** Returns the first child node in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case) with an
+		 *  attribute named "attributename" with value "attributevalue"
+		 *  (both ignoring case).  If "name" is null, then the name of
+		 *  the child node is not checked, and the first child node
+		 *  with any name (with matching attribute name/value) will be
+		 *  returned.  If no match is found, nullnode is returned. */
+		xmldomnode	*getFirstChildIgnoringCase(
+						const char *ns,
 						const char *name,
 						const char *attributename,
 						const char *attributevalue)
@@ -345,10 +481,24 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  is found, nullnode is returned. */
 		xmldomnode	*getFirstTagChild(const char *name) const;
 
+		/** Returns the first child node in namespace "ns"
+		 *  named "name" whose type is TAG_XMLDOMNODE.  If no match
+		 *  is found, nullnode is returned. */
+		xmldomnode	*getFirstTagChild(const char *ns,
+						const char *name) const;
+
 		/** Returns the first child node named "name" (ignoring case)
 		 *  whose type is TAG_XMLDOMNODE.  If no match
 		 *  is found, nullnode is returned. */
 		xmldomnode	*getFirstTagChildIgnoringCase(
+						const char *name) const;
+
+		/** Returns the first child node in namespace "ns"
+		 *  named "name" (both ignoring case) whose type is
+		 *  TAG_XMLDOMNODE.  If no match is found, nullnode is
+		 *  returned. */
+		xmldomnode	*getFirstTagChildIgnoringCase(
+						const char *ns,
 						const char *name) const;
 
 		/** Returns the first child node named "name"
@@ -361,6 +511,19 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  will be returned.  If no match is found,
 		 *  nullnode is returned. */
 		xmldomnode	*getFirstTagChild(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
+		/** Returns the first child node in namespace "ns"
+		 *  named "name" with an attribute named "attributename"
+		 *  with value "attributevalue" whose type is TAG_XMLDOMNODE.
+		 *  If "name" is null, then the name of the child node is not
+		 *  checked, and the first child node with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		xmldomnode	*getFirstTagChild(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue) const;
@@ -378,11 +541,34 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue) const;
 
+		/** Returns the first child node in namespace "ns"
+		 *  (ignoring case) named "name" *  (ignoring case) with an
+		 *  attribute named "attributename" with value "attributevalue"
+		 *  (both ignoring case) whose type is TAG_XMLDOMNODE.  If
+		 *  "name" is null, then the name of the child node is not
+		 *  checked, and the first child node with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		xmldomnode	*getFirstTagChildIgnoringCase(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
 		/** Returns the first child node whose type is TAG_XMLDOMNODE
 		 *  and whose name matches one of the members of the
 		 *  NULL-terminated array "set".  If no match is found,
 		 *  nullnode is returned. */
 		xmldomnode	*getFirstTagChildInSet(
+					const char * const *set) const;
+
+		/** Returns the first child node in namespace "ns"
+		 *  whose name matches one of the members of the
+		 *  NULL-terminated array "set" and whose type is
+		 *  TAG_XMLDOMNODE.  If no match is found, nullnode is
+		 *  returned. */
+		xmldomnode	*getFirstTagChildInSet(
+					const char *ns,
 					const char * const *set) const;
 
 
@@ -392,11 +578,28 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		xmldomnode	*getFirstTagDescendent(const char *name) const;
 
 
+		/** Returns the first descendent node in namespace "ns"
+		 *  named "name" whose type is TAG_XMLDOMNODE.  If no match
+		 *  is found, nullnode is returned. */
+		xmldomnode	*getFirstTagDescendent(
+						const char *ns,
+						const char *name) const;
+
+
 		/** Returns the first descendent node named "name"
 		 *  (ignoring case) whose type is TAG_XMLDOMNODE.
 		 *  If no match is found, nullnode is returned. */
 		xmldomnode	*getFirstTagDescendentIgnoringCase(
 							const char *name) const;
+
+
+		/** Returns the first descendent node in namespace "ns"
+		 *  named "name" (both ignoring case) whose type is
+		 *  TAG_XMLDOMNODE.  If no match is found, nullnode is
+		 *  returned. */
+		xmldomnode	*getFirstTagDescendentIgnoringCase(
+						const char *ns,
+						const char *name) const;
 
 		/** Returns the first descendent node named "name"
 		 *  with an attribute named "attributename" with
@@ -408,6 +611,19 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  will be returned.  If no match is found,
 		 *  nullnode is returned. */
 		xmldomnode	*getFirstTagDescendent(
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
+		/** Returns the first descendent node in namespace "ns"
+		 *  named "name" with an attribute named "attributename" with
+		 *  value "attributevalue" whose type is TAG_XMLDOMNODE.  If
+		 *  "name" is null, then the name of the descendent node is not
+		 *  checked, and the first descendent node with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		xmldomnode	*getFirstTagDescendent(
+					const char *ns,
 					const char *name,
 					const char *attributename,
 					const char *attributevalue) const;
@@ -425,11 +641,33 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue) const;
 
+		/** Returns the first descendent node in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case) with an
+		 *  attribute named "attributename" with value "attributevalue"
+		 *  (both ignoring case) whose type is TAG_XMLDOMNODE.  If
+		 *  "name" is null, then the name of the descendent node is not
+		 *  checked, and the first descendent node with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		xmldomnode	*getFirstTagDescendentIgnoringCase(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue) const;
+
 		/** Returns the first descendent node whose type is
 		 *  TAG_XMLDOMNODE and whose name matches one of the members of
 		 *  the NULL-terminated array "set".  If no match is found,
 		 *  nullnode is returned. */
 		xmldomnode	*getFirstTagDescendentInSet(
+					const char * const *set) const;
+
+		/** Returns the first descendent node in namespace "ns"
+		 *  whose name matches one of the members of the NULL-terminated
+		 *  array "set" and whose type is TAG_XMLDOMNODE.  If no match
+		 *  is found, nullnode is returned. */
+		xmldomnode	*getFirstTagDescendentInSet(
+					const char *ns,
 					const char * const *set) const;
 
 		/** Returns the next node in a depth-first traversal whose
@@ -518,7 +756,7 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		/** Sets the node type to "type". */
 		void	setType(xmldomnodetype type);
 
-		/** Sets the node namespace to "namesp". */
+		/** Sets the node namespace to "ns". */
 		void	setNamespace(const char *namesp);
 
 		/** Sets the node name to "name". */
@@ -553,6 +791,17 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  failure. */
 		xmldomnode	*insertTag(const char *tag, uint64_t position);
 
+		/** Inserts a new node of type TAG_XMLDOMNODETYPE with
+		 *  namespace "ns" and name "tag" into the list of child
+		 *  nodes at "position".  The position of the next sibling (and
+		 *  all successive siblings) is incremented.
+		 *
+		 *  Returns the new node on success or the null node on
+		 *  failure. */
+		xmldomnode	*insertTag(const char *ns,
+						const char *tag,
+						uint64_t position);
+
 		/** Parses "xml" and inserts the result into the list of child
 		 *  nodes at "position".  The position of the next sibling (and
 		 *  all successive siblings) is incremented as appropriate.
@@ -568,12 +817,19 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  Returns true on success or false on failure. */
 		bool	insertXmlFile(const char *xmlfile, uint64_t position);
 
-		/** Appends a new node of type TAG_XMLDOMNODETYPE to the list
-		 *  of child nodes.
+		/** Appends a new node of type TAG_XMLDOMNODETYPE with name
+		 *  "tag" to the list of child nodes.
 		 *
 		 *  Returns the new node on success or the null node on
 		 *  failure. */
 		xmldomnode	*appendTag(const char *tag);
+
+		/** Appends a new node of type TAG_XMLDOMNODETYPE with namespace
+		 * "ns" and name "tag" to the list of child nodes.
+		 *
+		 *  Returns the new node on success or the null node on
+		 *  failure. */
+		xmldomnode	*appendTag(const char *ns, const char *tag);
 
 		/** Parses "xml" and appends the result to the list of child
 		 *  nodes.
@@ -612,10 +868,21 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  is decremented. */
 		bool	deleteFirstChild(const char *name);
 
+		/** Deletes the first child in namespace "ns" named "name".
+		 *  The position of the next sibling (and all successive
+		 *  siblings) is decremented. */
+		bool	deleteFirstChild(const char *ns, const char *name);
+
 		/** Deletes the first child named "name" (ignoring case).
 		 *  The position of the next sibling (and all successive
 		 *  siblings) is decremented. */
 		bool	deleteFirstChildIgnoringCase(const char *name);
+
+		/** Deletes the first child in namespace "ns" named "name"
+		 *  (both ignoring case).  The position of the next sibling
+		 *  (and all successive siblings) is decremented. */
+		bool	deleteFirstChildIgnoringCase(const char *ns,
+							const char *name);
 
 		/** Deletes the first child node named "name"
 		 *  with an attribute named "attributename" with
@@ -627,6 +894,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  will be returned.  If no match is found,
 		 *  nullnode is returned. */
 		bool	deleteFirstChild(const char *name,
+					const char *attributename,
+					const char *attributevalue);
+
+		/** Deletes the first child node in namespace "ns"
+		 *  named "name" with an attribute named "attributename" with
+		 *  value "attributevalue" whose type is
+		 *  TAG_XMLDOMNODE.  If "name" is null,
+		 *  then the name of the child node is not
+		 *  checked, and the first child node with any
+		 *  name (with matching attribute name/value)
+		 *  will be returned.  If no match is found,
+		 *  nullnode is returned. */
+		bool	deleteFirstChild(const char *ns,
+					const char *name,
 					const char *attributename,
 					const char *attributevalue);
 
@@ -643,14 +924,37 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue);
 
+		/** Deletes the first child node in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case) with an
+		 *  attribute named "attributename" with value "attributevalue"
+		 *  (both ignoring case) whose type is TAG_XMLDOMNODE.
+		 *  If "name" is null, then the name of the child node
+		 *  is not checked, and the first child node with any
+		 *  name (with matching attribute name/value) will be
+		 *  returned.  If no match is found, nullnode is returned. */
+		bool	deleteFirstChildIgnoringCase(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue);
+
 		/** Deletes all child nodes. */
 		bool	deleteChildren();
 
 		/** Deletes all child nodes named "name". */
 		bool	deleteChildren(const char *name);
 
+		/** Deletes all child nodes in namespace "ns"
+		 *  named "name". */
+		bool	deleteChildren(const char *ns, const char *name);
+
 		/** Deletes all child nodes named "name" (ignoring case). */
 		bool	deleteChildrenIgnoringCase(const char *name);
+
+		/** Deletes all child nodes in namespace "ns"
+		 *  named "name" (both ignoring case). */
+		bool	deleteChildrenIgnoringCase(const char *ns,
+							const char *name);
 
 		/** Deletes all child nodes named "name"
 		 *  with an attribute named "attributename" with
@@ -662,6 +966,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  will be returned.  If no match is found,
 		 *  nullnode is returned. */
 		bool	deleteChildren(const char *name,
+					const char *attributename,
+					const char *attributevalue);
+
+		/** Deletes all child nodes in namespace "ns"
+		 *  named "name" with an attribute named "attributename" with
+		 *  value "attributevalue" whose type is
+		 *  TAG_XMLDOMNODE.  If "name" is null,
+		 *  then the name of the child node is not
+		 *  checked, and the first child node with any
+		 *  name (with matching attribute name/value)
+		 *  will be returned.  If no match is found,
+		 *  nullnode is returned. */
+		bool	deleteChildren(const char *ns,
+					const char *name,
 					const char *attributename,
 					const char *attributevalue);
 
@@ -678,11 +996,35 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue);
 
+		/** Deletes all child nodes in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case) with an
+		 *  attribute name "attributename" with value "attributevalue"
+		 *  (both ignoring case) whose type is TAG_XMLDOMNODE.  If
+		 *  "name" is null, then the name of the child node is not
+		 *  checked, and the first child node with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		bool	deleteChildrenIgnoringCase(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue);
+
 		/** Deletes all descendents named "name". */
 		bool	deleteDescendents(const char *name);
 
+		/** Deletes all descendents in namespace "ns"
+		 *  named "name". */
+		bool	deleteDescendents(const char *ns,
+						const char *name);
+
 		/** Deletes all descendents named "name" (ignoring case). */
 		bool	deleteDescendentsIgnoringCase(const char *name);
+
+		/** Deletes all descendents in namespace "ns" named "name"
+		 *  (both ignoring case). */
+		bool	deleteDescendentsIgnoringCase(const char *ns,
+							const char *name);
 
 		/** Deletes all descendents named "name"
 		 *  with an attribute named "attributename" with
@@ -694,6 +1036,20 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  will be returned.  If no match is found,
 		 *  nullnode is returned. */
 		bool	deleteDescendents(const char *name,
+					const char *attributename,
+					const char *attributevalue);
+
+		/** Deletes all descendents in namespace "ns"
+		 *  named "name" with an attribute named "attributename" with
+		 *  value "attributevalue" whose type is
+		 *  TAG_XMLDOMNODE.  If "name" is null,
+		 *  then the name of the descendent is not
+		 *  checked, and the first descendent with any
+		 *  name (with matching attribute name/value)
+		 *  will be returned.  If no match is found,
+		 *  nullnode is returned. */
+		bool	deleteDescendents(const char *ns,
+					const char *name,
 					const char *attributename,
 					const char *attributevalue);
 
@@ -710,15 +1066,45 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 					const char *attributename,
 					const char *attributevalue);
 
+		/** Deletes all descendents in namespace "ns"
+		 *  (ignoring case) named "name" (ignoring case) with an
+		 *  attribute named "attributename" with value "attributevalue"
+		 *  (both ignoring case) whose type is TAG_XMLDOMNODE.  If
+		 *  "name" is null, then the name of the descendent is not
+		 *  checked, and the first descendent with any name (with
+		 *  matching attribute name/value) will be returned.  If no
+		 *  match is found, nullnode is returned. */
+		bool	deleteDescendentsIgnoringCase(
+					const char *ns,
+					const char *name,
+					const char *attributename,
+					const char *attributevalue);
+
 
 		/** Finds the first child node named "oldname" and
 		 *  renames it "newname". */
 		bool	renameFirstChild(const char *oldname,
 						const char *newname);
 
-		/** Finds the first child node named "oldname"
-		 *  (ignoring case) and renames it "newname". */
+
+		/** Finds the first child node named "oldname" in namespace
+		 *  "oldns" and renames it "newname" with namespace "newns". */
+		bool	renameFirstChild(const char *oldns,
+						const char *oldname,
+						const char *newns,
+						const char *newname);
+
+		/** Finds the first child node named "oldname" (ignoring case)
+		 *  and renames it "newname". */
 		bool	renameFirstChildIgnoringCase(const char *oldname,
+							const char *newname);
+
+		/** Finds the first child node named "oldname" in namespace
+		 *  "oldns" (both ignoring case) and renames it "newname"
+		 *  with namespace "newns". */
+		bool	renameFirstChildIgnoringCase(const char *oldns,
+							const char *oldname,
+							const char *newns,
 							const char *newname);
 
 		/** Finds all child nodes named "oldname" and renames
@@ -726,9 +1112,24 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		bool	renameChildren(const char *oldname,
 						const char *newname);
 
+		/** Finds all child nodes named "oldname" in namespace "oldns"
+		 *  and renames them "newname" with namespace "newns". */
+		bool	renameChildren(const char *oldns,
+						const char *oldname,
+						const char *newns,
+						const char *newname);
+
 		/** Finds all child nodes named "oldname" (ignoring
 		 *  case) and renames them "newname". */
 		bool	renameChildrenIgnoringCase(const char *oldname,
+							const char *newname);
+
+		/** Finds all child nodes named "oldname" in namespace "oldns"
+		 *  (both ignoring case) and renames them "newname" with
+		 *  namespace "newns". */
+		bool	renameChildrenIgnoringCase(const char *oldns,
+							const char *oldname,
+							const char *newns,
 							const char *newname);
 
 		/** Finds all descendents named "oldname" and renames
@@ -736,10 +1137,26 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		bool	renameDescendents(const char *oldname,
 						const char *newname);
 
+		/** Finds all descendents named "oldname" in namespace "oldns"
+ 		 *  and renames them "newname" with namespace "newns". */
+		bool	renameDescendents(const char *oldns,
+						const char *oldname,
+						const char *newns,
+						const char *newname);
+
 		/** Finds all descendents named "oldname" (ignoring
  		 *  case) and renames them "newname". */
 		bool	renameDescendentsIgnoringCase(
 						const char *oldname,
+						const char *newname);
+
+		/** Finds all descendents named "oldname" in namespace "oldns"
+		 *  (both ignoring case) and renames them "newname" with
+		 *  namespace "newns". */
+		bool	renameDescendentsIgnoringCase(
+						const char *oldns,
+						const char *oldname,
+						const char *newns,
 						const char *newname);
 
 
@@ -801,25 +1218,55 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  children out of the tag, then deletes the tag. */
 		bool	unwrapFirstChild(const char *name);
 
+		/** Finds the first tag child in namespace "ns" named "name",
+		 *  moves all children out of the tag, then deletes the tag. */
+		bool	unwrapFirstChild(const char *ns, const char *name);
+
 		/** Finds the first tag child named "name" (ignoring case),
 		 *  moves all children out of the tag, then deletes the tag. */
 		bool	unwrapFirstChildIgnoringCase(const char *name);
+
+		/** Finds the first tag child in namespace "ns" named "name"
+		 *  (both ignoring case), moves all children out of the tag,
+		 *  then deletes the tag. */
+		bool	unwrapFirstChildIgnoringCase(const char *ns,
+							const char *name);
 
 		/** For each tag child named "name", moves all children
 		 *  out of the tag, then deletes the tag. */
 		bool	unwrapChildren(const char *name);
 
+		/** For each tag child in namespace "ns" named "name",
+		 *  moves all children out of the tag, then deletes the tag. */
+		bool	unwrapChildren(const char *ns, const char *name);
+
 		/** For each tag child named "name" (ignoring case),
 		 *  moves all children out of the tag, then deletes the tag. */
 		bool	unwrapChildrenIgnoringCase(const char *name);
+
+		/** For each tag child in namespace "ns" named "name"
+		 *  (both ignoring case), moves all children out of the tag,
+		 *  then deletes the tag. */
+		bool	unwrapChildrenIgnoringCase(const char *ns,
+							const char *name);
 
 		/** For each tag descendent named "name", moves all children
 		 *  out of the tag, then deletes the tag. */
 		bool	unwrapDescendents(const char *name);
 
+		/** For each tag descendent in namespace "ns" named "name",
+		 *  moves all children out of the tag, then deletes the tag. */
+		bool	unwrapDescendents(const char *ns, const char *name);
+
 		/** For each tag descendent named "name" (ignoring case),
 		 *  moves all children out of the tag, then deletes the tag. */
 		bool	unwrapDescendentsIgnoringCase(const char *name);
+
+		/** For each tag descendent in namespace "ns" named "name"
+		 *  (both ignoring case), moves all children out of the tag,
+		 *  then deletes the tag. */
+		bool	unwrapDescendentsIgnoringCase(const char *ns,
+							const char *name);
 
 
 		/** Wraps the specified child with a tag named "name".
@@ -828,6 +1275,16 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  The behavior is undefined if "child" is not actually a
 		 *  child of this node. */
 		xmldomnode	*wrapChild(xmldomnode *child,
+						const char *name);
+
+		/** Wraps the specified child with a tag named "name"
+		 *  with namespace "ns".
+		 *  Returns the newly new created tag node.
+		 * 
+		 *  The behavior is undefined if "child" is not actually a
+		 *  child of this node. */
+		xmldomnode	*wrapChild(xmldomnode *child,
+						const char *ns,
 						const char *name);
 
 		/** Wraps the specified children with a tag named "name".
@@ -842,9 +1299,28 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 						xmldomnode *endchild,
 						const char *name);
 
+		/** Wraps the specified children with a tag named "name"
+ 		 *  with namespace "ns".
+		 *  Returns the newly new created tag node.
+		 *
+		 *  "startchild" and "endchild" should be children of the
+		 *  current node, and siblings, and not the null node.  The
+		 *  position of "endchild" should be >= the position of
+		 *  "startchild".  The behavior is undefined if any of
+		 *  these conditions are not met. */
+		xmldomnode	*wrapChildren(xmldomnode *startchild,
+						xmldomnode *endchild,
+						const char *ns,
+						const char *name);
+
 		/** Wraps all children of the current node with a tag
 		 *  named "name".  Returns the newly new created tag node. */
 		xmldomnode	*wrapChildren(const char *name);
+
+		/** Wraps all children of the current node with a tag
+		 *  named "name" with namespace "ns".
+		 *  Returns the newly new created tag node. */
+		xmldomnode	*wrapChildren(const char *ns, const char *name);
 
 
 		/** Clones this node and all of its children and returns a
