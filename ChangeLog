@@ -6,6 +6,7 @@
 	fixed FILE->fileno detection for solaris 11.2,
 		which doesn't have it at all
 	llabs() is detected and preferred to abs()
+	added partial xml namespace support (namespaces for tags)
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class

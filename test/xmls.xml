@@ -181,4 +181,11 @@
 &amp&lt&gt&apos&quot
 &&&&&
 <![CDATA[ test [ test [ test [test]]]]]>
+
+<testns:testtag1>
+  <testns:testtag2>
+    <testns:testtag3/>
+  </testns:testtag2>
+</testns:testtag1>
+
 </test>

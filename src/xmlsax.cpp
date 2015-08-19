@@ -269,7 +269,8 @@ bool xmlsax::parseTag(char current, char *next) {
 	} else {
 
 		// call the callback for tag start
-		if (!tagStart(pvt->_tagns.getString(),
+		if (!tagStart((pvt->_tagns.getStringLength())?
+					pvt->_tagns.getString():NULL,
 				pvt->_tagname.getString())) {
 			return false;
 		}
@@ -315,7 +316,8 @@ bool xmlsax::parseTag(char current, char *next) {
 	// if the tag was an empty or standalone tag,
 	// call the callback for tag end
 	if (endtag || standalone) {
-		if (!tagEnd(pvt->_tagns.getString(),
+		if (!tagEnd((pvt->_tagns.getStringLength())?
+					pvt->_tagns.getString():NULL,
 				pvt->_tagname.getString())) {
 			return false;
 		}
@@ -330,10 +332,15 @@ bool xmlsax::parseTagName(char current, stringbuffer *ns,
 				stringbuffer *name, char *next) {
 
 	int32_t	bracketcount=0;
+	bool	hascolon=false;
 
 	// get characters and put them in the buffer
 	char	ch=current;
 	for (;;) {
+
+		if (ch==':') {
+			hascolon=true;
+		}
 
 		if (!ch) {
 
@@ -363,6 +370,15 @@ bool xmlsax::parseTagName(char current, stringbuffer *ns,
 
 			// if we find whitespace, a / or a > then we're done
 			// parsing the name
+
+			// if the name contained a namespace then split it
+			if (hascolon) {
+				char	*n=name->detachString();
+				char	*colon=charstring::findFirst(n,':');
+				ns->append(n,colon-n);
+				name->append(colon+1);
+				delete[] n;
+			}
 
 			// return the character after the end of the name
 			*next=ch;

@@ -160,6 +160,7 @@ bool xmldom::tagStart(const char *ns, const char *name) {
 		createRootNode();
 	}
 	xmldomnode	*tagnode=new xmldomnode(this,pvt->_nullnode);
+	tagnode->setNamespace(ns);
 	tagnode->setName(name);
 	tagnode->setType(TAG_XMLDOMNODETYPE);
 	insertChild(tagnode);
