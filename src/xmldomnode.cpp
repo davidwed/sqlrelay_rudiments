@@ -714,6 +714,10 @@ void xmldomnode::xml(stringbuffer *strb,
 			}
 		}
 		append(strb,fd,"<");
+		if (pvt->_namespace) {
+			safeAppend(strb,fd,pvt->_namespace);
+			append(strb,fd,":");
+		}
 		safeAppend(strb,fd,pvt->_name);
 		current=pvt->_firstattribute;
 		for (uint64_t i=0; i<pvt->_attributecount; i++) {
@@ -750,6 +754,10 @@ void xmldomnode::xml(stringbuffer *strb,
 				}
 			}
 			append(strb,fd,"</");
+			if (pvt->_namespace) {
+				safeAppend(strb,fd,pvt->_namespace);
+				append(strb,fd,":");
+			}
 			safeAppend(strb,fd,pvt->_name);
 			append(strb,fd,">");
 			if (indent && indentlevel) {

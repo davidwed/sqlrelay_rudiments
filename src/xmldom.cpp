@@ -154,7 +154,7 @@ xmldomnode *xmldom::getNullNode() const {
 	return pvt->_nullnode;
 }
 
-bool xmldom::tagStart(const char *name) {
+bool xmldom::tagStart(const char *ns, const char *name) {
 	pvt->_currentattribute=NULL;
 	if (pvt->_rootnode->isNullNode()) {
 		createRootNode();
@@ -197,7 +197,7 @@ bool xmldom::text(const char *string) {
 	return true;
 }
 
-bool xmldom::tagEnd(const char *name) {
+bool xmldom::tagEnd(const char *ns, const char *name) {
 	pvt->_currentattribute=NULL;
 	pvt->_currentparent=pvt->_currentparent->getParent();
 	return true;

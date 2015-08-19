@@ -88,7 +88,7 @@ codetreegrammar::~codetreegrammar() {
 	delete pvt;
 }
 
-bool codetreegrammar::tagStart(const char *name) {
+bool codetreegrammar::tagStart(const char *ns, const char *name) {
 
 	// get the first letter of the name
 	char	ch=name[0];
@@ -107,7 +107,7 @@ bool codetreegrammar::tagStart(const char *name) {
         char	newname[2];
 	newname[0]=ch;
 	newname[1]='\0';
-	return xmldom::tagStart(newname);
+	return xmldom::tagStart(ns,newname);
 }
 
 bool codetreegrammar::attributeName(const char *name) {

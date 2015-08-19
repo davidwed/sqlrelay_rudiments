@@ -26,6 +26,7 @@ class xmlsaxprivate {
 		stringbuffer	_err;
 
 		// reusing these over and over reduces heap fragmentation
+		stringbuffer	_tagns;
 		stringbuffer	_tagname;
 		stringbuffer	_commenttext;
 		stringbuffer	_cdatatext;
@@ -54,7 +55,7 @@ void xmlsax::reset() {
 	pvt->_line=1;
 }
 
-bool xmlsax::tagStart(const char *name) {
+bool xmlsax::tagStart(const char *ns, const char *name) {
 	// by default, just return success
 	return true;
 }
@@ -74,7 +75,7 @@ bool xmlsax::text(const char *string) {
 	return true;
 }
 
-bool xmlsax::tagEnd(const char *name) {
+bool xmlsax::tagEnd(const char *ns, const char *name) {
 	// by default, just return success
 	return true;
 }
@@ -235,8 +236,9 @@ bool xmlsax::parseTag(char current, char *next) {
 	}
 
 	// get the tag name
+	pvt->_tagns.clear();
 	pvt->_tagname.clear();
-	if (!parseTagName(ch,&pvt->_tagname,&ch)) {
+	if (!parseTagName(ch,&pvt->_tagns,&pvt->_tagname,&ch)) {
 		parseTagFailed();
 		return false;
 	}
@@ -267,7 +269,8 @@ bool xmlsax::parseTag(char current, char *next) {
 	} else {
 
 		// call the callback for tag start
-		if (!tagStart(pvt->_tagname.getString())) {
+		if (!tagStart(pvt->_tagns.getString(),
+				pvt->_tagname.getString())) {
 			return false;
 		}
 
@@ -312,7 +315,8 @@ bool xmlsax::parseTag(char current, char *next) {
 	// if the tag was an empty or standalone tag,
 	// call the callback for tag end
 	if (endtag || standalone) {
-		if (!tagEnd(pvt->_tagname.getString())) {
+		if (!tagEnd(pvt->_tagns.getString(),
+				pvt->_tagname.getString())) {
 			return false;
 		}
 	}
@@ -322,7 +326,8 @@ bool xmlsax::parseTag(char current, char *next) {
 	return true;
 }
 
-bool xmlsax::parseTagName(char current, stringbuffer *name, char *next) {
+bool xmlsax::parseTagName(char current, stringbuffer *ns,
+				stringbuffer *name, char *next) {
 
 	int32_t	bracketcount=0;
 

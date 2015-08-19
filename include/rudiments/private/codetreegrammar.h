@@ -3,7 +3,7 @@
 
 	private:
 		bool	hasRecursiveBreak();
-		bool	tagStart(const char *name);
+		bool	tagStart(const char *ns, const char *name);
 		bool	attributeName(const char *name);
 		bool	attributeValue(const char *value);
 

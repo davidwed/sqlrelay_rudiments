@@ -40,7 +40,7 @@ class RUDIMENTS_DLLSPEC xmlsax {
 	protected:
 
 		/** Gets called when a start tag is parsed. */
-		virtual	bool	tagStart(const char *name);
+		virtual	bool	tagStart(const char *ns, const char *name);
 
 		/** Gets called when an attribute name is parsed. */
 		virtual	bool	attributeName(const char *name);
@@ -52,7 +52,7 @@ class RUDIMENTS_DLLSPEC xmlsax {
 		virtual	bool	text(const char *string);
 
 		/** Gets called when an end tag is parsed. */
-		virtual	bool	tagEnd(const char *name);
+		virtual	bool	tagEnd(const char *ns, const char *name);
 
 		/** Gets called when a comment is parsed. */
 		virtual	bool	comment(const char *string);
