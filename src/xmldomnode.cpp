@@ -44,6 +44,18 @@ xmldomnode::xmldomnode(xmldom *dom, xmldomnode *nullnode) {
 xmldomnode::xmldomnode(xmldom *dom,
 			xmldomnode *nullnode,
 			xmldomnodetype type,
+			const char *name,
+			const char *value) {
+	init(nullnode);
+	pvt->_dom=dom;
+	pvt->_type=type;
+	setName(name);
+	setValue(value);
+}
+
+xmldomnode::xmldomnode(xmldom *dom,
+			xmldomnode *nullnode,
+			xmldomnodetype type,
 			const char *ns,
 			const char *name,
 			const char *value) {

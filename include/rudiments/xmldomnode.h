@@ -138,6 +138,15 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 			xmldomnode(xmldom *dom,
 					xmldomnode *nullnode,
 					xmldomnodetype type,
+					const char *name,
+					const char *value);
+
+			/** Creates a new node (see
+ 			 *  xmldomnode(xmldom *, xmldomnode *) and intializes
+ 			 *  its member variables to the values passed in. */
+			xmldomnode(xmldom *dom,
+					xmldomnode *nullnode,
+					xmldomnodetype type,
 					const char *ns,
 					const char *name,
 					const char *value);
