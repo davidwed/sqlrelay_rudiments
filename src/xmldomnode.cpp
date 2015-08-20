@@ -2075,7 +2075,7 @@ bool xmldomnode::match(xmldomnode *node,
 	if (ns && charstring::compare(node->pvt->_namespace,ns)) {
 		return false;
 	}
-	if (set && charstring::inSet(node->pvt->_name,set)) {
+	if (set && !charstring::inSet(node->pvt->_name,set)) {
 		return false;
 	}
 	return true;
