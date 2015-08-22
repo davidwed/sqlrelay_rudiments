@@ -21,7 +21,7 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns true if "c" is alphabetical character, including
 		 *  accented alphabetical characters from the extended ascii
 		 *  character set, and false otherwise. */
-		static bool	isExtendedAlphabetical(int32_t c);
+		static bool	isAlphabeticalExtended(int32_t c);
 
 		/** Returns true if "c" is lower case and false otherwise. */
 		static bool	isLowerCase(int32_t c);
@@ -29,7 +29,7 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns true if "c" is lower case, including
 		 *  accented alphabetical characters from the extended ascii
 		 *  character set, and false otherwise. */
-		static bool	isExtendedLowerCase(int32_t c);
+		static bool	isLowerCaseExtended(int32_t c);
 
 		/** Returns true if "c" is upper case and false otherwise. */
 		static bool	isUpperCase(int32_t c);
@@ -37,7 +37,7 @@ class RUDIMENTS_DLLSPEC character {
 		/** Returns true if "c" is upper case, including
 		 *  accented alphabetical characters from the extended ascii
 		 *  character set, and false otherwise. */
-		static bool	isExtendedUpperCase(int32_t c);
+		static bool	isUpperCaseExtended(int32_t c);
 
 		/** Returns true if "c" is a printable character that is not
 		 *  a space or alphanumeric character and false otherwise. */

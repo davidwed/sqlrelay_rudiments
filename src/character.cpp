@@ -17,7 +17,7 @@ bool character::isAlphabetical(int32_t c) {
 	return isalpha(c)!=0;
 }
 
-bool character::isExtendedAlphabetical(int32_t c) {
+bool character::isAlphabeticalExtended(int32_t c) {
 	// see http://www.theasciicode.com.ar/
 	return isAlphabetical(c) ||
 		(c>=128 && c<=154) ||
@@ -40,7 +40,7 @@ bool character::isLowerCase(int32_t c) {
 	return islower(c)!=0;
 }
 
-bool character::isExtendedLowerCase(int32_t c) {
+bool character::isLowerCaseExtended(int32_t c) {
 	// see http://www.theasciicode.com.ar/
 	return isLowerCase(c) ||
 		(c>=129 && c<=141) ||
@@ -71,7 +71,7 @@ bool character::isUpperCase(int32_t c) {
 	return isupper(c)!=0;
 }
 
-bool character::isExtendedUpperCase(int32_t c) {
+bool character::isUpperCaseExtended(int32_t c) {
 	// see http://www.theasciicode.com.ar/
 	return isUpperCase(c) ||
 		(c==128) ||
