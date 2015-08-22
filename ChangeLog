@@ -7,6 +7,11 @@
 		which doesn't have it at all
 	llabs() is detected and preferred to abs()
 	added partial xml namespace support (namespaces for tags)
+	added partial support for extended ascii character set to character
+		class
+	codetree's letter, uppercaseletter, and lowercaseletter terminals
+		now include accented characters from the extended ascii
+		character set
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class

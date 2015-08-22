@@ -1249,6 +1249,11 @@ void xmldomnode::setName(const char *name) {
 	}
 }
 
+void xmldomnode::setName(const char *ns, const char *name) {
+	setNamespace(ns);
+	setName(name);
+}
+
 void xmldomnode::setValue(const char *value) {
 	if (pvt->_dom->stringCacheEnabled()) {
 		pvt->_dom->unCacheString(pvt->_value);

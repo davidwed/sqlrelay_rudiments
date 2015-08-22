@@ -774,10 +774,13 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		void	setType(xmldomnodetype type);
 
 		/** Sets the node namespace to "ns". */
-		void	setNamespace(const char *namesp);
+		void	setNamespace(const char *ns);
 
 		/** Sets the node name to "name". */
 		void	setName(const char *name);
+
+		/** Sets the node namespace to "ns" and node name to "name". */
+		void	setName(const char *ns, const char *name);
 
 		/** Sets the node value to "value". */
 		void	setValue(const char *value);

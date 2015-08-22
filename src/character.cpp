@@ -12,9 +12,20 @@
 bool character::isAlphanumeric(int32_t c) {
 	return isalnum(c)!=0;
 }
-
+ 
 bool character::isAlphabetical(int32_t c) {
 	return isalpha(c)!=0;
+}
+
+bool character::isExtendedAlphabetical(int32_t c) {
+	// see http://www.theasciicode.com.ar/
+	return isAlphabetical(c) ||
+		(c>=128 && c<=154) ||
+		(c>=160 && c<=165) ||
+		(c>=181 && c<=183) ||
+		(c>=198 && c<=199) ||
+		(c>=208 && c<=216) ||
+		(c>=224 && c<=237);
 }
 
 bool character::isControlCharacter(int32_t c) {
@@ -27,6 +38,21 @@ bool character::isDigit(int32_t c) {
 
 bool character::isLowerCase(int32_t c) {
 	return islower(c)!=0;
+}
+
+bool character::isExtendedLowerCase(int32_t c) {
+	// see http://www.theasciicode.com.ar/
+	return isLowerCase(c) ||
+		(c>=129 && c<=141) ||
+		(c==145) ||
+		(c>=147 && c<=152) ||
+		(c>=160 && c<=164) ||
+		(c==198) ||
+		(c==208) ||
+		(c==213) ||
+		(c==228) ||
+		(c>=230 && c<=231) ||
+		(c==236);
 }
 
 bool character::isPrintableNonSpace(int32_t c) {
@@ -43,6 +69,23 @@ bool character::isPunctuation(int32_t c) {
 
 bool character::isUpperCase(int32_t c) {
 	return isupper(c)!=0;
+}
+
+bool character::isExtendedUpperCase(int32_t c) {
+	// see http://www.theasciicode.com.ar/
+	return isUpperCase(c) ||
+		(c==128) ||
+		(c>=142 && c<=144) ||
+		(c==146) ||
+		(c>=153 && c<=154) ||
+		(c==165) ||
+		(c>=181 && c<=183) ||
+		(c==199) ||
+		(c>=209 && c<=212) ||
+		(c>=214 && c<=216) ||
+		(c>=224 && c<=227) ||
+		(c>=232 && c<=235) ||
+		(c==237);
 }
 
 bool character::isHexDigit(int32_t c) {
@@ -63,7 +106,6 @@ bool character::isWhitespace(int32_t c) {
 bool character::isAscii(int32_t c) {
 	return isascii(c)!=0;
 }
-
 
 int32_t character::toUpperCase(int32_t c) {
 	return toupper(c);

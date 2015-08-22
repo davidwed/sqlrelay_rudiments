@@ -49,6 +49,7 @@ static const char	EXCEPTION='e';
 
 static const char	*GRAMMAR="g";
 static const char	*INDENT="i";
+static const char	*NAMESPACE="n";
 
 static const char	*DEFINITION="d";
 static const char	*NAME="n";
@@ -174,6 +175,7 @@ class codetreeprivate {
 		bool			_error;
 		uint32_t		_depth;
 		const char		*_indentstring;
+		const char		*_ns;
 		size_t			_indentlength;
 		bool			_previousparsechildretval;
 		const char		*_beginningofinput;
@@ -239,6 +241,9 @@ bool codetree::parse(const char *input,
 	if (pvt->_grammartag->isNullNode()) {
 		return false;
 	}
+
+	// get the namespace
+	pvt->_ns=pvt->_grammartag->getAttributeValue(NAMESPACE);
 
 	// build non-terminal node associations
 	// (see method for explanation)
@@ -727,7 +732,7 @@ bool codetree::parseLetter(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::isAlphabetical((int32_t)(**codeposition))) {
+	if (character::isExtendedAlphabetical((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
@@ -754,7 +759,7 @@ bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::isLowerCase((int32_t)(**codeposition))) {
+	if (character::isExtendedLowerCase((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
@@ -782,7 +787,7 @@ bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::isUpperCase((int32_t)(**codeposition))) {
+	if (character::isExtendedUpperCase((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
@@ -941,7 +946,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 			codenode=new xmldomnode(treeparent->getTree(),
 						treeparent->getNullNode(),
 						TAG_XMLDOMNODETYPE,
-						NULL,name,NULL);
+						pvt->_ns,name,NULL);
 		}
 		if (symboltype==LITERAL) {
 			localntbuffer=new stringbuffer;

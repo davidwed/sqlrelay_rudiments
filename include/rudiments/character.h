@@ -7,7 +7,7 @@
 #include <rudiments/private/characterincludes.h>
 
 /** The character class provides static methods for evaluating and manipulating
- *  characters. */
+ *  ascii characters. */
 class RUDIMENTS_DLLSPEC character {
 	public:
 		/** Returns true if "c" is an alphanumeric character
@@ -18,11 +18,26 @@ class RUDIMENTS_DLLSPEC character {
 		 *  and false otherwise. */
 		static bool	isAlphabetical(int32_t c);
 
+		/** Returns true if "c" is alphabetical character, including
+		 *  accented alphabetical characters from the extended ascii
+		 *  character set, and false otherwise. */
+		static bool	isExtendedAlphabetical(int32_t c);
+
 		/** Returns true if "c" is lower case and false otherwise. */
 		static bool	isLowerCase(int32_t c);
 
+		/** Returns true if "c" is lower case, including
+		 *  accented alphabetical characters from the extended ascii
+		 *  character set, and false otherwise. */
+		static bool	isExtendedLowerCase(int32_t c);
+
 		/** Returns true if "c" is upper case and false otherwise. */
 		static bool	isUpperCase(int32_t c);
+
+		/** Returns true if "c" is upper case, including
+		 *  accented alphabetical characters from the extended ascii
+		 *  character set, and false otherwise. */
+		static bool	isExtendedUpperCase(int32_t c);
 
 		/** Returns true if "c" is a printable character that is not
 		 *  a space or alphanumeric character and false otherwise. */
