@@ -351,7 +351,13 @@ bool directory::remove(const char *path) {
 }
 
 char *directory::getCurrentWorkingDirectory() {
-	size_t	inc=1024;
+	size_t	inc=
+		#ifdef MAX_PATH
+			MAX_PATH;
+		#else
+			// (this is the max path length on Windows)
+			260;
+		#endif
 	size_t	max=inc*10;
 	for (size_t size=inc; size<max; size=size+inc) {
 		char	*buffer=new char[size];

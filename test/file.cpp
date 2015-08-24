@@ -176,10 +176,4 @@ int main(int argc, const char **argv) {
 
 	// remove the file
 	file::remove("testfile");
-
-	// return a reasonably safe value
-	char	*link=file::resolveSymbolicLink(
-			"/usr/local/firstworks/lib/librudiments-0.53.so.1");
-	stdoutput.printf("resolve symlink: %s\n",link);
-	delete[] link;
 }
