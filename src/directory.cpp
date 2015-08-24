@@ -351,8 +351,9 @@ bool directory::remove(const char *path) {
 }
 
 char *directory::getCurrentWorkingDirectory() {
-	size_t	size=1024;
-	for (;;) {
+	size_t	inc=1024;
+	size_t	max=inc*10;
+	for (size_t size=inc; size<max; size=size+inc) {
 		char	*buffer=new char[size];
 		char	*result=NULL;
 		#if defined(RUDIMENTS_HAVE_GETCURRENTDIRECTORY)
@@ -374,12 +375,9 @@ char *directory::getCurrentWorkingDirectory() {
 			return buffer;
 		} else {
 			delete[] buffer;
-			size=size+1024;
-			if (size>10240) {
-				return NULL;
-			}
 		}
 	}
+	return NULL;
 }
 
 bool directory::changeDirectory(const char *path) {
@@ -457,7 +455,8 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 				return MAX_PATH;
 			#else
 				// return a reasonably safe value
-				return 256;
+				// (this is the max path length on Windows)
+				return 260;
 			#endif
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
@@ -510,7 +509,8 @@ int64_t directory::fpathConf(int32_t name) {
 				return MAX_PATH;
 			#else
 				// return a reasonably safe value
-				return 256;
+				// (this is the max path length on Windows)
+				return 260;
 			#endif
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;

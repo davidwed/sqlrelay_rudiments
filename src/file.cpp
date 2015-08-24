@@ -10,6 +10,7 @@
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/permissions.h>
+#include <rudiments/directory.h>
 #include <rudiments/stdio.h>
 #ifndef RUDIMENTS_HAVE_BLKSIZE_T
 	#include <rudiments/filesystem.h>
@@ -1300,17 +1301,18 @@ bool file::createSymbolicLink(const char *oldpath, const char *newpath) {
 char *file::resolveSymbolicLink(const char *filename) {
 
 	#if defined(RUDIMENTS_HAVE_READLINK)
-		size_t	buffersize=1024;
-		for (;;) {
+		size_t	inc=directory::maxPathLength(filename);
+		size_t	max=inc*10;
+		for (size_t size=inc; size<max; size=size+inc) {
 
 			// create a buffer to store the path
-			char	*buffer=new char[buffersize];
+			char	*buffer=new char[size];
 
 			// read the path into the buffer
 			int32_t	len;
 			error::clearError();
 			do {
-				len=::readlink(filename,buffer,buffersize);
+				len=::readlink(filename,buffer,size);
 			} while (len==-1 && error::getErrorNumber()==EINTR);
 
 			if (len==-1) {
@@ -1320,28 +1322,22 @@ char *file::resolveSymbolicLink(const char *filename) {
 				delete[] buffer;
 				return NULL;
 
-			} else if ((size_t)len==buffersize) {
+			} else if ((size_t)len==size) {
 
 				// if the length of the path was the same as
 				// the buffer size the we didn't get the entire
-				// path, increase the size of the buffer and
-				// try again
+				// path, loop back, increase the size of the
+				// buffer and try again
 				delete[] buffer;
-				buffersize=buffersize+1024;
-
-				// if the buffer size exceeds 10k
-				// then return failure
-				if (buffersize>10240) {
-					return NULL;
-				}
 
 			} else {
-				// NULL-terminate the buffer, readlink()
-				// doesn't do this for us
+				// NULL-terminate the buffer,
+				// readlink() doesn't do this for us
 				buffer[len]='\0';
 				return buffer;
 			}
 		}
+		return NULL;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return NULL;
