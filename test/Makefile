@@ -71,7 +71,6 @@ PROGS3= handoff1 \
 	nonhandoff1 \
 	nonhandoff2 \
 	nonhandoffclient \
-	dtd \
 	xmls \
 	xmld \
 	xmlentities \
@@ -216,9 +215,6 @@ datetime: datetime.cpp datetime.$(OBJ)
 
 dictionary: dictionary.cpp dictionary.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dictionary.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-dtd: dtd.cpp dtd.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dtd.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 randomnumber: randomnumber.cpp randomnumber.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) randomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

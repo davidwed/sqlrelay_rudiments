@@ -14,6 +14,7 @@
 		character set
 	added setgroups() call before setuid() call to drop extraneous groups
 	updated rudiments-config man page, slightly
+	removed outdated and unused dtd class
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class

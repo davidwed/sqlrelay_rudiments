@@ -788,7 +788,6 @@ enable_crypt
 enable_datetime
 enable_device
 enable_directory
-enable_dtd
 enable_dynamiclib
 enable_environment
 enable_error
@@ -1483,7 +1482,6 @@ Optional Features:
   --disable-datetime      Don't build datetime class
   --disable-device        Don't build device class
   --disable-directory     Don't build directory class
-  --disable-dtd           Don't build dtd class
   --disable-dynamiclib    Don't build dynamiclib class
   --disable-environment   Don't build environment class
   --disable-error         Don't build error
@@ -2604,13 +2602,6 @@ if test "${enable_directory+set}" = set; then :
   enableval=$enable_directory; INCLUDE_DIRECTORY="0"
 else
   INCLUDE_DIRECTORY="1"
-fi
-
-# Check whether --enable-dtd was given.
-if test "${enable_dtd+set}" = set; then :
-  enableval=$enable_dtd; INCLUDE_DTD="0"
-else
-  INCLUDE_DTD="1"
 fi
 
 # Check whether --enable-dynamiclib was given.
@@ -30786,14 +30777,6 @@ then
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 directory.h directoryincludes.h"
 	SRCS="$SRCS directory.cpp"
 	LOBJS="$LOBJS directory.lo"
-fi
-
-if ( test "$INCLUDE_DTD" = "1" )
-then
-	HEADERS1="$HEADERS1 dtd.h"
-	PRIVATEHEADERS1="$PRIVATEHEADERS1 dtd.h dtdincludes.h"
-	SRCS="$SRCS dtd.cpp"
-	LOBJS="$LOBJS dtd.lo"
 fi
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )

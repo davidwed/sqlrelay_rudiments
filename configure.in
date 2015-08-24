@@ -100,10 +100,6 @@ AC_ARG_ENABLE(directory,
 	[  --disable-directory     Don't build directory class],
 	INCLUDE_DIRECTORY="0",
 	INCLUDE_DIRECTORY="1")
-AC_ARG_ENABLE(dtd,
-	[  --disable-dtd           Don't build dtd class],
-	INCLUDE_DTD="0",
-	INCLUDE_DTD="1")
 AC_ARG_ENABLE(dynamiclib,
 	[  --disable-dynamiclib    Don't build dynamiclib class],
 	INCLUDE_DYNAMICLIB="0",
@@ -3575,14 +3571,6 @@ then
 	PRIVATEHEADERS1="$PRIVATEHEADERS1 directory.h directoryincludes.h"
 	SRCS="$SRCS directory.cpp"
 	LOBJS="$LOBJS directory.lo"
-fi
-
-if ( test "$INCLUDE_DTD" = "1" )
-then
-	HEADERS1="$HEADERS1 dtd.h"
-	PRIVATEHEADERS1="$PRIVATEHEADERS1 dtd.h dtdincludes.h"
-	SRCS="$SRCS dtd.cpp"
-	LOBJS="$LOBJS dtd.lo"
 fi
 
 if ( test "$INCLUDE_DYNAMICLIB" = "1" )

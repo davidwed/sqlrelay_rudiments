@@ -26,7 +26,6 @@ srcs="winsock.cpp "+_
 	"datetime.cpp "+_
 	"device.cpp "+_
 	"directory.cpp "+_
-	"dtd.cpp "+_
 	"dynamiclib.cpp "+_
 	"environment.cpp "+_
 	"error.cpp "+_
@@ -84,7 +83,6 @@ lobjs="winsock.obj "+_
 	"datetime.obj "+_
 	"device.obj "+_
 	"directory.obj "+_
-	"dtd.obj "+_
 	"dynamiclib.obj "+_
 	"environment.obj "+_
 	"error.obj "+_
@@ -147,7 +145,6 @@ headers0="resultcodes.h "+_
 	"datetime.h "+_
 	"device.h "+_
 	"directory.h "+_
-	"dtd.h "+_
 	"dynamiclib.h "+_
 	"environment.h "+_
 	"error.h "+_
@@ -238,8 +235,6 @@ privateheaders1="dynamicarray.h "+_
 	"deviceincludes.h "
 privateheaders2="directory.h "+_
 	"directoryincludes.h "+_
-	"dtd.h "+_
-	"dtdincludes.h "+_
 	"dynamiclib.h "+_
 	"dynamiclibincludes.h "+_
 	"environment.h "+_
