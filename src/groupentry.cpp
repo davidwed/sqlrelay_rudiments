@@ -10,9 +10,9 @@
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
 
-#ifdef RUDIMENTS_HAVE_NETGROUPGETINFO
+#if defined(RUDIMENTS_HAVE_NETGROUPGETINFO)
 	#include <rudiments/dictionary.h>
-#else
+#elif defined(RUDIMENTS_HAVE_GRP_H)
 	#include <grp.h>
 #endif
 

@@ -12,6 +12,7 @@
 	codetree's letter, uppercaseletter, and lowercaseletter terminals
 		now include accented characters from the extended ascii
 		character set
+	added setgroups() call before setuid() call to drop extraneous groups
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class

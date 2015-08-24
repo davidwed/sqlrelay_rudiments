@@ -571,6 +571,9 @@
 /* Some systems have GlobalMemoryStatusEx */
 #define RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX 1
 
+/* Some systems have grp.h */
+/* #undef RUDIMENTS_HAVE_GRP_H */
+
 /* Some systems have HANDLE_FLAG_INHERIT */
 #define RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT 1
 
@@ -972,6 +975,9 @@
 
 /* Some systems have setgid */
 /* #undef RUDIMENTS_HAVE_SETGID */
+
+/* Some systems have setgroups */
+/* #undef RUDIMENTS_HAVE_SETGROUPS */
 
 /* Some systems have sethostname */
 /* #undef RUDIMENTS_HAVE_SETHOSTNAME */

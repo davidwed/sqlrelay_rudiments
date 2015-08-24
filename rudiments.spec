@@ -1,11 +1,13 @@
-Summary: C++ class library for daemons, clients and servers.
 Name: rudiments
-Version: 0.52
-Release: 1
-License: LGPL
-Group: Development/Libraries
-Source0: %{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-root
+Version: 0.53
+Release: 1%{?dist}
+Summary: C++ class library for daemons, clients and servers
+
+License: LGPLv2
+URL: http://rudiments.sourceforge.net
+Source0: http://sourceforge.net/projects/%{name}/files/%{name}/%{version}/%{name}-%{version}.tar.gz
+
+BuildRequires: pcre-devel,openssl-devel
 
 %description
 Rudiments is an Open Source C++ class library providing base classes
@@ -15,33 +17,18 @@ expressions, semaphores and signal handling.
 
 
 %package devel
-Summary: Libraries and header files for developing with rudiments.
-Group: Development/Libraries
+Summary: Libraries and header files for developing with rudiments
+Requires: %{name} = 0.53
 
 %description devel
 Libraries and header files for developing with rudiments.
-
-
-%package doc
-Summary: Documentation for rudiments.
-Group: Development/Libraries
-
-%description doc
-Documentation for rudiments.
-
-
-%package man
-Summary: Man pages for rudiments
-Group: Development/Libraries
-
-%description man
-Man pages for rudiments.
 
 
 %prep
 %setup -q
 
 %build
+chmod -x include/rudiments/private/permissions.h
 %configure
 make %{?_smp_mflags}
 
@@ -49,11 +36,9 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name} install
 
-%post
-/sbin/ldconfig
+%post -p /sbin/ldconfig
 
-%postun
-/sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 %clean
 rm -rf %{buildroot}
@@ -61,23 +46,24 @@ rm -rf %{buildroot}
 %files
 %defattr(-, root, root)
 %{_libdir}/librudiments-*.so.*
+%{_datadir}/licenses/%{name}
+%doc AUTHORS ChangeLog
 
 %files devel
+%defattr(-, root, root)
 %{_includedir}/rudiments
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_bindir}/rudiments-config
 %{_libdir}/pkgconfig/rudiments.pc
-
-%files doc
+%{_mandir}/man1/rudiments-config*
 %{_docdir}/%{name}
-%{_datadir}/licenses/%{name}
-
-%files man
-%{_mandir}
 
 %changelog
+* Fri Jan  31 2003 David Muse <dmuse@firstworks.com> 0.53-1
+- Fedora compliance updates.
+
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
 - Made it so it could be distributed with rudiments.
 - Added devel.

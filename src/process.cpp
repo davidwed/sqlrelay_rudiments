@@ -21,6 +21,9 @@
 	// for getsid()
 	#define __USE_XOPEN_EXTENDED
 #endif
+#ifdef RUDIMENTS_HAVE_GRP_H
+	#include <grp.h>
+#endif
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
@@ -189,6 +192,13 @@ uid_t process::getEffectiveUserId() {
 
 bool process::setUserId(uid_t uid) {
 	#if defined(RUDIMENTS_HAVE_SETUID)
+		#if defined(RUDIMENTS_HAVE_SETGROUPS)
+			// If we're changing from root to another user, be sure
+			// to drop all group permissions first.  This will fail
+			// if we're not root, so there's no need to check the
+			// result.
+			setgroups(0,NULL);
+		#endif
 		return !setuid(uid);
 	#else
 		RUDIMENTS_SET_ENOSYS

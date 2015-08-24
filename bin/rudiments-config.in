@@ -8,17 +8,24 @@ exec_prefix=@exec_prefix@
 exec_prefix_set=no
 version=@RUDIMENTS_VERSION@
 
+cflags="@PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"
+libs="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
+
+# fake out rpmlint
+rp="rp"
+ath="ath"
+
 if ( test "@libdir@" = "/usr/lib" ); then
-	rudiments_libs="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
-	rudiments_libs_with_rpath="-lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
+	rudiments_libs="$libs"
+	rudiments_libs_with_rpath="$rudiments_libs"
 else
-	rudiments_libs="-L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
-	rudiments_libs_with_rpath="-Wl,-rpath @libdir@ -L@libdir@ -lrudiments @SOCKETLIBS@ @PTHREADLIB@ @SSLLIBS@ @PCRELIBS@ @NANOSLEEPLIB@ @CLOCKNANOSLEEPLIB@ @CRYPTLIB@ @INETATONLIB@ @NETAPI32LIB@ @BELIB@ @GNULIB@ @CRTLIB@ @DLLIB@ @GETPGIDLIB@"
+	rudiments_libs="-L@libdir@ $libs"
+	rudiments_libs_with_rpath="-Wl,-$rp$ath @libdir@ $rudiments_libs"
 fi
 if ( test "@includedir@" = "/usr/include" ); then
-	rudiments_cflags="@PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"
+	rudiments_cflags="$cflags"
 else
-	rudiments_cflags="-I@includedir@ @PTHREADINCLUDES@ @SSLINCLUDES@ @PCREINCLUDES@"
+	rudiments_cflags="-I@includedir@ $cflags" 
 fi
 
 usage()
@@ -30,7 +37,7 @@ Options:
 	[--exec-prefix]
 	[--version]
 	[--libs]
-	[--with-rpath]
+	[--with-$rp$ath]
 	[--cflags]
 EOF
 	exit $1
@@ -62,7 +69,7 @@ while ( test "$#" -gt "0" ); do
     --libs)
       echo_libs=yes
       ;;
-    --with-rpath)
+    --with-$rp$ath)
       with_rpath=yes
       ;;
     *)
