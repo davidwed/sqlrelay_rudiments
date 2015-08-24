@@ -5,7 +5,7 @@ Summary: C++ utility and base class library
 
 License: LGPLv2
 URL: http://rudiments.sourceforge.net
-Source0: http://sourceforge.net/projects/%{name}/files/%{name}/%{version}/%{name}-%{version}.tar.gz
+Source0: http://downloads.sourceforge.net/projects/%{name}/%{name}-%{version}.tar.gz
 
 BuildRequires: pcre-devel,openssl-devel
 
@@ -15,7 +15,7 @@ C++ utility and base class library.
 
 %package devel
 Summary: Libraries and header files for developing with rudiments
-Requires: %{name} = 0.53
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Libraries and header files for developing with rudiments.
