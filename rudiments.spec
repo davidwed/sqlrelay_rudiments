@@ -1,7 +1,7 @@
 Name: rudiments
 Version: 0.53
 Release: 1%{?dist}
-Summary: C++ class library for daemons, clients and servers
+Summary: C++ utility and base class library
 
 License: LGPLv2
 URL: http://rudiments.sourceforge.net
@@ -10,10 +10,7 @@ Source0: http://sourceforge.net/projects/%{name}/files/%{name}/%{version}/%{name
 BuildRequires: pcre-devel,openssl-devel
 
 %description
-Rudiments is an Open Source C++ class library providing base classes
-for things such as daemons, clients and servers, and wrapper classes
-for the standard C functions for things like such as regular
-expressions, semaphores and signal handling.
+C++ utility and base class library.
 
 
 %package devel
