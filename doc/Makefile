@@ -17,7 +17,6 @@ install:
 	$(CP) classes/html/*.js $(docdir)/classes/html
 	$(CP) programming/*.html $(docdir)/programming
 	$(CHMOD) 644 $(docdir)/*.html
-	$(CHMOD) 644 $(docdir)/*.gif
 	$(CHMOD) 644 $(docdir)/css/*
 	$(CHMOD) 644 $(docdir)/classes/html/a*.html
 	$(CHMOD) 644 $(docdir)/classes/html/b*.html
