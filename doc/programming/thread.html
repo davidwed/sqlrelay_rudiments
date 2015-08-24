@@ -19,7 +19,7 @@
 
 <p>The <a href="../classes/html/classthread.html">thread class</a> provides a simple thread implementation.</p>
 
-<p>In this implementation, each instance of the thread class corresponds to a separate thread.  The setFunction() method associates a function with the thread.  When the run() method is called, a new thread is created, and the function is run in the new therad.  An optional argument may be passed to the function via the run() method.  This argument is usually used to pass a pointer to a class or struct, providing parameters for the thread function.</p>
+<p>In this implementation, each instance of the thread class corresponds to a separate thread.  The setFunction() method associates a function with the thread.  When the run() method is called, a new thread is created, and the function is run in the new thread.  An optional argument may be passed to the function via the run() method.  This argument is usually used to pass a pointer to a class or struct, providing parameters for the thread function.</p>
 
 <p>In these examples, two threads are spawned.  Each runs a separate instance of a "count" function which counts from 0 to some number and prints out the numbers.  Each thread is passed in a structure containing a pointer to the thread class, a thread id and a maximum number to count to.  The threads are not synchronized in any way, so the numbers will be printed out in seemingly random blocks.</p>
 
