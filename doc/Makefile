@@ -9,7 +9,6 @@ install:
 	$(MKINSTALLDIRS) $(docdir)/programming
 	$(CP) installing.html $(docdir)
 	$(CP) index.html $(docdir)
-	$(CP) introduction.html $(docdir)
 	$(CP) css/styles.css $(docdir)/css
 	$(CP) classes/html/*.html $(docdir)/classes/html
 	$(CP) classes/html/*.png $(docdir)/classes/html

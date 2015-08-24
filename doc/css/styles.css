@@ -1,81 +1,99 @@
 body {
-	background:	white;
-	color:		black;
-	font-family:	arial;
-	font-weight:	medium;
-	font-size:	10pt;
-}
-
-.indented {
-	margin-left:	40px;
-}
-
-.code {
-	padding:	5px;
-	background:	#eeeeee;
-}
-
-.heading1 {
-	color:		black;
-	font-family:	arial;
-	font-weight:	bold;
-	font-size:	20pt;
-}
-
-.heading2 {
-	color:		black;
-	font-family:	arial;
-	font-weight:	bold;
-	font-size:	16pt;
-}
-
-.heading3 {
-	color:		black;
-	font-family:	arial;
-	font-weight:	bold;
-	font-size:	12pt;
-}
-
-.heading4 {
-	color:		black;
-	font-family:	arial;
-	font-weight:	bold;
-	font-size:	10pt;
-}
-
-.heading {
-	color:		black;
-	font-family:	arial;
-	font-weight:	bold;
-	font-size:	14pt;
-}
-
-.subject {
-	color:		black;
-	font-family:	arial;
-	font-weight:	bold;
-	font-size:	12pt;
+	font-family: arial;
+	font-size: 12px;
 }
 
 a {
-	color:		blue;
-	font-family:	arial;
-	font-weight:	medium;
-	font-size:	10pt;
+	color: black;
+}
+
+li a {
+	font-size: 13px;
+}
+
+td a {
+	font-size: 13px;
+}
+
+img {
+	border-width: 0px;
+}
+
+hr {
+	border-width: 0px;
+	background-color: #C0C0C0;
+	height: 1px;
+}
+
+.indented {
+	margin-left: 40px;
+}
+
+.header {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.header img {
+	margin-left: 10px;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+.heading1 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 20pt;
+}
+
+.heading2 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 16pt;
+}
+
+.heading3 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+.heading4 {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+.heading {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 14pt;
+}
+
+.subject {
+	color: black;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 12pt;
 }
 
 input {
-	color:		black;
-	font-family:	courier;
-	font-weight:	medium;
-	font-size:	10pt;
+	color: black;
+	font-family: courier;
+	font-weight: medium;
+	font-size: 10pt;
 }
 
 .login {
-	color:		black;
-	font-family:	arial;
-	font-weight:	medium;
-	font-size:	10pt;
+	color: black;
+	font-family: arial;
+	font-weight: medium;
+	font-size: 10pt;
 }
 
 .slide {
@@ -86,17 +104,27 @@ input {
 	display: none;
 }
 
+.code {
+	margin: 2px;
+	padding: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
+	background: #eef3fa;
+	font-size: 12px;
+}
+
 p {
-	background:	white;
-	color:		black;
-	font-family:	arial;
-	font-weight:	medium;
-	font-size:	10pt;
+	background: white;
+	color: black;
+	font-family: arial;
+	font-weight: medium;
+	font-size: 10pt;
 }
 
 pre {
-	color:		black;
-	font-family:	courier;
-	font-weight:	medium;
-	font-size:	10pt;
+	color: black;
+	font-family: courier;
+	font-weight: medium;
+	font-size: 10pt;
 }
