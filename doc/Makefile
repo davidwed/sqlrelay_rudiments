@@ -16,7 +16,7 @@ install:
 	$(CP) classes/html/*.png $(docdir)/classes/html
 	$(CP) classes/html/*.css $(docdir)/classes/html
 	$(CP) classes/html/*.js $(docdir)/classes/html
-	$(CP) programming/guide.html $(docdir)/programming
+	$(CP) programming/*.html $(docdir)/programming
 	$(CHMOD) 644 $(docdir)/*.html
 	$(CHMOD) 644 $(docdir)/*.gif
 	$(CHMOD) 644 $(docdir)/css/*
