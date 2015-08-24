@@ -29,6 +29,8 @@
 	#include <windows.h>
 #endif
 
+#include <stdio.h>
+
 #if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 	// windows doesn't define these, but we need them
 	// internally to this file
@@ -43,7 +45,11 @@
 	#endif
 #endif
 
-#include <stdio.h>
+#ifndef MAX_PATH
+	// non-windows doesn't define this ,but we need it
+	// internally to this file
+	#define MAX_PATH 256
+#endif
 
 class directoryprivate {
 	friend class directory;
@@ -351,13 +357,7 @@ bool directory::remove(const char *path) {
 }
 
 char *directory::getCurrentWorkingDirectory() {
-	size_t	inc=
-		#ifdef MAX_PATH
-			MAX_PATH;
-		#else
-			// (this is the max path length on Windows)
-			260;
-		#endif
+	size_t	inc=MAX_PATH;
 	size_t	max=inc*10;
 	for (size_t size=inc; size<max; size=size+inc) {
 		char	*buffer=new char[size];
@@ -457,13 +457,7 @@ int64_t directory::pathConf(const char *pathname, int32_t name) {
 		return result;
 	#else
 		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
-			#ifdef MAX_PATH
-				return MAX_PATH;
-			#else
-				// return a reasonably safe value
-				// (this is the max path length on Windows)
-				return 260;
-			#endif
+			return MAX_PATH;
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
 		}
@@ -511,13 +505,7 @@ int64_t directory::fpathConf(int32_t name) {
 		return result;
 	#else
 		if (name==_PC_PATH_MAX || name==_PC_NAME_MAX) {
-			#ifdef MAX_PATH
-				return MAX_PATH;
-			#else
-				// return a reasonably safe value
-				// (this is the max path length on Windows)
-				return 260;
-			#endif
+			return MAX_PATH;
 		} else if (name==_PC_NO_TRUNC) {
 			return 0;
 		}

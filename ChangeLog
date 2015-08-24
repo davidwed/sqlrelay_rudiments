@@ -17,6 +17,8 @@
 	removed outdated and unused dtd class
 	updated file::resolveSymbolicLink() to use
 		directory::maxPathLength(filename) as a starting point
+	updated directory::getCurrentDirectory() to use
+		MAX_PATH as a starting point
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class
