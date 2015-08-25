@@ -2,10 +2,13 @@ top_builddir = ..
 
 include ../config.mk
 
+all:
+
 install:
 	$(MKINSTALLDIRS) $(docdir)
 	$(MKINSTALLDIRS) $(docdir)/css
 	$(MKINSTALLDIRS) $(docdir)/classes/html
+	$(MKINSTALLDIRS) $(docdir)/features
 	$(MKINSTALLDIRS) $(docdir)/programming
 	$(CP) installing.html $(docdir)
 	$(CP) index.html $(docdir)
@@ -14,6 +17,7 @@ install:
 	$(CP) classes/html/*.png $(docdir)/classes/html
 	$(CP) classes/html/*.css $(docdir)/classes/html
 	$(CP) classes/html/*.js $(docdir)/classes/html
+	$(CP) features/*.html $(docdir)/features
 	$(CP) programming/*.html $(docdir)/programming
 	$(CHMOD) 644 $(docdir)/*.html
 	$(CHMOD) 644 $(docdir)/css/*
@@ -39,6 +43,7 @@ install:
 	$(CHMOD) 644 $(docdir)/classes/html/*.png
 	$(CHMOD) 644 $(docdir)/classes/html/*.css
 	$(CHMOD) 644 $(docdir)/classes/html/*.js
+	$(CHMOD) 644 $(docdir)/features/*.html
 	$(CHMOD) 644 $(docdir)/programming/*.html
 
 uninstall:
