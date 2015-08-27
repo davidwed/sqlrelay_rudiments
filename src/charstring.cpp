@@ -68,44 +68,34 @@ const char *charstring::findLast(const char *haystack, const char *needle) {
 }
 
 void charstring::upper(char *str) {
-
-	if (!str) {
-		return;
-	}
-
-	for (int32_t i=0; str[i]; i++) {
-		if (str[i]>='a' && str[i]<='z') {
-			str[i]=str[i]-32;
+	if (str) {
+		for (char *ch=str; *ch; ch++) {
+			*ch=character::toUpperCase(*ch);
 		}
 	}
 }
 
 void charstring::lower(char *str) {
-
-	if (!str) {
-		return;
-	}
-
-	for (int32_t i=0; str[i]; i++) {
-		if (str[i]>='A' && str[i]<='Z') {
-			str[i]=str[i]+32;
+	if (str) {
+		for (char *ch=str; *ch; ch++) {
+			*ch=character::toLowerCase(*ch);
 		}
 	}
 }
 
 void charstring::capitalize(char *str) {
-
-	bool	cap=true;
-	for (char *ch=str; *ch; ch++) {
-		char	c=*ch;
-		if (cap) {
-			*ch=character::toUpperCase(c);
-			cap=false;
-		} else {
-			*ch=character::toLowerCase(c);
-		}
-		if (c==' ' || c=='\'' || c=='"' || c=='-' || c=='(') {
-			cap=true;
+	if (str) {
+		bool	cap=true;
+		for (char *ch=str; *ch; ch++) {
+			if (cap) {
+				*ch=character::toUpperCase(*ch);
+				cap=false;
+			} else {
+				*ch=character::toLowerCase(*ch);
+			}
+			if (character::inSet(*ch," '\"-(")) {
+				cap=true;
+			}
 		}
 	}
 }

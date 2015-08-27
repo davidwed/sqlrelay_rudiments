@@ -334,12 +334,17 @@ int main(int argc, const char **argv) {
 
 	// convert buffer to uppercase
 	charstring::upper(buffer);
-	stdoutput.printf("!%s!\n",buffer);
+	stdoutput.printf("upper: !%s!\n",buffer);
 
 
 	// convert buffer to lowercase
 	charstring::lower(buffer);
-	stdoutput.printf("!%s!\n",buffer);
+	stdoutput.printf("lower: !%s!\n",buffer);
+
+
+	// capitalize buffer
+	charstring::capitalize(buffer);
+	stdoutput.printf("caps:  !%s!\n",buffer);
 
 
 	// http escape the buffer
