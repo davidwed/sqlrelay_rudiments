@@ -163,13 +163,13 @@ AC_ARG_ENABLE(memorypool,
 	INCLUDE_MEMORYPOOL="0",
 	INCLUDE_MEMORYPOOL="1")
 AC_ARG_ENABLE(modemclient,
-	[  --disable-modemclient   Don't build modemclient class],
-	INCLUDE_MODEMCLIENT="0",
-	INCLUDE_MODEMCLIENT="1")
+	[  --enable-modemclient    Build modemclient class (disabled by default)],
+	INCLUDE_MODEMCLIENT="1",
+	INCLUDE_MODEMCLIENT="0")
 AC_ARG_ENABLE(modemserver,
-	[  --disable-modemserver   Don't build modemserver class],
-	INCLUDE_MODEMSERVER="0",
-	INCLUDE_MODEMSERVER="1")
+	[  --enable-modemserver    Build modemserver class (disabled by default)],
+	INCLUDE_MODEMSERVER="1",
+	INCLUDE_MODEMSERVER="0")
 AC_ARG_ENABLE(thread,
 	[  --disable-thread        Don't build thread class],
 	INCLUDE_THREAD="0",
@@ -215,13 +215,13 @@ AC_ARG_ENABLE(semaphoreset,
 	INCLUDE_SEMAPHORESET="0",
 	INCLUDE_SEMAPHORESET="1")
 AC_ARG_ENABLE(serialport,
-	[  --disable-serialport    Don't build serialport class],
-	INCLUDE_SERIALPORT="0",
-	INCLUDE_SERIALPORT="1")
+	[  --enable-serialport     Build serialport class (disabled by default)],
+	INCLUDE_SERIALPORT="1",
+	INCLUDE_SERIALPORT="0")
 AC_ARG_ENABLE(serialportprofile,
-	[  --disable-serialportprofile    Don't build serialportprofile class],
-	INCLUDE_SERIALPORTPROFILE="0",
-	INCLUDE_SERIALPORTPROFILE="1")
+	[  --enable-serialportprofile     Build serialportprofile class (disabled by default)],
+	INCLUDE_SERIALPORTPROFILE="1",
+	INCLUDE_SERIALPORTPROFILE="0")
 AC_ARG_ENABLE(server,
 	[  --disable-server        Don't build server class],
 	INCLUDE_SERVER="0",

@@ -9,7 +9,12 @@
 
 <span class="header">Lightweight Implementation</span>
 
-<p>...</p>
+<p>Stays close to native code.  If the C library provides a function, then it gets used.  Minimal reinvention.</p>
+
+<p>Default release build on x64 is around 500K.</p>
+<p>A properly stripped arm-uclibc build with --enable-small code is around 500K.</p>
+
+<p>Doesn't go overboard with inline code, so your app stays light too.</p>
 
 </body>
 

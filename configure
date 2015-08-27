@@ -1497,8 +1497,8 @@ Optional Features:
   --disable-math          Don't build math class
   --disable-memorymap     Don't build memorymap class
   --disable-memorypool    Don't build memorypool class
-  --disable-modemclient   Don't build modemclient class
-  --disable-modemserver   Don't build modemserver class
+  --enable-modemclient    Build modemclient class (disabled by default)
+  --enable-modemserver    Build modemserver class (disabled by default)
   --disable-thread        Don't build thread class
   --disable-threadmutex   Don't build threadmutex class
   --disable-parameterstring      Don't build parameterstring class
@@ -1510,8 +1510,8 @@ Optional Features:
   --disable-bytestring    Don't build bytestring class
   --disable-regularexpression    Don't build regularexpression
   --disable-semaphoreset  Don't build semaphoreset
-  --disable-serialport    Don't build serialport class
-  --disable-serialportprofile    Don't build serialportprofile class
+  --enable-serialport     Build serialport class (disabled by default)
+  --enable-serialportprofile     Build serialportprofile class (disabled by default)
   --disable-server        Don't build server class
   --disable-serviceentry  Don't build serviceentry class
   --disable-sharedmemory  Don't build sharedmemory
@@ -2712,16 +2712,16 @@ fi
 
 # Check whether --enable-modemclient was given.
 if test "${enable_modemclient+set}" = set; then :
-  enableval=$enable_modemclient; INCLUDE_MODEMCLIENT="0"
+  enableval=$enable_modemclient; INCLUDE_MODEMCLIENT="1"
 else
-  INCLUDE_MODEMCLIENT="1"
+  INCLUDE_MODEMCLIENT="0"
 fi
 
 # Check whether --enable-modemserver was given.
 if test "${enable_modemserver+set}" = set; then :
-  enableval=$enable_modemserver; INCLUDE_MODEMSERVER="0"
+  enableval=$enable_modemserver; INCLUDE_MODEMSERVER="1"
 else
-  INCLUDE_MODEMSERVER="1"
+  INCLUDE_MODEMSERVER="0"
 fi
 
 # Check whether --enable-thread was given.
@@ -2803,16 +2803,16 @@ fi
 
 # Check whether --enable-serialport was given.
 if test "${enable_serialport+set}" = set; then :
-  enableval=$enable_serialport; INCLUDE_SERIALPORT="0"
+  enableval=$enable_serialport; INCLUDE_SERIALPORT="1"
 else
-  INCLUDE_SERIALPORT="1"
+  INCLUDE_SERIALPORT="0"
 fi
 
 # Check whether --enable-serialportprofile was given.
 if test "${enable_serialportprofile+set}" = set; then :
-  enableval=$enable_serialportprofile; INCLUDE_SERIALPORTPROFILE="0"
+  enableval=$enable_serialportprofile; INCLUDE_SERIALPORTPROFILE="1"
 else
-  INCLUDE_SERIALPORTPROFILE="1"
+  INCLUDE_SERIALPORTPROFILE="0"
 fi
 
 # Check whether --enable-server was given.
