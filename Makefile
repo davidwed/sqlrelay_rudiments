@@ -8,6 +8,7 @@ all:
 clean:
 	cd src $(AND) $(MAKE) clean
 	cd test $(AND) $(MAKE) clean
+	cd bench $(AND) $(MAKE) clean
 	cd examples $(AND) $(MAKE) clean
 
 install:
