@@ -104,22 +104,20 @@ void charstring::rightTrim(char *str, char character) {
 
 	if (str && str[0]) {
 
-		int32_t	i=0;
-
 		// advance to the last character in the string
-		while (str[i]) {
-			i++;
+		while (*str) {
+			str++;
 		}
-		i--;
+		str--;
 
 		// back up to the first instance of the character to trim
-		while (str[i]==character) { 
-			i--;
+		while (*str==character) { 
+			str--;
 		}
-		i++;
+		str++;
 
 		// terminate the string there
-		str[i]='\0';
+		*str='\0';
 	}
 }
 
