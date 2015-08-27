@@ -11,11 +11,6 @@
 	#include <stdlib.h>
 #endif
 
-// for GetSystemInfo
-#ifdef RUDIMENTS_HAVE_WINDOWS_H
-	#include <windows.h>
-#endif
-
 class xmldomprivate {
 	friend class xmldom;
 	private:
