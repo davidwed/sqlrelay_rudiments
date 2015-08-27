@@ -312,24 +312,24 @@ int main(int argc, const char **argv) {
 
 	// trim the spaces off of the right hand side
 	charstring::rightTrim(buffer);
-	stdoutput.printf("!%s!\n",buffer);
+	stdoutput.printf("rtrim: !%s!\n",buffer);
 
 
 	// trim the spaces off of the left hand side
 	charstring::leftTrim(buffer);
-	stdoutput.printf("!%s!\n",buffer);
+	stdoutput.printf("ltrim: !%s!\n",buffer);
 
 
 	// strip the spaces out
 	charstring::copy(buffer,"   hello      there   buddy  ");
 	charstring::strip(buffer,' ');
-	stdoutput.printf("!%s!\n",buffer);
+	stdoutput.printf("strip space: !%s!\n",buffer);
 
 
 	// strip the "   " out
 	charstring::copy(buffer,"   hello       there  buddy  ");
 	charstring::strip(buffer,"   ");
-	stdoutput.printf("!%s!\n",buffer);
+	stdoutput.printf("strip ds   : !%s!\n",buffer);
 
 
 	// convert buffer to uppercase
