@@ -3,6 +3,8 @@
 
 #if defined(USE_LIST)
 	#include <list>
+#elif defined(USE_FORWARD_LIST)
+	#include <forward_list>
 #elif defined(USE_VECTOR)
 	#include <vector>
 #elif defined(USE_ARRAY)
@@ -26,6 +28,8 @@ int main(int argc, char **argv) {
 
 #if defined(USE_LIST)
 	std::list<uint64_t>		l;
+#elif defined(USE_FORWARD_LIST)
+	std::forward_list<uint64_t>	l;
 #elif defined(USE_VECTOR)
 	std::vector<uint64_t>		l;
 #elif defined(USE_ARRAY)
@@ -51,6 +55,8 @@ int main(int argc, char **argv) {
 			#if defined(USE_LIST) || \
 					defined(USE_VECTOR)
 				l.push_back(100);
+			#elif defined(USE_FORWARD_LIST)
+				l.push_front(100);
 			#elif defined(USE_ARRAY) || \
 					defined(USE_DYNAMICARRAY) || \
 					defined(USE_STATICARRAY)
