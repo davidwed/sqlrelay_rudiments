@@ -135,9 +135,9 @@ bool xmldom::writeFile(const char *filename, mode_t perms) const {
 }
 
 void xmldom::createRootNode() {
-	pvt->_rootnode=new xmldomnode(this,pvt->_nullnode);
-	pvt->_rootnode->setName("document");
-	pvt->_rootnode->setType(ROOT_XMLDOMNODETYPE);
+	pvt->_rootnode=new xmldomnode(this,pvt->_nullnode,
+					ROOT_XMLDOMNODETYPE,
+					NULL,"document",NULL);
 	pvt->_currentparent=pvt->_rootnode;
 }
 
@@ -154,19 +154,18 @@ bool xmldom::tagStart(const char *ns, const char *name) {
 	if (pvt->_rootnode->isNullNode()) {
 		createRootNode();
 	}
-	xmldomnode	*tagnode=new xmldomnode(this,pvt->_nullnode);
-	tagnode->setNamespace(ns);
-	tagnode->setName(name);
-	tagnode->setType(TAG_XMLDOMNODETYPE);
+	xmldomnode	*tagnode=new xmldomnode(this,pvt->_nullnode,
+						TAG_XMLDOMNODETYPE,
+						ns,name,NULL);
 	insertChild(tagnode);
 	pvt->_currentparent=tagnode;
 	return true;
 }
 
 bool xmldom::attributeName(const char *name) {
-	pvt->_currentattribute=new xmldomnode(this,pvt->_nullnode);
-	pvt->_currentattribute->setName(name);
-	pvt->_currentattribute->setType(ATTRIBUTE_XMLDOMNODETYPE);
+	pvt->_currentattribute=new xmldomnode(this,pvt->_nullnode,
+						ATTRIBUTE_XMLDOMNODETYPE,
+						NULL,name,NULL);
 	pvt->_currentparent->insertAttribute(pvt->_currentattribute,
 				pvt->_currentparent->getAttributeCount());
 	return true;
@@ -185,11 +184,9 @@ bool xmldom::attributeValue(const char *value) {
 
 bool xmldom::text(const char *string) {
 	pvt->_currentattribute=NULL;
-	xmldomnode	*textnode=new xmldomnode(this,pvt->_nullnode);
-	textnode->setName("text");
-	textnode->setValue(string);
-	textnode->setType(TEXT_XMLDOMNODETYPE);
-	insertChild(textnode);
+	insertChild(new xmldomnode(this,pvt->_nullnode,
+					TEXT_XMLDOMNODETYPE,
+					NULL,"text",string));
 	return true;
 }
 
@@ -201,21 +198,17 @@ bool xmldom::tagEnd(const char *ns, const char *name) {
 
 bool xmldom::comment(const char *string) {
 	pvt->_currentattribute=NULL;
-	xmldomnode	*commentnode=new xmldomnode(this,pvt->_nullnode);
-	commentnode->setName("comment");
-	commentnode->setValue(string);
-	commentnode->setType(COMMENT_XMLDOMNODETYPE);
-	insertChild(commentnode);
+	insertChild(new xmldomnode(this,pvt->_nullnode,
+					COMMENT_XMLDOMNODETYPE,
+					NULL,"comment",string));
 	return true;
 }
 
 bool xmldom::cdata(const char *string) {
 	pvt->_currentattribute=NULL;
-	xmldomnode	*cdatanode=new xmldomnode(this,pvt->_nullnode);
-	cdatanode->setName("cdata");
-	cdatanode->setValue(string);
-	cdatanode->setType(CDATA_XMLDOMNODETYPE);
-	insertChild(cdatanode);
+	insertChild(new xmldomnode(this,pvt->_nullnode,
+					CDATA_XMLDOMNODETYPE,
+					NULL,"cdata",string));
 	return true;
 }
 
