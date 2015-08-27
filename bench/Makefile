@@ -5,8 +5,7 @@ include ../config.mk
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include -std=c++11
 LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
 
-PROGS = bytebuffer \
-	deque \
+PROGS = array \
 	dictionary \
 	dynamicarray \
 	forward_list \
@@ -33,11 +32,8 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS)
 	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj
 
-bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytebuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-deque: deque.cpp deque.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) deque.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+array: array.cpp array.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) array.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 dictionary: dictionary.cpp dictionary.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dictionary.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

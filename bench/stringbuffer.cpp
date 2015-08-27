@@ -1,9 +1,5 @@
 // Copyright (c) 2015  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/stringbuffer.h>
-#include <rudiments/datetime.h>
-#include <rudiments/stdio.h>
-
-int main(int argc, char **argv) {
-}
+#define USE_STRINGBUFFER
+#include "buffers.cpp"
