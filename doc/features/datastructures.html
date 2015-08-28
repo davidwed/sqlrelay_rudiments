@@ -9,24 +9,22 @@
 
 <span class="header">Data Structures</span>
 
-<p>Of course you can use STL with Rudiments, but for platforms where STL is unavailable, or ...</p>
-<p>dynamic array is more intuitive than vector</p>
-<p>singlylinkedlist doesn't require C++11</p>
+<p>For platforms where STL is unavailable or undesirable, Rudiments provides a set of commonly used data structures.</p>
 
 <ul>
 
-<li>String Storage</li>
+<li class="listheader">String Storage</li>
 <ul>
 <li><a href="stringbuffer.html">Using the stringbuffer class</a></li>
 </ul>
 
-<li>Binary Data Storage</li>
+<li class="listheader">Binary Data Storage</li>
 <ul>
 <li><a href="bytebuffer.html">Using the bytebuffer class</a></li>
 <li><a href="memorypool.html">Using the memorypool class</a></li>
 </ul>
 
-<li>Data Structures</li>
+<li class="listheader">Data Structures</li>
 <ul>
 <li><a href="dynamicarray.html">Using the dynamicarray class</a></li>
 <li><a href="staticcarray.html">Using the staticcarray class</a></li>
@@ -35,6 +33,15 @@
 <li><a href="dictionary.html">Using the dictionary class</a></li>
 </ul>
 
+</ul>
+
+<p>The Rudiments data structures arguably have some advantages over their STL counterparts too.</p>
+
+<ul>
+<li>Assignments to staticarray and dynamicarray are more intuitive than std::array and std::vector assignments.</li>
+<li>Unlike std::forward_list, the singlylinkedlist class doesn't require C++11.</li>
+<li>bytebuffer is far less clumsy than using std::string or std::vector<unsigned char> to store binary data.</li>
+<li>The dictionary class uses keys and values directly rather than requiring the std::pair intermediary.</li>
 </ul>
 
 </body>
