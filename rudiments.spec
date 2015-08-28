@@ -26,7 +26,7 @@ Development files for rudiments.
 
 %build
 chmod -x include/rudiments/private/permissions.h
-%configure
+%configure --disable-static
 make %{?_smp_mflags}
 
 %install
@@ -42,23 +42,24 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-, root, root)
-%{_libdir}/librudiments-*.so.*
+%{_libdir}/librudiments-%{version}.so.1
+%{_libdir}/librudiments-%{version}.so.1.0.0
 %{_datadir}/licenses/%{name}
 %doc AUTHORS ChangeLog
+%exclude %{_libdir}/librudiments.la
 
 %files devel
 %defattr(-, root, root)
 %{_includedir}/rudiments
-%{_libdir}/*.so
-%{_libdir}/*.a
-%{_libdir}/*.la
+%{_libdir}/librudiments.so
 %{_bindir}/rudiments-config
 %{_libdir}/pkgconfig/rudiments.pc
 %{_mandir}/man1/rudiments-config*
 %{_docdir}/%{name}
+%exclude %{_libdir}/librudiments.la
 
 %changelog
-* Fri Jan  31 2003 David Muse <dmuse@firstworks.com> 0.53-1
+* Fri Aug  28 2015 David Muse <dmuse@firstworks.com> 0.53-1
 - Fedora compliance updates.
 
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
