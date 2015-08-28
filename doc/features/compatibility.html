@@ -17,6 +17,18 @@
 
 <p>uClibc-linux systems are also supported.</p>
 
+<p>Platform-specific functions and variants are used if they exist.  For example:</p>
+
+<ul>
+<li>strcasecmp, strncasecmp, strchrnul, strpbrk, strspn, strcspn</li>
+<li>vdprintf, vasprintf and vsnprintf before vsprintf</li>
+<li>kqueue, epoll, port_create, /dev/poll and poll before select</li>
+<li>CryptGenRandom, arc4random, random and rand before lrand48</li>
+<li>reentrant functions before mutex-protected thread-unsafe versions</li>
+<li>_s functions on Windows</li>
+<li>Win32 API before standard C API</li>
+</ul>
+
 </body>
 
 </html>
