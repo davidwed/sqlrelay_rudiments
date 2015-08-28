@@ -1,7 +1,5 @@
 top_builddir = ../..
 
-include ../../config.mk
-
 all: buildparts html
 
 buildparts:

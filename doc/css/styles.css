@@ -128,3 +128,9 @@ pre {
 	font-weight: medium;
 	font-size: 10pt;
 }
+
+.metaphor {
+	border-style: none;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+}
