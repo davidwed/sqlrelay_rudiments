@@ -22,7 +22,7 @@ Development files for rudiments.
 
 
 %prep
-%setup -q
+%autosetup
 
 %build
 chmod -x include/rudiments/private/permissions.h
