@@ -35,6 +35,10 @@
 
 <p>The following program parses the addressbook and prints it to the screen.</p>
 
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
+
 <blockquote class="code">
 @xmldom.cpp.html@
 </blockquote>

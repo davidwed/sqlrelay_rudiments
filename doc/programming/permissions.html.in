@@ -8,7 +8,9 @@
 <a name="permissions">
 <span class="heading">Using the permissions class</span><br><br>
 
-<p>...</p>
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
 
 <blockquote class="code">
 @permissions.cpp.html@

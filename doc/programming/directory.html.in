@@ -8,7 +8,9 @@
 <a name="directory"></a>
 <span class="heading">Using the directory class</span><br><br>
 
-<p>...</p>
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
 
 <blockquote class="code">
 @directory.cpp.html@

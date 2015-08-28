@@ -34,9 +34,9 @@ name='\'value\''
 name='\\value\\'
 </blockquote>
 
-<pre>
-...
-</pre>
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
 
 <blockquote class="code">
 @parameterstring.cpp.html@

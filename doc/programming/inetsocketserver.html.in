@@ -9,6 +9,10 @@
 
 <p>Daemons are commonly used to serve data to clients over a network.  This can be done using the inetsocketserver class.  The example below listens on an inet socket for a client connection, receives a string from the client and writes the same string back to the client.</p>
 
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
+
 <blockquote class="code">
 @inetsocketserver.cpp.html@
 </blockquote>
