@@ -21,6 +21,7 @@
 		MAX_PATH as a starting point
 	serialport/serialportprofile, modemserver/modemclient classes are
 		disabled in the default build now
+	updated intro docs
 
 0.52 - tweaked codetree's recursive break logic a bit
 	added compiler class

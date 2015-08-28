@@ -26,12 +26,12 @@
 
 <p>While perhaps true in '91, I contend that the situation has gotten even worse since then.</p>
 
-<p>Not that C++ is a powerful improvement over C, but its features give rise to a list of drawbacks:</p>
+<p>Not that C++ isn't a massive improvement over C, but its features give rise to a list of drawbacks:</p>
 
 <ul>
 <li>It's easy to write unintentionally obfuscated code.</li>
-<li>It's easy to write code that accidentally passes objects by value rather than reference, and then unintentionally copies and deletes them over and over.</li>
-<li>It's easy to lose track of whether an instance of an object is a clone or reference.</li>
+<li>It's easy to write code that happens to work, but accidentally passes objects by value rather than reference, and then unintentionally copies and deletes them over and over.</li>
+<li>It's easy to lose track of whether an instance of an object is a copy of another object, or just a reference to it.</li>
 <li>It's easy for a few lines of code to balloon into an unexpectedly large binary because of agressive inlining.</li>
 <li>It's easy to get confused about which of a dozen, subtly different subclasses, with long names, containing obtuse abbreviations, to use.</li>
 <li>It's easy to get locked into an API because it defines it's own types and doesn't provide any good way to convert them to anything else.</li>
@@ -39,21 +39,21 @@
 
 <p>Or, at least, I've been frustrated by each of those problems at one time or another, over the years.</p>
 
-<p>The standard API's for many other high level languages seem to just implement C paradigms in an object oriented manner.  Rudiments takes this approach as well.  In effect, using "C++ as a better C".</p>
+<p>The standard API's for many other high level languages seem to just implement paradigms established by C in an object oriented manner.  Rudiments takes this approach too, in effect, using "C++ as a better C".</p>
 
 <ul>
 <li>C types are used throughout.</li>
-<li>Primitive types are passed by value, non-primitive types are passed by reference.</li>
+<li>Primitive types are passed by value, arrays and objects are passed by reference.</li>
 <li>Templates are only used in data structures.</li>
 <li>Operators are not overloaded to provide unintuitive functionality.</li>
-<li>Class heirarchies are shallow, with a minimum of multiple inheritance.</li>
+<li>Class heirarchies are shallow, with a minimum of multiple inheritance and no virtual inheritance.</li>
 <li>Rather than being subclassed, classes usually have attributes or options.</li>
 <li>File I/O follows the open(), read(), write(), close() paradigm.</li>
 <li>Network I/O follows the connect(), read(), write(), close() paradigm.</li>
 <li>Standard I/O follows the read(), write(), printf() paradigm.</li>
 </ul>
 
-<p>Further, rather than abstracting the entire set of Posix and Windows errors into hundreds of individual exceptions, Rudiments simply doesn't use exceptions.  Rather, its methods generally just return true on success and false on failure.  Since most methods just wrap C functions, errno is set when a method fails, and the error class (which wraps errno) can be used to get the specific error number and string.</p>
+<p>Further, rather than abstracting the entire set of Posix and Windows errors into hundreds of individual exceptions, Rudiments' methods throw no exceptions and generally return true on success and false on failure.  Since most methods just wrap C functions, errno is set when a method fails, and the error class (which wraps errno) can be used to get the specific error number and string.</p>
 
 <p>As such, Rudiments can be compiled with the -fno-exceptions flag to conserve space on resource-limited platforms.</p>
 
