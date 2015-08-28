@@ -1,7 +1,7 @@
 Name: rudiments
 Version: 0.53
 Release: 1%{?dist}
-Summary: C++ utility and base class library
+Summary: C++ class library for developing systems and applications
 
 License: LGPLv2
 URL: http://rudiments.sourceforge.net
@@ -10,15 +10,15 @@ Source0: http://downloads.sourceforge.net/projects/%{name}/%{name}-%{version}.ta
 BuildRequires: pcre-devel,openssl-devel
 
 %description
-C++ utility and base class library.
+A C++ class library for developing systems and applications.
 
 
 %package devel
-Summary: Libraries and header files for developing with rudiments
+Summary: Development files for rudiments
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Libraries and header files for developing with rudiments.
+Development files for rudiments.
 
 
 %prep
