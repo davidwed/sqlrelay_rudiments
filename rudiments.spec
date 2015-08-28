@@ -46,6 +46,7 @@ rm -rf %{buildroot}
 %{_libdir}/librudiments-%{version}.so.1.0.0
 %{_datadir}/licenses/%{name}
 %doc AUTHORS ChangeLog
+%license COPYING
 %exclude %{_libdir}/librudiments.la
 
 %files devel
@@ -60,7 +61,7 @@ rm -rf %{buildroot}
 
 %changelog
 * Fri Aug  28 2015 David Muse <dmuse@firstworks.com> 0.53-1
-- Fedora compliance updates.
+- Fedora Naming/Packaging/Review Guidelines compliance updates.
 
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
 - Made it so it could be distributed with rudiments.
