@@ -9,9 +9,6 @@
 	added partial xml namespace support (namespaces for tags)
 	added partial support for extended ascii character set to character
 		class
-	codetree's letter, uppercaseletter, and lowercaseletter terminals
-		now include accented characters from the extended ascii
-		character set
 	added setgroups() call before setuid() call to drop extraneous groups
 	updated rudiments-config man page, slightly
 	removed outdated and unused dtd class

@@ -732,7 +732,7 @@ bool codetree::parseLetter(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::isAlphabeticalExtended((int32_t)(**codeposition))) {
+	if (character::isAlphabetical((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
@@ -759,7 +759,7 @@ bool codetree::parseLowerCaseLetter(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::isLowerCaseExtended((int32_t)(**codeposition))) {
+	if (character::isLowerCase((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
@@ -787,7 +787,7 @@ bool codetree::parseUpperCaseLetter(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (character::isUpperCaseExtended((int32_t)(**codeposition))) {
+	if (character::isUpperCase((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
