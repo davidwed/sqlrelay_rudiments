@@ -7,12 +7,8 @@
 	#include <forward_list>
 #elif defined(USE_VECTOR)
 	#include <vector>
-#elif defined(USE_ARRAY)
-	#include <array>
 #elif defined(USE_DYNAMICARRAY)
 	#include <rudiments/dynamicarray.h>
-#elif defined(USE_STATICARRAY)
-	#include <rudiments/staticarray.h>
 #elif defined(USE_LINKEDLIST)
 	#include <rudiments/linkedlist.h>
 #elif defined(USE_SINGLYLINKEDLIST)
@@ -32,12 +28,8 @@ int main(int argc, char **argv) {
 	std::forward_list<uint64_t>	l;
 #elif defined(USE_VECTOR)
 	std::vector<uint64_t>		l;
-#elif defined(USE_ARRAY)
-	std::array<uint64_t,ITEMS>	l;
 #elif defined(USE_DYNAMICARRAY)
 	dynamicarray<uint64_t>		l;
-#elif defined(USE_STATICARRAY)
-	staticarray<uint64_t,ITEMS>	l;
 #elif defined(USE_LINKEDLIST)
 	linkedlist<uint64_t>		l;
 #elif defined(USE_SINGLYLINKEDLIST)
@@ -57,8 +49,7 @@ int main(int argc, char **argv) {
 				l.push_back(100);
 			#elif defined(USE_FORWARD_LIST)
 				l.push_front(100);
-			#elif defined(USE_ARRAY) || \
-					defined(USE_DYNAMICARRAY) || \
+			#elif defined(USE_DYNAMICARRAY) || \
 					defined(USE_STATICARRAY)
 				l[k]=100;
 			#else
@@ -66,9 +57,7 @@ int main(int argc, char **argv) {
 			#endif
 		}
 
-		#if !defined(USE_ARRAY)
 		l.clear();
-		#endif
 
 		stdoutput.printf(".");
 	}
