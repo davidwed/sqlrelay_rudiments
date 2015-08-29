@@ -5,15 +5,13 @@ include ../config.mk
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include -std=c++11
 LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
 
-PROGS = array \
-	dictionary \
+PROGS = dictionary \
 	dynamicarray \
 	forward_list \
 	linkedlist \
 	list \
 	map \
 	singlylinkedlist \
-	staticarray \
 	stringbuffer \
 	string \
 	vector
@@ -31,9 +29,6 @@ all: $(PROGS)
 clean:
 	$(LTCLEAN) $(RM) $(PROGS)
 	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj
-
-array: array.cpp array.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) array.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 dictionary: dictionary.cpp dictionary.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dictionary.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
@@ -55,9 +50,6 @@ map: map.cpp map.$(OBJ)
 
 singlylinkedlist: singlylinkedlist.cpp singlylinkedlist.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) singlylinkedlist.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-staticarray: staticarray.cpp staticarray.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) staticarray.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 stringbuffer: stringbuffer.cpp stringbuffer.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) stringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

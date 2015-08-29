@@ -159,6 +159,13 @@ bytebuffer *bytebuffer::write(const unsigned char *data, size_t size) {
 bytebuffer *bytebuffer::copy(unsigned char *data, size_t size,
 					bool copyin, size_t *bytescopied) {
 
+	// FIXME: simplest case:
+	// * copyin
+	// * writing to current extent
+	// * size < remaining in current extent
+	// maybe checking for this here, writing and bailing
+	// will improve performance
+
 	// bail if we're not actually writing anything
 	// or, if copying out, if the current position
 	// is set to or set beyond the end
