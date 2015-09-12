@@ -15921,8 +15921,8 @@ fi
 
 
 
-CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror.* | |g" -e "s|-Wall||g"`
-CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror.* | |g" -e "s|-Wall||g"`
+CPPFLAGS=`echo $CPPFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
+CXXFLAGS=`echo $CXXFLAGS | sed -e "s|-Werror[^ ]*||g" -e "s|-Wall||g"`
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for whether undefined functions are allowed" >&5
