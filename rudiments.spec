@@ -5,7 +5,7 @@ Summary: C++ class library for developing systems and applications
 
 License: LGPLv2
 URL: http://rudiments.sourceforge.net
-Source0: http://downloads.sourceforge.net/projects/%{name}/%{name}-%{version}.tar.gz
+Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 BuildRequires: pcre-devel,openssl-devel
 
