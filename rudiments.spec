@@ -10,7 +10,13 @@ Source0: http://downloads.sourceforge.net/projects/%{name}/%{name}-%{version}.ta
 BuildRequires: pcre-devel,openssl-devel
 
 %description
-A C++ class library for developing systems and applications.  Rudiments includes frameworks for proceses, threads, clients, servers, parsers, loggers and compilers.  It also includes data structures for buffers, arrays, linked lists and dictionaries, and utility classes for processing text and binary data, regular expressions, random numbers, encryption, date and time, system information,  files, directories, filesystems, interprocess communication, dynamic libraries, and XML.
+A C++ class library for developing systems and applications.  Rudiments includes
+frameworks for processes, threads, clients, servers, parsers, loggers and
+compilers.  It also includes data structures for buffers, arrays, linked lists
+and dictionaries, and utility classes for processing text and binary data,
+regular expressions, random numbers, encryption, date and time, system
+information,  files, directories, file-systems, inter-process communication,
+dynamic libraries, and XML.
 
 
 %package devel
