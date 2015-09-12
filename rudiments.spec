@@ -1,11 +1,11 @@
 Name: rudiments
-Version: 0.53
-Release: 2%{?dist}
+Version: 0.54
+Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
 License: LGPLv2
 URL: http://rudiments.sourceforge.net
-Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0: http://downloads.sourceforge.net/projects/%{name}/%{name}-%{version}.tar.gz
 
 BuildRequires: pcre-devel,openssl-devel
 
@@ -62,6 +62,7 @@ make DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name} install
 %changelog
 * Fri Sep  11 2015 David Muse <dmuse@firstworks.com> 0.53-2
 - More Fedora Naming/Packaging/Review Guidelines compliance updates.
+- configure patch for fedora 23
 
 * Fri Aug  28 2015 David Muse <dmuse@firstworks.com> 0.53-1
 - Fedora Naming/Packaging/Review Guidelines compliance updates.
