@@ -92,11 +92,11 @@ sharedmemory::sharedmemory() {
 }
 
 sharedmemory::~sharedmemory() {
+	delete[] pvt->_username;
+	delete[] pvt->_groupname;
 	if (pvt->_created) {
 		forceRemove();
 	}
-	delete[] pvt->_username;
-	delete[] pvt->_groupname;
 	delete pvt;
 }
 
