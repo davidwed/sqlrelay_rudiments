@@ -3,7 +3,9 @@ Version: 0.54
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
-License: LGPLv2
+# Library source code is LGLPv2.  Tests and build scripts are GPLv2 unless
+# otherwise noted in the script (some are FSFUL).
+License: LGPLv2 and GPLv2 and FSFUL
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
@@ -20,6 +22,7 @@ dynamic libraries, and XML.
 
 
 %package devel
+License: LGPLv2
 Summary: Development files for rudiments
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
@@ -27,6 +30,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Development files for rudiments.
 
 %package doc
+# Documentation is GPLv2 except for example code in the documentation.
+# Example code is FSFUL.
+License: GPLv2 and FSFUL
 Summary: Documentation for rudiments
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
@@ -66,6 +72,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Fri Sep 25 2015 David Muse <dmuse@firstworks.com> - 0.53-4
+- License updates
+
 * Thu Sep 17 2015 Jens Lody <fedora@jenslody.de> - 0.53-3
 - Added doc-package
 - Removed obsolete cleaning of buildroot
