@@ -5,7 +5,7 @@ Summary: C++ class library for developing systems and applications
 
 License: LGPLv2
 URL: http://rudiments.sourceforge.net
-Source0: http://downloads.sourceforge.net/projects/%{name}/%{name}-%{version}.tar.gz
+Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 BuildRequires: pcre-devel,openssl-devel
 
@@ -26,6 +26,13 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description devel
 Development files for rudiments.
 
+%package doc
+Summary: Documentation for rudiments
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description doc
+Documentation for rudiments.
+
 
 %prep
 %autosetup
@@ -36,16 +43,14 @@ chmod -x include/rudiments/private/permissions.h
 make %{?_smp_mflags}
 
 %install
-rm -rf %{buildroot}
-make DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name} install
+make install DESTDIR=%{buildroot}
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%{_libdir}/librudiments-%{version}.so.1
-%{_libdir}/librudiments-%{version}.so.1.0.0
+%{_libdir}/librudiments-%{version}.so.*
 %doc AUTHORS ChangeLog
 %license COPYING
 %exclude %{_libdir}/librudiments.la
@@ -56,15 +61,21 @@ make DESTDIR=%{buildroot} docdir=%{buildroot}%{_docdir}/%{name} install
 %{_bindir}/rudiments-config
 %{_libdir}/pkgconfig/rudiments.pc
 %{_mandir}/man1/rudiments-config*
+
+%files doc
 %{_docdir}/%{name}
-%exclude %{_libdir}/librudiments.la
 
 %changelog
-* Fri Sep  11 2015 David Muse <dmuse@firstworks.com> 0.53-2
+* Thu Sep 17 2015 Jens Lody <fedora@jenslody.de> - 0.53-3
+- Added doc-package
+- Removed obsolete cleaning of buildroot
+- Removed docdir= from make install
+
+* Fri Sep  11 2015 David Muse <dmuse@firstworks.com> - 0.53-2
 - More Fedora Naming/Packaging/Review Guidelines compliance updates.
 - configure patch for fedora 23
 
-* Fri Aug  28 2015 David Muse <dmuse@firstworks.com> 0.53-1
+* Fri Aug  28 2015 David Muse <dmuse@firstworks.com> - 0.53-1
 - Fedora Naming/Packaging/Review Guidelines compliance updates.
 
 * Fri Jan  31 2003 David Muse <dmuse@firstworks.com>
