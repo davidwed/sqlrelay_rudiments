@@ -67,6 +67,9 @@
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 
+/* Rudiments supports libcurl */
+/* #undef RUDIMENTS_HAS_LIBCURL */
+
 /* Rudiments supports PCRE */
 /* #undef RUDIMENTS_HAS_PCRE */
 
