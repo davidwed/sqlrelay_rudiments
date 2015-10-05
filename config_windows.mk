@@ -62,6 +62,9 @@ SSLLIBS = @SSLLIBS@
 # regular expression library
 PCRELIBS = @PCRELIBS@
 
+# libcurl library
+LIBCURLLIBS = @LIBCURLLIBS@
+
 # socket library
 SOCKETLIBS = @SOCKETLIBS@
 

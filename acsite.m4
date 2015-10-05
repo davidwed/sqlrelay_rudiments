@@ -1050,6 +1050,66 @@ AC_SUBST(PCRELIBS)
 ])
 
 
+
+dnl checks for the libcurl library
+dnl requires:  cross_compiling
+dnl sets the substitution variable LIBCURLLIBS
+AC_DEFUN([FW_CHECK_LIBCURL],
+[
+
+HAVE_LIBCURL=""
+if ( test "$ENABLE_RUDIMENTS_LIBCURL" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+		dnl cross compiling
+		echo "cross compiling"
+		if ( test -n "$LIBCURLLIBS" -o -n "$LIBCURLINCLUDES" )
+		then
+			AC_DEFINE(RUDIMENTS_HAS_LIBCURL,1,Rudiments supports libcurl)
+		fi
+
+	else
+
+		AC_MSG_CHECKING(for libcurl)
+		if ( test -z "$LIBCURLLIBS" -a -z "$LIBCURLINCLUDES" )
+		then
+			LIBCURLLIBS=`curl-config --libs 2> /dev/null`
+			if ( test -n "$LIBCURLLIBS" )
+			then
+				LIBCURLINCLUDES=`curl-config --cflags 2> /dev/null`
+			fi
+		fi
+
+		if ( test -z "$LIBCURLLIBS" -a -z "$LIBCURLINCLUDES" )
+		then
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[curl],[curl/curl.h],[curl],[""],[""],[LIBCURLINCLUDES],[LIBCURLLIBS],[LIBCURLLIBPATH],[LIBCURLSTATIC])
+		fi
+
+		if ( test -n "$LIBCURLLIBS" )
+		then
+			FW_TRY_LINK([#include <curl/curl.h>],[CURL *c=curl_easy_init();],[$CPPFLAGS $LIBCURLINCLUDES],[$LIBCURLLIBS],[],[HAVE_LIBCURL="yes"; AC_DEFINE(RUDIMENTS_HAS_LIBCURL,1,Rudiments supports libcurl) AC_MSG_RESULT(yes)],[LIBCURLINCLUDES=""; LIBCURLLIBS=""; AC_MSG_RESULT(no)])
+		else
+			AC_MSG_RESULT(no)
+		fi
+	fi
+
+	FW_INCLUDES(curl,[$LIBCURLINCLUDES])
+	FW_LIBS(curl,[$LIBCURLLIBS])
+
+else
+
+	echo "disabled"
+
+fi
+
+AC_SUBST(LIBCURLINCLUDES)
+AC_SUBST(LIBCURLLIBS)
+])
+
+
 dnl checks for shadow entry functions and header files
 AC_DEFUN([FW_CHECK_SHADOW],
 [

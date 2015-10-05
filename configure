@@ -652,6 +652,8 @@ SONAME_VERSION_INFO
 RUDIMENTS_VERSION
 GETPGIDLIB
 DLLIB
+LIBCURLLIBS
+LIBCURLINCLUDES
 HAS_MEMORYMAP
 CRYPTLIB
 CLOCKNANOSLEEPLIB
@@ -777,6 +779,9 @@ with_ssl_libs
 enable_pcre
 with_pcre_includes
 with_pcre_libs
+enable_libcurl
+with_libcurl_includes
+with_libcurl_libs
 enable_built_in_regex
 enable_threads
 enable_character
@@ -1471,6 +1476,7 @@ Optional Features:
   --enable-inlines        use inline methods
   --disable-ssl           Disable SSL support
   --disable-pcre          Don't use PCRE for regular expressions
+  --disable-libcurl       Disable libcurl support
   --enable-built-in-regex Use the built-in regex
   --disable-threads       Disable thread support
   --disable-character     Don't build character class
@@ -1541,6 +1547,8 @@ Optional Packages:
   --with-ssl-libs         SSL libraries
   --with-pcre-includes    PCRE includes
   --with-pcre-libs        PCRE libraries
+  --with-libcurl-includes LIBCURL includes
+  --with-libcurl-libs     LIBCURL libraries
   --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
                           both]
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
@@ -2524,6 +2532,29 @@ if test "${with_pcre_libs+set}" = set; then :
   withval=$with_pcre_libs; PCRELIBS="$withval"
 else
   PCRELIBS=""
+fi
+
+# Check whether --enable-libcurl was given.
+if test "${enable_libcurl+set}" = set; then :
+  enableval=$enable_libcurl; ENABLE_RUDIMENTS_LIBCURL="no"
+else
+  ENABLE_RUDIMENTS_LIBCURL="yes"
+fi
+
+
+# Check whether --with-libcurl-includes was given.
+if test "${with_libcurl_includes+set}" = set; then :
+  withval=$with_libcurl_includes; LIBCURLINCLUDES="$withval"
+else
+  LIBCURLINCLUDES=""
+fi
+
+
+# Check whether --with-libcurl-libs was given.
+if test "${with_libcurl_libs+set}" = set; then :
+  withval=$with_libcurl_libs; LIBCURLLIBS="$withval"
+else
+  LIBCURLLIBS=""
 fi
 
 # Check whether --enable-built-in-regex was given.
@@ -26247,6 +26278,347 @@ echo "******************************"
 echo
 echo "***** File Functions *********"
 
+
+
+HAVE_LIBCURL=""
+if ( test "$ENABLE_RUDIMENTS_LIBCURL" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+				echo "cross compiling"
+		if ( test -n "$LIBCURLLIBS" -o -n "$LIBCURLINCLUDES" )
+		then
+
+$as_echo "#define RUDIMENTS_HAS_LIBCURL 1" >>confdefs.h
+
+		fi
+
+	else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libcurl" >&5
+$as_echo_n "checking for libcurl... " >&6; }
+		if ( test -z "$LIBCURLLIBS" -a -z "$LIBCURLINCLUDES" )
+		then
+			LIBCURLLIBS=`curl-config --libs 2> /dev/null`
+			if ( test -n "$LIBCURLLIBS" )
+			then
+				LIBCURLINCLUDES=`curl-config --cflags 2> /dev/null`
+			fi
+		fi
+
+		if ( test -z "$LIBCURLLIBS" -a -z "$LIBCURLINCLUDES" )
+		then
+
+
+SEARCHPATH=/usr
+NAME=curl
+HEADER=curl/curl.h
+LIBNAME=curl
+LINKSTATIC=""
+LINKRPATH=""
+USEFULLLIBPATH=
+INCLUDESTRING=""
+LIBSTRING=""
+LIBPATH=""
+STATIC=""
+HEADERSANDLIBSPATH=""
+
+eval "LIBCURLINCLUDES=\"\""
+eval "LIBCURLLIBS=\"\""
+eval "LIBCURLLIBPATH=\"\""
+eval "LIBCURLSTATIC=\"\""
+if ( test -n "" )
+then
+	eval "=\"\""
+fi
+
+
+for path in "$SEARCHPATH" "/" "/usr" "/usr/local/$NAME" "/opt/$NAME" "/usr/$NAME" "/usr/local" "/usr/pkg" "/usr/pkg/$NAME" "/opt/sfw" "/opt/sfw/$NAME" "/usr/sfw" "/usr/sfw/$NAME" "/opt/csw" "/sw" "/boot/common" "/resources/index" "/resources/firstworks" "/Library/$NAME" "/usr/local/firstworks"
+do
+	if ( test -n "$path" -a -d "$path" )
+	then
+
+		if ( test "$path" = "/" )
+		then
+						if ( test "$USEFULLLIBPATH" = "yes" )
+			then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-Wl,/$LIBDIR/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "/$LIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"/$LIBDIR/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "/usr/include/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval ""
+		eval "LIBPATH=\"/$LIBDIR\"; LIBSTRING=\"-l$LIBNAME\""
+	fi
+else
+	if ( test -n "/$LIBDIR/lib$LIBNAME.a" -a -n "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "/$LIBDIR/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval ""
+			eval "LIBSTRING=\"-l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+			fi
+
+						path=""
+		fi
+
+
+		for libpath in "$path/$LIBDIR" "$path/$LIBDIR/$NAME" "$path/$LIBDIR/opt" "$path/$LIBDIR/$MULTIARCHDIR"
+		do
+
+			if ( test -n "$LIBSTRING" )
+			then
+				break
+			fi
+
+			for includepath in "$path/include" "$path/include/$NAME"
+			do
+
+				if ( test -n "$LIBSTRING" )
+				then
+					break
+				fi
+
+								if ( test "$USEFULLLIBPATH" = "yes" )
+				then
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-Wl,$libpath/lib$LIBNAME.$SOSUFFIX\""
+	fi
+else
+	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"$libpath/lib$LIBNAME.a\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				else
+
+FOUNDHEADER=""
+FOUNDLIB=""
+
+if ( test -r "$includepath/$HEADER" )
+then
+	eval "FOUNDHEADER=\"yes\""
+fi
+
+
+if ( test -r "$libpath/lib$LIBNAME.$SOSUFFIX" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+if ( test -n "$FOUNDLIB" )
+then
+	if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+	then
+		eval "INCLUDESTRING=\"-I$includepath\""
+		eval "LIBPATH=\"$libpath\"; LIBSTRING=\"-L$libpath -l$LIBNAME\""
+	fi
+else
+	if ( test -n "$libpath/lib$LIBNAME.a" -a -n "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\"" )
+	then
+
+if ( test -r "$libpath/lib$LIBNAME.a" )
+then
+	eval "FOUNDLIB=\"yes\""
+fi
+
+		if ( test -n "$FOUNDHEADER" -a -n "$FOUNDLIB" )
+		then
+			eval "INCLUDESTRING=\"-I$includepath\""
+			eval "LIBSTRING=\"-L$libpath -l$LIBNAME\"; STATIC=\"$LINKSTATIC\""
+		fi
+	fi
+fi
+
+				fi
+			done
+		done
+
+		if ( test -n "$LIBSTRING" )
+		then
+			HEADERSANDLIBSPATH="$path"
+			break
+		fi
+	fi
+done
+
+INCLUDESTRING=`echo $INCLUDESTRING | sed -e "s|-I/usr/include$||g" -e "s|-I/usr/include ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib$||g" -e "s|-L/lib$||g" -e "s|-L/usr/lib ||g" -e "s|-L/lib ||g"`
+LIBSTRING=`echo $LIBSTRING | sed -e "s|-L/usr/lib64$||g" -e "s|-L/lib64$||g" -e "s|-L/usr/lib64 ||g" -e "s|-L/lib64 ||g"`
+
+eval "LIBCURLINCLUDES=\"$INCLUDESTRING\""
+eval "LIBCURLLIBS=\"$LIBSTRING\""
+eval "LIBCURLLIBPATH=\"$LIBPATH\""
+eval "LIBCURLSTATIC=\"$STATIC\""
+if ( test -n "" )
+then
+	eval "=\"$HEADERSANDLIBSPATH\""
+fi
+
+		fi
+
+		if ( test -n "$LIBCURLLIBS" )
+		then
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $LIBCURLINCLUDES"
+LIBS="$LIBCURLLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <curl/curl.h>
+int
+main ()
+{
+CURL *c=curl_easy_init();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  HAVE_LIBCURL="yes";
+$as_echo "#define RUDIMENTS_HAS_LIBCURL 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  LIBCURLINCLUDES=""; LIBCURLLIBS=""; { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
+	fi
+
+
+if ( test -n "$LIBCURLINCLUDES" )
+then
+	echo "curl includes... $LIBCURLINCLUDES"
+fi
+
+
+if ( test -n "$LIBCURLLIBS" )
+then
+	echo "curl libs... $LIBCURLLIBS"
+fi
+
+
+else
+
+	echo "disabled"
+
+fi
+
+
+
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for open" >&5
 $as_echo_n "checking for open... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -33745,6 +34117,12 @@ then
 	PCREBUILD="yes"
 fi
 
+LIBCURLBUILD="no "
+if ( test -n "$HAVE_LIBCURL" )
+then
+	LIBCURLBUILD="yes"
+fi
+
 SSLBUILD="no "
 if ( test -n "$SSLLIBS" )
 then
@@ -33753,6 +34131,7 @@ fi
 
 echo " Features     : Threads $HAS_THREADS"
 echo "                PCRE    $PCREBUILD"
+echo "                libcurl $LIBCURLBUILD"
 echo "                SSL     $SSLBUILD"
 echo "******************************"
 echo
