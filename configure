@@ -798,6 +798,7 @@ enable_environment
 enable_error
 enable_filedescriptor
 enable_file
+enable_url
 enable_filesystem
 enable_groupentry
 enable_hostentry
@@ -1493,6 +1494,7 @@ Optional Features:
   --disable-error         Don't build error
   --disable-filedescriptor       Don't build filedescriptor class
   --disable-file          Don't build file class
+  --disable-url           Don't build url class
   --disable-filesystem    Don't build filesystem class
   --disable-groupentry    Don't build groupentry class
   --disable-hostentry     Don't build hostentry class
@@ -2668,6 +2670,13 @@ if test "${enable_file+set}" = set; then :
   enableval=$enable_file; INCLUDE_FILE="0"
 else
   INCLUDE_FILE="1"
+fi
+
+# Check whether --enable-url was given.
+if test "${enable_url+set}" = set; then :
+  enableval=$enable_url; INCLUDE_URL="0"
+else
+  INCLUDE_URL="1"
 fi
 
 # Check whether --enable-filesystem was given.
@@ -31181,6 +31190,14 @@ then
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 file.h fileincludes.h"
 	SRCS="$SRCS file.cpp"
 	LOBJS="$LOBJS file.lo"
+fi
+
+if ( test "$INCLUDE_URL" = "1" )
+then
+	HEADERS1="$HEADERS1 url.h"
+	PRIVATEHEADERS2="$PRIVATEHEADERS2 url.h urlincludes.h"
+	SRCS="$SRCS url.cpp"
+	LOBJS="$LOBJS url.lo"
 fi
 
 if ( test "$INCLUDE_FILEDESCRIPTOR" = "1" )
