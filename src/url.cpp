@@ -8,6 +8,8 @@
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 
+#include <rudiments/private/winsock.h>
+
 //#define DEBUG_CURL 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
