@@ -197,13 +197,14 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 
 			// get the file descriptor
 			// FIXME: this doesn't work with file:// urls
+			#ifdef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET
 			curl_easy_getinfo(pvt->_curl,
-				#ifdef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET
-				CURLINFO_ACTIVESOCKET,
-				#else
-				CURLINFO_LASTSOCKET,
-				#endif
-				&s)==CURLE_OK) {
+				CURLINFO_ACTIVESOCKET,&s)==CURLE_OK
+			#else
+			curl_easy_getinfo(pvt->_curl,
+				CURLINFO_LASTSOCKET,&s)==CURLE_OK
+			#endif
+			) {
 
 			// set the file descriptor
 			fd(s);
