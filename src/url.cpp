@@ -1,7 +1,6 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information
 
-
 #include <rudiments/url.h>
 #include <rudiments/bytebuffer.h>
 #include <rudiments/bytestring.h>
@@ -88,8 +87,10 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 		}
 
 		// extract user/password from url...
+		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
 		char	*user=NULL;
 		char	*password=NULL;
+		#endif
 		char	*userpwd=NULL;
 		char	*cleanurl=NULL;
 
@@ -103,12 +104,14 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 				userpwd=charstring::duplicate(
 							protodelim+3,
 							at-protodelim-3);
+				#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
 				user=userpwd;
 				password=charstring::findFirst(userpwd,':');
 				if (password) {
 					password++;
 					*(password-1)='\0';
 				}
+				#endif
 
 				cleanurl=new char[charstring::length(name)+1];
 				charstring::copy(cleanurl,name,
@@ -121,7 +124,7 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 		}
 
 		// variable to hold the socket...
-		#ifdef CURLINFO_ACTIVESOCKET
+		#ifdef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET
 		curl_socket_t	s;
 		#else
 		long	s;
@@ -141,6 +144,7 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_URL,cleanurl)==CURLE_OK &&
 
+			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
 			// set the user
 			(!user ||
 			curl_easy_setopt(pvt->_curl,
@@ -151,9 +155,18 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_PASSWORD,password)==CURLE_OK) &&
 
+			#elif defined(RUDIMENTS_HAS_CURLOPT_USERPWD)
+
+			// set the user/password
+			(!userpwd ||
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_USERPWD,userpwd)==CURLE_OK) &&
+			#endif
+
 			// if a password is supplied, then use password
 			// authentication for ssh protocols, or otherwise
 			// allow curl to choose an appropriate auth type
+			#ifdef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES
 			((password &&
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_SSH_AUTH_TYPES,
@@ -161,6 +174,7 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_SSH_AUTH_TYPES,
 				CURLSSH_AUTH_ANY)==CURLE_OK) &&
+			#endif
 			
 
 			// set up write handler
@@ -184,7 +198,7 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			// get the file descriptor
 			// FIXME: this doesn't work with file:// urls
 			curl_easy_getinfo(pvt->_curl,
-				#ifdef CURLINFO_ACTIVESOCKET
+				#ifdef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET
 				CURLINFO_ACTIVESOCKET,
 				#else
 				CURLINFO_LASTSOCKET,
