@@ -130,7 +130,7 @@ lobjs="winsock.obj "+_
 	"unixsocketutil.obj "+_
 	"socketserver.obj "+_
 	"socketclient.obj "+_
-	"url.cpp"
+	"url.obj"
 
 headers0="resultcodes.h "+_
 	"linkedlist.h "+_
