@@ -197,6 +197,11 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 
 			// get the file descriptor
 			// FIXME: this doesn't work with file:// urls
+			// Also, this looks odd...  Why not just ifdef wrap the
+			// CURLINFO_ACTIVESOCKET/CURLINFO_LASTSOCKET parameter?
+			// For some reason that doesn't work with some
+			// preprocessors.  Namely Haiku's, but probably others
+			// as well.
 			#ifdef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET
 			curl_easy_getinfo(pvt->_curl,
 				CURLINFO_ACTIVESOCKET,&s)==CURLE_OK
