@@ -3,7 +3,7 @@ top_builddir = ..
 include ../config.mk
 
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
-LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
+LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
 
 PROGS0 = server \
 	listener \
@@ -81,7 +81,8 @@ PROGS3= handoff1 \
 	sys \
 	reboot \
 	halt \
-	shutdown
+	shutdown \
+	url
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -326,6 +327,9 @@ halt: halt.cpp halt.$(OBJ)
 
 shutdown: shutdown.cpp shutdown.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) shutdown.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+url: url.cpp url.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) url.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all

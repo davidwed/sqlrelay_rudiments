@@ -6,8 +6,9 @@
 						mode_t perms, bool useperms);
 		int32_t	lowLevelClose();
 
+		ssize_t	lowLevelRead(void *buffer, ssize_t size) const;
 	private:
-		void	urlClone(const url &u);
+		void	init();
 
 		static	bool	initUrl();
 		static	void	shutDownUrl();

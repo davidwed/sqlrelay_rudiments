@@ -3,8 +3,13 @@
 
 
 #include <rudiments/url.h>
+#include <rudiments/bytebuffer.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/threadmutex.h>
-#include <rudiments/stdio.h>
+#include <rudiments/charstring.h>
+#include <rudiments/error.h>
+
+//#define DEBUG_CURL 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
@@ -16,47 +21,45 @@ bool		_initialized=false;
 class urlprivate {
 	friend class url;
 	private:
-	#ifdef RUDIMENTS_HAS_LIBCURL
-		CURL	*_curl;
-		CURLM	*_curlm;
-		bool	_curlminitsuccess;
-		int32_t	_stillrunning;
-	#endif
+		#ifdef RUDIMENTS_HAS_LIBCURL
+			CURL	*_curl;
+			unsigned char	_b[CURL_MAX_WRITE_SIZE];
+			uint64_t	_bpos;
+			ssize_t		_bsize;
+			bool		_fetched;
+		#endif
 };
 
 url::url() : file() {
 	pvt=new urlprivate;
 	#ifdef RUDIMENTS_HAS_LIBCURL
 		pvt->_curl=NULL;
-		pvt->_curlm=NULL;
-		pvt->_curlminitsuccess=false;
-		pvt->_stillrunning=0;
 	#endif
+	init();
 	type("url");
 }
 
 url::url(const url &u) : file(u) {
+	// no good way to do this
 	pvt=new urlprivate;
-	urlClone(u);
 	type("url");
 }
 
 url &url::operator=(const url &u) {
-	if (this!=&u) {
-		file::operator=(u);
-		urlClone(u);
-	}
+	// no good way to do this
 	return *this;
-}
-
-void url::urlClone(const url &f) {
-	#ifdef RUDIMENTS_HAS_LIBCURL
-		pvt->_curl=f.pvt->_curl;
-	#endif
 }
 
 url::~url() {
 	delete pvt;
+}
+
+void url::init() {
+	#ifdef RUDIMENTS_HAS_LIBCURL
+		pvt->_bpos=0;
+		pvt->_bsize=0;
+		pvt->_fetched=false;
+	#endif
 }
 
 void url::lowLevelOpen(const char *name, int32_t flags,
@@ -66,8 +69,9 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 
 		// clean up from a previous run
 		close();
+		init();
 
-		// for now, we don't support create or write
+		// for now, don't support create or write
 		if (perms || useperms || flags&O_WRONLY || flags&O_RDWR) {
 			return;
 		}
@@ -83,59 +87,169 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			return;
 		}
 
-		// init a "multi" instance
-		// (so we can get the file descriptor later)
-		pvt->_curlm=curl_multi_init();
-		if (!pvt->_curlm) {
-			return;
-		}
+		// extract user/password from url...
+		char	*user=NULL;
+		char	*password=NULL;
+		char	*userpwd=NULL;
+		char	*cleanurl=NULL;
 
-		// add this instance to the multi
-		pvt->_curlminitsuccess=
-			!curl_multi_add_handle(pvt->_curlm,pvt->_curl);
-		if (pvt->_curlminitsuccess) {
-			return;
-		}
+		const char	*protodelim=charstring::findFirst(name,"://");
+		if (protodelim) {
 
-		// tell it what url to fetch
-		curl_easy_setopt(pvt->_curl,CURLOPT_URL,name);
+			const char	*at=
+				charstring::findFirst(protodelim+3,'@');
+			if (at) {
 
-		// tell it what write function and data to use
-		curl_easy_setopt(pvt->_curl,CURLOPT_WRITEFUNCTION,
-							url::writeData);
-		curl_easy_setopt(pvt->_curl,CURLOPT_WRITEDATA,this);
+				userpwd=charstring::duplicate(
+							protodelim+3,
+							at-protodelim-3);
+				user=userpwd;
+				password=charstring::findFirst(userpwd,':');
+				if (password) {
+					password++;
+					*(password-1)='\0';
+				}
 
-		// begin the transfer
-		curl_multi_perform(pvt->_curlm,(int *)&pvt->_stillrunning);
-
-		// extract the file descriptor
-		fd_set	fdread;
-		int32_t	maxfd;
-		FD_ZERO(&fdread);
-		curl_multi_fdset(pvt->_curlm,&fdread,NULL,NULL,(int *)&maxfd);
-		for (int32_t i=0; i<maxfd; i++) {
-			if (FD_ISSET(i,&fdread)) {
-				fd(i);
-				break;
+				cleanurl=new char[charstring::length(name)+1];
+				charstring::copy(cleanurl,name,
+							protodelim+3-name);
+				charstring::append(cleanurl,at+1);
 			}
 		}
+		if (!userpwd) {
+			cleanurl=charstring::duplicate(name);
+		}
+
+		// variable to hold the socket...
+		#ifdef CURLINFO_ACTIVESOCKET
+		curl_socket_t	s;
+		#else
+		long	s;
+		#endif
+
+		// clear any existing errors
+		error::clearError();
+
+		// make the connection...
+		if (
+			#ifdef DEBUG_CURL
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_VERBOSE,1)==CURLE_OK &&
+			#endif
+
+			// set up the url to open
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_URL,cleanurl)==CURLE_OK &&
+
+			// set the user
+			(!user ||
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_USERNAME,user)==CURLE_OK) &&
+
+			// set the password
+			(!password ||
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_PASSWORD,password)==CURLE_OK) &&
+
+			// if a password is supplied, then use password
+			// authentication for ssh protocols, or otherwise
+			// allow curl to choose an appropriate auth type
+			((password &&
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_SSH_AUTH_TYPES,
+				CURLSSH_AUTH_PASSWORD)==CURLE_OK) ||
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_SSH_AUTH_TYPES,
+				CURLSSH_AUTH_ANY)==CURLE_OK) &&
+			
+
+			// set up write handler
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_WRITEFUNCTION,writeData)==CURLE_OK &&
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_WRITEDATA,this)==CURLE_OK &&
+
+			// just connect during the first "perform" call
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_CONNECT_ONLY,1)==CURLE_OK &&
+
+			// connect
+			curl_easy_perform(pvt->_curl)==CURLE_OK &&
+
+			// now configure subsequent "perform" calls to
+			// actually read data
+			curl_easy_setopt(pvt->_curl,
+				CURLOPT_CONNECT_ONLY,0)==CURLE_OK &&
+
+			// get the file descriptor
+			// FIXME: this doesn't work with file:// urls
+			curl_easy_getinfo(pvt->_curl,
+				#ifdef CURLINFO_ACTIVESOCKET
+				CURLINFO_ACTIVESOCKET,
+				#else
+				CURLINFO_LASTSOCKET,
+				#endif
+				&s)==CURLE_OK) {
+
+			// set the file descriptor
+			fd(s);
+		} else {
+			close();
+		}
+
+		delete[] cleanurl;
+		delete[] userpwd;
 	#endif
 }
 
 int32_t url::lowLevelClose() {
 	#ifdef RUDIMENTS_HAS_LIBCURL
-		if (pvt->_curlminitsuccess) {
-			curl_multi_remove_handle(pvt->_curlm,pvt->_curl);
-		}
-		if (pvt->_curlm) {
-			curl_multi_cleanup(pvt->_curlm);
-		}
 		if (pvt->_curl) {
 			curl_easy_cleanup(pvt->_curl);
 		}
 		return 0;
 	#else
 		return 1;
+	#endif
+}
+
+ssize_t url::lowLevelRead(void *buffer, ssize_t size) const {
+
+	#ifdef RUDIMENTS_HAS_LIBCURL
+
+		// buffer some data, if necessary
+		if (pvt->_bsize==0 && !pvt->_fetched) {
+
+			error::clearError();
+
+			if (curl_easy_perform(pvt->_curl)) {
+				return -1;
+			}
+
+			// ignore EAGAIN, even if this succeeds,
+			// the error number is sometimes set to EAGAIN
+			if (error::getErrorNumber()==EAGAIN) {
+				error::clearError();
+			}
+		}
+
+		// don't attempt to return more bytes
+		// than there are in the buffer
+		if (size>pvt->_bsize) {
+			size=pvt->_bsize;
+		}
+
+		// copy data from the buffer
+		bytestring::copy(buffer,pvt->_b+pvt->_bpos,size);
+
+		// adjust the buffer position and size
+		pvt->_bpos=pvt->_bpos+size;
+		pvt->_bsize=pvt->_bsize-size;
+
+		// return how much was actually read
+		return size;
+	#else
+		return -1;
 	#endif
 }
 
@@ -160,7 +274,26 @@ void url::shutDownUrl() {
 }
 
 size_t url::writeData(void *buffer, size_t size, size_t nmemb, void *userp) {
-	// FIXME: implement this for real
-	stdoutput.write((unsigned char *)buffer,nmemb);
-	return nmemb;
+
+	#ifdef RUDIMENTS_HAS_LIBCURL
+		url	*u=(url *)userp;
+
+		// get the actual size (in bytes)
+		size=size*nmemb;
+
+		// copy data into the buffer
+		bytestring::copy(u->pvt->_b,buffer,size);
+
+		// adjust the buffer position and size
+		u->pvt->_bpos=0;
+		u->pvt->_bsize=size;
+
+		// did we fetch the entire file?
+		u->pvt->_fetched=(size<sizeof(u->pvt->_b));
+
+		// return how much data was buffered
+		return size;
+	#else
+		return 0;
+	#endif
 }
