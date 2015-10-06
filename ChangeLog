@@ -1,6 +1,8 @@
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
 		semaphoreset/sharedmemory segment last
+	added url class that uses libcurl (read-only for now)
+	added support for urls to xmlsax (and thus xmldom and codetree)
 
 0.53 - exposed codetreegrammar class and updated codetree class so that
 		successive parses/writes can use the same grammar without

@@ -4,6 +4,7 @@
 #include <rudiments/xmlsax.h>
 #include <rudiments/charstring.h>
 #include <rudiments/filesystem.h>
+#include <rudiments/url.h>
 #include <rudiments/sys.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -16,7 +17,7 @@ class xmlsaxprivate {
 		const char	*_string;
 		const char	*_ptr;
 		const char	*_endptr;
-		file		_fl;
+		file		*_fl;
 		bool		_mmapped;
 		off64_t		_filesize;
 		off64_t		_optblocksize;
@@ -49,6 +50,7 @@ void xmlsax::reset() {
 	pvt->_string=NULL;
 	pvt->_ptr=NULL;
 	pvt->_endptr=NULL;
+	pvt->_fl=NULL;
 	pvt->_filesize=0;
 	pvt->_fileoffset=0;
 	pvt->_mmapped=false;
@@ -99,9 +101,23 @@ bool xmlsax::parseFile(const char *filename) {
 	// it again
 	close();
 
-	// open the file
-	bool retval;
-	if ((retval=pvt->_fl.open(filename,O_RDONLY))) {
+	// parse the file...
+	if (!charstring::compare(filename,"file://")) {
+		return parseLocalFile(filename+7);
+	} else if (charstring::contains(filename,"://")) {
+		return parseRemoteFile(filename);
+	} else {
+		return parseLocalFile(filename);
+	}
+}
+
+bool xmlsax::parseLocalFile(const char *filename) {
+
+	pvt->_fl=new file();
+
+	// open and parse the file...
+	bool retval=pvt->_fl->open(filename,O_RDONLY);
+	if (retval) {
 
 		// Set the read buffer size...
 
@@ -126,12 +142,12 @@ bool xmlsax::parseFile(const char *filename) {
 		}
 
 		// get the file size
-		pvt->_filesize=pvt->_fl.getSize();
+		pvt->_filesize=pvt->_fl->getSize();
 
 		// optimize...
-		pvt->_fl.setReadBufferSize(pvt->_optblocksize);
-		pvt->_fl.sequentialAccess(0,pvt->_filesize);
-		pvt->_fl.onlyOnce(0,pvt->_filesize);
+		pvt->_fl->setReadBufferSize(pvt->_optblocksize);
+		pvt->_fl->sequentialAccess(0,pvt->_filesize);
+		pvt->_fl->onlyOnce(0,pvt->_filesize);
 
 		// Try to memorymap the file.  If it fails, that's ok, pvt->_ptr
 		// will be set to NULL from the previous call to reset() and
@@ -149,6 +165,18 @@ bool xmlsax::parseFile(const char *filename) {
 			pvt->_mm.detach();
 		}
 	}
+
+	// close and return
+	close();
+	return retval;
+}
+
+bool xmlsax::parseRemoteFile(const char *filename) {
+
+	pvt->_fl=new url();
+
+	// open and parse the file
+	bool retval=(pvt->_fl->open(filename,O_RDONLY) && parse());
 
 	// close and return
 	close();
@@ -177,7 +205,8 @@ void xmlsax::close() {
 	reset();
 
 	// close any previously opened files
-	pvt->_fl.close();
+	delete pvt->_fl;
+	pvt->_fl=NULL;
 }
 
 bool xmlsax::parse() {
@@ -843,7 +872,7 @@ char xmlsax::getCharacter() {
 			pvt->_fileoffset++;
 		}
 	} else {
-		if (pvt->_fl.read(&ch)!=sizeof(char)) {
+		if (pvt->_fl->read(&ch)!=sizeof(char)) {
 			return '\0';
 		}
 	}
@@ -890,7 +919,7 @@ bool xmlsax::mapFile() {
 		return false;
 	}
 
-	if (pvt->_mm.attach(pvt->_fl.getFileDescriptor(),
+	if (pvt->_mm.attach(pvt->_fl->getFileDescriptor(),
 				pvt->_fileoffset,len,PROT_READ,MAP_PRIVATE)) {
 		pvt->_string=static_cast<char *>(pvt->_mm.getData());
 		pvt->_ptr=pvt->_string;	

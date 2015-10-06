@@ -5,6 +5,8 @@
 			void	reset();
 			void	close();
 			bool	parse();
+			bool	parseLocalFile(const char *filename);
+			bool	parseRemoteFile(const char *filename);
 			void	parseFailed();
 			bool	parseTag(char current, char *next);
 			void	parseTagFailed();

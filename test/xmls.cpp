@@ -135,6 +135,8 @@ int main(int argc, const char **argv) {
 
 	myxmlsax	x;
 	stdoutput.printf("=====================================================\n");
+
+	// parse string...
 	x.parseString("\n\
 <?xml version=\"1.0\" ?>\n\
 <!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n\
@@ -155,8 +157,17 @@ int main(int argc, const char **argv) {
 ");
 	stdoutput.printf("%s\n",x.getString());
 	stdoutput.printf("=====================================================\n");
+
+	// parse local file...
 	if (!x.parseFile("xmls.xml")) {
-		stdoutput.printf("failed to parse xmls.xml\n");
+		stdoutput.printf("failed to parse local xmls.xml\n");
+	}
+	stdoutput.printf("%s\n",x.getString());
+	stdoutput.printf("=====================================================\n");
+
+	// parse remote file...
+	if (!x.parseFile("http://localhost/~dmuse/src/rudiments/test/xmls.xml")) {
+		stdoutput.printf("failed to parse remote xmls.xml\n");
 	}
 	stdoutput.printf("%s\n",x.getString());
 	stdoutput.printf("=====================================================\n");
@@ -170,5 +181,5 @@ int main(int argc, const char **argv) {
 		x.parseString("<xml><tag attribute=\"/></xml>\n")==false,
 		x.parseString("<xml><tag attribute=\"></tag></xml>\n")==false,
 		x.parseString("<xml><tag1 attribute=\"\"></tag2></xml>\n")==false);
-	
+
 }
