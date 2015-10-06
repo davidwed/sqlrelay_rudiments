@@ -71,7 +71,8 @@ srcs="winsock.cpp "+_
 	"inetsocketutil.cpp "+_
 	"unixsocketutil.cpp "+_
 	"socketserver.cpp "+_
-	"socketclient.cpp"
+	"socketclient.cpp "+_
+	"url.cpp"
 
 lobjs="winsock.obj "+_
 	"character.obj "+_
@@ -128,7 +129,8 @@ lobjs="winsock.obj "+_
 	"inetsocketutil.obj "+_
 	"unixsocketutil.obj "+_
 	"socketserver.obj "+_
-	"socketclient.obj"
+	"socketclient.obj "+_
+	"url.cpp"
 
 headers0="resultcodes.h "+_
 	"linkedlist.h "+_
@@ -193,7 +195,8 @@ headers3="xmldom.h "+_
 	"inetsocketutil.h "+_
 	"unixsocketutil.h "+_
 	"socketserver.h "+_
-	"socketclient.h"
+	"socketclient.h "+_
+	"url.h"
 
 privateheaders0="config.h "+_
 	"rudimentsinlines.h "+_
@@ -336,7 +339,9 @@ privateheaders7="codetree.h "+_
 	"socketserverincludes.h "+_
 	"socketclient.h "+_
 	"socketclientincludes.h "+_
-	"modemutil.h"
+	"modemutil.h "+_
+	"url.h "+_
+	"urlincludes.h"
 
 ' version
 RUDIMENTS_VERSION="0.53"
