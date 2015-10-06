@@ -67,6 +67,18 @@
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 
+/* libcurl has CURLINFO_ACTIVESOCKET */
+/* #undef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET */
+
+/* libcurl has CURLOPT_SSH_AUTH_TYPES */
+/* #undef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES */
+
+/* libcurl has CURLOPT_USERNAME */
+/* #undef RUDIMENTS_HAS_CURLOPT_USERNAME */
+
+/* libcurl has CURLOPT_USERPWD */
+/* #undef RUDIMENTS_HAS_CURLOPT_USERPWD */
+
 /* Rudiments supports libcurl */
 /* #undef RUDIMENTS_HAS_LIBCURL */
 
