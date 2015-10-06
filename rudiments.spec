@@ -9,7 +9,7 @@ License: LGPLv2 and GPLv2 and FSFUL
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-BuildRequires: pcre-devel,openssl-devel
+BuildRequires: pcre-devel,openssl-devel,libcurl-devel
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
