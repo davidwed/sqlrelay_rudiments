@@ -7,6 +7,7 @@
 #include <rudiments/threadmutex.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -33,11 +34,13 @@ class urlprivate {
 
 url::url() : file() {
 	pvt=new urlprivate;
+	dontGetCurrentPropertiesOnOpen();
 	#ifdef RUDIMENTS_HAS_LIBCURL
 		pvt->_curl=NULL;
 	#endif
 	init();
 	type("url");
+	winsock::initWinsock();
 }
 
 url::url(const url &u) : file(u) {
@@ -52,6 +55,9 @@ url &url::operator=(const url &u) {
 }
 
 url::~url() {
+	// call close here rather than letting filedescriptor call it
+	// because lowLevelClose() needs to access pvt->_curl
+	close();
 	delete pvt;
 }
 
@@ -135,6 +141,15 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 		// clear any existing errors
 		error::clearError();
 
+		#ifdef DEBUG_CURL
+		stdoutput.printf("url: \"%s\"\n",cleanurl);
+		stdoutput.printf("userpwd: \"%s\"\n",userpwd);
+		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+		stdoutput.printf("user: \"%s\"\n",user);
+		stdoutput.printf("password: \"%s\"\n",password);
+		#endif
+		#endif
+
 		// make the connection...
 		if (
 			#ifdef DEBUG_CURL
@@ -213,9 +228,19 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			#endif
 			) {
 
+			#ifdef DEBUG_CURL
+			stdoutput.printf("open succeeded, fd: %d\n",s);
+			#endif
+
 			// set the file descriptor
 			fd(s);
+
 		} else {
+
+			#ifdef DEBUG_CURL
+			stdoutput.printf("open failed\n");
+			#endif
+
 			close();
 		}
 
@@ -298,6 +323,12 @@ void url::shutDownUrl() {
 size_t url::writeData(void *buffer, size_t size, size_t nmemb, void *userp) {
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
+
+		#ifdef DEBUG_CURL
+			stdoutput.printf("writeData(%d,%d) (%d bytes)\n",
+							size,nmemb,size*nmemb);
+		#endif
+
 		url	*u=(url *)userp;
 
 		// get the actual size (in bytes)
@@ -312,6 +343,10 @@ size_t url::writeData(void *buffer, size_t size, size_t nmemb, void *userp) {
 
 		// did we fetch the entire file?
 		u->pvt->_fetched=(size<sizeof(u->pvt->_b));
+
+		#ifdef DEBUG_CURL
+			stdoutput.printf("    %d bytes buffered\n",size);
+		#endif
 
 		// return how much data was buffered
 		return size;
