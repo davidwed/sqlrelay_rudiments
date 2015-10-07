@@ -3,6 +3,8 @@
 		semaphoreset/sharedmemory segment last
 	added url class that uses libcurl (read-only for now)
 	added support for urls to xmlsax (and thus xmldom and codetree)
+	added http support to the url class for platforms that lack an
+		appropriate libcurl
 
 0.53 - exposed codetreegrammar class and updated codetree class so that
 		successive parses/writes can use the same grammar without
