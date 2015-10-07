@@ -115,25 +115,47 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 	char	*userpwd=NULL;
 	char	*cleanurl=NULL;
 
+	// is there an @ in the url?
 	const char	*at=charstring::findFirst(protodelim+3,'@');
 	if (at) {
 
+		// extract the user/password block
 		userpwd=charstring::duplicate(protodelim+3,at-protodelim-3);
 
+		// handle password files
+		if (userpwd[0]=='[' &&
+			userpwd[charstring::length(userpwd)-1]==']') {
+
+			charstring::rightTrim(userpwd,']');
+
+			char	*temp=file::getContents(userpwd+1);
+			charstring::bothTrim(temp,' ');
+			charstring::bothTrim(temp,'\r');
+			charstring::bothTrim(temp,'\n');
+			charstring::bothTrim(temp,'	');
+
+			delete[] userpwd;
+			userpwd=temp;
+		}
+
+		// split to separate user/password if necessary
 		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-		user=userpwd;
-		password=charstring::findFirst(userpwd,':');
-		if (password) {
-			password++;
-			*(password-1)='\0';
+		if (userpwd) {
+			user=userpwd;
+			password=charstring::findFirst(userpwd,':');
+			if (password) {
+				password++;
+				*(password-1)='\0';
+			}
 		}
 		#endif
 
+		// build a clean url, without the user/password in it
 		cleanurl=new char[charstring::length(name)+1];
 		charstring::copy(cleanurl,name,protodelim+3-name);
 		charstring::append(cleanurl,at+1);
-	}
-	if (!userpwd) {
+
+	} else {
 		cleanurl=charstring::duplicate(name);
 	}
 
