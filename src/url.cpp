@@ -2,23 +2,28 @@
 // See the COPYING file for more information
 
 #include <rudiments/url.h>
-#include <rudiments/bytebuffer.h>
-#include <rudiments/bytestring.h>
-#include <rudiments/threadmutex.h>
+#ifdef RUDIMENTS_HAS_LIBCURL
+	#include <rudiments/bytestring.h>
+	#include <rudiments/threadmutex.h>
+	#include <rudiments/error.h>
+#else
+	#include <rudiments/stringbuffer.h>
+	#include <rudiments/inetsocketclient.h>
+#endif
 #include <rudiments/charstring.h>
-#include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 
 //#define DEBUG_CURL 1
+#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
-#endif
 
-threadmutex	_urlmutex;
-bool		_initialized=false;
+	threadmutex	_urlmutex;
+	bool		_initialized=false;
+#endif
 
 class urlprivate {
 	friend class url;
@@ -29,6 +34,10 @@ class urlprivate {
 			uint64_t	_bpos;
 			ssize_t		_bsize;
 			bool		_fetched;
+		#else
+			inetsocketclient	_isc;
+			uint64_t		_contentlength;
+			uint64_t		_fetchedsofar;
 		#endif
 };
 
@@ -40,7 +49,9 @@ url::url() : file() {
 	#endif
 	init();
 	type("url");
-	winsock::initWinsock();
+	#ifdef RUDIMENTS_HAS_LIBCURL
+		winsock::initWinsock();
+	#endif
 }
 
 url::url(const url &u) : file(u) {
@@ -66,69 +77,71 @@ void url::init() {
 		pvt->_bpos=0;
 		pvt->_bsize=0;
 		pvt->_fetched=false;
+	#else
+		pvt->_contentlength=0;
+		pvt->_fetchedsofar=0;
 	#endif
 }
 
 void url::lowLevelOpen(const char *name, int32_t flags,
 				mode_t perms, bool useperms) {
 
+	// clean up from a previous run
+	close();
+	init();
+
+	// for now, don't support create or write
+	if (perms || useperms || flags&O_WRONLY || flags&O_RDWR) {
+		return;
+	}
+
+	// extract user and password (and combined userpwd) from url
+	#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+	char	*user=NULL;
+	char	*password=NULL;
+	#endif
+	char	*userpwd=NULL;
+	char	*cleanurl=NULL;
+
+	const char	*protodelim=charstring::findFirst(name,"://");
+	if (protodelim) {
+
+		const char	*at=charstring::findFirst(protodelim+3,'@');
+		if (at) {
+
+			userpwd=charstring::duplicate(
+						protodelim+3,at-protodelim-3);
+
+			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+			user=userpwd;
+			password=charstring::findFirst(userpwd,':');
+			if (password) {
+				password++;
+				*(password-1)='\0';
+			}
+			#endif
+
+			cleanurl=new char[charstring::length(name)+1];
+			charstring::copy(cleanurl,name,protodelim+3-name);
+			charstring::append(cleanurl,at+1);
+		}
+	}
+	if (!userpwd) {
+		cleanurl=charstring::duplicate(name);
+	}
+
+
+	// init the framework, if necessary
+	if (!initUrl()) {
+		return;
+	}
+
 	#ifdef RUDIMENTS_HAS_LIBCURL
 
-		// clean up from a previous run
-		close();
-		init();
-
-		// for now, don't support create or write
-		if (perms || useperms || flags&O_WRONLY || flags&O_RDWR) {
-			return;
-		}
-
-		// init all of curl, if necessary
-		if (!initUrl()) {
-			return;
-		}
-
-		// init this instance
+		// init this curl instance
 		pvt->_curl=curl_easy_init();
 		if (!pvt->_curl) {
 			return;
-		}
-
-		// extract user/password from url...
-		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-		char	*user=NULL;
-		char	*password=NULL;
-		#endif
-		char	*userpwd=NULL;
-		char	*cleanurl=NULL;
-
-		const char	*protodelim=charstring::findFirst(name,"://");
-		if (protodelim) {
-
-			const char	*at=
-				charstring::findFirst(protodelim+3,'@');
-			if (at) {
-
-				userpwd=charstring::duplicate(
-							protodelim+3,
-							at-protodelim-3);
-				#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-				user=userpwd;
-				password=charstring::findFirst(userpwd,':');
-				if (password) {
-					password++;
-					*(password-1)='\0';
-				}
-				#endif
-
-				cleanurl=new char[charstring::length(name)+1];
-				charstring::copy(cleanurl,name,
-							protodelim+3-name);
-				charstring::append(cleanurl,at+1);
-			}
-		}
-		if (!userpwd) {
-			cleanurl=charstring::duplicate(name);
 		}
 
 		// variable to hold the socket...
@@ -244,8 +257,114 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			close();
 		}
 
-		delete[] cleanurl;
-		delete[] userpwd;
+	#else
+
+		// http connect...
+		if (!charstring::compare(cleanurl,"http://",7)) {
+
+			// parse out the host, port and path
+			protodelim=charstring::findFirst(cleanurl,"://");
+			const char	*path=
+				charstring::findFirstOrEnd(protodelim+3,'/');
+			char	*host=charstring::duplicate(protodelim+3,
+							path-protodelim-3);
+			const char	*port="80";
+			char	*colon=charstring::findFirst(host,':');
+			if (colon) {
+				port=colon+1;
+				*colon='\0';
+			}
+
+			// connect and start transfer
+			if (http(host,charstring::toInteger(port),
+							userpwd,path)) {
+				fd(pvt->_isc.getFileDescriptor());
+			}
+		}
+
+	#endif
+
+	delete[] cleanurl;
+	delete[] userpwd;
+}
+
+bool url::http(const char *host,
+			uint16_t port,
+			const char *userpwd,
+			const char *path) {
+
+	#ifdef RUDIMENTS_HAS_LIBCURL
+		return false;
+	#else
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("host: %s\n",host),
+		stdoutput.printf("port: %d\n\n",port);
+		stdoutput.printf("userpwd: %s\n\n",userpwd);
+		#endif
+
+		// connect to the host
+		if (!pvt->_isc.connect(host,port,-1,-1,0,0)) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http connect failed\n");
+			#endif
+			return false;
+		}
+
+		// build the request
+		stringbuffer	request;
+		request.append("GET ")->append(path);
+		request.append(" HTTP/1.1\r\n");
+		request.append("Host: ")->append(host)->append("\r\n");
+		if (userpwd) {
+			request.append("Authorization: Basic ");
+			char	*userpwd64=charstring::base64Encode(
+						(const unsigned char *)userpwd);
+			request.append(userpwd64);
+			delete[] userpwd64;
+			request.append("\r\n");
+		}
+		request.append("\r\n");
+
+		// send the request
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("Request:\n%s",request.getString());
+		#endif
+		if (pvt->_isc.write(request.getString(),
+				request.getStringLength())!=
+				(ssize_t)request.getStringLength()) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http send request failed\n");
+			#endif
+			return false;
+		}
+
+		// fetch the headers
+		char	*headers=NULL;
+		if (pvt->_isc.read(&headers,"\r\n\r\n",-1,-1)<4) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http fetch headers failed\n");
+			#endif
+			delete[] headers;
+			return false;
+		}
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("Response Headers:\n%s",headers);
+		#endif
+
+		// get the content-length
+		const char	*cs=charstring::findFirst(
+						headers,"Content-Length: ");
+		if (!cs) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http content length not found\n");
+			#endif
+			delete[] headers;
+			return false;
+		}
+		pvt->_contentlength=charstring::toInteger(cs+16);
+		delete[] headers;
+
+		return true;
 	#endif
 }
 
@@ -256,7 +375,7 @@ int32_t url::lowLevelClose() {
 		}
 		return 0;
 	#else
-		return 1;
+		return pvt->_isc.lowLevelClose();
 	#endif
 }
 
@@ -296,12 +415,17 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) const {
 		// return how much was actually read
 		return size;
 	#else
-		return -1;
+		if (pvt->_fetchedsofar>=pvt->_contentlength) {
+			return 0;
+		}
+		ssize_t	bytesread=pvt->_isc.lowLevelRead(buffer,size);
+		pvt->_fetchedsofar+=bytesread;
+		return bytesread;
 	#endif
 }
 
 bool url::initUrl() {
-	bool	result=false;
+	bool	result=true;
 	#ifdef RUDIMENTS_HAS_LIBCURL
 		_urlmutex.lock();
 		if (!_initialized) {

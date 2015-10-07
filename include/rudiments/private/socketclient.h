@@ -1,6 +1,7 @@
 // Copyright (c) 2004 David Muse
 // See the COPYING file for more information.
 
+	friend class url;
 	protected:
 #ifdef RUDIMENTS_HAS_SSL
 		void	*newSSLBIO() const;

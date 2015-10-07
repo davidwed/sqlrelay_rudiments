@@ -10,6 +10,11 @@
 	private:
 		void	init();
 
+		bool	http(const char *host,
+				uint16_t port,
+				const char *userpwd,
+				const char *path);
+
 		static	bool	initUrl();
 		static	void	shutDownUrl();
 
