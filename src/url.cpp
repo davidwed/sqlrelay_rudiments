@@ -66,8 +66,14 @@ url &url::operator=(const url &u) {
 }
 
 url::~url() {
-	// call close here rather than letting filedescriptor call it
-	// because lowLevelClose() needs to access pvt->_curl
+	// filedescriptor's destructor calls close(), why the close() call here?
+	// Destructors don't always call overridden methods, but rather the
+	// version defined in that class.  In this case, lowLevelClose() needs
+	// to be called from this class.  If close() is called here, it will
+	// eventually call this method's lowLevelClose() rather than
+	// filedescriptor::lowLevelClose().  Also, lowLevelClose() needs to
+	// access pvt->_curl or pvt->_isc so we need to call close(), before
+	// deleting pvt.
 	close();
 	delete pvt;
 }
@@ -95,7 +101,13 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 		return;
 	}
 
-	// extract user and password (and combined userpwd) from url
+	// don't support local files
+	const char	*protodelim=charstring::findFirst(name,"://");
+	if (!protodelim || !charstring::compare(name,"file://",7)) {
+		return;
+	}
+
+	// extract user and password (and combined userpwd) from url...
 	#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
 	char	*user=NULL;
 	char	*password=NULL;
@@ -103,28 +115,23 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 	char	*userpwd=NULL;
 	char	*cleanurl=NULL;
 
-	const char	*protodelim=charstring::findFirst(name,"://");
-	if (protodelim) {
+	const char	*at=charstring::findFirst(protodelim+3,'@');
+	if (at) {
 
-		const char	*at=charstring::findFirst(protodelim+3,'@');
-		if (at) {
+		userpwd=charstring::duplicate(protodelim+3,at-protodelim-3);
 
-			userpwd=charstring::duplicate(
-						protodelim+3,at-protodelim-3);
-
-			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
-			user=userpwd;
-			password=charstring::findFirst(userpwd,':');
-			if (password) {
-				password++;
-				*(password-1)='\0';
-			}
-			#endif
-
-			cleanurl=new char[charstring::length(name)+1];
-			charstring::copy(cleanurl,name,protodelim+3-name);
-			charstring::append(cleanurl,at+1);
+		#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+		user=userpwd;
+		password=charstring::findFirst(userpwd,':');
+		if (password) {
+			password++;
+			*(password-1)='\0';
 		}
+		#endif
+
+		cleanurl=new char[charstring::length(name)+1];
+		charstring::copy(cleanurl,name,protodelim+3-name);
+		charstring::append(cleanurl,at+1);
 	}
 	if (!userpwd) {
 		cleanurl=charstring::duplicate(name);
@@ -275,10 +282,24 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 				*colon='\0';
 			}
 
-			// connect and start transfer
+			// connect and request file
 			if (http(host,charstring::toInteger(port),
 							userpwd,path)) {
+
+				#ifdef DEBUG_HTTP
+				stdoutput.printf("open succeeded, fd: %d\n",
+						pvt->_isc.getFileDescriptor());
+				#endif
+
 				fd(pvt->_isc.getFileDescriptor());
+
+			} else {
+
+				#ifdef DEBUG_HTTP
+				stdoutput.printf("open failed\n");
+				#endif
+
+				close();
 			}
 		}
 
@@ -298,7 +319,7 @@ bool url::http(const char *host,
 	#else
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("host: %s\n",host),
-		stdoutput.printf("port: %d\n\n",port);
+		stdoutput.printf("port: %d\n",port);
 		stdoutput.printf("userpwd: %s\n\n",userpwd);
 		#endif
 
@@ -375,7 +396,11 @@ int32_t url::lowLevelClose() {
 		}
 		return 0;
 	#else
-		return pvt->_isc.lowLevelClose();
+		int32_t	retval=pvt->_isc.lowLevelClose();
+		if (!retval) {
+			pvt->_isc.setFileDescriptor(-1);
+		}
+		return retval;
 	#endif
 }
 
