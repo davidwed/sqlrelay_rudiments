@@ -306,7 +306,7 @@ int main(int argc, const char **argv) {
 
 	// initialize a text buffer and print it out
 	char    buffer[100];
-	charstring::copy(buffer,"     hello there buddy     ");
+	charstring::copy(buffer,"\r\n	     hello there buddy     	\r\n");
 	stdoutput.printf("!%s!\n",buffer);
 
 
