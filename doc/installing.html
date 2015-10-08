@@ -32,24 +32,24 @@
 <a name="platforms"></a>
 <span class="heading2">Supported Platforms</span>
 
-<p>Rudiments should build on Linux, Solaris, FreeBSD, NetBSD, OpenBSD, Minix, SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, and Syllable.  Other Unix or Unix-like systems may also be supported.</p>
-
-<p>Modern versions of Windows are also supported.</p>
+<p>Rudiments should build on relatively modern versions of Linux, Unix, or Unix-like systems including Solaris, FreeBSD, NetBSD, OpenBSD, Minix, SCO OpenServer, SCO UnixWare, GNU Hurd, Haiku, and Syllable.  Other Unix or Unix-like systems may also be supported.</p>
 
 <p>x86_64 and x86 platforms are supported, as are non-x86 architectures such as ARM, Sparc, Mips, PPC and others.</p>
 
-<p>uClibc-linux systems are also supported.</p>
+<p>uClibc/Linux-based systems are also supported.</p>
+
+<p>Rudiments should build on relatively modern versions of x86 or x64 Windows as well.</p>
 
 <a name="prerequisites"></a>
 <span class="heading2">Prerequisites</span>
 
 <p>To build on a unix-like platform, Rudiments requires a working compiler toolchain and the make utility.</p>
 
-<p>If OpenSSL and/or the Perl Compatible Regular Expression library are present on a unix-like platform then the build process will detect them and include support for them but they are not required.</p>
+<p>If OpenSSL, the Perl Compatible Regular Expression library, or libcurl are present on a unix-like platform then the build process will detect them and include support for them but they are not required.</p>
 
-<p>To build natively on Windows, you need to install Microsoft Visual Studio or Microsoft Visual Studio Express.  Versions 2005 and greater should work.</p>
+<p>To build Rudiments on Windows, you need to install Microsoft Visual Studio or Microsoft Visual Studio Express.  Versions 2005 and greater should work.</p>
 
-<p>OpenSSL and the Perl Compatible Regular Expressions library are not currently supported on Windows.</p>
+<p>OpenSSL, the Perl Compatible Regular Expressions library, and libcurl are not currently supported on Windows.</p>
 
 
 <br>
@@ -62,7 +62,7 @@
 
 <p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
 
-<p>For Linux, Unix or Cygwin installations, download the tar.gz file.</p>
+<p>For Linux or Unix installations, download the tar.gz file.</p>
 
 
 <a name="extracting"></a>
@@ -104,14 +104,6 @@ configure --prefix=/usr/local
 configure --help
 </b></blockquote>
 
-<p>There are several things to note when using Cygwin.</p>
-
-<ul>
-<li>You must use the Cygwin shell to build SQL Relay, rather than the Windows Command Line or DOS prompt.</li>
-<li>The <b>file</b> command must be present.  If it is not, the build will fail and you will get a very cryptic error.</li>
-<li>SQL Relay cannot be built against non-Cygwin dll's.  You can't, for instance, build against the Oracle, Sybase, the native Windows version of MySQL or the native Windows versions of Perl, Python, PHP, etc.  Many languages and a few databases come with Cygwin though and others can be compiled from source under Cygwin.</li>
-</ul>
-
 <a name="installing"></a>
 <span class="heading2">Installing Rudiments</span>
 
@@ -140,7 +132,7 @@ make uninstall
 
 <p>You can download the most current source distribution of Rudiments from <a href="http://rudiments.sourceforge.net/">http://rudiments.sourceforge.net</a>.</p>
 
-<p>For a native Windows installation, download the zip file.</p>
+<p>For a Windows installation, download the zip file.</p>
 
 <a name="winextracting"></a>
 <span class="heading2">Extracting Rudiments</span>
