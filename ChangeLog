@@ -5,6 +5,8 @@
 	added support for urls to xmlsax (and thus xmldom and codetree)
 	added http support to the url class for platforms that lack an
 		appropriate libcurl
+	charstring 1-argument trim methods trim all whitespace now,
+		not just spaces
 
 0.53 - exposed codetreegrammar class and updated codetree class so that
 		successive parses/writes can use the same grammar without

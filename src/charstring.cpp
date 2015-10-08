@@ -128,7 +128,7 @@ void charstring::leftTrim(char *str, char character) {
 		int32_t	i=0;
 		int32_t	j=0;
 
-		// advance past all of the characters we want to replace
+		// advance past all of the characters we want to trim
 		while (str[i]==character) {
 			i++;
 		}
@@ -1179,16 +1179,53 @@ char *charstring::duplicate(const char *str) {
 	return duplicate(str,length(str));
 }
 
-void charstring::rightTrim(char *string) {
-	rightTrim(string,' ');
+void charstring::rightTrim(char *str) {
+
+	if (str && str[0]) {
+
+		// advance to the last character in the string
+		while (*str) {
+			str++;
+		}
+		str--;
+
+		// back up to the first instance of the character to trim
+		while (character::isWhitespace(*str)) { 
+			str--;
+		}
+		str++;
+
+		// terminate the string there
+		*str='\0';
+	}
 }
 
-void charstring::leftTrim(char *string) {
-	leftTrim(string,' ');
+void charstring::leftTrim(char *str) {
+
+	if (str && str[0]) {
+
+		int32_t	i=0;
+		int32_t	j=0;
+
+		// advance past all of the characters we want to trim
+		while (character::isWhitespace(str[i])) {
+			i++;
+		}
+	
+		// swap chars to front of string
+		while (str[i]) {
+			str[j]=str[i];
+			j++;
+			i++;
+		}
+		// store a null to the new end of string
+		str[j]='\0';
+	}
 }
 
 void charstring::bothTrim(char *string) {
-	bothTrim(string,' ');
+	leftTrim(string);
+	rightTrim(string);
 }
 
 int64_t charstring::toInteger(const char *string) {
