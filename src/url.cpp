@@ -129,10 +129,7 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 			charstring::rightTrim(userpwd,']');
 
 			char	*temp=file::getContents(userpwd+1);
-			charstring::bothTrim(temp,' ');
-			charstring::bothTrim(temp,'\r');
-			charstring::bothTrim(temp,'\n');
-			charstring::bothTrim(temp,'	');
+			charstring::bothTrim(temp);
 
 			delete[] userpwd;
 			userpwd=temp;
