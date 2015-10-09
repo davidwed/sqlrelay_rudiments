@@ -309,7 +309,7 @@ void codetree::buildNonTerminalNodeAssociations(xmldomnode *node) {
 
 char codetree::getSymbolType(xmldomnode *nt) {
 	const char	*symboltype=nt->getAttributeValue(TYPE);
-	if (!(symboltype && symboltype[0])) {
+	if (charstring::isNullOrEmpty(symboltype)) {
 		return INLINE;
 	}
 	return symboltype[0];
@@ -317,7 +317,7 @@ char codetree::getSymbolType(xmldomnode *nt) {
 
 bool codetree::isTag(xmldomnode *nt) {
 	const char	*tag=nt->getAttributeValue(TAG);
-	if (!(tag && tag[0])) {
+	if (charstring::isNullOrEmpty(tag)) {
 		return false;
 	}
 	return (tag[0]==YES);
@@ -1156,7 +1156,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the start
 	const char	*start=def->getAttributeValue(START);
-	if (line || (block && (tag || (start && start[0])))) {
+	if (line || (block && (tag || !charstring::isNullOrEmpty(start)))) {
 		indent(output);
 	}
 	writeStartEnd(output,start);
@@ -1176,13 +1176,13 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 			output->append('>');
 		}
 	}
-	if (block && (tag || (start && start[0]))) {
+	if (block && (tag || !charstring::isNullOrEmpty(start))) {
 		output->append('\n');
 	}
 
 	// if the node has a value, just write that,
 	// otherwise write its children
-	if (value && value[0]) {
+	if (!charstring::isNullOrEmpty(value)) {
 		output->append(value);
 	} else {
 
@@ -1208,7 +1208,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// write the end
 	const char	*end=def->getAttributeValue(END);
-	if (block && (tag || (end && end[0]))) {
+	if (block && (tag || !charstring::isNullOrEmpty(end))) {
 		if (output->getString()[output->getStringLength()-1]!='\n') {
 			output->append('\n');
 		}
@@ -1224,7 +1224,7 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		}
 	}
 	writeStartEnd(output,end);
-	if (line || (block && (tag || (end && end[0])))) {
+	if (line || (block && (tag || !charstring::isNullOrEmpty(end)))) {
 		output->append('\n');
 	}
 	return true;

@@ -22,6 +22,12 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Returns the length of "string". */
 		static	size_t	length(const unsigned char *string);
 
+		/** Returns true if "string" is NULL or the empty string. */
+		static	bool	isNullOrEmpty(const char *string);
+
+		/** Returns true if "string" is NULL or the empty string. */
+		static	bool	isNullOrEmpty(const unsigned char *string);
+
 		/** Sets "size" bytes of "str" to NULL. */
 		static	void	zero(char *str, size_t size);
 

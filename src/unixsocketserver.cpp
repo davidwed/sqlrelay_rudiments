@@ -78,7 +78,7 @@ bool unixsocketserver::initialize(const char *filename, mode_t mask) {
 	pvt->_mask=mask;
 
 	// if a null or blank port was specified, return an error
-	if (!filename || (filename && !filename[0])) {
+	if (charstring::isNullOrEmpty(filename)) {
 		return false;
 	}
 

@@ -85,7 +85,8 @@ bool inetsocketserver::initialize(const char *address, uint16_t port) {
 
 	// if a specific address was passed in, bind to it only,
 	// otherwise bind to all addresses
-	if (address && address[0] && charstring::compare(address,"0.0.0.0")) {
+	if (!charstring::isNullOrEmpty(address) &&
+			charstring::compare(address,"0.0.0.0")) {
 		#if defined(RUDIMENTS_HAVE_INET_ATON)
 			in_addr	ia;
 			if (!inet_aton(address,&ia)) {

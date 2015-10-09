@@ -102,7 +102,7 @@ void charstring::capitalize(char *str) {
 
 void charstring::rightTrim(char *str, char character) {
 
-	if (str && str[0]) {
+	if (!isNullOrEmpty(str)) {
 
 		// advance to the last character in the string
 		while (*str) {
@@ -123,7 +123,7 @@ void charstring::rightTrim(char *str, char character) {
 
 void charstring::leftTrim(char *str, char character) {
 
-	if (str && str[0]) {
+	if (!isNullOrEmpty(str)) {
 
 		int32_t	i=0;
 		int32_t	j=0;
@@ -855,6 +855,14 @@ size_t charstring::length(const unsigned char *string) {
 	return length((const char *)(string));
 }
 
+bool charstring::isNullOrEmpty(const char *string) {
+	return !(string && string[0]);
+}
+
+bool charstring::isNullOrEmpty(const unsigned char *string) {
+	return !(string && string[0]);
+}
+
 void charstring::zero(char *str, size_t size) {
 	bytestring::set(str,0,size);
 }
@@ -1181,7 +1189,7 @@ char *charstring::duplicate(const char *str) {
 
 void charstring::rightTrim(char *str) {
 
-	if (str && str[0]) {
+	if (!isNullOrEmpty(str)) {
 
 		// advance to the last character in the string
 		while (*str) {
@@ -1202,7 +1210,7 @@ void charstring::rightTrim(char *str) {
 
 void charstring::leftTrim(char *str) {
 
-	if (str && str[0]) {
+	if (!isNullOrEmpty(str)) {
 
 		int32_t	i=0;
 		int32_t	j=0;
@@ -1322,8 +1330,8 @@ void charstring::split(const char *string, ssize_t stringlength,
 				char ***list, uint64_t *listlength) {
 
 	// handle degenerate cases
-	if (!string || !string[0] || !stringlength ||
-			!delimiter || !delimiter[0] || !delimiterlength) {
+	if (isNullOrEmpty(string) || !stringlength ||
+		isNullOrEmpty(delimiter) || !delimiterlength) {
 		(*list)=NULL;
 		(*listlength)=0;
 		return;

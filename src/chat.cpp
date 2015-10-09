@@ -6,6 +6,7 @@
 #include <rudiments/xmldomnode.h>
 #include <rudiments/regularexpression.h>
 #include <rudiments/snooze.h>
+#include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/singlylinkedlist.h>
 #ifdef DEBUG_CHAT
@@ -57,7 +58,7 @@ int32_t chat::runScript(const char *script, char **abort,
 	#endif
 
 	// if there was no script, just return success
-	if (!script || !script[0]) {
+	if (charstring::isNullOrEmpty(script)) {
 		return RESULT_SUCCESS;
 	}
 

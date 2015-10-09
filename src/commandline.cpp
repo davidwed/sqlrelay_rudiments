@@ -25,7 +25,7 @@ commandline::~commandline() {
 
 const char *commandline::getValue(const char *arg) const {
 
-	if (arg && arg[0]) {
+	if (!charstring::isNullOrEmpty(arg)) {
 
 		const char	*realarg=arg;
 
@@ -62,7 +62,7 @@ const char *commandline::getValue(const char *arg) const {
 
 bool commandline::found(const char *arg) const {
 
-	if (arg && arg[0]) {
+	if (!charstring::isNullOrEmpty(arg)) {
 
 		const char	*realarg=arg;
 

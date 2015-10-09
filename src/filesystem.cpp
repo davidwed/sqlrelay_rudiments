@@ -5,9 +5,9 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/directory.h>
 #include <rudiments/error.h>
+#include <rudiments/charstring.h>
 #ifdef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 	#include <rudiments/filedescriptor.h>
-	#include <rudiments/charstring.h>
 #endif
 #include <rudiments/stdio.h>
 
@@ -112,7 +112,7 @@ filesystem::~filesystem() {
 
 bool filesystem::initialize(const char *path) {
 	close();
-	if (!path || !path[0]) {
+	if (charstring::isNullOrEmpty(path)) {
 		path=directory::getCurrentWorkingDirectory();
 	}
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE

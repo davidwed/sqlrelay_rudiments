@@ -117,13 +117,13 @@ bool datetime::initialize(const char *tmstring) {
 	const char	*ptr=tmstring;
 	pvt->_mon=charstring::toInteger(ptr)-1;
 	ptr=charstring::findFirst(ptr,'/');
-	if (!ptr || !ptr[0]) {
+	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
 	pvt->_mday=charstring::toInteger(ptr);
 	ptr=charstring::findFirst(ptr,'/');
-	if (!ptr || !ptr[0]) {
+	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
@@ -131,19 +131,19 @@ bool datetime::initialize(const char *tmstring) {
 
 	// parse out the time
 	ptr=charstring::findFirst(ptr,' ');
-	if (!ptr || !ptr[0]) {
+	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
 	pvt->_hour=charstring::toInteger(ptr);
 	ptr=charstring::findFirst(ptr,':');
-	if (!ptr || !ptr[0]) {
+	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
 	pvt->_min=charstring::toInteger(ptr);
 	ptr=charstring::findFirst(ptr,':');
-	if (!ptr || !ptr[0]) {
+	if (charstring::isNullOrEmpty(ptr)) {
 		return false;
 	}
 	ptr=ptr+sizeof(char);
@@ -578,13 +578,13 @@ bool datetime::adjustTimeZone(const char *newtz, bool ignoredst) {
 	// current epoch, in the new time zone.
 	char	*oldzone=NULL;
 	bool	retval=true;
-	if (newtz && newtz[0]) {
+	if (!charstring::isNullOrEmpty(newtz)) {
 		retval=setTZ(newtz,&oldzone,ignoredst);
 	}
 	if (retval) {
 		retval=getBrokenDownTimeFromEpoch();
 	}
-	if (newtz && newtz[0]) {
+	if (!charstring::isNullOrEmpty(newtz)) {
 		retval=restoreTZ(oldzone);
 	}
 
@@ -698,7 +698,8 @@ bool datetime::normalize() {
 
 	// If a time zone is set then use it
 	char	*oldzone=NULL;
-	if (pvt->_zone && pvt->_zone[0] && !setTZ(pvt->_zone,&oldzone,false)) {
+	if (!charstring::isNullOrEmpty(pvt->_zone) &&
+			!setTZ(pvt->_zone,&oldzone,false)) {
 		releaseLock();
 		return false;
 	}
