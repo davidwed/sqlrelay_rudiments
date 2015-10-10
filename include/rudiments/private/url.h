@@ -5,11 +5,11 @@
 		url	&operator=(const url &u);
 
 	protected:
-		void	lowLevelOpen(const char *name, int32_t flags,
+		bool	lowLevelOpen(const char *name, int32_t flags,
 						mode_t perms, bool useperms);
 		int32_t	lowLevelClose();
 
-		ssize_t	lowLevelRead(void *buffer, ssize_t size) const;
+		ssize_t	lowLevelRead(void *buffer, ssize_t size);
 	private:
 		void	init();
 
@@ -17,11 +17,12 @@
 				uint16_t port,
 				const char *userpwd,
 				const char *path);
+		bool	perform();
 
 		static	bool	initUrl();
 		static	void	shutDownUrl();
 
-		static	size_t	writeData(void *buffer, size_t size,
+		static	size_t	readData(void *buffer, size_t size,
 						size_t nmemb, void *userp);
 
 		urlprivate	*pvt;

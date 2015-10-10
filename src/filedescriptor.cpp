@@ -670,68 +670,68 @@ ssize_t filedescriptor::write(const void *buffer, size_t size,
 	return bufferedWrite(buffer,size,sec,usec);
 }
 
-ssize_t filedescriptor::read(uint16_t *buffer) const {
+ssize_t filedescriptor::read(uint16_t *buffer) {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(uint32_t *buffer) const {
+ssize_t filedescriptor::read(uint32_t *buffer) {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(uint64_t *buffer) const {
+ssize_t filedescriptor::read(uint64_t *buffer) {
 	return read(buffer,-1,-1);
 }
 
-ssize_t filedescriptor::read(int16_t *buffer) const {
+ssize_t filedescriptor::read(int16_t *buffer) {
 	return bufferedRead(buffer,sizeof(int16_t),-1,-1);
 }
 
-ssize_t filedescriptor::read(int32_t *buffer) const {
+ssize_t filedescriptor::read(int32_t *buffer) {
 	return bufferedRead(buffer,sizeof(int32_t),-1,-1);
 }
 
-ssize_t filedescriptor::read(int64_t *buffer) const {
+ssize_t filedescriptor::read(int64_t *buffer) {
 	return bufferedRead(buffer,sizeof(int64_t),-1,-1);
 }
 
-ssize_t filedescriptor::read(float *buffer) const {
+ssize_t filedescriptor::read(float *buffer) {
 	return bufferedRead(buffer,sizeof(float),-1,-1);
 }
 
-ssize_t filedescriptor::read(double *buffer) const {
+ssize_t filedescriptor::read(double *buffer) {
 	return bufferedRead(buffer,sizeof(double),-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned char *buffer) const {
+ssize_t filedescriptor::read(unsigned char *buffer) {
 	return bufferedRead(buffer,sizeof(unsigned char),-1,-1);
 }
 
-ssize_t filedescriptor::read(bool *buffer) const {
+ssize_t filedescriptor::read(bool *buffer) {
 	return bufferedRead(buffer,sizeof(bool),-1,-1);
 }
 
-ssize_t filedescriptor::read(char *buffer) const {
+ssize_t filedescriptor::read(char *buffer) {
 	return bufferedRead(buffer,sizeof(char),-1,-1);
 }
 
-ssize_t filedescriptor::read(unsigned char *buffer, size_t size) const {
+ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
 	return bufferedRead(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::read(char *buffer, size_t size) const {
+ssize_t filedescriptor::read(char *buffer, size_t size) {
 	return bufferedRead(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::read(void *buffer, size_t size) const {
+ssize_t filedescriptor::read(void *buffer, size_t size) {
 	return bufferedRead(buffer,size,-1,-1);
 }
 
-ssize_t filedescriptor::read(char **buffer, const char *terminator) const {
+ssize_t filedescriptor::read(char **buffer, const char *terminator) {
 	return read(buffer,terminator,-1,-1);
 }
 
 ssize_t filedescriptor::read(uint16_t *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint16_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -740,7 +740,7 @@ ssize_t filedescriptor::read(uint16_t *buffer,
 }
 
 ssize_t filedescriptor::read(uint32_t *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint32_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -749,7 +749,7 @@ ssize_t filedescriptor::read(uint32_t *buffer,
 }
 
 ssize_t filedescriptor::read(uint64_t *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint64_t),sec,usec);
 	if (pvt->_translatebyteorder) {
 		*buffer=netToHost(*buffer);
@@ -758,57 +758,57 @@ ssize_t filedescriptor::read(uint64_t *buffer,
 }
 
 ssize_t filedescriptor::read(int16_t *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(int16_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(int32_t *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(int32_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(int64_t *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(int64_t),sec,usec);
 }
 
 ssize_t filedescriptor::read(float *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(float),sec,usec);
 }
 
 ssize_t filedescriptor::read(double *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(double),sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(unsigned char),sec,usec);
 }
 
 ssize_t filedescriptor::read(bool *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(bool),sec,usec);
 }
 
 ssize_t filedescriptor::read(char *buffer,
-				int32_t sec, int32_t usec) const {
+				int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,sizeof(char),sec,usec);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer, size_t size,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(char *buffer, size_t size,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 	return bufferedRead(buffer,size,sec,usec);
 }
 
@@ -919,7 +919,7 @@ void filedescriptor::dontAllowShortWrites() {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
-					int32_t sec, int32_t usec) const {
+						int32_t sec, int32_t usec) {
 
 	// initialize a buffer
 	int32_t	buffersize=512;
@@ -1035,7 +1035,7 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 }
 
 ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 	debugPrintf("bufferedRead of %d bytes\n",(int)count);
@@ -1165,7 +1165,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 }
 
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
-					int32_t sec, int32_t usec) const {
+					int32_t sec, int32_t usec) {
 
 	// FIXME: is this what we want to do?
 	// maybe we should set some kind of error condition too
@@ -1321,7 +1321,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	return totalread;
 }
 
-ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) const {
+ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 	#if defined(RUDIMENTS_HAVE__READ)
 		return _read(pvt->_fd,buf,count);
 	#elif defined(RUDIMENTS_HAVE_READ)

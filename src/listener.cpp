@@ -205,6 +205,10 @@ listenerlist *listener::getWriteReadyList() {
 	return &pvt->_writereadylist;
 }
 
+int32_t listener::listen() {
+	return listen(-1,-1);
+}
+
 int32_t listener::listen(int32_t sec, int32_t usec) {
 
 	// initialize the return value

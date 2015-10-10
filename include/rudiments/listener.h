@@ -43,6 +43,16 @@ class RUDIMENTS_DLLSPEC listener {
 		/** Removes all file descriptors from the pool. */
 		void	removeAllFileDescriptors();
 
+
+		/** Causes the application to wait until a read or write
+		 *  operation will proceed without blocking, as appropriate
+		 *  for each file descriptor added by previous calls.
+		 * 
+		 *  Returns RESULT_ERROR on error or otherwise returns the
+		 *  number of file descriptors that are ready to be
+		 *  read from or written to. */
+		int32_t	listen();
+
 		/** Causes the application to wait until a read or write
 		 *  operation will proceed without blocking, as appropriate
 		 *  for each file descriptor added by previous calls, or
@@ -59,8 +69,9 @@ class RUDIMENTS_DLLSPEC listener {
 		 *  Returns RESULT_ERROR on error, RESULT_TIMEOUT
 		 *  on timeout and otherwise returns the number
 		 *  of file descriptors that are ready to be 
-		 *  written to. */
+		 *  read from or written to. */
 		int32_t	listen(int32_t sec, int32_t usec);
+
 
 		/** Returns the list of file descriptors that were ready for
 		 *  read operations after the last call to listen(). */

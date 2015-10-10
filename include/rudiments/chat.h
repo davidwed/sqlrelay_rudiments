@@ -14,11 +14,11 @@ class RUDIMENTS_DLLSPEC chat {
 	public:
 		/** Creates an instance of the chat class.  Data will be
 		 *  written to and read from "fd". */
-		chat(const filedescriptor *fd);
+		chat(filedescriptor *fd);
 
 		/** Creates an instance of the chat class.  Data will be
 		 *  read from "rfd" and written to "wfd". */
-		chat(const filedescriptor *rfd, const filedescriptor *wfd);
+		chat(filedescriptor *rfd, filedescriptor *wfd);
 
 		/** Deletes this instance of the chat class. */
 		~chat();

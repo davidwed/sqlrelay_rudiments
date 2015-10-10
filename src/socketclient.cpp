@@ -442,7 +442,7 @@ wsacleanup:
 	return retval;
 }
 
-ssize_t socketclient::lowLevelRead(void *buf, ssize_t count) const {
+ssize_t socketclient::lowLevelRead(void *buf, ssize_t count) {
 	return ::recv(fd(),
 			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
 			buf,

@@ -422,77 +422,77 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
 		 *  occurred. */
-		ssize_t	read(uint16_t *buffer) const;
+		ssize_t	read(uint16_t *buffer);
 
 		/** Reads an unsigned 32-bit integer from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
 		 *  occurred. */
-		ssize_t	read(uint32_t *buffer) const;
+		ssize_t	read(uint32_t *buffer);
 
 		/** Reads an unsigned 64-bit integer from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
 		 *  occurred. */
-		ssize_t	read(uint64_t *buffer) const;
+		ssize_t	read(uint64_t *buffer);
 
 		/** Reads a 16-bit integer from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(int16_t *buffer) const;
+		ssize_t	read(int16_t *buffer);
 
 		/** Reads a 32-bit integer from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(int32_t *buffer) const;
+		ssize_t	read(int32_t *buffer);
 
 		/** Reads a 64-bit integer from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(int64_t *buffer) const;
+		ssize_t	read(int64_t *buffer);
 
 		/** Reads a floating point number from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
 		 *  occurred. */
-		ssize_t	read(float *buffer) const;
+		ssize_t	read(float *buffer);
 
 		/** Reads a double-precision floating point number from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
 		 *  occurred. */
-		ssize_t	read(double *buffer) const;
+		ssize_t	read(double *buffer);
 
 		/** Reads an unsigned character from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
 		 *  were successfully read or RESULT_ERROR if an error
 		 *  occurred. */
-		ssize_t	read(unsigned char *buffer) const;
+		ssize_t	read(unsigned char *buffer);
 
 		/** Reads an character from the file descriptor into "buffer".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	read(char *buffer) const;
+		ssize_t	read(char *buffer);
 
 		/** Reads a boolean value from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(bool *buffer) const;
+		ssize_t	read(bool *buffer);
 
 		/** Reads "size" unsigned characters from the file descriptor
 		 *  into "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(unsigned char *buffer, size_t size) const;
+		ssize_t	read(unsigned char *buffer, size_t size);
 
 		/** Reads "size" characters from the file descriptor into
 		 *  "buffer".  Returns the number of bytes that were
 		 *  successfully read or RESULT_ERROR if an error occurred. */
-		ssize_t	read(char *buffer, size_t size) const;
+		ssize_t	read(char *buffer, size_t size);
 
 		/** Reads "size" bytes from the file descriptor into "buf".
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	read(void *buf, size_t size) const;
+		ssize_t	read(void *buf, size_t size);
 
 		/** Reads from the file desciptor into "buffer" until
 		 *  "terminator" is encountered.
@@ -502,85 +502,84 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *
 		 *  Returns the number of bytes that were read or
 		 *  RESULT_ERROR if an error occurred. */
-		ssize_t	read(char **buffer, const char *terminator) const;
+		ssize_t	read(char **buffer, const char *terminator);
 
 		/** Reads an unsigned 16-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(uint16_t *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(uint16_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads an unsigned 32-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(uint32_t *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(uint32_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads an unsigned 64-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(uint64_t *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(uint64_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a 16-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(int16_t *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(int16_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a 32-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(int32_t *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(int32_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a 64-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(int64_t *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(int64_t *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a floating point number from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(float *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(float *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a double-precision floating point number from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(double *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(double *buffer, int32_t sec, int32_t usec);
 
 		/** Reads an unsigned character from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(unsigned char *buffer,
-					int32_t sec, int32_t usec) const;
+		ssize_t	read(unsigned char *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a character from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(char *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(char *buffer, int32_t sec, int32_t usec);
 
 		/** Reads a boolean value from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
-		ssize_t	read(bool *buffer, int32_t sec, int32_t usec) const;
+		ssize_t	read(bool *buffer, int32_t sec, int32_t usec);
 
 		/** Reads "size" unsigned characters from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -588,7 +587,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(unsigned char *buffer, size_t size,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Reads "size" characters from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -596,7 +595,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(char *buffer, size_t size,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Reads "size" bytes from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
@@ -604,7 +603,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  were successfully read, RESULT_ERROR if an error
 		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
 		ssize_t	read(void *buf, size_t size,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 		/** Reads from the file desciptor into "buffer" until
 		 *  "terminator" is encountered with a timeout of "sec" seconds
@@ -616,7 +615,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  Returns the number of bytes that were read or
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(char **buffer, const char *terminator,
-					int32_t sec, int32_t usec) const;
+					int32_t sec, int32_t usec);
 
 
 		/** Causes the application to wait until a read()

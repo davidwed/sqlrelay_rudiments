@@ -2,7 +2,7 @@
 // See the COPYING file for more information
 
 	protected:
-		virtual	void	lowLevelOpen(const char *name, int32_t flags,
+		virtual	bool	lowLevelOpen(const char *name, int32_t flags,
 						mode_t perms, bool useperms);
 
 	private:

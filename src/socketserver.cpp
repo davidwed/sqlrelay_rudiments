@@ -204,7 +204,7 @@ bool socketserver::sslAccept(filedescriptor *sock) {
 }
 #endif
 
-ssize_t socketserver::lowLevelRead(void *buf, ssize_t count) const {
+ssize_t socketserver::lowLevelRead(void *buf, ssize_t count) {
 	return ::recv(fd(),
 			#ifdef RUDIMENTS_HAVE_RECV_WITH_VOID
 			buf,

@@ -23,7 +23,7 @@ bool printUrl(const char *url) {
 		for (;;) {
 			ssize_t	s=u.read(buffer,sizeof(buffer));
 			stdoutput.write(buffer,s);
-			if (s<1) {
+			if (s<(ssize_t)sizeof(buffer)) {
 				break;
 			}
 		}

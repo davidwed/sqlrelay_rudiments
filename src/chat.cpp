@@ -18,21 +18,21 @@
 class chatprivate {
 	friend class chat;
 	private:
-		const filedescriptor	*_readfd;
-		const filedescriptor	*_writefd;
+		filedescriptor	*_readfd;
+		filedescriptor	*_writefd;
 
 		int32_t				_timeout;
 		singlylinkedlist< char * >	_aborts;
 };
 
-chat::chat(const filedescriptor *fd) {
+chat::chat(filedescriptor *fd) {
 	pvt=new chatprivate;
 	pvt->_readfd=fd;
 	pvt->_writefd=fd;
 	pvt->_timeout=45;
 }
 
-chat::chat(const filedescriptor *rfd, const filedescriptor *wfd) {
+chat::chat(filedescriptor *rfd, filedescriptor *wfd) {
 	pvt=new chatprivate;
 	pvt->_readfd=rfd;
 	pvt->_writefd=wfd;

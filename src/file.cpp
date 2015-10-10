@@ -170,7 +170,7 @@ bool file::createFile(const char *name, mode_t perms) {
 	return fl.create(name,perms);
 }
 
-void file::lowLevelOpen(const char *name, int32_t flags,
+bool file::lowLevelOpen(const char *name, int32_t flags,
 				mode_t perms, bool useperms) {
 
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
@@ -331,18 +331,18 @@ void file::lowLevelOpen(const char *name, int32_t flags,
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		fd(result);
 	#endif
+
+	return (fd()!=-1);
 }
 
 bool file::open(const char *name, int32_t flags) {
-	lowLevelOpen(name,flags,0,false);
-	return (fd()!=-1 &&
+	return (lowLevelOpen(name,flags,0,false) &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int32_t flags, mode_t perms) {
-	lowLevelOpen(name,flags,perms,true);
-	return (fd()!=-1 &&
+	return (lowLevelOpen(name,flags,perms,true) &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
