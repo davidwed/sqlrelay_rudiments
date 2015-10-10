@@ -11,6 +11,7 @@
 	#include <rudiments/inetsocketclient.h>
 #endif
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
@@ -99,6 +100,11 @@ void url::lowLevelOpen(const char *name, int32_t flags,
 	// for now, don't support create or write
 	if (perms || useperms || flags&O_WRONLY || flags&O_RDWR) {
 		return;
+	}
+
+	// skip leading whitespace
+	while (*name && character::isWhitespace(*name)) {
+		name++;
 	}
 
 	// don't support local files

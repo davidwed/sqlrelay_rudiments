@@ -4,12 +4,10 @@
 #include <rudiments/xmlsax.h>
 #include <rudiments/charstring.h>
 #include <rudiments/filesystem.h>
+#include <rudiments/character.h>
 #include <rudiments/url.h>
 #include <rudiments/sys.h>
-
-#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
+#include <rudiments/stdio.h>
 
 class xmlsaxprivate {
 	friend class xmlsax;
@@ -101,8 +99,13 @@ bool xmlsax::parseFile(const char *filename) {
 	// it again
 	close();
 
+	// skip leading whitespace
+	while (*filename && character::isWhitespace(*filename)) {
+		filename++;
+	}
+
 	// parse the file...
-	if (!charstring::compare(filename,"file://")) {
+	if (!charstring::compare(filename,"file://",7)) {
 		return parseLocalFile(filename+7);
 	} else if (charstring::contains(filename,"://")) {
 		return parseRemoteFile(filename);
