@@ -11,37 +11,51 @@ const char * urls[]={
 	NULL
 };
 
+url	u;
+
+bool printUrl(const char *url) {
+
+	// open the url
+	if (u.open(url,O_RDONLY)) {
+
+		// get and print it in 1024 byte chunks...
+		char	buffer[1024];
+		for (;;) {
+			ssize_t	s=u.read(buffer,sizeof(buffer));
+			stdoutput.write(buffer,s);
+			if (s<1) {
+				break;
+			}
+		}
+
+		return true;
+	}
+	return false;
+}
+
 int main(int argc, const char **argv) {
 
-	url	u;
+	if (argc==2) {
 
-	for (const char * const *url=urls; *url; url++) {
+		printUrl(argv[1]);
+		
+	} else {
 
-		// print out the url
-		stdoutput.printf("%s\n\n",*url);
+		for (const char * const *url=urls; *url; url++) {
 
-		// open the url
-		if (u.open(*url,O_RDONLY)) {
+			// print out the url
+			stdoutput.printf("%s\n\n",*url);
 
-			// get and print it in 1024 byte chunks...
-			char	buffer[1024];
-			for (;;) {
-				ssize_t	s=u.read(buffer,sizeof(buffer));
-				stdoutput.write(buffer,s);
-				if (s<1) {
-					break;
-				}
+			if (!printUrl(*url)) {
+				stdoutput.printf("failed to open");
 			}
 
-		} else {
-			stdoutput.printf("failed to open");
+			// banner
+			stdoutput.printf("\n");
+			for (uint16_t i=0; i<80; i++) {
+				stdoutput.printf("=");
+			}
+			stdoutput.printf("\n");
 		}
-
-		// banner
-		stdoutput.printf("\n");
-		for (uint16_t i=0; i<80; i++) {
-			stdoutput.printf("=");
-		}
-		stdoutput.printf("\n");
 	}
 }
