@@ -1,6 +1,9 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information
 
+		url(const url &u);
+		url	&operator=(const url &u);
+
 	protected:
 		void	lowLevelOpen(const char *name, int32_t flags,
 						mode_t perms, bool useperms);

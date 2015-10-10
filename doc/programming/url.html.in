@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>firstworks   Programming with Rudiments using the url class</title>
+<link href="../css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+<span class="heading">Using the url class</span><br><br>
+
+<p>The <a href="../classes/html/classurl.html">url class</a> provides read access to urls.</p>
+
+<p>Its parent class: file provides provides open(), read(), and close() methods.</p>
+
+<p>http urls, with Basic Authentication, are supported on all platforms.</p>
+
+<p>urls for other protocols, including ftp, https, scp, sftp, and others, are supported if rudiments was compiled with support for libcurl.</p>
+
+<p>Examples of supported urls include:</p>
+
+<ul>
+<li>http://somedomain.com/path/to/file.html</li>
+<li>http://user:password@somedomain.com/path/to/file.html</li>
+<li>http://[/path/to/userpwdfile]@somedomain.com/path/to/file.html</li>
+</ul>
+
+<p>The url class supports storing the user:password portion of a url in a user-password file.  These files may be referenced in the url by enclosing the full pathname of the file in square brackets.  The file should consist of a single line containing the user and password, separated by a colon.</p>
+
+<p>For example:</p>
+
+<blockquote><code>myusername:mypassword</code></blockquote>
+
+<img src="../images/traffic_cone.png"/>
+
+<p>Coming soon...</p>
+
+<blockquote class="code">
+@url.cpp.html@
+</blockquote>
+
+</body>
+</html>
