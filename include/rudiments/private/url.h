@@ -17,6 +17,7 @@
 				uint16_t port,
 				const char *userpwd,
 				const char *path);
+		bool	getChunkSize(bool bof);
 		bool	perform();
 
 		static	bool	initUrl();

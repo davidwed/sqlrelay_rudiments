@@ -30,10 +30,16 @@
 class urlprivate {
 	friend class url;
 	private:
+		bool			_usingbuiltin;
 		inetsocketclient	_isc;
+
 		uint64_t		_contentlength;
 		uint64_t		_fetchedsofar;
-		bool			_usingbuiltin;
+
+		bool			_chunked;
+		bool			_bof;
+		ssize_t			_chunksize;
+		ssize_t			_chunkpos;
 		#ifdef RUDIMENTS_HAS_LIBCURL
 			CURL	*_curl;
 			CURLM	*_curlm;
@@ -87,10 +93,15 @@ url::~url() {
 }
 
 void url::init() {
+	pvt->_usingbuiltin=true;
 
 	pvt->_contentlength=0;
 	pvt->_fetchedsofar=0;
-	pvt->_usingbuiltin=true;
+
+	pvt->_bof=false;
+	pvt->_chunked=false;
+	pvt->_chunksize=0;
+	pvt->_chunkpos=0;
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
 	pvt->_breadpos=0;
@@ -363,15 +374,21 @@ bool url::http(const char *host,
 	// connect to the host
 	if (!pvt->_isc.connect(host,port,-1,-1,0,0)) {
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http connect failed\n");
+		stdoutput.printf("http: connect failed\n");
 		#endif
 		return false;
+	}
+
+	// finagle path
+	if (charstring::isNullOrEmpty(path)) {
+		path="/";
 	}
 
 	// build the request
 	stringbuffer	request;
 	request.append("GET ")->append(path);
 	request.append(" HTTP/1.1\r\n");
+	request.append("User-Agent: rudiments/"RUDIMENTS_VERSION"\r\n");
 	request.append("Host: ")->append(host)->append("\r\n");
 	if (userpwd) {
 		request.append("Authorization: Basic ");
@@ -381,6 +398,7 @@ bool url::http(const char *host,
 		delete[] userpwd64;
 		request.append("\r\n");
 	}
+	request.append("Accept: */*\r\n");
 	request.append("\r\n");
 
 	// send the request
@@ -391,7 +409,7 @@ bool url::http(const char *host,
 				request.getStringLength())!=
 				(ssize_t)request.getStringLength()) {
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http send request failed\n");
+		stdoutput.printf("http: send request failed\n");
 		#endif
 		return false;
 	}
@@ -400,7 +418,7 @@ bool url::http(const char *host,
 	char	*headers=NULL;
 	if (pvt->_isc.read(&headers,"\r\n\r\n",-1,-1)<4) {
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http fetch headers failed\n");
+		stdoutput.printf("http: fetch headers failed\n");
 		#endif
 		delete[] headers;
 		return false;
@@ -409,19 +427,40 @@ bool url::http(const char *host,
 	stdoutput.printf("Response Headers:\n%s",headers);
 	#endif
 
-	// get the content-length
+	// get the content-length or transfer-encoding
+	bool	retval=false;
+	pvt->_contentlength=0;
+	pvt->_chunked=false;
 	const char	*cs=charstring::findFirst(headers,"Content-Length: ");
-	if (!cs) {
+	if (cs) {
+		pvt->_contentlength=charstring::toInteger(cs+16);
 		#ifdef DEBUG_HTTP
-		stdoutput.printf("http content length not found\n");
+		stdoutput.printf("http: content length: %lld\n",
+						pvt->_contentlength);
 		#endif
-		delete[] headers;
-		return false;
+		retval=true;
+	} else {
+		pvt->_chunked=charstring::findFirst(headers,
+						"Transfer-Encoding: chunked");
+		if (pvt->_chunked) {
+			pvt->_bof=true;
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: chunked encoding\n");
+			#endif
+		}
+		retval=true;
 	}
-	pvt->_contentlength=charstring::toInteger(cs+16);
+
+	#ifdef DEBUG_HTTP
+	if (!retval) {
+		stdoutput.printf("http: neither content length "
+				"nor chunked encoding header found\n");
+	}
+	#endif
+
 	delete[] headers;
 
-	return true;
+	return retval;
 }
 
 int32_t url::lowLevelClose() {
@@ -457,17 +496,64 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 
 	if (pvt->_usingbuiltin) {
 
-		// eof condition
-		if (pvt->_fetchedsofar>=pvt->_contentlength) {
-			return 0;
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("\nhttp: lowLevelRead(%d)\n",size);
+		#endif
+
+		ssize_t	bytesread=0;
+
+		if (pvt->_chunked) {
+
+			// we either at the beginning or
+			// just finished reading a chunk...
+			if (!pvt->_chunksize) {
+
+				// get the chunk size
+				if (!getChunkSize(pvt->_bof)) {
+					return -1;
+				}
+				pvt->_bof=false;
+			}
+
+			// eof condition
+			if (!pvt->_chunksize) {
+				return 0;
+			}
+
+			// don't try to read more than there is in the chunk
+			if (size>pvt->_chunksize-pvt->_chunkpos) {
+				size=pvt->_chunksize-pvt->_chunkpos;
+			} 
+
+			// read some data
+			bytesread=pvt->_isc.lowLevelRead(buffer,size);
+
+			// adjust chunk position, reset if necessary
+			pvt->_chunkpos+=bytesread;
+			if (pvt->_chunkpos==pvt->_chunksize) {
+				pvt->_chunkpos=0;
+				pvt->_chunksize=0;
+			}
+
+		} else {
+
+			// eof condition
+			if (pvt->_fetchedsofar>=pvt->_contentlength) {
+				return 0;
+			}
+
+			// read some data
+			bytesread=pvt->_isc.lowLevelRead(buffer,size);
+
+			// update the total bytes read
+			// (so we can decide later if we've hit an eof)
+			pvt->_fetchedsofar+=bytesread;
+
 		}
 
-		// read some data
-		ssize_t	bytesread=pvt->_isc.lowLevelRead(buffer,size);
-
-		// update the total bytes read
-		// (so we can decide later if we've hit an eof)
-		pvt->_fetchedsofar+=bytesread;
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("http: read %d bytes\n",bytesread);
+		#endif
 
 		return bytesread;
 
@@ -510,6 +596,110 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 		return size;
 	}
 	#endif
+}
+
+bool url::getChunkSize(bool bof) {
+
+	#ifdef DEBUG_HTTP
+	stdoutput.printf("http: get chunk size...\n");
+	#endif
+
+	// read the \r\n trailing behind the previous chunk
+	if (!bof) {
+
+		// these seem to be off-by-one sometimes,
+		// (the \r is actually included in the previous chunk)
+		// so get them individually...
+		char	crlf;
+		if (pvt->_isc.read(&crlf,-1,-1)<(ssize_t)sizeof(crlf)) {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: get trailing crlf failed\n");
+			#endif
+			return false;
+		}
+		if (crlf=='\r') {
+			if (pvt->_isc.read(&crlf,-1,-1)<(ssize_t)sizeof(crlf)) {
+				#ifdef DEBUG_HTTP
+				stdoutput.printf("http: get trailing "
+							"crlf failed\n");
+				#endif
+				return false;
+			}
+		}
+		#ifdef DEBUG_HTTP
+		else if (crlf=='\n') {
+			stdoutput.printf("http: trailing crlf "
+					"appears to be off-by-one\n");
+		}
+		#endif
+		if (crlf!='\n') {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: unexpected characters "
+							"in trailing crlf\n");
+			#endif
+			return false;
+		}
+	}
+
+	// get until the end-of-line (should be at least 3 bytes too)
+	char	*csstring=NULL;
+	ssize_t	bytesread=pvt->_isc.read(&csstring,"\r\n",-1,-1);
+	if (bytesread<3) {
+		#ifdef DEBUG_HTTP
+		stdoutput.printf("http: invalid chunk size:");
+		stdoutput.safePrint(csstring,bytesread);
+		stdoutput.write('\n');
+		#endif
+		return false;
+	}
+
+	// reset chunk size
+	pvt->_chunksize=0;
+
+	// initialize return value
+	bool		retval=true;
+
+	// run backwards through the string, converting ascii representations
+	// of hex digits to integers, multiplying them by the correct place and
+	// adding that to the chunksize
+	uint64_t	place=1;
+	char		*c=csstring+bytesread-2-1;
+	for (;;) {
+		char	base='\0';
+		if (*c>='0' && *c<='9') {
+			base='0';
+		} else if (*c>='a' && *c<='f') {
+			base='a'-11;
+		} else if (*c>='A' && *c<='F') {
+			base='A'-11;
+		} else {
+			#ifdef DEBUG_HTTP
+			stdoutput.printf("http: invalid chunk size:");
+			stdoutput.safePrint(csstring,bytesread);
+			stdoutput.write('\n');
+			#endif
+			retval=false;
+			break;
+		}
+		pvt->_chunksize+=((*c-base)*place);
+		place=place*16;
+		if (c==csstring) {
+			break;
+		}
+		c--;
+	}
+
+	// clean up
+	delete[] csstring;
+
+	#ifdef DEBUG_HTTP
+	if (retval) {
+		stdoutput.printf("http: chunk size is: %d\n",pvt->_chunksize);
+	}
+	#endif
+
+	// return
+	return retval;
 }
 
 bool url::initUrl() {

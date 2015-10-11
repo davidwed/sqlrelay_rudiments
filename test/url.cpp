@@ -8,6 +8,7 @@
 const char * urls[]={
 	"http://localhost/~dmuse/src/rudiments/test/url.cpp",
 	"scp://[/home/dmuse/userpwd]@localhost/home/dmuse/src/rudiments/test/url.cpp",
+	"http://www.google.com",
 	NULL
 };
 
@@ -24,6 +25,7 @@ bool printUrl(const char *url) {
 			ssize_t	s=u.read(buffer,sizeof(buffer));
 			stdoutput.write(buffer,s);
 			if (s<(ssize_t)sizeof(buffer)) {
+				stdoutput.write('\n');
 				break;
 			}
 		}
