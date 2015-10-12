@@ -504,6 +504,20 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(char **buffer, const char *terminator);
 
+		/** Reads from the file desciptor into "buffer" until
+		 *  "terminator" is encountered.
+		 *
+		 *  Note that "buffer" is allocated internally and must be freed
+		 *  by the calling program.
+		 *
+		 *  Returns the number of bytes that were read, RESULT_ERROR if
+		 *  an error occurred or RESULT_MAX if maxbytes were read
+		 *  before the terminator was encountered.
+		 *  
+		 *  Setting maxbytes to 0 disables it. */
+		ssize_t	read(char **buffer,
+				const char *terminator, size_t maxbytes);
+
 		/** Reads an unsigned 16-bit integer from the file
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
@@ -616,6 +630,25 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	read(char **buffer, const char *terminator,
 					int32_t sec, int32_t usec);
+
+		/** Reads from the file desciptor into "buffer" until
+		 *  "terminator" is encountered with a timeout of "sec" seconds
+		 *  and "usec" microseconds.
+		 *
+		 *  Note that "buffer" is allocated internally and must be freed
+		 *  by the calling program.
+		 *
+		 *  Returns the number of bytes that were read or
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  Returns the number of bytes that were read, RESULT_ERROR if
+		 *  an error occurred or RESULT_MAX if maxbytes were read
+		 *  before the terminator was encountered.
+		 *  
+		 *  Setting maxbytes to 0 disables it. */
+		ssize_t	read(char **buffer,
+				const char *terminator, size_t maxbytes,
+				int32_t sec, int32_t usec);
 
 
 		/** Causes the application to wait until a read()

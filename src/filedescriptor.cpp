@@ -727,7 +727,17 @@ ssize_t filedescriptor::read(void *buffer, size_t size) {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator) {
-	return read(buffer,terminator,-1,-1);
+	return read(buffer,terminator,0,-1,-1);
+}
+
+ssize_t filedescriptor::read(char **buffer,
+				const char *terminator, size_t maxbytes) {
+	return read(buffer,terminator,maxbytes,-1,-1);
+}
+
+ssize_t filedescriptor::read(char **buffer, const char *terminator,
+						int32_t sec, int32_t usec) {
+	return read(buffer,terminator,0,sec,usec);
 }
 
 ssize_t filedescriptor::read(uint16_t *buffer,
@@ -919,119 +929,96 @@ void filedescriptor::dontAllowShortWrites() {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
-						int32_t sec, int32_t usec) {
+				size_t maxbytes, int32_t sec, int32_t usec) {
 
-	// initialize a buffer
-	int32_t	buffersize=512;
+	// initialize the return buffer
 	if (buffer) {
-		*buffer=new char[buffersize];
+		*buffer=NULL;
 	}
+
+	// initialize a temp buffer
+	stringbuffer	temp;
 
 	// initialize termination detector
 	int32_t	termlen=charstring::length(terminator);
 	char	*term=new char[termlen];
-	for (int32_t i=0; i<termlen; i++) {
-		term[i]='\0';
-	}
+	bytestring::zero(term,termlen);
 
 	// initialize some variables
-	char	charbuffer;
 	int32_t	sizeread;
-	int32_t	totalread=0;
-	int32_t	escaped=0;
-	int32_t	copytobuffer;
-	int32_t	copytoterm;
+	char	charbuffer;
+	bool	escaped=false;
+	bool	copytobuffer;
+	bool	copytoterm;
+	ssize_t	retval=RESULT_SUCCESS;
 
 	// loop, getting 1 character at a time
 	for (;;) {
 
 		// read from the file descriptor
-		if ((sizeread=bufferedRead(&charbuffer,
-				sizeof(char),sec,usec))<=RESULT_ERROR) {
-			totalread=sizeread;
+		sizeread=read(&charbuffer,sec,usec);
+		if (sizeread<=0) {
+			retval=sizeread;
 			break;
 		}
-		totalread=totalread+sizeread;
 
-		if (sizeread) {
+		// handle escaping
+		if (escaped) {
+			copytobuffer=true;
+			copytoterm=false;
+			escaped=false;
+		} else {
+			escaped=(charbuffer=='\\');
+			copytobuffer=!escaped;
+			copytoterm=!escaped;
+		}
 
-			// handle escaping
-			if (escaped) {
+		// copy to return buffer
+		if (copytobuffer && buffer) {
+			temp.append(charbuffer);
+		}
 
-				copytobuffer=1;
-				copytoterm=0;
-				escaped=0;
+		if (copytoterm) {
 
-			} else {
-
-				if (charbuffer=='\\') {
-					escaped=1;
-				} else { 
-					escaped=0;
-				}
-
-				if (escaped) {
-					copytobuffer=0;
-					copytoterm=0;
-				} else {
-					copytobuffer=1;
-					copytoterm=1;
-				}
+			// update terminator detector
+			for (int32_t i=0; i<termlen-1; i++) {
+				term[i]=term[i+1];
 			}
+			term[termlen-1]=charbuffer;
 
-			// copy to return buffer
-			if (copytobuffer && buffer) {
-
-				// extend buffer if necessary
-				if (totalread==buffersize) {
-					char	*newbuffer=
-						new char[buffersize+512];
-					charstring::copy(newbuffer,
-							*buffer,buffersize);
-					delete[] *buffer;
-					buffersize=buffersize+512;
-					*buffer=newbuffer;
-				}
-
-				(*buffer)[totalread-1]=charbuffer;
-				(*buffer)[totalread]='\0';
-			}
-
-			if (copytoterm) {
-
-				// update terminator detector
-				for (int32_t i=0; i<termlen-1; i++) {
-					term[i]=term[i+1];
-				}
-				term[termlen-1]=charbuffer;
-
-				// check for termination
-				if (!charstring::compare(term,terminator,
-								termlen)) {
-					break;
-				}
-
-			} else {
-
-				// clear terminator
-				for (int32_t i=0; i<termlen; i++) {
-					term[i]='\0';
-				}
+			// check for termination
+			if (!charstring::compare(term,terminator,termlen)) {
+				break;
 			}
 
 		} else {
+
+			// clear terminator
+			bytestring::zero(term,termlen);
+		}
+
+		// max-bytes-read condition
+		if (maxbytes && temp.getStringLength()>maxbytes) {
+			retval=RESULT_MAX;
 			break;
 		}
 	}
 
-	// if 0 bytes were read then clean up the buffer
-	if (totalread<=0) {
-		delete[] *buffer;
-		*buffer=NULL;
+	if (retval>=RESULT_SUCCESS) {
+
+		// get the size to return
+		retval=temp.getStringLength();
+
+		// set the return buffer
+		if (buffer) {
+			*buffer=temp.detachString();
+		}
 	}
 
+	// clean up
 	delete[] term;
-	return totalread;
+
+	return retval;
 }
 
 ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,

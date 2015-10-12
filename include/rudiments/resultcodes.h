@@ -8,5 +8,6 @@
 #define RESULT_ERROR	-1
 #define RESULT_TIMEOUT	-2
 #define RESULT_ABORT	-3
+#define RESULT_MAX	-4
 
 #endif

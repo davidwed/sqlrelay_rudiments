@@ -8,7 +8,7 @@
 const char * urls[]={
 	"http://localhost/~dmuse/src/rudiments/test/url.cpp",
 	"scp://[/home/dmuse/userpwd]@localhost/home/dmuse/src/rudiments/test/url.cpp",
-	"http://www.google.com",
+	"http://rudiments.sourceforge.net",
 	NULL
 };
 

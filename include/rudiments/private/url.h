@@ -13,10 +13,7 @@
 	private:
 		void	init();
 
-		bool	http(const char *host,
-				uint16_t port,
-				const char *userpwd,
-				const char *path);
+		bool	httpOpen(const char *urlname, const char *userpwd);
 		bool	getChunkSize(bool bof);
 		bool	perform();
 

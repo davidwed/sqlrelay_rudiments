@@ -8,6 +8,7 @@
 	charstring 1-argument trim methods trim all whitespace now,
 		not just spaces
 	added charstring::isNullOrEmpty()
+	added read-until-terminator methods with maxbytes option
 
 0.53 - exposed codetreegrammar class and updated codetree class so that
 		successive parses/writes can use the same grammar without
