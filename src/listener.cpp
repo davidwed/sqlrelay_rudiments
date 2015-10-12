@@ -126,15 +126,21 @@ listener::~listener() {
 
 void listener::cleanUp() {
 	#if defined(RUDIMENTS_HAVE_KQUEUE)
-		::close(pvt->_kq);
+		if (pvt->_kq!=-1) {
+			::close(pvt->_kq);
+		}
 		delete[] pvt->_kevs;
 		delete[] pvt->_rkevs;
 	#elif defined(RUDIMENTS_HAVE_EPOLL)
-		::close(pvt->_epfd);
+		if (pvt->_epfd!=-1) {
+			::close(pvt->_epfd);
+		}
 		delete[] pvt->_evs;
 		delete[] pvt->_revs;
 	#elif defined(RUDIMENTS_HAVE_PORT_CREATE)
-		::close(pvt->_port);
+		if (pvt->_port!=-1) {
+			::close(pvt->_port);
+		}
 	#elif defined(RUDIMENTS_HAVE_SYS_DEVPOLL_H)
 		pvt->_dpfd.close();
 		delete[] pvt->_fds;

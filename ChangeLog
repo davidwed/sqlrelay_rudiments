@@ -9,6 +9,8 @@
 		not just spaces
 	added charstring::isNullOrEmpty()
 	added read-until-terminator methods with maxbytes option
+	applied George Carrette's listener class patch to not close
+		invalid-epoll filedescriptors
 
 0.53 - exposed codetreegrammar class and updated codetree class so that
 		successive parses/writes can use the same grammar without
