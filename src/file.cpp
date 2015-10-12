@@ -348,10 +348,28 @@ bool file::open(const char *name, int32_t flags, mode_t perms) {
 }
 
 char *file::getContents() {
-	off64_t	size=(fd()>-1)?pvt->_st.st_size:0;
-	char	*contents=new char[size+1];
-	contents[size]='\0';
-	return (size==0 || read(contents,size)==size)?contents:NULL;
+	if (fd()==-1) {
+		return NULL;
+	}
+	if (pvt->_st.st_size) {
+		off64_t	size=pvt->_st.st_size;
+		char	*contents=new char[size+1];
+		contents[size]='\0';
+		return (size==0 || read(contents,size)==size)?contents:NULL;
+	} else {
+		stringbuffer	contents;
+		// FIXME: this is fine for url's but for actual files that
+		// we don't know the size of, we ought to use a more
+		// intelligent size.
+		char		buffer[16*1024];
+		for (;;) {
+			ssize_t	s=read(buffer,sizeof(buffer));
+			contents.append(buffer,s);
+			if (s<(ssize_t)sizeof(buffer)) {
+				return contents.detachString();
+			}
+		}
+	}
 }
 
 char *file::getContents(const char *name) {
@@ -363,7 +381,7 @@ char *file::getContents(const char *name) {
 }
 
 ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
-	return read(buffer,(buffersize<(size_t)getSize())?buffersize:getSize());
+	return read(buffer,buffersize);
 }
 
 ssize_t file::getContents(const char *name, unsigned char *buffer,

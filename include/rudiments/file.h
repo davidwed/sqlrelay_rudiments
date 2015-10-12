@@ -119,7 +119,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */
-		ssize_t	getContents(unsigned char *buffer, size_t buffersize);
+		ssize_t	getContents(unsigned char *buffer,size_t buffersize);
 
 
 		/** Truncates all data in the file, resulting in a file of

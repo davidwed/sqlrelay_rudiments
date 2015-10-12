@@ -16,9 +16,20 @@ url	u;
 
 bool printUrl(const char *url) {
 
+#if 0
+	char	*contents=url::getContents(url);
+	stdoutput.write(contents);
+	return true;
+
+#else
 	// open the url
 	if (u.open(url,O_RDONLY)) {
 
+#if 0
+		char	*contents=u.getContents();
+		stdoutput.write(contents);
+		return true;
+#else
 		// get and print it in 1024 byte chunks...
 		char	buffer[1024];
 		for (;;) {
@@ -29,10 +40,12 @@ bool printUrl(const char *url) {
 				break;
 			}
 		}
+#endif
 
 		return true;
 	}
 	return false;
+#endif
 }
 
 int main(int argc, const char **argv) {

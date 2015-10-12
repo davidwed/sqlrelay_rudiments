@@ -27,7 +27,7 @@
 	bool		_initialized=false;
 #endif
 
-#define MAX_HEADER_SIZE 16*1024*1024
+#define MAX_HEADER_SIZE 16*1024
 
 class urlprivate {
 	friend class url;
@@ -285,7 +285,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 
 			// set up write handler
 			curl_easy_setopt(pvt->_curl,
-				CURLOPT_WRITEFUNCTION,readData)==CURLE_OK &&
+				CURLOPT_WRITEFUNCTION,curlReadData)==CURLE_OK &&
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_WRITEDATA,this)==CURLE_OK &&
 
@@ -297,7 +297,7 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 				pvt->_curl)==CURLM_OK &&
 
 			// connect
-			perform()) {
+			curlPerform()) {
 
 			// It's actually possible for all of this above
 			// to succeed, but for the file descriptor to
@@ -610,9 +610,9 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 			error::clearError();
 
 			#ifdef DEBUG_CURL
-				stdoutput.printf("\n\ncalling perform()\n");
+				stdoutput.printf("\n\ncalling curlPerform()\n");
 			#endif
-			if (!perform()) {
+			if (!curlPerform()) {
 				return -1;
 			}
 
@@ -734,30 +734,7 @@ bool url::getChunkSize(bool bof) {
 	return retval;
 }
 
-bool url::initUrl() {
-
-	bool	result=true;
-
-	#ifdef RUDIMENTS_HAS_LIBCURL
-	_urlmutex.lock();
-	if (!_initialized) {
-		result=!curl_global_init(CURL_GLOBAL_ALL);
-	}
-	_urlmutex.unlock();
-	#endif
-
-	return result;
-}
-
-void url::shutDownUrl() {
-	#ifdef RUDIMENTS_HAS_LIBCURL
-	if (_initialized) {
-		curl_global_cleanup();
-	}
-	#endif
-}
-
-bool url::perform() {
+bool url::curlPerform() {
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
 
@@ -850,12 +827,12 @@ bool url::perform() {
 	#endif
 }
 
-size_t url::readData(void *buffer, size_t size, size_t nmemb, void *userp) {
+size_t url::curlReadData(void *buffer, size_t size, size_t nmemb, void *userp) {
 
 	#ifdef RUDIMENTS_HAS_LIBCURL
 
 	#ifdef DEBUG_CURL
-		stdoutput.printf("readData(%d,%d) (%d bytes)\n",
+		stdoutput.printf("curlReadData(%d,%d) (%d bytes)\n",
 						size,nmemb,size*nmemb);
 	#endif
 
@@ -886,4 +863,52 @@ size_t url::readData(void *buffer, size_t size, size_t nmemb, void *userp) {
 	return 0;
 
 	#endif
+}
+
+bool url::initUrl() {
+
+	bool	result=true;
+
+	#ifdef RUDIMENTS_HAS_LIBCURL
+	_urlmutex.lock();
+	if (!_initialized) {
+		result=!curl_global_init(CURL_GLOBAL_ALL);
+	}
+	_urlmutex.unlock();
+	#endif
+
+	return result;
+}
+
+void url::shutDownUrl() {
+	#ifdef RUDIMENTS_HAS_LIBCURL
+	if (_initialized) {
+		curl_global_cleanup();
+	}
+	#endif
+}
+
+char *url::getContents() {
+	return file::getContents();
+}
+
+ssize_t url::getContents(unsigned char *buffer, size_t buffersize) {
+	return file::getContents(buffer,buffersize);
+}
+
+char *url::getContents(const char *name) {
+	url	u;
+	u.open(name,O_RDONLY);
+	char	*contents=u.getContents();
+	u.close();
+	return contents;
+}
+
+ssize_t url::getContents(const char *name, unsigned char *buffer,
+						size_t buffersize) {
+	url	u;
+	u.open(name,O_RDONLY);
+	ssize_t	bytes=u.getContents(buffer,buffersize);
+	u.close();
+	return bytes;
 }
