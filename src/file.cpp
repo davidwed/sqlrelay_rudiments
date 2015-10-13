@@ -201,7 +201,7 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 					SECURITY_DESCRIPTOR_REVISION)) {
 				fd(-1);
 				LocalFree(psd);
-				return;
+				return false;
 			}
 			dacl=permissions::permOctalToDacl(perms,true);
 			if (!SetSecurityDescriptorDacl(psd,TRUE,
@@ -215,7 +215,7 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 				fd(-1);
 				LocalFree(dacl);
 				LocalFree(psd);
-				return;
+				return false;
 			}
 
 			// create security attributes
@@ -291,7 +291,7 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 
 		if (fh==INVALID_HANDLE_VALUE) {
 			fd(-1);
-			return;
+			return false;
 		}
 
 		// get the file descriptor from the handle

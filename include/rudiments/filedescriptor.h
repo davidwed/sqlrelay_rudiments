@@ -829,23 +829,23 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		/** Sends file descriptor "fd" to the file descriptor.  This
 		 *  is useful for passing an open file descriptor from one
 		 *  process to another over a unix socket, for example. */
-		virtual bool	passFileDescriptor(int32_t fd) const;
+		virtual bool	passFileDescriptor(int32_t fd);
 
 		/** Receives a file descriptor into buffer "fd".  This
 		 *  is useful for receiving an open file descriptor passed
 		 *  from another process over a unix socket, for example. */
-		virtual bool	receiveFileDescriptor(int32_t *fd) const;
+		virtual bool	receiveFileDescriptor(int32_t *fd);
 
 
 		/** Sends socket "sock" to the file descriptor.  This
 		 *  is useful for passing an open socket from one
 		 *  process to another over a unix socket, for example. */
-		virtual bool	passSocket(int32_t sock) const;
+		virtual bool	passSocket(int32_t sock);
 
 		/** Receives a socket into buffer "sock".  This is useful for
 		 *  receiving an open file descriptor passed from another
 		 *  process over a unix socket, for example. */
-		virtual bool	receiveSocket(int32_t *sock) const;
+		virtual bool	receiveSocket(int32_t *sock);
 
 
 		/** Translate integers from native byte order to network byte

@@ -1722,7 +1722,7 @@ int32_t filedescriptor::ioCtl(int32_t cmd, void *arg) const {
 	#endif
 }
 
-bool filedescriptor::passFileDescriptor(int32_t fd) const {
+bool filedescriptor::passFileDescriptor(int32_t fd) {
 
 #if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
 		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
@@ -1868,7 +1868,7 @@ bool filedescriptor::passFileDescriptor(int32_t fd) const {
 #endif
 }
 
-bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
+bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 
 #if (defined(RUDIMENTS_HAVE_MSGHDR_MSG_CONTROLLEN) && \
 		defined(RUDIMENTS_HAVE_CMSGHDR)) || \
@@ -2054,7 +2054,7 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) const {
 #endif
 }
 
-bool filedescriptor::passSocket(int32_t sock) const {
+bool filedescriptor::passSocket(int32_t sock) {
 
 #if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
 
@@ -2091,7 +2091,7 @@ bool filedescriptor::passSocket(int32_t sock) const {
 #endif
 }
 
-bool filedescriptor::receiveSocket(int32_t *sock) const {
+bool filedescriptor::receiveSocket(int32_t *sock) {
 
 #if defined(RUDIMENTS_HAVE_WSADUPLICATESOCKET)
 
