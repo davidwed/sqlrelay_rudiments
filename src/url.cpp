@@ -207,8 +207,9 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 			close();
 		}
 
+	}
 	#ifdef RUDIMENTS_HAS_LIBCURL
-	} else {
+	else {
 
 		// not using built-in protocol handler
 		pvt->_usingbuiltin=false;
@@ -427,7 +428,7 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 		char	*header=NULL;
 		if (pvt->_isc.read(&header,"\r\n",MAX_HEADER_SIZE)<2) {
 			#ifdef DEBUG_HTTP
-			stdoutput.printf("http: fetch headers failed: %s\n",error::getErrorString());
+			stdoutput.printf("http: fetch headers failed\n");
 			#endif
 			delete[] header;
 			return false;
@@ -506,17 +507,15 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 
 int32_t url::lowLevelClose() {
 
+	int32_t	retval=0;
 	if (pvt->_usingbuiltin) {
-
-		int32_t	retval=pvt->_isc.lowLevelClose();
+		retval=pvt->_isc.lowLevelClose();
 		if (!retval) {
 			pvt->_isc.setFileDescriptor(-1);
 		}
-		return retval;
-
+	}
 	#ifdef RUDIMENTS_HAS_LIBCURL
-	} else {
-
+	else {
 		if (pvt->_curlm && pvt->_curl) {
 			curl_multi_remove_handle(pvt->_curlm,pvt->_curl);
 		}
@@ -528,20 +527,20 @@ int32_t url::lowLevelClose() {
 			curl_multi_cleanup(pvt->_curlm);
 			pvt->_curlm=NULL;
 		}
-		return 0;
 	}
 	#endif
+	return retval;
 }
 
 ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
+
+	ssize_t	bytesread=0;
 
 	if (pvt->_usingbuiltin) {
 
 		#ifdef DEBUG_HTTP
 		stdoutput.printf("\nhttp: lowLevelRead(%d)\n",size);
 		#endif
-
-		ssize_t	bytesread=0;
 
 		if (pvt->_chunked) {
 
@@ -598,11 +597,9 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 					bytesread,
 					pvt->_chunksize-pvt->_chunkpos);
 		#endif
-
-		return bytesread;
-
+	}
 	#ifdef RUDIMENTS_HAS_LIBCURL
-	} else {
+	else {
 
 		// buffer some data, if necessary
 		if (pvt->_bsize==0 && !pvt->_eof) {
@@ -637,9 +634,11 @@ ssize_t url::lowLevelRead(void *buffer, ssize_t size) {
 		pvt->_bsize=pvt->_bsize-size;
 
 		// return how much was actually read
-		return size;
+		bytesread=size;
 	}
 	#endif
+
+	return bytesread;
 }
 
 bool url::getChunkSize(bool bof) {
