@@ -17,6 +17,11 @@
 
 #include <rudiments/private/winsock.h>
 
+// Solaris 11 needs this for FD_ZERO
+#if defined(RUDIMENTS_HAS_LIBCURL) && defined(RUDIMENTS_HAVE_STRING_H)
+	#include <string.h>
+#endif
+
 //#define DEBUG_CURL 1
 //#define DEBUG_HTTP 1
 
