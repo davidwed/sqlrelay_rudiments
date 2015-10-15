@@ -3,9 +3,8 @@ Version: 0.54
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
-# Library source code is LGLPv2.  Tests and build scripts are GPLv2 unless
-# otherwise noted in the script (some are FSFUL).
-License: LGPLv2 and GPLv2 and FSFUL
+# Library source code is LGLPv2.
+License: LGPLv2
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
@@ -35,6 +34,7 @@ Development files for rudiments.
 License: GPLv2 and FSFUL
 Summary: Documentation for rudiments
 Requires: %{name}%{?_isa} = %{version}-%{release}
+BuildArch: noarch
 
 %description doc
 Documentation for rudiments.
@@ -72,6 +72,10 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Tue Oct 06 2015 David Muse <dmuse@firstworks.com> - 0.54-1
+- added libcurl dependencies
+- removed mention of test/build-script licenses
+
 * Fri Sep 25 2015 David Muse <dmuse@firstworks.com> - 0.53-4
 - License updates
 
