@@ -99,6 +99,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0D789E44777644B798B8A02F6F06C898"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0E6E3BB2043E4BA39FB0CB30421B423E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -304,6 +310,12 @@
         "Entry"
         {
         "MsmKey" = "8:_3F31070E0F1D4D74BA85718AF7028476"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3F52E7F3E35E4F61814D650DD92E7E85"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -910,6 +922,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B45E1A88CC2E4655A58273F9DD2CCC29"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B4C08DA5E806425D9E9C60D5D179BB56"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1692,6 +1710,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D789E44777644B798B8A02F6F06C898"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\url.h"
+            "TargetName" = "8:url.h"
+            "Tag" = "8:"
+            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E6E3BB2043E4BA39FB0CB30421B423E"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\semaphoresetincludes.h"
@@ -2338,6 +2376,26 @@
             "TargetName" = "8:socketserver.h"
             "Tag" = "8:"
             "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3F52E7F3E35E4F61814D650DD92E7E85"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\urlincludes.h"
+            "TargetName" = "8:urlincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4252,6 +4310,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B4C08DA5E806425D9E9C60D5D179BB56"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\url.h"
+            "TargetName" = "8:url.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B5C78C104C734F6AA8D96A0BD83F7C84"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\chat.h"
@@ -5613,7 +5691,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Firstworks Rudiments (64-bit)"
         "ProductCode" = "8:{4FFAFBD0-B9F1-4069-A124-14DC1A1ABBBF}"
-        "PackageCode" = "8:{DED6A65A-8B3D-4693-9BAA-92DA67BB7453}"
+        "PackageCode" = "8:{95115EC9-D0A1-4803-AE6F-46C658F15204}"
         "UpgradeCode" = "8:{D16853E8-6A60-4842-B9FC-1C6EB9CAC827}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
