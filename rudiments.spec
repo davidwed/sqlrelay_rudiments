@@ -73,8 +73,9 @@ make install DESTDIR=%{buildroot}
 
 %changelog
 * Tue Oct 06 2015 David Muse <dmuse@firstworks.com> - 0.54-1
-- added libcurl dependencies
-- removed mention of test/build-script licenses
+- Added libcurl dependencies
+- Removed mention of test/build-script licenses
+- Made doc rpm noarch
 
 * Fri Sep 25 2015 David Muse <dmuse@firstworks.com> - 0.53-4
 - License updates
