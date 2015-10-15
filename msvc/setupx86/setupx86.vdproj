@@ -315,6 +315,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_43A3AEA3FD08413EA3818B607B552DB0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_43DA50126FBF40C196968555B1DEDA2D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -615,6 +621,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8064172B30A743D3965209B389B452CE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_812ADFADDDC741F7BD347D587E40D1BF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -838,6 +850,12 @@
         "Entry"
         {
         "MsmKey" = "8:_A2BEB04B0F5548F9A930933106301545"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A30207F399354B9EBA6DD3541BD9B76B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2332,6 +2350,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_43A3AEA3FD08413EA3818B607B552DB0"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\url.h"
+            "TargetName" = "8:url.h"
+            "Tag" = "8:"
+            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_43DA50126FBF40C196968555B1DEDA2D"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\directoryincludes.h"
@@ -3272,6 +3310,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8064172B30A743D3965209B389B452CE"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\url.h"
+            "TargetName" = "8:url.h"
+            "Tag" = "8:"
+            "Folder" = "8:_24F30AE45EC846FFB81B34FBD4E516D4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_812ADFADDDC741F7BD347D587E40D1BF"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\logdestination.h"
@@ -3976,6 +4034,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\device.h"
             "TargetName" = "8:device.h"
+            "Tag" = "8:"
+            "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A30207F399354B9EBA6DD3541BD9B76B"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\urlincludes.h"
+            "TargetName" = "8:urlincludes.h"
             "Tag" = "8:"
             "Folder" = "8:_6E15437CB7384C7DBD9F491208AD1264"
             "Condition" = "8:"
@@ -5613,7 +5691,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Firstworks Rudiments (32-bit)"
         "ProductCode" = "8:{7E5A657C-AE6D-463F-9D33-189F4FADB6BB}"
-        "PackageCode" = "8:{C3D063EF-FFEE-41DB-983D-A71C7A3346D3}"
+        "PackageCode" = "8:{F0DB63AC-6FC4-49A8-BF15-BCA8CACFA5E7}"
         "UpgradeCode" = "8:{2B008836-8AF8-4E5E-A3B6-C5DE3E8A04D3}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
