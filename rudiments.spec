@@ -41,7 +41,8 @@ Documentation for rudiments.
 
 
 %prep
-%autosetup -p1
+#%autosetup -p1
+%autosetup
 
 %build
 chmod -x include/rudiments/private/permissions.h
