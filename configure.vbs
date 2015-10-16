@@ -344,7 +344,7 @@ privateheaders7="codetree.h "+_
 	"urlincludes.h"
 
 ' version
-RUDIMENTS_VERSION="0.54"
+RUDIMENTS_VERSION="0.55"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"

@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 0.54
+Version: 0.55
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
