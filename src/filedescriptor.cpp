@@ -2430,9 +2430,9 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 					fclose(f);
 				}
 				#endif
-			}
 
-			return size;
+				return size;
+			}
 		#endif
 	}
 

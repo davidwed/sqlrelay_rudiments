@@ -291,6 +291,15 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 
 		if (fh==INVALID_HANDLE_VALUE) {
 			fd(-1);
+
+			// handle file/directory not found
+			// FIXME: really there ought to be a generic
+			// Windows-Posix error mapping function call here
+			int32_t	err=error::getNativeErrorNumber();
+			if (err==2 || err==3) {
+				error::setErrorNumber(ENOENT);
+			}
+
 			return false;
 		}
 

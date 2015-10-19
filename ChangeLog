@@ -1,4 +1,7 @@
-0.55 -
+0.55 - file::open sets errno=ENOENT if the file or path wasn't found on
+		Windows now
+	fixed a bug with filedescriptor::printf when printing to non-buffered
+		files on Windows and Solaris 11
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
