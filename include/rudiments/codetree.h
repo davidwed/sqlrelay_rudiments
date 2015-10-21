@@ -329,7 +329,7 @@ class RUDIMENTS_DLLSPEC codetree {
 		~codetree();
 
 		/** Parses "input" using "grammar", starting with "startsymbol",
-		 *  creates an XML represenataion of the code and appends it as
+		 *  creates an XML representation of the code and appends it as
 		 *  children to "output".  Returns true if parsing succeeded
 		 *  and false otherwise.  If parsing fails, "codeposition" is
 		 *  set to the location in the code that parsing failed. */
@@ -340,7 +340,7 @@ class RUDIMENTS_DLLSPEC codetree {
 					const char **codeposition);
 
 		/** Parses "input" using "grammar", starting with "startsymbol",
-		 *  creates an XML represenataion of the code and appends it as
+		 *  creates an XML representation of the code and appends it as
 		 *  children to "output".  Returns true if parsing succeeded
 		 *  and false otherwise.  If parsing fails, "codeposition" is
 		 *  set to the location in the code that parsing failed. */

@@ -267,7 +267,9 @@ bool codetree::parse(const char *input,
 	// parse, starting with the specified start symbol
 	const char	*codepos=input;
 	pvt->_beginningofinput=input;
-	pvt->_finalcodeposition=*codeposition;
+	if (codeposition) {
+		pvt->_finalcodeposition=*codeposition;
+	}
 
 	bool	retval=(parseNonTerminal(pvt->_grammartag,
 					output,&codepos,NULL) && !pvt->_error);
@@ -338,7 +340,9 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 
 	pvt->_depth++;
 
-	pvt->_finalcodeposition=*codeposition;
+	if (codeposition) {
+		pvt->_finalcodeposition=*codeposition;
+	}
 
 	// save the initial state
 	uint64_t	startchildcount=treeparent->getChildCount();
