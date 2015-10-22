@@ -30,9 +30,17 @@ xmldom::xmldom() : xmlsax() {
 	init(true);
 }
 
-
 xmldom::xmldom(bool stringcacheenabled) : xmlsax() {
 	init(stringcacheenabled);
+}
+
+xmldom::xmldom(const xmldom &x) : xmlsax() {
+	// FIXME: implement this for real
+}
+
+xmldom &xmldom::operator=(const xmldom &x) {
+	// FIXME: implement this for real
+	return *this;
 }
 
 void xmldom::init(bool stringcacheenabled) {
