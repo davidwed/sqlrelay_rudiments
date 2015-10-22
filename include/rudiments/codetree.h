@@ -373,7 +373,7 @@ class RUDIMENTS_DLLSPEC codetree {
 class codetreegrammarprivate;
 
 /** A child class of xmldom with various codetree-specific optimizations. */
-class codetreegrammar : public xmldom {
+class RUDIMENTS_DLLSPEC codetreegrammar : public xmldom {
 	friend class codetree;
 	public:
 		/** Creates a new instance of the codetreegrammar class. */
