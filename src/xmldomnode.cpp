@@ -67,15 +67,6 @@ xmldomnode::xmldomnode(xmldom *dom,
 	setValue(value);
 }
 
-xmldomnode::xmldomnode(const xmldomnode &x) {
-	// FIXME: implement this for real
-}
-
-xmldomnode &xmldomnode::operator=(const xmldomnode &x) {
-	// FIXME: implement this for real
-	return *this;
-}
-
 void xmldomnode::init(xmldomnode *nullnode) {
 	pvt=new xmldomnodeprivate;
 	pvt->_nullnode=nullnode;
