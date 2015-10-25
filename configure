@@ -31689,7 +31689,7 @@ fi
 if ( test "$INCLUDE_XMLDOMEVENTS" = "1" )
 then
 	HEADERS3="$HEADERS3 xmldomevents.h"
-	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldomevents.h xmldomeventsincludes.h xmldomeventsgrammar.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldomevents.h xmldomeventsincludes.h"
 	SRCS="$SRCS xmldomevents.cpp"
 	LOBJS="$LOBJS xmldomevents.lo"
 fi
