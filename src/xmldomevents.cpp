@@ -49,7 +49,7 @@ xmldomevents::~xmldomevents() {
 
 bool xmldomevents::setEvents(const char *events) {
 
-	debugPrintf(1,"\nsetting events... ");
+	debugPrintf(1,"setting events... ");
 
 	pvt->_eventsnode=NULL;
 
