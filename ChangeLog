@@ -5,6 +5,7 @@
 	fixed a bug that caused a crash in codetree if codeposition is NULL
 	added missing dll export clause to codetreegrammar class
 	added xmldomevents class
+	added namespace discrimination in codetree::write
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the

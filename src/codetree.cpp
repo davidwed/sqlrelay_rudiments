@@ -1123,6 +1123,14 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 		return true;
 	}
 
+	// ignore the node if its namespace doesn't
+	// match the grammar's namespace
+	if (charstring::compare(node->getNamespace(),pvt->_ns)) {
+		debugPrintIndent(1);
+		debugPrintf(1,"ignoring node %s\n",node->getName());
+		return true;
+	}
+
 	// if it's the root node then just write the children and return
 	if (node->getType()==ROOT_XMLDOMNODETYPE) {
 		for (xmldomnode *child=node->getFirstTagChild();
