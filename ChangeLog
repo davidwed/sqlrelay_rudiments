@@ -4,6 +4,7 @@
 		files on Windows and Solaris 11
 	fixed a bug that caused a crash in codetree if codeposition is NULL
 	added missing dll export clause to codetreegrammar class
+	added xmldomevents class
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the

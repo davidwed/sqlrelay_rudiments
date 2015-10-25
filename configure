@@ -836,6 +836,7 @@ enable_unixserver
 enable_bytebuffer
 enable_xmldom
 enable_xmlsax
+enable_xmldomevents
 enable_codetree
 enable_compiler
 enable_shared
@@ -1532,6 +1533,7 @@ Optional Features:
   --disable-bytebuffer    Don't build bytebuffer class
   --disable-xmldom        Don't build xmldom class
   --disable-xmlsax        Don't build xmlsax class
+  --disable-xmldomevents  Don't build xmldomevents class
   --disable-codetree      Don't build codetree class
   --disable-compiler      Don't build compiler class
   --enable-shared[=PKGS]  build shared libraries [default=yes]
@@ -2937,6 +2939,13 @@ if test "${enable_xmlsax+set}" = set; then :
   enableval=$enable_xmlsax; INCLUDE_XMLSAX="0"
 else
   INCLUDE_XMLSAX="1"
+fi
+
+# Check whether --enable-xmldomevents was given.
+if test "${enable_xmldomevents+set}" = set; then :
+  enableval=$enable_xmldomevents; INCLUDE_XMLDOMEVENTS="0"
+else
+  INCLUDE_XMLDOMEVENTS="1"
 fi
 
 # Check whether --enable-codetree was given.
@@ -31675,6 +31684,14 @@ then
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmlsax.h xmlsaxincludes.h"
 	SRCS="$SRCS xmlsax.cpp"
 	LOBJS="$LOBJS xmlsax.lo"
+fi
+
+if ( test "$INCLUDE_XMLDOMEVENTS" = "1" )
+then
+	HEADERS3="$HEADERS3 xmldomevents.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 xmldomevents.h xmldomeventsincludes.h xmldomeventsgrammar.h"
+	SRCS="$SRCS xmldomevents.cpp"
+	LOBJS="$LOBJS xmldomevents.lo"
 fi
 
 if ( test "$INCLUDE_CODETREE" = "1" )
