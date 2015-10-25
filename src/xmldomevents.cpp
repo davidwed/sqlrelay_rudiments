@@ -118,7 +118,7 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		// call the event handler
 		xmldomnode	*next=(handler)?
 					handler(codetreenode,etnode,pvt->_data):
-					codetreenode;
+					codetreenode->getNextTag();
 
 		// bail if it returned null node
 		if (next->isNullNode()) {
@@ -127,12 +127,7 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		}
 
 		// continue walking from the node that the handler returned
-		// (or the next tag node if it returned the current node)
-		if (next!=codetreenode) {
-			codetreenode=next;
-		} else {
-			codetreenode=codetreenode->getNextTag();
-		}
+		codetreenode=next;
 	}
 
 	debugPrintf(1,"} success\n");
