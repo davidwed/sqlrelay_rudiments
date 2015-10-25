@@ -115,6 +115,16 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		xmldomeventhandler_t	handler=
 					(xmldomeventhandler_t)etnode->getData();
 
+		if (pvt->_debuglevel) {
+			if (!handler &&
+				!charstring::isNullOrEmpty(
+					etnode->getAttributeValue("event"))) {
+				debugPrintf(1,"    WARNING: "
+					"handler for event \"%s\" not found\n",
+					etnode->getAttributeValue("event"));
+			}
+		}
+
 		// call the event handler
 		xmldomnode	*next=(handler)?
 					handler(codetreenode,etnode,pvt->_data):
@@ -136,11 +146,19 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 
 xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 
-	debugPrintf(1,"  %s : ",codetreenode->getName());
-
 	// get the name of the current code tree node, we'll need them later...
+	const char	*ctnodens=codetreenode->getNamespace();
 	const char	*ctnodename=codetreenode->getName();
 	const char	*ctnodevalue=codetreenode->getAttributeValue("value");
+
+	debugPrintf(1,"  <%s%s%s%s%s%s%s> : ",
+				(ctnodens)?ctnodens:"",
+				(ctnodens)?":":"",
+				ctnodename,
+				(ctnodevalue)?" ":"",
+				(ctnodevalue)?"value=\"":"",
+				(ctnodevalue)?ctnodevalue:"",
+				(ctnodevalue)?"\"":"");
 
 	// We need to figure out where to start in the event tree.  If the
 	// parent of this codetreenode has an event tree node attached to it,
@@ -151,27 +169,26 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 		p=pvt->_eventsnode;
 	}
 
-	debugPrintf(1,"%s... ",p->getName());
+	debugPrintf(1,"<%s%s%s> : ",
+			(p->getNamespace())?p->getNamespace():"",
+			(p->getNamespace())?":":"",
+			p->getName());
 
 	// walk the children of the parent event tree node...
-	xmldomnode *c=p->getFirstTagChild(ctnodename);
+	xmldomnode *c=p->getFirstTagChild(ctnodens,ctnodename);
 	while (!c->isNullNode()) {
 
-		// if the event tree node matches the code tree node...
-		if (!charstring::compare(c->getName(),ctnodename)) {
-
-			// test values too, if necessary...
-			const char	*v=c->getAttributeValue("value");
-			if (charstring::isNullOrEmpty(v)) {
-				break;
-			}
-			if (!charstring::compare(v,ctnodevalue)) {
-				break;
-			}
+		// test values too, if necessary...
+		const char	*v=c->getAttributeValue("value");
+		if (charstring::isNullOrEmpty(v)) {
+			break;
+		}
+		if (!charstring::compare(v,ctnodevalue)) {
+			break;
 		}
 
 		// move on
- 		c=c->getNextTagSibling(ctnodename);
+ 		c=c->getNextTagSibling(ctnodens,ctnodename);
 	}
 
 	if (pvt->_debuglevel) {
