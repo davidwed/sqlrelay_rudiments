@@ -120,8 +120,8 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 					handler(codetreenode,etnode,pvt->_data):
 					codetreenode->getNextTag();
 
-		// bail if it returned null node
-		if (next->isNullNode()) {
+		// bail if it returned null
+		if (!next) {
 			debugPrintf(1,"} failed\n");
 			return false;
 		}
@@ -178,6 +178,33 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 
 		// move on
  		c=c->getNextTagSibling(ctnodens,ctnodename);
+	}
+
+	// if we didn't find an event yet, try again from the top of the
+	// event node tree (unless that's what we just did)
+	if (c->isNullNode() && p!=pvt->_eventsnode) {
+
+		p=pvt->_eventsnode;
+
+		debugPrintf(1,"<%s%s%s> - ",
+				(p->getNamespace())?p->getNamespace():"",
+				(p->getNamespace())?":":"",
+				p->getName());
+
+		// walk the children of the parent event tree node...
+		c=p->getFirstTagChild(ctnodens,ctnodename);
+		while (!c->isNullNode()) {
+
+			// test values too, if necessary...
+			const char	*v=c->getAttributeValue("value");
+			if (charstring::isNullOrEmpty(v) ||
+				!charstring::compare(v,ctnodevalue)) {
+				break;
+			}
+
+			// move on
+ 			c=c->getNextTagSibling(ctnodens,ctnodename);
+		}
 	}
 
 	if (pvt->_debuglevel) {
