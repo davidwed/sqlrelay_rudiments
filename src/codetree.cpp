@@ -247,7 +247,7 @@ bool codetree::parse(const char *input,
 
 	// build non-terminal node associations
 	// (see method for explanation)
-	pvt->_grammartag->setData((void *)
+	pvt->_grammartag->setPrivateData((void *)
 		pvt->_grammartag->getFirstTagChild(DEFINITION,NAME,
 							startsymbol));
 	buildNonTerminalNodeAssociations(pvt->_grammartag);
@@ -297,7 +297,7 @@ void codetree::buildNonTerminalNodeAssociations(xmldomnode *node) {
 	if (node->getName()[0]=='n') {
 
 		// find the associated definition and attach it to this node
-		node->setData((void *)
+		node->setPrivateData((void *)
 			pvt->_grammartag->getFirstTagChild(DEFINITION,NAME,
 						node->getAttributeValue(NAME)));
 	}
@@ -915,7 +915,7 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 				stringbuffer *ntbuffer) {
 
 	// find the definition
-	xmldomnode	*def=(xmldomnode *)grammarnode->getData();
+	xmldomnode	*def=(xmldomnode *)grammarnode->getPrivateData();
 	if (!def || def->isNullNode()) {
 		debugPrintIndent(1);
 		debugPrintf(1,"ERROR: nonterminal %s not found\n",

@@ -1,6 +1,8 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
+	friend class codetree;
+	friend class xmldomevents;
 	private:
 		void		init(xmldomnode *nullnode);
 		xmldomnode	*getNode(xmldomnode *first,
@@ -158,6 +160,9 @@
 		bool		match(xmldomnode *node,
 						const char *ns,
 						const char * const *set) const;
+
+		void	setPrivateData(void *privatedata);
+		void	*getPrivateData();
 
 				xmldomnode(const xmldomnode &x);
 		xmldomnode	&operator=(const xmldomnode &x);

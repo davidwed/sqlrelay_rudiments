@@ -33,6 +33,7 @@ class xmldomnodeprivate {
 		xmldomnode	*_nullnode;
 		bool		_isnullnode;
 		void		*_data;
+		void		*_privatedata;
 };
 
 xmldomnode::xmldomnode(xmldom *dom, xmldomnode *nullnode) {
@@ -87,6 +88,7 @@ void xmldomnode::init(xmldomnode *nullnode) {
 	pvt->_name=NULL;
 	pvt->_value=NULL;
 	pvt->_data=NULL;
+	pvt->_privatedata=NULL;
 }
 
 xmldomnode::~xmldomnode() {
@@ -1849,6 +1851,14 @@ void xmldomnode::setData(void *data) {
 
 void *xmldomnode::getData() {
 	return pvt->_data;
+}
+
+void xmldomnode::setPrivateData(void *privatedata) {
+	pvt->_privatedata=privatedata;
+}
+
+void *xmldomnode::getPrivateData() {
+	return pvt->_privatedata;
 }
 
 bool xmldomnode::unwrapChild(xmldomnode *child) {

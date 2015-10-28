@@ -80,7 +80,7 @@ bool xmldomevents::setEventHandler(const char *event,
 				node->getAttributeValue("event"),event)) {
 
 			// attach the event handler to the node
-			node->setData((void *)handler);
+			node->setPrivateData((void *)handler);
 			count++;
 		}
 	}
@@ -113,17 +113,7 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 
 		// get the event handler
 		xmldomeventhandler_t	handler=
-					(xmldomeventhandler_t)etnode->getData();
-
-		if (pvt->_debuglevel) {
-			if (!handler &&
-				!charstring::isNullOrEmpty(
-					etnode->getAttributeValue("event"))) {
-				debugPrintf(1,"    WARNING: "
-					"handler for event \"%s\" not found\n",
-					etnode->getAttributeValue("event"));
-			}
-		}
+				(xmldomeventhandler_t)etnode->getPrivateData();
 
 		// call the event handler
 		xmldomnode	*next=(handler)?
@@ -164,12 +154,13 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 	// parent of this codetreenode has an event tree node attached to it,
 	// then start there.  If it doesn't, then start at the top of the 
 	// event node tree.
-	xmldomnode	*p=(xmldomnode *)codetreenode->getParent()->getData();
+	xmldomnode	*p=(xmldomnode *)codetreenode->
+					getParent()->getPrivateData();
 	if (!p || p->isNullNode()) {
 		p=pvt->_eventsnode;
 	}
 
-	debugPrintf(1,"<%s%s%s> : ",
+	debugPrintf(1,"<%s%s%s> - ",
 			(p->getNamespace())?p->getNamespace():"",
 			(p->getNamespace())?":":"",
 			p->getName());
@@ -180,10 +171,8 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 
 		// test values too, if necessary...
 		const char	*v=c->getAttributeValue("value");
-		if (charstring::isNullOrEmpty(v)) {
-			break;
-		}
-		if (!charstring::compare(v,ctnodevalue)) {
+		if (charstring::isNullOrEmpty(v) ||
+			!charstring::compare(v,ctnodevalue)) {
 			break;
 		}
 
@@ -197,10 +186,17 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 		} else {
 			debugPrintf(1,"\n");
 		}
+
+		if (!c->getPrivateData() && !charstring::isNullOrEmpty(
+					c->getAttributeValue("event"))) {
+			debugPrintf(1,"    WARNING: "
+					"handler for event \"%s\" not found\n",
+					c->getAttributeValue("event"));
+		}
 	}
 
 	// attach the corresponding event tree node to the code tree node
-	codetreenode->setData(c);
+	codetreenode->setPrivateData(c);
 
 	return c;
 }
