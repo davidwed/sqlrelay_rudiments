@@ -505,9 +505,8 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 			debugPrintf(3,"\"\n");
 		}
 		*codeposition=startcodeposition;
-		uint64_t	childcount=treeparent->getChildCount();
-		if (childcount>startchildcount) {
-			treeparent->deleteChild(childcount-1);
+		while (treeparent->getChildCount()>startchildcount) {
+			treeparent->deleteChild(treeparent->getChildCount()-1);
 		}
 		pvt->_endofstring=false;
 	} else {
