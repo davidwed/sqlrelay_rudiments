@@ -509,6 +509,7 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 		if (childcount>startchildcount) {
 			treeparent->deleteChild(childcount-1);
 		}
+		pvt->_endofstring=false;
 	} else {
 		if (ntbuffer) {
 			ntbuffer->append(localntbuffer->getString());
@@ -531,6 +532,29 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 	// all children must parse successfully
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
+
+		// if we hit the end of the string, then that's only ok if
+		// the rest of the children are option, repetition, break
+		// or exception
+		if (pvt->_endofstring) {
+
+			for (xmldomnode *rchild=child->getNextTagSibling();
+				!rchild->isNullNode();
+				rchild=rchild->getNextTagSibling()) {
+
+				const char	*name=rchild->getName();
+				if (!name || (name[0]!=OPTION &&
+						name[0]!=REPETITION &&
+						name[0]!=BREAK &&
+						name[0]!=EXCEPTION)) {
+					debugPrintIndent(4);
+					debugPrintf(4,
+						"} concatenation failed\n");
+					return false;
+				}
+			}
+		}
+
 		if (!parseChild(child,treeparent,codeposition,ntbuffer)) {
 			debugPrintIndent(4);
 			debugPrintf(4,"} concatenation failed\n");
