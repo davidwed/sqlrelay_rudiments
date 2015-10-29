@@ -6,6 +6,7 @@
 	added missing dll export clause to codetreegrammar class
 	added xmldomevents class
 	added namespace discrimination in codetree::write
+	fixed a codetree end-of-string-during-concatenation bug
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
