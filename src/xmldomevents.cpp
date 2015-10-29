@@ -105,6 +105,9 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		// find the corresponding node in the event tree
 		xmldomnode	*etnode=findEvent(codetreenode);
 
+		// attach the event tree node to the code tree node
+		codetreenode->setPrivateData(etnode);
+
 		// if there is no corresponding node, then move on
 		if (etnode->isNullNode()) {
 			codetreenode=codetreenode->getNextTag();
@@ -221,9 +224,6 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 					c->getAttributeValue("event"));
 		}
 	}
-
-	// attach the corresponding event tree node to the code tree node
-	codetreenode->setPrivateData(c);
 
 	return c;
 }
