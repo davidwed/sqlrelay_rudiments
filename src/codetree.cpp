@@ -1108,6 +1108,11 @@ bool codetree::write(xmldomnode *input,
 		return false;
 	}
 
+	// get the namespace
+	pvt->_ns=pvt->_grammar.getRootNode()->
+			getFirstTagChild(GRAMMAR)->
+			getAttributeValue(NAMESPACE);
+
 	// parse
 	return write(input,&pvt->_grammar,output);
 }
@@ -1148,7 +1153,8 @@ bool codetree::writeNode(xmldomnode *node, stringbuffer *output) {
 
 	// ignore the node if its namespace doesn't
 	// match the grammar's namespace
-	if (charstring::compare(node->getNamespace(),pvt->_ns)) {
+	if (!charstring::isNullOrEmpty(pvt->_ns) &&
+		charstring::compare(node->getNamespace(),pvt->_ns)) {
 		debugPrintIndent(1);
 		debugPrintf(1,"ignoring node %s\n",node->getName());
 		return true;
