@@ -8,6 +8,8 @@
 	added namespace discrimination in codetree::write
 	fixed a codetree end-of-string-during-concatenation bug
 	fixed a codetree tree reset bug
+	fixed an xmlsax bug that caused text nodes with empty values to be
+		inserted between tag nodes when there is no text between tags
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the

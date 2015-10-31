@@ -766,8 +766,11 @@ bool xmlsax::parseText(char current, char *next) {
 		} else if (ch=='<') {
 
 			// if we find an opening < then it should be a tag,
-			// call the text callback and return the <
-			text(pvt->_textdata.getString());
+			// call the text callback (if we actually read any text)
+			// and return the <
+			if (pvt->_textdata.getStringLength()) {
+				text(pvt->_textdata.getString());
+			}
 			*next=ch;
 			return true;
 
