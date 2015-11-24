@@ -727,17 +727,32 @@ ssize_t filedescriptor::read(void *buffer, size_t size) {
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator) {
-	return read(buffer,terminator,0,-1,-1);
+	return read(buffer,terminator,0,'\0',-1,-1);
 }
 
 ssize_t filedescriptor::read(char **buffer,
 				const char *terminator, size_t maxbytes) {
-	return read(buffer,terminator,maxbytes,-1,-1);
+	return read(buffer,terminator,maxbytes,'\0',-1,-1);
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
 						int32_t sec, int32_t usec) {
-	return read(buffer,terminator,0,sec,usec);
+	return read(buffer,terminator,0,'\0',sec,usec);
+}
+
+ssize_t filedescriptor::read(char **buffer, const char *terminator,
+							char escapechar) {
+	return read(buffer,terminator,0,escapechar,-1,-1);
+}
+
+ssize_t filedescriptor::read(char **buffer, const char *terminator,
+					size_t maxbytes, char escapechar) {
+	return read(buffer,terminator,maxbytes,escapechar,-1,-1);
+}
+
+ssize_t filedescriptor::read(char **buffer, const char *terminator,
+				char escapechar, int32_t sec, int32_t usec) {
+	return read(buffer,terminator,0,escapechar,sec,usec);
 }
 
 ssize_t filedescriptor::read(uint16_t *buffer,
@@ -930,6 +945,12 @@ void filedescriptor::dontAllowShortWrites() {
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator,
 				size_t maxbytes, int32_t sec, int32_t usec) {
+	return read(buffer,terminator,maxbytes,'\0',sec,usec);
+}
+
+ssize_t filedescriptor::read(char **buffer, const char *terminator,
+				size_t maxbytes, char escapechar,
+				int32_t sec, int32_t usec) {
 
 	// initialize the return buffer
 	if (buffer) {
@@ -968,7 +989,8 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 			copytoterm=false;
 			escaped=false;
 		} else {
-			escaped=(charbuffer=='\\');
+			escaped=((escapechar!='\0')?
+					(charbuffer==escapechar):false);
 			copytobuffer=!escaped;
 			copytoterm=!escaped;
 		}
