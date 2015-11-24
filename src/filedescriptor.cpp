@@ -740,21 +740,6 @@ ssize_t filedescriptor::read(char **buffer, const char *terminator,
 	return read(buffer,terminator,0,'\0',sec,usec);
 }
 
-ssize_t filedescriptor::read(char **buffer, const char *terminator,
-							char escapechar) {
-	return read(buffer,terminator,0,escapechar,-1,-1);
-}
-
-ssize_t filedescriptor::read(char **buffer, const char *terminator,
-					size_t maxbytes, char escapechar) {
-	return read(buffer,terminator,maxbytes,escapechar,-1,-1);
-}
-
-ssize_t filedescriptor::read(char **buffer, const char *terminator,
-				char escapechar, int32_t sec, int32_t usec) {
-	return read(buffer,terminator,0,escapechar,sec,usec);
-}
-
 ssize_t filedescriptor::read(uint16_t *buffer,
 				int32_t sec, int32_t usec) {
 	ssize_t	retval=bufferedRead(buffer,sizeof(uint16_t),sec,usec);

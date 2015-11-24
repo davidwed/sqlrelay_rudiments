@@ -638,9 +638,6 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  Note that "buffer" is allocated internally and must be freed
 		 *  by the calling program.
 		 *
-		 *  Returns the number of bytes that were read or
-		 *  RESULT_ERROR if an error occurred.
-		 *
 		 *  Returns the number of bytes that were read, RESULT_ERROR if
 		 *  an error occurred or RESULT_MAX if maxbytes were read
 		 *  before the terminator was encountered.
@@ -649,6 +646,25 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		ssize_t	read(char **buffer,
 				const char *terminator, size_t maxbytes,
 				int32_t sec, int32_t usec);
+
+		/** Reads from the file desciptor into "buffer" until
+		 *  "terminator" is encountered, using "escapechar" as an
+		 *  escape character, with a timeout of "sec" seconds
+		 *  and "usec" microseconds.
+		 *
+		 *  Note that "buffer" is allocated internally and must be freed
+		 *  by the calling program.
+		 *
+		 *  Setting "escapechar" to '\0' disables it.
+		 *
+		 *  Returns the number of bytes that were read, RESULT_ERROR if
+		 *  an error occurred or RESULT_MAX if maxbytes were read
+		 *  before the terminator was encountered.
+		 *  
+		 *  Setting maxbytes to 0 disables it. */
+		ssize_t	read(char **buffer,
+				const char *terminator, size_t maxbytes,
+				char escapechar, int32_t sec, int32_t usec);
 
 
 		/** Causes the application to wait until a read()
