@@ -4,8 +4,6 @@
 #include <rudiments/filedescriptor.h>
 #include <rudiments/stringbuffer.h>
 
-#include <gssapi/gssapi_generic.h>
-
 class gssapiprivate;
 class gssapimechanismprivate;
 class gssapicredentialsprivate;

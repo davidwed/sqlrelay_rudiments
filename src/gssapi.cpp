@@ -9,6 +9,8 @@
 #include <rudiments/stdio.h>
 #include <rudiments/gssapi.h>
 
+#include <gssapi.h>
+
 // for gss_acquire_cred_with_password
 #include <gssapi/gssapi_ext.h>
 
