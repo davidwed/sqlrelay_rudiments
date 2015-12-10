@@ -12,6 +12,7 @@
 		inserted between tag nodes when there is no text between tags
 	added escapechar option to filedescriptor::read-until-terminator
 		methods
+	added various gssapi wrapper classes
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the

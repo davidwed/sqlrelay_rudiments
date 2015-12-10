@@ -663,6 +663,8 @@ INETATONLIB
 SOCKETLIBS
 PCRELIBS
 PCREINCLUDES
+KRB5LIBS
+KRB5INCLUDES
 SSLLIBS
 SSLINCLUDES
 PTHREADLIB
@@ -776,6 +778,9 @@ with_pthread_prefix
 enable_ssl
 with_ssl_includes
 with_ssl_libs
+enable_krb5
+with_krb5_includes
+with_krb5_libs
 enable_pcre
 with_pcre_includes
 with_pcre_libs
@@ -1477,6 +1482,7 @@ Optional Features:
   --enable-enosys-notify  enable runtime notification of methods that set ENOSYS
   --enable-inlines        use inline methods
   --disable-ssl           Disable SSL support
+  --disable-krb5          Disable krb5/gssapi support
   --disable-pcre          Don't use PCRE for regular expressions
   --disable-libcurl       Disable libcurl support
   --enable-built-in-regex Use the built-in regex
@@ -1549,10 +1555,12 @@ Optional Packages:
   --with-pthread-prefix   Location of pthread library
   --with-ssl-includes     SSL includes
   --with-ssl-libs         SSL libraries
+  --with-krb5-includes    krb5/gssapi includes
+  --with-krb5-libs        krb5/gssapi libraries
   --with-pcre-includes    PCRE includes
   --with-pcre-libs        PCRE libraries
-  --with-libcurl-includes LIBCURL includes
-  --with-libcurl-libs     LIBCURL libraries
+  --with-libcurl-includes libcurl includes
+  --with-libcurl-libs     libcurl libraries
   --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
                           both]
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
@@ -2513,6 +2521,29 @@ if test "${with_ssl_libs+set}" = set; then :
   withval=$with_ssl_libs; SSLLIBS="$withval"
 else
   SSLLIBS=""
+fi
+
+# Check whether --enable-krb5 was given.
+if test "${enable_krb5+set}" = set; then :
+  enableval=$enable_krb5; ENABLE_RUDIMENTS_KRB5="no"
+else
+  ENABLE_RUDIMENTS_KRB5="yes"
+fi
+
+
+# Check whether --with-krb5-includes was given.
+if test "${with_krb5_includes+set}" = set; then :
+  withval=$with_krb5_includes; KRB5INCLUDES="$withval"
+else
+  KRB5INCLUDES=""
+fi
+
+
+# Check whether --with-krb5-libs was given.
+if test "${with_krb5_libs+set}" = set; then :
+  withval=$with_krb5_libs; KRB5LIBS="$withval"
+else
+  KRB5LIBS=""
 fi
 
 # Check whether --enable-pcre was given.
@@ -19236,6 +19267,72 @@ echo "******************************"
 
 
 echo
+echo "***** krb5/gssapi ************"
+
+
+HAVE_KRB5=""
+if ( test "$ENABLE_RUDIMENTS_KRB5" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+				echo "cross compiling"
+		if ( test -n "$KRB5LIBS" -o -n "$KRB5INCLUDES" )
+		then
+
+$as_echo "#define RUDIMENTS_HAS_KRB5 1" >>confdefs.h
+
+		fi
+
+	else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for krb5/gssapi" >&5
+$as_echo_n "checking for krb5/gssapi... " >&6; }
+		if ( test -z "$KRB5LIBS" -a -z "$KRB5INCLUDES" )
+		then
+			KRB5LIBS=`krb5-config --libs gssapi 2> /dev/null`
+			if ( test -n "$KRB5LIBS" )
+			then
+				KRB5INCLUDES=`krb5-config --cflags 2> /dev/null`
+			fi
+		fi
+	fi
+
+	if ( test -n "$KRB5LIBS" )
+	then
+		HAVE_KRB5="yes"
+
+$as_echo "#define RUDIMENTS_HAS_KRB5 1" >>confdefs.h
+
+	fi
+
+
+if ( test -n "$KRB5INCLUDES" )
+then
+	echo "krb5/gssapi includes... $KRB5INCLUDES"
+fi
+
+
+if ( test -n "$KRB5LIBS" )
+then
+	echo "krb5/gssapi libs... $KRB5LIBS"
+fi
+
+
+else
+
+	echo "disabled"
+
+fi
+
+
+
+
+echo "******************************"
+
+
+echo
 echo "***** Structures *************"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inline" >&5
@@ -31749,6 +31846,15 @@ then
 	LOBJS="$LOBJS modemutil.lo"
 fi
 
+if ( test "$HAVE_KRB5" = "yes" )
+then
+	HEADERS3="$HEADERS3 gssapi.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 gssapi.h gssapimechanism.h gssapicredentials.h gssapicontext.h gssapiincludes.h"
+	SRCS="$SRCS gssapi.cpp"
+	LOBJS="$LOBJS gssapi.lo"
+fi
+
+
 
 
 
@@ -34324,10 +34430,17 @@ then
 	SSLBUILD="yes"
 fi
 
-echo " Features     : Threads $HAS_THREADS"
-echo "                PCRE    $PCREBUILD"
-echo "                libcurl $LIBCURLBUILD"
-echo "                SSL     $SSLBUILD"
+KRB5BUILD="no "
+if ( test -n "$HAVE_KRB5" )
+then
+	KRB5BUILD="yes"
+fi
+
+echo " Features     : Threads     $HAS_THREADS"
+echo "                PCRE        $PCREBUILD"
+echo "                libcurl     $LIBCURLBUILD"
+echo "                SSL         $SSLBUILD"
+echo "                krb5/gssapi $KRB5BUILD"
 echo "******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"

@@ -988,6 +988,60 @@ AC_SUBST(SSLLIBS)
 
 
 
+
+dnl checks for the krb5 library
+dnl requires:  cross_compiling
+dnl sets the substitution variable KRB5LIBS
+AC_DEFUN([FW_CHECK_KRB5],
+[
+
+HAVE_KRB5=""
+if ( test "$ENABLE_RUDIMENTS_KRB5" = "yes" )
+then
+
+	if ( test "$cross_compiling" = "yes" )
+	then
+
+		dnl cross compiling
+		echo "cross compiling"
+		if ( test -n "$KRB5LIBS" -o -n "$KRB5INCLUDES" )
+		then
+			AC_DEFINE(RUDIMENTS_HAS_KRB5,1,Rudiments supports krb5/gssapi)
+		fi
+
+	else
+
+		AC_MSG_CHECKING(for krb5/gssapi)
+		if ( test -z "$KRB5LIBS" -a -z "$KRB5INCLUDES" )
+		then
+			KRB5LIBS=`krb5-config --libs gssapi 2> /dev/null`
+			if ( test -n "$KRB5LIBS" )
+			then
+				KRB5INCLUDES=`krb5-config --cflags 2> /dev/null`
+			fi
+		fi
+	fi
+
+	if ( test -n "$KRB5LIBS" )
+	then
+		HAVE_KRB5="yes"
+		AC_DEFINE(RUDIMENTS_HAS_KRB5,1,Rudiments supports krb5/gssapi)
+	fi
+
+	FW_INCLUDES(krb5/gssapi,[$KRB5INCLUDES])
+	FW_LIBS(krb5/gssapi,[$KRB5LIBS])
+
+else
+
+	echo "disabled"
+
+fi
+
+AC_SUBST(KRB5INCLUDES)
+AC_SUBST(KRB5LIBS)
+])
+
+
 dnl checks for the pcre library
 dnl requires:  cross_compiling
 dnl sets the substitution variable PCRELIBS
