@@ -11,7 +11,7 @@
 
 #include <gssapi/gssapi.h>
 
-// for gss_acquire_cred_with_password
+// for gss_acquire_cred_with_password and gss_str_to_oid
 #include <gssapi/gssapi_ext.h>
 
 // for GSS_KRB5_NT_PRINCIPAL_NAME
