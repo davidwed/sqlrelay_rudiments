@@ -184,25 +184,36 @@ bool socketserver::listen(int32_t backlog) {
 	return !result;
 }
 
-#ifdef RUDIMENTS_HAS_SSL
 void *socketserver::newSSLBIO() const {
-	return (void *)BIO_new_socket(fd(),BIO_NOCLOSE);
+	#ifdef RUDIMENTS_HAS_SSL
+		return (void *)BIO_new_socket(fd(),BIO_NOCLOSE);
+	#else
+		return NULL;
+	#endif
 }
 
 bool socketserver::sslAccept(filedescriptor *sock) {
-	if (ctx()) {
-		sock->setSSLContext((SSL_CTX *)ctx());
-		if (!sock->initializeSSL()) {
-			return false;
+	#ifdef RUDIMENTS_HAS_SSL
+		if (sslctx()) {
+			sock->setSSLContext((SSL_CTX *)sslctx());
+			if (!sock->initializeSSL()) {
+				return false;
+			}
+			sslresult(SSL_accept((SSL *)sock->getSSL()));
+			if (sslresult()!=1) {
+				return false;
+			}
 		}
-		sslresult(SSL_accept((SSL *)sock->getSSL()));
-		if (sslresult()!=1) {
-			return false;
-		}
+	#endif
+	return true;
+}
+
+bool socketserver::gssapiAccept(filedescriptor *sock) {
+	if (gssapictx()) {
+		// FIXME: accept context
 	}
 	return true;
 }
-#endif
 
 ssize_t socketserver::lowLevelRead(void *buf, ssize_t count) {
 	return ::recv(fd(),

@@ -423,9 +423,10 @@ wsacleanup:
 	}
 	#endif
 
+	// handle SSL-connect if necessary
 	#ifdef RUDIMENTS_HAS_SSL
 	if (retval==RESULT_SUCCESS) {
-		if (!ctx()) {
+		if (!sslctx()) {
 			return RESULT_SUCCESS;
 		}
 		if (initializeSSL()) {
@@ -438,6 +439,11 @@ wsacleanup:
 		return RESULT_ERROR;
 	}
 	#endif
+
+	// handle GSSAPI-connect if necessary
+	if (gssapictx()) {
+		// FIXME: initiate context
+	}
 
 	return retval;
 }

@@ -6,7 +6,7 @@
 
 #include <rudiments/private/gssapiincludes.h>
 
-class gssapi {
+class RUDIMENTS_DLLSPEC gssapi {
 	public:
 		/** Creates a new instance of the gssapi framework. */
 		gssapi();
@@ -34,7 +34,7 @@ class gssapi {
 };
 
 
-class gssapimechanism {
+class RUDIMENTS_DLLSPEC gssapimechanism {
 	public:
 		/** Creates a new instance of the gssapimechanism class. */
 		gssapimechanism();
@@ -73,7 +73,7 @@ class gssapimechanism {
 };
 
 
-class gssapicredentials {
+class RUDIMENTS_DLLSPEC gssapicredentials {
 	public:
 		/** Creates an instance of the gssapicredentials class. */
 		gssapicredentials();
@@ -217,7 +217,7 @@ class gssapicredentials {
 };
 
 
-class gssapicontext {
+class RUDIMENTS_DLLSPEC gssapicontext {
 	public:
 		/** Creates an instance of the gssapicontext class. */
 		gssapicontext();
@@ -233,14 +233,14 @@ class gssapicontext {
 		 *  setCredentials() or NULL if no credentials have been set. */
 		gssapicredentials	*getCredentials();
 
-		/** Sets the peer filedescriptor (presumably an open socket)
-		 *  that will be used during subsequent calls to one of the
-		 *  initiate or accept methods. */
-		void	setPeer(filedescriptor *peer);
+		/** Sets the filedescriptor that will be used during subsequent
+		 *  calls to one of the initiate or accept methods. */
+		void	setFileDescriptor(filedescriptor *fd);
 
-		/** Returns the filedscriptor by a previous call to setPeer()
-		 *  or NULL if no filedescriptor has been set. */
-		filedescriptor	*getPeer();
+		/** Returns the filedscriptor by a previous call to
+		 *  setFileDescriptor() or NULL if no filedescriptor has been
+		 *  set. */
+		filedescriptor	*getFileDescriptor();
 
 		/** Sets the context-lifetime that will be requested during
 		 *  subsequent calls to the initiate or accept methods.
@@ -422,6 +422,9 @@ class gssapicontext {
 					size_t messagesize,
 					const unsigned char *mic,
 					size_t micsize);
+
+		ssize_t	read(void *buf, ssize_t count);
+		ssize_t	write(const void *buf, ssize_t count);
 
 
 		/** Returns the major-status code of the most recently failed

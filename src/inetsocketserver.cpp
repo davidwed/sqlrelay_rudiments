@@ -220,12 +220,16 @@ filedescriptor *inetsocketserver::accept() {
 	}
 
 	// handle SSL-accept if necessary
-	#ifdef RUDIMENTS_HAS_SSL
-		if (!sslAccept(returnsock)) {
-			delete returnsock;
-			return NULL;
-		}
-	#endif
+	if (!sslAccept(returnsock)) {
+		delete returnsock;
+		return NULL;
+	}
+
+	// handle GSSAPI-accept if necessary
+	if (!gssapiAccept(returnsock)) {
+		delete returnsock;
+		return NULL;
+	}
 
 	return returnsock;
 }

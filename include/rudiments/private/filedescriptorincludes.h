@@ -4,6 +4,8 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
+#include <rudiments/gssapi.h>
+
 #include <rudiments/resultcodes.h>
 
 #include <sys/types.h>

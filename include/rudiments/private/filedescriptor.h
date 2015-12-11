@@ -35,10 +35,12 @@
 		int32_t	fd() const;
 		void	fd(int32_t filedes);
 
-		void	*ctx();
+		void	*sslctx();
 		void	*ssl();
 		int32_t	sslresult();
 		void	sslresult(int32_t sslrslt);
+
+		gssapicontext	*gssapictx();
 
 	private:
 		filedescriptorprivate	*pvt;

@@ -569,7 +569,7 @@ class gssapicontextprivate {
 
 		gssapicredentials	*_credentials;
 
-		filedescriptor		*_peer;
+		filedescriptor		*_fd;
 
 		OM_uint32		_desiredlifetime;
 		OM_uint32		_actuallifetime;
@@ -595,7 +595,7 @@ class gssapicontextprivate {
 gssapicontext::gssapicontext() {
 	pvt=new gssapicontextprivate;
 	pvt->_credentials=NULL;
-	pvt->_peer=NULL;
+	pvt->_fd=NULL;
 	pvt->_desiredlifetime=GSS_C_INDEFINITE;
 	pvt->_actuallifetime=GSS_C_INDEFINITE;
 	pvt->_desiredmechanism=NULL;
@@ -623,12 +623,12 @@ gssapicredentials *gssapicontext::getCredentials() {
 	return pvt->_credentials;
 }
 
-void gssapicontext::setPeer(filedescriptor *peer) {
-	pvt->_peer=peer;
+void gssapicontext::setFileDescriptor(filedescriptor *fd) {
+	pvt->_fd=fd;
 }
 
-filedescriptor *gssapicontext::getPeer() {
-	return pvt->_peer;
+filedescriptor *gssapicontext::getFileDescriptor() {
+	return pvt->_fd;
 }
 
 void gssapicontext::setDesiredLifetime(uint32_t desiredlifetime) {
@@ -741,10 +741,10 @@ bool gssapicontext::initiate(const void *name,
 		if (outputtoken.length) {
 
 			// send the length, then the value
-			if (pvt->_peer->write(
+			if (pvt->_fd->write(
 					(uint64_t)outputtoken.length,
 					sec,usec)!=sizeof(uint64_t) ||
-				pvt->_peer->write(
+				pvt->_fd->write(
 					(unsigned char *)outputtoken.value,
 					outputtoken.length,
 					sec,usec)!=
@@ -768,7 +768,7 @@ bool gssapicontext::initiate(const void *name,
 
 			// get the length of the token
 			uint64_t	length;
-			if (pvt->_peer->read(&length,
+			if (pvt->_fd->read(&length,
 					sec,usec)!=sizeof(uint64_t)) {
 
 				// clean up
@@ -784,7 +784,7 @@ bool gssapicontext::initiate(const void *name,
 			inputtoken.value=new unsigned char[length];
 
 			// get the value
-			if (pvt->_peer->read(
+			if (pvt->_fd->read(
 					(unsigned char *)inputtoken.value,
 					length,sec,usec)!=(ssize_t)length) {
 
@@ -960,7 +960,7 @@ bool gssapicontext::accept(int32_t sec, int32_t usec) {
 
 		// get the length of the token
 		uint64_t	length;
-		if (pvt->_peer->read(&length,sec,usec)!=sizeof(uint64_t)) {
+		if (pvt->_fd->read(&length,sec,usec)!=sizeof(uint64_t)) {
 			release();
 			break;
 		}
@@ -970,7 +970,7 @@ bool gssapicontext::accept(int32_t sec, int32_t usec) {
 		inputtoken.value=new unsigned char[length];
 
 		// get the value
-		if (pvt->_peer->read((unsigned char *)inputtoken.value,
+		if (pvt->_fd->read((unsigned char *)inputtoken.value,
 					length,sec,usec)!=(ssize_t)length) {
 
 			// clean up
@@ -1004,10 +1004,10 @@ bool gssapicontext::accept(int32_t sec, int32_t usec) {
 		if (outputtoken.length) {
 
 			// send the length, then the value
-			if (pvt->_peer->write(
+			if (pvt->_fd->write(
 					(uint64_t)outputtoken.length,
 					sec,usec)!=sizeof(uint64_t) ||
-				pvt->_peer->write(
+				pvt->_fd->write(
 					(unsigned char *)outputtoken.value,
 					outputtoken.length,
 					sec,usec)!=
@@ -1297,6 +1297,16 @@ bool gssapicontext::verifyMic(const unsigned char *message,
 
 	// return success/failure
 	return (pvt->_major==GSS_S_COMPLETE);
+}
+
+ssize_t gssapicontext::read(void *buf, ssize_t count) {
+	// FIXME: read, unwrap
+	return RESULT_ERROR;
+}
+
+ssize_t gssapicontext::write(const void *buf, ssize_t count) {
+	// FIXME: wrap, write
+	return RESULT_ERROR;
 }
 
 uint32_t gssapicontext::getRemainingLifetime() {

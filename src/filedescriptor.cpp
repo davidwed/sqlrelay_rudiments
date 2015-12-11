@@ -25,7 +25,6 @@
 		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
 #endif
-#include <rudiments/stringbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -211,11 +210,13 @@ class filedescriptorprivate {
 		int32_t	_fd;
 
 		#ifdef RUDIMENTS_HAS_SSL
-		SSL_CTX	*_ctx;
+		SSL_CTX	*_sslctx;
 		SSL	*_ssl;
 		BIO	*_bio;
 		int32_t	_sslresult;
 		#endif
+
+		gssapicontext	*_gssapictx;
 
 		const char	*_type;
 
@@ -264,11 +265,12 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_allowshortwrites=false;
 	pvt->_translatebyteorder=false;
 #ifdef RUDIMENTS_HAS_SSL
-	pvt->_ctx=NULL;
+	pvt->_sslctx=NULL;
 	pvt->_bio=NULL;
 	pvt->_ssl=NULL;
 	pvt->_sslresult=1;
 #endif
+	pvt->_gssapictx=NULL;
 	pvt->_type="filedescriptor";
 	pvt->_writebuffer=NULL;
 	pvt->_writebufferend=NULL;
@@ -290,11 +292,12 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
 #ifdef RUDIMENTS_HAS_SSL
-	pvt->_ctx=f.pvt->_ctx;
+	pvt->_sslctx=f.pvt->_sslctx;
 	pvt->_bio=f.pvt->_bio;
 	pvt->_ssl=f.pvt->_ssl;
 	pvt->_sslresult=f.pvt->_sslresult;
 #endif
+	pvt->_gssapictx=f.pvt->_gssapictx;
 	if (f.pvt->_writebuffer) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
 						f.pvt->_writebuffer;
@@ -421,13 +424,13 @@ void filedescriptor::setSSLContext(void *ctx) {
 	if (!ctx) {
 		deInitializeSSL();
 	}
-	pvt->_ctx=(SSL_CTX *)ctx;
+	pvt->_sslctx=(SSL_CTX *)ctx;
 #endif
 }
 
 void *filedescriptor::getSSLContext() {
 #ifdef RUDIMENTS_HAS_SSL
-	return (void *)pvt->_ctx;
+	return (void *)pvt->_sslctx;
 #else
 	return NULL;
 #endif
@@ -439,9 +442,9 @@ bool filedescriptor::initializeSSL() {
 		return false;
 	}
 	deInitializeSSL();
-	if (pvt->_ctx) {
+	if (pvt->_sslctx) {
 		pvt->_bio=(BIO *)newSSLBIO();
-		pvt->_ssl=SSL_new(pvt->_ctx);
+		pvt->_ssl=SSL_new(pvt->_sslctx);
 		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
 	}
 	return true;
@@ -480,6 +483,28 @@ void *filedescriptor::newSSLBIO() const {
 #else
 	return NULL;
 #endif
+}
+
+bool filedescriptor::supportsGSSAPI() {
+#ifdef RUDIMENTS_HAS_KRB5
+	return true;
+#else
+	return false;
+#endif
+}
+
+void filedescriptor::setGSSAPIContext(gssapicontext *ctx) {
+	if (pvt->_gssapictx) {
+		pvt->_gssapictx->setFileDescriptor(NULL);
+	}
+	pvt->_gssapictx=ctx;
+	if (ctx) {
+		pvt->_gssapictx->setFileDescriptor(this);
+	}
+}
+
+gssapicontext *filedescriptor::getGSSAPIContext() {
+	return pvt->_gssapictx;
 }
 
 bool filedescriptor::supportsBlockingNonBlockingModes() {
@@ -1240,22 +1265,24 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 						done=true;
 				}
 			}
-		} else {
+		} else
 		#endif
+		if (pvt->_gssapictx) {
+			actualread=pvt->_gssapictx->read(ptr,sizetoread);
+		} else {
 			actualread=lowLevelRead(ptr,sizetoread);
-			#ifdef DEBUG_READ
-			for (int32_t i=0; i<actualread; i++) {
-				debugSafePrint(
-					(static_cast<unsigned char *>(ptr))[i]);
-			}
-			debugPrintf("(%ld bytes) ",(long)actualread);
-			if (actualread==-1) {
-				debugPrintf("%s ",error::getErrorString());
-			}
-			stdoutput.flush();
-			#endif
-		#ifdef RUDIMENTS_HAS_SSL
 		}
+
+		#ifdef DEBUG_READ
+		for (int32_t i=0; i<actualread; i++) {
+			debugSafePrint(
+				(static_cast<unsigned char *>(ptr))[i]);
+		}
+		debugPrintf("(%ld bytes) ",(long)actualread);
+		if (actualread==-1) {
+			debugPrintf("%s ",error::getErrorString());
+		}
+		stdoutput.flush();
 		#endif
 
 		// if we didn't read the number of bytes we expected to,
@@ -1519,24 +1546,24 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 						done=true;
 				}
 			}
-		} else {
+		} else
 		#endif
-
+		if (pvt->_gssapictx) {
+			actualwrite=pvt->_gssapictx->write(ptr,sizetowrite);
+		} else {
 			actualwrite=lowLevelWrite(ptr,sizetowrite);
-			#ifdef DEBUG_WRITE
-			for (int32_t i=0; i<actualwrite; i++) {
-				debugSafePrint(
-				(static_cast<const unsigned char *>(ptr))[i]);
-			}
-			debugPrintf("(%ld bytes) ",(long)actualwrite);
-			if (actualwrite==-1) {
-				debugPrintf("%s ",error::getErrorString());
-			}
-			stdoutput.flush();
-			#endif
-
-		#ifdef RUDIMENTS_HAS_SSL
 		}
+
+		#ifdef DEBUG_WRITE
+		for (int32_t i=0; i<actualwrite; i++) {
+			debugSafePrint(
+			(static_cast<const unsigned char *>(ptr))[i]);
+		}
+		debugPrintf("(%ld bytes) ",(long)actualwrite);
+		if (actualwrite==-1) {
+			debugPrintf("%s ",error::getErrorString());
+		}
+		stdoutput.flush();
 		#endif
 
 		// if we didn't read the number of bytes we expected to,
@@ -2278,9 +2305,9 @@ void filedescriptor::fd(int32_t filedes) {
 	setFileDescriptor(filedes);
 }
 
-void *filedescriptor::ctx() {
+void *filedescriptor::sslctx() {
 #ifdef RUDIMENTS_HAS_SSL
-	return (void *)pvt->_ctx;
+	return (void *)pvt->_sslctx;
 #else
 	return NULL;
 #endif
@@ -2306,6 +2333,10 @@ void filedescriptor::sslresult(int32_t sslrslt) {
 #ifdef RUDIMENTS_HAS_SSL
 	pvt->_sslresult=sslrslt;
 #endif
+}
+
+gssapicontext *filedescriptor::gssapictx() {
+	return pvt->_gssapictx;
 }
 
 bool filedescriptor::closeOnExec() {

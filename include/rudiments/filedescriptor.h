@@ -62,10 +62,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  and false otherwise. */
 		bool	supportsSSL();
 
-		/** Associates an SSL context "ctx" with the
-		 *  filedescriptor.  Passing in a NULL for "ctx"
-		 *  has the additional side effect of calling
-		 *  deInitializeSSL() below.
+		/** Associates an SSL context "ctx" with the filedescriptor.
+		 *  To remove the current SSL context, pass in a NULL for
+		 *  "ctx".  Passing in a NULL for "ctx" has the additional side
+		 *  effect of calling deInitializeSSL() below.
 		 *
 		 *  When using OpenSSL, pass in a pointer to an
 		 *  instance of the SSL_CTX structure here. */
@@ -79,13 +79,10 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  pointer to an SSL_CTX structure. */
 		void	*getSSLContext();
 
-		/** Should be called after calling
-		 *  setSSLContext() and one of open(),
-		 *  create() or connect() (from socket child
-		 *  classes). Causes the appropriate SSL
-		 *  function to be called instead of or in
-		 *  concert with read(), write(), connect(),
-		 *  accept() and close() methods.
+		/** Should be called after calling setSSLContext().
+		 *  Causes the appropriate GSSAPI function to be called
+		 *  instead of, or in concert with, read(), write(),
+		 *  connect(), accept() and close() methods.
 		 * 
 		 *  Returns true on success and false on failure. */
 		bool	initializeSSL();
@@ -112,6 +109,20 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  on the result of this method to determine
 		 *  the exact error. */
 		int32_t	getSSLResult() const;
+
+		/** Returns true rudiments was built with GSSAPI support
+		 *  and false otherwise. */
+		bool	supportsGSSAPI();
+
+		/** Associates a gssapicontext "ctx" with the filedescriptor.
+		 *  To remove the current gssapicontext, pass in a NULL for
+		 *  "ctx". */
+		void	setGSSAPIContext(gssapicontext *ctx);
+
+		/** Returns the gssapicontext currently associated
+		 *  with the filedescriptor or NULL if none
+		 *  is currently associated. */
+		gssapicontext	*getGSSAPIContext();
 
 		/** Returns true if the client socket supports
 		 *  blocking/nonblocking modes and false otherwise. */
