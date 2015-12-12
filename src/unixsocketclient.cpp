@@ -107,6 +107,8 @@ void unixsocketclient::initialize(constnamevaluepairs *cd) {
 
 int32_t unixsocketclient::connect() {
 
+	close();
+
 #if defined(_WIN32) || defined(__VMS)
 	int32_t	result=pvt->_isc.connect();
 	if (result>-1) {

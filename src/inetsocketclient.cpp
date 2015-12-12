@@ -132,6 +132,8 @@ void inetsocketclient::initialize(constnamevaluepairs *cd) {
 
 int32_t inetsocketclient::connect() {
 
+	close();
+
 	#ifdef RUDIMENTS_HAVE_GETADDRINFO
 
 		// create a hint indicating that SOCK_STREAM should be used
