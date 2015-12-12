@@ -212,7 +212,11 @@ bool socketserver::gssapiAccept(filedescriptor *sock) {
 	if (gssapictx()) {
 		sock->setGSSAPIContext(gssapictx());
 		gssapictx()->setFileDescriptor(sock);
-		return gssapictx()->accept();
+		if (!gssapictx()->accept()) {
+			sock->setGSSAPIContext(NULL);
+			gssapictx()->setFileDescriptor(NULL);
+			return false;
+		}
 	}
 	return true;
 }

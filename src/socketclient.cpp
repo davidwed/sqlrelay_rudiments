@@ -442,6 +442,7 @@ wsacleanup:
 	if (retval==RESULT_SUCCESS && gssapictx()) {
 		gssapictx()->setFileDescriptor(this);
 		if (!gssapictx()->initiate()) {
+			gssapictx()->setFileDescriptor(NULL);
 			close();
 			return RESULT_ERROR;
 		}

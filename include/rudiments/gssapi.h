@@ -234,7 +234,18 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		gssapicredentials	*getCredentials();
 
 		/** Sets the filedescriptor that will be used during subsequent
-		 *  calls to one of initiate() or accept(). */
+		 *  calls to one of initiate() or accept().
+		 *
+		 *  Note that if this instance is set as the current GSSAPI
+		 *  context of a child of the socketclient class, then this
+		 *  method is called implicitly during a successful call to
+		 *  connect().
+		 *
+		 *  Note also that if this instance is set as the current
+		 *  GSSAPI context of a child of the socketserver class, then
+		 *  this method is called implicitly during a successful call
+		 *  to accept().
+		 *  */
 		void	setFileDescriptor(filedescriptor *fd);
 
 		/** Returns the filedscriptor by a previous call to
@@ -283,6 +294,12 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		/** Initiates a context with service principal "name" with
 		 *  whom a connection is established across the filedescriptor
 		 *  previously set using setPeer().
+		 *
+		 *  Note that if this instance is set as the current GSSAPI
+		 *  context of a child of the socketclient class, then this
+		 *  method is called implicitly during a successful call to
+		 *  connect().
+		 *
 		 *  Returns true on success and false on failure. */
 		bool	initiate();
 
@@ -290,6 +307,12 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		/** Accepts a security context from a principal with whom a
 		 *  connection is established across the filedescriptor
 		 *  previously set using setPeer().
+		 *
+		 *  Note that if this instance is set as the current GSSAPI
+		 *  context of a child of the socketserver class, then this
+		 *  method is called implicitly during a successful call to
+		 *  accept().
+		 *
 		 *  Returns true on success and false on failure. */
 		bool	accept();
 
@@ -416,7 +439,18 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 					const unsigned char *mic,
 					size_t micsize);
 
+
+		/** Reads tokens from the file descriptor configured by
+		 *  setFileDescriptor(), unwraps them, and writes the unwrapped
+		 *  data to "buf" until "count" bytes have been read.
+		 *  Returns the number of unwrapped bytes that were written
+		 *  to "buf" or RESULT_ERROR if an error occurred. */
 		ssize_t	read(void *buf, ssize_t count);
+
+		/** Wraps "buf" of size "count" bytes and writes it to the
+		 *  file descriptor set by setFileDescriptor().
+		 *  Returns the number of unwrapped bytes that were written
+		 *  or RESULT_ERROR if an error occurred. */
 		ssize_t	write(const void *buf, ssize_t count);
 
 
