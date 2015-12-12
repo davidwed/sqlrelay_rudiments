@@ -327,6 +327,9 @@ filedescriptor::~filedescriptor() {
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
+	// FIXME: this should be passed down into the gssapicontext
+	// so it knows how to chunk writes
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting write buffer size to %d\n",size);
 	#endif
@@ -350,6 +353,16 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 }
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
+
+	// gssapicontext does it's own read buffering, which interferes
+	// with buffering at this level, so ignore it if we're using
+	// gssapi and request buffering
+	// FIXME: this should actually be passed down into the gssapicontext
+	// so it knows when to return a short-read
+	if (size && pvt->_gssapictx) {
+		return true;
+	}
+
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting read buffer size to %d\n",size);
@@ -495,6 +508,16 @@ bool filedescriptor::supportsGSSAPI() {
 
 void filedescriptor::setGSSAPIContext(gssapicontext *ctx) {
 	pvt->_gssapictx=ctx;
+
+	// gssapicontext does it's own read buffering, which interferes
+	// with buffering at this level, so disable read buffering if
+	// we're using gssapi.
+	//
+	// Note: this is a little kludgy, as the app won't necessarily know
+	// to re-enable read buffering if it disables gssapi.
+	if (ctx) {
+		setReadBufferSize(0);
+	}
 }
 
 gssapicontext *filedescriptor::getGSSAPIContext() {

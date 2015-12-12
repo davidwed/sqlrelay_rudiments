@@ -8,4 +8,11 @@
 					const void *nametype);
 		void	getStatus(uint32_t status, int32_t type);
 
+		ssize_t	receiveToken(uint16_t *tokenflags,
+					void **tokendata,
+					size_t *tokensize);
+		ssize_t sendToken(uint16_t tokenflags,
+					const void *tokendata,
+					size_t tokensize);
+
 		gssapicontextprivate	*pvt;

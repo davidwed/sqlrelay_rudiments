@@ -18,8 +18,12 @@
 // for GSS_KRB5_NT_PRINCIPAL_NAME
 #include <gssapi/gssapi_krb5.h>
 
-#define TOKEN_DATA	1<<0;
-#define TOKEN_MIC	1<<1;
+#define TOKEN_FLAGS_TYPE_INITIATE	(1<<0)
+#define TOKEN_FLAGS_TYPE_ACCEPT		(1<<1)
+#define TOKEN_FLAGS_TYPE_DATA		(1<<2)
+#define TOKEN_FLAGS_TYPE_MIC		(1<<3)
+#define TOKEN_FLAGS_ENCRYPTED		(1<<4)
+#define TOKEN_FLAGS_VERIFY		(1<<5)
 
 class gssapiprivate {
 	friend class gssapi;
@@ -755,15 +759,10 @@ bool gssapicontext::initiate(const void *name,
 
 		// send token to peer, if necessary
 		if (outputtoken.length) {
-
-			// send the length, then the value
-			uint64_t	length=outputtoken.length;
-			if (pvt->_fd->lowLevelWrite(
-					&length,sizeof(uint64_t))!=
-					sizeof(uint64_t) ||
-				pvt->_fd->lowLevelWrite(
-					outputtoken.value,length)!=
-					(ssize_t)length) {
+			if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
+					outputtoken.value,
+					outputtoken.length)!=
+					(ssize_t)outputtoken.length) {
 
 				// clean up
 				OM_uint32	minor;
@@ -781,30 +780,14 @@ bool gssapicontext::initiate(const void *name,
 		// receive token from peer, into inputtoken, if necessary
 		if (pvt->_major==GSS_S_CONTINUE_NEEDED) {
 
-			// get the length of the token
-			uint64_t	length;
-			if (pvt->_fd->lowLevelRead(
-					&length,sizeof(uint64_t))!=
-					sizeof(uint64_t)) {
-
-				// clean up
-				OM_uint32	minor;
-				gss_release_buffer(&minor,&outputtoken);
-
-				release();
-				break;
-			}
-			inputtoken.length=length;
-
-			// create a buffer to store the value
-			inputtoken.value=new unsigned char[length];
-
-			// get the value
-			if (pvt->_fd->lowLevelRead(
-					inputtoken.value,length)!=
-					(ssize_t)length) {
-
-				// clean up
+			uint16_t	flags=0;
+			inputtoken.value=NULL;
+			inputtoken.length=0;
+			if (receiveToken(&flags,
+					&inputtoken.value,
+					&inputtoken.length)<=0 ||
+				flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+			
 				delete[] (unsigned char *)inputtoken.value;
 
 				OM_uint32	minor;
@@ -969,24 +952,13 @@ bool gssapicontext::accept() {
 	do {
 
 		// receive token from peer, into inputtoken...
-
-		// get the length of the token
-		uint64_t	length;
-		if (pvt->_fd->lowLevelRead(
-				&length,sizeof(uint64_t))!=
-				sizeof(uint64_t)) {
-			release();
-			break;
-		}
-		inputtoken.length=length;
-
-		// create a buffer to store the value
-		inputtoken.value=new unsigned char[length];
-
-		// get the value
-		if (pvt->_fd->lowLevelRead(
-				inputtoken.value,length)!=
-				(ssize_t)length) {
+		uint16_t	flags=0;
+		inputtoken.value=NULL;
+		inputtoken.length=0;
+		if (receiveToken(&flags,
+				&inputtoken.value,
+				&inputtoken.length)<=0 ||
+			flags!=TOKEN_FLAGS_TYPE_INITIATE) {
 
 			// clean up
 			delete[] (unsigned char *)inputtoken.value;
@@ -1017,15 +989,10 @@ bool gssapicontext::accept() {
 
 		// send token to peer, if necessary
 		if (outputtoken.length) {
-
-			// send the length, then the value
-			uint64_t	length=outputtoken.length;
-			if (pvt->_fd->lowLevelWrite(
-					&length,sizeof(uint64_t))!=
-					sizeof(uint64_t) ||
-				pvt->_fd->lowLevelWrite(
-					outputtoken.value,length)!=
-					(ssize_t)length) {
+			if (sendToken(TOKEN_FLAGS_TYPE_ACCEPT,
+					outputtoken.value,
+					outputtoken.length)!=
+					(ssize_t)outputtoken.length) {
 
 				// clean up
 				OM_uint32	minor;
@@ -1319,13 +1286,13 @@ bool gssapicontext::verifyMic(const unsigned char *message,
 
 ssize_t gssapicontext::read(void *buf, ssize_t count) {
 
-	// first, return buffered data, if there is any
+	// first, return any buffered data
 	ssize_t bytestoread=count;
 	ssize_t	bytesread=0;
 	size_t	bytesinbuffer=(pvt->_readbuffer.getSize()-pvt->_readbufferpos);
 	if (bytesinbuffer) {
 
-		// copy the data out...
+		// copy data out...
 		if (bytesinbuffer<=(size_t)bytestoread) {
 			bytestring::copy(
 				buf,pvt->_readbuffer.getBuffer(),bytesinbuffer);
@@ -1344,35 +1311,30 @@ ssize_t gssapicontext::read(void *buf, ssize_t count) {
 		}
 	}
 
-	// next, read tokens from the peer...
+	// next, receive tokens from the peer...
+stdoutput.printf("bytestoread: %d\n",bytestoread);
 	while (bytestoread) {
 
-		// FIXME: read token type
-
-		// read token size
-		uint64_t	tokensize;
-		ssize_t	result=pvt->_fd->lowLevelRead(&tokensize,
-							sizeof(uint64_t));
-		if (result!=sizeof(tokensize)) {
-			return (result<=0)?result:RESULT_ERROR;
-		}
-
-		// read token data
-		unsigned char	*tokendata=new unsigned char[tokensize];
-		result=pvt->_fd->lowLevelRead(tokendata,tokensize);
-		if (result!=(ssize_t)tokensize) {
-			return (result<=0)?result:RESULT_ERROR;
+		// receive token
+		uint16_t	tokenflags=0;
+		void		*tokendata=NULL;
+		size_t		tokensize=0;
+		ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
+stdoutput.printf("recieveToken(%d)\n",tokensize);
+		if (result<=0 || !(tokenflags&TOKEN_FLAGS_TYPE_DATA)) {
+			return result;
 		}
 
 		// unwrap
 		unsigned char	*data;
 		size_t		datasize;
-		if (!unwrap(tokendata,tokensize,&data,&datasize)) {
+		if (!unwrap((unsigned char *)tokendata,tokensize,
+						&data,&datasize)) {
 			delete[] data;
 			return RESULT_ERROR;
 		}
 
-		// copy the data out...
+		// copy data out...
 		if (datasize<=(size_t)bytestoread) {
 			bytestring::copy(buf,data,datasize);
 			bytesread+=datasize;
@@ -1389,9 +1351,40 @@ ssize_t gssapicontext::read(void *buf, ssize_t count) {
 						datasize-bytesread);
 		}
 		delete[] data;
+stdoutput.printf("bytesread: %d\n",bytesread);
 	}
 
 	return bytesread;
+}
+
+ssize_t gssapicontext::receiveToken(uint16_t *tokenflags,
+					void **tokendata,
+					size_t *tokensize) {
+
+	// read token flags
+	ssize_t		result=pvt->_fd->lowLevelRead(tokenflags,
+							sizeof(*tokenflags));
+	if (result!=sizeof(*tokenflags)) {
+		return (result<=0)?result:RESULT_ERROR;
+	}
+
+	// read token size
+	uint64_t	size;
+	result=pvt->_fd->lowLevelRead(&size,sizeof(size));
+	if (result!=sizeof(size)) {
+		return (result<=0)?result:RESULT_ERROR;
+	}
+
+	// copy size out and create data buffer
+	*tokensize=size;
+	*tokendata=new unsigned char[size];
+
+	// read token data
+	result=pvt->_fd->lowLevelRead(*tokendata,size);
+	if (result!=(ssize_t)size) {
+		return (result<=0)?result:RESULT_ERROR;
+	}
+	return result;
 }
 
 ssize_t gssapicontext::write(const void *buf, ssize_t count) {
@@ -1403,12 +1396,28 @@ ssize_t gssapicontext::write(const void *buf, ssize_t count) {
 		return RESULT_ERROR;
 	}
 
-	// FIXME: write token type
+	// send token
+	ssize_t	result=sendToken(TOKEN_FLAGS_TYPE_DATA,tokendata,tokensize);
+	if (result!=(ssize_t)tokensize) {
+		return (result<=0)?result:RESULT_ERROR;
+	}
+	return count;
+}
+
+ssize_t gssapicontext::sendToken(uint16_t tokenflags,
+					const void *tokendata,
+					size_t tokensize) {
+	// write token flags
+	ssize_t		result=pvt->_fd->lowLevelWrite(&tokenflags,
+							sizeof(tokenflags));
+	if (result!=sizeof(tokenflags)) {
+		return (result<=0)?result:RESULT_ERROR;
+	}
 
 	// write token size
 	uint64_t	size=tokensize;
-	ssize_t	result=pvt->_fd->lowLevelWrite(&size,sizeof(uint64_t));
-	if (result!=sizeof(uint64_t)) {
+	result=pvt->_fd->lowLevelWrite(&size,sizeof(size));
+	if (result!=sizeof(size)) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
@@ -1417,7 +1426,7 @@ ssize_t gssapicontext::write(const void *buf, ssize_t count) {
 	if (result!=(ssize_t)tokensize) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
-	return count;
+	return result;
 }
 
 uint32_t gssapicontext::getRemainingLifetime() {
