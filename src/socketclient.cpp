@@ -423,26 +423,28 @@ wsacleanup:
 	}
 	#endif
 
-	// handle SSL-connect if necessary
+	// SSL-connect if necessary
 	#ifdef RUDIMENTS_HAS_SSL
-	if (retval==RESULT_SUCCESS) {
-		if (!sslctx()) {
-			return RESULT_SUCCESS;
+	if (retval==RESULT_SUCCESS && sslctx()) {
+		if (!initializeSSL()) {
+			close();
+			return RESULT_ERROR;
 		}
-		if (initializeSSL()) {
-			sslresult(SSL_connect((SSL *)ssl()));
-			if (sslresult()==1) {
-				return RESULT_SUCCESS;
-			}
+		sslresult(SSL_connect((SSL *)ssl()));
+		if (sslresult()!=1) {
+			close();
+			return RESULT_ERROR;
 		}
-		close();
-		return RESULT_ERROR;
 	}
 	#endif
 
-	// handle GSSAPI-connect if necessary
-	if (gssapictx()) {
-		// FIXME: initiate context
+	// GSSAPI-connect if necessary
+	if (retval==RESULT_SUCCESS && gssapictx()) {
+		gssapictx()->setFileDescriptor(this);
+		if (!gssapictx()->initiate()) {
+			close();
+			return RESULT_ERROR;
+		}
 	}
 
 	return retval;

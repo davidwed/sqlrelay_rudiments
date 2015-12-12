@@ -226,7 +226,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		~gssapicontext();
 		
 		/** Sets the credentials that will be used during subsequent
-		 *  calls to one of the initiate or accept methods. */
+		 *  calls to one of initiate() or accept(). */
 		void	setCredentials(gssapicredentials *credentials);
 
 		/** Returns the credentials set by a previous call to
@@ -234,7 +234,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		gssapicredentials	*getCredentials();
 
 		/** Sets the filedescriptor that will be used during subsequent
-		 *  calls to one of the initiate or accept methods. */
+		 *  calls to one of initiate() or accept(). */
 		void	setFileDescriptor(filedescriptor *fd);
 
 		/** Returns the filedscriptor by a previous call to
@@ -243,7 +243,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		filedescriptor	*getFileDescriptor();
 
 		/** Sets the context-lifetime that will be requested during
-		 *  subsequent calls to the initiate or accept methods.
+		 *  subsequent calls to initiate() or accept().
 		 *  Setting "desiredlifetime" to the largest 32-bit unsigned
 		 *  integer requests an indefinite lifetime. */
 		void	setDesiredLifetime(uint32_t desiredlifetime);
@@ -255,7 +255,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		uint32_t	getDesiredLifetime();
 
 		/** Sets the security mechanism that will be requested during
-		 *  subsequent calls to the initiate or accept methods. */
+		 *  subsequent calls to initiate() or accept(). */
 		void	setDesiredMechanism(gssapimechanism *desiredmechanism);
 
 		/** Returns the security mechanism set by a previous call to
@@ -264,27 +264,27 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		gssapimechanism	*getDesiredMechanism();
 
 		/** Sets the context-flags that will be requested during
-		 *  subsequent calls to the initiate or accept methods. */
+		 *  subsequent calls to initiate() or accept(). */
 		void	setDesiredFlags(uint32_t desiredflags);
 
 		/** Returns the context-flags set by a previous call to
 		 *  setDesiredFlags() or 0 if no flags have been set. */
 		uint32_t	getDesiredFlags();
 
+		/** Sets the service that will be requested during subsequent
+ 		 *  calls to initiate(). */
+		void	setService(const char *service);
+
+		/** Returns the service that will be requested during
+ 		 *  subsequent calls to initiate(). */
+		const char	*getService();
+
 
 		/** Initiates a context with service principal "name" with
 		 *  whom a connection is established across the filedescriptor
 		 *  previously set using setPeer().
 		 *  Returns true on success and false on failure. */
-		bool	initiateToService(const char *name);
-
-		/** Initiates a context with service principal "name" with
-		 *  whom a connection is established across the filedescriptor
-		 *  previously set using setPeer(), with a timeout of "sec"
-		 *  seconds and "usec" microseconds.
-		 *  Returns true on success and false on failure. */
-		bool	initiateToService(const char *name,
-						int32_t sec, int32_t usec);
+		bool	initiate();
 
 
 		/** Accepts a security context from a principal with whom a
@@ -292,13 +292,6 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		 *  previously set using setPeer().
 		 *  Returns true on success and false on failure. */
 		bool	accept();
-
-		/** Accepts a security context from a principal with whom a
-		 *  connection is established across the filedescriptor
-		 *  previously set using setPeer(), with a timeout of "sec"
-		 *  seconds and "usec" microseconds.
-		 *  Returns true on success and false on failure. */
-		bool	accept(int32_t sec, int32_t usec);
 
 
 		/** Releases any security context established using an initiate
@@ -315,14 +308,14 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		uint32_t	getActualLifetime();
 
 		/** Returns the security mechanism that was actually used
-		 *  during the most recent call to one of the initiate or accept
-		 *  methods or NULL if no call to an initiate or accept method
+		 *  during the most recent call to one of initiate() or
+		 *  accept() or NULL if no call to initiate() or accept()
 		 *  has been made, or if release() has been called. */
 		gssapimechanism	*getActualMechanism();
 
 		/** Returns the context flags that were actually used during
-		 *  the most recent call to one of the initiate or accept
-		 *  methods or 0 if no call to an initiate or accept method
+		 *  the most recent call to one of initiate() or accept()
+		 *  or 0 if no call to an initiate() or accept() method
 		 *  has been made, or if release() has been called. */
 		uint32_t	getActualFlags();
 

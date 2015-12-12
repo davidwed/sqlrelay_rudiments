@@ -5,9 +5,7 @@
 		bool	inquire();
 		bool	initiate(const void *name,
 					size_t size,
-					const void *nametype,
-					int32_t sec,
-					int32_t usec);
+					const void *nametype);
 		void	getStatus(uint32_t status, int32_t type);
 
 		gssapicontextprivate	*pvt;

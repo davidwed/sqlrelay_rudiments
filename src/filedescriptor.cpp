@@ -494,13 +494,7 @@ bool filedescriptor::supportsGSSAPI() {
 }
 
 void filedescriptor::setGSSAPIContext(gssapicontext *ctx) {
-	if (pvt->_gssapictx) {
-		pvt->_gssapictx->setFileDescriptor(NULL);
-	}
 	pvt->_gssapictx=ctx;
-	if (ctx) {
-		pvt->_gssapictx->setFileDescriptor(this);
-	}
 }
 
 gssapicontext *filedescriptor::getGSSAPIContext() {
@@ -1240,6 +1234,11 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
 		if (pvt->_ssl) {
+
+			#ifdef DEBUG_READ
+		        debugPrintf(" (SSL) ");
+			#endif
+
 			for (bool done=false; !done ;) {
 
 				#ifdef RUDIMENTS_SSL_VOID_PTR
@@ -1268,6 +1267,11 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		} else
 		#endif
 		if (pvt->_gssapictx) {
+
+			#ifdef DEBUG_READ
+		        debugPrintf(" (GSSAPI) ");
+			#endif
+
 			actualread=pvt->_gssapictx->read(ptr,sizetoread);
 		} else {
 			actualread=lowLevelRead(ptr,sizetoread);
@@ -1521,6 +1525,11 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		error::clearError();
 		#ifdef RUDIMENTS_HAS_SSL
 		if (pvt->_ssl) {
+
+			#ifdef DEBUG_WRITE
+		        debugPrintf(" (SSL) ");
+			#endif
+			
 			for (bool done=false; !done ;) {
 
 				#ifdef RUDIMENTS_SSL_VOID_PTR
@@ -1549,6 +1558,11 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		} else
 		#endif
 		if (pvt->_gssapictx) {
+
+			#ifdef DEBUG_WRITE
+		        debugPrintf(" (GSSAPI) ");
+			#endif
+
 			actualwrite=pvt->_gssapictx->write(ptr,sizetowrite);
 		} else {
 			actualwrite=lowLevelWrite(ptr,sizetowrite);

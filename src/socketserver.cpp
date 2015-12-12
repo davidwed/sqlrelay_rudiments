@@ -210,7 +210,9 @@ bool socketserver::sslAccept(filedescriptor *sock) {
 
 bool socketserver::gssapiAccept(filedescriptor *sock) {
 	if (gssapictx()) {
-		// FIXME: accept context
+		sock->setGSSAPIContext(gssapictx());
+		gssapictx()->setFileDescriptor(sock);
+		return gssapictx()->accept();
 	}
 	return true;
 }
