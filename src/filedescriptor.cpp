@@ -327,9 +327,6 @@ filedescriptor::~filedescriptor() {
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
-	// FIXME: this should be passed down into the gssapicontext
-	// so it knows how to chunk writes
-
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting write buffer size to %d\n",size);
 	#endif
@@ -357,8 +354,6 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 	// gssapicontext does it's own read buffering, which interferes
 	// with buffering at this level, so ignore it if we're using
 	// gssapi and request buffering
-	// FIXME: this should actually be passed down into the gssapicontext
-	// so it knows when to return a short-read
 	if (size && pvt->_gssapictx) {
 		return true;
 	}

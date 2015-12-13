@@ -158,7 +158,7 @@ void gssapimechanism::clear() {
 	}
 	pvt->_oid=GSS_C_NO_OID;
 
-	delete pvt->_str;
+	delete[] pvt->_str;
 	pvt->_str=NULL;
 }
 
@@ -780,7 +780,7 @@ bool gssapicontext::initiate(const void *name,
 		// receive token from peer, into inputtoken, if necessary
 		if (pvt->_major==GSS_S_CONTINUE_NEEDED) {
 
-			uint16_t	flags=0;
+			uint32_t	flags=0;
 			inputtoken.value=NULL;
 			inputtoken.length=0;
 			if (receiveToken(&flags,
@@ -952,7 +952,7 @@ bool gssapicontext::accept() {
 	do {
 
 		// receive token from peer, into inputtoken...
-		uint16_t	flags=0;
+		uint32_t	flags=0;
 		inputtoken.value=NULL;
 		inputtoken.length=0;
 		if (receiveToken(&flags,
@@ -1312,15 +1312,13 @@ ssize_t gssapicontext::read(void *buf, ssize_t count) {
 	}
 
 	// next, receive tokens from the peer...
-stdoutput.printf("bytestoread: %d\n",bytestoread);
 	while (bytestoread) {
 
 		// receive token
-		uint16_t	tokenflags=0;
+		uint32_t	tokenflags=0;
 		void		*tokendata=NULL;
 		size_t		tokensize=0;
 		ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
-stdoutput.printf("recieveToken(%d)\n",tokensize);
 		if (result<=0 || !(tokenflags&TOKEN_FLAGS_TYPE_DATA)) {
 			return result;
 		}
@@ -1351,26 +1349,24 @@ stdoutput.printf("recieveToken(%d)\n",tokensize);
 						datasize-bytesread);
 		}
 		delete[] data;
-stdoutput.printf("bytesread: %d\n",bytesread);
 	}
 
 	return bytesread;
 }
 
-ssize_t gssapicontext::receiveToken(uint16_t *tokenflags,
+ssize_t gssapicontext::receiveToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize) {
 
 	// read token flags
-	ssize_t		result=pvt->_fd->lowLevelRead(tokenflags,
-							sizeof(*tokenflags));
+	ssize_t		result=fullRead(tokenflags,sizeof(*tokenflags));
 	if (result!=sizeof(*tokenflags)) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
 	// read token size
-	uint64_t	size;
-	result=pvt->_fd->lowLevelRead(&size,sizeof(size));
+	uint32_t	size;
+	result=fullRead(&size,sizeof(size));
 	if (result!=sizeof(size)) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
@@ -1380,7 +1376,7 @@ ssize_t gssapicontext::receiveToken(uint16_t *tokenflags,
 	*tokendata=new unsigned char[size];
 
 	// read token data
-	result=pvt->_fd->lowLevelRead(*tokendata,size);
+	result=fullRead(*tokendata,size);
 	if (result!=(ssize_t)size) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
@@ -1404,29 +1400,68 @@ ssize_t gssapicontext::write(const void *buf, ssize_t count) {
 	return count;
 }
 
-ssize_t gssapicontext::sendToken(uint16_t tokenflags,
+ssize_t gssapicontext::sendToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize) {
 	// write token flags
-	ssize_t		result=pvt->_fd->lowLevelWrite(&tokenflags,
-							sizeof(tokenflags));
+	ssize_t		result=fullWrite(&tokenflags,sizeof(tokenflags));
 	if (result!=sizeof(tokenflags)) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
 	// write token size
-	uint64_t	size=tokensize;
-	result=pvt->_fd->lowLevelWrite(&size,sizeof(size));
+	uint32_t	size=tokensize;
+	result=fullWrite(&size,sizeof(size));
 	if (result!=sizeof(size)) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
 	// write token data
-	result=pvt->_fd->lowLevelWrite(tokendata,tokensize);
+	result=fullWrite(tokendata,tokensize);
 	if (result!=(ssize_t)tokensize) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
 	return result;
+}
+
+ssize_t gssapicontext::fullRead(void *data, ssize_t size) {
+
+	// read, retrying if we got a short read,
+	// until we've read "size" bytes...
+
+	ssize_t	bytesread=0;
+	ssize_t bytestoread=size;
+	while (bytestoread) {
+		ssize_t	result=pvt->_fd->lowLevelRead(
+					((unsigned char *)data)+bytesread,
+					bytestoread);
+		if (result<=0) {
+			return result;
+		}
+		bytesread+=result;
+		bytestoread-=result;
+	}
+	return bytesread;
+}
+
+ssize_t gssapicontext::fullWrite(const void *data, ssize_t size) {
+
+	// write, retrying if we got a short write,
+	// until we've written "size" bytes...
+
+	ssize_t	byteswritten=0;
+	ssize_t bytestowrite=size;
+	while (bytestowrite) {
+		ssize_t	result=pvt->_fd->lowLevelWrite(
+				((const unsigned char *)data)+byteswritten,
+				bytestowrite);
+		if (result<=0) {
+			return result;
+		}
+		byteswritten+=result;
+		bytestowrite-=result;
+	}
+	return byteswritten;
 }
 
 uint32_t gssapicontext::getRemainingLifetime() {
