@@ -1,18 +1,18 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information.
 
-#ifndef RUDIMENTS_GSSAPI_H
-#define RUDIMENTS_GSSAPI_H
+#ifndef RUDIMENTS_GSS_H
+#define RUDIMENTS_GSS_H
 
-#include <rudiments/private/gssapiincludes.h>
+#include <rudiments/private/gssincludes.h>
 
-class RUDIMENTS_DLLSPEC gssapi {
+class RUDIMENTS_DLLSPEC gss {
 	public:
-		/** Creates a new instance of the gssapi framework. */
-		gssapi();
+		/** Creates a new instance of the gss framework. */
+		gss();
 
-		/** Deletes this instance of the gssapi framework. */
-		~gssapi();
+		/** Deletes this instance of the gss framework. */
+		~gss();
 
 		/** Returns the available underlying security mechanisms as
 		 *  a NULL-terminated array.   The members of the array
@@ -27,28 +27,28 @@ class RUDIMENTS_DLLSPEC gssapi {
 		 *    { 1 3 6 1 5 5 2 }
 		 *
 		 *  These strings may be passed into
-		 *  gssapimechanism::initialize(const char *str). */
+		 *  gssmechanism::initialize(const char *str). */
 		const char * const	*getAvailableMechanisms();
 
-	#include <rudiments/private/gssapi.h>
+	#include <rudiments/private/gss.h>
 };
 
 
-class RUDIMENTS_DLLSPEC gssapimechanism {
+class RUDIMENTS_DLLSPEC gssmechanism {
 	public:
-		/** Creates a new instance of the gssapimechanism class. */
-		gssapimechanism();
+		/** Creates a new instance of the gssmechanism class. */
+		gssmechanism();
 
-		/** Deletes this instance of the gssapimechanism class. */
-		~gssapimechanism();
+		/** Deletes this instance of the gssmechanism class. */
+		~gssmechanism();
 
-		/** Initializes this instance of the gssapimechanism class
+		/** Initializes this instance of the gssmechanism class
 		 *  using "str", which should be the string representation
 		 *  of the object id for an available security mechanism.
 		 *  Returns true on success and false on failure. */
 		bool	initialize(const char *str);
 
-		/** Initializes this instance of the gssapimechanism class
+		/** Initializes this instance of the gssmechanism class
 		 *  using "oid", which should be the platform-spcific binary
 		 *  representation of the object id for an available security
 		 *  mechanism.
@@ -69,17 +69,17 @@ class RUDIMENTS_DLLSPEC gssapimechanism {
 		 *  been cleared. */
 		const void	*getObjectId();
 
-	#include <rudiments/private/gssapimechanism.h>
+	#include <rudiments/private/gssmechanism.h>
 };
 
 
-class RUDIMENTS_DLLSPEC gssapicredentials {
+class RUDIMENTS_DLLSPEC gsscredentials {
 	public:
-		/** Creates an instance of the gssapicredentials class. */
-		gssapicredentials();
+		/** Creates an instance of the gsscredentials class. */
+		gsscredentials();
 
-		/** Deletes this instance of the gssapicredentials class. */
-		~gssapicredentials();
+		/** Deletes this instance of the gsscredentials class. */
+		~gsscredentials();
 
 		/** Sets the credentials-lifetime that will be requested during
 		 *  subsequent calls to the acquire methods.
@@ -96,18 +96,18 @@ class RUDIMENTS_DLLSPEC gssapicredentials {
 		/** Adds security mechanism "mech" to the list of security
 		 *  mechanisms that will be requested during a subsequent call
 		 *  to one of the acquire methods. */
-		void		addDesiredMechanism(gssapimechanism *mech);
+		void		addDesiredMechanism(gssmechanism *mech);
 
 		/** Removes security mechanism "mech" from the list of security
 		 *  mechanisms that will be requested during a subsequent call
 		 *  to one of the acquire methods. */
-		void		removeDesiredMechanism(gssapimechanism *mech);
+		void		removeDesiredMechanism(gssmechanism *mech);
 
 		/** Returns true if security mechanism "mech" is in the list of
 		 *  security mechanisms that will be requested during a
 		 *  subsequent call to one of the acquire methods and false
 		 *  otherwise. */
-		bool		inDesiredMechanisms(gssapimechanism *mech);
+		bool		inDesiredMechanisms(gssmechanism *mech);
 
 		/** Removes all security mechanism from the list of security
 		 *  mechanisms that will be requested during a subsequent call
@@ -122,7 +122,7 @@ class RUDIMENTS_DLLSPEC gssapicredentials {
 		/** Returns the "index"'th security mechanism from the list of
 		 *  security mechanisms that will be requested during a
 		 *  subsequent call to one of the acquire methods. */
-		gssapimechanism *getDesiredMechanism(uint64_t index);
+		gssmechanism *getDesiredMechanism(uint64_t index);
 
 
 		/** Acquires credentials for service principal "name".
@@ -178,7 +178,7 @@ class RUDIMENTS_DLLSPEC gssapicredentials {
 		 *  security mechanisms that was actually used during the
 		 *  most recent call to one of the acquire methods and false
 		 *  otherwise. */
-		bool		inActualMechanisms(gssapimechanism *mech);
+		bool		inActualMechanisms(gssmechanism *mech);
 
 		/** Returns the number of security mechanisms in the list of
 		 *  security mechanisms that were actually used during the
@@ -192,7 +192,7 @@ class RUDIMENTS_DLLSPEC gssapicredentials {
 		 *  most recent call to one of the acquire methods or NULL
 		 *  if no call to an acquire method has been made, or if
 		 *  release() has been called. */
-		gssapimechanism	*getActualMechanism(uint64_t index);
+		gssmechanism	*getActualMechanism(uint64_t index);
 
 
 		/** Returns the major-status code of the most recently failed
@@ -213,36 +213,36 @@ class RUDIMENTS_DLLSPEC gssapicredentials {
 		 *  acquire method, or if release() has been called. */
 		const void	*getCredentials();
 
-	#include <rudiments/private/gssapicredentials.h>
+	#include <rudiments/private/gsscredentials.h>
 };
 
 
-class RUDIMENTS_DLLSPEC gssapicontext {
+class RUDIMENTS_DLLSPEC gsscontext {
 	public:
-		/** Creates an instance of the gssapicontext class. */
-		gssapicontext();
+		/** Creates an instance of the gsscontext class. */
+		gsscontext();
 
-		/** Deletes this instance of the gssapicontext class. */
-		~gssapicontext();
+		/** Deletes this instance of the gsscontext class. */
+		~gsscontext();
 		
 		/** Sets the credentials that will be used during subsequent
 		 *  calls to one of initiate() or accept(). */
-		void	setCredentials(gssapicredentials *credentials);
+		void	setCredentials(gsscredentials *credentials);
 
 		/** Returns the credentials set by a previous call to
 		 *  setCredentials() or NULL if no credentials have been set. */
-		gssapicredentials	*getCredentials();
+		gsscredentials	*getCredentials();
 
 		/** Sets the filedescriptor that will be used during subsequent
 		 *  calls to one of initiate() or accept().
 		 *
-		 *  Note that if this instance is set as the current GSSAPI
+		 *  Note that if this instance is set as the current GSS
 		 *  context of a child of the socketclient class, then this
 		 *  method is called implicitly during a successful call to
 		 *  connect().
 		 *
 		 *  Note also that if this instance is set as the current
-		 *  GSSAPI context of a child of the socketserver class, then
+		 *  GSS context of a child of the socketserver class, then
 		 *  this method is called implicitly during a successful call
 		 *  to accept().
 		 *  */
@@ -267,12 +267,12 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 
 		/** Sets the security mechanism that will be requested during
 		 *  subsequent calls to initiate() or accept(). */
-		void	setDesiredMechanism(gssapimechanism *desiredmechanism);
+		void	setDesiredMechanism(gssmechanism *desiredmechanism);
 
 		/** Returns the security mechanism set by a previous call to
 		 *  setDesiredMechanism() or NULL if no security mechanism has
 		 *  been set. */
-		gssapimechanism	*getDesiredMechanism();
+		gssmechanism	*getDesiredMechanism();
 
 		/** Sets the context-flags that will be requested during
 		 *  subsequent calls to initiate() or accept(). */
@@ -295,7 +295,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		 *  whom a connection is established across the filedescriptor
 		 *  previously set using setPeer().
 		 *
-		 *  Note that if this instance is set as the current GSSAPI
+		 *  Note that if this instance is set as the current GSS
 		 *  context of a child of the socketclient class, then this
 		 *  method is called implicitly during a successful call to
 		 *  connect().
@@ -308,7 +308,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		 *  connection is established across the filedescriptor
 		 *  previously set using setPeer().
 		 *
-		 *  Note that if this instance is set as the current GSSAPI
+		 *  Note that if this instance is set as the current GSS
 		 *  context of a child of the socketserver class, then this
 		 *  method is called implicitly during a successful call to
 		 *  accept().
@@ -334,7 +334,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		 *  during the most recent call to one of initiate() or
 		 *  accept() or NULL if no call to initiate() or accept()
 		 *  has been made, or if release() has been called. */
-		gssapimechanism	*getActualMechanism();
+		gssmechanism	*getActualMechanism();
 
 		/** Returns the context flags that were actually used during
 		 *  the most recent call to one of initiate() or accept()
@@ -466,7 +466,7 @@ class RUDIMENTS_DLLSPEC gssapicontext {
 		 *  call. */
 		const char	*getStatus();
 		
-	#include <rudiments/private/gssapicontext.h>
+	#include <rudiments/private/gsscontext.h>
 };
 
 #endif

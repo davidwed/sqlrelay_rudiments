@@ -32016,10 +32016,10 @@ fi
 
 if ( test "$HAVE_GSS" = "yes" )
 then
-	HEADERS3="$HEADERS3 gssapi.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS7 gssapi.h gssapimechanism.h gssapicredentials.h gssapicontext.h gssapiincludes.h"
-	SRCS="$SRCS gssapi.cpp"
-	LOBJS="$LOBJS gssapi.lo"
+	HEADERS3="$HEADERS3 gss.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 gss.h gssmechanism.h gsscredentials.h gsscontext.h gssincludes.h"
+	SRCS="$SRCS gss.cpp"
+	LOBJS="$LOBJS gss.lo"
 fi
 
 

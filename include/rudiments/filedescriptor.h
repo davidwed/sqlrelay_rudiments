@@ -80,7 +80,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		void	*getSSLContext();
 
 		/** Should be called after calling setSSLContext().
-		 *  Causes the appropriate GSSAPI function to be called
+		 *  Causes the appropriate GSS function to be called
 		 *  instead of, or in concert with, read(), write(),
 		 *  connect(), accept() and close() methods.
 		 * 
@@ -110,19 +110,19 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  the exact error. */
 		int32_t	getSSLResult() const;
 
-		/** Returns true rudiments was built with GSSAPI support
+		/** Returns true rudiments was built with GSS support
 		 *  and false otherwise. */
-		bool	supportsGSSAPI();
+		bool	supportsGSS();
 
-		/** Associates a gssapicontext "ctx" with the filedescriptor.
-		 *  To remove the current gssapicontext, pass in a NULL for
+		/** Associates a gsscontext "ctx" with the filedescriptor.
+		 *  To remove the current gsscontext, pass in a NULL for
 		 *  "ctx". */
-		void	setGSSAPIContext(gssapicontext *ctx);
+		void	setGSSContext(gsscontext *ctx);
 
-		/** Returns the gssapicontext currently associated
+		/** Returns the gsscontext currently associated
 		 *  with the filedescriptor or NULL if none
 		 *  is currently associated. */
-		gssapicontext	*getGSSAPIContext();
+		gsscontext	*getGSSContext();
 
 		/** Returns true if the client socket supports
 		 *  blocking/nonblocking modes and false otherwise. */

@@ -216,7 +216,7 @@ class filedescriptorprivate {
 		int32_t	_sslresult;
 		#endif
 
-		gssapicontext	*_gssapictx;
+		gsscontext	*_gssctx;
 
 		const char	*_type;
 
@@ -270,7 +270,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_ssl=NULL;
 	pvt->_sslresult=1;
 #endif
-	pvt->_gssapictx=NULL;
+	pvt->_gssctx=NULL;
 	pvt->_type="filedescriptor";
 	pvt->_writebuffer=NULL;
 	pvt->_writebufferend=NULL;
@@ -297,7 +297,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_ssl=f.pvt->_ssl;
 	pvt->_sslresult=f.pvt->_sslresult;
 #endif
-	pvt->_gssapictx=f.pvt->_gssapictx;
+	pvt->_gssctx=f.pvt->_gssctx;
 	if (f.pvt->_writebuffer) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
 						f.pvt->_writebuffer;
@@ -351,10 +351,10 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
 
-	// gssapicontext does it's own read buffering, which interferes
+	// gsscontext does it's own read buffering, which interferes
 	// with buffering at this level, so ignore it if we're using
-	// gssapi and request buffering
-	if (size && pvt->_gssapictx) {
+	// gss and request buffering
+	if (size && pvt->_gssctx) {
 		return true;
 	}
 
@@ -493,7 +493,7 @@ void *filedescriptor::newSSLBIO() const {
 #endif
 }
 
-bool filedescriptor::supportsGSSAPI() {
+bool filedescriptor::supportsGSS() {
 #ifdef RUDIMENTS_HAS_GSS
 	return true;
 #else
@@ -501,22 +501,22 @@ bool filedescriptor::supportsGSSAPI() {
 #endif
 }
 
-void filedescriptor::setGSSAPIContext(gssapicontext *ctx) {
-	pvt->_gssapictx=ctx;
+void filedescriptor::setGSSContext(gsscontext *ctx) {
+	pvt->_gssctx=ctx;
 
-	// gssapicontext does it's own read buffering, which interferes
+	// gsscontext does it's own read buffering, which interferes
 	// with buffering at this level, so disable read buffering if
-	// we're using gssapi.
+	// we're using gss.
 	//
 	// Note: this is a little kludgy, as the app won't necessarily know
-	// to re-enable read buffering if it disables gssapi.
+	// to re-enable read buffering if it disables gss.
 	if (ctx) {
 		setReadBufferSize(0);
 	}
 }
 
-gssapicontext *filedescriptor::getGSSAPIContext() {
-	return pvt->_gssapictx;
+gsscontext *filedescriptor::getGSSContext() {
+	return pvt->_gssctx;
 }
 
 bool filedescriptor::supportsBlockingNonBlockingModes() {
@@ -1284,13 +1284,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			}
 		} else
 		#endif
-		if (pvt->_gssapictx) {
+		if (pvt->_gssctx) {
 
 			#ifdef DEBUG_READ
-		        debugPrintf(" (GSSAPI) ");
+		        debugPrintf(" (GSS) ");
 			#endif
 
-			actualread=pvt->_gssapictx->read(ptr,sizetoread);
+			actualread=pvt->_gssctx->read(ptr,sizetoread);
 		} else {
 			actualread=lowLevelRead(ptr,sizetoread);
 		}
@@ -1575,13 +1575,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			}
 		} else
 		#endif
-		if (pvt->_gssapictx) {
+		if (pvt->_gssctx) {
 
 			#ifdef DEBUG_WRITE
-		        debugPrintf(" (GSSAPI) ");
+		        debugPrintf(" (GSS) ");
 			#endif
 
-			actualwrite=pvt->_gssapictx->write(ptr,sizetowrite);
+			actualwrite=pvt->_gssctx->write(ptr,sizetowrite);
 		} else {
 			actualwrite=lowLevelWrite(ptr,sizetowrite);
 		}
@@ -2367,8 +2367,8 @@ void filedescriptor::sslresult(int32_t sslrslt) {
 #endif
 }
 
-gssapicontext *filedescriptor::gssapictx() {
-	return pvt->_gssapictx;
+gsscontext *filedescriptor::gssctx() {
+	return pvt->_gssctx;
 }
 
 bool filedescriptor::closeOnExec() {

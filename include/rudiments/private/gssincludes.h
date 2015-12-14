@@ -6,9 +6,9 @@
 
 #include <rudiments/stringbuffer.h>
 
-class gssapiprivate;
-class gssapimechanismprivate;
-class gssapicredentialsprivate;
-class gssapicontextprivate;
+class gssprivate;
+class gssmechanismprivate;
+class gsscredentialsprivate;
+class gsscontextprivate;
 
 class filedescriptor;

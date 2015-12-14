@@ -12,7 +12,7 @@
 		inserted between tag nodes when there is no text between tags
 	added escapechar option to filedescriptor::read-until-terminator
 		methods
-	added various gssapi wrapper classes and integrated them with
+	added various GSS wrapper classes and integrated them with
 		filedescriptor, similar to SSL integration
 	updated inet/unixsocketclient to close() as the first step of connect()
 	updated charstring::to(Unsigned)Integer-with-endptr methods to have

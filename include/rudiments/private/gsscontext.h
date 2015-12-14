@@ -18,4 +18,4 @@
 		ssize_t	fullRead(void *data, ssize_t count);
 		ssize_t	fullWrite(const void *data, ssize_t count);
 
-		gssapicontextprivate	*pvt;
+		gsscontextprivate	*pvt;

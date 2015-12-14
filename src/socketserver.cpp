@@ -208,13 +208,13 @@ bool socketserver::sslAccept(filedescriptor *sock) {
 	return true;
 }
 
-bool socketserver::gssapiAccept(filedescriptor *sock) {
-	if (gssapictx()) {
-		sock->setGSSAPIContext(gssapictx());
-		gssapictx()->setFileDescriptor(sock);
-		if (!gssapictx()->accept()) {
-			sock->setGSSAPIContext(NULL);
-			gssapictx()->setFileDescriptor(NULL);
+bool socketserver::gssAccept(filedescriptor *sock) {
+	if (gssctx()) {
+		sock->setGSSContext(gssctx());
+		gssctx()->setFileDescriptor(sock);
+		if (!gssctx()->accept()) {
+			sock->setGSSContext(NULL);
+			gssctx()->setFileDescriptor(NULL);
 			return false;
 		}
 	}

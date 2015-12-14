@@ -9,12 +9,12 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/stdio.h>
 #include <rudiments/bytebuffer.h>
-#include <rudiments/gssapi.h>
+#include <rudiments/gss.h>
 
 #include <gssapi/gssapi.h>
 
 #ifndef RUDIMENTS_HAS_GSS_STR_TO_OID
-	#include "gssapioid.cpp"
+	#include "gssoid.cpp"
 #endif
 
 // for gss_acquire_cred_with_password and possibly gss_str_to_oid
@@ -34,21 +34,21 @@
 #define TOKEN_FLAGS_ENCRYPTED		(1<<4)
 #define TOKEN_FLAGS_VERIFY		(1<<5)
 
-class gssapiprivate {
-	friend class gssapi;
+class gssprivate {
+	friend class gss;
 		char	**_mechs;
 };
 
-gssapi::gssapi() {
-	pvt=new gssapiprivate;
+gss::gss() {
+	pvt=new gssprivate;
 	pvt->_mechs=NULL;
 }
 
-gssapi::~gssapi() {
+gss::~gss() {
 	clear();
 }
 
-const char * const *gssapi::getAvailableMechanisms() {
+const char * const *gss::getAvailableMechanisms() {
 
 	clear();
 
@@ -60,7 +60,7 @@ const char * const *gssapi::getAvailableMechanisms() {
 
 		pvt->_mechs=new char *[mechs->count+1];
 
-		gssapimechanism	scratch;
+		gssmechanism	scratch;
 
 		for (size_t i=0; i<mechs->count; i++) {
 			scratch.initialize(&mechs->elements[i]);
@@ -76,7 +76,7 @@ const char * const *gssapi::getAvailableMechanisms() {
 	return pvt->_mechs;
 }
 
-void gssapi::clear() {
+void gss::clear() {
 	if (pvt->_mechs) {
 		for (char **m=pvt->_mechs; *m; m++) {
 			delete[] *m;
@@ -87,25 +87,25 @@ void gssapi::clear() {
 }
 
 
-class gssapimechanismprivate {
-	friend class gssapimechanism;
+class gssmechanismprivate {
+	friend class gssmechanism;
 	private:
 		char	*_str;
 		gss_OID	_oid;
 };
 
-gssapimechanism::gssapimechanism() {
-	pvt=new gssapimechanismprivate;
+gssmechanism::gssmechanism() {
+	pvt=new gssmechanismprivate;
 	pvt->_str=NULL;
 	pvt->_oid=GSS_C_NO_OID;
 }
 
-gssapimechanism::~gssapimechanism() {
+gssmechanism::~gssmechanism() {
 	clear();
 	delete pvt;
 }
 
-bool gssapimechanism::initialize(const char *str) {
+bool gssmechanism::initialize(const char *str) {
 
 	clear();
 
@@ -125,7 +125,7 @@ bool gssapimechanism::initialize(const char *str) {
 	return (major==GSS_S_COMPLETE);
 }
 
-bool gssapimechanism::initialize(const void *oid) {
+bool gssmechanism::initialize(const void *oid) {
 
 	clear();
 
@@ -159,7 +159,7 @@ bool gssapimechanism::initialize(const void *oid) {
 	return (major==GSS_S_COMPLETE);
 }
 
-void gssapimechanism::clear() {
+void gssmechanism::clear() {
 
 	if (pvt->_oid!=GSS_C_NO_OID) {
 		OM_uint32	minor;
@@ -171,17 +171,17 @@ void gssapimechanism::clear() {
 	pvt->_str=NULL;
 }
 
-const char *gssapimechanism::getString() {
+const char *gssmechanism::getString() {
 	return pvt->_str;
 }
 
-const void *gssapimechanism::getObjectId() {
+const void *gssmechanism::getObjectId() {
 	return pvt->_oid;
 }
 
 
-class gssapicredentialsprivate {
-	friend class gssapicredentials;
+class gsscredentialsprivate {
+	friend class gsscredentials;
 	private:
 		OM_uint32			_major;
 		OM_uint32			_minor;
@@ -190,19 +190,19 @@ class gssapicredentialsprivate {
 		const char			*_name;
 
 		OM_uint32			_desiredlifetime;
-		linkedlist< gssapimechanism * >	_dmlist;
+		linkedlist< gssmechanism * >	_dmlist;
 		gss_OID_set			_desiredmechanisms;
 		gss_cred_usage_t		_credusage;
 
 		gss_cred_id_t			_credentials;
 
 		OM_uint32			_actuallifetime;
-		linkedlist< gssapimechanism * >	_amlist;
+		linkedlist< gssmechanism * >	_amlist;
 		gss_OID_set			_actualmechanisms;
 };
 
-gssapicredentials::gssapicredentials() {
-	pvt=new gssapicredentialsprivate;
+gsscredentials::gsscredentials() {
+	pvt=new gsscredentialsprivate;
 
 	pvt->_name=NULL;
 
@@ -216,28 +216,28 @@ gssapicredentials::gssapicredentials() {
 	pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 }
 
-gssapicredentials::~gssapicredentials() {
+gsscredentials::~gsscredentials() {
 	release();
 	delete pvt;
 }
 
-void gssapicredentials::setDesiredLifetime(uint32_t desiredlifetime) {
+void gsscredentials::setDesiredLifetime(uint32_t desiredlifetime) {
 	pvt->_desiredlifetime=desiredlifetime;
 }
 
-uint32_t gssapicredentials::getDesiredLifetime() {
+uint32_t gsscredentials::getDesiredLifetime() {
 	return pvt->_desiredlifetime;
 }
 
-void gssapicredentials::addDesiredMechanism(gssapimechanism *mech) {
+void gsscredentials::addDesiredMechanism(gssmechanism *mech) {
 	pvt->_dmlist.append(mech);
 }
 
-void gssapicredentials::removeDesiredMechanism(gssapimechanism *mech) {
+void gsscredentials::removeDesiredMechanism(gssmechanism *mech) {
 	pvt->_dmlist.removeAll(mech);
 }
 
-bool gssapicredentials::inDesiredMechanisms(gssapimechanism *mech) {
+bool gsscredentials::inDesiredMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
 	if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
@@ -250,7 +250,7 @@ bool gssapicredentials::inDesiredMechanisms(gssapimechanism *mech) {
 	}
 
 	// look for the mech in the list
-	for (linkedlistnode< gssapimechanism * > *node=
+	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
 		// this isn't super efficient, but I don't know of a better way
@@ -263,17 +263,17 @@ bool gssapicredentials::inDesiredMechanisms(gssapimechanism *mech) {
 	return false;
 }
 
-void gssapicredentials::clearDesiredMechanisms() {
+void gsscredentials::clearDesiredMechanisms() {
 	pvt->_dmlist.clear();
 }
 
-uint64_t gssapicredentials::getDesiredMechanismCount() {
+uint64_t gsscredentials::getDesiredMechanismCount() {
 	return pvt->_dmlist.getLength();
 }
 
-gssapimechanism *gssapicredentials::getDesiredMechanism(uint64_t index) {
+gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 	uint64_t	i=0;
-	for (linkedlistnode< gssapimechanism * > *node=
+	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
 		if (i==index) {
@@ -284,43 +284,43 @@ gssapimechanism *gssapicredentials::getDesiredMechanism(uint64_t index) {
 	return NULL;
 }
 
-bool gssapicredentials::acquireService(const char *name) {
+bool gsscredentials::acquireService(const char *name) {
 	pvt->_credusage=GSS_C_ACCEPT;
 	return acquire(name,charstring::length(name)+1,
 				NULL,GSS_C_NT_HOSTBASED_SERVICE);
 }
 
-bool gssapicredentials::acquireUserName(const char *name,
+bool gsscredentials::acquireUserName(const char *name,
 					const char *password) {
 	pvt->_credusage=GSS_C_INITIATE;
 	return acquire(name,charstring::length(name)+1,
 				password,GSS_C_NT_USER_NAME);
 }
 
-bool gssapicredentials::acquireKerberosPrincipalName(const char *name,
+bool gsscredentials::acquireKerberosPrincipalName(const char *name,
 							const char *password) {
 	pvt->_credusage=GSS_C_INITIATE;
 	return acquire(name,charstring::length(name)+1,
 				password,(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
 }
 
-bool gssapicredentials::acquireAnonymous() {
+bool gsscredentials::acquireAnonymous() {
 	pvt->_credusage=GSS_C_INITIATE;
 	return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
 }
 
-bool gssapicredentials::acquireUid(uid_t uid) {
+bool gsscredentials::acquireUid(uid_t uid) {
 	pvt->_credusage=GSS_C_INITIATE;
 	return acquire(&uid,sizeof(uid_t),NULL,GSS_C_NT_MACHINE_UID_NAME);
 }
 
-bool gssapicredentials::acquireUidString(const char *uid) {
+bool gsscredentials::acquireUidString(const char *uid) {
 	pvt->_credusage=GSS_C_INITIATE;
 	return acquire(uid,charstring::length(uid)+1,
 				NULL,GSS_C_NT_STRING_UID_NAME);
 }
 
-bool gssapicredentials::acquire(const void *name,
+bool gsscredentials::acquire(const void *name,
 				size_t namesize,
 				const char *password,
 				const void *nametype) {
@@ -375,7 +375,7 @@ bool gssapicredentials::acquire(const void *name,
 	}
 
 	// populate the set from the list of mechs
-	for (linkedlistnode< gssapimechanism * > *node=
+	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
 
@@ -460,7 +460,7 @@ bool gssapicredentials::acquire(const void *name,
 	return (pvt->_major==GSS_S_COMPLETE);
 }
 
-void gssapicredentials::release() {
+void gsscredentials::release() {
 
 	// release the credentials
 	OM_uint32	minor;
@@ -475,7 +475,7 @@ void gssapicredentials::release() {
 		gss_release_oid_set(&minor,&pvt->_actualmechanisms);
 		pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 	}
-	for (linkedlistnode< gssapimechanism * > *node=
+	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
 					node; node=node->getNext()) {
 		delete node->getValue();
@@ -484,15 +484,15 @@ void gssapicredentials::release() {
 	pvt->_actuallifetime=GSS_C_INDEFINITE;
 }
 
-const char *gssapicredentials::getName() {
+const char *gsscredentials::getName() {
 	return pvt->_name;
 }
 
-uint32_t gssapicredentials::getActualLifetime() {
+uint32_t gsscredentials::getActualLifetime() {
 	return pvt->_actuallifetime;
 }
 
-bool gssapicredentials::inActualMechanisms(gssapimechanism *mech) {
+bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
 	if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
@@ -513,35 +513,35 @@ bool gssapicredentials::inActualMechanisms(gssapimechanism *mech) {
 	return (major==GSS_S_COMPLETE && present!=0);
 }
 
-uint64_t gssapicredentials::getActualMechanismCount() {
+uint64_t gsscredentials::getActualMechanismCount() {
 	return (pvt->_actualmechanisms==GSS_C_NO_OID_SET)?
 				0:pvt->_actualmechanisms->count;
 }
 
-gssapimechanism *gssapicredentials::getActualMechanism(uint64_t index) {
+gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {
 	if (pvt->_actualmechanisms==GSS_C_NO_OID_SET ||
 			index>pvt->_actualmechanisms->count) {
 		return NULL;
 	}
-	gssapimechanism	*mech=new gssapimechanism;
+	gssmechanism	*mech=new gssmechanism;
 	mech->initialize(&pvt->_actualmechanisms->elements[index]);
 	pvt->_amlist.append(mech);
 	return mech;
 }
 
-const void *gssapicredentials::getCredentials() {
+const void *gsscredentials::getCredentials() {
 	return pvt->_credentials;
 }
 
-uint32_t gssapicredentials::getMajorStatus() {
+uint32_t gsscredentials::getMajorStatus() {
 	return pvt->_major;
 }
 
-uint32_t gssapicredentials::getMinorStatus() {
+uint32_t gsscredentials::getMinorStatus() {
 	return pvt->_minor;
 }
 
-const char *gssapicredentials::getStatus() {
+const char *gsscredentials::getStatus() {
 	pvt->_status.clear();
 	pvt->_status.append("GSS - major:\n");
 	getStatus(pvt->_major,GSS_C_GSS_CODE);
@@ -554,7 +554,7 @@ const char *gssapicredentials::getStatus() {
 	return pvt->_status.getString();
 }
 
-void gssapicredentials::getStatus(uint32_t status, int32_t type) {
+void gsscredentials::getStatus(uint32_t status, int32_t type) {
 	gss_buffer_desc	statusbuffer;
 
 	OM_uint32	msgctx=0;
@@ -581,22 +581,22 @@ void gssapicredentials::getStatus(uint32_t status, int32_t type) {
 
 
 
-class gssapicontextprivate {
-	friend class gssapicontext;
+class gsscontextprivate {
+	friend class gsscontext;
 	private:
 		OM_uint32		_major;
 		OM_uint32		_minor;
 		stringbuffer		_status;
 
-		gssapicredentials	*_credentials;
+		gsscredentials	*_credentials;
 
 		filedescriptor		*_fd;
 
 		OM_uint32		_desiredlifetime;
 		OM_uint32		_actuallifetime;
 
-		gssapimechanism		*_desiredmechanism;
-		gssapimechanism		_actualmechanism;
+		gssmechanism		*_desiredmechanism;
+		gssmechanism		_actualmechanism;
 
 		OM_uint32		_desiredflags;
 		OM_uint32		_actualflags;
@@ -619,8 +619,8 @@ class gssapicontextprivate {
 		uint64_t		_readbufferpos;
 };
 
-gssapicontext::gssapicontext() {
-	pvt=new gssapicontextprivate;
+gsscontext::gsscontext() {
+	pvt=new gsscontextprivate;
 	pvt->_credentials=NULL;
 	pvt->_fd=NULL;
 	pvt->_desiredlifetime=GSS_C_INDEFINITE;
@@ -640,66 +640,66 @@ gssapicontext::gssapicontext() {
 	pvt->_readbufferpos=0;
 }
 
-gssapicontext::~gssapicontext() {
+gsscontext::~gsscontext() {
 	release();
 	delete pvt;
 }
 
-void gssapicontext::setCredentials(gssapicredentials *credentials) {
+void gsscontext::setCredentials(gsscredentials *credentials) {
 	pvt->_credentials=credentials;
 }
 
-gssapicredentials *gssapicontext::getCredentials() {
+gsscredentials *gsscontext::getCredentials() {
 	return pvt->_credentials;
 }
 
-void gssapicontext::setFileDescriptor(filedescriptor *fd) {
+void gsscontext::setFileDescriptor(filedescriptor *fd) {
 	pvt->_fd=fd;
 }
 
-filedescriptor *gssapicontext::getFileDescriptor() {
+filedescriptor *gsscontext::getFileDescriptor() {
 	return pvt->_fd;
 }
 
-void gssapicontext::setDesiredLifetime(uint32_t desiredlifetime) {
+void gsscontext::setDesiredLifetime(uint32_t desiredlifetime) {
 	pvt->_desiredlifetime=desiredlifetime;
 }
 
-uint32_t gssapicontext::getDesiredLifetime() {
+uint32_t gsscontext::getDesiredLifetime() {
 	return pvt->_desiredlifetime;
 }
 
-void gssapicontext::setDesiredMechanism(gssapimechanism *desiredmechanism) {
+void gsscontext::setDesiredMechanism(gssmechanism *desiredmechanism) {
 	pvt->_desiredmechanism=desiredmechanism;
 }
 
-gssapimechanism *gssapicontext::getDesiredMechanism() {
+gssmechanism *gsscontext::getDesiredMechanism() {
 	return pvt->_desiredmechanism;
 }
 
-void gssapicontext::setDesiredFlags(uint32_t desiredflags) {
+void gsscontext::setDesiredFlags(uint32_t desiredflags) {
 	pvt->_desiredflags=desiredflags;
 }
 
-uint32_t gssapicontext::getDesiredFlags() {
+uint32_t gsscontext::getDesiredFlags() {
 	return pvt->_desiredflags;
 }
 
-void gssapicontext::setService(const char *service) {
+void gsscontext::setService(const char *service) {
 	pvt->_service=service;
 	pvt->_servicelength=charstring::length(service);
 }
 
-const char *gssapicontext::getService() {
+const char *gsscontext::getService() {
 	return pvt->_service;
 }
 
-bool gssapicontext::initiate() {
+bool gsscontext::initiate() {
 	return initiate(pvt->_service,pvt->_servicelength+1,
 				GSS_C_NT_HOSTBASED_SERVICE);
 }
 
-bool gssapicontext::initiate(const void *name,
+bool gsscontext::initiate(const void *name,
 				size_t namesize,
 				const void *nametype) {
 
@@ -828,7 +828,7 @@ bool gssapicontext::initiate(const void *name,
 	return inquire();
 }
 
-bool gssapicontext::inquire() {
+bool gsscontext::inquire() {
 
 	// inquire...
 	gss_name_t	initiator;
@@ -943,7 +943,7 @@ bool gssapicontext::inquire() {
 	return (pvt->_major==GSS_S_COMPLETE);
 }
 
-bool gssapicontext::accept() {
+bool gsscontext::accept() {
 
 	// release any previously accepted context
 	release();
@@ -1034,7 +1034,7 @@ bool gssapicontext::accept() {
 	return inquire();
 }
 
-void gssapicontext::release() {
+void gsscontext::release() {
 
 	// delete the context
 	if (pvt->_context!=GSS_C_NO_CONTEXT) {
@@ -1066,50 +1066,50 @@ void gssapicontext::release() {
 	pvt->_readbufferpos=0;
 }
 
-uint32_t gssapicontext::getActualLifetime() {
+uint32_t gsscontext::getActualLifetime() {
 	return pvt->_actuallifetime;
 }
 
-gssapimechanism *gssapicontext::getActualMechanism() {
+gssmechanism *gsscontext::getActualMechanism() {
 	return &pvt->_actualmechanism;
 }
 
-uint32_t gssapicontext::getActualFlags() {
+uint32_t gsscontext::getActualFlags() {
 	return pvt->_actualflags;
 }
 
-const char *gssapicontext::getInitiator() {
+const char *gsscontext::getInitiator() {
 	return pvt->_initiator;
 }
 
-const char *gssapicontext::getInitiatorType() {
+const char *gsscontext::getInitiatorType() {
 	return pvt->_initiatortype;
 }
 
-const char *gssapicontext::getAcceptor() {
+const char *gsscontext::getAcceptor() {
 	return pvt->_acceptor;
 }
 
-const char *gssapicontext::getAcceptorType() {
+const char *gsscontext::getAcceptorType() {
 	return pvt->_acceptortype;
 }
 
-bool gssapicontext::getIsInitiator() {
+bool gsscontext::getIsInitiator() {
 	return pvt->_isinitiator;
 }
 
-bool gssapicontext::getIsOpen() {
+bool gsscontext::getIsOpen() {
 	return pvt->_isopen;
 }
 
-bool gssapicontext::wrap(const unsigned char *input,
+bool gsscontext::wrap(const unsigned char *input,
 					size_t inputsize,
 					unsigned char **output,
 					size_t *outputsize) {
 	return wrap(input,inputsize,true,output,outputsize,NULL);
 }
 
-bool gssapicontext::wrap(const unsigned char *input,
+bool gsscontext::wrap(const unsigned char *input,
 					size_t inputsize,
 					bool useencryption,
 					unsigned char **output,
@@ -1166,14 +1166,14 @@ bool gssapicontext::wrap(const unsigned char *input,
 	return false;
 }
 
-bool gssapicontext::unwrap(const unsigned char *input,
+bool gsscontext::unwrap(const unsigned char *input,
 					size_t inputsize,
 					unsigned char **output,
 					size_t *outputsize) {
 	return unwrap(input,inputsize,output,outputsize,NULL);
 }
 
-bool gssapicontext::unwrap(const unsigned char *input,
+bool gsscontext::unwrap(const unsigned char *input,
 					size_t inputsize,
 					unsigned char **output,
 					size_t *outputsize,
@@ -1227,7 +1227,7 @@ bool gssapicontext::unwrap(const unsigned char *input,
 	return false;
 }
 
-bool gssapicontext::getMic(const unsigned char *message,
+bool gsscontext::getMic(const unsigned char *message,
 					size_t messagesize,
 					unsigned char **mic,
 					size_t *micsize) {
@@ -1271,7 +1271,7 @@ bool gssapicontext::getMic(const unsigned char *message,
 	return false;
 }
 
-bool gssapicontext::verifyMic(const unsigned char *message,
+bool gsscontext::verifyMic(const unsigned char *message,
 					size_t messagesize,
 					const unsigned char *mic,
 					size_t micsize) {
@@ -1297,7 +1297,7 @@ bool gssapicontext::verifyMic(const unsigned char *message,
 	return (pvt->_major==GSS_S_COMPLETE);
 }
 
-ssize_t gssapicontext::read(void *buf, ssize_t count) {
+ssize_t gsscontext::read(void *buf, ssize_t count) {
 
 	// first, return any buffered data
 	ssize_t bytestoread=count;
@@ -1367,7 +1367,7 @@ ssize_t gssapicontext::read(void *buf, ssize_t count) {
 	return bytesread;
 }
 
-ssize_t gssapicontext::receiveToken(uint32_t *tokenflags,
+ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize) {
 
@@ -1396,7 +1396,7 @@ ssize_t gssapicontext::receiveToken(uint32_t *tokenflags,
 	return result;
 }
 
-ssize_t gssapicontext::write(const void *buf, ssize_t count) {
+ssize_t gsscontext::write(const void *buf, ssize_t count) {
 
 	// create token
 	unsigned char	*tokendata;
@@ -1413,7 +1413,7 @@ ssize_t gssapicontext::write(const void *buf, ssize_t count) {
 	return count;
 }
 
-ssize_t gssapicontext::sendToken(uint32_t tokenflags,
+ssize_t gsscontext::sendToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize) {
 	// write token flags
@@ -1437,7 +1437,7 @@ ssize_t gssapicontext::sendToken(uint32_t tokenflags,
 	return result;
 }
 
-ssize_t gssapicontext::fullRead(void *data, ssize_t size) {
+ssize_t gsscontext::fullRead(void *data, ssize_t size) {
 
 	// read, retrying if we got a short read,
 	// until we've read "size" bytes...
@@ -1457,7 +1457,7 @@ ssize_t gssapicontext::fullRead(void *data, ssize_t size) {
 	return bytesread;
 }
 
-ssize_t gssapicontext::fullWrite(const void *data, ssize_t size) {
+ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
 
 	// write, retrying if we got a short write,
 	// until we've written "size" bytes...
@@ -1477,7 +1477,7 @@ ssize_t gssapicontext::fullWrite(const void *data, ssize_t size) {
 	return byteswritten;
 }
 
-uint32_t gssapicontext::getRemainingLifetime() {
+uint32_t gsscontext::getRemainingLifetime() {
 	OM_uint32	remainingtime;
 	pvt->_major=gss_context_time(&pvt->_minor,
 					pvt->_context,
@@ -1485,15 +1485,15 @@ uint32_t gssapicontext::getRemainingLifetime() {
 	return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
 }
 
-uint32_t gssapicontext::getMajorStatus() {
+uint32_t gsscontext::getMajorStatus() {
 	return pvt->_major;
 }
 
-uint32_t gssapicontext::getMinorStatus() {
+uint32_t gsscontext::getMinorStatus() {
 	return pvt->_minor;
 }
 
-const char *gssapicontext::getStatus() {
+const char *gsscontext::getStatus() {
 	pvt->_status.clear();
 	pvt->_status.append("GSS - major:\n");
 	getStatus(pvt->_major,GSS_C_GSS_CODE);
@@ -1506,7 +1506,7 @@ const char *gssapicontext::getStatus() {
 	return pvt->_status.getString();
 }
 
-void gssapicontext::getStatus(uint32_t status, int32_t type) {
+void gsscontext::getStatus(uint32_t status, int32_t type) {
 
 	gss_buffer_desc	statusbuffer;
 

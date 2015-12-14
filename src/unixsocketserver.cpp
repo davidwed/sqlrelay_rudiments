@@ -221,8 +221,8 @@ filedescriptor *unixsocketserver::accept() {
 		return NULL;
 	}
 
-	// handle GSSAPI-accept if necessary
-	if (!gssapiAccept(returnsock)) {
+	// handle GSS-accept if necessary
+	if (!gssAccept(returnsock)) {
 		delete returnsock;
 		return NULL;
 	}

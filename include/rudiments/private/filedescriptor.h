@@ -1,7 +1,7 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
-	friend class gssapicontext;
+	friend class gsscontext;
 	protected:
 
 		void	filedescriptorInit();
@@ -41,7 +41,7 @@
 		int32_t	sslresult();
 		void	sslresult(int32_t sslrslt);
 
-		gssapicontext	*gssapictx();
+		gsscontext	*gssctx();
 
 	private:
 		filedescriptorprivate	*pvt;

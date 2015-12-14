@@ -438,11 +438,11 @@ wsacleanup:
 	}
 	#endif
 
-	// GSSAPI-connect if necessary
-	if (retval==RESULT_SUCCESS && gssapictx()) {
-		gssapictx()->setFileDescriptor(this);
-		if (!gssapictx()->initiate()) {
-			gssapictx()->setFileDescriptor(NULL);
+	// GSS-connect if necessary
+	if (retval==RESULT_SUCCESS && gssctx()) {
+		gssctx()->setFileDescriptor(this);
+		if (!gssctx()->initiate()) {
+			gssctx()->setFileDescriptor(NULL);
 			close();
 			return RESULT_ERROR;
 		}

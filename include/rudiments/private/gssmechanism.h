@@ -2,6 +2,5 @@
 // See the COPYING file for more information.
 
 	private:
-		void	clear();
-
-		gssapiprivate	*pvt;
+		void	strToOid(const char *str, void *oid);
+		gssmechanismprivate	*pvt;
