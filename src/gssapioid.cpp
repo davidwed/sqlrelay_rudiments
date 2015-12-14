@@ -49,7 +49,10 @@
 
 #include <rudiments/character.h>
 
-#include <gssapi/gssapi_generic.h>
+#include <gssapi/gssapi.h>
+
+#define GSS_EMPTY_BUFFER(buf)   ((buf) == NULL ||                       \
+                                 (buf)->value == NULL || (buf)->length == 0)
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
@@ -115,8 +118,8 @@ get_arc(const unsigned char **bufp, const unsigned char *end,
  * 1, or 2, and the second value must be less than 40 if the first value is not
  * 2.
  */
-static OM_uint32
-gss_str_to_oid1(OM_uint32 *minor_status,
+OM_uint32
+gss_str_to_oid(OM_uint32 *minor_status,
                        gss_buffer_t oid_str,
                        gss_OID *oid_out)
 {

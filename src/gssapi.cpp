@@ -18,9 +18,12 @@
 #endif
 
 // for gss_acquire_cred_with_password and possibly gss_str_to_oid
-#include <gssapi/gssapi_ext.h>
+#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+	#include <gssapi/gssapi_ext.h>
+#endif
 
-#ifndef GSS_KRB5_NT_PRINCIPAL_NAME
+#if !defined(GSS_KRB5_NT_PRINCIPAL_NAME) && \
+	defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H)
 	#include <gssapi/gssapi_krb5.h>
 #endif
 
