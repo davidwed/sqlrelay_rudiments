@@ -1038,6 +1038,13 @@ then
 
 			AC_MSG_CHECKING(for gss_str_to_oid)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,krb5 has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+			AC_MSG_CHECKING(for gss_acquire_cred_with_password)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+	#include <gssapi/gssapi_ext.h>
+#endif
+],[gss_acquire_cred_with_password(0,0,0,0,0,0,0,0,0);],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD,1,krb5 has gss_acquire_cred_with_password) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 

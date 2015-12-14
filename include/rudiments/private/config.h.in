@@ -85,6 +85,9 @@
 /* krb5 has gssapi/gssapi_krb5.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 
+/* krb5 has gss_acquire_cred_with_password */
+#undef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
+
 /* krb5 has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID
 

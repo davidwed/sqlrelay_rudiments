@@ -418,6 +418,7 @@ bool gssapicredentials::acquire(const void *name,
 				(const char *)passwordbuffer.value)+1;
 
 		// acquire the credentials associated with the name/password...
+		#ifdef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
 		pvt->_major=gss_acquire_cred_with_password(
 					&pvt->_minor,
 					desiredname,
@@ -428,6 +429,9 @@ bool gssapicredentials::acquire(const void *name,
 					&pvt->_credentials,
 					&pvt->_actualmechanisms,
 					&pvt->_actuallifetime);
+		#else
+			#error no gss_acquire_cred_with_password or anything like it
+		#endif
 	} else {
 
 		// acquire the credentials associated with the name...
