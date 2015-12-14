@@ -6,6 +6,10 @@
 
 #include <rudiments/stringbuffer.h>
 
+#ifdef RUDIMENTS_HAS_GSS
+	#include <gssapi/gssapi.h>
+#endif
+
 class gssprivate;
 class gssmechanismprivate;
 class gsscredentialsprivate;

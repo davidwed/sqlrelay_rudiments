@@ -11,8 +11,6 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-#include <gssapi/gssapi.h>
-
 #ifndef RUDIMENTS_HAS_GSS_STR_TO_OID
 	#include "gssoid.cpp"
 #endif
