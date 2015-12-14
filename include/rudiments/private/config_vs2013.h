@@ -79,17 +79,17 @@
 /* libcurl has CURLOPT_USERPWD */
 /* #undef RUDIMENTS_HAS_CURLOPT_USERPWD */
 
-/* krb5 has gssapi/gssapi_ext.h */
+/* GSS has gssapi/gssapi_ext.h */
 /* #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H */
 
-/* krb5 has gssapi/gssapi_krb5.h */
+/* GSS has gssapi/gssapi_krb5.h */
 /* #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H */
 
-/* krb5 has gss_str_to_oid */
+/* GSS has gss_str_to_oid */
 /* #undef RUDIMENTS_HAS_GSS_STR_TO_OID */
 
-/* Rudiments supports krb5/gssapi */
-/* #undef RUDIMENTS_HAS_KRB5 */
+/* Rudiments supports GSS */
+/* #undef RUDIMENTS_HAS_GSS */
 
 /* Rudiments supports libcurl */
 /* #undef RUDIMENTS_HAS_LIBCURL */

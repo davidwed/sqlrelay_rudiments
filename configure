@@ -663,8 +663,8 @@ INETATONLIB
 SOCKETLIBS
 PCRELIBS
 PCREINCLUDES
-KRB5LIBS
-KRB5INCLUDES
+GSSLIBS
+GSSINCLUDES
 SSLLIBS
 SSLINCLUDES
 PTHREADLIB
@@ -778,9 +778,9 @@ with_pthread_prefix
 enable_ssl
 with_ssl_includes
 with_ssl_libs
-enable_krb5
-with_krb5_includes
-with_krb5_libs
+enable_gss
+with_gss_includes
+with_gss_libs
 enable_pcre
 with_pcre_includes
 with_pcre_libs
@@ -1482,7 +1482,7 @@ Optional Features:
   --enable-enosys-notify  enable runtime notification of methods that set ENOSYS
   --enable-inlines        use inline methods
   --disable-ssl           Disable SSL support
-  --disable-krb5          Disable krb5/gssapi support
+  --disable-gss           Disable GSS support
   --disable-pcre          Don't use PCRE for regular expressions
   --disable-libcurl       Disable libcurl support
   --enable-built-in-regex Use the built-in regex
@@ -1555,8 +1555,8 @@ Optional Packages:
   --with-pthread-prefix   Location of pthread library
   --with-ssl-includes     SSL includes
   --with-ssl-libs         SSL libraries
-  --with-krb5-includes    krb5/gssapi includes
-  --with-krb5-libs        krb5/gssapi libraries
+  --with-gss-includes     GSS includes
+  --with-gss-libs         GSS libraries
   --with-pcre-includes    PCRE includes
   --with-pcre-libs        PCRE libraries
   --with-libcurl-includes libcurl includes
@@ -2523,27 +2523,27 @@ else
   SSLLIBS=""
 fi
 
-# Check whether --enable-krb5 was given.
-if test "${enable_krb5+set}" = set; then :
-  enableval=$enable_krb5; ENABLE_RUDIMENTS_KRB5="no"
+# Check whether --enable-gss was given.
+if test "${enable_gss+set}" = set; then :
+  enableval=$enable_gss; ENABLE_RUDIMENTS_GSS="no"
 else
-  ENABLE_RUDIMENTS_KRB5="yes"
+  ENABLE_RUDIMENTS_GSS="yes"
 fi
 
 
-# Check whether --with-krb5-includes was given.
-if test "${with_krb5_includes+set}" = set; then :
-  withval=$with_krb5_includes; KRB5INCLUDES="$withval"
+# Check whether --with-gss-includes was given.
+if test "${with_gss_includes+set}" = set; then :
+  withval=$with_gss_includes; GSSINCLUDES="$withval"
 else
-  KRB5INCLUDES=""
+  GSSINCLUDES=""
 fi
 
 
-# Check whether --with-krb5-libs was given.
-if test "${with_krb5_libs+set}" = set; then :
-  withval=$with_krb5_libs; KRB5LIBS="$withval"
+# Check whether --with-gss-libs was given.
+if test "${with_gss_libs+set}" = set; then :
+  withval=$with_gss_libs; GSSLIBS="$withval"
 else
-  KRB5LIBS=""
+  GSSLIBS=""
 fi
 
 # Check whether --enable-pcre was given.
@@ -19267,38 +19267,38 @@ echo "******************************"
 
 
 echo
-echo "***** krb5/gssapi ************"
+echo "***** GSS ********************"
 
 
-HAVE_KRB5=""
-if ( test "$ENABLE_RUDIMENTS_KRB5" = "yes" )
+HAVE_GSS=""
+if ( test "$ENABLE_RUDIMENTS_GSS" = "yes" )
 then
 
 	if ( test "$cross_compiling" = "yes" )
 	then
 
 				echo "cross compiling"
-		if ( test -n "$KRB5LIBS" -o -n "$KRB5INCLUDES" )
+		if ( test -n "$GSSLIBS" -o -n "$GSSINCLUDES" )
 		then
 
-$as_echo "#define RUDIMENTS_HAS_KRB5 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAS_GSS 1" >>confdefs.h
 
 		fi
 
 	else
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for krb5/gssapi" >&5
-$as_echo_n "checking for krb5/gssapi... " >&6; }
-		if ( test -z "$KRB5LIBS" -a -z "$KRB5INCLUDES" )
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GSS" >&5
+$as_echo_n "checking for GSS... " >&6; }
+		if ( test -z "$GSSLIBS" -a -z "$GSSINCLUDES" )
 		then
-			KRB5LIBS=`krb5-config --libs gssapi 2> /dev/null`
-			if ( test -n "$KRB5LIBS" )
+			GSSLIBS=`krb5-config --libs gssapi 2> /dev/null`
+			if ( test -n "$GSSLIBS" )
 			then
-				KRB5INCLUDES=`krb5-config --cflags 2> /dev/null`
+				GSSINCLUDES=`krb5-config --cflags 2> /dev/null`
 			fi
 		fi
 
-		if ( test -n "$KRB5LIBS" )
+		if ( test -n "$GSSLIBS" )
 		then
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -19307,7 +19307,7 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
 		fi
 
-		if ( test -n "$KRB5LIBS" )
+		if ( test -n "$GSSLIBS" )
 		then
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gssapi/gssapi_ext.h" >&5
 $as_echo_n "checking for gssapi/gssapi_ext.h... " >&6; }
@@ -19315,8 +19315,8 @@ $as_echo_n "checking for gssapi/gssapi_ext.h... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $KRB5INCLUDES"
-LIBS="$KRB5LIBS"
+CPPFLAGS="$CPPFLAGS $GSSINCLUDES"
+LIBS="$GSSLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19353,8 +19353,8 @@ $as_echo_n "checking for gssapi/gssapi_krb5.h... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $KRB5INCLUDES"
-LIBS="$KRB5LIBS"
+CPPFLAGS="$CPPFLAGS $GSSINCLUDES"
+LIBS="$GSSLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19391,8 +19391,8 @@ $as_echo_n "checking for gss_str_to_oid... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $KRB5INCLUDES"
-LIBS="$KRB5LIBS"
+CPPFLAGS="$CPPFLAGS $GSSINCLUDES"
+LIBS="$GSSLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19429,8 +19429,8 @@ $as_echo_n "checking for gss_acquire_cred_with_password... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $KRB5INCLUDES"
-LIBS="$KRB5LIBS"
+CPPFLAGS="$CPPFLAGS $GSSINCLUDES"
+LIBS="$GSSLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -19467,24 +19467,24 @@ export LD_LIBRARY_PATH
 		fi
 	fi
 
-	if ( test -n "$KRB5LIBS" )
+	if ( test -n "$GSSLIBS" )
 	then
-		HAVE_KRB5="yes"
+		HAVE_GSS="yes"
 
-$as_echo "#define RUDIMENTS_HAS_KRB5 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAS_GSS 1" >>confdefs.h
 
 	fi
 
 
-if ( test -n "$KRB5INCLUDES" )
+if ( test -n "$GSSINCLUDES" )
 then
-	echo "krb5/gssapi includes... $KRB5INCLUDES"
+	echo "GSS includes... $GSSINCLUDES"
 fi
 
 
-if ( test -n "$KRB5LIBS" )
+if ( test -n "$GSSLIBS" )
 then
-	echo "krb5/gssapi libs... $KRB5LIBS"
+	echo "GSS libs... $GSSLIBS"
 fi
 
 
@@ -32014,7 +32014,7 @@ then
 	LOBJS="$LOBJS modemutil.lo"
 fi
 
-if ( test "$HAVE_KRB5" = "yes" )
+if ( test "$HAVE_GSS" = "yes" )
 then
 	HEADERS3="$HEADERS3 gssapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 gssapi.h gssapimechanism.h gssapicredentials.h gssapicontext.h gssapiincludes.h"
@@ -34598,17 +34598,17 @@ then
 	SSLBUILD="yes"
 fi
 
-KRB5BUILD="no "
-if ( test -n "$HAVE_KRB5" )
+GSSBUILD="no "
+if ( test -n "$HAVE_GSS" )
 then
-	KRB5BUILD="yes"
+	GSSBUILD="yes"
 fi
 
-echo " Features     : Threads     $HAS_THREADS"
-echo "                PCRE        $PCREBUILD"
-echo "                libcurl     $LIBCURLBUILD"
-echo "                SSL         $SSLBUILD"
-echo "                krb5/gssapi $KRB5BUILD"
+echo " Features     : Threads $HAS_THREADS"
+echo "                PCRE    $PCREBUILD"
+echo "                libcurl $LIBCURLBUILD"
+echo "                SSL     $SSLBUILD"
+echo "                GSS     $GSSBUILD"
 echo "******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"

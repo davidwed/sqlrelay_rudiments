@@ -494,7 +494,7 @@ void *filedescriptor::newSSLBIO() const {
 }
 
 bool filedescriptor::supportsGSSAPI() {
-#ifdef RUDIMENTS_HAS_KRB5
+#ifdef RUDIMENTS_HAS_GSS
 	return true;
 #else
 	return false;

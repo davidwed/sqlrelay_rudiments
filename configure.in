@@ -42,18 +42,18 @@ AC_ARG_WITH(ssl-libs,
 	[  --with-ssl-libs         SSL libraries],
 	SSLLIBS="$withval",
 	SSLLIBS="")
-AC_ARG_ENABLE(krb5,
-	[  --disable-krb5          Disable krb5/gssapi support],
-	ENABLE_RUDIMENTS_KRB5="no",
-	ENABLE_RUDIMENTS_KRB5="yes")
-AC_ARG_WITH(krb5-includes,
-	[  --with-krb5-includes    krb5/gssapi includes],
-	KRB5INCLUDES="$withval",
-	KRB5INCLUDES="")
-AC_ARG_WITH(krb5-libs,
-	[  --with-krb5-libs        krb5/gssapi libraries],
-	KRB5LIBS="$withval",
-	KRB5LIBS="")
+AC_ARG_ENABLE(gss,
+	[  --disable-gss           Disable GSS support],
+	ENABLE_RUDIMENTS_GSS="no",
+	ENABLE_RUDIMENTS_GSS="yes")
+AC_ARG_WITH(gss-includes,
+	[  --with-gss-includes     GSS includes],
+	GSSINCLUDES="$withval",
+	GSSINCLUDES="")
+AC_ARG_WITH(gss-libs,
+	[  --with-gss-libs         GSS libraries],
+	GSSLIBS="$withval",
+	GSSLIBS="")
 AC_ARG_ENABLE(pcre,
 	[  --disable-pcre          Don't use PCRE for regular expressions],
 	ENABLE_RUDIMENTS_PCRE="no",
@@ -780,10 +780,10 @@ FW_CHECK_SSL
 echo "******************************"
 
 
-dnl Checks for krb5 library.
+dnl Checks for gss library.
 echo
-echo "***** krb5/gssapi ************"
-FW_CHECK_KRB5
+echo "***** GSS ********************"
+FW_CHECK_GSS
 echo "******************************"
 
 
@@ -4033,7 +4033,7 @@ then
 	LOBJS="$LOBJS modemutil.lo"
 fi
 
-if ( test "$HAVE_KRB5" = "yes" )
+if ( test "$HAVE_GSS" = "yes" )
 then
 	HEADERS3="$HEADERS3 gssapi.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 gssapi.h gssapimechanism.h gssapicredentials.h gssapicontext.h gssapiincludes.h"
@@ -4142,17 +4142,17 @@ then
 	SSLBUILD="yes"
 fi
 
-KRB5BUILD="no "
-if ( test -n "$HAVE_KRB5" )
+GSSBUILD="no "
+if ( test -n "$HAVE_GSS" )
 then
-	KRB5BUILD="yes"
+	GSSBUILD="yes"
 fi
 
-echo " Features     : Threads     $HAS_THREADS"
-echo "                PCRE        $PCREBUILD"
-echo "                libcurl     $LIBCURLBUILD"
-echo "                SSL         $SSLBUILD"
-echo "                krb5/gssapi $KRB5BUILD"
+echo " Features     : Threads $HAS_THREADS"
+echo "                PCRE    $PCREBUILD"
+echo "                libcurl $LIBCURLBUILD"
+echo "                SSL     $SSLBUILD"
+echo "                GSS     $GSSBUILD"
 echo "******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"

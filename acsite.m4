@@ -989,14 +989,14 @@ AC_SUBST(SSLLIBS)
 
 
 
-dnl checks for the krb5 library
+dnl checks for the a library providing GSS
 dnl requires:  cross_compiling
-dnl sets the substitution variable KRB5LIBS
-AC_DEFUN([FW_CHECK_KRB5],
+dnl sets the substitution variable GSSLIBS
+AC_DEFUN([FW_CHECK_GSS],
 [
 
-HAVE_KRB5=""
-if ( test "$ENABLE_RUDIMENTS_KRB5" = "yes" )
+HAVE_GSS=""
+if ( test "$ENABLE_RUDIMENTS_GSS" = "yes" )
 then
 
 	if ( test "$cross_compiling" = "yes" )
@@ -1004,58 +1004,58 @@ then
 
 		dnl cross compiling
 		echo "cross compiling"
-		if ( test -n "$KRB5LIBS" -o -n "$KRB5INCLUDES" )
+		if ( test -n "$GSSLIBS" -o -n "$GSSINCLUDES" )
 		then
-			AC_DEFINE(RUDIMENTS_HAS_KRB5,1,Rudiments supports krb5/gssapi)
+			AC_DEFINE(RUDIMENTS_HAS_GSS,1,Rudiments supports GSS)
 		fi
 
 	else
 
-		AC_MSG_CHECKING(for krb5/gssapi)
-		if ( test -z "$KRB5LIBS" -a -z "$KRB5INCLUDES" )
+		AC_MSG_CHECKING(for GSS)
+		if ( test -z "$GSSLIBS" -a -z "$GSSINCLUDES" )
 		then
-			KRB5LIBS=`krb5-config --libs gssapi 2> /dev/null`
-			if ( test -n "$KRB5LIBS" )
+			GSSLIBS=`krb5-config --libs gssapi 2> /dev/null`
+			if ( test -n "$GSSLIBS" )
 			then
-				KRB5INCLUDES=`krb5-config --cflags 2> /dev/null`
+				GSSINCLUDES=`krb5-config --cflags 2> /dev/null`
 			fi
 		fi
 
-		if ( test -n "$KRB5LIBS" )
+		if ( test -n "$GSSLIBS" )
 		then
 			AC_MSG_RESULT(yes)
 		else
 			AC_MSG_RESULT(no)
 		fi
 
-		if ( test -n "$KRB5LIBS" )
+		if ( test -n "$GSSLIBS" )
 		then
 			AC_MSG_CHECKING(for gssapi/gssapi_ext.h)
-			FW_TRY_LINK([#include <gssapi/gssapi_ext.h>],[int a;],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H,1,krb5 has gssapi/gssapi_ext.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			FW_TRY_LINK([#include <gssapi/gssapi_ext.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H,1,GSS has gssapi/gssapi_ext.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gssapi/gssapi_krb5.h)
-			FW_TRY_LINK([#include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,krb5 has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			FW_TRY_LINK([#include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,GSS has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss_str_to_oid)
-			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,krb5 has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,GSS has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss_acquire_cred_with_password)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>
 #ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
 	#include <gssapi/gssapi_ext.h>
 #endif
-],[gss_acquire_cred_with_password(0,0,0,0,0,0,0,0,0);],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD,1,krb5 has gss_acquire_cred_with_password) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+],[gss_acquire_cred_with_password(0,0,0,0,0,0,0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD,1,GSS has gss_acquire_cred_with_password) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 
-	if ( test -n "$KRB5LIBS" )
+	if ( test -n "$GSSLIBS" )
 	then
-		HAVE_KRB5="yes"
-		AC_DEFINE(RUDIMENTS_HAS_KRB5,1,Rudiments supports krb5/gssapi)
+		HAVE_GSS="yes"
+		AC_DEFINE(RUDIMENTS_HAS_GSS,1,Rudiments supports GSS)
 	fi
 
-	FW_INCLUDES(krb5/gssapi,[$KRB5INCLUDES])
-	FW_LIBS(krb5/gssapi,[$KRB5LIBS])
+	FW_INCLUDES(GSS,[$GSSINCLUDES])
+	FW_LIBS(GSS,[$GSSLIBS])
 
 else
 
@@ -1063,8 +1063,8 @@ else
 
 fi
 
-AC_SUBST(KRB5INCLUDES)
-AC_SUBST(KRB5LIBS)
+AC_SUBST(GSSINCLUDES)
+AC_SUBST(GSSLIBS)
 ])
 
 
