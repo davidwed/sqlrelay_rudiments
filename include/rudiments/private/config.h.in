@@ -79,6 +79,9 @@
 /* libcurl has CURLOPT_USERPWD */
 #undef RUDIMENTS_HAS_CURLOPT_USERPWD
 
+/* krb5 has gss_str_to_oid */
+#undef RUDIMENTS_HAS_GSS_STR_TO_OID
+
 /* Rudiments supports krb5/gssapi */
 #undef RUDIMENTS_HAS_KRB5
 

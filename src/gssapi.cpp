@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/stringbuffer.h>
@@ -12,11 +13,16 @@
 
 #include <gssapi/gssapi.h>
 
-// for gss_acquire_cred_with_password and gss_str_to_oid
+#ifndef RUDIMENTS_HAS_GSS_STR_TO_OID
+	#include "gssapioid.cpp"
+#endif
+
+// for gss_acquire_cred_with_password and possibly gss_str_to_oid
 #include <gssapi/gssapi_ext.h>
 
-// for GSS_KRB5_NT_PRINCIPAL_NAME
-#include <gssapi/gssapi_krb5.h>
+#ifndef GSS_KRB5_NT_PRINCIPAL_NAME
+	#include <gssapi/gssapi_krb5.h>
+#endif
 
 #define TOKEN_FLAGS_TYPE_INITIATE	(1<<0)
 #define TOKEN_FLAGS_TYPE_ACCEPT		(1<<1)

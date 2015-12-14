@@ -1240,7 +1240,7 @@ int64_t charstring::toInteger(const char *string) {
 	return toInteger(string,NULL,10);
 }
 
-int64_t charstring::toInteger(const char *string, char **endptr) {
+int64_t charstring::toInteger(const char *string, const char **endptr) {
 	return toInteger(string,endptr,10);
 }
 
@@ -1248,11 +1248,12 @@ int64_t charstring::toInteger(const char *string, int32_t base) {
 	return toInteger(string,NULL,base);
 }
 
-int64_t charstring::toInteger(const char *string, char **endptr, int32_t base) {
+int64_t charstring::toInteger(const char *string,
+				const char **endptr, int32_t base) {
 	#ifdef RUDIMENTS_HAVE_STRTOLL
-	return (string)?strtoll(string,endptr,base):0;
+	return (string)?strtoll(string,(char **)endptr,base):0;
 	#else
-	return (string)?strtol(string,endptr,base):0;
+	return (string)?strtol(string,(char **)endptr,base):0;
 	#endif
 }
 
@@ -1260,7 +1261,8 @@ uint64_t charstring::toUnsignedInteger(const char *string) {
 	return toUnsignedInteger(string,NULL,10);
 }
 
-uint64_t charstring::toUnsignedInteger(const char *string, char **endptr) {
+uint64_t charstring::toUnsignedInteger(const char *string,
+					const char **endptr) {
 	return toUnsignedInteger(string,endptr,10);
 }
 
@@ -1269,11 +1271,11 @@ uint64_t charstring::toUnsignedInteger(const char *string, int32_t base) {
 }
 
 uint64_t charstring::toUnsignedInteger(const char *string,
-						char **endptr, int32_t base) {
+					const char **endptr, int32_t base) {
 	#ifdef RUDIMENTS_HAVE_STRTOULL
-	return (string)?strtoull(string,endptr,base):0;
+	return (string)?strtoull(string,(char **)endptr,base):0;
 	#else
-	return (string)?strtoul(string,endptr,base):0;
+	return (string)?strtoul(string,(char **)endptr,base):0;
 	#endif
 }
 
@@ -1281,11 +1283,11 @@ long double charstring::toFloat(const char *string) {
 	return toFloat(string,NULL);
 }
 
-long double charstring::toFloat(const char *string, char **endptr) {
+long double charstring::toFloat(const char *string, const char **endptr) {
 	#ifdef RUDIMENTS_HAVE_STRTOLD
-	return (string)?strtold(string,endptr):0.0;
+	return (string)?strtold(string,(char **)endptr):0.0;
 	#else
-	return (string)?(long double)(strtod(string,endptr)):0.0;
+	return (string)?(long double)(strtod(string,(char **)endptr)):0.0;
 	#endif
 }
 

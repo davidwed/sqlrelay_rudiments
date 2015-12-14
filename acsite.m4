@@ -1020,6 +1020,19 @@ then
 				KRB5INCLUDES=`krb5-config --cflags 2> /dev/null`
 			fi
 		fi
+
+		if ( test -n "$KRB5LIBS" )
+		then
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+		fi
+
+		if ( test -n "$KRB5LIBS" )
+		then
+			AC_MSG_CHECKING(for gss_str_to_oid)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,krb5 has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		fi
 	fi
 
 	if ( test -n "$KRB5LIBS" )

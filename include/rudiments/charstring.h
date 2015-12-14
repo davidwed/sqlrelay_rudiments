@@ -483,7 +483,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Converts "string" to a 64-bit integer.  If non-NULL,
 		 *  endptr will be set to the first character in the
 		 *  string after the number. */
-		static	int64_t	toInteger(const char *string, char **endptr);
+		static	int64_t	toInteger(const char *string,
+						const char **endptr);
 
 		/** Converts "string" to a 64-bit integer of base "base". */
 		static	int64_t	toInteger(const char *string, int32_t base);
@@ -492,7 +493,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
 		static	int64_t	toInteger(const char *string,
-					char **endptr, int32_t base);
+					const char **endptr, int32_t base);
 
 		/** Converts "string" to a 64-bit unsigned integer. */
 		static	uint64_t	toUnsignedInteger(const char *string);
@@ -501,7 +502,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
 		static	uint64_t	toUnsignedInteger(const char *string,
-							char **endptr);
+							const char **endptr);
 
 		/** Converts "string" to a 64-bit unsigned integer of
 		 *  base "base". */
@@ -513,7 +514,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  If non-NULL, endptr will be set to the first
 		 *  character in the string after the number. */
 		static	uint64_t	toUnsignedInteger(const char *string,
-							char **endptr,
+							const char **endptr,
 							int32_t base);
 
 
@@ -524,7 +525,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
 		static	long double	toFloat(const char *string,
-							char **endptr);
+							const char **endptr);
 
 		/** Converts "amount" which is assumed to be a dollar amount
 		 *  into pennies. */

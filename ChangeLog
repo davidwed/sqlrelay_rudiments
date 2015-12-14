@@ -15,6 +15,8 @@
 	added various gssapi wrapper classes and integrated them with
 		filedescriptor, similar to SSL integration
 	updated inet/unixsocketclient to close() as the first step of connect()
+	updated charstring::to(Unsigned)Integer-with-endptr methods to have
+		const char **endptr arguments
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the

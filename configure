@@ -19297,6 +19297,56 @@ $as_echo_n "checking for krb5/gssapi... " >&6; }
 				KRB5INCLUDES=`krb5-config --cflags 2> /dev/null`
 			fi
 		fi
+
+		if ( test -n "$KRB5LIBS" )
+		then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
+
+		if ( test -n "$KRB5LIBS" )
+		then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gss_str_to_oid" >&5
+$as_echo_n "checking for gss_str_to_oid... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $KRB5INCLUDES"
+LIBS="$KRB5LIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <gssapi/gssapi.h>
+int
+main ()
+{
+gss_str_to_oid(0,0,0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAS_GSS_STR_TO_OID 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		fi
 	fi
 
 	if ( test -n "$KRB5LIBS" )
