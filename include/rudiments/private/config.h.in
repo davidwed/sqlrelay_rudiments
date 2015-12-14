@@ -82,8 +82,8 @@
 /* krb5 has gssapi/gssapi_ext.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
 
-/* krb5 has gssapi/gssapi_krb.h */
-#undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB_H
+/* krb5 has gssapi/gssapi_krb5.h */
+#undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 
 /* krb5 has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID

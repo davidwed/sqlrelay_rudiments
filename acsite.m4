@@ -1033,8 +1033,8 @@ then
 			AC_MSG_CHECKING(for gssapi/gssapi_ext.h)
 			FW_TRY_LINK([#include <gssapi/gssapi_ext.h>],[int a;],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H,1,krb5 has gssapi/gssapi_ext.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
-			AC_MSG_CHECKING(for gssapi/gssapi_krb.h)
-			FW_TRY_LINK([#include <gssapi/gssapi_krb.h>],[int a;],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB_H,1,krb5 has gssapi/gssapi_krb.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			AC_MSG_CHECKING(for gssapi/gssapi_krb5.h)
+			FW_TRY_LINK([#include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,krb5 has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss_str_to_oid)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $KRB5INCLUDES],[$KRB5LIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,krb5 has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])

@@ -19347,8 +19347,8 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gssapi/gssapi_krb.h" >&5
-$as_echo_n "checking for gssapi/gssapi_krb.h... " >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gssapi/gssapi_krb5.h" >&5
+$as_echo_n "checking for gssapi/gssapi_krb5.h... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
@@ -19359,7 +19359,7 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <gssapi/gssapi_krb.h>
+#include <gssapi/gssapi_krb5.h>
 int
 main ()
 {
@@ -19370,7 +19370,7 @@ int a;
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB_H 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else

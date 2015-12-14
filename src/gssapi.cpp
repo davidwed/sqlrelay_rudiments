@@ -23,7 +23,7 @@
 #endif
 
 #if !defined(GSS_KRB5_NT_PRINCIPAL_NAME) && \
-	defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H)
+	defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H)
 	#include <gssapi/gssapi_krb5.h>
 #endif
 
