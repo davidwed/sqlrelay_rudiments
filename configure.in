@@ -3660,6 +3660,12 @@ then
 	PRIVATEHEADERS2="$PRIVATEHEADERS2 filedescriptor.h filedescriptorincludes.h stdio.h"
 	SRCS="$SRCS filedescriptor.cpp stdio.cpp"
 	LOBJS="$LOBJS filedescriptor.lo stdio.lo"
+
+	# include GSS too
+	HEADERS3="$HEADERS3 gss.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 gss.h gssmechanism.h gsscredentials.h gsscontext.h gssincludes.h"
+	SRCS="$SRCS gss.cpp"
+	LOBJS="$LOBJS gss.lo"
 fi
 
 if ( test "$INCLUDE_FILESYSTEM" = "1" )
@@ -4031,14 +4037,6 @@ then
 	PRIVATEHEADERS6="$PRIVATEHEADERS6 modemutil.h"
 	SRCS="$SRCS modemutil.cpp"
 	LOBJS="$LOBJS modemutil.lo"
-fi
-
-if ( test "$HAVE_GSS" = "yes" )
-then
-	HEADERS3="$HEADERS3 gss.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS7 gss.h gssmechanism.h gsscredentials.h gsscontext.h gssincludes.h"
-	SRCS="$SRCS gss.cpp"
-	LOBJS="$LOBJS gss.lo"
 fi
 
 

@@ -11,18 +11,25 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-#ifndef RUDIMENTS_HAS_GSS_STR_TO_OID
-	#include "gssoid.cpp"
-#endif
+#ifdef RUDIMENTS_HAS_GSS
+	#ifndef RUDIMENTS_HAS_GSS_STR_TO_OID
+		#include "gssoid.cpp"
+	#endif
 
-// for gss_acquire_cred_with_password and possibly gss_str_to_oid
-#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
-	#include <gssapi/gssapi_ext.h>
-#endif
+	// for gss_acquire_cred_with_password and possibly gss_str_to_oid
+	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+		#include <gssapi/gssapi_ext.h>
+	#endif
 
-#if !defined(GSS_KRB5_NT_PRINCIPAL_NAME) && \
-	defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H)
-	#include <gssapi/gssapi_krb5.h>
+	#if !defined(GSS_KRB5_NT_PRINCIPAL_NAME) && \
+		defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H)
+		#include <gssapi/gssapi_krb5.h>
+	#endif
+#else
+	// for UINT_MAX
+	#ifdef RUDIMENTS_HAVE_LIMITS_H
+		#include <limits.h>
+	#endif
 #endif
 
 #define TOKEN_FLAGS_TYPE_INITIATE	(1<<0)
@@ -50,26 +57,28 @@ const char * const *gss::getAvailableMechanisms() {
 
 	clear();
 
-	OM_uint32		major;
-	OM_uint32		minor;
-	gss_OID_set		mechs;
-	major=gss_indicate_mechs(&minor,&mechs);
-	if (major==GSS_S_COMPLETE && mechs->count) {
+	#ifdef RUDIMENTS_HAS_GSS
+		OM_uint32		major;
+		OM_uint32		minor;
+		gss_OID_set		mechs;
+		major=gss_indicate_mechs(&minor,&mechs);
+		if (major==GSS_S_COMPLETE && mechs->count) {
 
-		pvt->_mechs=new char *[mechs->count+1];
+			pvt->_mechs=new char *[mechs->count+1];
 
-		gssmechanism	scratch;
+			gssmechanism	scratch;
 
-		for (size_t i=0; i<mechs->count; i++) {
-			scratch.initialize(&mechs->elements[i]);
-			pvt->_mechs[i]=charstring::duplicate(
-						scratch.getString());
+			for (size_t i=0; i<mechs->count; i++) {
+				scratch.initialize(&mechs->elements[i]);
+				pvt->_mechs[i]=charstring::duplicate(
+							scratch.getString());
+			}
+
+			pvt->_mechs[mechs->count]=NULL;
+
+			gss_release_oid_set(&minor,&mechs);
 		}
-
-		pvt->_mechs[mechs->count]=NULL;
-
-		gss_release_oid_set(&minor,&mechs);
-	}
+	#endif
 
 	return pvt->_mechs;
 }
@@ -89,13 +98,22 @@ class gssmechanismprivate {
 	friend class gssmechanism;
 	private:
 		char	*_str;
-		gss_OID	_oid;
+
+		#ifdef RUDIMENTS_HAS_GSS
+			gss_OID	_oid;
+		#else
+			void	*_oid;
+		#endif
 };
 
 gssmechanism::gssmechanism() {
 	pvt=new gssmechanismprivate;
 	pvt->_str=NULL;
-	pvt->_oid=GSS_C_NO_OID;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_oid=GSS_C_NO_OID;
+	#else
+		pvt->_oid=NULL;
+	#endif
 }
 
 gssmechanism::~gssmechanism() {
@@ -113,57 +131,70 @@ bool gssmechanism::initialize(const char *str) {
 
 	pvt->_str=charstring::duplicate(str);
 
-	gss_buffer_desc	mechbuffer;
-	mechbuffer.value=(void *)str;
-	mechbuffer.length=charstring::length(str);
+	#ifdef RUDIMENTS_HAS_GSS
+		gss_buffer_desc	mechbuffer;
+		mechbuffer.value=(void *)str;
+		mechbuffer.length=charstring::length(str);
 
-	OM_uint32		major;
-	OM_uint32		minor;
-	major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
-	return (major==GSS_S_COMPLETE);
+		OM_uint32		major;
+		OM_uint32		minor;
+		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
+		return (major==GSS_S_COMPLETE);
+	#else
+		return false;
+	#endif
 }
 
 bool gssmechanism::initialize(const void *oid) {
 
 	clear();
 
-	if ((gss_OID)oid==GSS_C_NO_OID) {
-		return true;
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+		if ((gss_OID)oid==GSS_C_NO_OID) {
+			return true;
+		}
 
-	OM_uint32		major;
-	OM_uint32		minor;
+		OM_uint32		major;
+		OM_uint32		minor;
 
-	// create a string from the oid
-	gss_buffer_desc	mechbuffer;
-	major=gss_oid_to_str(&minor,(gss_OID)oid,&mechbuffer);
-	if (major!=GSS_S_COMPLETE) {
+		// create a string from the oid
+		gss_buffer_desc	mechbuffer;
+		major=gss_oid_to_str(&minor,(gss_OID)oid,&mechbuffer);
+		if (major!=GSS_S_COMPLETE) {
+			return false;
+		}
+
+		pvt->_str=new char[mechbuffer.length+1];
+		charstring::copy(pvt->_str,
+				(char *)mechbuffer.value,mechbuffer.length);
+		pvt->_str[mechbuffer.length]='\0';
+
+		gss_release_buffer(&minor,&mechbuffer);
+
+		// create a new oid from the string
+		// (you'd think there'd be a clean way to just copy
+		// an oid, but there doesn't appear to be)
+		mechbuffer.value=(void *)pvt->_str;
+		mechbuffer.length=charstring::length(pvt->_str);
+
+		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
+		return (major==GSS_S_COMPLETE);
+	#else
 		return false;
-	}
-
-	pvt->_str=new char[mechbuffer.length+1];
-	charstring::copy(pvt->_str,(char *)mechbuffer.value,mechbuffer.length);
-	pvt->_str[mechbuffer.length]='\0';
-
-	gss_release_buffer(&minor,&mechbuffer);
-
-	// create a new oid from the string
-	// (you'd think there'd be a clean way to just copy
-	// an oid, but there doesn't appear to be)
-	mechbuffer.value=(void *)pvt->_str;
-	mechbuffer.length=charstring::length(pvt->_str);
-
-	major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
-	return (major==GSS_S_COMPLETE);
+	#endif
 }
 
 void gssmechanism::clear() {
 
-	if (pvt->_oid!=GSS_C_NO_OID) {
-		OM_uint32	minor;
-		gss_release_oid(&minor,&pvt->_oid);
-	}
-	pvt->_oid=GSS_C_NO_OID;
+	#ifdef RUDIMENTS_HAS_GSS
+		if (pvt->_oid!=GSS_C_NO_OID) {
+			OM_uint32	minor;
+			gss_release_oid(&minor,&pvt->_oid);
+		}
+		pvt->_oid=GSS_C_NO_OID;
+	#else
+		pvt->_oid=NULL;
+	#endif
 
 	delete[] pvt->_str;
 	pvt->_str=NULL;
@@ -181,37 +212,60 @@ const void *gssmechanism::getObjectId() {
 class gsscredentialsprivate {
 	friend class gsscredentials;
 	private:
-		OM_uint32			_major;
-		OM_uint32			_minor;
+		#ifdef RUDIMENTS_HAS_GSS
+			OM_uint32		_major;
+			OM_uint32		_minor;
+		#else
+			uint32_t		_major;
+			uint32_t		_minor;
+		#endif
+
 		stringbuffer			_status;
 
 		const char			*_name;
 
-		OM_uint32			_desiredlifetime;
+		#ifdef RUDIMENTS_HAS_GSS
+			OM_uint32		_desiredlifetime;
+			OM_uint32		_actuallifetime;
+		#else
+			uint32_t		_desiredlifetime;
+			uint32_t		_actuallifetime;
+		#endif
+
+		#ifdef RUDIMENTS_HAS_GSS
+			gss_OID_set		_desiredmechanisms;
+			gss_OID_set		_actualmechanisms;
+
+			gss_cred_usage_t	_credusage;
+			gss_cred_id_t		_credentials;
+		#endif
+
 		linkedlist< gssmechanism * >	_dmlist;
-		gss_OID_set			_desiredmechanisms;
-		gss_cred_usage_t		_credusage;
-
-		gss_cred_id_t			_credentials;
-
-		OM_uint32			_actuallifetime;
 		linkedlist< gssmechanism * >	_amlist;
-		gss_OID_set			_actualmechanisms;
 };
 
 gsscredentials::gsscredentials() {
 	pvt=new gsscredentialsprivate;
 
+	pvt->_major=0;
+	pvt->_minor=0;
 	pvt->_name=NULL;
 
-	pvt->_desiredlifetime=GSS_C_INDEFINITE;
-	pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
-	pvt->_credusage=GSS_C_BOTH;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_desiredlifetime=GSS_C_INDEFINITE;
+		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#else
+		pvt->_desiredlifetime=UINT_MAX;
+		pvt->_actuallifetime=UINT_MAX;
+	#endif
 
-	pvt->_credentials=GSS_C_NO_CREDENTIAL;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
+		pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 
-	pvt->_actuallifetime=GSS_C_INDEFINITE;
-	pvt->_actualmechanisms=GSS_C_NO_OID_SET;
+		pvt->_credusage=GSS_C_BOTH;
+		pvt->_credentials=GSS_C_NO_CREDENTIAL;
+	#endif
 }
 
 gsscredentials::~gsscredentials() {
@@ -238,9 +292,15 @@ void gsscredentials::removeDesiredMechanism(gssmechanism *mech) {
 bool gsscredentials::inDesiredMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
-	if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+		if (!mech || (gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
+			return false;
+		}
+	#else
+		if (!mech || !mech->getObjectId()) {
+			return false;
+		}
+	#endif
 
 	// just return false for degenerate lists
 	if (!pvt->_dmlist.getLength()) {
@@ -283,39 +343,64 @@ gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 }
 
 bool gsscredentials::acquireService(const char *name) {
-	pvt->_credusage=GSS_C_ACCEPT;
-	return acquire(name,charstring::length(name)+1,
-				NULL,GSS_C_NT_HOSTBASED_SERVICE);
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_credusage=GSS_C_ACCEPT;
+		return acquire(name,charstring::length(name)+1,
+					NULL,GSS_C_NT_HOSTBASED_SERVICE);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscredentials::acquireUserName(const char *name,
 					const char *password) {
-	pvt->_credusage=GSS_C_INITIATE;
-	return acquire(name,charstring::length(name)+1,
-				password,GSS_C_NT_USER_NAME);
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_credusage=GSS_C_INITIATE;
+		return acquire(name,charstring::length(name)+1,
+					password,GSS_C_NT_USER_NAME);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscredentials::acquireKerberosPrincipalName(const char *name,
 							const char *password) {
-	pvt->_credusage=GSS_C_INITIATE;
-	return acquire(name,charstring::length(name)+1,
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_credusage=GSS_C_INITIATE;
+		return acquire(name,charstring::length(name)+1,
 				password,(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscredentials::acquireAnonymous() {
-	pvt->_credusage=GSS_C_INITIATE;
-	return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_credusage=GSS_C_INITIATE;
+		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscredentials::acquireUid(uid_t uid) {
-	pvt->_credusage=GSS_C_INITIATE;
-	return acquire(&uid,sizeof(uid_t),NULL,GSS_C_NT_MACHINE_UID_NAME);
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_credusage=GSS_C_INITIATE;
+		return acquire(&uid,sizeof(uid_t),NULL,
+					GSS_C_NT_MACHINE_UID_NAME);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscredentials::acquireUidString(const char *uid) {
-	pvt->_credusage=GSS_C_INITIATE;
-	return acquire(uid,charstring::length(uid)+1,
-				NULL,GSS_C_NT_STRING_UID_NAME);
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_credusage=GSS_C_INITIATE;
+		return acquire(uid,charstring::length(uid)+1,
+					NULL,GSS_C_NT_STRING_UID_NAME);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscredentials::acquire(const void *name,
@@ -326,160 +411,180 @@ bool gsscredentials::acquire(const void *name,
 	// release any previously acquired credentials
 	release();
 
-	// keep track of the name for nametypes where the name is a string
-	if ((gss_OID)nametype==GSS_C_NT_HOSTBASED_SERVICE ||
-		(gss_OID)nametype==GSS_C_NT_USER_NAME ||
-		(gss_OID)nametype==(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME ||
-		(gss_OID)nametype==(gss_OID)GSS_C_NT_STRING_UID_NAME) {
-		pvt->_name=(const char *)name;
-	}
-
-	// degenerate case
-	if (!name && !password) {
-		pvt->_major=GSS_S_COMPLETE;
-		return true;
-	}
-
-	// Acquire credentials associated with "name" and "password", where
-	// "name" is type "nametype"...
-
-	// by default, we'll use "no name"
-	gss_name_t	desiredname=GSS_C_NO_NAME;
-
-	if (name) {
-
-		// if a name was provided then use it...
-		gss_buffer_desc	namebuffer;
-		namebuffer.value=(void *)name;
-		namebuffer.length=namesize;
-
-		// create an "internal form" struct from the name...
-		pvt->_major=gss_import_name(&pvt->_minor,
-						&namebuffer,
-						(gss_OID)nametype,
-						&desiredname);
-		if (pvt->_major!=GSS_S_COMPLETE) {
-			return false;
-		}
-	}
-
-	// assemble desired mechs...
-
-	// release the old set and mark it nonexistent
-	if (pvt->_desiredmechanisms!=GSS_C_NO_OID_SET) {
-		OM_uint32	minor;
-		gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
-		pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
-	}
-
-	// populate the set from the list of mechs
-	for (linkedlistnode< gssmechanism * > *node=
-					pvt->_dmlist.getFirst();
-					node; node=node->getNext()) {
-
-		gss_OID	mechoid=(gss_OID)node->getValue()->getObjectId();
-
-		// skip degenerate mechs
-		if (mechoid==GSS_C_NO_OID) {
-			continue;
+	#ifdef RUDIMENTS_HAS_GSS
+		// keep track of the name for nametypes
+		// where the name is a string
+		if ((gss_OID)nametype==GSS_C_NT_HOSTBASED_SERVICE ||
+			(gss_OID)nametype==GSS_C_NT_USER_NAME ||
+			(gss_OID)nametype==
+				(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME ||
+			(gss_OID)nametype==
+				(gss_OID)GSS_C_NT_STRING_UID_NAME) {
+			pvt->_name=(const char *)name;
 		}
 
-		OM_uint32	major;
-		OM_uint32	minor;
+		// degenerate case
+		if (!name && !password) {
+			pvt->_major=GSS_S_COMPLETE;
+			return true;
+		}
 
-		// if the set doesn't exist already, then create it
-		if (pvt->_desiredmechanisms==GSS_C_NO_OID_SET) {
-			major=gss_create_empty_oid_set(&minor,
-						&pvt->_desiredmechanisms);
-			if (major!=GSS_S_COMPLETE) {
-				pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
-				break;
+		// Acquire credentials associated with "name" and "password",
+		// where "name" is type "nametype"...
+
+		// by default, we'll use "no name"
+		gss_name_t	desiredname=GSS_C_NO_NAME;
+
+		if (name) {
+
+			// if a name was provided then use it...
+			gss_buffer_desc	namebuffer;
+			namebuffer.value=(void *)name;
+			namebuffer.length=namesize;
+
+			// create an "internal form" struct from the name...
+			pvt->_major=gss_import_name(&pvt->_minor,
+							&namebuffer,
+							(gss_OID)nametype,
+							&desiredname);
+			if (pvt->_major!=GSS_S_COMPLETE) {
+				return false;
 			}
 		}
 
-		// add the mech
-		gss_add_oid_set_member(&minor,mechoid,&pvt->_desiredmechanisms);
-		// FIXME: what if this fails?
-	}
+		// assemble desired mechs...
 
-	// "log in"...
+		// release the old set and mark it nonexistent
+		if (pvt->_desiredmechanisms!=GSS_C_NO_OID_SET) {
+			OM_uint32	minor;
+			gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
+			pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
+		}
 
-	if (password) {
+		// populate the set from the list of mechs
+		for (linkedlistnode< gssmechanism * > *node=
+						pvt->_dmlist.getFirst();
+						node; node=node->getNext()) {
 
-		// if a password was provided, then use it...
+			gss_OID	mechoid=
+				(gss_OID)node->getValue()->getObjectId();
 
-		// create a data/length struct from the password string...
-		gss_buffer_desc	passwordbuffer;
-		passwordbuffer.value=(void *)password;
-		passwordbuffer.length=
-			charstring::length(
-				(const char *)passwordbuffer.value)+1;
+			// skip degenerate mechs
+			if (mechoid==GSS_C_NO_OID) {
+				continue;
+			}
 
-		// acquire the credentials associated with the name/password...
-		#ifdef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
-		pvt->_major=gss_acquire_cred_with_password(
-					&pvt->_minor,
-					desiredname,
-					&passwordbuffer,
-					pvt->_desiredlifetime,
-					pvt->_desiredmechanisms,
-					pvt->_credusage,
-					&pvt->_credentials,
-					&pvt->_actualmechanisms,
-					&pvt->_actuallifetime);
-		#else
-			#error no gss_acquire_cred_with_password or anything like it
-		#endif
-	} else {
+			OM_uint32	major;
+			OM_uint32	minor;
 
-		// acquire the credentials associated with the name...
-		pvt->_major=gss_acquire_cred(&pvt->_minor,
-					desiredname,
-					pvt->_desiredlifetime,
-					pvt->_desiredmechanisms,
-					pvt->_credusage,
-					&pvt->_credentials,
-					&pvt->_actualmechanisms,
-					&pvt->_actuallifetime);
-	}
+			// if the set doesn't exist already, then create it
+			if (pvt->_desiredmechanisms==GSS_C_NO_OID_SET) {
+				major=gss_create_empty_oid_set(&minor,
+						&pvt->_desiredmechanisms);
+				if (major!=GSS_S_COMPLETE) {
+					pvt->_desiredmechanisms=
+						GSS_C_NO_OID_SET;
+					break;
+				}
+			}
 
-	// clean up
-	if (desiredname!=GSS_C_NO_NAME) {
-		OM_uint32	minor;
-		gss_release_name(&minor,&desiredname);
-	}
-	if (pvt->_desiredmechanisms!=GSS_C_NO_OID_SET) {
-		OM_uint32	minor;
-		gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
-		pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
-	}
+			// add the mech
+			gss_add_oid_set_member(&minor,mechoid,
+						&pvt->_desiredmechanisms);
+			// FIXME: what if this fails?
+		}
 
-	// return success/failure
-	return (pvt->_major==GSS_S_COMPLETE);
+		// "log in"...
+
+		if (password) {
+
+			// if a password was provided, then use it...
+
+			// create a data/length struct
+			// from the password string...
+			gss_buffer_desc	passwordbuffer;
+			passwordbuffer.value=(void *)password;
+			passwordbuffer.length=
+				charstring::length(
+					(const char *)passwordbuffer.value)+1;
+
+			// acquire the credentials associated
+			// with the name/password...
+			#ifdef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
+			pvt->_major=gss_acquire_cred_with_password(
+						&pvt->_minor,
+						desiredname,
+						&passwordbuffer,
+						pvt->_desiredlifetime,
+						pvt->_desiredmechanisms,
+						pvt->_credusage,
+						&pvt->_credentials,
+						&pvt->_actualmechanisms,
+						&pvt->_actuallifetime);
+			#else
+				#error no gss_acquire_cred_with_password or anything like it
+			#endif
+		} else {
+
+			// acquire the credentials associated with the name...
+			pvt->_major=gss_acquire_cred(&pvt->_minor,
+						desiredname,
+						pvt->_desiredlifetime,
+						pvt->_desiredmechanisms,
+						pvt->_credusage,
+						&pvt->_credentials,
+						&pvt->_actualmechanisms,
+						&pvt->_actuallifetime);
+		}
+
+		// clean up
+		if (desiredname!=GSS_C_NO_NAME) {
+			OM_uint32	minor;
+			gss_release_name(&minor,&desiredname);
+		}
+		if (pvt->_desiredmechanisms!=GSS_C_NO_OID_SET) {
+			OM_uint32	minor;
+			gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
+			pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
+		}
+
+		// return success/failure
+		return (pvt->_major==GSS_S_COMPLETE);
+	#else
+		return false;
+	#endif
 }
 
 void gsscredentials::release() {
 
 	// release the credentials
-	OM_uint32	minor;
-	gss_release_cred(&minor,&pvt->_credentials);
+	#ifdef RUDIMENTS_HAS_GSS
+		OM_uint32	minor;
+		gss_release_cred(&minor,&pvt->_credentials);
+	#endif
 
 	// reset the name
 	pvt->_name=NULL;
 
 	// reset the "actuals"
-	if (pvt->_actualmechanisms!=GSS_C_NO_OID_SET) {
-		OM_uint32	minor;
-		gss_release_oid_set(&minor,&pvt->_actualmechanisms);
-		pvt->_actualmechanisms=GSS_C_NO_OID_SET;
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+		if (pvt->_actualmechanisms!=GSS_C_NO_OID_SET) {
+			OM_uint32	minor;
+			gss_release_oid_set(&minor,&pvt->_actualmechanisms);
+			pvt->_actualmechanisms=GSS_C_NO_OID_SET;
+		}
+	#endif
 	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
 					node; node=node->getNext()) {
 		delete node->getValue();
 	}
 	pvt->_amlist.clear();
-	pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#else
+		pvt->_actuallifetime=UINT_MAX;
+	#endif
 }
 
 const char *gsscredentials::getName() {
@@ -493,42 +598,68 @@ uint32_t gsscredentials::getActualLifetime() {
 bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
-	if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+		if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
+			return false;
+		}
+	#else
+		if (!mech->getObjectId()) {
+			return false;
+		}
+	#endif
 
 	// just return false for degenerate sets
-	if (pvt->_actualmechanisms==GSS_C_NO_OID_SET) {
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET) {
+			return false;
+		}
+	#endif
 
 	// look for the mech in the set
-	OM_uint32	major;
-	OM_uint32	minor;
-	int		present;
-	major=gss_test_oid_set_member(&minor,(gss_OID)mech->getObjectId(),
-					pvt->_actualmechanisms,&present);
-	return (major==GSS_S_COMPLETE && present!=0);
+	#ifdef RUDIMENTS_HAS_GSS
+		OM_uint32	major;
+		OM_uint32	minor;
+		int		present;
+		major=gss_test_oid_set_member(&minor,
+						(gss_OID)mech->getObjectId(),
+						pvt->_actualmechanisms,
+						&present);
+		return (major==GSS_S_COMPLETE && present!=0);
+	#else
+		return false;
+	#endif
 }
 
 uint64_t gsscredentials::getActualMechanismCount() {
-	return (pvt->_actualmechanisms==GSS_C_NO_OID_SET)?
-				0:pvt->_actualmechanisms->count;
+	#ifdef RUDIMENTS_HAS_GSS
+		return (pvt->_actualmechanisms==GSS_C_NO_OID_SET)?
+					0:pvt->_actualmechanisms->count;
+	#else
+		return 0;
+	#endif
 }
 
 gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {
-	if (pvt->_actualmechanisms==GSS_C_NO_OID_SET ||
-			index>pvt->_actualmechanisms->count) {
+	#ifdef RUDIMENTS_HAS_GSS
+		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET ||
+				index>pvt->_actualmechanisms->count) {
+			return NULL;
+		}
+		gssmechanism	*mech=new gssmechanism;
+		mech->initialize(&pvt->_actualmechanisms->elements[index]);
+		pvt->_amlist.append(mech);
+		return mech;
+	#else
 		return NULL;
-	}
-	gssmechanism	*mech=new gssmechanism;
-	mech->initialize(&pvt->_actualmechanisms->elements[index]);
-	pvt->_amlist.append(mech);
-	return mech;
+	#endif
 }
 
 const void *gsscredentials::getCredentials() {
-	return pvt->_credentials;
+	#ifdef RUDIMENTS_HAS_GSS
+		return pvt->_credentials;
+	#else
+		return NULL;
+	#endif
 }
 
 uint32_t gsscredentials::getMajorStatus() {
@@ -542,39 +673,51 @@ uint32_t gsscredentials::getMinorStatus() {
 const char *gsscredentials::getStatus() {
 	pvt->_status.clear();
 	pvt->_status.append("GSS - major:\n");
-	getStatus(pvt->_major,GSS_C_GSS_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_GSS_CODE);
+	#endif
 	pvt->_status.append("GSS - minor:\n");
-	getStatus(pvt->_minor,GSS_C_GSS_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_GSS_CODE);
+	#endif
 	pvt->_status.append("MECH - major:\n");
-	getStatus(pvt->_major,GSS_C_MECH_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_MECH_CODE);
+	#endif
 	pvt->_status.append("MECH - minor:\n");
-	getStatus(pvt->_minor,GSS_C_MECH_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_MECH_CODE);
+	#endif
 	return pvt->_status.getString();
 }
 
 void gsscredentials::getStatus(uint32_t status, int32_t type) {
-	gss_buffer_desc	statusbuffer;
 
-	OM_uint32	msgctx=0;
-	do {
-		OM_uint32	major;
-		OM_uint32	minor;
-		major=gss_display_status(&minor,
-					status,
-					type,
-					GSS_C_NO_OID,
-					&msgctx,
-					&statusbuffer);
-		if (major!=GSS_S_COMPLETE) {
-			break;
-		}
+	#ifdef RUDIMENTS_HAS_GSS
+		gss_buffer_desc	statusbuffer;
 
-		pvt->_status.append((unsigned char *)statusbuffer.value,
-							statusbuffer.length);
-		pvt->_status.append('\n');
+		OM_uint32	msgctx=0;
+		do {
+			OM_uint32	major;
+			OM_uint32	minor;
+			major=gss_display_status(&minor,
+						status,
+						type,
+						GSS_C_NO_OID,
+						&msgctx,
+						&statusbuffer);
+			if (major!=GSS_S_COMPLETE) {
+				break;
+			}
 
-		gss_release_buffer(&minor,&statusbuffer);
-	} while (msgctx);
+			pvt->_status.append((unsigned char *)
+						statusbuffer.value,
+						statusbuffer.length);
+			pvt->_status.append('\n');
+
+			gss_release_buffer(&minor,&statusbuffer);
+		} while (msgctx);
+	#endif
 }
 
 
@@ -582,27 +725,47 @@ void gsscredentials::getStatus(uint32_t status, int32_t type) {
 class gsscontextprivate {
 	friend class gsscontext;
 	private:
-		OM_uint32		_major;
-		OM_uint32		_minor;
+		#ifdef RUDIMENTS_HAS_GSS
+			OM_uint32	_major;
+			OM_uint32	_minor;
+		#else
+			uint32_t	_major;
+			uint32_t	_minor;
+		#endif
+
 		stringbuffer		_status;
 
-		gsscredentials	*_credentials;
+		gsscredentials		*_credentials;
 
 		filedescriptor		*_fd;
 
-		OM_uint32		_desiredlifetime;
-		OM_uint32		_actuallifetime;
+		#ifdef RUDIMENTS_HAS_GSS
+			OM_uint32	_desiredlifetime;
+			OM_uint32	_actuallifetime;
+		#else
+			uint32_t	_desiredlifetime;
+			uint32_t	_actuallifetime;
+		#endif
 
 		gssmechanism		*_desiredmechanism;
 		gssmechanism		_actualmechanism;
 
-		OM_uint32		_desiredflags;
-		OM_uint32		_actualflags;
+		#ifdef RUDIMENTS_HAS_GSS
+			OM_uint32	_desiredflags;
+			OM_uint32	_actualflags;
+		#else
+			uint32_t	_desiredflags;
+			uint32_t	_actualflags;
+		#endif
 
 		const char		*_service;
 		size_t			_servicelength;
 
-		gss_ctx_id_t		_context;
+		#ifdef RUDIMENTS_HAS_GSS
+			gss_ctx_id_t	_context;
+		#else
+			void		*_context;
+		#endif
 
 		char			*_initiator;
 		char			*_initiatortype;
@@ -621,14 +784,23 @@ gsscontext::gsscontext() {
 	pvt=new gsscontextprivate;
 	pvt->_credentials=NULL;
 	pvt->_fd=NULL;
-	pvt->_desiredlifetime=GSS_C_INDEFINITE;
-	pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_desiredlifetime=GSS_C_INDEFINITE;
+		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#else
+		pvt->_desiredlifetime=UINT_MAX;
+		pvt->_actuallifetime=UINT_MAX;
+	#endif
 	pvt->_desiredmechanism=NULL;
 	pvt->_desiredflags=0;
 	pvt->_actualflags=0;
 	pvt->_service=NULL;
 	pvt->_servicelength=0;
-	pvt->_context=GSS_C_NO_CONTEXT;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_context=GSS_C_NO_CONTEXT;
+	#else
+		pvt->_context=NULL;
+	#endif
 	pvt->_initiator=NULL;
 	pvt->_initiatortype=NULL;
 	pvt->_acceptor=NULL;
@@ -693,8 +865,12 @@ const char *gsscontext::getService() {
 }
 
 bool gsscontext::initiate() {
-	return initiate(pvt->_service,pvt->_servicelength+1,
-				GSS_C_NT_HOSTBASED_SERVICE);
+	#ifdef RUDIMENTS_HAS_GSS
+		return initiate(pvt->_service,pvt->_servicelength+1,
+						GSS_C_NT_HOSTBASED_SERVICE);
+	#else
+		return false;
+	#endif
 }
 
 bool gsscontext::initiate(const void *name,
@@ -704,123 +880,129 @@ bool gsscontext::initiate(const void *name,
 	// release any previously initialized context
 	release();
 
-	// by default, we'll use "no name"
-	gss_name_t	desiredname=GSS_C_NO_NAME;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	if (name) {
+		// by default, we'll use "no name"
+		gss_name_t	desiredname=GSS_C_NO_NAME;
 
-		// if a name was provided then use it...
-		gss_buffer_desc	namebuffer;
-		namebuffer.value=(void *)name;
-		namebuffer.length=namesize;
+		if (name) {
 
-		// create an "internal form" struct from the name...
-		pvt->_major=gss_import_name(&pvt->_minor,
-						&namebuffer,
-						(gss_OID)nametype,
-						&desiredname);
-		if (pvt->_major!=GSS_S_COMPLETE) {
-			return false;
+			// if a name was provided then use it...
+			gss_buffer_desc	namebuffer;
+			namebuffer.value=(void *)name;
+			namebuffer.length=namesize;
+
+			// create an "internal form" struct from the name...
+			pvt->_major=gss_import_name(&pvt->_minor,
+							&namebuffer,
+							(gss_OID)nametype,
+							&desiredname);
+			if (pvt->_major!=GSS_S_COMPLETE) {
+				return false;
+			}
 		}
-	}
 
-	// initialize the context...
-	gss_buffer_desc	inputtoken;
-	inputtoken.length=0;
-	gss_buffer_desc	outputtoken;
+		// initialize the context...
+		gss_buffer_desc	inputtoken;
+		inputtoken.length=0;
+		gss_buffer_desc	outputtoken;
 
-	gss_cred_id_t	credentials=
-		(pvt->_credentials)?
+		gss_cred_id_t	credentials=
+			(pvt->_credentials)?
 			(gss_cred_id_t)pvt->_credentials->getCredentials():
 			GSS_C_NO_CREDENTIAL;
 
-	gss_OID	desiredmechoid=(pvt->_desiredmechanism)?
-				(gss_OID)pvt->_desiredmechanism->getObjectId():
-				GSS_C_NO_OID;
-	gss_OID	actualmechoid=GSS_C_NO_OID;
+		gss_OID	desiredmechoid=
+			(pvt->_desiredmechanism)?
+			(gss_OID)pvt->_desiredmechanism->getObjectId():
+			GSS_C_NO_OID;
+		gss_OID	actualmechoid=GSS_C_NO_OID;
 
-	for (;;) {
+		for (;;) {
 
-		// attempt to init the context
-		pvt->_major=gss_init_sec_context(
-					&pvt->_minor,
-					credentials,
-					&pvt->_context,
-					desiredname,
-					desiredmechoid,
-					pvt->_desiredflags,
-					pvt->_desiredlifetime,
-					GSS_C_NO_CHANNEL_BINDINGS,
-					&inputtoken,
-					&actualmechoid,
-					&outputtoken,
-					&pvt->_actualflags,
-					&pvt->_actuallifetime);
+			// attempt to init the context
+			pvt->_major=gss_init_sec_context(
+						&pvt->_minor,
+						credentials,
+						&pvt->_context,
+						desiredname,
+						desiredmechoid,
+						pvt->_desiredflags,
+						pvt->_desiredlifetime,
+						GSS_C_NO_CHANNEL_BINDINGS,
+						&inputtoken,
+						&actualmechoid,
+						&outputtoken,
+						&pvt->_actualflags,
+						&pvt->_actuallifetime);
 
-		// free inputtoken if necessary
-		if (inputtoken.length) {
-			delete[] (unsigned char *)inputtoken.value;
+			// free inputtoken if necessary
+			if (inputtoken.length) {
+				delete[] (unsigned char *)inputtoken.value;
+			}
+
+			// bail on error
+			if (GSS_ERROR(pvt->_major)) {
+				release();
+				break;
+			}
+
+			// send token to peer, if necessary
+			if (outputtoken.length) {
+				if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
+						outputtoken.value,
+						outputtoken.length)!=
+						(ssize_t)outputtoken.length) {
+
+					// clean up
+					OM_uint32	minor;
+					gss_release_buffer(&minor,
+							&outputtoken);
+					release();
+					break;
+				}
+			}
+
+			// clean up
+			OM_uint32	minor;
+			gss_release_buffer(&minor,&outputtoken);
+
+			// receive token from peer,
+			// into inputtoken, if necessary
+			if (pvt->_major==GSS_S_CONTINUE_NEEDED) {
+
+				uint32_t	flags=0;
+				inputtoken.value=NULL;
+				inputtoken.length=0;
+				if (receiveToken(&flags,
+						&inputtoken.value,
+						&inputtoken.length)<=0 ||
+					flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+			
+					delete[] (unsigned char *)
+							inputtoken.value;
+
+					OM_uint32	minor;
+					gss_release_buffer(&minor,&outputtoken);
+
+					release();
+					break;
+				}
+
+			} else {
+				// break out if we've completed the process
+				break;
+			}
 		}
 
 		// bail on error
-		if (GSS_ERROR(pvt->_major)) {
-			release();
-			break;
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			return false;
 		}
 
-		// send token to peer, if necessary
-		if (outputtoken.length) {
-			if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
-					outputtoken.value,
-					outputtoken.length)!=
-					(ssize_t)outputtoken.length) {
-
-				// clean up
-				OM_uint32	minor;
-				gss_release_buffer(&minor,&outputtoken);
-
-				release();
-				break;
-			}
-		}
-
-		// clean up
-		OM_uint32	minor;
-		gss_release_buffer(&minor,&outputtoken);
-
-		// receive token from peer, into inputtoken, if necessary
-		if (pvt->_major==GSS_S_CONTINUE_NEEDED) {
-
-			uint32_t	flags=0;
-			inputtoken.value=NULL;
-			inputtoken.length=0;
-			if (receiveToken(&flags,
-					&inputtoken.value,
-					&inputtoken.length)<=0 ||
-				flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
-			
-				delete[] (unsigned char *)inputtoken.value;
-
-				OM_uint32	minor;
-				gss_release_buffer(&minor,&outputtoken);
-
-				release();
-				break;
-			}
-
-		} else {
-			// break out if we've completed the process
-			break;
-		}
-	}
-
-	// bail on error
-	if (pvt->_major!=GSS_S_COMPLETE) {
-		return false;
-	}
-
-	// populate actual mechanism
-	pvt->_actualmechanism.initialize(actualmechoid);
+		// populate actual mechanism
+		pvt->_actualmechanism.initialize(actualmechoid);
+	#endif
 
 	// get additional info about the context
 	return inquire();
@@ -828,117 +1010,122 @@ bool gsscontext::initiate(const void *name,
 
 bool gsscontext::inquire() {
 
-	// inquire...
-	gss_name_t	initiator;
-	gss_name_t	acceptor;
-	int		isinitiator;
-	int		isopen;
-	pvt->_major=gss_inquire_context(&pvt->_minor,
-					pvt->_context,
-					&initiator,
-					&acceptor,
-					NULL,
-					NULL,
-					NULL,
-					&isinitiator,
-					&isopen);
-	if (pvt->_major!=GSS_S_COMPLETE) {
-		// FIXME: release initiator?
-		// FIXME: release acceptor?
-		return false;
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+
+		// inquire...
+		gss_name_t	initiator;
+		gss_name_t	acceptor;
+		int		isinitiator;
+		int		isopen;
+		pvt->_major=gss_inquire_context(&pvt->_minor,
+						pvt->_context,
+						&initiator,
+						&acceptor,
+						NULL,
+						NULL,
+						NULL,
+						&isinitiator,
+						&isopen);
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			// FIXME: release initiator?
+			// FIXME: release acceptor?
+			return false;
+		}
 
 
-	OM_uint32	minor;
+		OM_uint32	minor;
 
-	// expose initiator and initiator type
-	gss_buffer_desc	initiatorbuffer;
-	gss_OID		initiatortype;
-	pvt->_major=gss_display_name(&pvt->_minor,
-					initiator,
-					&initiatorbuffer,
-					&initiatortype);
-	if (pvt->_major!=GSS_S_COMPLETE) {
-		return false;
-	}
+		// expose initiator and initiator type
+		gss_buffer_desc	initiatorbuffer;
+		gss_OID		initiatortype;
+		pvt->_major=gss_display_name(&pvt->_minor,
+						initiator,
+						&initiatorbuffer,
+						&initiatortype);
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			return false;
+		}
 
-	delete[] pvt->_initiator;
-	pvt->_initiator=new char[initiatorbuffer.length+1];
-	charstring::copy(pvt->_initiator,
-				(char *)initiatorbuffer.value,
-				initiatorbuffer.length);
-	pvt->_initiator[initiatorbuffer.length]='\0';
+		delete[] pvt->_initiator;
+		pvt->_initiator=new char[initiatorbuffer.length+1];
+		charstring::copy(pvt->_initiator,
+					(char *)initiatorbuffer.value,
+					initiatorbuffer.length);
+		pvt->_initiator[initiatorbuffer.length]='\0';
 	
-	gss_release_name(&minor,&initiator);
-	gss_release_buffer(&minor,&initiatorbuffer);
+		gss_release_name(&minor,&initiator);
+		gss_release_buffer(&minor,&initiatorbuffer);
 
-	gss_buffer_desc	initiatortypebuffer;
-	pvt->_major=gss_oid_to_str(&pvt->_minor,
-					initiatortype,
-					&initiatortypebuffer);
-	if (pvt->_major!=GSS_S_COMPLETE) {
+		gss_buffer_desc	initiatortypebuffer;
+		pvt->_major=gss_oid_to_str(&pvt->_minor,
+						initiatortype,
+						&initiatortypebuffer);
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			return false;
+		}
+
+		delete[] pvt->_initiatortype;
+		pvt->_initiatortype=new char[initiatortypebuffer.length+1];
+		charstring::copy(pvt->_initiatortype,
+					(char *)initiatortypebuffer.value,
+					initiatortypebuffer.length);
+		pvt->_initiatortype[initiatortypebuffer.length]='\0';
+
+		gss_release_buffer(&minor,&initiatortypebuffer);
+	
+
+		// expose acceptor and acceptor type
+		gss_buffer_desc	acceptorbuffer;
+		gss_OID		acceptortype;
+		pvt->_major=gss_display_name(&pvt->_minor,
+						acceptor,
+						&acceptorbuffer,
+						&acceptortype);
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			return false;
+		}
+
+		delete[] pvt->_acceptor;
+		pvt->_acceptor=new char[acceptorbuffer.length+1];
+		charstring::copy(pvt->_acceptor,
+					(char *)acceptorbuffer.value,
+					acceptorbuffer.length);
+		pvt->_acceptor[acceptorbuffer.length]='\0';
+	
+		gss_release_name(&minor,&acceptor);
+		gss_release_buffer(&minor,&acceptorbuffer);
+
+		gss_buffer_desc	acceptortypebuffer;
+		pvt->_major=gss_oid_to_str(&pvt->_minor,
+						acceptortype,
+						&acceptortypebuffer);
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			return false;
+		}
+
+		delete[] pvt->_acceptortype;
+		pvt->_acceptortype=new char[acceptortypebuffer.length+1];
+		charstring::copy(pvt->_acceptortype,
+					(char *)acceptortypebuffer.value,
+					acceptortypebuffer.length);
+		pvt->_acceptortype[acceptortypebuffer.length]='\0';
+	
+		gss_release_buffer(&minor,&acceptortypebuffer);
+
+
+		// expose isinitiator
+		pvt->_isinitiator=isinitiator;
+
+
+		// expose isopen
+		pvt->_isopen=isopen;
+
+
+		// return success/failure
+		return (pvt->_major==GSS_S_COMPLETE);
+	#else
 		return false;
-	}
-
-	delete[] pvt->_initiatortype;
-	pvt->_initiatortype=new char[initiatortypebuffer.length+1];
-	charstring::copy(pvt->_initiatortype,
-				(char *)initiatortypebuffer.value,
-				initiatortypebuffer.length);
-	pvt->_initiatortype[initiatortypebuffer.length]='\0';
-	
-	gss_release_buffer(&minor,&initiatortypebuffer);
-	
-
-	// expose acceptor and acceptor type
-	gss_buffer_desc	acceptorbuffer;
-	gss_OID		acceptortype;
-	pvt->_major=gss_display_name(&pvt->_minor,
-					acceptor,
-					&acceptorbuffer,
-					&acceptortype);
-	if (pvt->_major!=GSS_S_COMPLETE) {
-		return false;
-	}
-
-	delete[] pvt->_acceptor;
-	pvt->_acceptor=new char[acceptorbuffer.length+1];
-	charstring::copy(pvt->_acceptor,
-				(char *)acceptorbuffer.value,
-				acceptorbuffer.length);
-	pvt->_acceptor[acceptorbuffer.length]='\0';
-	
-	gss_release_name(&minor,&acceptor);
-	gss_release_buffer(&minor,&acceptorbuffer);
-
-	gss_buffer_desc	acceptortypebuffer;
-	pvt->_major=gss_oid_to_str(&pvt->_minor,
-					acceptortype,
-					&acceptortypebuffer);
-	if (pvt->_major!=GSS_S_COMPLETE) {
-		return false;
-	}
-
-	delete[] pvt->_acceptortype;
-	pvt->_acceptortype=new char[acceptortypebuffer.length+1];
-	charstring::copy(pvt->_acceptortype,
-				(char *)acceptortypebuffer.value,
-				acceptortypebuffer.length);
-	pvt->_acceptortype[acceptortypebuffer.length]='\0';
-	
-	gss_release_buffer(&minor,&acceptortypebuffer);
-
-
-	// expose isinitiator
-	pvt->_isinitiator=isinitiator;
-
-
-	// expose isopen
-	pvt->_isopen=isopen;
-
-
-	// return success/failure
-	return (pvt->_major==GSS_S_COMPLETE);
+	#endif
 }
 
 bool gsscontext::accept() {
@@ -946,87 +1133,92 @@ bool gsscontext::accept() {
 	// release any previously accepted context
 	release();
 
-	// accept the context...
-	gss_buffer_desc	inputtoken;
-	gss_buffer_desc	outputtoken;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	gss_cred_id_t	credentials=
-		(pvt->_credentials)?
+		// accept the context...
+		gss_buffer_desc	inputtoken;
+		gss_buffer_desc	outputtoken;
+
+		gss_cred_id_t	credentials=
+			(pvt->_credentials)?
 			(gss_cred_id_t)pvt->_credentials->getCredentials():
 			GSS_C_NO_CREDENTIAL;
 
-	// FIXME: expose this in the API
-	gss_name_t	clientname;
+		// FIXME: expose this in the API
+		gss_name_t	clientname;
 
-	gss_OID	actualmechoid=GSS_C_NO_OID;
+		gss_OID	actualmechoid=GSS_C_NO_OID;
 
-	do {
+		do {
 
-		// receive token from peer, into inputtoken...
-		uint32_t	flags=0;
-		inputtoken.value=NULL;
-		inputtoken.length=0;
-		if (receiveToken(&flags,
-				&inputtoken.value,
-				&inputtoken.length)<=0 ||
-			flags!=TOKEN_FLAGS_TYPE_INITIATE) {
-
-			// clean up
-			delete[] (unsigned char *)inputtoken.value;
-			release();
-			break;
-		}
-
-		// attempt to accept the context
-		pvt->_major=gss_accept_sec_context(
-					&pvt->_minor,
-					&pvt->_context,
-					credentials,
-					&inputtoken,
-					GSS_C_NO_CHANNEL_BINDINGS,
-					&clientname,
-					&actualmechoid,
-					&outputtoken,
-					&pvt->_actualflags,
-					&pvt->_actuallifetime,
-					// FIXME: support delegated credentials
-					NULL);
-
-		// bail on error
-		if (GSS_ERROR(pvt->_major)) {
-			release();
-			break;
-		}
-
-		// send token to peer, if necessary
-		if (outputtoken.length) {
-			if (sendToken(TOKEN_FLAGS_TYPE_ACCEPT,
-					outputtoken.value,
-					outputtoken.length)!=
-					(ssize_t)outputtoken.length) {
+			// receive token from peer, into inputtoken...
+			uint32_t	flags=0;
+			inputtoken.value=NULL;
+			inputtoken.length=0;
+			if (receiveToken(&flags,
+					&inputtoken.value,
+					&inputtoken.length)<=0 ||
+				flags!=TOKEN_FLAGS_TYPE_INITIATE) {
 
 				// clean up
-				OM_uint32	minor;
-				gss_release_buffer(&minor,&outputtoken);
-
+				delete[] (unsigned char *)inputtoken.value;
 				release();
 				break;
 			}
+
+			// attempt to accept the context
+			pvt->_major=gss_accept_sec_context(
+						&pvt->_minor,
+						&pvt->_context,
+						credentials,
+						&inputtoken,
+						GSS_C_NO_CHANNEL_BINDINGS,
+						&clientname,
+						&actualmechoid,
+						&outputtoken,
+						&pvt->_actualflags,
+						&pvt->_actuallifetime,
+						// FIXME: support
+						// delegated credentials
+						NULL);
+
+			// bail on error
+			if (GSS_ERROR(pvt->_major)) {
+				release();
+				break;
+			}
+
+			// send token to peer, if necessary
+			if (outputtoken.length) {
+				if (sendToken(TOKEN_FLAGS_TYPE_ACCEPT,
+						outputtoken.value,
+						outputtoken.length)!=
+						(ssize_t)outputtoken.length) {
+
+					// clean up
+					OM_uint32	minor;
+					gss_release_buffer(&minor,&outputtoken);
+
+					release();
+					break;
+				}
+			}
+
+			// clean up
+			OM_uint32	minor;
+			gss_release_buffer(&minor,&outputtoken);
+
+		} while (pvt->_major==GSS_S_CONTINUE_NEEDED);
+
+		// bail on error
+		if (pvt->_major!=GSS_S_COMPLETE) {
+			return false;
 		}
 
-		// clean up
-		OM_uint32	minor;
-		gss_release_buffer(&minor,&outputtoken);
+		// populate actual mechanism
+		pvt->_actualmechanism.initialize(actualmechoid);
 
-	} while (pvt->_major==GSS_S_CONTINUE_NEEDED);
-
-	// bail on error
-	if (pvt->_major!=GSS_S_COMPLETE) {
-		return false;
-	}
-
-	// populate actual mechanism
-	pvt->_actualmechanism.initialize(actualmechoid);
+	#endif
 
 	// get additional info about the context
 	return inquire();
@@ -1034,12 +1226,14 @@ bool gsscontext::accept() {
 
 void gsscontext::release() {
 
-	// delete the context
-	if (pvt->_context!=GSS_C_NO_CONTEXT) {
-		gss_delete_sec_context(
-			&pvt->_minor,&pvt->_context,GSS_C_NO_BUFFER);
-		// automatically sets pvt->_context to GSS_C_NO_CONTEXT
-	}
+	#ifdef RUDIMENTS_HAS_GSS
+		// delete the context
+		if (pvt->_context!=GSS_C_NO_CONTEXT) {
+			gss_delete_sec_context(
+				&pvt->_minor,&pvt->_context,GSS_C_NO_BUFFER);
+			// automatically sets pvt->_context to GSS_C_NO_CONTEXT
+		}
+	#endif
 
 	// reset initiator and acceptor names
 	delete[] pvt->_initiator;
@@ -1053,7 +1247,11 @@ void gsscontext::release() {
 	pvt->_acceptortype=NULL;
 
 	// reset the "actuals"
-	pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#ifdef RUDIMENTS_HAS_GSS
+		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#else
+		pvt->_actuallifetime=UINT_MAX;
+	#endif
 	pvt->_actualmechanism.clear();
 	pvt->_actualflags=0;
 
@@ -1114,53 +1312,58 @@ bool gsscontext::wrap(const unsigned char *input,
 					size_t *outputsize,
 					bool *encryptionused) {
 
-	// configure input buffer
-	gss_buffer_desc	inputbuffer;
-	inputbuffer.value=(void *)input;
-	inputbuffer.length=inputsize;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	// declare output buffer
-	gss_buffer_desc	outputbuffer;
+		// configure input buffer
+		gss_buffer_desc	inputbuffer;
+		inputbuffer.value=(void *)input;
+		inputbuffer.length=inputsize;
 
-	// use encryption or not
-	int	useenc=useencryption;
-	int	encused=0;
+		// declare output buffer
+		gss_buffer_desc	outputbuffer;
 
-	// wrap the input
-	pvt->_major=gss_wrap(&pvt->_minor,
-				pvt->_context,
-				useenc,
-				GSS_C_QOP_DEFAULT,
-				&inputbuffer,
-				&encused,
-				&outputbuffer);
+		// use encryption or not
+		int	useenc=useencryption;
+		int	encused=0;
 
-	// whether encryption was used or not
-	if (encryptionused) {
-		*encryptionused=encused;
-	}
+		// wrap the input
+		pvt->_major=gss_wrap(&pvt->_minor,
+					pvt->_context,
+					useenc,
+					GSS_C_QOP_DEFAULT,
+					&inputbuffer,
+					&encused,
+					&outputbuffer);
 
-	if (pvt->_major==GSS_S_COMPLETE) {
-
-		// copy-out the wrapped 
-		if (output) {
-			*output=(unsigned char *)bytestring::duplicate(
-							outputbuffer.value,
-							outputbuffer.length);
-		}
-		if (outputsize) {
-			*outputsize=outputbuffer.length;
+		// whether encryption was used or not
+		if (encryptionused) {
+			*encryptionused=encused;
 		}
 
-		// clean up
-		OM_uint32	minor;
-		gss_release_buffer(&minor,&outputbuffer);
+		if (pvt->_major==GSS_S_COMPLETE) {
 
-		return true;
-	}
+			// copy-out the wrapped 
+			if (output) {
+				*output=(unsigned char *)
+					bytestring::duplicate(
+						outputbuffer.value,
+						outputbuffer.length);
+			}
+			if (outputsize) {
+				*outputsize=outputbuffer.length;
+			}
 
-	// FIXME: are there cases where outputbuffer
-	// should be cleaned up here too?
+			// clean up
+			OM_uint32	minor;
+			gss_release_buffer(&minor,&outputbuffer);
+
+			return true;
+		}
+
+		// FIXME: are there cases where outputbuffer
+		// should be cleaned up here too?
+	#endif
+
 	return false;
 }
 
@@ -1177,51 +1380,56 @@ bool gsscontext::unwrap(const unsigned char *input,
 					size_t *outputsize,
 					bool *decryptionused) {
 
-	// configure input buffer
-	gss_buffer_desc	inputbuffer;
-	inputbuffer.value=(void *)input;
-	inputbuffer.length=inputsize;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	// declare output buffer
-	gss_buffer_desc	outputbuffer;
+		// configure input buffer
+		gss_buffer_desc	inputbuffer;
+		inputbuffer.value=(void *)input;
+		inputbuffer.length=inputsize;
 
-	// decryption used or not
-	int	decused=0;
+		// declare output buffer
+		gss_buffer_desc	outputbuffer;
 
-	// unwrap the input
-	pvt->_major=gss_unwrap(&pvt->_minor,
-				pvt->_context,
-				&inputbuffer,
-				&outputbuffer,
-				&decused,
-				NULL);
+		// decryption used or not
+		int	decused=0;
 
-	// whether decryption was used or not
-	if (decryptionused) {
-		*decryptionused=decused;
-	}
+		// unwrap the input
+		pvt->_major=gss_unwrap(&pvt->_minor,
+					pvt->_context,
+					&inputbuffer,
+					&outputbuffer,
+					&decused,
+					NULL);
 
-	if (pvt->_major==GSS_S_COMPLETE) {
-
-		// copy-out the unwrapped 
-		if (output) {
-			*output=(unsigned char *)bytestring::duplicate(
-							outputbuffer.value,
-							outputbuffer.length);
-		}
-		if (outputsize) {
-			*outputsize=outputbuffer.length;
+		// whether decryption was used or not
+		if (decryptionused) {
+			*decryptionused=decused;
 		}
 
-		// clean up
-		OM_uint32	minor;
-		gss_release_buffer(&minor,&outputbuffer);
+		if (pvt->_major==GSS_S_COMPLETE) {
 
-		return true;
-	}
+			// copy-out the unwrapped 
+			if (output) {
+				*output=(unsigned char *)
+					bytestring::duplicate(
+						outputbuffer.value,
+						outputbuffer.length);
+			}
+			if (outputsize) {
+				*outputsize=outputbuffer.length;
+			}
 
-	// FIXME: are there cases where outputbuffer
-	// should be cleaned up here too?
+			// clean up
+			OM_uint32	minor;
+			gss_release_buffer(&minor,&outputbuffer);
+
+			return true;
+		}
+
+		// FIXME: are there cases where outputbuffer
+		// should be cleaned up here too?
+	#endif
+
 	return false;
 }
 
@@ -1230,42 +1438,47 @@ bool gsscontext::getMic(const unsigned char *message,
 					unsigned char **mic,
 					size_t *micsize) {
 
-	// configure message buffer
-	gss_buffer_desc	messagebuffer;
-	messagebuffer.value=(void *)message;
-	messagebuffer.length=messagesize;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	// declare mic buffer
-	gss_buffer_desc	micbuffer;
+		// configure message buffer
+		gss_buffer_desc	messagebuffer;
+		messagebuffer.value=(void *)message;
+		messagebuffer.length=messagesize;
 
-	// get the mic
-	pvt->_major=gss_get_mic(&pvt->_minor,
-				pvt->_context,
-				GSS_C_QOP_DEFAULT,
-				&messagebuffer,
-				&micbuffer);
+		// declare mic buffer
+		gss_buffer_desc	micbuffer;
 
-	if (pvt->_major==GSS_S_COMPLETE) {
+		// get the mic
+		pvt->_major=gss_get_mic(&pvt->_minor,
+					pvt->_context,
+					GSS_C_QOP_DEFAULT,
+					&messagebuffer,
+					&micbuffer);
 
-		// copy-out the mic
-		if (mic) {
-			*mic=(unsigned char *)bytestring::duplicate(
-							micbuffer.value,
-							micbuffer.length);
+		if (pvt->_major==GSS_S_COMPLETE) {
+
+			// copy-out the mic
+			if (mic) {
+				*mic=(unsigned char *)
+					bytestring::duplicate(
+						micbuffer.value,
+						micbuffer.length);
+			}
+			if (micsize) {
+				*micsize=micbuffer.length;
+			}
+
+			// clean up
+			OM_uint32	minor;
+			gss_release_buffer(&minor,&micbuffer);
+
+			return true;
 		}
-		if (micsize) {
-			*micsize=micbuffer.length;
-		}
 
-		// clean up
-		OM_uint32	minor;
-		gss_release_buffer(&minor,&micbuffer);
+		// FIXME: are there cases where micbuffer
+		// should be cleaned up here too?
+	#endif
 
-		return true;
-	}
-
-	// FIXME: are there cases where micbuffer
-	// should be cleaned up here too?
 	return false;
 }
 
@@ -1274,25 +1487,30 @@ bool gsscontext::verifyMic(const unsigned char *message,
 					const unsigned char *mic,
 					size_t micsize) {
 
-	// configure message buffer
-	gss_buffer_desc	messagebuffer;
-	messagebuffer.value=(void *)message;
-	messagebuffer.length=messagesize;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	// configure mic buffer
-	gss_buffer_desc	micbuffer;
-	micbuffer.value=(void *)mic;
-	micbuffer.length=micsize;
+		// configure message buffer
+		gss_buffer_desc	messagebuffer;
+		messagebuffer.value=(void *)message;
+		messagebuffer.length=messagesize;
 
-	// verify the mic
-	pvt->_major=gss_verify_mic(&pvt->_minor,
-					pvt->_context,
-					&messagebuffer,
-					&micbuffer,
-					NULL);
+		// configure mic buffer
+		gss_buffer_desc	micbuffer;
+		micbuffer.value=(void *)mic;
+		micbuffer.length=micsize;
 
-	// return success/failure
-	return (pvt->_major==GSS_S_COMPLETE);
+		// verify the mic
+		pvt->_major=gss_verify_mic(&pvt->_minor,
+						pvt->_context,
+						&messagebuffer,
+						&micbuffer,
+						NULL);
+
+		// return success/failure
+		return (pvt->_major==GSS_S_COMPLETE);
+	#else
+		return false;
+	#endif
 }
 
 ssize_t gsscontext::read(void *buf, ssize_t count) {
@@ -1476,11 +1694,15 @@ ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
 }
 
 uint32_t gsscontext::getRemainingLifetime() {
-	OM_uint32	remainingtime;
-	pvt->_major=gss_context_time(&pvt->_minor,
-					pvt->_context,
-					&remainingtime);
-	return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
+	#ifdef RUDIMENTS_HAS_GSS
+		OM_uint32	remainingtime;
+		pvt->_major=gss_context_time(&pvt->_minor,
+						pvt->_context,
+						&remainingtime);
+		return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
+	#else
+		return 0;
+	#endif
 }
 
 uint32_t gsscontext::getMajorStatus() {
@@ -1494,38 +1716,50 @@ uint32_t gsscontext::getMinorStatus() {
 const char *gsscontext::getStatus() {
 	pvt->_status.clear();
 	pvt->_status.append("GSS - major:\n");
-	getStatus(pvt->_major,GSS_C_GSS_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_GSS_CODE);
+	#endif
 	pvt->_status.append("GSS - minor:\n");
-	getStatus(pvt->_minor,GSS_C_GSS_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_GSS_CODE);
+	#endif
 	pvt->_status.append("MECH - major:\n");
-	getStatus(pvt->_major,GSS_C_MECH_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_MECH_CODE);
+	#endif
 	pvt->_status.append("MECH - minor:\n");
-	getStatus(pvt->_minor,GSS_C_MECH_CODE);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_MECH_CODE);
+	#endif
 	return pvt->_status.getString();
 }
 
 void gsscontext::getStatus(uint32_t status, int32_t type) {
 
-	gss_buffer_desc	statusbuffer;
+	#ifdef RUDIMENTS_HAS_GSS
 
-	OM_uint32	msgctx=0;
-	do {
-		OM_uint32	major;
-		OM_uint32	minor;
-		major=gss_display_status(&minor,
-					status,
-					type,
-					GSS_C_NO_OID,
-					&msgctx,
-					&statusbuffer);
-		if (major!=GSS_S_COMPLETE) {
-			break;
-		}
+		gss_buffer_desc	statusbuffer;
 
-		pvt->_status.append((unsigned char *)statusbuffer.value,
-							statusbuffer.length);
-		pvt->_status.append('\n');
+		OM_uint32	msgctx=0;
+		do {
+			OM_uint32	major;
+			OM_uint32	minor;
+			major=gss_display_status(&minor,
+						status,
+						type,
+						GSS_C_NO_OID,
+						&msgctx,
+						&statusbuffer);
+			if (major!=GSS_S_COMPLETE) {
+				break;
+			}
 
-		gss_release_buffer(&minor,&statusbuffer);
-	} while (msgctx);
+			pvt->_status.append((unsigned char *)
+						statusbuffer.value,
+						statusbuffer.length);
+			pvt->_status.append('\n');
+
+			gss_release_buffer(&minor,&statusbuffer);
+		} while (msgctx);
+	#endif
 }
