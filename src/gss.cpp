@@ -35,9 +35,11 @@
 #define TOKEN_FLAGS_TYPE_INITIATE	(1<<0)
 #define TOKEN_FLAGS_TYPE_ACCEPT		(1<<1)
 #define TOKEN_FLAGS_TYPE_DATA		(1<<2)
+
+// FIXME: do something with these...
 #define TOKEN_FLAGS_TYPE_MIC		(1<<3)
-#define TOKEN_FLAGS_ENCRYPTED		(1<<4)
-#define TOKEN_FLAGS_VERIFY		(1<<5)
+#define TOKEN_FLAGS_VERIFY		(1<<4)
+#define TOKEN_FLAGS_ENCRYPTED		(1<<5)
 
 class gssprivate {
 	friend class gss;
@@ -414,8 +416,10 @@ bool gsscredentials::acquire(const void *name,
 	#ifdef RUDIMENTS_HAS_GSS
 		// keep track of the name for nametypes
 		// where the name is a string
-		if ((gss_OID)nametype==GSS_C_NT_HOSTBASED_SERVICE ||
-			(gss_OID)nametype==GSS_C_NT_USER_NAME ||
+		if ((gss_OID)nametype==
+				GSS_C_NT_HOSTBASED_SERVICE ||
+			(gss_OID)nametype==
+				GSS_C_NT_USER_NAME ||
 			(gss_OID)nametype==
 				(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME ||
 			(gss_OID)nametype==
