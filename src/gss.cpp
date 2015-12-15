@@ -14,17 +14,29 @@
 #include <errno.h>
 
 #ifdef RUDIMENTS_HAS_GSS
+
+	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+		// for gss_acquire_cred_with_password and gss_str_to_oid
+		#include <gssapi/gssapi_ext.h>
+	#endif
+
 	#ifndef RUDIMENTS_HAS_GSS_STR_TO_OID
+		// for local gss_str_to_oid implementation
 		#include "gssoid.cpp"
 	#endif
 
-	// for gss_acquire_cred_with_password and possibly gss_str_to_oid
-	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
-		#include <gssapi/gssapi_ext.h>
+	#ifndef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
+		// for direct krb5 functions
+		#if defined(RUDIMENTS_HAS_KRB5_KRB5_H)
+			#include <krb5/krb5.h>
+		#elif defined(RUDIMENTS_HAS_KRB5_H)
+			#include <krb5.h>
+		#endif
 	#endif
 
 	#if !defined(GSS_KRB5_NT_PRINCIPAL_NAME) && \
 		defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H)
+		// for GSS_KRB5_NT_PRINCIPAL_NAME
 		#include <gssapi/gssapi_krb5.h>
 	#endif
 #else
