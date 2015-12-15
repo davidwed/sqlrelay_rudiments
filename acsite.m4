@@ -1051,6 +1051,15 @@ then
 	#include <gssapi/gssapi_ext.h>
 #endif
 ],[gss_acquire_cred_with_password(0,0,0,0,0,0,0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD,1,GSS has gss_acquire_cred_with_password) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+			AC_MSG_CHECKING(for krb5_get_init_creds_opt_set_out_ccache)
+			FW_TRY_LINK([#ifdef RUDIMENTS_HAS_KRB5_KRB5_H
+	#include <krb5/krb5.h>
+#endif
+#ifdef RUDIMENTS_HAS_KRB5_H
+	#include <krb5.h>
+#endif
+],[krb5_get_init_creds_opt_set_out_ccache(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_KRB5_GET_INIT_CREDS_OPT_SET_OUT_CCACHE,1,GSS has krb5_get_init_creds_opt_set_out_ccache) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 

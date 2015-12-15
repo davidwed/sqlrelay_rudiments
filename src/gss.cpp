@@ -577,10 +577,12 @@ bool gsscredentials::acquire(const void *name,
 				kerror=krb5_get_init_creds_opt_alloc(
 								kctx,&kopt);
 			}
+			#ifdef RUDIMENTS_HAS_KRB5_GET_INIT_CREDS_OPT_SET_OUT_CCACHE
 			if (!kerror) {
 				kerror=krb5_get_init_creds_opt_set_out_ccache(
 								kctx,kopt,kcc);
 			}
+			#endif
 
 			// create a principal struct from the user name
 			if (!kerror) {
