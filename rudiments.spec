@@ -8,7 +8,7 @@ License: LGPLv2
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-BuildRequires: pcre-devel,openssl-devel,libcurl-devel
+BuildRequires: pcre-devel,openssl-devel,libcurl-devel,krb5-devel
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
@@ -72,6 +72,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Wed Dec 16 2015 David Muse <dmuse@firstworks.com> - 0.55-1
+- Added krb5 dependencies
+
 * Tue Oct 06 2015 David Muse <dmuse@firstworks.com> - 0.54-1
 - Added libcurl dependencies
 - Removed mention of test/build-script licenses
