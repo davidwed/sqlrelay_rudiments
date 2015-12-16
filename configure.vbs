@@ -31,6 +31,7 @@ srcs="winsock.cpp "+_
 	"error.cpp "+_
 	"file.cpp "+_
 	"filedescriptor.cpp "+_
+	"gss.cpp "+_
 	"stdio.cpp "+_
 	"filesystem.cpp "+_
 	"groupentry.cpp "+_
@@ -89,6 +90,7 @@ lobjs="winsock.obj "+_
 	"error.obj "+_
 	"file.obj "+_
 	"filedescriptor.obj "+_
+	"gss.obj "+_
 	"stdio.obj "+_
 	"filesystem.obj "+_
 	"groupentry.obj "+_
@@ -196,7 +198,8 @@ headers3="xmldom.h "+_
 	"unixsocketutil.h "+_
 	"socketserver.h "+_
 	"socketclient.h "+_
-	"url.h"
+	"url.h "+_
+	"gss.h"
 
 privateheaders0="config.h "+_
 	"rudimentsinlines.h "+_
@@ -341,7 +344,12 @@ privateheaders7="codetree.h "+_
 	"socketclientincludes.h "+_
 	"modemutil.h "+_
 	"url.h "+_
-	"urlincludes.h"
+	"urlincludes.h "+_
+	"gss.h "+_
+	"gssincludes.h "+_
+	"gssmechanism.h "+_
+	"gsscredentials.h "+_
+	"gsscontext.h"
 
 ' version
 RUDIMENTS_VERSION="0.55"
