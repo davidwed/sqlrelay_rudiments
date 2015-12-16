@@ -11,8 +11,6 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-#include <rudiments/error.h>
-
 #ifdef RUDIMENTS_HAS_GSS
 
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
