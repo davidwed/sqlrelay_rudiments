@@ -94,9 +94,6 @@
 /* GSS has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID
 
-/* GSS has krb5_get_init_creds_opt_set_out_ccache */
-#undef RUDIMENTS_HAS_KRB5_GET_INIT_CREDS_OPT_SET_OUT_CCACHE
-
 /* GSS has krb5.h */
 #undef RUDIMENTS_HAS_KRB5_H
 

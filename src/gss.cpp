@@ -11,7 +11,7 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-#include <errno.h>
+#include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAS_GSS
 
@@ -557,8 +557,6 @@ bool gsscredentials::acquire(const void *name,
 			// calling gss_acquire_cred_with_password() does.
 
 			krb5_context		kctx=NULL;
-			krb5_ccache		kcc=NULL;
-			krb5_get_init_creds_opt	*kopt=NULL;
 			krb5_principal		kpr=NULL;
 			krb5_creds		kcrd;
 			bytestring::zero(&kcrd,sizeof(kcrd));
@@ -566,50 +564,33 @@ bool gsscredentials::acquire(const void *name,
 			// create a context
 			kerror=krb5_init_context(&kctx);
 
-			// get the default cred cache
-			if (!kerror) {
-				kerror=krb5_cc_default(kctx,&kcc);
-			}
-
-			// set the cred cache as an "out cache"
-			// (so *_init_creds_* will write credentials to it)
-			if (!kerror) {
-				kerror=krb5_get_init_creds_opt_alloc(
-								kctx,&kopt);
-			}
-			#ifdef RUDIMENTS_HAS_KRB5_GET_INIT_CREDS_OPT_SET_OUT_CCACHE
-			if (!kerror) {
-				kerror=krb5_get_init_creds_opt_set_out_ccache(
-								kctx,kopt,kcc);
-			}
-			#endif
-
-			// create a principal struct from the user name
+			// authenticate with the KDC
 			if (!kerror) {
 				kerror=krb5_parse_name(kctx,
 						(const char *)name,&kpr);
 			}
-
-			// authenticate with the KDC using the principal
-			// and password (and cache the credentials)
 			if (!kerror) {
 				kerror=krb5_get_init_creds_password(
 						kctx,&kcrd,kpr,password,
-						NULL,NULL,0,NULL,kopt);
+						NULL,NULL,0,NULL,NULL);
 			}
 
-			#ifndef RUDIMENTS_HAS_KRB5_GET_INIT_CREDS_OPT_SET_OUT_CCACHE
-			// save the credentials to the cache
+			// cache the credentials
+			krb5_ccache	kcc=NULL;
+			if (!kerror) {
+				kerror=krb5_cc_default(kctx,&kcc);
+			}
+			if (!kerror) {
+				kerror=krb5_cc_initialize(kctx,kcc,kpr);
+			}
 			if (!kerror) {
 				kerror=krb5_cc_store_cred(kctx,kcc,&kcrd);
 			}
-			#endif
+			krb5_cc_close(kctx,kcc);
 
 			// clean up
-			krb5_get_init_creds_opt_free(kctx,kopt);
-			krb5_cc_close(kctx,kcc);
-			krb5_free_principal(kctx,kpr);
 			krb5_free_cred_contents(kctx,&kcrd);
+			krb5_free_principal(kctx,kpr);
 			krb5_free_context(kctx);
 
 			// At this point, the cred cache should contain
