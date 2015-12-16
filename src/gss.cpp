@@ -598,6 +598,13 @@ bool gsscredentials::acquire(const void *name,
 						NULL,NULL,0,NULL,kopt);
 			}
 
+			#ifndef RUDIMENTS_HAS_KRB5_GET_INIT_CREDS_OPT_SET_OUT_CCACHE
+			// save the credentials to the cache
+			if (!kerror) {
+				kerror=krb5_cc_store_cred(kctx,kcc,&kcrd);
+			}
+			#endif
+
 			// clean up
 			krb5_get_init_creds_opt_free(kctx,kopt);
 			krb5_cc_close(kctx,kcc);
