@@ -1014,7 +1014,7 @@ then
 		AC_MSG_CHECKING(for GSS)
 		if ( test -z "$GSSLIBS" -a -z "$GSSINCLUDES" )
 		then
-			GSSLIBS=`krb5-config --libs gssapi 2> /dev/null`
+			GSSLIBS=`krb5-config --libs krb5 gssapi 2> /dev/null`
 			if ( test -n "$GSSLIBS" )
 			then
 				GSSINCLUDES=`krb5-config --cflags 2> /dev/null`
