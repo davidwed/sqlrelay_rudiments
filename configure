@@ -21052,7 +21052,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-if ( test "$RUDIMENTS_HAVE_SCO" == "yes" -a "$CXX" == "CC" )
+if ( test "$RUDIMENTS_HAVE_SCO" = "yes" -a "$CXX" = "CC" )
 then
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for long long type" >&5
 $as_echo_n "checking for long long type... " >&6; }
