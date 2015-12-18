@@ -1,0 +1,34 @@
+#!/bin/sh
+
+HOST=`hostname`
+
+kdestroy
+
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -ccount 2 -mcount 5 -host $HOST -service gssserver -message "ccount/mcount test" $@
+
+
+# "iakerb" mechanism
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -mech "{ 1 3 6 1 5 2 5 }" -host $HOST -service gssserver -message "iakerb mech test" $@
+
+# "krb5" mechanism
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -mech "{ 1 3 5 1 5 2 }" -host $HOST -service gssserver -message "krb5 mech test" $@
+
+
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -deleg -host $HOST -service gssserver -message "deleg flag test" $@
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -seq -host $HOST -service gssserver -message "seq flag test" $@
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -noreplay -host $HOST -service gssserver -message "noreplay flag test" $@
+./gssclient -user dmuse@FIRSTWORKS.COM -pass 3edcvgy7 -nomutual -host $HOST -service gssserver -message "nomutual flag test" $@
+
+
+
+# "iakerb" mechanism
+./gssclient -mech "{ 1 3 6 1 5 2 5 }" -host $HOST -service gssserver -message "iakerb mech test" $@
+
+# "krb5" mechanism
+./gssclient -mech "{ 1 3 5 1 5 2 }" -host $HOST -service gssserver -message "krb5 mech test (noauth)" $@
+
+
+./gssclient -deleg -host $HOST -service gssserver -message "deleg flag test (noauth)" $@
+./gssclient -seq -host $HOST -service gssserver -message "seq flag test (noauth)" $@
+./gssclient -noreplay -host $HOST -service gssserver -message "noreplay flag test (noauth)" $@
+./gssclient -nomutual -host $HOST -service gssserver -message "nomutual flag test (noauth)" $@
