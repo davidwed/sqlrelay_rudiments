@@ -94,6 +94,9 @@
 /* GSS has gss_acquire_cred_with_password */
 /* #undef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD */
 
+/* GSS has GSS_C_NT_ANONYMOUS */
+/* #undef RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS */
+
 /* GSS has gss name types */
 /* #undef RUDIMENTS_HAS_GSS_NAME_TYPES */
 

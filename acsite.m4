@@ -1048,6 +1048,9 @@ then
 			AC_MSG_CHECKING(for krb5/krb5.h)
 			FW_TRY_LINK([#include <krb5/krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_KRB5_KRB5_H,1,GSS has krb5/krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+			AC_MSG_CHECKING(for GSS_C_NT_ANONYMOUS)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_ANONYMOUS;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS,1,GSS has GSS_C_NT_ANONYMOUS) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 			AC_MSG_CHECKING(for gss_str_to_oid)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,GSS has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 

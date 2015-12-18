@@ -400,7 +400,8 @@ bool gsscredentials::acquireKerberosPrincipalName(const char *name,
 }
 
 bool gsscredentials::acquireAnonymous() {
-	#if defined(RUDIMENTS_HAS_GSS) && defined(RUDIMENTS_HAS_GSS_NAME_TYPES)
+	#if defined(RUDIMENTS_HAS_GSS) && \
+		defined(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
 	#else
