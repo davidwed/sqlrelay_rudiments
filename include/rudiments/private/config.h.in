@@ -85,6 +85,9 @@
 /* GSS has gssapi/gssapi_ext.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
 
+/* GSS has gssapi/gssapi_generic.h */
+#undef RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H
+
 /* GSS has gssapi/gssapi_krb5.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 

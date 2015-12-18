@@ -1030,11 +1030,17 @@ then
 
 		if ( test -n "$GSSLIBS" )
 		then
+			AC_MSG_CHECKING(for gssapi/gssapi_generic.h)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#include <gssapi/gssapi_generic.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H,1,GSS has gssapi/gssapi_generic.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+#
 			AC_MSG_CHECKING(for gssapi/gssapi_ext.h)
-			FW_TRY_LINK([#include <gssapi/gssapi_ext.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H,1,GSS has gssapi/gssapi_ext.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#include <gssapi/gssapi_ext.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H,1,GSS has gssapi/gssapi_ext.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gssapi/gssapi_krb5.h)
-			FW_TRY_LINK([#include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,GSS has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,GSS has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for krb5.h)
 			FW_TRY_LINK([#include <krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_KRB5_H,1,GSS has krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])

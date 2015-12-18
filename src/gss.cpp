@@ -37,6 +37,17 @@
 		// for GSS_KRB5_NT_PRINCIPAL_NAME
 		#include <gssapi/gssapi_krb5.h>
 	#endif
+
+	#ifndef RUDIMENTS_HAS_GSS_NAME_TYPES
+		#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H
+			#include <gssapi/gssapi_generic.h>
+		#endif
+		#define GSS_C_NT_HOSTBASED_SERVICE gss_nt_service_name
+		#define GSS_C_NT_USER_NAME gss_nt_user_name
+		#define GSS_KRB5_NT_PRINCIPAL_NAME gss_nt_krb5_principal
+		#define GSS_C_NT_MACHINE_UID_NAME gss_nt_machine_uid_name
+		#define GSS_C_NT_STRING_UID_NAME gss_nt_string_uid_name
+	#endif
 #else
 	// for UINT_MAX
 	#ifdef RUDIMENTS_HAVE_LIMITS_H
