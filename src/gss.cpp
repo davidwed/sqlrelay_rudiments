@@ -568,8 +568,11 @@ bool gsscredentials::acquire(const void *name,
 						(const char *)name,&kpr);
 			}
 			if (!kerror) {
+				// older implementations have a char *
+				// type for argument 4
 				kerror=krb5_get_init_creds_password(
-						kctx,&kcrd,kpr,password,
+						kctx,&kcrd,kpr,
+						(char *)password,
 						NULL,NULL,0,NULL,NULL);
 			}
 
