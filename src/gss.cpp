@@ -32,14 +32,14 @@
 		#endif
 	#endif
 
-	#if !defined(GSS_KRB5_NT_PRINCIPAL_NAME) && \
-		defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H)
-		// for GSS_KRB5_NT_PRINCIPAL_NAME
+	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
+		// for GSS_KRB5_NT_PRINCIPAL_NAME on some platforms
 		#include <gssapi/gssapi_krb5.h>
 	#endif
 
 	#ifndef RUDIMENTS_HAS_GSS_NAME_TYPES
 		#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H
+			// for gss_nt_* identifiers
 			#include <gssapi/gssapi_generic.h>
 		#endif
 		#define GSS_C_NT_HOSTBASED_SERVICE gss_nt_service_name
@@ -400,7 +400,7 @@ bool gsscredentials::acquireKerberosPrincipalName(const char *name,
 }
 
 bool gsscredentials::acquireAnonymous() {
-	#if defined(RUDIMENTS_HAS_GSS) && defined(GSS_C_NT_ANONYMOUS)
+	#if defined(RUDIMENTS_HAS_GSS) && defined(RUDIMENTS_HAS_GSS_NAME_TYPES)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
 	#else
