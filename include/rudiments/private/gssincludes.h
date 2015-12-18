@@ -10,7 +10,7 @@
 	#include <gssapi/gssapi.h>
 #endif
 
-#ifndef RUDIMENTS_HAS_GSS_NAME_MACROS
+#ifndef RUDIMENTS_HAS_GSS_NAME_TYPES
 	extern gss_OID GSS_C_NT_HOSTBASED_SERVICE;
 	extern gss_OID GSS_C_NT_USER_NAME;
 	extern const gss_OID_desc * const GSS_KRB5_NT_PRINCIPAL_NAME;

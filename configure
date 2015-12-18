@@ -19541,8 +19541,8 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gss name macros" >&5
-$as_echo_n "checking for gss name macros... " >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gss name types" >&5
+$as_echo_n "checking for gss name types... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
@@ -19564,7 +19564,7 @@ gss_OID a=GSS_C_NT_HOSTBASED_SERVICE;
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAS_GSS_NAME_MACROS 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAS_GSS_NAME_TYPES 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
