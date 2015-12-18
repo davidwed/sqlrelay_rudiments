@@ -1051,6 +1051,9 @@ then
 	#include <gssapi/gssapi_ext.h>
 #endif
 ],[gss_acquire_cred_with_password(0,0,0,0,0,0,0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD,1,GSS has gss_acquire_cred_with_password) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+			AC_MSG_CHECKING(for gss name macros)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_NAME_MACROS,1,GSS has gss name macros) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 

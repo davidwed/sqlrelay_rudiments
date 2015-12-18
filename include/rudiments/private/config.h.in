@@ -91,6 +91,9 @@
 /* GSS has gss_acquire_cred_with_password */
 #undef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
 
+/* GSS has gss name macros */
+#undef RUDIMENTS_HAS_GSS_NAME_MACROS
+
 /* GSS has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID
 
