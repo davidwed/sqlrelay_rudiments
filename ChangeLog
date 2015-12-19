@@ -17,6 +17,7 @@
 	updated inet/unixsocketclient to close() as the first step of connect()
 	updated charstring::to(Unsigned)Integer-with-endptr methods to have
 		const char **endptr arguments
+	updated configure script to find erlang on openbsd 5.8
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
