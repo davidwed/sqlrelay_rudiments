@@ -339,7 +339,7 @@ privateheaders7="codetree.h "+_
 	"modemutil.h"
 
 ' version
-RUDIMENTS_VERSION="0.53"
+RUDIMENTS_VERSION="0.53.1"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"

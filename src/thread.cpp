@@ -113,6 +113,8 @@ bool thread::run(void *arg) {
 bool thread::run() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();
+		pthread_attr_setdetachstate(&pvt->_attr,
+						PTHREAD_CREATE_DETACHED);
 		int	result=pthread_create(&pvt->_thr,&pvt->_attr,
 						pvt->_function,pvt->_arg);
 		if (!result) {
