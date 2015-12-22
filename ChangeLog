@@ -1,4 +1,5 @@
 0.53.1 - tweaked thread class to always create threads in detached mode
+	tweaked semaphore/shared memory destructors
 
 0.53 - exposed codetreegrammar class and updated codetree class so that
 		successive parses/writes can use the same grammar without
