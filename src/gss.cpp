@@ -1644,8 +1644,8 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 		}
 
 		// unwrap
-		unsigned char	*data;
-		size_t		datasize;
+		unsigned char	*data=NULL;
+		size_t		datasize=0;
 		if (!unwrap((unsigned char *)tokendata,tokensize,
 						&data,&datasize)) {
 			delete[] data;
