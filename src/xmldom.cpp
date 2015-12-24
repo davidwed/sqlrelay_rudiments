@@ -35,11 +35,15 @@ xmldom::xmldom(bool stringcacheenabled) : xmlsax() {
 }
 
 xmldom::xmldom(const xmldom &x) : xmlsax() {
-	// FIXME: implement this for real
+	init(x.pvt->_stringcacheenabled);
+	pvt->_rootnode=x.pvt->_rootnode->clone(this);
 }
 
 xmldom &xmldom::operator=(const xmldom &x) {
-	// FIXME: implement this for real
+	if (this!=&x) {
+		reset();
+		pvt->_rootnode=x.pvt->_rootnode->clone(this);
+	}
 	return *this;
 }
 
@@ -106,6 +110,12 @@ void xmldom::reset() {
 		delete pvt->_rootnode;
 		pvt->_rootnode=pvt->_nullnode;
 	}
+	for (linkedlistnode< char * > *node=pvt->_strlist.getFirst();
+						node; node=node->getNext()) {
+		delete[] node->getValue();
+	}
+	pvt->_strlist.clear();
+	pvt->_refcountlist.clear();
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
 	pvt->_top=NULL;

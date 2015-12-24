@@ -2028,11 +2028,15 @@ xmldomnode *xmldomnode::wrapChildren(const char *ns, const char *name) {
 }
 
 xmldomnode *xmldomnode::clone() {
+	return clone(getTree());
+}
+
+xmldomnode *xmldomnode::clone(xmldom *dom) {
 
 	// clone this node
-	xmldomnode	*clonednode=new xmldomnode(getTree(),
-						getNullNode(),getType(),
-						getNamespace(),
+	xmldomnode	*clonednode=new xmldomnode(dom,
+						dom->getNullNode(),
+						getType(),getNamespace(),
 						getName(),getValue());
 
 	// clone attributes
@@ -2044,7 +2048,7 @@ xmldomnode *xmldomnode::clone() {
 	// clone children
 	for (xmldomnode *child=pvt->_firstchild;
 			!child->isNullNode(); child=child->pvt->_next) {
-		clonednode->appendChild(child->clone());
+		clonednode->appendChild(child->clone(dom));
 	}
 
 	return clonednode;

@@ -1347,6 +1347,10 @@ class RUDIMENTS_DLLSPEC xmldomnode {
 		 *  pointer to the clone. */
 		xmldomnode	*clone();
 
+		/** Clones this node and all of its children in tree "dom"
+		 *  and returns a pointer to the clone. */
+		xmldomnode	*clone(xmldom *dom);
+
 
 		/** Allocates a stringbuffer, writes a text
 		 *  representation of the tree starting at this
