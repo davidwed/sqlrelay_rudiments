@@ -9,6 +9,9 @@
 
 #ifdef RUDIMENTS_HAVE_VASPRINTF
 	#include <stdio.h>
+	#ifdef RUDIMENTS_HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
 #endif
 
 #define DEFAULT_INITIALSIZE 128
@@ -340,7 +343,11 @@ bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
 	write(buffer,size);
 
 	// clean up
+	#ifdef RUDIMENTS_HAVE_VASPRINTF
+	free(buffer);
+	#else
 	delete[] buffer;
+	#endif
 	
 	return this;
 }
