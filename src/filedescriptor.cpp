@@ -58,6 +58,9 @@
 #endif
 
 #include <stdio.h>
+#if defined(RUDIMENTS_HAVE_VASPRINTF) && defined(RUDIMENTS_HAVE_STDLIB_H)
+	#include <stdlib.h>
+#endif
 
 // NOTE: These next two headers must be included in this order or LITTLE_ENDIAN
 // will be multiply-defined on linux libc4 systems.  Other systems are
@@ -2524,7 +2527,11 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 		size=charstring::printf(buffer,size+1,format,argp);
 	#endif
 	write(buffer,size);
-	delete[] buffer;
+	#ifdef RUDIMENTS_HAVE_VASPRINTF
+		free(buffer);
+	#else
+		delete[] buffer;
+	#endif
 	return size;
 }
 
