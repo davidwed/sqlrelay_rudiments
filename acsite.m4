@@ -1024,6 +1024,13 @@ then
 				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null`
 				if ( test -n "$GSSLIBS" )
 				then
+					dnl on openbsd, libcom_err is in
+					dnl /usr/local/lib, but this isn't
+					dnl returned by krb5-config
+					if ( test "$path" = "/usr/local/heimdal/bin" )
+					then
+						GSSLIBS="-L/usr/local/lib $GSSLIBS"
+					fi
 					GSSINCLUDES=`$KRB5CONFIG --cflags 2> /dev/null`
 					break
 				fi
