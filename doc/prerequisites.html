@@ -50,7 +50,7 @@
 <p>To install all of the prerequisites at once, execute the following command, as root:</p>
 
 <pre class="code">
-dnf -y install gcc-c++ make openssl-devel pcre-devel libcurl-devel</pre>
+dnf -y install gcc-c++ make openssl-devel krb5-devel pcre-devel libcurl-devel</pre>
 
 <p>The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.</p>
 
@@ -67,7 +67,7 @@ dnf -y install gcc-c++ make openssl-devel pcre-devel libcurl-devel</pre>
 <p>To install all of the prerequisites at once, execute the following command, as root:</p>
 
 <pre class="code">
-yuf -y install gcc-c++ make openssl-devel pcre-devel libcurl-devel</pre>
+yuf -y install gcc-c++ make openssl-devel krb5-devel pcre-devel libcurl-devel</pre>
 
 <p>The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.</p>
 
@@ -82,7 +82,7 @@ yuf -y install gcc-c++ make openssl-devel pcre-devel libcurl-devel</pre>
 <p>To install all of the prerequisites at once, execute the following command, as root:</p>
 
 <pre class="code">
-zypper install gcc-c++ make libopenssl-devel pcre-devel libcurl-devel</pre>
+zypper install gcc-c++ make libopenssl-devel krb5-devel pcre-devel libcurl-devel</pre>
 
 <p>The gcc-c++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre-devel package.</p>
 
@@ -97,7 +97,7 @@ zypper install gcc-c++ make libopenssl-devel pcre-devel libcurl-devel</pre>
 <p>To install all of the prerequisites at once, execute the following command, as root:</p>
 
 <pre class="code">
-apt-get install g++ make libssl-dev libpcre3-dev libcurl4-openssl-dev</p>
+apt-get install g++ make libssl-dev libkrb5-dev libpcre3-dev libcurl4-openssl-dev</p>
 
 <p>The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre3-dev package.</p>
 
@@ -112,7 +112,7 @@ apt-get install g++ make libssl-dev libpcre3-dev libcurl4-openssl-dev</p>
 <p>To install all of the prerequisites at once, execute the following command, as root:</p>
 
 <pre class="code">
-apt-get install g++ make libssl-dev libpcre3-dev libcurl4-openssl-dev</p>
+apt-get install g++ make libssl-dev libkrb5-dev libpcre3-dev libcurl4-openssl-dev</p>
 
 <p>The g++ and make packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the libpcre3-dev package.</p>
 
@@ -144,6 +144,8 @@ pkg install clang gmake openssl pcre curl</p>
 <li>Clang is not available, so clang must be replaced with g++.</li>
 </ul>
 
+<p>Kerberos/GSSAPI is installed as part of the base installation.</p>
+
 </blockquote>
 
 
@@ -158,6 +160,8 @@ pkg install clang gmake openssl pcre curl</p>
 pkgin install g++ gmake openssl pcre curl</pre>
 
 <p>The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.</p>
+
+<p>Kerberos/GSSAPI is installed as part of the base installation.</p>
 
 </blockquote>
 
@@ -178,7 +182,7 @@ installpath = ftp://ftp.usa.openbsd.org/pub/OpenBSD/5.8/packages/amd64/
 <p>... and execute the following command, as root:</p>
 
 <pre class="code">
-pkg_add -r g++ gmake pcre curl</pre>
+pkg_add -r g++ gmake heimdal pcre curl</pre>
 
 <p>The g++ and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre package.</p>
 
@@ -194,11 +198,9 @@ pkg_add -r g++ gmake pcre curl</pre>
 <p>To install all of the prerequisites at once, execute the following command, as root:</p>
 
 <pre class="code">
-pkgin install clang binutils gmake openssl pcre</pre>
+pkgin install clang binutils gmake openssl heimdal pcre curl</pre>
 
 <p>The clang, binutils, and gmake packages are required, but the rest are optional and may be omitted as appropriate.  For example, if you don't need PCRE support, then you can omit the pcre packages.</p>
-
-<p>Packages are not available for libcurl.  If support is required for it, then it must be built and installed from source.</p>
 
 </blockquote>
 
