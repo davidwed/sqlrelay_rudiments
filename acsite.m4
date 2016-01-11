@@ -1014,11 +1014,20 @@ then
 		AC_MSG_CHECKING(for GSS)
 		if ( test -z "$GSSLIBS" -a -z "$GSSINCLUDES" )
 		then
-			GSSLIBS=`krb5-config --libs krb5 gssapi 2> /dev/null`
-			if ( test -n "$GSSLIBS" )
-			then
-				GSSINCLUDES=`krb5-config --cflags 2> /dev/null`
-			fi
+			for path in "" "/usr/lib/mit/bin" "/usr/local/heimdal/bin"
+			do
+				KRB5CONFIG="krb5-config"
+				if ( test -n "$path" )
+				then
+					KRB5CONFIG="$path$KRB5CONFIG"
+				fi
+				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null`
+				if ( test -n "$GSSLIBS" )
+				then
+					GSSINCLUDES=`$KRB5CONFIG --cflags 2> /dev/null`
+					break
+				fi
+			done
 		fi
 
 		if ( test -n "$GSSLIBS" )
