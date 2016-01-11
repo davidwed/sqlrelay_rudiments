@@ -1019,7 +1019,7 @@ then
 				KRB5CONFIG="krb5-config"
 				if ( test -n "$path" )
 				then
-					KRB5CONFIG="$path$KRB5CONFIG"
+					KRB5CONFIG="$path/$KRB5CONFIG"
 				fi
 				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null`
 				if ( test -n "$GSSLIBS" )
