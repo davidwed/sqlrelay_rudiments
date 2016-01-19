@@ -72,8 +72,9 @@ Public Member Functions</h2></td></tr>
 <p>The top-level tag is &lt;grammar&gt;. Inside the grammar tag are sets of &lt;definition&gt; tags, each defining a nonterminal.</p>
 <p>Each &lt;definition&gt; tag must contain sets of &lt;terminal&gt;, &lt;letter&gt;, &lt;lowercaseletter&gt;, &lt;uppercaseletter&gt;, &lt;digit&gt;, &lt;set&gt;, &lt;nonterminal&gt;, &lt;alternation&gt;, &lt;repetition&gt;, &lt;concatenation&gt;, &lt;option&gt;,  and &lt;break&gt; tags.</p>
 <p>The &lt;alternation&gt;, &lt;repetition&gt;, &lt;concatenation&gt;, &lt;option&gt; and  tags must contain combinations of other tags.</p>
-<p>The &lt;grammar&gt; tag may contain a single attribute:</p>
+<p>The &lt;grammar&gt; tag may contain two attributes:</p>
 <p>indent - Optional. The string to use when indenting code as it's being written back out. The string will be repeated once for each level of indention. If omitted, tabs will be used. Setting the attribute to "&amp;#9;" will also cause tabs to be used. Otherwise whatever string is supplied will be repeated for each level of indentation. To use 4 spaces, for example, set it to "    ". To kill all indentation, set it to an empty string: "".</p>
+<p>namespace - Optional. If specified, when the grammar is used to parse source code, each tag in the resulting tree will be assigned this namespace. Also, if specified, when the grammar is used to write a tree back out as code, nodes with a different namespace will be ignored.</p>
 <p>The &lt;definition&gt; tag defines a nonterminal and has the following attributes:</p>
 <p>name - Required. The name of the nonterminal. This will also be the tag name used to represent the nonterminal in the XML representation of the code.</p>
 <p>start - Optional. A string to be printed before the nonterminal when writing it back out.</p>
@@ -311,7 +312,7 @@ recursive - Acceptable values are true or false.  Defaults to false.
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses "input" using "grammar", starting with "startsymbol", creates an XML represenataion of the code and appends it as children to "output". Returns true if parsing succeeded and false otherwise. If parsing fails, "codeposition" is set to the location in the code that parsing failed. </p>
+<p>Parses "input" using "grammar", starting with "startsymbol", creates an XML representation of the code and appends it as children to "output". Returns true if parsing succeeded and false otherwise. If parsing fails, "codeposition" is set to the location in the code that parsing failed. </p>
 
 </div>
 </div>
@@ -356,7 +357,7 @@ recursive - Acceptable values are true or false.  Defaults to false.
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses "input" using "grammar", starting with "startsymbol", creates an XML represenataion of the code and appends it as children to "output". Returns true if parsing succeeded and false otherwise. If parsing fails, "codeposition" is set to the location in the code that parsing failed. </p>
+<p>Parses "input" using "grammar", starting with "startsymbol", creates an XML representation of the code and appends it as children to "output". Returns true if parsing succeeded and false otherwise. If parsing fails, "codeposition" is set to the location in the code that parsing failed. </p>
 
 </div>
 </div>
@@ -446,7 +447,7 @@ recursive - Acceptable values are true or false.  Defaults to false.
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 10 2015 00:31:33 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 18 2016 19:45:12 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

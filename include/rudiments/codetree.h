@@ -28,15 +28,22 @@ class codetreeprivate;
  *  The <alternation>, <repetition>, <concatenation>, <option> and <exception>
  *  tags must contain combinations of other tags.
  *
- *  The <grammar> tag may contain a single attribute:
+ *  The <grammar> tag may contain two attributes:
  *
- *    indent - Optional.  The string to use when indenting code as it's being
- *             written back out.  The string will be repeated once for each
- *             level of indention.  If omitted, tabs will be used.  Setting the
- *             attribute to "&#9;" will also cause tabs to be used.  Otherwise
- *             whatever string is supplied will be repeated for each level
- *             of indentation.  To use 4 spaces, for example, set it to "    ".
- *             To kill all indentation, set it to an empty string: "".
+ *    indent    - Optional.  The string to use when indenting code as it's being
+ *                written back out.  The string will be repeated once for each
+ *                level of indention.  If omitted, tabs will be used.  Setting
+ *                the attribute to "&#9;" will also cause tabs to be used.
+ *                Otherwise whatever string is supplied will be repeated for
+ *                each level of indentation.  To use 4 spaces, for example, set
+ *                it to "    ".  To kill all indentation, set it to an empty
+ *                string: "".
+ *
+ *    namespace - Optional.  If specified, when the grammar is used to parse
+ *                source code, each tag in the resulting tree will be assigned
+ *                this namespace.  Also, if specified, when the grammar is used
+ *                to write a tree back out as code, nodes with a different
+ *                namespace will be ignored.
  *
  *  The <definition> tag defines a nonterminal and has the following attributes:
  *

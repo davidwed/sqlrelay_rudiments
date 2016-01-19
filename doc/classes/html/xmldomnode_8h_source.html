@@ -620,37 +620,39 @@
 <div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;</div>
 <div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *clone();</div>
 <div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;</div>
-<div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;</div>
-<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *xml() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;</div>
-<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;                <span class="keywordtype">void</span>    print(<a class="code" href="classstringbuffer.html">stringbuffer</a> *strb) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *clone(<a class="code" href="classxmldom.html">xmldom</a> *dom);</div>
+<div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;</div>
+<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;</div>
+<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *xml() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;</div>
-<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;                <span class="keywordtype">void</span>    print(<a class="code" href="classfiledescriptor.html">filedescriptor</a> *fd) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;                <span class="keywordtype">void</span>    print(<a class="code" href="classstringbuffer.html">stringbuffer</a> *strb) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;</div>
-<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *getPath() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01376"></a><span class="lineno"> 1376</span>&#160;</div>
-<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChildByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;</div>
-<div class="line"><a name="l01393"></a><span class="lineno"> 1393</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
-<div class="line"><a name="l01394"></a><span class="lineno"> 1394</span>&#160;                                                uint64_t position) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01395"></a><span class="lineno"> 1395</span>&#160;</div>
-<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
-<div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;</div>
-<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
-<div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160;                                                uint64_t position) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;</div>
-<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
-<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;</div>
-<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;                <span class="keywordtype">void</span>    setData(<span class="keywordtype">void</span> *data);</div>
-<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;</div>
-<div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;                <span class="keywordtype">void</span>    *getData();</div>
+<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;                <span class="keywordtype">void</span>    print(<a class="code" href="classfiledescriptor.html">filedescriptor</a> *fd) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;</div>
+<div class="line"><a name="l01379"></a><span class="lineno"> 1379</span>&#160;                <a class="code" href="classstringbuffer.html">stringbuffer</a>    *getPath() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01380"></a><span class="lineno"> 1380</span>&#160;</div>
+<div class="line"><a name="l01387"></a><span class="lineno"> 1387</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getChildByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01388"></a><span class="lineno"> 1388</span>&#160;</div>
+<div class="line"><a name="l01397"></a><span class="lineno"> 1397</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a name="l01398"></a><span class="lineno"> 1398</span>&#160;                                                uint64_t position) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01399"></a><span class="lineno"> 1399</span>&#160;</div>
+<div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160;                <a class="code" href="classxmldomnode.html">xmldomnode</a>      *getAttributeByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160;                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160;</div>
+<div class="line"><a name="l01418"></a><span class="lineno"> 1418</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;                                                uint64_t position) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;</div>
+<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">char</span>      *getAttributeValueByPath(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l01431"></a><span class="lineno"> 1431</span>&#160;</div>
+<div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;                <span class="keywordtype">void</span>    setData(<span class="keywordtype">void</span> *data);</div>
 <div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;</div>
-<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/xmldomnode.h&gt;</span></div>
-<div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160;};</div>
-<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;</div>
-<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;                <span class="keywordtype">void</span>    *getData();</div>
+<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160;</div>
+<div class="line"><a name="l01439"></a><span class="lineno"> 1439</span>&#160;<span class="preprocessor">        #include &lt;rudiments/private/xmldomnode.h&gt;</span></div>
+<div class="line"><a name="l01440"></a><span class="lineno"> 1440</span>&#160;};</div>
+<div class="line"><a name="l01441"></a><span class="lineno"> 1441</span>&#160;</div>
+<div class="line"><a name="l01442"></a><span class="lineno"> 1442</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="classxmldomnode_html"><div class="ttname"><a href="classxmldomnode.html">xmldomnode</a></div><div class="ttdef"><b>Definition:</b> xmldomnode.h:123</div></div>
 <div class="ttc" id="classstringbuffer_html"><div class="ttname"><a href="classstringbuffer.html">stringbuffer</a></div><div class="ttdef"><b>Definition:</b> stringbuffer.h:22</div></div>
 <div class="ttc" id="classfiledescriptor_html"><div class="ttname"><a href="classfiledescriptor.html">filedescriptor</a></div><div class="ttdef"><b>Definition:</b> filedescriptor.h:14</div></div>
@@ -658,7 +660,7 @@
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 10 2015 00:31:33 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 18 2016 19:45:12 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -65,6 +65,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2920c590616747dd8dae46d027817cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7cb68b6f581ecb410b861f9eb5afe60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#aa7cb68b6f581ecb410b861f9eb5afe60">removeAllFileDescriptors</a> ()</td></tr>
 <tr class="separator:aa7cb68b6f581ecb410b861f9eb5afe60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c4ca04c59b3a0d725af96a4a6b28f5d"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen</a> ()</td></tr>
+<tr class="separator:a6c4ca04c59b3a0d725af96a4a6b28f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03e88066b6015f4ee3f23cba4a90d501"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listen</a> (int32_t sec, int32_t usec)</td></tr>
 <tr class="separator:a03e88066b6015f4ee3f23cba4a90d501"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a31600edc4644dfc7c2e7a2960ad61b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsinglylinkedlist.html">listenerlist</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlistener.html#a9a31600edc4644dfc7c2e7a2960ad61b">getReadReadyList</a> ()</td></tr>
@@ -133,7 +135,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listen()</a> is called, it will listen for read or write operations on this file descriptor. </p>
+<p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen()</a> is called, it will listen for read or write operations on this file descriptor. </p>
 
 </div>
 </div>
@@ -150,7 +152,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listen()</a> is called, it will only listen for read operations on this file descriptor. </p>
+<p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen()</a> is called, it will only listen for read operations on this file descriptor. </p>
 
 </div>
 </div>
@@ -167,7 +169,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listen()</a> is called, it will only listen for write operations on this file descriptor. </p>
+<p>Adds the specified file descriptor to the pool that the listener is listening on. When <a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen()</a> is called, it will only listen for write operations on this file descriptor. </p>
 
 </div>
 </div>
@@ -199,7 +201,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the list of file descriptors that were ready for read operations after the last call to <a class="el" href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listen()</a>. </p>
+<p>Returns the list of file descriptors that were ready for read operations after the last call to <a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen()</a>. </p>
 
 </div>
 </div>
@@ -215,7 +217,24 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the list of file descriptors that were ready for write operations after the last call to <a class="el" href="classlistener.html#a03e88066b6015f4ee3f23cba4a90d501">listen()</a>. </p>
+<p>Returns the list of file descriptors that were ready for write operations after the last call to <a class="el" href="classlistener.html#a6c4ca04c59b3a0d725af96a4a6b28f5d">listen()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6c4ca04c59b3a0d725af96a4a6b28f5d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t listener::listen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Causes the application to wait until a read or write operation will proceed without blocking, as appropriate for each file descriptor added by previous calls.</p>
+<p>Returns RESULT_ERROR on error or otherwise returns the number of file descriptors that are ready to be read from or written to. </p>
 
 </div>
 </div>
@@ -245,7 +264,7 @@ Public Member Functions</h2></td></tr>
 <p>Causes the application to wait until a read or write operation will proceed without blocking, as appropriate for each file descriptor added by previous calls, or until "sec" seconds and "usec" microseconds have elapsed.</p>
 <p>Entering -1 for either parameter causes the method to wait indefinitely.</p>
 <p>Entering 0 for both parameters causes the method to fall through immediately, returning RESULT_TIMEOUT unless a write operation will immediately proceed without blocking.</p>
-<p>Returns RESULT_ERROR on error, RESULT_TIMEOUT on timeout and otherwise returns the number of file descriptors that are ready to be written to. </p>
+<p>Returns RESULT_ERROR on error, RESULT_TIMEOUT on timeout and otherwise returns the number of file descriptors that are ready to be read from or written to. </p>
 
 </div>
 </div>
@@ -301,7 +320,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 10 2015 00:31:34 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 18 2016 19:45:12 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
