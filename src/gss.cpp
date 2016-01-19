@@ -11,6 +11,8 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
+//#define DEBUG_GSS 1
+
 #ifdef RUDIMENTS_HAS_GSS
 
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
@@ -116,6 +118,14 @@ void gss::clear() {
 		delete[] pvt->_mechs;
 		pvt->_mechs=NULL;
 	}
+}
+
+bool gss::supportsGSS() {
+	#ifdef RUDIMENTS_HAS_GSS
+		return true;
+	#else
+		return false;
+	#endif
 }
 
 
@@ -989,6 +999,9 @@ bool gsscontext::initiate(const void *name,
 							(gss_OID)nametype,
 							&desiredname);
 			if (pvt->_major!=GSS_S_COMPLETE) {
+				#ifdef DEBUG_GSS
+				stdoutput.write("import name failed\n\n");
+				#endif
 				return false;
 			}
 		}
@@ -1034,6 +1047,10 @@ bool gsscontext::initiate(const void *name,
 
 			// bail on error
 			if (GSS_ERROR(pvt->_major)) {
+				#ifdef DEBUG_GSS
+				stdoutput.printf("initiate error\n%s",
+							getStatus());
+				#endif
 				release();
 				break;
 			}
@@ -1044,6 +1061,11 @@ bool gsscontext::initiate(const void *name,
 						outputtoken.value,
 						outputtoken.length)!=
 						(ssize_t)outputtoken.length) {
+
+					#ifdef DEBUG_GSS
+					stdoutput.write("initiate send"
+								"failed\n\n");
+					#endif
 
 					// clean up
 					OM_uint32	minor;
@@ -1069,6 +1091,11 @@ bool gsscontext::initiate(const void *name,
 						&inputtoken.value,
 						&inputtoken.length)<=0 ||
 					flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+
+					#ifdef DEBUG_GSS
+					stdoutput.write("initiate receive"
+								"failed\n\n");
+					#endif
 			
 					delete[] (unsigned char *)
 							inputtoken.value;
@@ -1405,6 +1432,12 @@ bool gsscontext::wrap(const unsigned char *input,
 
 	#ifdef RUDIMENTS_HAS_GSS
 
+		#ifdef DEBUG_GSS
+			stdoutput.printf("wrap(%d,",inputsize);
+			stdoutput.safePrint(input,inputsize);
+			stdoutput.write(")\n");
+		#endif
+
 		// configure input buffer
 		gss_buffer_desc	inputbuffer;
 		inputbuffer.value=(void *)input;
@@ -1448,8 +1481,17 @@ bool gsscontext::wrap(const unsigned char *input,
 			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputbuffer);
 
+			#ifdef DEBUG_GSS
+				stdoutput.write(" success\n\n");
+			#endif
+
 			return true;
 		}
+
+		#ifdef DEBUG_GSS
+			stdoutput.write(" failed\n\n");
+		#endif
+
 
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
@@ -1514,8 +1556,18 @@ bool gsscontext::unwrap(const unsigned char *input,
 			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputbuffer);
 
+			#ifdef DEBUG_GSS
+				stdoutput.printf("unwrap(%d,",*outputsize);
+				stdoutput.safePrint(*output,*outputsize);
+				stdoutput.write(") success\n\n");
+			#endif
+
 			return true;
 		}
+
+		#ifdef DEBUG_GSS
+			stdoutput.write("unwrap() failed\n\n");
+		#endif
 
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
@@ -1678,18 +1730,38 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize) {
 
+	#ifdef DEBUG_GSS
+		stdoutput.write("receiveToken(");
+	#endif
+
 	// read token flags
 	ssize_t		result=fullRead(tokenflags,sizeof(*tokenflags));
 	if (result!=sizeof(*tokenflags)) {
+		#ifdef DEBUG_GSS
+			stdoutput.write(") failed (flags)\n");
+		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
+	*tokenflags=pvt->_fd->netToHost(*tokenflags);
+
+	#ifdef DEBUG_GSS
+		stdoutput.printf("%08x,",*tokenflags);
+	#endif
 
 	// read token size
 	uint32_t	size;
 	result=fullRead(&size,sizeof(size));
 	if (result!=sizeof(size)) {
+		#ifdef DEBUG_GSS
+			stdoutput.write(") failed (size)\n");
+		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
+	size=pvt->_fd->netToHost(size);
+
+	#ifdef DEBUG_GSS
+		stdoutput.printf("%d,",size);
+	#endif
 
 	// copy size out and create data buffer
 	*tokensize=size;
@@ -1698,8 +1770,16 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 	// read token data
 	result=fullRead(*tokendata,size);
 	if (result!=(ssize_t)size) {
+		#ifdef DEBUG_GSS
+			stdoutput.write(") failed (data)\n");
+		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
+
+	#ifdef DEBUG_GSS
+		stdoutput.safePrint((unsigned char *)*tokendata,*tokensize);
+		stdoutput.write(") success\n\n");
+	#endif
 	return result;
 }
 
@@ -1723,28 +1803,53 @@ ssize_t gsscontext::write(const void *buf, ssize_t count) {
 ssize_t gsscontext::sendToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize) {
+
+	#ifdef DEBUG_GSS
+		stdoutput.printf("sendToken(%08x,%d,",tokenflags,tokensize);
+		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
+		stdoutput.write(") ");
+	#endif
+
 	// write token flags
-	ssize_t		result=fullWrite(&tokenflags,sizeof(tokenflags));
+	uint32_t	temptokenflags=pvt->_fd->netToHost(tokenflags);
+	ssize_t		result=fullWrite(&temptokenflags,sizeof(tokenflags));
 	if (result!=sizeof(tokenflags)) {
+		#ifdef DEBUG_GSS
+			stdoutput.write("failed (flags)\n");
+		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
 	// write token size
-	uint32_t	size=tokensize;
+	uint32_t	size=pvt->_fd->netToHost((uint32_t)tokensize);
 	result=fullWrite(&size,sizeof(size));
 	if (result!=sizeof(size)) {
+		#ifdef DEBUG_GSS
+			stdoutput.write("failed (size)\n");
+		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
 	// write token data
 	result=fullWrite(tokendata,tokensize);
 	if (result!=(ssize_t)tokensize) {
+		#ifdef DEBUG_GSS
+			stdoutput.write("failed (data)\n");
+		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
+
+	#ifdef DEBUG_GSS
+		stdoutput.write("success\n\n");
+	#endif
 	return result;
 }
 
 ssize_t gsscontext::fullRead(void *data, ssize_t size) {
+
+	if (!pvt->_fd) {
+		return RESULT_ERROR;
+	}
 
 	// read, retrying if we got a short read,
 	// until we've read "size" bytes...
@@ -1765,6 +1870,10 @@ ssize_t gsscontext::fullRead(void *data, ssize_t size) {
 }
 
 ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
+
+	if (!pvt->_fd) {
+		return RESULT_ERROR;
+	}
 
 	// write, retrying if we got a short write,
 	// until we've written "size" bytes...

@@ -30,6 +30,10 @@ class RUDIMENTS_DLLSPEC gss {
 		 *  gssmechanism::initialize(const char *str). */
 		const char * const	*getAvailableMechanisms();
 
+		/** Returns true if rudiments was built with GSS support and
+		 *  false otherwise. */
+		static	bool	supportsGSS();
+
 	#include <rudiments/private/gss.h>
 };
 

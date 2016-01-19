@@ -40,12 +40,23 @@ const char *commandline::getValue(const char *arg) const {
 
 		for (int32_t i=1; i<pvt->_argc; i++) {
 
-			// look for "-arg value" or "--arg=value"
+			// look for "-arg value"...
 			if (i<pvt->_argc-1 &&
 				pvt->_argv[i][0]=='-' &&
 				!charstring::compare(pvt->_argv[i]+1,realarg)) {
-				return pvt->_argv[i+1];
-			} else if (charstring::length(pvt->_argv[i])>=
+
+				// return the next arg unless it
+				// also starts with a -
+				if (pvt->_argv[i+1] &&
+					pvt->_argv[i+1][0]!='-') {
+					return pvt->_argv[i+1];
+				} else {
+					return "";
+				}
+			} else
+	
+			// ...or "--arg=value"
+			if (charstring::length(pvt->_argv[i])>=
 							realarglen+3 &&
 					!charstring::compare(pvt->_argv[i],
 								"--",2) &&
@@ -53,6 +64,8 @@ const char *commandline::getValue(const char *arg) const {
 								realarg,
 								realarglen) &&
 					pvt->_argv[i][2+realarglen]=='=') {
+
+				// return the part of this arg after the =
 				return pvt->_argv[i]+2+realarglen+1;
 			}
 		}
