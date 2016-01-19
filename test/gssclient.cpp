@@ -26,7 +26,9 @@ int main(int argc, const char **argv) {
 	const char	*host=cmdl.getValue("host");
 	const char	*service=cmdl.getValue("service");
 	const char	*msg=cmdl.getValue("message");
-	if (!host || !service || !msg) {
+	if (charstring::isNullOrEmpty(host) || 
+		charstring::isNullOrEmpty(service) || 
+		charstring::isNullOrEmpty(msg)) {
 		usage();
 		process::exit(1);
 	}
