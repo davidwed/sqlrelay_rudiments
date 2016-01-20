@@ -11,7 +11,10 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-//#define DEBUG_GSS 1
+#define DEBUG_GSS 1
+//#define DEBUG_GSS_WRAP 1
+//#define DEBUG_GSS_SEND 1
+//#define DEBUG_GSS_RECIEVE 1
 
 #ifdef RUDIMENTS_HAS_GSS
 
@@ -448,6 +451,11 @@ bool gsscredentials::acquire(const void *name,
 	release();
 
 	#ifdef RUDIMENTS_HAS_GSS
+
+		#ifdef DEBUG_GSS
+			stdoutput.write("acquire credentials - ");
+		#endif
+
 		// keep track of the name for nametypes
 		// where the name is a string
 		if ((gss_OID)nametype==
@@ -464,6 +472,9 @@ bool gsscredentials::acquire(const void *name,
 		// degenerate case
 		if (!name && !password) {
 			pvt->_major=GSS_S_COMPLETE;
+			#ifdef DEBUG_GSS
+				stdoutput.write("success (no credentials)\n\n");
+			#endif
 			return true;
 		}
 
@@ -486,6 +497,10 @@ bool gsscredentials::acquire(const void *name,
 							(gss_OID)nametype,
 							&desiredname);
 			if (pvt->_major!=GSS_S_COMPLETE) {
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+							"(import name)\n\n");
+				#endif
 				return false;
 			}
 		}
@@ -621,6 +636,15 @@ bool gsscredentials::acquire(const void *name,
 			//
 			// The call to gss_acquire_cred() below will fetch
 			// these creds from the cache.
+
+			if (kerror) {
+				// this will make the whole method fail
+				// FIXME: getStatus() won't return why though...
+				pvt->_major=GSS_S_FAILURE;
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed (kinit)\n\n");
+				#endif
+			}
 		}
 
 		if (!kerror) {
@@ -648,6 +672,41 @@ bool gsscredentials::acquire(const void *name,
 			gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
 			pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
 		}
+
+		#ifdef DEBUG_GSS
+		if ((pvt->_major==GSS_S_COMPLETE)) {
+			stdoutput.write("success...\n\n");
+			stdoutput.write("Credentials {\n");
+			stdoutput.printf("  name: %s\n",pvt->_name);
+			stdoutput.printf("  desired lifetime: %d\n",
+						pvt->_desiredlifetime);
+			stdoutput.printf("  actual lifetime: %d\n",
+						pvt->_actuallifetime);
+			stdoutput.write("  desired mechanisms:\n");
+			for (linkedlistnode< gssmechanism * > *node=
+						pvt->_dmlist.getFirst();
+						node; node=node->getNext()) {
+				stdoutput.printf("    %s\n",
+					node->getValue()->getString());
+			}
+			stdoutput.write("  actual mechanisms:\n");
+			for (linkedlistnode< gssmechanism * > *node=
+						pvt->_amlist.getFirst();
+						node; node=node->getNext()) {
+				stdoutput.printf("    %s\n",
+					node->getValue()->getString());
+			}
+			stdoutput.write("  credentials usage: ");
+			if (pvt->_credusage==GSS_C_BOTH) {
+				stdoutput.write("both\n");
+			} else if (pvt->_credusage==GSS_C_INITIATE) {
+				stdoutput.write("initiate\n");
+			} else if (pvt->_credusage==GSS_C_ACCEPT) {
+				stdoutput.write("accept\n");
+			}
+			stdoutput.write("}\n");
+		}
+		#endif
 
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
@@ -983,6 +1042,10 @@ bool gsscontext::initiate(const void *name,
 
 	#ifdef RUDIMENTS_HAS_GSS
 
+		#ifdef DEBUG_GSS
+			stdoutput.write("initiate context...\n");
+		#endif
+
 		// by default, we'll use "no name"
 		gss_name_t	desiredname=GSS_C_NO_NAME;
 
@@ -1000,7 +1063,8 @@ bool gsscontext::initiate(const void *name,
 							&desiredname);
 			if (pvt->_major!=GSS_S_COMPLETE) {
 				#ifdef DEBUG_GSS
-				stdoutput.write("import name failed\n\n");
+					stdoutput.write("failed "
+							"(import_name)\n\n");
 				#endif
 				return false;
 			}
@@ -1048,8 +1112,10 @@ bool gsscontext::initiate(const void *name,
 			// bail on error
 			if (GSS_ERROR(pvt->_major)) {
 				#ifdef DEBUG_GSS
-				stdoutput.printf("initiate error\n%s",
-							getStatus());
+					stdoutput.printf(
+						"failed "
+						"(init_sec_context)\n%s\n",
+						getStatus());
 				#endif
 				release();
 				break;
@@ -1063,8 +1129,8 @@ bool gsscontext::initiate(const void *name,
 						(ssize_t)outputtoken.length) {
 
 					#ifdef DEBUG_GSS
-					stdoutput.write("initiate send"
-								"failed\n\n");
+						stdoutput.write(
+							"failed (send)\n\n");
 					#endif
 
 					// clean up
@@ -1093,8 +1159,8 @@ bool gsscontext::initiate(const void *name,
 					flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
 
 					#ifdef DEBUG_GSS
-					stdoutput.write("initiate receive"
-								"failed\n\n");
+						stdoutput.write(
+							"failed (receive)\n\n");
 					#endif
 			
 					delete[] (unsigned char *)
@@ -1118,6 +1184,10 @@ bool gsscontext::initiate(const void *name,
 			return false;
 		}
 
+		#ifdef DEBUG_GSS
+			stdoutput.write("success\n\n");
+		#endif
+
 		// populate actual mechanism
 		pvt->_actualmechanism.initialize(actualmechoid);
 	#endif
@@ -1129,6 +1199,10 @@ bool gsscontext::initiate(const void *name,
 bool gsscontext::inquire() {
 
 	#ifdef RUDIMENTS_HAS_GSS
+
+		#ifdef DEBUG_GSS
+			stdoutput.write("inquire context - ");
+		#endif
 
 		// inquire...
 		gss_name_t	initiator;
@@ -1145,6 +1219,10 @@ bool gsscontext::inquire() {
 						&isinitiator,
 						&isopen);
 		if (pvt->_major!=GSS_S_COMPLETE) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(gss_inquire_context)\n\n");
+			#endif
 			// FIXME: release initiator?
 			// FIXME: release acceptor?
 			return false;
@@ -1161,6 +1239,10 @@ bool gsscontext::inquire() {
 						&initiatorbuffer,
 						&initiatortype);
 		if (pvt->_major!=GSS_S_COMPLETE) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(display_name(initiator))\n\n");
+			#endif
 			return false;
 		}
 
@@ -1179,6 +1261,10 @@ bool gsscontext::inquire() {
 						initiatortype,
 						&initiatortypebuffer);
 		if (pvt->_major!=GSS_S_COMPLETE) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(oid_to_str(initiatortype))\n\n");
+			#endif
 			return false;
 		}
 
@@ -1200,6 +1286,10 @@ bool gsscontext::inquire() {
 						&acceptorbuffer,
 						&acceptortype);
 		if (pvt->_major!=GSS_S_COMPLETE) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(display_name(acceptor))\n\n");
+			#endif
 			return false;
 		}
 
@@ -1218,6 +1308,10 @@ bool gsscontext::inquire() {
 						acceptortype,
 						&acceptortypebuffer);
 		if (pvt->_major!=GSS_S_COMPLETE) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(oid_to_str(acceptortype))\n\n");
+			#endif
 			return false;
 		}
 
@@ -1238,6 +1332,42 @@ bool gsscontext::inquire() {
 		// expose isopen
 		pvt->_isopen=isopen;
 
+		#ifdef DEBUG_GSS
+			stdoutput.write("success...\n\n");
+			stdoutput.write("Context {\n");
+			stdoutput.printf("  file descriptor: %d\n",
+				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1);
+			stdoutput.printf("  desired lifetime: %d\n",
+						pvt->_desiredlifetime);
+			stdoutput.printf("  actual lifetime: %d\n",
+						pvt->_actuallifetime);
+			stdoutput.printf("  desired mechanism: %s\n",
+				(pvt->_desiredmechanism)?
+				pvt->_desiredmechanism->getString():"(none)");
+			stdoutput.printf("  actual mechanism: %s\n",
+				pvt->_actualmechanism.getString());
+			stdoutput.printf("  desired flags: %08x\n",
+						pvt->_desiredflags);
+			stdoutput.printf("  actual flags: %08x\n",
+						pvt->_actualflags);
+			stdoutput.printf("  service: %s\n",
+				(pvt->_service)?pvt->_service:"(none)");
+			stdoutput.printf("  initiator: %s\n",
+				(pvt->_initiator)?pvt->_initiator:"(none)");
+			stdoutput.printf("  initiator type: %s\n",
+				(pvt->_initiatortype)?
+				pvt->_initiatortype:"(none)");
+			stdoutput.printf("  acceptor: %s\n",
+				(pvt->_acceptor)?pvt->_acceptor:"(none)");
+			stdoutput.printf("  acceptor type: %s\n",
+				(pvt->_acceptortype)?
+				pvt->_acceptortype:"(none)");
+			stdoutput.printf("  is initiator: %s\n",
+				(pvt->_isinitiator)?"yes":"no");
+			stdoutput.printf("  is open: %s\n",
+				(pvt->_isopen)?"yes":"no");
+			stdoutput.write("}\n");
+		#endif
 
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
@@ -1252,6 +1382,10 @@ bool gsscontext::accept() {
 	release();
 
 	#ifdef RUDIMENTS_HAS_GSS
+
+		#ifdef DEBUG_GSS
+			stdoutput.write("accept context...\n");
+		#endif
 
 		// accept the context...
 		gss_buffer_desc	inputtoken;
@@ -1278,6 +1412,10 @@ bool gsscontext::accept() {
 					&inputtoken.length)<=0 ||
 				flags!=TOKEN_FLAGS_TYPE_INITIATE) {
 
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed (receive)\n\n");
+				#endif
+
 				// clean up
 				delete[] (unsigned char *)inputtoken.value;
 				release();
@@ -1302,6 +1440,12 @@ bool gsscontext::accept() {
 
 			// bail on error
 			if (GSS_ERROR(pvt->_major)) {
+				#ifdef DEBUG_GSS
+					stdoutput.printf(
+						"failed "
+						"(accept_sec_context)\n%s\n",
+						getStatus());
+				#endif
 				release();
 				break;
 			}
@@ -1335,6 +1479,10 @@ bool gsscontext::accept() {
 
 		// populate actual mechanism
 		pvt->_actualmechanism.initialize(actualmechoid);
+
+		#ifdef DEBUG_GSS
+			stdoutput.printf("success\n\n");
+		#endif
 
 	#endif
 
@@ -1432,7 +1580,7 @@ bool gsscontext::wrap(const unsigned char *input,
 
 	#ifdef RUDIMENTS_HAS_GSS
 
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_WRAP
 			stdoutput.printf("wrap(%d,",inputsize);
 			stdoutput.safePrint(input,inputsize);
 			stdoutput.write(")\n");
@@ -1481,14 +1629,14 @@ bool gsscontext::wrap(const unsigned char *input,
 			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputbuffer);
 
-			#ifdef DEBUG_GSS
+			#ifdef DEBUG_GSS_WRAP
 				stdoutput.write(" success\n\n");
 			#endif
 
 			return true;
 		}
 
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_WRAP
 			stdoutput.write(" failed\n\n");
 		#endif
 
@@ -1556,7 +1704,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputbuffer);
 
-			#ifdef DEBUG_GSS
+			#ifdef DEBUG_GSS_WRAP
 				stdoutput.printf("unwrap(%d,",*outputsize);
 				stdoutput.safePrint(*output,*outputsize);
 				stdoutput.write(") success\n\n");
@@ -1565,7 +1713,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			return true;
 		}
 
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_WRAP
 			stdoutput.write("unwrap() failed\n\n");
 		#endif
 
@@ -1730,21 +1878,21 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize) {
 
-	#ifdef DEBUG_GSS
+	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.write("receiveToken(");
 	#endif
 
 	// read token flags
 	ssize_t		result=fullRead(tokenflags,sizeof(*tokenflags));
 	if (result!=sizeof(*tokenflags)) {
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (flags)\n");
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
 	*tokenflags=pvt->_fd->netToHost(*tokenflags);
 
-	#ifdef DEBUG_GSS
+	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.printf("%08x,",*tokenflags);
 	#endif
 
@@ -1752,14 +1900,14 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 	uint32_t	size;
 	result=fullRead(&size,sizeof(size));
 	if (result!=sizeof(size)) {
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (size)\n");
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
 	size=pvt->_fd->netToHost(size);
 
-	#ifdef DEBUG_GSS
+	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.printf("%d,",size);
 	#endif
 
@@ -1770,13 +1918,13 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 	// read token data
 	result=fullRead(*tokendata,size);
 	if (result!=(ssize_t)size) {
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (data)\n");
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
-	#ifdef DEBUG_GSS
+	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.safePrint((unsigned char *)*tokendata,*tokensize);
 		stdoutput.write(") success\n\n");
 	#endif
@@ -1804,7 +1952,7 @@ ssize_t gsscontext::sendToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize) {
 
-	#ifdef DEBUG_GSS
+	#ifdef DEBUG_GSS_SEND
 		stdoutput.printf("sendToken(%08x,%d,",tokenflags,tokensize);
 		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
 		stdoutput.write(") ");
@@ -1814,7 +1962,7 @@ ssize_t gsscontext::sendToken(uint32_t tokenflags,
 	uint32_t	temptokenflags=pvt->_fd->netToHost(tokenflags);
 	ssize_t		result=fullWrite(&temptokenflags,sizeof(tokenflags));
 	if (result!=sizeof(tokenflags)) {
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_SEND
 			stdoutput.write("failed (flags)\n");
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
@@ -1824,7 +1972,7 @@ ssize_t gsscontext::sendToken(uint32_t tokenflags,
 	uint32_t	size=pvt->_fd->netToHost((uint32_t)tokensize);
 	result=fullWrite(&size,sizeof(size));
 	if (result!=sizeof(size)) {
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_SEND
 			stdoutput.write("failed (size)\n");
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
@@ -1833,13 +1981,13 @@ ssize_t gsscontext::sendToken(uint32_t tokenflags,
 	// write token data
 	result=fullWrite(tokendata,tokensize);
 	if (result!=(ssize_t)tokensize) {
-		#ifdef DEBUG_GSS
+		#ifdef DEBUG_GSS_SEND
 			stdoutput.write("failed (data)\n");
 		#endif
 		return (result<=0)?result:RESULT_ERROR;
 	}
 
-	#ifdef DEBUG_GSS
+	#ifdef DEBUG_GSS_SEND
 		stdoutput.write("success\n\n");
 	#endif
 	return result;

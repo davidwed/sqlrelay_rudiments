@@ -8,7 +8,8 @@
 
 static void usage() {
 	stdoutput.printf("Usage: gss-client "
-			"-host host -service service -message msg "
+			"-host host [-port port] [-service service] "
+			"-message msg "
 			"[-user user] [-pass pw] "
 			"[-ccount count] [-mcount count] [-dcount count]"
 			"[-mech mechanism] "
@@ -24,7 +25,14 @@ int main(int argc, const char **argv) {
 
 	// host, service, message
 	const char	*host=cmdl.getValue("host");
-	const char	*service=cmdl.getValue("service");
+	uint16_t	port=4444;
+	if (cmdl.found("port")) {
+		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+	}
+	const char	*service="gssserver";
+	if (cmdl.found("service")) {
+		service=cmdl.getValue("service");
+	}
 	const char	*msg=cmdl.getValue("message");
 	if (charstring::isNullOrEmpty(host) || 
 		charstring::isNullOrEmpty(service) || 
@@ -124,7 +132,7 @@ int main(int argc, const char **argv) {
 	for (int64_t i=0; i<ccount; i++) {
 
 		// connect (will also initiate context)
-		if (!fd.connect(host,4444,-1,-1,1,0)) {
+		if (!fd.connect(host,port,-1,-1,0,1)) {
 			stdoutput.printf("connect():\n");
 			stdoutput.printf("%s\n",gctx.getStatus());
 			continue;
