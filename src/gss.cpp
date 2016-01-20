@@ -13,8 +13,8 @@
 
 #define DEBUG_GSS 1
 //#define DEBUG_GSS_WRAP 1
-//#define DEBUG_GSS_SEND 1
-//#define DEBUG_GSS_RECIEVE 1
+#define DEBUG_GSS_SEND 1
+#define DEBUG_GSS_RECEIVE 1
 
 #ifdef RUDIMENTS_HAS_GSS
 

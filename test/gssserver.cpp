@@ -22,6 +22,14 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 	const char	*keytab=cmdl.getValue("keytab");
 	bool		verbose=cmdl.found("verbose");
+	uint16_t	port=4444;
+	if (cmdl.found("port")) {
+		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+	}
+	const char	*service="gssserver";
+	if (cmdl.found("service")) {
+		service=cmdl.getValue("service");
+	}
 
 	// configure keytab
 	if (!charstring::isNullOrEmpty(keytab) &&
@@ -37,7 +45,7 @@ int main(int argc, const char **argv) {
 
 	// get the credentials for this service from the keytab
 	gsscredentials	gcred;
-	if (!gcred.acquireService("gssserver")) {
+	if (!gcred.acquireService(service)) {
 		stdoutput.printf("acquireService():\n");
 		stdoutput.printf("%s\n",gcred.getStatus());
 		process::exit(1);
@@ -55,7 +63,7 @@ int main(int argc, const char **argv) {
 	// create socket
 	inetsocketserver	iss;
 	iss.setGSSContext(&gctx);
-	if (iss.listen(NULL,4444,0)) {
+	if (iss.listen(NULL,port,0)) {
 		for (;;) {
 
 			// accept (will also accept context)
