@@ -211,6 +211,22 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		 *  call. */
 		const char	*getStatus();
 
+		/** Returns the GSS major status string of the most
+		 *  recently failed call. */
+		const char	*getGSSMajorStatus();
+
+		/** Returns the GSS minor status string of the most
+		 *  recently failed call. */
+		const char	*getGSSMinorStatus();
+
+		/** Returns the mechanism major status string of the most
+		 *  recently failed call. */
+		const char	*getMechanismMajorStatus();
+
+		/** Returns the mechanism minor status string of the most
+ 		 *  recently failed call. */
+		const char	*getMechanismMinorStatus();
+
 
 		/** Returns a platform-specific binary internal representation
 		 *  of the credentials, or NULL if no call has been made to an
@@ -469,6 +485,22 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		/** Returns the status string of the most recently failed
 		 *  call. */
 		const char	*getStatus();
+
+		/** Returns the GSS major status string of the most
+		 *  recently failed call. */
+		const char	*getGSSMajorStatus();
+
+		/** Returns the GSS minor status string of the most
+		 *  recently failed call. */
+		const char	*getGSSMinorStatus();
+
+		/** Returns the mechanism major status string of the most
+		 *  recently failed call. */
+		const char	*getMechanismMajorStatus();
+
+		/** Returns the mechanism minor status string of the most
+ 		 *  recently failed call. */
+		const char	*getMechanismMinorStatus();
 		
 	#include <rudiments/private/gsscontext.h>
 };

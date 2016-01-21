@@ -11,16 +11,19 @@
 
 int main(int argc, const char **argv) {
 
-	#ifndef WIN32
-	if (process::getUserId()) {
-		stdoutput.printf("Warning! this should probably "
-						"be run as root\n\n");
-	}
-	#endif
-
 	// process command line
 	commandline	cmdl(argc,argv);
 	const char	*keytab=cmdl.getValue("keytab");
+	if (charstring::isNullOrEmpty(keytab)) {
+		#ifndef WIN32
+		if (process::getUserId()) {
+			stdoutput.printf("Warning! Since you're using the "
+					"system keytab,\n         "
+					"this program should probably be "
+					"run as root.\n\n");
+		}
+		#endif
+	}
 	bool		verbose=cmdl.found("verbose");
 	uint16_t	port=4444;
 	if (cmdl.found("port")) {

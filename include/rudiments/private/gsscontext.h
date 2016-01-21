@@ -6,7 +6,8 @@
 		bool	initiate(const void *name,
 					size_t size,
 					const void *nametype);
-		void	getStatus(uint32_t status, int32_t type);
+		void	getStatus(uint32_t status, int32_t type,
+						stringbuffer *strb);
 
 		ssize_t	receiveToken(uint32_t *tokenflags,
 					void **tokendata,

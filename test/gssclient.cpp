@@ -8,8 +8,8 @@
 
 static void usage() {
 	stdoutput.printf("Usage: gss-client "
-			"-host host [-port port] [-service service] "
-			"-message msg "
+			"[-host host] [-port port] [-service service] "
+			"[-message msg] "
 			"[-user user] [-pass pw] "
 			"[-ccount count] [-mcount count] [-dcount count]"
 			"[-mech mechanism] "
@@ -24,7 +24,10 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 
 	// host, service, message
-	const char	*host=cmdl.getValue("host");
+	const char	*host="127.0.0.1";
+	if (cmdl.found("host")) {
+		host=cmdl.getValue("host");
+	}
 	uint16_t	port=4444;
 	if (cmdl.found("port")) {
 		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
@@ -33,7 +36,10 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("service")) {
 		service=cmdl.getValue("service");
 	}
-	const char	*msg=cmdl.getValue("message");
+	const char	*msg="hello";
+	if (cmdl.found("message")) {
+		msg=cmdl.getValue("message");
+	}
 	if (charstring::isNullOrEmpty(host) || 
 		charstring::isNullOrEmpty(service) || 
 		charstring::isNullOrEmpty(msg)) {
@@ -120,7 +126,7 @@ int main(int argc, const char **argv) {
 	gsscontext	gctx;
 	gctx.setDesiredMechanism(&gmech);
 	gctx.setDesiredFlags(flags);
-	gctx.setService("gssserver");
+	gctx.setService(service);
 
 	// configure socket
 	inetsocketclient	fd;
