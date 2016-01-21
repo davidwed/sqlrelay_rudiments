@@ -127,6 +127,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad63726d6f0d57edafbef401e850431f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fb423d08c9f9683f045b6ed7e5825bf"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a0fb423d08c9f9683f045b6ed7e5825bf">getStatus</a> ()</td></tr>
 <tr class="separator:a0fb423d08c9f9683f045b6ed7e5825bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a923568eba1c3e886e1c532b9c6e31b1c"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a923568eba1c3e886e1c532b9c6e31b1c">getGSSMajorStatus</a> ()</td></tr>
+<tr class="separator:a923568eba1c3e886e1c532b9c6e31b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3492ce237cb193dd71d518e5f77b873a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#a3492ce237cb193dd71d518e5f77b873a">getGSSMinorStatus</a> ()</td></tr>
+<tr class="separator:a3492ce237cb193dd71d518e5f77b873a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1fcd629cf7e3d4e79e6d4ef24cf3e90"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#ab1fcd629cf7e3d4e79e6d4ef24cf3e90">getMechanismMajorStatus</a> ()</td></tr>
+<tr class="separator:ab1fcd629cf7e3d4e79e6d4ef24cf3e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa720c376f1f605331669adc722a397f8"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgsscontext.html#aa720c376f1f605331669adc722a397f8">getMechanismMinorStatus</a> ()</td></tr>
+<tr class="separator:aa720c376f1f605331669adc722a397f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ac4527d9cf7f6f0785be97131d9f86043"></a>
@@ -340,6 +348,38 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a923568eba1c3e886e1c532b9c6e31b1c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* gsscontext::getGSSMajorStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the GSS major status string of the most recently failed call. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3492ce237cb193dd71d518e5f77b873a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* gsscontext::getGSSMinorStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the GSS minor status string of the most recently failed call. </p>
+
+</div>
+</div>
 <a class="anchor" id="aa14afebda9d1d62e004bc9a390d7f2b2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -417,6 +457,38 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns the major-status code of the most recently failed call. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab1fcd629cf7e3d4e79e6d4ef24cf3e90"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* gsscontext::getMechanismMajorStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the mechanism major status string of the most recently failed call. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa720c376f1f605331669adc722a397f8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* gsscontext::getMechanismMinorStatus </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the mechanism minor status string of the most recently failed call. </p>
 
 </div>
 </div>
@@ -931,7 +1003,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 18 2016 19:45:12 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 21 2016 02:12:48 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
