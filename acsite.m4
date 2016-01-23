@@ -1021,7 +1021,12 @@ then
 				then
 					KRB5CONFIG="$path/$KRB5CONFIG"
 				fi
-				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null`
+
+				dnl on some platforms (solaris), kerberos and
+				dnl gssapi are completely separate and
+				dnl krb-config --libs gssapi returns "Unknown
+				dnl option `gssapi'..." to stdout though, oddly.
+				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null | grep -v Unknown`
 				if ( test -n "$GSSLIBS" )
 				then
 					dnl on openbsd, libcom_err is in

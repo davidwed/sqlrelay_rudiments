@@ -19298,7 +19298,8 @@ $as_echo_n "checking for GSS... " >&6; }
 				then
 					KRB5CONFIG="$path/$KRB5CONFIG"
 				fi
-				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null`
+
+																				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null | grep -v Unknown`
 				if ( test -n "$GSSLIBS" )
 				then
 																				if ( test "$path" = "/usr/local/heimdal/bin" )
