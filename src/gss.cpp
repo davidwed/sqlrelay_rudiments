@@ -883,25 +883,33 @@ const char *gsscredentials::getStatus() {
 
 const char *gsscredentials::getGSSMajorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getGSSMinorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getMechanismMajorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getMechanismMinorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
@@ -1253,36 +1261,56 @@ bool gsscontext::initiate(const void *name,
 
 #ifdef DEBUG_GSS
 static void printFlags(OM_uint32 flags) {
-	if (flags&GSS_C_DELEG_FLAG) {
-		stdoutput.printf("    GSS_C_DELEG_FLAG\n");
-	}
-	if (flags&GSS_C_MUTUAL_FLAG) {
-		stdoutput.printf("    GSS_C_MUTUAL_FLAG\n");
-	}
-	if (flags&GSS_C_REPLAY_FLAG) {
-		stdoutput.printf("    GSS_C_REPLAY_FLAG\n");
-	}
-	if (flags&GSS_C_SEQUENCE_FLAG) {
-		stdoutput.printf("    GSS_C_SEQUENCE_FLAG\n");
-	}
-	if (flags&GSS_C_CONF_FLAG) {
-		stdoutput.printf("    GSS_C_CONF_FLAG\n");
-	}
-	if (flags&GSS_C_INTEG_FLAG) {
-		stdoutput.printf("    GSS_C_INTEG_FLAG\n");
-	}
-	if (flags&GSS_C_ANON_FLAG) {
-		stdoutput.printf("    GSS_C_ANON_FLAG\n");
-	}
-	if (flags&GSS_C_PROT_READY_FLAG) {
-		stdoutput.printf("    GSS_C_PROT_READY_FLAG\n");
-	}
-	if (flags&GSS_C_TRANS_FLAG) {
-		stdoutput.printf("    GSS_C_TRANS_FLAG\n");
-	}
-	if (flags&GSS_C_DELEG_POLICY_FLAG) {
-		stdoutput.printf("    GSS_C_DELEG_POLICY_FLAG\n");
-	}
+	#ifdef GSS_C_DELEG_FLAG
+		if (flags&GSS_C_DELEG_FLAG) {
+			stdoutput.printf("    GSS_C_DELEG_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_MUTUAL_FLAG
+		if (flags&GSS_C_MUTUAL_FLAG) {
+			stdoutput.printf("    GSS_C_MUTUAL_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_REPLAY_FLAG
+		if (flags&GSS_C_REPLAY_FLAG) {
+			stdoutput.printf("    GSS_C_REPLAY_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_SEQUENCE_FLAG
+		if (flags&GSS_C_SEQUENCE_FLAG) {
+			stdoutput.printf("    GSS_C_SEQUENCE_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_CONF_FLAG
+		if (flags&GSS_C_CONF_FLAG) {
+			stdoutput.printf("    GSS_C_CONF_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_INTEG_FLAG
+		if (flags&GSS_C_INTEG_FLAG) {
+			stdoutput.printf("    GSS_C_INTEG_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_ANON_FLAG
+		if (flags&GSS_C_ANON_FLAG) {
+			stdoutput.printf("    GSS_C_ANON_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_PROT_READY_FLAG
+		if (flags&GSS_C_PROT_READY_FLAG) {
+			stdoutput.printf("    GSS_C_PROT_READY_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_TRANS_FLAG
+		if (flags&GSS_C_TRANS_FLAG) {
+			stdoutput.printf("    GSS_C_TRANS_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_DELEG_POLICY_FLAG
+		if (flags&GSS_C_DELEG_POLICY_FLAG) {
+			stdoutput.printf("    GSS_C_DELEG_POLICY_FLAG\n");
+		}
+	#endif
 }
 #endif
 
@@ -2175,25 +2203,33 @@ const char *gsscontext::getStatus() {
 
 const char *gsscontext::getGSSMajorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscontext::getGSSMinorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscontext::getMechanismMajorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscontext::getMechanismMinorStatus() {
 	pvt->_status.clear();
-	getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#ifdef RUDIMENTS_HAS_GSS
+		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#endif
 	return pvt->_status.getString();
 }
 
