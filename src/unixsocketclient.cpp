@@ -166,8 +166,18 @@ int32_t unixsocketclient::connect() {
 		}
 	}
 
-	// if we're here, the connect failed
+	// if we're here, the connect failed...
+
+	// save the error, as a successful call to close() will mask it
+	int32_t	err=error::getErrorNumber();
+
 	close();
+
+	// restore the error
+	if (err) {
+		error::setErrorNumber(err);
+	}
+
 	return retval;
 #endif
 }
