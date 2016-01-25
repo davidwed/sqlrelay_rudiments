@@ -1946,7 +1946,8 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 		// copy data out...
 		if (pendingbytes<=(size_t)bytestoread) {
 			bytestring::copy(
-				buf,pvt->_readbuffer.getBuffer(),pendingbytes);
+				buf,pvt->_readbuffer.getBuffer()+
+					pvt->_readbufferpos,pendingbytes);
 			pvt->_readbuffer.clear();
 			pvt->_readbufferpos=0;
 			bytesread=pendingbytes;
@@ -1954,7 +1955,8 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 			bytestoread-=pendingbytes;
 		} else {
 			bytestring::copy(
-				buf,pvt->_readbuffer.getBuffer(),bytestoread);
+				buf,pvt->_readbuffer.getBuffer()+
+					pvt->_readbufferpos,bytestoread);
 			pvt->_readbufferpos+=bytestoread;
 			bytesread=bytestoread;
 			buf=((unsigned char *)buf)+bytestoread;
@@ -1962,45 +1964,48 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 		}
 	}
 
-	// next, receive tokens from the peer...
-	while (bytestoread) {
+	// next, receive a token from the peer...
+	//
+	// This should be a low-level read, and it should allow short reads.
+	// I.e. it should't try to receive multiple tokens until it's read
+	// "count" bytes.  It should just return "what's currently available",
+	// and in this case that should come from whatever was already buffered,
+	// and/or the next token.  The filedescriptor class's read-buffering
+	// depends on this method having short-read behavior.  We'll leave it
+	// up to the filedescriptor class to make multiple calls to satisfy
+	// cases where short-reads aren't allowed.
 
-		// receive token
-		uint32_t	tokenflags=0;
-		void		*tokendata=NULL;
-		size_t		tokensize=0;
-		ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
-		if (result<=0 || !(tokenflags&TOKEN_FLAGS_TYPE_DATA)) {
-			return result;
-		}
-
-		// unwrap
-		unsigned char	*data=NULL;
-		size_t		datasize=0;
-		if (!unwrap((unsigned char *)tokendata,tokensize,
-						&data,&datasize)) {
-			delete[] data;
-			return RESULT_ERROR;
-		}
-
-		// copy data out...
-		if (datasize<=(size_t)bytestoread) {
-			bytestring::copy(buf,data,datasize);
-			bytesread+=datasize;
-			buf=((unsigned char *)buf)+datasize;
-			bytestoread-=datasize;
-		} else {
-			bytestring::copy(buf,data,bytestoread);
-			bytesread+=bytestoread;
-			buf=((unsigned char *)buf)+bytestoread;
-			bytestoread=0;
-
-			// buffer what wasn't copied out
-			pvt->_readbuffer.append(data+bytesread,
-						datasize-bytesread);
-		}
-		delete[] data;
+	// receive token
+	uint32_t	tokenflags=0;
+	void		*tokendata=NULL;
+	size_t		tokensize=0;
+	ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
+	if (result<=0 || !(tokenflags&TOKEN_FLAGS_TYPE_DATA)) {
+		return result;
 	}
+
+	// unwrap
+	unsigned char	*data=NULL;
+	size_t		datasize=0;
+	if (!unwrap((unsigned char *)tokendata,tokensize,
+					&data,&datasize)) {
+		delete[] data;
+		return RESULT_ERROR;
+	}
+
+	// copy data out...
+	if (datasize<=(size_t)bytestoread) {
+		bytestring::copy(buf,data,datasize);
+		bytesread+=datasize;
+	} else {
+		bytestring::copy(buf,data,bytestoread);
+		bytesread+=bytestoread;
+
+		// buffer what wasn't copied out
+		pvt->_readbuffer.append(data+bytesread,
+					datasize-bytesread);
+	}
+	delete[] data;
 
 	return bytesread;
 }

@@ -354,14 +354,6 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
 
-	// gsscontext does it's own read buffering, which interferes
-	// with buffering at this level, so ignore it if we're using
-	// gss and request buffering
-	if (size && pvt->_gssctx) {
-		return true;
-	}
-
-
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting read buffer size to %d\n",size);
 	#endif
@@ -506,16 +498,6 @@ bool filedescriptor::supportsGSS() {
 
 void filedescriptor::setGSSContext(gsscontext *ctx) {
 	pvt->_gssctx=ctx;
-
-	// gsscontext does it's own read buffering, which interferes
-	// with buffering at this level, so disable read buffering if
-	// we're using gss.
-	//
-	// Note: this is a little kludgy, as the app won't necessarily know
-	// to re-enable read buffering if it disables gss.
-	if (ctx) {
-		setReadBufferSize(0);
-	}
 }
 
 gsscontext *filedescriptor::getGSSContext() {
