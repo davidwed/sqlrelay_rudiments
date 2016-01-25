@@ -160,6 +160,9 @@ void displayContext(gsscontext *gctx) {
 
 void displayData(const char *msg, const unsigned char *data, size_t datasize) {
 	stdoutput.printf("\n  %s (size=%d):\n  ",msg,datasize);
-	stdoutput.safePrint(data,datasize);
+	stdoutput.safePrint(data,(datasize<=300)?datasize:300);
+	if (datasize>300) {
+		stdoutput.write("...");
+	}
 	stdoutput.write('\n');
 }

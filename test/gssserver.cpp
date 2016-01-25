@@ -76,8 +76,8 @@ int main(int argc, const char **argv) {
 				stdoutput.printf("%s\n",gctx.getStatus());
 				continue;
 			}
-			fd->setWriteBufferSize(8192);
-			fd->setReadBufferSize(8192);
+			fd->setWriteBufferSize(65536);
+			fd->setReadBufferSize(65536);
 
 			// print information about the context
 			if (verbose) {
@@ -107,11 +107,33 @@ int main(int argc, const char **argv) {
 				unsigned char	*msg=new unsigned char[msgsize];
 				if (fd->read(msg,msgsize)!=(ssize_t)msgsize) {
 					stdoutput.printf(
-						"\n  read() message failed\n");
+						"\n  read() msg failed\n");
+					delete[] msg;
 					break;
 				}
 
-				displayData("Message",msg,msgsize);
+				displayData("Received message...",msg,msgsize);
+
+				stdoutput.printf("\n  Sending response...");
+
+				if (fd->write(msgsize)!=sizeof(msgsize)) {
+					stdoutput.printf(
+						"\n  write() size failed\n");
+					delete[] msg;
+					break;
+				}
+
+				if (fd->write(msg,msgsize)!=(ssize_t)msgsize) {
+					stdoutput.printf(
+						"\n  write() msg failed\n");
+					delete[] msg;
+					break;
+				}
+				fd->flushWriteBuffer(-1,-1);
+
+				delete[] msg;
+
+				stdoutput.printf(" success\n");
 			}
 
 			stdoutput.printf("}\n");

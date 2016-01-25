@@ -10,7 +10,7 @@
 static void usage() {
 	stdoutput.printf("Usage: gss-client "
 			"[-host host] [-port port] [-service service] "
-			"[-message msg] "
+			"[-message msg]"
 			"[-user user] [-pass pw] "
 			"[-ccount count] [-mcount count] [-dcount count]"
 			"[-mech mechanism] "
@@ -41,9 +41,7 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("message")) {
 		msg=cmdl.getValue("message");
 	}
-	if (charstring::isNullOrEmpty(host) || 
-		charstring::isNullOrEmpty(service) || 
-		charstring::isNullOrEmpty(msg)) {
+	if (cmdl.found("help")) {
 		usage();
 		process::exit(1);
 	}
@@ -131,8 +129,8 @@ int main(int argc, const char **argv) {
 
 	// configure socket
 	inetsocketclient	fd;
-	fd.setWriteBufferSize(8192);
-	fd.setReadBufferSize(8192);
+	fd.setWriteBufferSize(65536);
+	fd.setReadBufferSize(65536);
 	fd.setGSSContext(&gctx);
 
 	// loop, having sessions with server
@@ -161,7 +159,7 @@ int main(int argc, const char **argv) {
 		// write message to the server, the specified number of times...
 		for (int64_t j=0; j<mcount; j++) {
 
-			displayData("Message",
+			displayData("Sending message...",
 					msgbuf.getBuffer(),
 					msgbuf.getSize());
 
@@ -169,15 +167,33 @@ int main(int argc, const char **argv) {
 					msgbuf.getSize())!=
 					sizeof(uint64_t)) {
 				stdoutput.printf("\n  write() size failed\n");
-				continue;
+				break;
 			}
 			if (fd.write(msgbuf.getBuffer(),
 					msgbuf.getSize())!=
 					(ssize_t)msgbuf.getSize()) {
 				stdoutput.printf("\n  write() msg failed\n");
-				continue;
+				break;
 			}
 			fd.flushWriteBuffer(-1,-1);
+
+			stdoutput.printf("\n  Receiving response...");
+
+			uint64_t	msgsize;
+			if (fd.read(&msgsize)!=sizeof(msgsize)) {
+				stdoutput.printf("\n  read() size failed\n");
+				break;
+			}
+
+			unsigned char	*msgb=new unsigned char[msgsize];
+			if (fd.read(msgb,msgsize)!=(ssize_t)msgsize) {
+				stdoutput.printf("\n  read() msg failed\n");
+				delete[] msgb;
+				break;
+			}
+
+			stdoutput.printf(" success\n");
+			delete[] msgb;
 		}
 
 		stdoutput.printf("}\n");
