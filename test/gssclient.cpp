@@ -2,6 +2,7 @@
 #include <rudiments/process.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/commandline.h>
+#include <rudiments/error.h>
 #include <rudiments/gss.h>
 
 #include "gssmisc.h"
@@ -138,9 +139,15 @@ int main(int argc, const char **argv) {
 	for (int64_t i=0; i<ccount; i++) {
 
 		// connect (will also initiate context)
-		if (!fd.connect(host,port,-1,-1,0,1)) {
-			stdoutput.printf("connect():\n");
-			stdoutput.printf("%s\n",gctx.getStatus());
+		if (fd.connect(host,port,-1,-1,0,1)!=RESULT_SUCCESS) {
+			stdoutput.printf("connect(): ");
+			if (error::getErrorNumber()) {
+				char	*err=error::getErrorString();
+				stdoutput.printf("%s\n",err);
+				delete[] err;
+			} else {
+				stdoutput.printf("\n%s\n",gctx.getStatus());
+			}
 			continue;
 		}
 

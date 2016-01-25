@@ -303,6 +303,11 @@ int32_t socketclient::connect(const struct sockaddr *addr,
 	retval=RESULT_SUCCESS;
 
 cleanup:
+
+	// save any error that might have occurred above, as a
+	// successful call to useBlockingMode() below will mask it
+	int32_t	savederror=error::getErrorNumber();
+
 	// restore blocking mode, if necessary
 	if (!wasusingnonblockingmode &&
 			!useBlockingMode() &&
@@ -315,6 +320,11 @@ cleanup:
 			#endif
 			) {
 		return RESULT_ERROR;
+	}
+
+	// restore the saved error
+	if (savederror) {
+		error::setErrorNumber(savederror);
 	}
 
 #else

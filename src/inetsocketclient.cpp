@@ -284,7 +284,16 @@ int32_t inetsocketclient::connect() {
 					freeaddrinfo(ai);
 					return RESULT_SUCCESS;
 				} else {
+					// save the error, as a successful
+					// call to close() will mask it
+					int32_t	err=error::getErrorNumber();
+
 					close();
+
+					// restore the error
+					if (err) {
+						error::setErrorNumber(err);
+					}
 				}
 
 				// remove this addrinfo from the list
@@ -376,7 +385,16 @@ int32_t inetsocketclient::connect() {
 				if (retval==RESULT_SUCCESS) {
 					return RESULT_SUCCESS;
 				} else {
+					// save the error, as a successful
+					// call to close() will mask it
+					int32_t	err=error::getErrorNumber();
+
 					close();
+
+					// restore the error
+					if (err) {
+						error::setErrorNumber(err);
+					}
 				}
 
 				// remove this addrinfo from the list

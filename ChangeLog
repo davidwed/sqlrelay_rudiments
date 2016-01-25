@@ -21,6 +21,7 @@
 	buffers allocated by vasprintf are free()'ed now rather than deleted
 	fixed a commandline bug that could cause it to return the next
 		parameter for getValue() of a parameter with no value
+	fixed connect()/useBlockingMode error masking bug
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
