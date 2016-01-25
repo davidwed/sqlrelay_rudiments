@@ -1659,6 +1659,18 @@ uint32_t gsscontext::getActualFlags() {
 	return pvt->_actualflags;
 }
 
+uint32_t gsscontext::getRemainingLifetime() {
+	#ifdef RUDIMENTS_HAS_GSS
+		OM_uint32	remainingtime;
+		pvt->_major=gss_context_time(&pvt->_minor,
+						pvt->_context,
+						&remainingtime);
+		return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
+	#else
+		return 0;
+	#endif
+}
+
 const char *gsscontext::getInitiator() {
 	return pvt->_initiator;
 }
@@ -1928,18 +1940,18 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 	// first, return any buffered data
 	ssize_t bytestoread=count;
 	ssize_t	bytesread=0;
-	size_t	bytesinbuffer=(pvt->_readbuffer.getSize()-pvt->_readbufferpos);
-	if (bytesinbuffer) {
+	size_t	pendingbytes=pending();
+	if (pendingbytes) {
 
 		// copy data out...
-		if (bytesinbuffer<=(size_t)bytestoread) {
+		if (pendingbytes<=(size_t)bytestoread) {
 			bytestring::copy(
-				buf,pvt->_readbuffer.getBuffer(),bytesinbuffer);
+				buf,pvt->_readbuffer.getBuffer(),pendingbytes);
 			pvt->_readbuffer.clear();
 			pvt->_readbufferpos=0;
-			bytesread=bytesinbuffer;
-			buf=((unsigned char *)buf)+bytesinbuffer;
-			bytestoread-=bytesinbuffer;
+			bytesread=pendingbytes;
+			buf=((unsigned char *)buf)+pendingbytes;
+			bytestoread-=pendingbytes;
 		} else {
 			bytestring::copy(
 				buf,pvt->_readbuffer.getBuffer(),bytestoread);
@@ -2160,16 +2172,8 @@ ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
 	return byteswritten;
 }
 
-uint32_t gsscontext::getRemainingLifetime() {
-	#ifdef RUDIMENTS_HAS_GSS
-		OM_uint32	remainingtime;
-		pvt->_major=gss_context_time(&pvt->_minor,
-						pvt->_context,
-						&remainingtime);
-		return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
-	#else
-		return 0;
-	#endif
+ssize_t gsscontext::pending() {
+	return (pvt->_readbuffer.getSize()-pvt->_readbufferpos);
 }
 
 uint32_t gsscontext::getMajorStatus() {

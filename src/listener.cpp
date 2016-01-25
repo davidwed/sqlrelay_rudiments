@@ -223,23 +223,31 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 	// clear the read ready list
 	pvt->_readreadylist.clear();
 
-	// if we support SSL, check here to see if any of the filedescriptors
-	// have SSL data pending and return immediately if one does
-	#ifdef RUDIMENTS_HAS_SSL
-		for (linkedlistnode< fddata_t * >	*node=
-						pvt->_fdlist.getFirst();
-						node; node=node->getNext()) {
+	// return immediately if any of the filedescriptors
+	// have SSL or GSS data pending
+	for (linkedlistnode< fddata_t * >	*node=
+					pvt->_fdlist.getFirst();
+					node; node=node->getNext()) {
+
+		#ifdef RUDIMENTS_HAS_SSL
 			SSL	*ssl=(SSL *)node->getValue()->fd->getSSL();
 			if (ssl && SSL_pending(ssl)) {
 				pvt->_readreadylist.append(
 						node->getValue()->fd);
 				result++;
 			}
+		#endif
+		
+		gsscontext	*gctx=node->getValue()->fd->getGSSContext();
+		if (gctx && gctx->pending()) {
+			pvt->_readreadylist.append(
+					node->getValue()->fd);
+			result++;
 		}
-		if (result) {
-			return result;
-		}
-	#endif
+	}
+	if (result) {
+		return result;
+	}
 
 	// clear the write ready list
 	pvt->_writereadylist.clear();

@@ -473,6 +473,10 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		 *  or RESULT_ERROR if an error occurred. */
 		ssize_t	write(const void *buf, ssize_t count);
 
+		/** Returns the number of bytes that are buffered and available
+		 *  for immediate read. */
+		ssize_t pending();
+
 
 		/** Returns the major-status code of the most recently failed
 		 *  call. */
