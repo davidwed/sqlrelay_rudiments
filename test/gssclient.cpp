@@ -108,17 +108,18 @@ int main(int argc, const char **argv) {
 	// acquire credentials
 	gsscredentials	gcred;
 	gcred.addDesiredMechanism(&gmech);
-	if (!charstring::isNullOrEmpty(username) &&
-		!gcred.acquireUserName(username,password)) {
-		stdoutput.printf("acquireUserName():\n");
-		stdoutput.printf("%s\n",gcred.getStatus());
-		stdoutput.printf("}\n");
-		process::exit(1);
-	}
+	if (!charstring::isNullOrEmpty(username)) {
+		if (!gcred.acquireUserName(username,password)) {
+			stdoutput.printf("acquireUserName():\n");
+			stdoutput.printf("%s\n",gcred.getStatus());
+			stdoutput.printf("}\n");
+			process::exit(1);
+		}
 
-	// print information about the credentials
-	if (verbose) {
-		displayCredentials(&gcred);
+		// print information about the credentials
+		if (verbose) {
+			displayCredentials(&gcred);
+		}
 	}
 
 	// configure security context
