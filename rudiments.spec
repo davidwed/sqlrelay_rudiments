@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 0.55
+Version: 0.55.0
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -72,7 +72,7 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Wed Dec 16 2015 David Muse <dmuse@firstworks.com> - 0.55-1
+* Wed Dec 16 2015 David Muse <dmuse@firstworks.com> - 0.55.0-1
 - Added krb5 dependencies
 
 * Tue Oct 06 2015 David Muse <dmuse@firstworks.com> - 0.54-1

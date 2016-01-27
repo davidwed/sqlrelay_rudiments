@@ -105,10 +105,11 @@ int main(int argc, const char **argv) {
 	gssmechanism		gmech;
 	gmech.initialize(mechanism);
 
-	// acquire credentials
-	gsscredentials	gcred;
-	gcred.addDesiredMechanism(&gmech);
+	// acquire credentials, if necessary
 	if (!charstring::isNullOrEmpty(username)) {
+
+		gsscredentials	gcred;
+		gcred.addDesiredMechanism(&gmech);
 		if (!gcred.acquireUserName(username,password)) {
 			stdoutput.printf("acquireUserName():\n");
 			stdoutput.printf("%s\n",gcred.getStatus());

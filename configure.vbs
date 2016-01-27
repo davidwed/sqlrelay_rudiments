@@ -357,7 +357,7 @@ privateheaders7="codetree.h "+_
 	"gsscontext.h"
 
 ' version
-RUDIMENTS_VERSION="0.55"
+RUDIMENTS_VERSION="0.55.0"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"
