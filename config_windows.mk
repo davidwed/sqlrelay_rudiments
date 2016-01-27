@@ -1,5 +1,4 @@
 RUDIMENTS_VERSION = @RUDIMENTS_VERSION@
-SONAME_VERSION_INFO =
 
 # installation directories
 prefix = @prefix@
