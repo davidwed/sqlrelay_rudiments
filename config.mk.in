@@ -38,7 +38,6 @@ LTLINK = $(LIBTOOL) --mode=link
 LINK = @CXX@
 AR = @AR@
 LDFLAGS = @LDFLAGS@
-#LINKFLAGS = -rpath $(libdir) -release $(RUDIMENTS_VERSION) -version-info $(SONAME_VERSION_INFO) -no-undefined
 LINKFLAGS = -rpath $(libdir) -version-info $(SONAME_VERSION_INFO) -no-undefined
 MODLINKFLAGS = -rpath $(libdir) -avoid-version -module -no-undefined
 LIBPATH = -L
