@@ -31701,6 +31701,7 @@ rm -f core conftest.err conftest.$ac_objext \
 
 echo "******************************"
 
+
 RUDIMENTS_VERSION="0.55.0"
 
 
@@ -31710,6 +31711,7 @@ _ACEOF
 
 
 SONAME_VERSION_INFO="2:0:0"
+
 
 
 

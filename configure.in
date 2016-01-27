@@ -3509,6 +3509,7 @@ ExitWindowsEx(0,0),AC_DEFINE(RUDIMENTS_HAVE_EXITWINDOWSEX,1,Some systems have Ex
 
 echo "******************************"
 
+
 dnl Semantic Versioning
 dnl Given a version number MAJOR.MINOR.PATCH, increment the:
 dnl 1. MAJOR when you make backwards-incompatible API changes
@@ -3528,6 +3529,7 @@ dnl if interfaces added,                      c:r:a -> c:r:a+1
 dnl if interfaces removed,                    c:r:a -> c:r:0
 SONAME_VERSION_INFO="2:0:0"
 AC_SUBST(SONAME_VERSION_INFO)
+
 
 AC_PREFIX_DEFAULT(/usr/local/firstworks)
 
