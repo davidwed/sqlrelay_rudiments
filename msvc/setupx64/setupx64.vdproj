@@ -213,6 +213,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_28B8050DB16946EAB69B8A50CEB7FB21"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_29DC1B833AB041E8AFCDE07A7ED71392"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -387,6 +393,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3E37AED4741E4A5BBEBBD741ABBD734D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3EE73BF81F9445D88AB29AE2DC5D7158"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -538,6 +550,12 @@
         "Entry"
         {
         "MsmKey" = "8:_53181019B71F4AE6B19DF6E92340DC49"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5623765D7816479CBB174F34F5C8DC8F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -807,6 +825,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8D5ED20E560C422A92DD0B3C463FF89C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8E23FA7ADD274959A8C94C152D4CDF80"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -976,6 +1000,12 @@
         "Entry"
         {
         "MsmKey" = "8:_B41500E663BD42CAAA03515AC92D9ECC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B526F496476545528A8D838D8308D838"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1180,6 +1210,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D99A741D85654DF5A42125BAA3056B6B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DAA007B9B1A749FCBCCFC666E468E7D5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2040,6 +2076,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_28B8050DB16946EAB69B8A50CEB7FB21"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\gss.h"
+            "TargetName" = "8:gss.h"
+            "Tag" = "8:"
+            "Folder" = "8:_620B676350264C4B8978E215CD98F90F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29DC1B833AB041E8AFCDE07A7ED71392"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\filedescriptor.h"
@@ -2600,6 +2656,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E37AED4741E4A5BBEBBD741ABBD734D"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\gsscredentials.h"
+            "TargetName" = "8:gsscredentials.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3EE73BF81F9445D88AB29AE2DC5D7158"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\process.h"
@@ -3104,6 +3180,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\environment.h"
             "TargetName" = "8:environment.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5623765D7816479CBB174F34F5C8DC8F"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\gssmechanism.h"
+            "TargetName" = "8:gssmechanism.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -3940,6 +4036,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8D5ED20E560C422A92DD0B3C463FF89C"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\gssincludes.h"
+            "TargetName" = "8:gssincludes.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8E23FA7ADD274959A8C94C152D4CDF80"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\protocolentryincludes.h"
@@ -4444,6 +4560,26 @@
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\dictionarynode.h"
             "TargetName" = "8:dictionarynode.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B526F496476545528A8D838D8308D838"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\gsscontext.h"
+            "TargetName" = "8:gsscontext.h"
             "Tag" = "8:"
             "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
             "Condition" = "8:"
@@ -5080,6 +5216,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DAA007B9B1A749FCBCCFC666E468E7D5"
+            {
+            "SourcePath" = "8:..\\..\\include\\rudiments\\private\\gss.h"
+            "TargetName" = "8:gss.h"
+            "Tag" = "8:"
+            "Folder" = "8:_A1C6504DFB4B4D67A622C9CD1F5F3A2B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DC130DDD18364CC2914CE3B8AA4A3A21"
             {
             "SourcePath" = "8:..\\..\\include\\rudiments\\private\\mathincludes.h"
@@ -5561,7 +5717,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Firstworks Rudiments (64-bit)"
         "ProductCode" = "8:{4FFAFBD0-B9F1-4069-A124-14DC1A1ABBBF}"
-        "PackageCode" = "8:{662B534A-950D-49A3-B436-60A4E92151A5}"
+        "PackageCode" = "8:{71DF4F47-279C-42B8-B19D-916907DB8CE0}"
         "UpgradeCode" = "8:{D16853E8-6A60-4842-B9FC-1C6EB9CAC827}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
