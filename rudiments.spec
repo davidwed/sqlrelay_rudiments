@@ -56,7 +56,7 @@ make install DESTDIR=%{buildroot}
 %postun -p /sbin/ldconfig
 
 %files
-%{_libdir}/librudiments-%{version}.so.*
+%{_libdir}/librudiments.so.*
 %doc AUTHORS ChangeLog
 %license COPYING
 %exclude %{_libdir}/librudiments.la
@@ -74,6 +74,7 @@ make install DESTDIR=%{buildroot}
 %changelog
 * Wed Dec 16 2015 David Muse <dmuse@firstworks.com> - 0.55.0-1
 - Added krb5 dependencies
+- Updated shared library name to reflect libtool versioning scheme.
 
 * Tue Oct 06 2015 David Muse <dmuse@firstworks.com> - 0.54-1
 - Added libcurl dependencies
