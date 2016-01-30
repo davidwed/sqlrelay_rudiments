@@ -2049,17 +2049,20 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 
 	// copy size out and create data buffer
 	*tokensize=size;
-	*tokendata=new unsigned char[size];
+	*tokendata=NULL;
+	if (size) {
+		*tokendata=new unsigned char[size];
 
-	// read token data
-	result=fullRead(*tokendata,size);
-	if (result!=(ssize_t)size) {
-		#ifdef DEBUG_GSS_RECEIVE
-			stdoutput.write(") failed (data)\n");
-		#endif
-		return (result<=0)?result:RESULT_ERROR;
+		// read token data
+		result=fullRead(*tokendata,size);
+		if (result!=(ssize_t)size) {
+			#ifdef DEBUG_GSS_RECEIVE
+				stdoutput.write(") failed (data)\n");
+			#endif
+			return (result<=0)?result:RESULT_ERROR;
+		}
 	}
-
+	
 	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.safePrint((unsigned char *)*tokendata,*tokensize);
 		stdoutput.write(") success\n\n");
