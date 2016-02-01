@@ -4,6 +4,7 @@
 #include <rudiments/thread.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
+#include <rudiments/snooze.h>
 
 // for pthread_kill
 #include <signal.h>
@@ -113,12 +114,18 @@ bool thread::run(void *arg) {
 bool thread::run() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();
-		int	result=pthread_create(&pvt->_thr,&pvt->_attr,
+		int	result=0;
+		do {
+			pvt->_thr=0;
+			result=pthread_create(&pvt->_thr,&pvt->_attr,
 						pvt->_function,pvt->_arg);
-		if (!result) {
-			pvt->_needtojoin=true;
-			return true;
-		}
+			if (!result) {
+				pvt->_needtojoin=true;
+				return true;
+			}
+			snooze::macrosnooze(1);
+		} while (result==EAGAIN);
+		pvt->_thr=0;
 		error::setErrorNumber(result);
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
@@ -152,27 +159,40 @@ bool thread::join(int32_t *status) {
 	}
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();
-		int32_t	*st=NULL;
-		int	result=pthread_join(pvt->_thr,(void **)&st);
-		if (!result) {
+		if (pvt->_thr) {
+			int32_t	*st=NULL;
+			int	result=pthread_join(pvt->_thr,(void **)&st);
+			if (result) {
+				error::setErrorNumber(result);
+				return false;
+			}
 			if (status) {
 				*status=*st;
 			}
-			pvt->_needtojoin=false;
-			return true;
+		} else {
+			if (status) {
+				*status=0;
+			}
 		}
-		error::setErrorNumber(result);
-		return false;
+		pvt->_needtojoin=false;
+		return true;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		if (WaitForSingleObject(pvt->_thr,INFINITE)==WAIT_FAILED) {
-			return false;
-		}
-		DWORD	stat=0;
-		if (GetExitCodeThread(pvt->_thr,&stat)==FALSE) {
-			return false;
-		}
-		if (status) {
-			*status=(int32_t)stat;
+		if (pvt->_thr!=INVALID_HANDLE_VALUE) {
+			if (WaitForSingleObject(pvt->_thr,INFINITE)==
+							WAIT_FAILED) {
+				return false;
+			}
+			DWORD	stat=0;
+			if (GetExitCodeThread(pvt->_thr,&stat)==FALSE) {
+				return false;
+			}
+			if (status) {
+				*status=(int32_t)stat;
+			}
+		} else {
+			if (status) {
+				*status=0;
+			}
 		}
 		pvt->_needtojoin=false;
 		return true;
@@ -186,14 +206,16 @@ bool thread::detach() {
 	pvt->_needtojoin=false;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();
-		int	result=pthread_detach(pvt->_thr);
-		if (!result) {
-			return true;
+		if (pvt->_thr) {
+			int	result=pthread_detach(pvt->_thr);
+			if (result) {
+				error::setErrorNumber(result);
+				return false;
+			}
 		}
-		error::setErrorNumber(result);
-		return false;
+		return true;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		bool	result=true;(CloseHandle(pvt->_thr)==TRUE);
+		bool	result=true;
 		if (pvt->_thr!=INVALID_HANDLE_VALUE) {
 			result=(CloseHandle(pvt->_thr)==TRUE);
 		}
@@ -207,7 +229,10 @@ bool thread::detach() {
 
 bool thread::cancel() {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		return !pthread_cancel(pvt->_thr);
+		if (pvt->_thr) {
+			return !pthread_cancel(pvt->_thr);
+		}
+		return true;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		// FIXME: implement this for windows
 		RUDIMENTS_SET_ENOSYS
@@ -220,7 +245,10 @@ bool thread::cancel() {
 
 bool thread::raiseSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		return !pthread_kill(pvt->_thr,signum);
+		if (pvt->_thr) {
+			return !pthread_kill(pvt->_thr,signum);
+		}
+		return true;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		// FIXME: implement this for windows
 		RUDIMENTS_SET_ENOSYS
