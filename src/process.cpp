@@ -323,8 +323,9 @@ pid_t process::fork() {
 			result=::fork();
 
 			if (result==-1 && error::getErrorNumber()==EAGAIN) {
-				stdoutput.printf("fork: retry: %s\n",
-						error::getErrorString());
+				char	*err=error::getErrorString();
+				stdoutput.printf("fork: retry: %s\n",err);
+				delete[] err;
 				snooze::macrosnooze(1);
 				continue;
 			}

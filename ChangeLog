@@ -1,3 +1,6 @@
+0.53.2 - added pthread_create/EAGAIN retry
+	thread methods test for invalid thread before operating on it now
+
 0.53.1 - tweaked thread class to always create threads in detached mode
 	tweaked semaphore/shared memory destructors
 
