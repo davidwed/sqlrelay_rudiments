@@ -25,6 +25,7 @@
 	removed -revision during link and adopted Semantic Versioning 2.0
 	added pthread_create/EAGAIN retry
 	thread methods test for invalid thread before operating on it now
+	charstring::split doesn't crash if list or listlength are null now
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
