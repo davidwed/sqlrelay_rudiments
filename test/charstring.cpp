@@ -152,6 +152,14 @@ int main(int argc, const char **argv) {
 	}
 	delete[] list;
 
+	charstring::split("1.2.3.4.5.6",".",false,NULL,&listlength);
+	stdoutput.printf("1.2.3.4.5.6 with null list: ");
+	stdoutput.printf("%lld items\n",listlength);
+
+	charstring::split("1.2.3.4.5.6",".",false,NULL,NULL);
+	stdoutput.printf("1.2.3.4.5.6 with null list and listlength\n");
+
+
 	char	str[]="hello'\"\\hello'\"\\";
 	char	*escapedstr=charstring::escape(str,"\"'");
 	char	*unescapedstr=charstring::unescape(escapedstr);

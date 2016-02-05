@@ -1332,14 +1332,13 @@ void charstring::split(const char *string, ssize_t stringlength,
 				char ***list, uint64_t *listlength) {
 
 	// handle degenerate cases
+	if (!list && !listlength) {
+		return;
+	}
 	if (isNullOrEmpty(string) || !stringlength ||
 		isNullOrEmpty(delimiter) || !delimiterlength) {
-		if (list) {
-			(*list)=NULL;
-		}
-		if (listlength) {
-			(*listlength)=0;
-		}
+		(*list)=NULL;
+		(*listlength)=0;
 		return;
 	}
 
