@@ -784,6 +784,7 @@ dnl Checks for gss library.
 echo
 echo "***** GSS ********************"
 FW_CHECK_GSS
+AC_DEFINE(RUDIMENTS_HAS_SSPI,0,Rudiments supports SSPI)
 echo "******************************"
 
 

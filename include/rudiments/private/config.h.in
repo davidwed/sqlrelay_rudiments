@@ -118,6 +118,9 @@
 /* Rudiments supports SSL */
 #undef RUDIMENTS_HAS_SSL
 
+/* Rudiments supports SSPI */
+#undef RUDIMENTS_HAS_SSPI
+
 /* Rudiments supports threads */
 #undef RUDIMENTS_HAS_THREADS
 
