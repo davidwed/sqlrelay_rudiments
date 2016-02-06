@@ -16,7 +16,7 @@
 //#define DEBUG_GSS_SEND 1
 //#define DEBUG_GSS_RECEIVE 1
 
-#ifdef RUDIMENTS_HAS_GSS
+#if defined(RUDIMENTS_HAS_GSS)
 
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
 		// for gss_acquire_cred_with_password and gss_str_to_oid
@@ -53,6 +53,9 @@
 		#define GSS_C_NT_MACHINE_UID_NAME gss_nt_machine_uid_name
 		#define GSS_C_NT_STRING_UID_NAME gss_nt_string_uid_name
 	#endif
+
+#elif defined(RUDIMENTS_HAS_SSPI)
+
 #else
 	// for UINT_MAX
 	#ifdef RUDIMENTS_HAVE_LIMITS_H
@@ -87,7 +90,7 @@ const char * const *gss::getAvailableMechanisms() {
 
 	clear();
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
 			stdoutput.printf("Available Mechanisms {\n");
@@ -121,6 +124,9 @@ const char * const *gss::getAvailableMechanisms() {
 		#ifdef DEBUG_GSS
 			stdoutput.printf("}\n");
 		#endif
+
+	#elif defined(RUDIMENTS_HAS_SSPI)
+
 	#endif
 
 	return pvt->_mechs;
@@ -137,8 +143,10 @@ void gss::clear() {
 }
 
 bool gss::supportsGSS() {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		return true;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -150,8 +158,10 @@ class gssmechanismprivate {
 	private:
 		char	*_str;
 
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			gss_OID	_oid;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			void	*_oid;
 		#else
 			void	*_oid;
 		#endif
@@ -160,8 +170,10 @@ class gssmechanismprivate {
 gssmechanism::gssmechanism() {
 	pvt=new gssmechanismprivate;
 	pvt->_str=NULL;
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_oid=GSS_C_NO_OID;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_oid=NULL;
 	#else
 		pvt->_oid=NULL;
 	#endif
@@ -182,7 +194,7 @@ bool gssmechanism::initialize(const char *str) {
 
 	pvt->_str=charstring::duplicate(str);
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		gss_buffer_desc	mechbuffer;
 		mechbuffer.value=(void *)str;
 		mechbuffer.length=charstring::length(str);
@@ -191,6 +203,8 @@ bool gssmechanism::initialize(const char *str) {
 		OM_uint32		minor;
 		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
 		return (major==GSS_S_COMPLETE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -200,7 +214,7 @@ bool gssmechanism::initialize(const void *oid) {
 
 	clear();
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if ((gss_OID)oid==GSS_C_NO_OID) {
 			return true;
 		}
@@ -230,6 +244,8 @@ bool gssmechanism::initialize(const void *oid) {
 
 		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
 		return (major==GSS_S_COMPLETE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -237,12 +253,14 @@ bool gssmechanism::initialize(const void *oid) {
 
 void gssmechanism::clear() {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_oid!=GSS_C_NO_OID) {
 			OM_uint32	minor;
 			gss_release_oid(&minor,&pvt->_oid);
 		}
 		pvt->_oid=GSS_C_NO_OID;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_oid=NULL;
 	#else
 		pvt->_oid=NULL;
 	#endif
@@ -263,9 +281,12 @@ const void *gssmechanism::getObjectId() {
 class gsscredentialsprivate {
 	friend class gsscredentials;
 	private:
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			OM_uint32		_major;
 			OM_uint32		_minor;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			uint32_t		_major;
+			uint32_t		_minor;
 		#else
 			uint32_t		_major;
 			uint32_t		_minor;
@@ -275,20 +296,24 @@ class gsscredentialsprivate {
 
 		const char			*_name;
 
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			OM_uint32		_desiredlifetime;
 			OM_uint32		_actuallifetime;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			uint32_t		_desiredlifetime;
+			uint32_t		_actuallifetime;
 		#else
 			uint32_t		_desiredlifetime;
 			uint32_t		_actuallifetime;
 		#endif
 
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			gss_OID_set		_desiredmechanisms;
 			gss_OID_set		_actualmechanisms;
 
 			gss_cred_usage_t	_credusage;
 			gss_cred_id_t		_credentials;
+		#elif defined(RUDIMENTS_HAS_SSPI)
 		#endif
 
 		linkedlist< gssmechanism * >	_dmlist;
@@ -302,20 +327,24 @@ gsscredentials::gsscredentials() {
 	pvt->_minor=0;
 	pvt->_name=NULL;
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredlifetime=GSS_C_INDEFINITE;
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_desiredlifetime=UINT_MAX;
+		pvt->_actuallifetime=UINT_MAX;
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
 		pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 
 		pvt->_credusage=GSS_C_BOTH;
 		pvt->_credentials=GSS_C_NO_CREDENTIAL;
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 }
 
@@ -343,8 +372,12 @@ void gsscredentials::removeDesiredMechanism(gssmechanism *mech) {
 bool gsscredentials::inDesiredMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if (!mech || (gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
+			return false;
+		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		if (!mech || !mech->getObjectId()) {
 			return false;
 		}
 	#else
@@ -394,10 +427,12 @@ gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 }
 
 bool gsscredentials::acquireService(const char *name) {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_ACCEPT;
 		return acquire(name,charstring::length(name)+1,
 					NULL,GSS_C_NT_HOSTBASED_SERVICE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -405,10 +440,12 @@ bool gsscredentials::acquireService(const char *name) {
 
 bool gsscredentials::acquireUserName(const char *name,
 					const char *password) {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(name,charstring::length(name)+1,
 					password,GSS_C_NT_USER_NAME);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -416,10 +453,12 @@ bool gsscredentials::acquireUserName(const char *name,
 
 bool gsscredentials::acquireKerberosPrincipalName(const char *name,
 							const char *password) {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(name,charstring::length(name)+1,
 				password,(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -430,26 +469,32 @@ bool gsscredentials::acquireAnonymous() {
 		defined(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
 }
 
 bool gsscredentials::acquireUid(uid_t uid) {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(&uid,sizeof(uid_t),NULL,
 					GSS_C_NT_MACHINE_UID_NAME);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
 }
 
 bool gsscredentials::acquireUidString(const char *uid) {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(uid,charstring::length(uid)+1,
 					NULL,GSS_C_NT_STRING_UID_NAME);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -463,7 +508,7 @@ bool gsscredentials::acquire(const void *name,
 	// release any previously acquired credentials
 	release();
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
 			stdoutput.printf("acquire credentials\n(%s/%s/",
@@ -740,6 +785,9 @@ bool gsscredentials::acquire(const void *name,
 
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
+
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -748,21 +796,23 @@ bool gsscredentials::acquire(const void *name,
 void gsscredentials::release() {
 
 	// release the credentials
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		OM_uint32	minor;
 		gss_release_cred(&minor,&pvt->_credentials);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	// reset the name
 	pvt->_name=NULL;
 
 	// reset the "actuals"
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_actualmechanisms!=GSS_C_NO_OID_SET) {
 			OM_uint32	minor;
 			gss_release_oid_set(&minor,&pvt->_actualmechanisms);
 			pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
@@ -770,8 +820,10 @@ void gsscredentials::release() {
 		delete node->getValue();
 	}
 	pvt->_amlist.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_actuallifetime=UINT_MAX;
 	#else
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
@@ -788,8 +840,12 @@ uint32_t gsscredentials::getActualLifetime() {
 bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
+			return false;
+		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		if (!mech->getObjectId()) {
 			return false;
 		}
 	#else
@@ -799,14 +855,15 @@ bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 	#endif
 
 	// just return false for degenerate sets
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET) {
 			return false;
 		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	// look for the mech in the set
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		OM_uint32	major;
 		OM_uint32	minor;
 		int		present;
@@ -815,22 +872,26 @@ bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 						pvt->_actualmechanisms,
 						&present);
 		return (major==GSS_S_COMPLETE && present!=0);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
 }
 
 uint64_t gsscredentials::getActualMechanismCount() {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		return (pvt->_actualmechanisms==GSS_C_NO_OID_SET)?
 					0:pvt->_actualmechanisms->count;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return 0;
 	#else
 		return 0;
 	#endif
 }
 
 gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET ||
 				index>pvt->_actualmechanisms->count) {
 			return NULL;
@@ -839,14 +900,18 @@ gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {
 		mech->initialize(&pvt->_actualmechanisms->elements[index]);
 		pvt->_amlist.append(mech);
 		return mech;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return NULL;
 	#else
 		return NULL;
 	#endif
 }
 
 const void *gsscredentials::getCredentials() {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_credentials;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return NULL;
 	#else
 		return NULL;
 	#endif
@@ -863,52 +928,60 @@ uint32_t gsscredentials::getMinorStatus() {
 const char *gsscredentials::getStatus() {
 	pvt->_status.clear();
 	pvt->_status.append("GSS - major:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	pvt->_status.append("GSS - minor:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	pvt->_status.append("MECH - major:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	pvt->_status.append("MECH - minor:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getGSSMajorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getGSSMinorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getMechanismMajorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscredentials::getMechanismMinorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
@@ -916,7 +989,7 @@ const char *gsscredentials::getMechanismMinorStatus() {
 void gsscredentials::getStatus(uint32_t status, int32_t type,
 						stringbuffer *strb) {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		gss_buffer_desc	statusbuffer;
 
 		OM_uint32	msgctx=0;
@@ -940,6 +1013,7 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 
 			gss_release_buffer(&minor,&statusbuffer);
 		} while (msgctx);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 }
 
@@ -948,9 +1022,12 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 class gsscontextprivate {
 	friend class gsscontext;
 	private:
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			OM_uint32	_major;
 			OM_uint32	_minor;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			uint32_t	_major;
+			uint32_t	_minor;
 		#else
 			uint32_t	_major;
 			uint32_t	_minor;
@@ -962,9 +1039,12 @@ class gsscontextprivate {
 
 		filedescriptor		*_fd;
 
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			OM_uint32	_desiredlifetime;
 			OM_uint32	_actuallifetime;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			uint32_t	_desiredlifetime;
+			uint32_t	_actuallifetime;
 		#else
 			uint32_t	_desiredlifetime;
 			uint32_t	_actuallifetime;
@@ -973,9 +1053,12 @@ class gsscontextprivate {
 		gssmechanism		*_desiredmechanism;
 		gssmechanism		_actualmechanism;
 
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			OM_uint32	_desiredflags;
 			OM_uint32	_actualflags;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			uint32_t	_desiredflags;
+			uint32_t	_actualflags;
 		#else
 			uint32_t	_desiredflags;
 			uint32_t	_actualflags;
@@ -984,8 +1067,10 @@ class gsscontextprivate {
 		const char		*_service;
 		size_t			_servicelength;
 
-		#ifdef RUDIMENTS_HAS_GSS
+		#if defined(RUDIMENTS_HAS_GSS)
 			gss_ctx_id_t	_context;
+		#elif defined(RUDIMENTS_HAS_SSPI)
+			void		*_context;
 		#else
 			void		*_context;
 		#endif
@@ -1007,9 +1092,12 @@ gsscontext::gsscontext() {
 	pvt=new gsscontextprivate;
 	pvt->_credentials=NULL;
 	pvt->_fd=NULL;
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredlifetime=GSS_C_INDEFINITE;
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_desiredlifetime=UINT_MAX;
+		pvt->_actuallifetime=UINT_MAX;
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
 		pvt->_actuallifetime=UINT_MAX;
@@ -1019,8 +1107,10 @@ gsscontext::gsscontext() {
 	pvt->_actualflags=0;
 	pvt->_service=NULL;
 	pvt->_servicelength=0;
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_context=GSS_C_NO_CONTEXT;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_context=NULL;
 	#else
 		pvt->_context=NULL;
 	#endif
@@ -1088,9 +1178,11 @@ const char *gsscontext::getService() {
 }
 
 bool gsscontext::initiate() {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		return initiate(pvt->_service,pvt->_servicelength+1,
 						GSS_C_NT_HOSTBASED_SERVICE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -1103,7 +1195,7 @@ bool gsscontext::initiate(const void *name,
 	// release any previously initialized context
 	release();
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
 			stdoutput.write("initiate context...\n");
@@ -1253,6 +1345,9 @@ bool gsscontext::initiate(const void *name,
 
 		// populate actual mechanism
 		pvt->_actualmechanism.initialize(actualmechoid);
+
+	#elif defined(RUDIMENTS_HAS_SSPI)
+
 	#endif
 
 	// get additional info about the context
@@ -1316,7 +1411,7 @@ static void printFlags(OM_uint32 flags) {
 
 bool gsscontext::inquire() {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
 			stdoutput.write("inquire context - ");
@@ -1490,6 +1585,9 @@ bool gsscontext::inquire() {
 
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
+
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -1500,7 +1598,7 @@ bool gsscontext::accept() {
 	// release any previously accepted context
 	release();
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
 			stdoutput.write("accept context...\n");
@@ -1603,6 +1701,8 @@ bool gsscontext::accept() {
 			stdoutput.printf("success\n\n");
 		#endif
 
+	#elif defined(RUDIMENTS_HAS_SSPI)
+
 	#endif
 
 	// get additional info about the context
@@ -1611,13 +1711,14 @@ bool gsscontext::accept() {
 
 void gsscontext::release() {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		// delete the context
 		if (pvt->_context!=GSS_C_NO_CONTEXT) {
 			gss_delete_sec_context(
 				&pvt->_minor,&pvt->_context,GSS_C_NO_BUFFER);
 			// automatically sets pvt->_context to GSS_C_NO_CONTEXT
 		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	// reset initiator and acceptor names
@@ -1632,8 +1733,10 @@ void gsscontext::release() {
 	pvt->_acceptortype=NULL;
 
 	// reset the "actuals"
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_actuallifetime=UINT_MAX;
 	#else
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
@@ -1660,12 +1763,14 @@ uint32_t gsscontext::getActualFlags() {
 }
 
 uint32_t gsscontext::getRemainingLifetime() {
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		OM_uint32	remainingtime;
 		pvt->_major=gss_context_time(&pvt->_minor,
 						pvt->_context,
 						&remainingtime);
 		return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return 0;
 	#else
 		return 0;
 	#endif
@@ -1709,7 +1814,7 @@ bool gsscontext::wrap(const unsigned char *input,
 					size_t *outputsize,
 					bool *encryptionused) {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS_WRAP
 			stdoutput.printf("wrap(%d,",inputsize);
@@ -1774,6 +1879,7 @@ bool gsscontext::wrap(const unsigned char *input,
 
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	return false;
@@ -1792,7 +1898,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 					size_t *outputsize,
 					bool *decryptionused) {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// configure input buffer
 		gss_buffer_desc	inputbuffer;
@@ -1850,6 +1956,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	return false;
@@ -1860,7 +1967,7 @@ bool gsscontext::getMic(const unsigned char *message,
 					unsigned char **mic,
 					size_t *micsize) {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// configure message buffer
 		gss_buffer_desc	messagebuffer;
@@ -1899,6 +2006,7 @@ bool gsscontext::getMic(const unsigned char *message,
 
 		// FIXME: are there cases where micbuffer
 		// should be cleaned up here too?
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	return false;
@@ -1909,7 +2017,7 @@ bool gsscontext::verifyMic(const unsigned char *message,
 					const unsigned char *mic,
 					size_t micsize) {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// configure message buffer
 		gss_buffer_desc	messagebuffer;
@@ -1930,6 +2038,8 @@ bool gsscontext::verifyMic(const unsigned char *message,
 
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return false;
 	#else
 		return false;
 	#endif
@@ -2195,43 +2305,49 @@ uint32_t gsscontext::getMinorStatus() {
 const char *gsscontext::getStatus() {
 	pvt->_status.clear();
 	pvt->_status.append("GSS - major:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	pvt->_status.append("GSS - minor:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	pvt->_status.append("MECH - major:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	pvt->_status.append("MECH - minor:\n");
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscontext::getGSSMajorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscontext::getGSSMinorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 const char *gsscontext::getMechanismMajorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
 	#endif
 	return pvt->_status.getString();
@@ -2239,15 +2355,16 @@ const char *gsscontext::getMechanismMajorStatus() {
 
 const char *gsscontext::getMechanismMinorStatus() {
 	pvt->_status.clear();
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
 
 void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 
-	#ifdef RUDIMENTS_HAS_GSS
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		gss_buffer_desc	statusbuffer;
 
@@ -2272,5 +2389,6 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 
 			gss_release_buffer(&minor,&statusbuffer);
 		} while (msgctx);
+	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 }
