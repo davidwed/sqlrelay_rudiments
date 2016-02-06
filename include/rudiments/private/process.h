@@ -13,3 +13,4 @@
 		static	signalhandler	_crashhandler;
 		static	void		(*_shutdownfunc)(int32_t);
 		static	void		(*_crashfunc)(int32_t);
+		static	bool		_retry;

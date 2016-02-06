@@ -62,6 +62,8 @@ signalhandler	process::_crashhandler;
 void		(*process::_shutdownfunc)(int32_t);
 void		(*process::_crashfunc)(int32_t);
 
+bool		process::_retry=true;
+
 pid_t process::getProcessId() {
 	#if defined(RUDIMENTS_HAVE_GETCURRENTPROCESSID)
 		return GetCurrentProcessId();
@@ -321,15 +323,11 @@ pid_t process::fork() {
 		error::clearError();
 		do {
 			result=::fork();
-
-			if (result==-1 && error::getErrorNumber()==EAGAIN) {
-				char	*err=error::getErrorString();
-				stdoutput.printf("fork: retry: %s\n",err);
-				delete[] err;
+			if (result==-1 &&
+				error::getErrorNumber()==EAGAIN && _retry) {
 				snooze::macrosnooze(1);
 				continue;
 			}
-
 		} while (result==-1 && error::getErrorNumber()==EINTR);
 		return result;
 	#else
@@ -773,4 +771,16 @@ bool process::supportsGetChildStateChange() {
 	#else
 		return true;
 	#endif
+}
+
+void process::retryFailedFork() {
+	_retry=true;
+}
+
+void process::dontRetryFailedFork() {
+	_retry=false;
+}
+
+bool process::getRetryFailedFork() {
+	return _retry;
 }

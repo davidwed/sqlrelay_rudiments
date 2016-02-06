@@ -320,6 +320,23 @@ class RUDIMENTS_DLLSPEC process {
 		 *  process to exit or change state and false otherwise. */
 		static bool	supportsGetChildStateChange();
 
+		/** Causes fork() calls to be automatically retried if they
+		 *  fail because of insufficient system resources.  This
+		 *  is the default behavior.  Otherwise, if a fork() fails,
+		 *  the system error is set to EAGAIN and the fork() must
+		 *  be retried by the calling program. */
+		void	retryFailedFork();
+
+		/** Causes fork() calls not to be automatically retried if
+ 		 *  they fail because of insufficient system resources.  If
+ 		 *  set, if a fork() fails, the system error is set to EAGAIN
+ 		 *  and the fork() must be retried by the calling program. */
+		void	dontRetryFailedFork();
+
+		/** Returns true if failed fork() calls will be retried and
+		 *  false otherwise. */
+		bool	getRetryFailedFork();
+
 	#include <rudiments/private/process.h>
 };
 

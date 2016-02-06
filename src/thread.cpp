@@ -34,6 +34,7 @@ class threadprivate {
 		void		*(*_function)(void *);
 		void		*_arg;
 		bool		_needtojoin;
+		bool		_retry;
 };
 
 thread::thread() {
@@ -48,6 +49,7 @@ thread::thread() {
 	pvt->_function=NULL;
 	pvt->_arg=NULL;
 	pvt->_needtojoin=false;
+	pvt->_retry=true;
 }
 
 thread::~thread() {
@@ -124,7 +126,7 @@ bool thread::run() {
 				return true;
 			}
 			snooze::macrosnooze(1);
-		} while (result==EAGAIN);
+		} while (result==EAGAIN && pvt->_retry);
 		pvt->_thr=0;
 		error::setErrorNumber(result);
 		return false;
@@ -266,4 +268,16 @@ bool thread::supportsThreads() {
 	#else
 		return false;
 	#endif
+}
+
+void thread::retryFailedRun() {
+	pvt->_retry=true;
+}
+
+void thread::dontRetryFailedRun() {
+	pvt->_retry=false;
+}
+
+bool thread::getRetryFailedRun() {
+	return pvt->_retry;
 }

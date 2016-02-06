@@ -73,6 +73,23 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  was built with thread support and false otherwise. */
 		static bool	supportsThreads();
 
+		/** Causes run() calls to be automatically retried if they
+		 *  fail because of insufficient system resources.  This
+		 *  is the default behavior.  Otherwise, if a run() fails,
+		 *  the system error is set to EAGAIN and the run() must
+		 *  be retried by the calling program. */
+		void	retryFailedRun();
+
+		/** Causes run() calls not to be automatically retried if
+ 		 *  they fail because of insufficient system resources.  If
+ 		 *  set, if a run() fails, the system error is set to EAGAIN
+ 		 *  and the run() must be retried by the calling program. */
+		void	dontRetryFailedRun();
+
+		/** Returns true if failed run() calls will be retried and
+		 *  false otherwise. */
+		bool	getRetryFailedRun();
+
 	#include <rudiments/private/thread.h>
 };
 
