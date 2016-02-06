@@ -54,8 +54,6 @@
 		#define GSS_C_NT_STRING_UID_NAME gss_nt_string_uid_name
 	#endif
 
-#elif defined(RUDIMENTS_HAS_SSPI)
-
 #else
 	// for UINT_MAX
 	#ifdef RUDIMENTS_HAVE_LIMITS_H
