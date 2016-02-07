@@ -54,6 +54,17 @@
 		#define GSS_C_NT_STRING_UID_NAME gss_nt_string_uid_name
 	#endif
 
+#elif defined(RUDIMENTS_HAS_SSPI)
+
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#define SECURITY_WIN32
+	#include <security.h>
+
+	#define SSPI_PACKAGE_NAME	TEXT("Negotiate")
+	#define SSPI_ERROR(sstatus)	((sstatus)<0)
+
 #else
 	// for UINT_MAX
 	#ifdef RUDIMENTS_HAVE_LIMITS_H
@@ -125,6 +136,8 @@ const char * const *gss::getAvailableMechanisms() {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
+		// FIXME: does SSPI even support mechs?
+
 	#endif
 
 	return pvt->_mechs;
@@ -144,7 +157,7 @@ bool gss::supportsGSS() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return true;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		return true;
 	#else
 		return false;
 	#endif
@@ -158,8 +171,6 @@ class gssmechanismprivate {
 
 		#if defined(RUDIMENTS_HAS_GSS)
 			gss_OID	_oid;
-		#elif defined(RUDIMENTS_HAS_SSPI)
-			void	*_oid;
 		#else
 			void	*_oid;
 		#endif
@@ -170,8 +181,6 @@ gssmechanism::gssmechanism() {
 	pvt->_str=NULL;
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_oid=GSS_C_NO_OID;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_oid=NULL;
 	#else
 		pvt->_oid=NULL;
 	#endif
@@ -202,7 +211,7 @@ bool gssmechanism::initialize(const char *str) {
 		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
 		return (major==GSS_S_COMPLETE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		return true;
 	#else
 		return false;
 	#endif
@@ -257,8 +266,6 @@ void gssmechanism::clear() {
 			gss_release_oid(&minor,&pvt->_oid);
 		}
 		pvt->_oid=GSS_C_NO_OID;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_oid=NULL;
 	#else
 		pvt->_oid=NULL;
 	#endif
@@ -283,8 +290,7 @@ class gsscredentialsprivate {
 			OM_uint32		_major;
 			OM_uint32		_minor;
 		#elif defined(RUDIMENTS_HAS_SSPI)
-			uint32_t		_major;
-			uint32_t		_minor;
+			SECURITY_STATUS		_sstatus;
 		#else
 			uint32_t		_major;
 			uint32_t		_minor;
@@ -298,8 +304,7 @@ class gsscredentialsprivate {
 			OM_uint32		_desiredlifetime;
 			OM_uint32		_actuallifetime;
 		#elif defined(RUDIMENTS_HAS_SSPI)
-			uint32_t		_desiredlifetime;
-			uint32_t		_actuallifetime;
+			TimeStamp		_actuallifetime;
 		#else
 			uint32_t		_desiredlifetime;
 			uint32_t		_actuallifetime;
@@ -312,6 +317,8 @@ class gsscredentialsprivate {
 			gss_cred_usage_t	_credusage;
 			gss_cred_id_t		_credentials;
 		#elif defined(RUDIMENTS_HAS_SSPI)
+			ULONG			_credusage;
+			CredHandle		_credentials;
 		#endif
 
 		linkedlist< gssmechanism * >	_dmlist;
@@ -321,16 +328,20 @@ class gsscredentialsprivate {
 gsscredentials::gsscredentials() {
 	pvt=new gsscredentialsprivate;
 
-	pvt->_major=0;
-	pvt->_minor=0;
+	#if defined(RUDIMENTS_HAS_SSPI)
+		pvt->_sstatus=0;
+	#else
+		pvt->_major=0;
+		pvt->_minor=0;
+	#endif
+
 	pvt->_name=NULL;
 
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredlifetime=GSS_C_INDEFINITE;
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_desiredlifetime=UINT_MAX;
-		pvt->_actuallifetime=UINT_MAX;
+		// FIXME: how to set TimeStamp (FILETIME) to max?
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
 		pvt->_actuallifetime=UINT_MAX;
@@ -343,6 +354,7 @@ gsscredentials::gsscredentials() {
 		pvt->_credusage=GSS_C_BOTH;
 		pvt->_credentials=GSS_C_NO_CREDENTIAL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_credusage=SECPKG_CRED_BOTH;
 	#endif
 }
 
@@ -352,11 +364,24 @@ gsscredentials::~gsscredentials() {
 }
 
 void gsscredentials::setDesiredLifetime(uint32_t desiredlifetime) {
-	pvt->_desiredlifetime=desiredlifetime;
+	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_desiredlifetime=desiredlifetime;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// do nothing...
+	#else
+		pvt->_desiredlifetime=desiredlifetime;
+	#endif
 }
 
 uint32_t gsscredentials::getDesiredLifetime() {
-	return pvt->_desiredlifetime;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_desiredlifetime;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: convert TimeStamp to uint32_t
+		return 0;
+	#else
+		return pvt->_desiredlifetime;
+	#endif
 }
 
 void gsscredentials::addDesiredMechanism(gssmechanism *mech) {
@@ -430,7 +455,8 @@ bool gsscredentials::acquireService(const char *name) {
 		return acquire(name,charstring::length(name)+1,
 					NULL,GSS_C_NT_HOSTBASED_SERVICE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		pvt->_credusage=SECPKG_CRED_INBOUND;
+		return acquire(name,0,NULL,NULL);
 	#else
 		return false;
 	#endif
@@ -443,7 +469,8 @@ bool gsscredentials::acquireUserName(const char *name,
 		return acquire(name,charstring::length(name)+1,
 					password,GSS_C_NT_USER_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		pvt->_credusage=SECPKG_CRED_OUTBOUND;
+		return acquire(name,0,password,NULL);
 	#else
 		return false;
 	#endif
@@ -456,7 +483,8 @@ bool gsscredentials::acquireKerberosPrincipalName(const char *name,
 		return acquire(name,charstring::length(name)+1,
 				password,(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		pvt->_credusage=SECPKG_CRED_OUTBOUND;
+		return acquire(name,0,password,NULL);
 	#else
 		return false;
 	#endif
@@ -468,7 +496,8 @@ bool gsscredentials::acquireAnonymous() {
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		pvt->_credusage=SECPKG_CRED_OUTBOUND;
+		return acquire(NULL,0,NULL,NULL);
 	#else
 		return false;
 	#endif
@@ -480,6 +509,7 @@ bool gsscredentials::acquireUid(uid_t uid) {
 		return acquire(&uid,sizeof(uid_t),NULL,
 					GSS_C_NT_MACHINE_UID_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: get user name from uid?
 		return false;
 	#else
 		return false;
@@ -492,7 +522,8 @@ bool gsscredentials::acquireUidString(const char *uid) {
 		return acquire(uid,charstring::length(uid)+1,
 					NULL,GSS_C_NT_STRING_UID_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		pvt->_credusage=SECPKG_CRED_OUTBOUND;
+		return acquire(uid,0,NULL,NULL);
 	#else
 		return false;
 	#endif
@@ -785,7 +816,81 @@ bool gsscredentials::acquire(const void *name,
 		return (pvt->_major==GSS_S_COMPLETE);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+
+		#ifdef DEBUG_GSS
+			stdoutput.printf("acquire credentials\n(%s/%s/",
+					name,(password)?password:"(none)");
+			if (pvt->_credusage==SECPKG_CRED_INBOUND) {
+				stdoutput.write("inbound");
+			} else if (pvt->_credusage==SECPKG_CRED_OUTBOUND) {
+				stdoutput.write("outbound");
+			} else {
+				stdoutput.write("both");
+			}
+			stdoutput.write(") - ");
+		#endif
+
+		// keep track of the name
+		pvt->_name=(const char *)name;
+
+		// degenerate case
+		if (!name && !password) {
+			pvt->_sstatus=SEC_E_OK;
+			#ifdef DEBUG_GSS
+				stdoutput.write("success (no credentials)\n\n");
+			#endif
+			return true;
+		}
+
+		// acquire the credentials associated with the name...
+		pvt->_sstatus=AcquireCredentialsHandle(
+						(LPSTR)name,
+						SSPI_PACKAGE_NAME,
+						pvt->_credusage,
+						NULL,
+						NULL,
+						NULL,
+						NULL,
+						&pvt->_credentials,
+						&pvt->_actuallifetime);
+
+		#ifdef DEBUG_GSS
+		if (!SSPI_ERROR(pvt->_sstatus)) {
+			stdoutput.write("success...\n\n");
+			stdoutput.write("Credentials {\n");
+			stdoutput.printf("  name: %s\n",pvt->_name);
+			stdoutput.printf("  desired lifetime: %d\n",
+						pvt->_desiredlifetime);
+			stdoutput.printf("  actual lifetime: %d\n",
+						pvt->_actuallifetime);
+			stdoutput.write("  desired mechanisms:\n");
+			for (linkedlistnode< gssmechanism * > *node=
+						pvt->_dmlist.getFirst();
+						node; node=node->getNext()) {
+				stdoutput.printf("    %s\n",
+					node->getValue()->getString());
+			}
+			stdoutput.write("  actual mechanisms:\n");
+			for (linkedlistnode< gssmechanism * > *node=
+						pvt->_amlist.getFirst();
+						node; node=node->getNext()) {
+				stdoutput.printf("    %s\n",
+					node->getValue()->getString());
+			}
+			stdoutput.write("  credentials usage: ");
+			if (pvt->_credusage==SECPKG_CRED_BOTH) {
+				stdoutput.write("both\n");
+			} else if (pvt->_credusage==SECPKG_CRED_OUTBOUND) {
+				stdoutput.write("initiate\n");
+			} else if (pvt->_credusage==SECPKG_CRED_INBOUND) {
+				stdoutput.write("accept\n");
+			}
+			stdoutput.write("}\n");
+		}
+		#endif
+
+		// return success/failure
+		return !SSPI_ERROR(pvt->_sstatus);
 	#else
 		return false;
 	#endif
@@ -798,6 +903,7 @@ void gsscredentials::release() {
 		OM_uint32	minor;
 		gss_release_cred(&minor,&pvt->_credentials);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		FreeCredentialHandle(&pvt->_credentials);
 	#endif
 
 	// reset the name
@@ -810,7 +916,6 @@ void gsscredentials::release() {
 			gss_release_oid_set(&minor,&pvt->_actualmechanisms);
 			pvt->_actualmechanisms=GSS_C_NO_OID_SET;
 		}
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_amlist.getFirst();
@@ -821,7 +926,7 @@ void gsscredentials::release() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_actuallifetime=UINT_MAX;
+		// FIXME: how to set TimeStamp (FILETIME) to max?
 	#else
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
@@ -832,7 +937,14 @@ const char *gsscredentials::getName() {
 }
 
 uint32_t gsscredentials::getActualLifetime() {
-	return pvt->_actuallifetime;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_actuallifetime;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: convert TimeStamp to uint32_t
+		return 0;
+	#else
+		return pvt->_actuallifetime;
+	#endif
 }
 
 bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
@@ -843,9 +955,7 @@ bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 			return false;
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		if (!mech->getObjectId()) {
-			return false;
-		}
+		// do nothing...
 	#else
 		if (!mech->getObjectId()) {
 			return false;
@@ -857,7 +967,6 @@ bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET) {
 			return false;
 		}
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 
 	// look for the mech in the set
@@ -909,41 +1018,46 @@ const void *gsscredentials::getCredentials() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_credentials;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return NULL;
+		return &pvt->_credentials;
 	#else
 		return NULL;
 	#endif
 }
 
 uint32_t gsscredentials::getMajorStatus() {
-	return pvt->_major;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_major;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return pvt->_sstatus;
+	#else
+		return 0;
+	#endif
 }
 
 uint32_t gsscredentials::getMinorStatus() {
-	return pvt->_minor;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_minor;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return 0;
+	#else
+		return 0;
+	#endif
 }
 
 const char *gsscredentials::getStatus() {
 	pvt->_status.clear();
-	pvt->_status.append("GSS - major:\n");
 	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("GSS - major:\n");
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
-	pvt->_status.append("GSS - minor:\n");
-	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("GSS - minor:\n");
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
-	pvt->_status.append("MECH - major:\n");
-	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("MECH - major:\n");
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
-	pvt->_status.append("MECH - minor:\n");
-	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("MECH - minor:\n");
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_status.append("SSPI - status:\n");
+		getStatus(pvt->_sstatus,0,&pvt->_status);
 	#endif
 	return pvt->_status.getString();
 }
@@ -953,6 +1067,7 @@ const char *gsscredentials::getGSSMajorStatus() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		getStatus(pvt->_sstatus,0,&pvt->_status);
 	#endif
 	return pvt->_status.getString();
 }
@@ -961,7 +1076,6 @@ const char *gsscredentials::getGSSMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
@@ -970,7 +1084,6 @@ const char *gsscredentials::getMechanismMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
@@ -979,7 +1092,6 @@ const char *gsscredentials::getMechanismMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
@@ -1011,7 +1123,57 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 
 			gss_release_buffer(&minor,&statusbuffer);
 		} while (msgctx);
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		const char	*str="";
+		switch (status) {
+			case SEC_E_INSUFFICIENT_MEMORY:
+				str="SEC_E_INSUFFICIENT_MEMORY";
+			case SEC_E_INVALID_HANDLE:
+				str="SEC_E_INVALID_HANDLE";
+			case SEC_E_UNSUPPORTED_FUNCTION:
+				str="SEC_E_UNSUPPORTED_FUNCTION";
+			case SEC_E_TARGET_UNKNOWN:
+				str="SEC_E_TARGET_UNKNOWN";
+			case SEC_E_INTERNAL_ERROR:
+				str="SEC_E_INTERNAL_ERROR";
+			case SEC_E_SECPKG_NOT_FOUND:
+				str="SEC_E_SECPKG_NOT_FOUND";
+			case SEC_E_NOT_OWNER:
+				str="SEC_E_NOT_OWNER";
+			case SEC_E_CANNOT_INSTALL:
+				str="SEC_E_CANNOT_INSTALL";
+			case SEC_E_INVALID_TOKEN:
+				str="SEC_E_INVALID_TOKEN";
+			case SEC_E_CANNOT_PACK:
+				str="SEC_E_CANNOT_PACK";
+			case SEC_E_QOP_NOT_SUPPORTED:
+				str="SEC_E_QOP_NOT_SUPPORTED";
+			case SEC_E_NO_IMPERSONATION:
+				str="SEC_E_NO_IMPERSONATION";
+			case SEC_E_LOGON_DENIED:
+				str="SEC_E_LOGON_DENIED";
+			case SEC_E_UNKNOWN_CREDENTIALS:
+				str="SEC_E_UNKNOWN_CREDENTIALS";
+			case SEC_E_NO_CREDENTIALS:
+				str="SEC_E_NO_CREDENTIALS";
+			case SEC_E_MESSAGE_ALTERED:
+				str="SEC_E_MESSAGE_ALTERED";
+			case SEC_E_OUT_OF_SEQUENCE:
+				str="SEC_E_OUT_OF_SEQUENCE";
+			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
+				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
+			case SEC_E_CONTEXT_EXPIRED:
+				str="SEC_E_CONTEXT_EXPIRED";
+			case SEC_E_INCOMPLETE_MESSAGE:
+				str="SEC_E_INCOMPLETE_MESSAGE";
+			case SEC_E_OK:
+				str="SEC_E_OK";
+			default:
+				str="";
+		}
+		strb->append(str)->append("\n");
 	#endif
 }
 
@@ -1024,8 +1186,7 @@ class gsscontextprivate {
 			OM_uint32	_major;
 			OM_uint32	_minor;
 		#elif defined(RUDIMENTS_HAS_SSPI)
-			uint32_t	_major;
-			uint32_t	_minor;
+			SECURITY_STATUS	_sstatus;
 		#else
 			uint32_t	_major;
 			uint32_t	_minor;
@@ -1041,8 +1202,11 @@ class gsscontextprivate {
 			OM_uint32	_desiredlifetime;
 			OM_uint32	_actuallifetime;
 		#elif defined(RUDIMENTS_HAS_SSPI)
-			uint32_t	_desiredlifetime;
-			uint32_t	_actuallifetime;
+			TimeStamp	_actuallifetime;
+			DWORD		_maxmsgsize;
+			DWORD		_trailersize;
+			DWORD		_blksize;
+			bool		_kerberos;
 		#else
 			uint32_t	_desiredlifetime;
 			uint32_t	_actuallifetime;
@@ -1055,8 +1219,8 @@ class gsscontextprivate {
 			OM_uint32	_desiredflags;
 			OM_uint32	_actualflags;
 		#elif defined(RUDIMENTS_HAS_SSPI)
-			uint32_t	_desiredflags;
-			uint32_t	_actualflags;
+			ULONG		_desiredflags;
+			ULONG		_actualflags;
 		#else
 			uint32_t	_desiredflags;
 			uint32_t	_actualflags;
@@ -1068,7 +1232,7 @@ class gsscontextprivate {
 		#if defined(RUDIMENTS_HAS_GSS)
 			gss_ctx_id_t	_context;
 		#elif defined(RUDIMENTS_HAS_SSPI)
-			void		*_context;
+			_SecHandle 	_context;
 		#else
 			void		*_context;
 		#endif
@@ -1094,8 +1258,11 @@ gsscontext::gsscontext() {
 		pvt->_desiredlifetime=GSS_C_INDEFINITE;
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_desiredlifetime=UINT_MAX;
-		pvt->_actuallifetime=UINT_MAX;
+		// FIXME: how to set TimeStamp (FILETIME) to max?
+		pvt->_maxmsgsize=0;
+		pvt->_trailersize=0;
+		pvt->_blksize=0;
+		pvt->_kerberos=false;
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
 		pvt->_actuallifetime=UINT_MAX;
@@ -1108,9 +1275,7 @@ gsscontext::gsscontext() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_context=GSS_C_NO_CONTEXT;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_context=NULL;
-	#else
-		pvt->_context=NULL;
+		bytestring::zero(&pvt->_context,sizeof(pvt->_context));
 	#endif
 	pvt->_initiator=NULL;
 	pvt->_initiatortype=NULL;
@@ -1143,11 +1308,24 @@ filedescriptor *gsscontext::getFileDescriptor() {
 }
 
 void gsscontext::setDesiredLifetime(uint32_t desiredlifetime) {
-	pvt->_desiredlifetime=desiredlifetime;
+	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_desiredlifetime=desiredlifetime;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// do nothing...
+	#else
+		pvt->_desiredlifetime=desiredlifetime;
+	#endif
 }
 
 uint32_t gsscontext::getDesiredLifetime() {
-	return pvt->_desiredlifetime;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_desiredlifetime;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: convert TimeStamp to uint32_t
+		return 0;
+	#else
+		return pvt->_desiredlifetime;
+	#endif
 }
 
 void gsscontext::setDesiredMechanism(gssmechanism *desiredmechanism) {
@@ -1180,10 +1358,37 @@ bool gsscontext::initiate() {
 		return initiate(pvt->_service,pvt->_servicelength+1,
 						GSS_C_NT_HOSTBASED_SERVICE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		return initiate(pvt->_service,0,NULL);
 	#else
 		return false;
 	#endif
+}
+
+bool gsscontext::getMaxMessageSize() {
+
+	#if defined(RUDIMENTS_HAS_SSPI)
+		if (!pvt->_maxmsgsize) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("get max message size...\n");
+			#endif
+			PSecPkgInfo	pkginfo;
+			pvt->_sstatus=QuerySecurityPackageInfo(
+						SSPI_PACKAGE_NAME,&pkginfo);
+			if (SSPI_ERROR(pvt->_sstatus))	{
+				#ifdef DEBUG_GSS
+					stdoutput.printf(
+						"failed "
+						"(QuerySecurityPackageInfo)"
+						"\n%s\n",
+						getStatus());
+				#endif
+				return false;
+			}
+			pvt->_maxmsgsize=pkginfo->cbMaxToken;
+			FreeContextBuffer(pkginfo);
+		}
+	#endif
+	return true;
 }
 
 bool gsscontext::initiate(const void *name,
@@ -1346,6 +1551,156 @@ bool gsscontext::initiate(const void *name,
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
+		// get maxiumum message size
+		if (!getMaxMessageSize()) {
+			return false;
+		}
+
+		// initiate the context...
+		#ifdef DEBUG_GSS
+			stdoutput.write("initiate context...\n");
+		#endif
+
+		// input buffer
+		BYTE	*inbuf=NULL;
+		DWORD	inbufsize=0;
+
+		SecBuffer         insecbuf;
+		insecbuf.BufferType=SECBUFFER_TOKEN;
+
+		SecBufferDesc     insecbufdesc;
+		insecbufdesc.ulVersion=0;
+		insecbufdesc.cBuffers=1;
+		insecbufdesc.pBuffers=&insecbuf;
+
+		// output buffer
+		BYTE	*outbuf=new BYTE[pvt->_maxmsgsize];
+		DWORD	outbufsize=pvt->_maxmsgsize;
+
+		SecBuffer         outsecbuf;
+		outsecbuf.BufferType=SECBUFFER_TOKEN;
+		outsecbuf.pvBuffer=outbuf;
+
+		SecBufferDesc     outsecbufdesc;
+		outsecbufdesc.ulVersion=0;
+		outsecbufdesc.cBuffers=1;
+		outsecbufdesc.pBuffers=&outsecbuf;
+
+		// get credentials
+		CredHandle	*credentials=
+			(CredHandle *)(pvt->_credentials->getCredentials());
+
+		bool	done=false;
+		while (!done) {
+
+			outsecbuf.cbBuffer=outbufsize;
+
+			if (inbuf) {
+				insecbuf.cbBuffer=inbufsize;
+				insecbuf.pvBuffer=inbuf;
+			}
+
+			// FIXME: should desiredflags always include
+			// ISC_REQ_CONFIDENTIALITY?
+
+			// attempt to init the context
+			pvt->_sstatus=InitializeSecurityContext(
+						credentials,
+						(inbuf)?&pvt->_context:NULL,
+						(SEC_CHAR *)name,
+						pvt->_desiredflags,
+						0,
+						SECURITY_NETWORK_DREP,
+						(inbuf)?&insecbufdesc:NULL,
+						0,
+						&pvt->_context,
+						&outsecbufdesc,
+						&pvt->_actualflags,
+						&pvt->_actuallifetime);
+
+			// bail on error
+			if (SSPI_ERROR(pvt->_sstatus)) {
+				#ifdef DEBUG_GSS
+					stdoutput.printf(
+						"failed "
+						"(InitializeSecurityContext)"
+						"\n%s\n",
+						getStatus());
+				#endif
+				release();
+				break;
+			}
+
+			// complete the token, if needed
+			if (pvt->_sstatus==SEC_I_COMPLETE_NEEDED ||
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
+
+				pvt->_sstatus=CompleteAuthToken(
+						&pvt->_context,&outsecbufdesc);
+
+				if (SSPI_ERROR(pvt->_sstatus)) {
+					#ifdef DEBUG_GSS
+						stdoutput.printf(
+							"failed "
+							"(CompleteAuthToken)"
+							"\n%s\n",
+							getStatus());
+					#endif
+					release();
+					break;
+				}
+			}
+
+			// are we done?
+			done=!(pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
+
+			// send token to peer, if necessary
+			outbufsize=outsecbuf.cbBuffer;
+			if (outbufsize) {
+				if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
+						outbuf,outbufsize)!=
+						(ssize_t)outbufsize) {
+					#ifdef DEBUG_GSS
+						stdoutput.write(
+							"failed (send)\n\n");
+					#endif
+					release();
+					break;
+				}
+			}
+
+			// receive token from peer, if necessary
+			if (!done) {
+				void	*inbuftemp;
+				size_t	inbufsizetemp;
+				uint32_t	flags=0;
+				ssize_t		result=
+					receiveToken(&flags,
+							&inbuftemp,
+							&inbufsizetemp);
+				inbuf=(BYTE *)inbuftemp;
+				inbufsize=inbufsizetemp;
+				if (result<=0 ||
+					flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+					#ifdef DEBUG_GSS
+						stdoutput.write(
+							"failed (receive)\n\n");
+					#endif
+					release();
+					break;
+				}
+				outbufsize=pvt->_maxmsgsize;
+			}
+		}
+
+		// clean up
+		delete[] inbuf;
+		delete[] outbuf;
+
+		#ifdef DEBUG_GSS
+			stdoutput.write("success\n\n");
+		#endif
 	#endif
 
 	// get additional info about the context
@@ -1354,66 +1709,82 @@ bool gsscontext::initiate(const void *name,
 
 #ifdef DEBUG_GSS
 static void printFlags(OM_uint32 flags) {
-	#ifdef GSS_C_DELEG_FLAG
-		if (flags&GSS_C_DELEG_FLAG) {
-			stdoutput.printf("    GSS_C_DELEG_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_MUTUAL_FLAG
-		if (flags&GSS_C_MUTUAL_FLAG) {
-			stdoutput.printf("    GSS_C_MUTUAL_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_REPLAY_FLAG
-		if (flags&GSS_C_REPLAY_FLAG) {
-			stdoutput.printf("    GSS_C_REPLAY_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_SEQUENCE_FLAG
-		if (flags&GSS_C_SEQUENCE_FLAG) {
-			stdoutput.printf("    GSS_C_SEQUENCE_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_CONF_FLAG
-		if (flags&GSS_C_CONF_FLAG) {
-			stdoutput.printf("    GSS_C_CONF_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_INTEG_FLAG
-		if (flags&GSS_C_INTEG_FLAG) {
-			stdoutput.printf("    GSS_C_INTEG_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_ANON_FLAG
-		if (flags&GSS_C_ANON_FLAG) {
-			stdoutput.printf("    GSS_C_ANON_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_PROT_READY_FLAG
-		if (flags&GSS_C_PROT_READY_FLAG) {
-			stdoutput.printf("    GSS_C_PROT_READY_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_TRANS_FLAG
-		if (flags&GSS_C_TRANS_FLAG) {
-			stdoutput.printf("    GSS_C_TRANS_FLAG\n");
-		}
-	#endif
-	#ifdef GSS_C_DELEG_POLICY_FLAG
-		if (flags&GSS_C_DELEG_POLICY_FLAG) {
-			stdoutput.printf("    GSS_C_DELEG_POLICY_FLAG\n");
-		}
+	#if defined(RUDIMENTS_HAS_GSS)
+		#ifdef GSS_C_DELEG_FLAG
+			if (flags&GSS_C_DELEG_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_DELEG_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_MUTUAL_FLAG
+			if (flags&GSS_C_MUTUAL_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_MUTUAL_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_REPLAY_FLAG
+			if (flags&GSS_C_REPLAY_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_REPLAY_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_SEQUENCE_FLAG
+			if (flags&GSS_C_SEQUENCE_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_SEQUENCE_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_CONF_FLAG
+			if (flags&GSS_C_CONF_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_CONF_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_INTEG_FLAG
+			if (flags&GSS_C_INTEG_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_INTEG_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_ANON_FLAG
+			if (flags&GSS_C_ANON_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_ANON_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_PROT_READY_FLAG
+			if (flags&GSS_C_PROT_READY_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_PROT_READY_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_TRANS_FLAG
+			if (flags&GSS_C_TRANS_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_TRANS_FLAG\n");
+			}
+		#endif
+		#ifdef GSS_C_DELEG_POLICY_FLAG
+			if (flags&GSS_C_DELEG_POLICY_FLAG) {
+				stdoutput.printf(
+					"    GSS_C_DELEG_POLICY_FLAG\n");
+			}
+		#endif
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: implement this
 	#endif
 }
 #endif
 
 bool gsscontext::inquire() {
 
-	#if defined(RUDIMENTS_HAS_GSS)
+	bool	retval=false;
 
-		#ifdef DEBUG_GSS
-			stdoutput.write("inquire context - ");
-		#endif
+	#ifdef DEBUG_GSS
+		stdoutput.write("inquire context - ");
+	#endif
+
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// inquire...
 		gss_name_t	initiator;
@@ -1543,52 +1914,132 @@ bool gsscontext::inquire() {
 		// expose isopen
 		pvt->_isopen=isopen;
 
-		#ifdef DEBUG_GSS
-			stdoutput.write("success...\n\n");
-			stdoutput.write("Context {\n");
-			stdoutput.printf("  file descriptor: %d\n",
-				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1);
-			stdoutput.printf("  desired lifetime: %d\n",
-						pvt->_desiredlifetime);
-			stdoutput.printf("  actual lifetime: %d\n",
-						pvt->_actuallifetime);
-			stdoutput.printf("  desired mechanism: %s\n",
-				(pvt->_desiredmechanism &&
-					pvt->_desiredmechanism->getString())?
-				pvt->_desiredmechanism->getString():"(none)");
-			stdoutput.printf("  actual mechanism: %s\n",
-				pvt->_actualmechanism.getString());
-			stdoutput.printf("  desired flags:\n");
-			printFlags(pvt->_desiredflags);
-			stdoutput.printf("  actual flags:\n");
-			printFlags(pvt->_actualflags);
-			stdoutput.printf("  service: %s\n",
-				(pvt->_service)?pvt->_service:"(none)");
-			stdoutput.printf("  initiator: %s\n",
-				(pvt->_initiator)?pvt->_initiator:"(none)");
-			stdoutput.printf("  initiator type: %s\n",
-				(pvt->_initiatortype)?
-				pvt->_initiatortype:"(none)");
-			stdoutput.printf("  acceptor: %s\n",
-				(pvt->_acceptor)?pvt->_acceptor:"(none)");
-			stdoutput.printf("  acceptor type: %s\n",
-				(pvt->_acceptortype)?
-				pvt->_acceptortype:"(none)");
-			stdoutput.printf("  is initiator: %s\n",
-				(pvt->_isinitiator)?"yes":"no");
-			stdoutput.printf("  is open: %s\n",
-				(pvt->_isopen)?"yes":"no");
-			stdoutput.write("}\n");
-		#endif
 
 		// return success/failure
-		return (pvt->_major==GSS_S_COMPLETE);
+		retval=(pvt->_major==GSS_S_COMPLETE);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
-	#else
-		return false;
+
+		// are we using kerberos?
+		SecPkgContext_NegotiationInfo	SecPkgNegInfo;
+		pvt->_sstatus=QueryContextAttributes(&pvt->_context,
+						SECPKG_ATTR_NEGOTIATION_INFO,
+						&SecPkgNegInfo);
+		if (SSPI_ERROR(pvt->_sstatus))	{
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
+			#endif
+			return false;
+		}
+		pvt->_kerberos=!charstring::compareIgnoringCase(
+						SecPkgNegInfo.PackageInfo->Name,
+						"Kerberos");
+		FreeContextBuffer(SecPkgNegInfo.PackageInfo);
+
+
+		// get trailer and block sizes
+		SecPkgContext_Sizes	SecPkgContextSizes;
+		pvt->_sstatus=QueryContextAttributes(&pvt->_context,
+						SECPKG_ATTR_SIZES,
+						&SecPkgContextSizes);
+		if (SSPI_ERROR(pvt->_sstatus)) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_SIZES))\n\n");
+			#endif
+			return false;
+		}
+		pvt->_trailersize=SecPkgContextSizes.cbSecurityTrailer;
+		pvt->_blksize=SecPkgContextSizes.cbBlockSize;
+
+
+		// expose initiator
+		// FIXME: does this work cross-machine or with kerberos?
+		pvt->_sstatus=ImpersonateSecurityContext(&pvt->_context);
+		if (SSPI_ERROR(pvt->_sstatus)) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(ImpersonateSecurityContext)\n\n");
+			#endif
+			return false;
+		}
+		DWORD	usernamesize=0;
+		GetUserName(NULL,&usernamesize);
+		TCHAR	*username=new TCHAR[usernamesize];
+		if (!GetUserName(username,&usernamesize)) {
+			delete[] username;
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed (GetUserName)\n\n");
+			#endif
+			return false;
+		}
+		delete[] username;
+		pvt->_sstatus=RevertSecurityContext(&pvt->_context);
+		if (SSPI_ERROR(pvt->_sstatus)) {
+			#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+					"(RevertSecurityContext)\n\n");
+			#endif
+			return false;
+		}
+		// FIXME: needs TCHAR -> CHAR conversion
+		pvt->_initiator=charstring::duplicate(username);
+
+		// FIXME: QuerySecurityContextToken?
+
+		// FIXME: set:
+		// char	*_initiatortype;
+		// char	*_acceptor;
+		// char	*_acceptortype;
+		// bool	_isinitiator;
+		// bool	_isopen;
+
+		retval=true;
+
 	#endif
+
+	#ifdef DEBUG_GSS
+		stdoutput.write("success...\n\n");
+		stdoutput.write("Context {\n");
+		stdoutput.printf("  file descriptor: %d\n",
+			(pvt->_fd)?pvt->_fd->getFileDescriptor():-1);
+		stdoutput.printf("  desired lifetime: %d\n",
+					pvt->_desiredlifetime);
+		stdoutput.printf("  actual lifetime: %d\n",
+					pvt->_actuallifetime);
+		stdoutput.printf("  desired mechanism: %s\n",
+			(pvt->_desiredmechanism &&
+				pvt->_desiredmechanism->getString())?
+			pvt->_desiredmechanism->getString():"(none)");
+		stdoutput.printf("  actual mechanism: %s\n",
+			pvt->_actualmechanism.getString());
+		stdoutput.printf("  desired flags:\n");
+		printFlags(pvt->_desiredflags);
+		stdoutput.printf("  actual flags:\n");
+		printFlags(pvt->_actualflags);
+		stdoutput.printf("  service: %s\n",
+			(pvt->_service)?pvt->_service:"(none)");
+		stdoutput.printf("  initiator: %s\n",
+			(pvt->_initiator)?pvt->_initiator:"(none)");
+		stdoutput.printf("  initiator type: %s\n",
+			(pvt->_initiatortype)?
+			pvt->_initiatortype:"(none)");
+		stdoutput.printf("  acceptor: %s\n",
+			(pvt->_acceptor)?pvt->_acceptor:"(none)");
+		stdoutput.printf("  acceptor type: %s\n",
+			(pvt->_acceptortype)?
+			pvt->_acceptortype:"(none)");
+		stdoutput.printf("  is initiator: %s\n",
+			(pvt->_isinitiator)?"yes":"no");
+		stdoutput.printf("  is open: %s\n",
+			(pvt->_isopen)?"yes":"no");
+		stdoutput.write("}\n");
+	#endif
+
+	return retval;
 }
 
 bool gsscontext::accept() {
@@ -1596,11 +2047,13 @@ bool gsscontext::accept() {
 	// release any previously accepted context
 	release();
 
-	#if defined(RUDIMENTS_HAS_GSS)
+	#ifdef DEBUG_GSS
+		stdoutput.write("accept context...\n");
+	#endif
 
-		#ifdef DEBUG_GSS
-			stdoutput.write("accept context...\n");
-		#endif
+	bool	error=false;
+
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// accept the context...
 		gss_buffer_desc	inputtoken;
@@ -1634,6 +2087,7 @@ bool gsscontext::accept() {
 				// clean up
 				delete[] (unsigned char *)inputtoken.value;
 				release();
+				error=true;
 				break;
 			}
 
@@ -1662,6 +2116,7 @@ bool gsscontext::accept() {
 						pvt->_major,getStatus());
 				#endif
 				release();
+				error=true;
 				break;
 			}
 
@@ -1677,6 +2132,7 @@ bool gsscontext::accept() {
 					gss_release_buffer(&minor,&outputtoken);
 
 					release();
+					error=true;
 					break;
 				}
 			}
@@ -1688,19 +2144,158 @@ bool gsscontext::accept() {
 		} while (pvt->_major==GSS_S_CONTINUE_NEEDED);
 
 		// bail on error
-		if (pvt->_major!=GSS_S_COMPLETE) {
+		if (error || pvt->_major!=GSS_S_COMPLETE) {
 			return false;
 		}
 
 		// populate actual mechanism
 		pvt->_actualmechanism.initialize(actualmechoid);
 
-		#ifdef DEBUG_GSS
-			stdoutput.printf("success\n\n");
-		#endif
-
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
+		// get maxiumum message size
+		if (!getMaxMessageSize()) {
+			return false;
+		}
+
+		// input buffer
+		BYTE	*inbuf=new BYTE[pvt->_maxmsgsize];
+		DWORD	inbufsize;
+
+		SecBuffer	insecbuf;
+		insecbuf.BufferType=SECBUFFER_TOKEN;
+		insecbuf.pvBuffer=inbuf;
+
+		SecBufferDesc	insecbufdesc;
+		insecbufdesc.ulVersion=0;
+		insecbufdesc.cBuffers=1;
+		insecbufdesc.pBuffers=&insecbuf;
+
+		// output buffer
+		BYTE	*outbuf=new BYTE[pvt->_maxmsgsize];
+		DWORD	outbufsize;
+
+		SecBuffer		outsecbuf;
+		outsecbuf.BufferType=SECBUFFER_TOKEN;
+		outsecbuf.pvBuffer=outbuf;
+
+		SecBufferDesc	outsecbufdesc;
+		outsecbufdesc.ulVersion=0;
+		outsecbufdesc.cBuffers=1;
+		outsecbufdesc.pBuffers=&outsecbuf;
+
+		// get credentials
+		CredHandle	*credentials=
+			(CredHandle *)(pvt->_credentials->getCredentials());
+
+		bool	done=false;
+		bool	first=true;
+		while (!done) {
+
+			// receive token from peer
+			void	*inbuftemp;
+			size_t	inbufsizetemp;
+			uint32_t	flags=0;
+			ssize_t		result=receiveToken(&flags,
+								&inbuftemp,
+								&inbufsizetemp);
+			inbuf=(BYTE *)inbuftemp;
+			inbufsize=inbufsizetemp;
+			if (result<=0 || flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed (receive)\n\n");
+				#endif
+				release();
+				error=true;
+				break;
+			}
+
+			// reset buffer sizes
+			outbufsize=pvt->_maxmsgsize;
+			outsecbuf.cbBuffer=outbufsize;
+			insecbuf.cbBuffer=inbufsize;
+
+			// attempt to accept the context
+			pvt->_sstatus=AcceptSecurityContext(
+						credentials,
+						(first)?NULL:&pvt->_context,
+						&insecbufdesc,
+						pvt->_desiredflags,
+						SECURITY_NETWORK_DREP,
+						&pvt->_context,
+						&outsecbufdesc,
+						&pvt->_actualflags,
+						&pvt->_actuallifetime);
+
+			// bail on error
+			if (SSPI_ERROR(pvt->_sstatus)) {
+				#ifdef DEBUG_GSS
+					stdoutput.printf(
+						"failed "
+						"(AcceptSecurityContext)"
+						"\n%s\n",
+						getStatus());
+				#endif
+				release();
+				error=true;
+				break;
+			}
+
+			// complete the token, if needed
+			if (pvt->_sstatus==SEC_I_COMPLETE_NEEDED ||
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
+
+				pvt->_sstatus=CompleteAuthToken(
+						&pvt->_context,&outsecbufdesc);
+
+				if (SSPI_ERROR(pvt->_sstatus)) {
+					#ifdef DEBUG_GSS
+						stdoutput.printf(
+							"failed "
+							"(CompleteAuthToken)"
+							"\n%s\n",
+							getStatus());
+					#endif
+					release();
+					error=true;
+					break;
+				}
+			}
+
+			// are we done?
+			done=!(pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
+
+			first=false;
+
+			// send token to peer, if necessary
+			outbufsize=outsecbuf.cbBuffer;
+			if (outbufsize) {
+				if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
+						outbuf,outbufsize)!=
+						(ssize_t)outbufsize) {
+					#ifdef DEBUG_GSS
+						stdoutput.write(
+							"failed (send)\n\n");
+					#endif
+					release();
+					error=true;
+					break;
+				}
+			}
+		}
+
+		delete[] inbuf;
+		delete[] outbuf;
+
+		// bail on error
+		if (error || pvt->_sstatus!=SEC_E_OK) {
+			return false;
+		}
+	#endif
+
+	#ifdef DEBUG_GSS
+		stdoutput.printf("success\n\n");
 	#endif
 
 	// get additional info about the context
@@ -1717,6 +2312,8 @@ void gsscontext::release() {
 			// automatically sets pvt->_context to GSS_C_NO_CONTEXT
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		DeleteSecurityContext(&pvt->_context);
+		bytestring::zero(&pvt->_context,sizeof(pvt->_context));
 	#endif
 
 	// reset initiator and acceptor names
@@ -1734,7 +2331,11 @@ void gsscontext::release() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_actuallifetime=GSS_C_INDEFINITE;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_actuallifetime=UINT_MAX;
+		// FIXME: how to set TimeStamp (FILETIME) to max?
+		pvt->_maxmsgsize=0;
+		pvt->_trailersize=0;
+		pvt->_blksize=0;
+		pvt->_kerberos=false;
 	#else
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
@@ -1749,7 +2350,14 @@ void gsscontext::release() {
 }
 
 uint32_t gsscontext::getActualLifetime() {
-	return pvt->_actuallifetime;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_actuallifetime;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: convert TimeStamp to uint32_t
+		return 0;
+	#else
+		return pvt->_actuallifetime;
+	#endif
 }
 
 gssmechanism *gsscontext::getActualMechanism() {
@@ -1812,13 +2420,13 @@ bool gsscontext::wrap(const unsigned char *input,
 					size_t *outputsize,
 					bool *encryptionused) {
 
-	#if defined(RUDIMENTS_HAS_GSS)
+	#ifdef DEBUG_GSS_WRAP
+		stdoutput.printf("wrap(%d,",inputsize);
+		stdoutput.safePrint(input,inputsize);
+		stdoutput.write(")\n");
+	#endif
 
-		#ifdef DEBUG_GSS_WRAP
-			stdoutput.printf("wrap(%d,",inputsize);
-			stdoutput.safePrint(input,inputsize);
-			stdoutput.write(")\n");
-		#endif
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// configure input buffer
 		gss_buffer_desc	inputbuffer;
@@ -1870,14 +2478,104 @@ bool gsscontext::wrap(const unsigned char *input,
 			return true;
 		}
 
-		#ifdef DEBUG_GSS_WRAP
-			stdoutput.write(" failed\n\n");
-		#endif
-
-
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		ULONG	qop=0;
+
+		// EncryptMessage encrypts into a set of buffers.  Exactly what
+		// buffers and how the encrypted data is formatted in them
+		// depends on the encryption package.
+		//
+		// In the general case, a "data" and "trailer" buffer are
+		// required and the data buffer must hold the unencrypted data.
+		// This data will be overwritten and any overflow will be
+		// placed in the trailer.
+		//
+		// For kerberos, a "padding" buffer is also required for
+		// who-knows-what.
+
+		if (pvt->_kerberos) {
+
+			// allocate the output buffer, large enough to hold the
+			// input, trailer, and padding
+			*outputsize=inputsize+pvt->_trailersize+pvt->_blksize;
+			*output=new BYTE[*outputsize];
+
+			// initialize the output buffer with the input
+			bytestring::copy(*output,input,inputsize);
+
+			// prepare security buffers
+			SecBuffer         secbuf[3];
+			secbuf[0].BufferType=SECBUFFER_DATA;
+			secbuf[0].cbBuffer=inputsize;
+			secbuf[0].pvBuffer=*output;
+
+			secbuf[1].BufferType=SECBUFFER_TOKEN;
+			secbuf[1].cbBuffer=pvt->_trailersize;
+			secbuf[1].pvBuffer=*output+inputsize;
+
+			secbuf[2].BufferType=SECBUFFER_PADDING;
+			secbuf[2].cbBuffer=pvt->_blksize;
+			secbuf[2].pvBuffer=*output+inputsize+pvt->_trailersize;
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=SECBUFFER_VERSION;
+			secbufdesc.cBuffers=3;
+			secbufdesc.pBuffers=secbuf;
+
+			// encrypt the input
+			pvt->_sstatus=EncryptMessage(
+					&pvt->_context,qop,&secbufdesc,0);
+
+		} else {
+
+			// allocate a buffer to hold the input size,
+			// input, trailer size, and trailer
+			*outputsize=sizeof(DWORD)+inputsize+
+						sizeof(DWORD)+pvt->_trailersize;
+			*output=new BYTE[*outputsize];
+
+			// store that data, in that order
+			*((DWORD *)*output)=inputsize;
+			bytestring::copy(*output+sizeof(DWORD),
+						input,inputsize);
+			*((DWORD *)(*output+sizeof(DWORD)+inputsize))=
+							pvt->_trailersize;
+
+			// prepare security buffers
+			SecBuffer         secbuf[2];
+			secbuf[0].BufferType=SECBUFFER_DATA;
+			secbuf[0].cbBuffer=inputsize;
+			secbuf[0].pvBuffer=*output+sizeof(DWORD);
+
+			secbuf[1].BufferType=SECBUFFER_TOKEN;
+			secbuf[1].cbBuffer=pvt->_trailersize;
+			secbuf[1].pvBuffer=*output+sizeof(DWORD)+
+						inputsize+sizeof(DWORD);
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=0;
+			secbufdesc.cBuffers=2;
+			secbufdesc.pBuffers=secbuf;
+
+			// encrypt the input
+			pvt->_sstatus=EncryptMessage(
+					&pvt->_context,qop,&secbufdesc,0);
+		}
+
+		if (!SSPI_ERROR(pvt->_sstatus)) {
+			#ifdef DEBUG_GSS_WRAP
+				stdoutput.write(" success\n\n");
+			#endif
+		}
+
+	#endif
+
+	#ifdef DEBUG_GSS_WRAP
+		stdoutput.write(" failed\n\n");
 	#endif
 
 	return false;
@@ -1948,13 +2646,95 @@ bool gsscontext::unwrap(const unsigned char *input,
 			return true;
 		}
 
-		#ifdef DEBUG_GSS_WRAP
-			stdoutput.write("unwrap() failed\n\n");
-		#endif
-
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		ULONG	qop=0;
+
+		// DecryptMessage decrypts a set of buffers.  Exactly what
+		// buffers and how the encrypted data is formatted in them
+		// depends on the encryption package...
+
+		if (!pvt->_kerberos) {
+
+			// In the general case, "data" and "trailer" buffers
+			// were required to store the encrypted data.
+			// DecryptMessage needs to know the location of each
+			// and will ultimately store the decrypted data in the
+			// "data" buffer.
+
+			// get output size, output, trailer size, and trailer
+			*outputsize=*((DWORD *)input);
+
+			// create a buffer to store the output and initialize
+			// it with the contents of the "data" buffer
+			*output=(unsigned char *)bytestring::duplicate(
+							(input+sizeof(DWORD)),
+							*outputsize);
+
+			// get the trailer size and location of the trailer
+			DWORD	trailersize=
+				*((DWORD *)(input+sizeof(DWORD)+*outputsize));
+			BYTE	*trailer=(BYTE *)
+				(input+sizeof(DWORD)+*outputsize+sizeof(DWORD));
+
+			// prepare buffers
+			SecBuffer         secbuf[2];
+			secbuf[0].BufferType=SECBUFFER_DATA;
+			secbuf[0].cbBuffer=*outputsize;
+			secbuf[0].pvBuffer=*output;
+
+			secbuf[1].BufferType=SECBUFFER_TOKEN;
+			secbuf[1].cbBuffer=trailersize;
+			secbuf[1].pvBuffer=trailer;
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=0;
+			secbufdesc.cBuffers=2;
+			secbufdesc.pBuffers=secbuf;
+
+			pvt->_sstatus=DecryptMessage(
+					&pvt->_context,&secbufdesc,0,&qop);
+
+		} else {
+
+			// For kerberos, "data", "trailer", and "padding"
+			// buffers were required to store the encrypted data,
+			// but apparently, information for how to do the
+			// decryption was stored in there too, so
+			// DecryptMessage just needs the input buffer as a
+			// single "stream".  It will allocate a buffer
+			// internally to store the decrypted data.  A pointer
+			// to this buffer must be designated in the "data"
+			// buffer.
+
+			// prepare buffers
+			SecBuffer         secbuf[2];
+			secbuf[0].BufferType=SECBUFFER_STREAM;
+			secbuf[0].cbBuffer=inputsize;
+			secbuf[0].pvBuffer=(void *)input;
+
+			secbuf[1].BufferType=SECBUFFER_DATA;
+			secbuf[1].cbBuffer=*outputsize;
+			secbuf[1].pvBuffer=*output;
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=SECBUFFER_VERSION;
+			secbufdesc.cBuffers=2;
+			secbufdesc.pBuffers=secbuf;
+
+			pvt->_sstatus=DecryptMessage(
+					&pvt->_context,&secbufdesc,0,&qop);
+		}
+
+		return !SSPI_ERROR(pvt->_sstatus);
+
+	#endif
+
+	#ifdef DEBUG_GSS_WRAP
+		stdoutput.write("unwrap() failed\n\n");
 	#endif
 
 	return false;
@@ -2037,10 +2817,10 @@ bool gsscontext::verifyMic(const unsigned char *message,
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
 	#else
-		return false;
 	#endif
+
+	return false;
 }
 
 ssize_t gsscontext::read(void *buf, ssize_t count) {
@@ -2293,34 +3073,39 @@ ssize_t gsscontext::pending() {
 }
 
 uint32_t gsscontext::getMajorStatus() {
-	return pvt->_major;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_major;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return pvt->_sstatus;
+	#else
+		return 0;
+	#endif
 }
 
 uint32_t gsscontext::getMinorStatus() {
-	return pvt->_minor;
+	#if defined(RUDIMENTS_HAS_GSS)
+		return pvt->_minor;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return 0;
+	#else
+		return 0;
+	#endif
 }
 
 const char *gsscontext::getStatus() {
 	pvt->_status.clear();
-	pvt->_status.append("GSS - major:\n");
 	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("GSS - major:\n");
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
-	pvt->_status.append("GSS - minor:\n");
-	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("GSS - minor:\n");
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
-	pvt->_status.append("MECH - major:\n");
-	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("MECH - major:\n");
 		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
-	pvt->_status.append("MECH - minor:\n");
-	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_status.append("MECH - minor:\n");
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_status.append("SSPI - status:\n");
+		getStatus(pvt->_sstatus,0,&pvt->_status);
 	#endif
 	return pvt->_status.getString();
 }
@@ -2330,6 +3115,7 @@ const char *gsscontext::getGSSMajorStatus() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		getStatus(pvt->_sstatus,0,&pvt->_status);
 	#endif
 	return pvt->_status.getString();
 }
@@ -2338,7 +3124,6 @@ const char *gsscontext::getGSSMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
@@ -2355,7 +3140,6 @@ const char *gsscontext::getMechanismMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
-	#elif defined(RUDIMENTS_HAS_SSPI)
 	#endif
 	return pvt->_status.getString();
 }
@@ -2387,6 +3171,56 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 
 			gss_release_buffer(&minor,&statusbuffer);
 		} while (msgctx);
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		const char	*str="";
+		switch (status) {
+			case SEC_E_INSUFFICIENT_MEMORY:
+				str="SEC_E_INSUFFICIENT_MEMORY";
+			case SEC_E_INVALID_HANDLE:
+				str="SEC_E_INVALID_HANDLE";
+			case SEC_E_UNSUPPORTED_FUNCTION:
+				str="SEC_E_UNSUPPORTED_FUNCTION";
+			case SEC_E_TARGET_UNKNOWN:
+				str="SEC_E_TARGET_UNKNOWN";
+			case SEC_E_INTERNAL_ERROR:
+				str="SEC_E_INTERNAL_ERROR";
+			case SEC_E_SECPKG_NOT_FOUND:
+				str="SEC_E_SECPKG_NOT_FOUND";
+			case SEC_E_NOT_OWNER:
+				str="SEC_E_NOT_OWNER";
+			case SEC_E_CANNOT_INSTALL:
+				str="SEC_E_CANNOT_INSTALL";
+			case SEC_E_INVALID_TOKEN:
+				str="SEC_E_INVALID_TOKEN";
+			case SEC_E_CANNOT_PACK:
+				str="SEC_E_CANNOT_PACK";
+			case SEC_E_QOP_NOT_SUPPORTED:
+				str="SEC_E_QOP_NOT_SUPPORTED";
+			case SEC_E_NO_IMPERSONATION:
+				str="SEC_E_NO_IMPERSONATION";
+			case SEC_E_LOGON_DENIED:
+				str="SEC_E_LOGON_DENIED";
+			case SEC_E_UNKNOWN_CREDENTIALS:
+				str="SEC_E_UNKNOWN_CREDENTIALS";
+			case SEC_E_NO_CREDENTIALS:
+				str="SEC_E_NO_CREDENTIALS";
+			case SEC_E_MESSAGE_ALTERED:
+				str="SEC_E_MESSAGE_ALTERED";
+			case SEC_E_OUT_OF_SEQUENCE:
+				str="SEC_E_OUT_OF_SEQUENCE";
+			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
+				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
+			case SEC_E_CONTEXT_EXPIRED:
+				str="SEC_E_CONTEXT_EXPIRED";
+			case SEC_E_INCOMPLETE_MESSAGE:
+				str="SEC_E_INCOMPLETE_MESSAGE";
+			case SEC_E_OK:
+				str="SEC_E_OK";
+			default:
+				str="";
+		}
+		strb->append(str)->append("\n");
 	#endif
 }

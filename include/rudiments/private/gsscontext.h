@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
+		bool	getMaxMessageSize();
 		bool	inquire();
 		bool	initiate(const void *name,
 					size_t size,
