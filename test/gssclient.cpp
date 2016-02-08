@@ -10,9 +10,9 @@
 static void usage() {
 	stdoutput.printf("Usage: gss-client "
 			"[-host host] [-port port] [-service service] "
-			"[-message msg]"
+			"[-message msg] "
 			"[-user user] [-pass pw] "
-			"[-ccount count] [-mcount count] [-dcount count]"
+			"[-ccount count] [-mcount count] [-dcount count] "
 			"[-mech mechanism] "
 			"[-deleg] [-seq] [-noreplay] [-nomutual] "
 			"[-verbose]\n");
@@ -105,10 +105,16 @@ int main(int argc, const char **argv) {
 	gssmechanism		gmech;
 	gmech.initialize(mechanism);
 
+	// configure security context
+	gsscontext	gctx;
+	gctx.setDesiredMechanism(&gmech);
+	gctx.setDesiredFlags(flags);
+	gctx.setService(service);
+
 	// acquire credentials, if necessary
+	gsscredentials	gcred;
 	if (!charstring::isNullOrEmpty(username)) {
 
-		gsscredentials	gcred;
 		gcred.addDesiredMechanism(&gmech);
 		if (!gcred.acquireUserName(username,password)) {
 			stdoutput.printf("acquireUserName():\n");
@@ -121,13 +127,10 @@ int main(int argc, const char **argv) {
 		if (verbose) {
 			displayCredentials(&gcred);
 		}
-	}
 
-	// configure security context
-	gsscontext	gctx;
-	gctx.setDesiredMechanism(&gmech);
-	gctx.setDesiredFlags(flags);
-	gctx.setService(service);
+		// attach the credentials to the context
+		gctx.setCredentials(&gcred);
+	}
 
 	// configure socket
 	inetsocketclient	fd;

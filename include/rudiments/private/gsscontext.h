@@ -2,7 +2,7 @@
 // See the COPYING file for more information.
 
 	private:
-		bool	getMaxMessageSize();
+		bool	getMaxMessageSize(const char *mechname);
 		bool	inquire();
 		bool	initiate(const void *name,
 					size_t size,

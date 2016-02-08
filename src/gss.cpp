@@ -56,13 +56,6 @@
 
 #elif defined(RUDIMENTS_HAS_SSPI)
 
-	#ifdef RUDIMENTS_HAVE_WINDOWS_H
-		#include <windows.h>
-	#endif
-	#define SECURITY_WIN32
-	#include <security.h>
-
-	#define SSPI_PACKAGE_NAME	TEXT("Negotiate")
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 
 #else
@@ -99,11 +92,11 @@ const char * const *gss::getAvailableMechanisms() {
 
 	clear();
 
-	#if defined(RUDIMENTS_HAS_GSS)
+	#ifdef DEBUG_GSS
+		stdoutput.printf("Available Mechanisms {\n");
+	#endif
 
-		#ifdef DEBUG_GSS
-			stdoutput.printf("Available Mechanisms {\n");
-		#endif
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		OM_uint32		major;
 		OM_uint32		minor;
@@ -130,14 +123,33 @@ const char * const *gss::getAvailableMechanisms() {
 			gss_release_oid_set(&minor,&mechs);
 		}
 
-		#ifdef DEBUG_GSS
-			stdoutput.printf("}\n");
-		#endif
-
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// FIXME: does SSPI even support mechs?
+		// FIXME: this is overly complex, but hopefully there's
+		// a programatic way of getting this list that this can
+		// easily be adapted to
+		const char	*mechs[]={
+					"Negotiate",
+					"Kerberos",
+					"NTLM",
+					"Digest",
+					"Schannel",
+					NULL
+		};
+		pvt->_mechs=new char *[6+1];
+		size_t	i=0;
+		for (const char * const *m=mechs; *m; m++) {
+			pvt->_mechs[i++]=charstring::duplicate(*m);
+			#ifdef DEBUG_GSS
+				stdoutput.printf("  %s\n",*m);
+			#endif
+		}
+		pvt->_mechs[i]=NULL;
 
+	#endif
+
+	#ifdef DEBUG_GSS
+		stdoutput.printf("}\n");
 	#endif
 
 	return pvt->_mechs;
@@ -211,6 +223,7 @@ bool gssmechanism::initialize(const char *str) {
 		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
 		return (major==GSS_S_COMPLETE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_oid=(void *)charstring::duplicate(str);
 		return true;
 	#else
 		return false;
@@ -251,22 +264,27 @@ bool gssmechanism::initialize(const void *oid) {
 
 		major=gss_str_to_oid(&minor,&mechbuffer,&pvt->_oid);
 		return (major==GSS_S_COMPLETE);
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
+		if (charstring::isNullOrEmpty((const char *)oid)) {
+			return true;
+		}
+		pvt->_oid=(void *)charstring::duplicate((const char *)oid);
+		return true;
 	#else
 		return false;
 	#endif
 }
 
 void gssmechanism::clear() {
-
 	#if defined(RUDIMENTS_HAS_GSS)
 		if (pvt->_oid!=GSS_C_NO_OID) {
 			OM_uint32	minor;
 			gss_release_oid(&minor,&pvt->_oid);
 		}
 		pvt->_oid=GSS_C_NO_OID;
-	#else
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		delete[] pvt->_oid;
 		pvt->_oid=NULL;
 	#endif
 
@@ -319,6 +337,7 @@ class gsscredentialsprivate {
 		#elif defined(RUDIMENTS_HAS_SSPI)
 			ULONG			_credusage;
 			CredHandle		_credentials;
+			bool			_acquired;
 		#endif
 
 		linkedlist< gssmechanism * >	_dmlist;
@@ -355,6 +374,7 @@ gsscredentials::gsscredentials() {
 		pvt->_credentials=GSS_C_NO_CREDENTIAL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_BOTH;
+		pvt->_acquired=false;
 	#endif
 }
 
@@ -418,7 +438,6 @@ bool gsscredentials::inDesiredMechanisms(gssmechanism *mech) {
 	for (linkedlistnode< gssmechanism * > *node=
 					pvt->_dmlist.getFirst();
 					node; node=node->getNext()) {
-		// this isn't super efficient, but I don't know of a better way
 		if (!charstring::compare(
 				node->getValue()->getString(),
 				mech->getString())) {
@@ -536,6 +555,8 @@ bool gsscredentials::acquire(const void *name,
 
 	// release any previously acquired credentials
 	release();
+
+	bool	retval=false;
 
 	#if defined(RUDIMENTS_HAS_GSS)
 
@@ -746,7 +767,7 @@ bool gsscredentials::acquire(const void *name,
 				// FIXME: getStatus() won't return why though...
 				pvt->_major=GSS_S_FAILURE;
 				#ifdef DEBUG_GSS
-					stdoutput.write("failed (kinit)\n\n");
+					stdoutput.write("failed (kinit) ");
 				#endif
 			}
 		}
@@ -766,6 +787,25 @@ bool gsscredentials::acquire(const void *name,
 						&pvt->_actuallifetime);
 		}
 
+		// success/failure
+		retval=(pvt->_major==GSS_S_COMPLETE);
+
+		// save the actual mechanisms
+		if (retval &&
+			pvt->_actualmechanisms!=GSS_C_NO_OID_SET &&
+			pvt->_actualmechanisms->count) {
+
+			for (uint64_t i=0;
+				i<pvt->_actualmechanisms->count; i++) {
+
+				gssmechanism	*mech=new gssmechanism;
+				mech->initialize(&pvt->
+						_actualmechanisms->
+						elements[index]);
+				pvt->_amlist.append(mech);
+			}
+		}
+
 		// clean up
 		if (desiredname!=GSS_C_NO_NAME) {
 			OM_uint32	minor;
@@ -776,44 +816,6 @@ bool gsscredentials::acquire(const void *name,
 			gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
 			pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
 		}
-
-		#ifdef DEBUG_GSS
-		if ((pvt->_major==GSS_S_COMPLETE)) {
-			stdoutput.write("success...\n\n");
-			stdoutput.write("Credentials {\n");
-			stdoutput.printf("  name: %s\n",pvt->_name);
-			stdoutput.printf("  desired lifetime: %d\n",
-						pvt->_desiredlifetime);
-			stdoutput.printf("  actual lifetime: %d\n",
-						pvt->_actuallifetime);
-			stdoutput.write("  desired mechanisms:\n");
-			for (linkedlistnode< gssmechanism * > *node=
-						pvt->_dmlist.getFirst();
-						node; node=node->getNext()) {
-				stdoutput.printf("    %s\n",
-					node->getValue()->getString());
-			}
-			stdoutput.write("  actual mechanisms:\n");
-			for (linkedlistnode< gssmechanism * > *node=
-						pvt->_amlist.getFirst();
-						node; node=node->getNext()) {
-				stdoutput.printf("    %s\n",
-					node->getValue()->getString());
-			}
-			stdoutput.write("  credentials usage: ");
-			if (pvt->_credusage==GSS_C_BOTH) {
-				stdoutput.write("both\n");
-			} else if (pvt->_credusage==GSS_C_INITIATE) {
-				stdoutput.write("initiate\n");
-			} else if (pvt->_credusage==GSS_C_ACCEPT) {
-				stdoutput.write("accept\n");
-			}
-			stdoutput.write("}\n");
-		}
-		#endif
-
-		// return success/failure
-		return (pvt->_major==GSS_S_COMPLETE);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
@@ -842,42 +844,123 @@ bool gsscredentials::acquire(const void *name,
 			return true;
 		}
 
-		// acquire the credentials associated with the name...
-		pvt->_sstatus=AcquireCredentialsHandle(
-						(LPSTR)name,
-						SSPI_PACKAGE_NAME,
-						pvt->_credusage,
-						NULL,
-						NULL,
-						NULL,
-						NULL,
-						&pvt->_credentials,
-						&pvt->_actuallifetime);
+		// try each desired mechanism...
+		bool		first=true;
+		const char	*mechname=NULL;
+		linkedlistnode< gssmechanism * > *node=pvt->_dmlist.getFirst();
+		for (;;) {
 
-		#ifdef DEBUG_GSS
-		if (!SSPI_ERROR(pvt->_sstatus)) {
-			stdoutput.write("success...\n\n");
-			stdoutput.write("Credentials {\n");
-			stdoutput.printf("  name: %s\n",pvt->_name);
+			// break at the end of the list of desired mechanisms
+			// 
+			// Although... We need to run through at least once,
+			// even if no desired mechanisms were specified.  So,
+			// make an exception in that case.
+			if (!first && !node) {
+				break;
+			}
+
+			// skip degenerate mechs
+			// 
+			// Although... We need to run through at least once,
+			// even if no desired mechanisms were specified.  So,
+			// make an exception in that case.
+			if (!first && !charstring::isNullOrEmpty(
+					node->getValue()->getString())) {
+				continue;
+			}
+
+			// clean up to try again, if we're
+			// not currenly on the first try
+			if (!first) {
+				FreeCredentialHandle(&pvt->_credentials);
+			}
+
+			// attempt to use the specified mech...
+			mechname=(node)?node->getValue()->getString():NULL;
+
+			// ...but fall back to the "Negotiate" mech
+			// This will only happen if no mechs were specified,
+			// or if only degenerate mechs were specified.
+			if (!mechname) {
+				mechname=TEXT("Negotiate");
+			}
+			#ifdef DEBUG_GSS
+				stdoutput.printf("%s... ",mechname);
+			#endif
+
+			// acquire the credentials associated with the name...
+			pvt->_sstatus=AcquireCredentialsHandle(
+							(LPSTR)name,
+							(SEC_CHAR *)mechname,
+							pvt->_credusage,
+							NULL,
+							NULL,
+							NULL,
+							NULL,
+							&pvt->_credentials,
+							&pvt->_actuallifetime);
+
+			// success/failure
+			retval=!SSPI_ERROR(pvt->_sstatus);
+			if (retval) {
+				break;
+			}
+
+			// if we made it here, then we're
+			// not still on the first try...
+			first=false;
+
+			// try the next mechanism
+			if (node) {
+				 node=node->getNext();
+			}
+		}
+
+		// save the actual mechanism
+		gssmechanism	*mech=new gssmechanism;
+		mech->initialize(mechname);
+		pvt->_amlist.append(mech);
+
+		pvt->_acquired=retval;
+	#else
+		retval=false;
+	#endif
+
+	#ifdef DEBUG_GSS
+	if (retval) {
+		stdoutput.write("success...\n\n");
+		stdoutput.write("Credentials {\n");
+		stdoutput.printf("  name: %s\n",pvt->_name);
+		#if !defined(RUDIMENTS_HAS_SSPI)
 			stdoutput.printf("  desired lifetime: %d\n",
 						pvt->_desiredlifetime);
 			stdoutput.printf("  actual lifetime: %d\n",
 						pvt->_actuallifetime);
-			stdoutput.write("  desired mechanisms:\n");
-			for (linkedlistnode< gssmechanism * > *node=
-						pvt->_dmlist.getFirst();
-						node; node=node->getNext()) {
-				stdoutput.printf("    %s\n",
-					node->getValue()->getString());
+		#endif
+		stdoutput.write("  desired mechanisms:\n");
+		for (linkedlistnode< gssmechanism * > *node=
+					pvt->_dmlist.getFirst();
+					node; node=node->getNext()) {
+			stdoutput.printf("    %s\n",
+				node->getValue()->getString());
+		}
+		stdoutput.write("  actual mechanisms:\n");
+		for (linkedlistnode< gssmechanism * > *node=
+					pvt->_amlist.getFirst();
+					node; node=node->getNext()) {
+			stdoutput.printf("    %s\n",
+				node->getValue()->getString());
+		}
+		stdoutput.write("  credentials usage: ");
+		#if defined(RUDIMENTS_HAS_GSS)
+			if (pvt->_credusage==GSS_C_BOTH) {
+				stdoutput.write("both\n");
+			} else if (pvt->_credusage==GSS_C_INITIATE) {
+				stdoutput.write("initiate\n");
+			} else if (pvt->_credusage==GSS_C_ACCEPT) {
+				stdoutput.write("accept\n");
 			}
-			stdoutput.write("  actual mechanisms:\n");
-			for (linkedlistnode< gssmechanism * > *node=
-						pvt->_amlist.getFirst();
-						node; node=node->getNext()) {
-				stdoutput.printf("    %s\n",
-					node->getValue()->getString());
-			}
-			stdoutput.write("  credentials usage: ");
+		#elif defined(RUDIMENTS_HAS_SSPI)
 			if (pvt->_credusage==SECPKG_CRED_BOTH) {
 				stdoutput.write("both\n");
 			} else if (pvt->_credusage==SECPKG_CRED_OUTBOUND) {
@@ -885,15 +968,14 @@ bool gsscredentials::acquire(const void *name,
 			} else if (pvt->_credusage==SECPKG_CRED_INBOUND) {
 				stdoutput.write("accept\n");
 			}
-			stdoutput.write("}\n");
-		}
 		#endif
-
-		// return success/failure
-		return !SSPI_ERROR(pvt->_sstatus);
-	#else
-		return false;
+		stdoutput.write("}\n");
+	} else {
+		stdoutput.write("failed\n\n");
+	}
 	#endif
+
+	return retval;
 }
 
 void gsscredentials::release() {
@@ -951,74 +1033,59 @@ bool gsscredentials::inActualMechanisms(gssmechanism *mech) {
 
 	// just return false for degenerate mechs
 	#if defined(RUDIMENTS_HAS_GSS)
-		if ((gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
+		if (!mech || (gss_OID)mech->getObjectId()==GSS_C_NO_OID) {
 			return false;
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// do nothing...
+		if (!mech || !mech->getObjectId()) {
+			return false;
+		}
 	#else
-		if (!mech->getObjectId()) {
+		if (!mech || !mech->getObjectId()) {
 			return false;
 		}
 	#endif
 
-	// just return false for degenerate sets
-	#if defined(RUDIMENTS_HAS_GSS)
-		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET) {
-			return false;
-		}
-	#endif
+	// just return false for degenerate lists
+	if (!pvt->_amlist.getLength()) {
+		return false;
+	}
 
-	// look for the mech in the set
-	#if defined(RUDIMENTS_HAS_GSS)
-		OM_uint32	major;
-		OM_uint32	minor;
-		int		present;
-		major=gss_test_oid_set_member(&minor,
-						(gss_OID)mech->getObjectId(),
-						pvt->_actualmechanisms,
-						&present);
-		return (major==GSS_S_COMPLETE && present!=0);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		return false;
-	#else
-		return false;
-	#endif
+	// look for the mech in the list
+	for (linkedlistnode< gssmechanism * > *node=
+					pvt->_amlist.getFirst();
+					node; node=node->getNext()) {
+		if (!charstring::compare(
+				node->getValue()->getString(),
+				mech->getString())) {
+			return true;
+		}
+	}
+	return false;
 }
 
 uint64_t gsscredentials::getActualMechanismCount() {
-	#if defined(RUDIMENTS_HAS_GSS)
-		return (pvt->_actualmechanisms==GSS_C_NO_OID_SET)?
-					0:pvt->_actualmechanisms->count;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		return 0;
-	#else
-		return 0;
-	#endif
+	return pvt->_amlist.getLength();
 }
 
 gssmechanism *gsscredentials::getActualMechanism(uint64_t index) {
-	#if defined(RUDIMENTS_HAS_GSS)
-		if (pvt->_actualmechanisms==GSS_C_NO_OID_SET ||
-				index>pvt->_actualmechanisms->count) {
-			return NULL;
+	uint64_t	i=0;
+	for (linkedlistnode< gssmechanism * > *node=
+					pvt->_amlist.getFirst();
+					node; node=node->getNext()) {
+		if (i==index) {
+			return node->getValue();
 		}
-		gssmechanism	*mech=new gssmechanism;
-		mech->initialize(&pvt->_actualmechanisms->elements[index]);
-		pvt->_amlist.append(mech);
-		return mech;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		return NULL;
-	#else
-		return NULL;
-	#endif
+		i++;
+	}
+	return NULL;
 }
 
 const void *gsscredentials::getCredentials() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_credentials;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return &pvt->_credentials;
+		return (pvt->_acquired)?&pvt->_credentials:NULL;
 	#else
 		return NULL;
 	#endif
@@ -1130,46 +1197,67 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 		switch (status) {
 			case SEC_E_INSUFFICIENT_MEMORY:
 				str="SEC_E_INSUFFICIENT_MEMORY";
+				break;
 			case SEC_E_INVALID_HANDLE:
 				str="SEC_E_INVALID_HANDLE";
+				break;
 			case SEC_E_UNSUPPORTED_FUNCTION:
 				str="SEC_E_UNSUPPORTED_FUNCTION";
+				break;
 			case SEC_E_TARGET_UNKNOWN:
 				str="SEC_E_TARGET_UNKNOWN";
+				break;
 			case SEC_E_INTERNAL_ERROR:
 				str="SEC_E_INTERNAL_ERROR";
+				break;
 			case SEC_E_SECPKG_NOT_FOUND:
 				str="SEC_E_SECPKG_NOT_FOUND";
+				break;
 			case SEC_E_NOT_OWNER:
 				str="SEC_E_NOT_OWNER";
+				break;
 			case SEC_E_CANNOT_INSTALL:
 				str="SEC_E_CANNOT_INSTALL";
+				break;
 			case SEC_E_INVALID_TOKEN:
 				str="SEC_E_INVALID_TOKEN";
+				break;
 			case SEC_E_CANNOT_PACK:
 				str="SEC_E_CANNOT_PACK";
+				break;
 			case SEC_E_QOP_NOT_SUPPORTED:
 				str="SEC_E_QOP_NOT_SUPPORTED";
+				break;
 			case SEC_E_NO_IMPERSONATION:
 				str="SEC_E_NO_IMPERSONATION";
+				break;
 			case SEC_E_LOGON_DENIED:
 				str="SEC_E_LOGON_DENIED";
+				break;
 			case SEC_E_UNKNOWN_CREDENTIALS:
 				str="SEC_E_UNKNOWN_CREDENTIALS";
+				break;
 			case SEC_E_NO_CREDENTIALS:
 				str="SEC_E_NO_CREDENTIALS";
+				break;
 			case SEC_E_MESSAGE_ALTERED:
 				str="SEC_E_MESSAGE_ALTERED";
+				break;
 			case SEC_E_OUT_OF_SEQUENCE:
 				str="SEC_E_OUT_OF_SEQUENCE";
+				break;
 			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
 				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
+				break;
 			case SEC_E_CONTEXT_EXPIRED:
 				str="SEC_E_CONTEXT_EXPIRED";
+				break;
 			case SEC_E_INCOMPLETE_MESSAGE:
 				str="SEC_E_INCOMPLETE_MESSAGE";
+				break;
 			case SEC_E_OK:
 				str="SEC_E_OK";
+				break;
 			default:
 				str="";
 		}
@@ -1364,16 +1452,20 @@ bool gsscontext::initiate() {
 	#endif
 }
 
-bool gsscontext::getMaxMessageSize() {
+bool gsscontext::getMaxMessageSize(const char *mechname) {
 
 	#if defined(RUDIMENTS_HAS_SSPI)
 		if (!pvt->_maxmsgsize) {
+
 			#ifdef DEBUG_GSS
-				stdoutput.write("get max message size...\n");
+				stdoutput.printf("get max message "
+						"size for mech %s...\n",
+						mechname);
 			#endif
+
 			PSecPkgInfo	pkginfo;
 			pvt->_sstatus=QuerySecurityPackageInfo(
-						SSPI_PACKAGE_NAME,&pkginfo);
+						(LPSTR)mechname,&pkginfo);
 			if (SSPI_ERROR(pvt->_sstatus))	{
 				#ifdef DEBUG_GSS
 					stdoutput.printf(
@@ -1386,6 +1478,11 @@ bool gsscontext::getMaxMessageSize() {
 			}
 			pvt->_maxmsgsize=pkginfo->cbMaxToken;
 			FreeContextBuffer(pkginfo);
+
+			#ifdef DEBUG_GSS
+				stdoutput.printf("max message size: %d\n",
+							pvt->_maxmsgsize);
+			#endif
 		}
 	#endif
 	return true;
@@ -1398,11 +1495,13 @@ bool gsscontext::initiate(const void *name,
 	// release any previously initialized context
 	release();
 
-	#if defined(RUDIMENTS_HAS_GSS)
+	#ifdef DEBUG_GSS
+		stdoutput.write("initiate context...\n");
+	#endif
 
-		#ifdef DEBUG_GSS
-			stdoutput.write("initiate context...\n");
-		#endif
+	bool	error=false;
+
+	#if defined(RUDIMENTS_HAS_GSS)
 
 		// by default, we'll use "no name"
 		gss_name_t	desiredname=GSS_C_NO_NAME;
@@ -1476,6 +1575,7 @@ bool gsscontext::initiate(const void *name,
 						getStatus());
 				#endif
 				release();
+				error=true;
 				break;
 			}
 
@@ -1496,6 +1596,7 @@ bool gsscontext::initiate(const void *name,
 					gss_release_buffer(&minor,
 							&outputtoken);
 					release();
+					error=true;
 					break;
 				}
 			}
@@ -1528,80 +1629,75 @@ bool gsscontext::initiate(const void *name,
 					gss_release_buffer(&minor,&outputtoken);
 
 					release();
+					error=true;
 					break;
 				}
 
 			} else {
+
+				// populate actual mechanism
+				pvt->_actualmechanism.initialize(actualmechoid);
+
 				// break out if we've completed the process
 				break;
 			}
 		}
 
 		// bail on error
-		if (pvt->_major!=GSS_S_COMPLETE) {
+		if (error || pvt->_major!=GSS_S_COMPLETE) {
 			return false;
 		}
-
-		#ifdef DEBUG_GSS
-			stdoutput.write("success\n\n");
-		#endif
-
-		// populate actual mechanism
-		pvt->_actualmechanism.initialize(actualmechoid);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// get maxiumum message size
-		if (!getMaxMessageSize()) {
+		// get maxiumum message size...
+		// At this point, we don't definitively know what mech
+		// (security package) we'll be using, so we'll get the
+		// max message size from the Negotiate mech, which will
+		// be the max message size for all mechs.
+		if (!getMaxMessageSize("Negotiate")) {
 			return false;
 		}
-
-		// initiate the context...
-		#ifdef DEBUG_GSS
-			stdoutput.write("initiate context...\n");
-		#endif
 
 		// input buffer
 		BYTE	*inbuf=NULL;
 		DWORD	inbufsize=0;
 
-		SecBuffer         insecbuf;
-		insecbuf.BufferType=SECBUFFER_TOKEN;
+		SecBuffer         inputtoken;
+		inputtoken.BufferType=SECBUFFER_TOKEN;
 
-		SecBufferDesc     insecbufdesc;
-		insecbufdesc.ulVersion=0;
-		insecbufdesc.cBuffers=1;
-		insecbufdesc.pBuffers=&insecbuf;
+		SecBufferDesc     inputtokendesc;
+		inputtokendesc.ulVersion=0;
+		inputtokendesc.cBuffers=1;
+		inputtokendesc.pBuffers=&inputtoken;
 
 		// output buffer
 		BYTE	*outbuf=new BYTE[pvt->_maxmsgsize];
-		DWORD	outbufsize=pvt->_maxmsgsize;
 
-		SecBuffer         outsecbuf;
-		outsecbuf.BufferType=SECBUFFER_TOKEN;
-		outsecbuf.pvBuffer=outbuf;
+		SecBuffer         outputtoken;
+		outputtoken.BufferType=SECBUFFER_TOKEN;
+		outputtoken.pvBuffer=outbuf;
 
-		SecBufferDesc     outsecbufdesc;
-		outsecbufdesc.ulVersion=0;
-		outsecbufdesc.cBuffers=1;
-		outsecbufdesc.pBuffers=&outsecbuf;
+		SecBufferDesc     outputtokendesc;
+		outputtokendesc.ulVersion=0;
+		outputtokendesc.cBuffers=1;
+		outputtokendesc.pBuffers=&outputtoken;
 
 		// get credentials
 		CredHandle	*credentials=
-			(CredHandle *)(pvt->_credentials->getCredentials());
+			(pvt->_credentials)?
+			(CredHandle *)(pvt->_credentials->getCredentials()):
+			NULL;
 
 		bool	done=false;
 		while (!done) {
 
-			outsecbuf.cbBuffer=outbufsize;
+			outputtoken.cbBuffer=pvt->_maxmsgsize;
 
 			if (inbuf) {
-				insecbuf.cbBuffer=inbufsize;
-				insecbuf.pvBuffer=inbuf;
+				inputtoken.cbBuffer=inbufsize;
+				inputtoken.pvBuffer=inbuf;
 			}
-
-			// FIXME: should desiredflags always include
-			// ISC_REQ_CONFIDENTIALITY?
 
 			// attempt to init the context
 			pvt->_sstatus=InitializeSecurityContext(
@@ -1611,10 +1707,10 @@ bool gsscontext::initiate(const void *name,
 						pvt->_desiredflags,
 						0,
 						SECURITY_NETWORK_DREP,
-						(inbuf)?&insecbufdesc:NULL,
+						(inbuf)?&inputtokendesc:NULL,
 						0,
 						&pvt->_context,
-						&outsecbufdesc,
+						&outputtokendesc,
 						&pvt->_actualflags,
 						&pvt->_actuallifetime);
 
@@ -1628,6 +1724,7 @@ bool gsscontext::initiate(const void *name,
 						getStatus());
 				#endif
 				release();
+				error=true;
 				break;
 			}
 
@@ -1636,7 +1733,8 @@ bool gsscontext::initiate(const void *name,
 				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
 
 				pvt->_sstatus=CompleteAuthToken(
-						&pvt->_context,&outsecbufdesc);
+							&pvt->_context,
+							&outputtokendesc);
 
 				if (SSPI_ERROR(pvt->_sstatus)) {
 					#ifdef DEBUG_GSS
@@ -1647,6 +1745,7 @@ bool gsscontext::initiate(const void *name,
 							getStatus());
 					#endif
 					release();
+					error=true;
 					break;
 				}
 			}
@@ -1656,16 +1755,17 @@ bool gsscontext::initiate(const void *name,
 				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
 
 			// send token to peer, if necessary
-			outbufsize=outsecbuf.cbBuffer;
-			if (outbufsize) {
+			if (outputtoken.cbBuffer) {
 				if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
-						outbuf,outbufsize)!=
-						(ssize_t)outbufsize) {
+						outbuf,
+						outputtoken.cbBuffer)!=
+						(ssize_t)outputtoken.cbBuffer) {
 					#ifdef DEBUG_GSS
 						stdoutput.write(
 							"failed (send)\n\n");
 					#endif
 					release();
+					error=true;
 					break;
 				}
 			}
@@ -1688,19 +1788,32 @@ bool gsscontext::initiate(const void *name,
 							"failed (receive)\n\n");
 					#endif
 					release();
+					error=true;
 					break;
 				}
-				outbufsize=pvt->_maxmsgsize;
 			}
 		}
+
+		// actual mechanism will be populated by inquire() below...
 
 		// clean up
 		delete[] inbuf;
 		delete[] outbuf;
 
-		#ifdef DEBUG_GSS
-			stdoutput.write("success\n\n");
-		#endif
+		// bail on error
+		if (error || pvt->_sstatus!=SEC_E_OK) {
+			return false;
+		}
+
+		// we are the initiator
+		pvt->_isinitiator=true;
+
+		// the context is opn
+		pvt->_isopen=true;
+	#endif
+
+	#ifdef DEBUG_GSS
+		stdoutput.write("success\n\n");
 	#endif
 
 	// get additional info about the context
@@ -1708,38 +1821,38 @@ bool gsscontext::initiate(const void *name,
 }
 
 #ifdef DEBUG_GSS
-static void printFlags(OM_uint32 flags) {
-	#if defined(RUDIMENTS_HAS_GSS)
-		#ifdef GSS_C_DELEG_FLAG
-			if (flags&GSS_C_DELEG_FLAG) {
-				stdoutput.printf(
-					"    GSS_C_DELEG_FLAG\n");
-			}
-		#endif
-		#ifdef GSS_C_MUTUAL_FLAG
-			if (flags&GSS_C_MUTUAL_FLAG) {
-				stdoutput.printf(
-					"    GSS_C_MUTUAL_FLAG\n");
-			}
-		#endif
-		#ifdef GSS_C_REPLAY_FLAG
-			if (flags&GSS_C_REPLAY_FLAG) {
-				stdoutput.printf(
-					"    GSS_C_REPLAY_FLAG\n");
-			}
-		#endif
-		#ifdef GSS_C_SEQUENCE_FLAG
-			if (flags&GSS_C_SEQUENCE_FLAG) {
-				stdoutput.printf(
-					"    GSS_C_SEQUENCE_FLAG\n");
-			}
-		#endif
-		#ifdef GSS_C_CONF_FLAG
-			if (flags&GSS_C_CONF_FLAG) {
-				stdoutput.printf(
-					"    GSS_C_CONF_FLAG\n");
-			}
-		#endif
+static void printFlags(uint32_t flags) {
+	#ifdef GSS_C_DELEG_FLAG
+		if (flags&GSS_C_DELEG_FLAG) {
+			stdoutput.printf(
+				"    GSS_C_DELEG_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_MUTUAL_FLAG
+		if (flags&GSS_C_MUTUAL_FLAG) {
+			stdoutput.printf(
+				"    GSS_C_MUTUAL_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_REPLAY_FLAG
+		if (flags&GSS_C_REPLAY_FLAG) {
+			stdoutput.printf(
+				"    GSS_C_REPLAY_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_SEQUENCE_FLAG
+		if (flags&GSS_C_SEQUENCE_FLAG) {
+			stdoutput.printf(
+			"    GSS_C_SEQUENCE_FLAG\n");
+		}
+	#endif
+	#ifdef GSS_C_CONF_FLAG
+		if (flags&GSS_C_CONF_FLAG) {
+			stdoutput.printf(
+				"    GSS_C_CONF_FLAG\n");
+		}
+	#endif
+	#if !defined(RUDIMENTS_HAS_SSPI)
 		#ifdef GSS_C_INTEG_FLAG
 			if (flags&GSS_C_INTEG_FLAG) {
 				stdoutput.printf(
@@ -1770,8 +1883,6 @@ static void printFlags(OM_uint32 flags) {
 					"    GSS_C_DELEG_POLICY_FLAG\n");
 			}
 		#endif
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: implement this
 	#endif
 }
 #endif
@@ -1920,7 +2031,7 @@ bool gsscontext::inquire() {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// are we using kerberos?
+		// get actual mechanism
 		SecPkgContext_NegotiationInfo	SecPkgNegInfo;
 		pvt->_sstatus=QueryContextAttributes(&pvt->_context,
 						SECPKG_ATTR_NEGOTIATION_INFO,
@@ -1933,10 +2044,18 @@ bool gsscontext::inquire() {
 			#endif
 			return false;
 		}
-		pvt->_kerberos=!charstring::compareIgnoringCase(
-						SecPkgNegInfo.PackageInfo->Name,
-						"Kerberos");
+		pvt->_actualmechanism.initialize(
+					SecPkgNegInfo.PackageInfo->Name);
 		FreeContextBuffer(SecPkgNegInfo.PackageInfo);
+
+		// are we using kerberos?
+		pvt->_kerberos=!charstring::compareIgnoringCase(
+					pvt->_actualmechanism.getString(),
+					"Kerberos");
+
+		// FIXME: Arguably, we should reset the max message size,
+		// now that we know the actual mechanism that we're using.
+		// As it might be smaller.
 
 
 		// get trailer and block sizes
@@ -1956,46 +2075,56 @@ bool gsscontext::inquire() {
 		pvt->_blksize=SecPkgContextSizes.cbBlockSize;
 
 
-		// expose initiator
-		// FIXME: does this work cross-machine or with kerberos?
-		pvt->_sstatus=ImpersonateSecurityContext(&pvt->_context);
-		if (SSPI_ERROR(pvt->_sstatus)) {
-			#ifdef DEBUG_GSS
-				stdoutput.write("failed "
-					"(ImpersonateSecurityContext)\n\n");
-			#endif
-			return false;
-		}
-		DWORD	usernamesize=0;
-		GetUserName(NULL,&usernamesize);
-		TCHAR	*username=new TCHAR[usernamesize];
-		if (!GetUserName(username,&usernamesize)) {
+		if (pvt->_isinitiator) {
+			// FIXME: set:
+			// char	*_initiator;
+			// char	*_initiatortype;
+		} else {
+
+			// expose initiator
+			// FIXME: does this work across machines
+			// or with non-NTLM mechs?
+			pvt->_sstatus=ImpersonateSecurityContext(&pvt->_context);
+			if (SSPI_ERROR(pvt->_sstatus)) {
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+						"(ImpersonateSecurityContext)"
+						"\n\n");
+				#endif
+				return false;
+			}
+			DWORD	usernamesize=0;
+			GetUserName(NULL,&usernamesize);
+			TCHAR	*username=new TCHAR[usernamesize];
+			if (!GetUserName(username,&usernamesize)) {
+				delete[] username;
+				#ifdef DEBUG_GSS
+					stdoutput.write(
+						"failed (GetUserName)\n\n");
+				#endif
+				return false;
+			}
+			pvt->_sstatus=RevertSecurityContext(&pvt->_context);
+			if (SSPI_ERROR(pvt->_sstatus)) {
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+						"(RevertSecurityContext)\n\n");
+				#endif
+				return false;
+			}
+			// FIXME: needs TCHAR -> CHAR conversion
+			pvt->_initiator=charstring::duplicate(username);
 			delete[] username;
-			#ifdef DEBUG_GSS
-				stdoutput.write("failed (GetUserName)\n\n");
-			#endif
-			return false;
+
+			// FIXME: set:
+			// char	*_initiatortype;
 		}
-		delete[] username;
-		pvt->_sstatus=RevertSecurityContext(&pvt->_context);
-		if (SSPI_ERROR(pvt->_sstatus)) {
-			#ifdef DEBUG_GSS
-				stdoutput.write("failed "
-					"(RevertSecurityContext)\n\n");
-			#endif
-			return false;
-		}
-		// FIXME: needs TCHAR -> CHAR conversion
-		pvt->_initiator=charstring::duplicate(username);
 
 		// FIXME: QuerySecurityContextToken?
 
 		// FIXME: set:
-		// char	*_initiatortype;
 		// char	*_acceptor;
 		// char	*_acceptortype;
-		// bool	_isinitiator;
-		// bool	_isopen;
 
 		retval=true;
 
@@ -2006,10 +2135,12 @@ bool gsscontext::inquire() {
 		stdoutput.write("Context {\n");
 		stdoutput.printf("  file descriptor: %d\n",
 			(pvt->_fd)?pvt->_fd->getFileDescriptor():-1);
-		stdoutput.printf("  desired lifetime: %d\n",
-					pvt->_desiredlifetime);
-		stdoutput.printf("  actual lifetime: %d\n",
-					pvt->_actuallifetime);
+		#if !defined(RUDIMENTS_HAS_SSPI)
+			stdoutput.printf("  desired lifetime: %d\n",
+						pvt->_desiredlifetime);
+			stdoutput.printf("  actual lifetime: %d\n",
+						pvt->_actuallifetime);
+		#endif
 		stdoutput.printf("  desired mechanism: %s\n",
 			(pvt->_desiredmechanism &&
 				pvt->_desiredmechanism->getString())?
@@ -2107,6 +2238,9 @@ bool gsscontext::accept() {
 						// delegated credentials
 						NULL);
 
+			// clean up
+			delete[] (unsigned char *)inputtoken.value;
+
 			// bail on error
 			if (GSS_ERROR(pvt->_major)) {
 				#ifdef DEBUG_GSS
@@ -2153,55 +2287,54 @@ bool gsscontext::accept() {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// get maxiumum message size
-		if (!getMaxMessageSize()) {
+		// get maxiumum message size...
+		// At this point, we don't definitively know what mech
+		// (security package) we'll be using, so we'll get the
+		// max message size from the Negotiate mech, which will
+		// be the max message size for all mechs.
+		if (!getMaxMessageSize("Negotiate")) {
 			return false;
 		}
 
 		// input buffer
-		BYTE	*inbuf=new BYTE[pvt->_maxmsgsize];
-		DWORD	inbufsize;
+		SecBuffer	inputtoken;
+		inputtoken.BufferType=SECBUFFER_TOKEN;
 
-		SecBuffer	insecbuf;
-		insecbuf.BufferType=SECBUFFER_TOKEN;
-		insecbuf.pvBuffer=inbuf;
-
-		SecBufferDesc	insecbufdesc;
-		insecbufdesc.ulVersion=0;
-		insecbufdesc.cBuffers=1;
-		insecbufdesc.pBuffers=&insecbuf;
+		SecBufferDesc	inputtokendesc;
+		inputtokendesc.ulVersion=0;
+		inputtokendesc.cBuffers=1;
+		inputtokendesc.pBuffers=&inputtoken;
 
 		// output buffer
 		BYTE	*outbuf=new BYTE[pvt->_maxmsgsize];
-		DWORD	outbufsize;
 
-		SecBuffer		outsecbuf;
-		outsecbuf.BufferType=SECBUFFER_TOKEN;
-		outsecbuf.pvBuffer=outbuf;
+		SecBuffer	outputtoken;
+		outputtoken.BufferType=SECBUFFER_TOKEN;
+		outputtoken.pvBuffer=outbuf;
 
-		SecBufferDesc	outsecbufdesc;
-		outsecbufdesc.ulVersion=0;
-		outsecbufdesc.cBuffers=1;
-		outsecbufdesc.pBuffers=&outsecbuf;
+		SecBufferDesc	outputtokendesc;
+		outputtokendesc.ulVersion=0;
+		outputtokendesc.cBuffers=1;
+		outputtokendesc.pBuffers=&outputtoken;
 
 		// get credentials
 		CredHandle	*credentials=
-			(CredHandle *)(pvt->_credentials->getCredentials());
+			(pvt->_credentials)?
+			(CredHandle *)(pvt->_credentials->getCredentials()):
+			NULL;
 
 		bool	done=false;
 		bool	first=true;
 		while (!done) {
 
-			// receive token from peer
-			void	*inbuftemp;
-			size_t	inbufsizetemp;
+			// receive token from peer, into inputtoken...
 			uint32_t	flags=0;
+			void		*inbuf;
+			size_t		inbufsize;
 			ssize_t		result=receiveToken(&flags,
-								&inbuftemp,
-								&inbufsizetemp);
-			inbuf=(BYTE *)inbuftemp;
-			inbufsize=inbufsizetemp;
-			if (result<=0 || flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+								&inbuf,
+								&inbufsize);
+			if (result<=0 || flags!=TOKEN_FLAGS_TYPE_INITIATE) {
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
 				#endif
@@ -2209,23 +2342,26 @@ bool gsscontext::accept() {
 				error=true;
 				break;
 			}
+			inputtoken.pvBuffer=inbuf;
+			inputtoken.cbBuffer=inbufsize;
 
-			// reset buffer sizes
-			outbufsize=pvt->_maxmsgsize;
-			outsecbuf.cbBuffer=outbufsize;
-			insecbuf.cbBuffer=inbufsize;
+			// reset output buffer sizes
+			outputtoken.cbBuffer=pvt->_maxmsgsize;
 
 			// attempt to accept the context
 			pvt->_sstatus=AcceptSecurityContext(
 						credentials,
 						(first)?NULL:&pvt->_context,
-						&insecbufdesc,
+						&inputtokendesc,
 						pvt->_desiredflags,
 						SECURITY_NETWORK_DREP,
 						&pvt->_context,
-						&outsecbufdesc,
+						&outputtokendesc,
 						&pvt->_actualflags,
 						&pvt->_actuallifetime);
+
+			// clean up
+			delete[] inbuf;
 
 			// bail on error
 			if (SSPI_ERROR(pvt->_sstatus)) {
@@ -2246,7 +2382,8 @@ bool gsscontext::accept() {
 				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
 
 				pvt->_sstatus=CompleteAuthToken(
-						&pvt->_context,&outsecbufdesc);
+							&pvt->_context,
+							&outputtokendesc);
 
 				if (SSPI_ERROR(pvt->_sstatus)) {
 					#ifdef DEBUG_GSS
@@ -2269,11 +2406,11 @@ bool gsscontext::accept() {
 			first=false;
 
 			// send token to peer, if necessary
-			outbufsize=outsecbuf.cbBuffer;
-			if (outbufsize) {
-				if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
-						outbuf,outbufsize)!=
-						(ssize_t)outbufsize) {
+			if (outputtoken.cbBuffer) {
+				if (sendToken(TOKEN_FLAGS_TYPE_ACCEPT,
+						outbuf,
+						outputtoken.cbBuffer)!=
+						(ssize_t)outputtoken.cbBuffer) {
 					#ifdef DEBUG_GSS
 						stdoutput.write(
 							"failed (send)\n\n");
@@ -2285,13 +2422,17 @@ bool gsscontext::accept() {
 			}
 		}
 
-		delete[] inbuf;
 		delete[] outbuf;
+
+		// actual mechanism will be populated by inquire() below...
 
 		// bail on error
 		if (error || pvt->_sstatus!=SEC_E_OK) {
 			return false;
 		}
+
+		// the context is opn
+		pvt->_isopen=true;
 	#endif
 
 	#ifdef DEBUG_GSS
@@ -2570,6 +2711,7 @@ bool gsscontext::wrap(const unsigned char *input,
 			#ifdef DEBUG_GSS_WRAP
 				stdoutput.write(" success\n\n");
 			#endif
+			return true;
 		}
 
 	#endif
@@ -2593,6 +2735,8 @@ bool gsscontext::unwrap(const unsigned char *input,
 					unsigned char **output,
 					size_t *outputsize,
 					bool *decryptionused) {
+
+	bool	retval=false;
 
 	#if defined(RUDIMENTS_HAS_GSS)
 
@@ -2636,14 +2780,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			// clean up
 			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputbuffer);
-
-			#ifdef DEBUG_GSS_WRAP
-				stdoutput.printf("unwrap(%d,",*outputsize);
-				stdoutput.safePrint(*output,*outputsize);
-				stdoutput.write(") success\n\n");
-			#endif
-
-			return true;
+			retval=true;
 		}
 
 		// FIXME: are there cases where outputbuffer
@@ -2729,15 +2866,20 @@ bool gsscontext::unwrap(const unsigned char *input,
 					&pvt->_context,&secbufdesc,0,&qop);
 		}
 
-		return !SSPI_ERROR(pvt->_sstatus);
-
+		retval=!SSPI_ERROR(pvt->_sstatus);
 	#endif
 
 	#ifdef DEBUG_GSS_WRAP
-		stdoutput.write("unwrap() failed\n\n");
+		if (retval) {
+			stdoutput.printf("unwrap(%d,",*outputsize);
+			stdoutput.safePrint(*output,*outputsize);
+			stdoutput.write(") success\n\n");
+		} else {
+			stdoutput.write("unwrap() failed\n\n");
+		}
 	#endif
 
-	return false;
+	return retval;
 }
 
 bool gsscontext::getMic(const unsigned char *message,
@@ -3178,46 +3320,67 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 		switch (status) {
 			case SEC_E_INSUFFICIENT_MEMORY:
 				str="SEC_E_INSUFFICIENT_MEMORY";
+				break;
 			case SEC_E_INVALID_HANDLE:
 				str="SEC_E_INVALID_HANDLE";
+				break;
 			case SEC_E_UNSUPPORTED_FUNCTION:
 				str="SEC_E_UNSUPPORTED_FUNCTION";
+				break;
 			case SEC_E_TARGET_UNKNOWN:
 				str="SEC_E_TARGET_UNKNOWN";
+				break;
 			case SEC_E_INTERNAL_ERROR:
 				str="SEC_E_INTERNAL_ERROR";
+				break;
 			case SEC_E_SECPKG_NOT_FOUND:
 				str="SEC_E_SECPKG_NOT_FOUND";
+				break;
 			case SEC_E_NOT_OWNER:
 				str="SEC_E_NOT_OWNER";
+				break;
 			case SEC_E_CANNOT_INSTALL:
 				str="SEC_E_CANNOT_INSTALL";
+				break;
 			case SEC_E_INVALID_TOKEN:
 				str="SEC_E_INVALID_TOKEN";
+				break;
 			case SEC_E_CANNOT_PACK:
 				str="SEC_E_CANNOT_PACK";
+				break;
 			case SEC_E_QOP_NOT_SUPPORTED:
 				str="SEC_E_QOP_NOT_SUPPORTED";
+				break;
 			case SEC_E_NO_IMPERSONATION:
 				str="SEC_E_NO_IMPERSONATION";
+				break;
 			case SEC_E_LOGON_DENIED:
 				str="SEC_E_LOGON_DENIED";
+				break;
 			case SEC_E_UNKNOWN_CREDENTIALS:
 				str="SEC_E_UNKNOWN_CREDENTIALS";
+				break;
 			case SEC_E_NO_CREDENTIALS:
 				str="SEC_E_NO_CREDENTIALS";
+				break;
 			case SEC_E_MESSAGE_ALTERED:
 				str="SEC_E_MESSAGE_ALTERED";
+				break;
 			case SEC_E_OUT_OF_SEQUENCE:
 				str="SEC_E_OUT_OF_SEQUENCE";
+				break;
 			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
 				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
+				break;
 			case SEC_E_CONTEXT_EXPIRED:
 				str="SEC_E_CONTEXT_EXPIRED";
+				break;
 			case SEC_E_INCOMPLETE_MESSAGE:
 				str="SEC_E_INCOMPLETE_MESSAGE";
+				break;
 			case SEC_E_OK:
 				str="SEC_E_OK";
+				break;
 			default:
 				str="";
 		}

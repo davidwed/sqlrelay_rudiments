@@ -10,6 +10,32 @@
 	#include <gssapi/gssapi.h>
 #endif
 
+#ifdef RUDIMENTS_HAS_SSPI
+	#ifdef RUDIMENTS_HAVE_WINSOCK2_H
+		#include <winsock2.h>
+	#endif
+
+	// must be included after winsock2.h
+	#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+
+	#define SECURITY_WIN32
+	#include <security.h>
+
+	// map some GSS flags
+	#define	GSS_C_DELEG_FLAG	ISC_REQ_DELEGATE
+	#define	GSS_C_MUTUAL_FLAG	ISC_REQ_MUTUAL_AUTH
+	#define	GSS_C_REPLAY_FLAG	ISC_REQ_REPLAY_DETECT
+	#define	GSS_C_SEQUENCE_FLAG	ISC_REQ_SEQUENCE_DETECT
+	#define	GSS_C_CONF_FLAG		ISC_REQ_CONFIDENTIALITY
+	#define	GSS_C_INTEG_FLAG	0
+	#define	GSS_C_ANON_FLAG		0
+	#define	GSS_C_PROT_READY_FLAG	0
+	#define	GSS_C_TRANS_FLAG	0
+	#define	GSS_C_DELEG_POLICY_FLAG	0
+#endif
+
 class gssprivate;
 class gssmechanismprivate;
 class gsscredentialsprivate;
