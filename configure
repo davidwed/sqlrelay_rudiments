@@ -19705,8 +19705,6 @@ fi
 
 
 
-$as_echo "#define RUDIMENTS_HAS_SSPI 0" >>confdefs.h
-
 echo "******************************"
 
 

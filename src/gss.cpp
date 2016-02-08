@@ -799,9 +799,8 @@ bool gsscredentials::acquire(const void *name,
 				i<pvt->_actualmechanisms->count; i++) {
 
 				gssmechanism	*mech=new gssmechanism;
-				mech->initialize(&pvt->
-						_actualmechanisms->
-						elements[index]);
+				mech->initialize(
+					&pvt->_actualmechanisms->elements[i]);
 				pvt->_amlist.append(mech);
 			}
 		}
