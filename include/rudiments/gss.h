@@ -133,32 +133,31 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		 *  Returns true on success and false on failure. */
 		bool	acquireService(const char *name);
 
+		/** Acquires credentials for user principal "name".
+		 *  Returns true on success and false on failure. */
+		bool	acquireUser(const char *name);
+
 		/** Acquires credentials for user principal "name" using
 		 *  "password" as the key.  Either "name" or "password" may
 		 *  be NULL if they are not required.
 		 *  Returns true on success and false on failure. */
-		bool	acquireUserName(const char *name,
+		bool	acquireUser(const char *name,
 					const char *password);
+
+		/** Acquires credentials for kerberos principal "name".
+		 *  Returns true on success and false on failure. */
+		bool	acquireKerberosPrincipal(const char *name);
 
 		/** Acquires credentials for kerberos principal "name" using
 		 *  "password" as the key.  Either "name" or "password" may
 		 *  be NULL if they are not required.
 		 *  Returns true on success and false on failure. */
-		bool	acquireKerberosPrincipalName(const char *name,
+		bool	acquireKerberosPrincipal(const char *name,
 							const char *password);
 
 		/** Acquires credentials for an anonymous principal.
 		 *  Returns true on success and false on failure. */
 		bool	acquireAnonymous();
-
-		/** Acquires credentials for platform-specific user id "uid".
-		 *  Returns true on success and false on failure. */
-		bool	acquireUid(uid_t uid);
-
-		/** Acquires credentials for platform-specific user id "uid"
-		 *  where "uid" is a string representation of the user id.
-		 *  Returns true on success and false on failure. */
-		bool	acquireUidString(const char *uid);
 
 
 		/** Releases any previously acquired credentials. */
@@ -370,17 +369,9 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		 *  context. */
 		const char	*getInitiator();
 
-		/** Returns a string representation of the object id of the
-		 *  type of the principal who initiated this context. */
-		const char	*getInitiatorType();
-
 		/** Returns the name of the principal who accepted this
 		 *  context. */
 		const char	*getAcceptor();
-
-		/** Returns a string representation of the object id of the
-		 *  type of the principal who accepted this context. */
-		const char	*getAcceptorType();
 
 
 		/** Returns true if the calling process was the initator of

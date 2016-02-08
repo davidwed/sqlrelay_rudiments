@@ -116,8 +116,8 @@ int main(int argc, const char **argv) {
 	if (!charstring::isNullOrEmpty(username)) {
 
 		gcred.addDesiredMechanism(&gmech);
-		if (!gcred.acquireUserName(username,password)) {
-			stdoutput.printf("acquireUserName():\n");
+		if (!gcred.acquireUser(username,password)) {
+			stdoutput.printf("acquireUser():\n");
 			stdoutput.printf("%s\n",gcred.getStatus());
 			stdoutput.printf("}\n");
 			process::exit(1);

@@ -121,12 +121,8 @@ void displayContext(gsscontext *gctx) {
 	stdoutput.write("  Context {\n");
 	stdoutput.printf("    initiator: %s\n",
 				gctx->getInitiator());
-	stdoutput.printf("    initiator type: %s\n",
-				gctx->getInitiatorType());
 	stdoutput.printf("    acceptor: %s\n",
 				gctx->getAcceptor());
-	stdoutput.printf("    acceptor type: %s\n",
-				gctx->getAcceptorType());
 	stdoutput.printf("    desired lifetime: %d\n",
 				gctx->getDesiredLifetime());
 	stdoutput.printf("    actual lifetime: %d\n",

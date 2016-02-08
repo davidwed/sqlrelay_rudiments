@@ -358,12 +358,13 @@ gsscredentials::gsscredentials() {
 
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredlifetime=GSS_C_INDEFINITE;
-		pvt->_actuallifetime=GSS_C_INDEFINITE;
+		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: how to set TimeStamp (FILETIME) to max?
+		pvt->_actuallifetime.u.LowPart=0;
+		pvt->_actuallifetime.u.HighPart=0;
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
-		pvt->_actuallifetime=UINT_MAX;
+		pvt->_actuallifetime=0;
 	#endif
 
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -397,7 +398,6 @@ uint32_t gsscredentials::getDesiredLifetime() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_desiredlifetime;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: convert TimeStamp to uint32_t
 		return 0;
 	#else
 		return pvt->_desiredlifetime;
@@ -481,8 +481,11 @@ bool gsscredentials::acquireService(const char *name) {
 	#endif
 }
 
-bool gsscredentials::acquireUserName(const char *name,
-					const char *password) {
+bool gsscredentials::acquireUser(const char *name) {
+	return acquireUser(name,NULL);
+}
+
+bool gsscredentials::acquireUser(const char *name, const char *password) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(name,charstring::length(name)+1,
@@ -495,8 +498,12 @@ bool gsscredentials::acquireUserName(const char *name,
 	#endif
 }
 
-bool gsscredentials::acquireKerberosPrincipalName(const char *name,
-							const char *password) {
+bool gsscredentials::acquireKerberosPrincipal(const char *name) {
+	return acquireKerberosPrincipal(name,NULL);
+}
+
+bool gsscredentials::acquireKerberosPrincipal(const char *name,
+						const char *password) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(name,charstring::length(name)+1,
@@ -516,33 +523,7 @@ bool gsscredentials::acquireAnonymous() {
 		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire(NULL,0,NULL,NULL);
-	#else
-		return false;
-	#endif
-}
-
-bool gsscredentials::acquireUid(uid_t uid) {
-	#if defined(RUDIMENTS_HAS_GSS)
-		pvt->_credusage=GSS_C_INITIATE;
-		return acquire(&uid,sizeof(uid_t),NULL,
-					GSS_C_NT_MACHINE_UID_NAME);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: get user name from uid?
-		return false;
-	#else
-		return false;
-	#endif
-}
-
-bool gsscredentials::acquireUidString(const char *uid) {
-	#if defined(RUDIMENTS_HAS_GSS)
-		pvt->_credusage=GSS_C_INITIATE;
-		return acquire(uid,charstring::length(uid)+1,
-					NULL,GSS_C_NT_STRING_UID_NAME);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire(uid,0,NULL,NULL);
+		return acquire("",0,NULL,NULL);
 	#else
 		return false;
 	#endif
@@ -574,10 +555,6 @@ bool gsscredentials::acquire(const void *name,
 					(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME) {
 				stdoutput.write("GSS_KRB5_NT_PRINCIPAL_NAME");
 			}
-			if ((gss_OID)nametype==
-					(gss_OID)GSS_C_NT_STRING_UID_NAME) {
-				stdoutput.write("GSS_C_NT_STRING_UID_NAME");
-			}
 			stdoutput.write(") - ");
 		#endif
 
@@ -588,9 +565,7 @@ bool gsscredentials::acquire(const void *name,
 			(gss_OID)nametype==
 				GSS_C_NT_USER_NAME ||
 			(gss_OID)nametype==
-				(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME ||
-			(gss_OID)nametype==
-				(gss_OID)GSS_C_NT_STRING_UID_NAME) {
+				(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME) {
 			pvt->_name=(const char *)name;
 		}
 
@@ -763,7 +738,7 @@ bool gsscredentials::acquire(const void *name,
 			// these creds from the cache.
 
 			if (kerror) {
-				// this will make the whole method fail
+				// make the whole method fail
 				// FIXME: getStatus() won't return why though...
 				pvt->_major=GSS_S_FAILURE;
 				#ifdef DEBUG_GSS
@@ -1005,9 +980,10 @@ void gsscredentials::release() {
 	}
 	pvt->_amlist.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		pvt->_actuallifetime=GSS_C_INDEFINITE;
+		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: how to set TimeStamp (FILETIME) to max?
+		pvt->_actuallifetime.u.LowPart=0;
+		pvt->_actuallifetime.u.HighPart=0;
 	#else
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
@@ -1021,8 +997,8 @@ uint32_t gsscredentials::getActualLifetime() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_actuallifetime;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: convert TimeStamp to uint32_t
-		return 0;
+		// this loses precision...
+		return (uint32_t)pvt->_actuallifetime.QuadPart;
 	#else
 		return pvt->_actuallifetime;
 	#endif
@@ -1325,10 +1301,8 @@ class gsscontextprivate {
 		#endif
 
 		char			*_initiator;
-		char			*_initiatortype;
 
 		char			*_acceptor;
-		char			*_acceptortype;
 
 		bool			_isinitiator;
 		bool			_isopen;
@@ -1343,16 +1317,17 @@ gsscontext::gsscontext() {
 	pvt->_fd=NULL;
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredlifetime=GSS_C_INDEFINITE;
-		pvt->_actuallifetime=GSS_C_INDEFINITE;
+		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: how to set TimeStamp (FILETIME) to max?
 		pvt->_maxmsgsize=0;
 		pvt->_trailersize=0;
 		pvt->_blksize=0;
 		pvt->_kerberos=false;
+		pvt->_actuallifetime.u.LowPart=0;
+		pvt->_actuallifetime.u.HighPart=0;
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
-		pvt->_actuallifetime=UINT_MAX;
+		pvt->_actuallifetime=0;
 	#endif
 	pvt->_desiredmechanism=NULL;
 	pvt->_desiredflags=0;
@@ -1365,9 +1340,7 @@ gsscontext::gsscontext() {
 		bytestring::zero(&pvt->_context,sizeof(pvt->_context));
 	#endif
 	pvt->_initiator=NULL;
-	pvt->_initiatortype=NULL;
 	pvt->_acceptor=NULL;
-	pvt->_acceptortype=NULL;
 	pvt->_isinitiator=false;
 	pvt->_isopen=false;
 	pvt->_readbufferpos=0;
@@ -1408,7 +1381,6 @@ uint32_t gsscontext::getDesiredLifetime() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_desiredlifetime;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: convert TimeStamp to uint32_t
 		return 0;
 	#else
 		return pvt->_desiredlifetime;
@@ -1806,9 +1778,6 @@ bool gsscontext::initiate(const void *name,
 
 		// we are the initiator
 		pvt->_isinitiator=true;
-
-		// the context is opn
-		pvt->_isopen=true;
 	#endif
 
 	#ifdef DEBUG_GSS
@@ -1886,6 +1855,26 @@ static void printFlags(uint32_t flags) {
 }
 #endif
 
+#ifdef RUDIMENTS_HAS_SSPI
+// FIXME: move to charstring class
+static CHAR *unicodeToAscii(const WCHAR *in) {
+
+	BOOL	useddefaultchar;
+	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
+	if (!size) {
+		return NULL;
+	}
+
+	CHAR	*out=new char[size];
+	if (!WideCharToMultiByte(CP_ACP,0,in,-1,out,size,
+						"?",&useddefaultchar)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+#endif
+
 bool gsscontext::inquire() {
 
 	bool	retval=false;
@@ -1923,13 +1912,12 @@ bool gsscontext::inquire() {
 
 		OM_uint32	minor;
 
-		// expose initiator and initiator type
+		// expose initiator
 		gss_buffer_desc	initiatorbuffer;
-		gss_OID		initiatortype;
 		pvt->_major=gss_display_name(&pvt->_minor,
 						initiator,
 						&initiatorbuffer,
-						&initiatortype);
+						NULL);
 		if (pvt->_major!=GSS_S_COMPLETE) {
 			#ifdef DEBUG_GSS
 				stdoutput.write("failed "
@@ -1948,35 +1936,13 @@ bool gsscontext::inquire() {
 		gss_release_name(&minor,&initiator);
 		gss_release_buffer(&minor,&initiatorbuffer);
 
-		gss_buffer_desc	initiatortypebuffer;
-		pvt->_major=gss_oid_to_str(&pvt->_minor,
-						initiatortype,
-						&initiatortypebuffer);
-		if (pvt->_major!=GSS_S_COMPLETE) {
-			#ifdef DEBUG_GSS
-				stdoutput.write("failed "
-					"(oid_to_str(initiatortype))\n\n");
-			#endif
-			return false;
-		}
 
-		delete[] pvt->_initiatortype;
-		pvt->_initiatortype=new char[initiatortypebuffer.length+1];
-		charstring::copy(pvt->_initiatortype,
-					(char *)initiatortypebuffer.value,
-					initiatortypebuffer.length);
-		pvt->_initiatortype[initiatortypebuffer.length]='\0';
-
-		gss_release_buffer(&minor,&initiatortypebuffer);
-	
-
-		// expose acceptor and acceptor type
+		// expose acceptor
 		gss_buffer_desc	acceptorbuffer;
-		gss_OID		acceptortype;
 		pvt->_major=gss_display_name(&pvt->_minor,
 						acceptor,
 						&acceptorbuffer,
-						&acceptortype);
+						NULL);
 		if (pvt->_major!=GSS_S_COMPLETE) {
 			#ifdef DEBUG_GSS
 				stdoutput.write("failed "
@@ -1995,33 +1961,12 @@ bool gsscontext::inquire() {
 		gss_release_name(&minor,&acceptor);
 		gss_release_buffer(&minor,&acceptorbuffer);
 
-		gss_buffer_desc	acceptortypebuffer;
-		pvt->_major=gss_oid_to_str(&pvt->_minor,
-						acceptortype,
-						&acceptortypebuffer);
-		if (pvt->_major!=GSS_S_COMPLETE) {
-			#ifdef DEBUG_GSS
-				stdoutput.write("failed "
-					"(oid_to_str(acceptortype))\n\n");
-			#endif
-			return false;
-		}
-
-		delete[] pvt->_acceptortype;
-		pvt->_acceptortype=new char[acceptortypebuffer.length+1];
-		charstring::copy(pvt->_acceptortype,
-					(char *)acceptortypebuffer.value,
-					acceptortypebuffer.length);
-		pvt->_acceptortype[acceptortypebuffer.length]='\0';
-	
-		gss_release_buffer(&minor,&acceptortypebuffer);
-
 
 		// expose isinitiator
 		pvt->_isinitiator=isinitiator;
 
 
-		// expose isopen
+		// exposeisopen
 		pvt->_isopen=isopen;
 
 
@@ -2029,23 +1974,124 @@ bool gsscontext::inquire() {
 		retval=(pvt->_major==GSS_S_COMPLETE);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		
+		// set initiator and acceptor
+		if (pvt->_isinitiator) {
 
-		// get actual mechanism
-		SecPkgContext_NegotiationInfo	SecPkgNegInfo;
-		pvt->_sstatus=QueryContextAttributes(&pvt->_context,
-						SECPKG_ATTR_NEGOTIATION_INFO,
-						&SecPkgNegInfo);
+			// try to get the native names
+			char	*clientname=NULL;
+			char	*servername=NULL;
+			SecPkgContext_NativeNames	nn;
+			pvt->_sstatus=QueryContextAttributes(
+						&pvt->_context,
+						SECPKG_ATTR_NATIVE_NAMES,
+						&nn);
+			if (pvt->_sstatus!=SEC_E_UNSUPPORTED_FUNCTION) {
+				if (SSPI_ERROR(pvt->_sstatus))	{
+					#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_NATIVE_NAMES))\n\n");
+					#endif
+					return false;
+				}
+				clientname=unicodeToAscii(
+						(WCHAR *)nn.sClientName);
+				servername=unicodeToAscii(
+						(WCHAR *)nn.sServerName);
+			}
+
+			// set initiator
+			delete[] pvt->_initiator;
+			if (clientname) {
+				pvt->_initiator=clientname;
+			} else if (pvt->_credentials) {
+				pvt->_initiator=charstring::duplicate(
+						pvt->_credentials->getName());
+			} else {
+				pvt->_initiator=NULL;
+			}
+
+			// set acceptor
+			delete[] pvt->_acceptor;
+			if (servername) {
+				pvt->_acceptor=servername;
+			} else {
+				pvt->_acceptor=charstring::duplicate(
+							pvt->_service);
+			}
+
+		} else {
+
+			// get the user name
+			SecPkgContext_Names	n;
+			pvt->_sstatus=QueryContextAttributes(
+						&pvt->_context,
+						SECPKG_ATTR_NAMES,
+						&n);
+			if (SSPI_ERROR(pvt->_sstatus))	{
+				#ifdef DEBUG_GSS
+				stdoutput.write("failed "
+				"(QueryContextAttributes("
+				"SECPKG_ATTR_NAMES))\n\n");
+				#endif
+				return false;
+			}
+			char	*username=charstring::duplicate(n.sUserName);
+
+			// try to get the target
+			char	*target=NULL;
+			SecPkgContext_ClientSpecifiedTarget	csp;
+			pvt->_sstatus=QueryContextAttributes(
+					&pvt->_context,
+					SECPKG_ATTR_CLIENT_SPECIFIED_TARGET,
+					&csp);
+			if (pvt->_sstatus!=SEC_E_TARGET_UNKNOWN) {
+				if (SSPI_ERROR(pvt->_sstatus))	{
+					#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
+					#endif
+					return false;
+				}
+				target=unicodeToAscii((WCHAR *)csp.sTargetName);
+			}
+
+			// set initiator
+			delete[] pvt->_initiator;
+			pvt->_initiator=username;
+
+			// set acceptor
+			delete[] pvt->_acceptor;
+			if (target) {
+				pvt->_acceptor=target;
+			} else if (pvt->_credentials) {
+				pvt->_acceptor=charstring::duplicate(
+						pvt->_credentials->getName());
+			} else {
+				pvt->_acceptor=NULL;
+			}
+		}
+
+
+		// get negotiation info
+		SecPkgContext_NegotiationInfo	neginfo;
+		pvt->_sstatus=QueryContextAttributes(
+					&pvt->_context,
+					SECPKG_ATTR_NEGOTIATION_INFO,
+					&neginfo);
 		if (SSPI_ERROR(pvt->_sstatus))	{
 			#ifdef DEBUG_GSS
 				stdoutput.write("failed "
-					"(QueryContextAttributes("
-					"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
+				"(QueryContextAttributes("
+				"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
 			#endif
 			return false;
 		}
-		pvt->_actualmechanism.initialize(
-					SecPkgNegInfo.PackageInfo->Name);
-		FreeContextBuffer(SecPkgNegInfo.PackageInfo);
+
+		// set actual mechanism
+		pvt->_actualmechanism.initialize(neginfo.PackageInfo->Name);
 
 		// are we using kerberos?
 		pvt->_kerberos=!charstring::compareIgnoringCase(
@@ -2056,74 +2102,30 @@ bool gsscontext::inquire() {
 		// now that we know the actual mechanism that we're using.
 		// As it might be smaller.
 
+		// set isopen
+		pvt->_isopen=(neginfo.NegotiationState==
+					SECPKG_NEGOTIATION_COMPLETE);
+
+		// clean up
+		FreeContextBuffer(neginfo.PackageInfo);
+
 
 		// get trailer and block sizes
-		SecPkgContext_Sizes	SecPkgContextSizes;
-		pvt->_sstatus=QueryContextAttributes(&pvt->_context,
-						SECPKG_ATTR_SIZES,
-						&SecPkgContextSizes);
+		SecPkgContext_Sizes	sizes;
+		pvt->_sstatus=QueryContextAttributes(
+					&pvt->_context,
+					SECPKG_ATTR_SIZES,
+					&sizes);
 		if (SSPI_ERROR(pvt->_sstatus)) {
 			#ifdef DEBUG_GSS
 				stdoutput.write("failed "
-					"(QueryContextAttributes("
-					"SECPKG_ATTR_SIZES))\n\n");
+				"(QueryContextAttributes("
+				"SECPKG_ATTR_SIZES))\n\n");
 			#endif
 			return false;
 		}
-		pvt->_trailersize=SecPkgContextSizes.cbSecurityTrailer;
-		pvt->_blksize=SecPkgContextSizes.cbBlockSize;
-
-
-		if (pvt->_isinitiator) {
-			// FIXME: set:
-			// char	*_initiator;
-			// char	*_initiatortype;
-		} else {
-
-			// expose initiator
-			// FIXME: does this work across machines
-			// or with non-NTLM mechs?
-			pvt->_sstatus=ImpersonateSecurityContext(&pvt->_context);
-			if (SSPI_ERROR(pvt->_sstatus)) {
-				#ifdef DEBUG_GSS
-					stdoutput.write("failed "
-						"(ImpersonateSecurityContext)"
-						"\n\n");
-				#endif
-				return false;
-			}
-			DWORD	usernamesize=0;
-			GetUserName(NULL,&usernamesize);
-			TCHAR	*username=new TCHAR[usernamesize];
-			if (!GetUserName(username,&usernamesize)) {
-				delete[] username;
-				#ifdef DEBUG_GSS
-					stdoutput.write(
-						"failed (GetUserName)\n\n");
-				#endif
-				return false;
-			}
-			pvt->_sstatus=RevertSecurityContext(&pvt->_context);
-			if (SSPI_ERROR(pvt->_sstatus)) {
-				#ifdef DEBUG_GSS
-					stdoutput.write("failed "
-						"(RevertSecurityContext)\n\n");
-				#endif
-				return false;
-			}
-			// FIXME: needs TCHAR -> CHAR conversion
-			pvt->_initiator=charstring::duplicate(username);
-			delete[] username;
-
-			// FIXME: set:
-			// char	*_initiatortype;
-		}
-
-		// FIXME: QuerySecurityContextToken?
-
-		// FIXME: set:
-		// char	*_acceptor;
-		// char	*_acceptortype;
+		pvt->_trailersize=sizes.cbSecurityTrailer;
+		pvt->_blksize=sizes.cbBlockSize;
 
 		retval=true;
 
@@ -2154,14 +2156,8 @@ bool gsscontext::inquire() {
 			(pvt->_service)?pvt->_service:"(none)");
 		stdoutput.printf("  initiator: %s\n",
 			(pvt->_initiator)?pvt->_initiator:"(none)");
-		stdoutput.printf("  initiator type: %s\n",
-			(pvt->_initiatortype)?
-			pvt->_initiatortype:"(none)");
 		stdoutput.printf("  acceptor: %s\n",
 			(pvt->_acceptor)?pvt->_acceptor:"(none)");
-		stdoutput.printf("  acceptor type: %s\n",
-			(pvt->_acceptortype)?
-			pvt->_acceptortype:"(none)");
 		stdoutput.printf("  is initiator: %s\n",
 			(pvt->_isinitiator)?"yes":"no");
 		stdoutput.printf("  is open: %s\n",
@@ -2429,9 +2425,6 @@ bool gsscontext::accept() {
 		if (error || pvt->_sstatus!=SEC_E_OK) {
 			return false;
 		}
-
-		// the context is opn
-		pvt->_isopen=true;
 	#endif
 
 	#ifdef DEBUG_GSS
@@ -2459,25 +2452,22 @@ void gsscontext::release() {
 	// reset initiator and acceptor names
 	delete[] pvt->_initiator;
 	pvt->_initiator=NULL;
-	delete[] pvt->_initiatortype;
-	pvt->_initiatortype=NULL;
 
 	delete[] pvt->_acceptor;
 	pvt->_acceptor=NULL;
-	delete[] pvt->_acceptortype;
-	pvt->_acceptortype=NULL;
 
 	// reset the "actuals"
 	#if defined(RUDIMENTS_HAS_GSS)
-		pvt->_actuallifetime=GSS_C_INDEFINITE;
+		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: how to set TimeStamp (FILETIME) to max?
 		pvt->_maxmsgsize=0;
 		pvt->_trailersize=0;
 		pvt->_blksize=0;
 		pvt->_kerberos=false;
+		pvt->_actuallifetime.u.LowPart=0;
+		pvt->_actuallifetime.u.HighPart=0;
 	#else
-		pvt->_actuallifetime=UINT_MAX;
+		pvt->_actuallifetime=0;
 	#endif
 	pvt->_actualmechanism.clear();
 	pvt->_actualflags=0;
@@ -2493,8 +2483,8 @@ uint32_t gsscontext::getActualLifetime() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return pvt->_actuallifetime;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: convert TimeStamp to uint32_t
-		return 0;
+		// this loses precision...
+		return (uint32_t)pvt->_actuallifetime.QuadPart;
 	#else
 		return pvt->_actuallifetime;
 	#endif
@@ -2516,6 +2506,20 @@ uint32_t gsscontext::getRemainingLifetime() {
 						&remainingtime);
 		return (pvt->_major==GSS_S_COMPLETE)?remainingtime:0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		SecPkgContext_Lifespan	l;
+		pvt->_sstatus=QueryContextAttributes(
+						&pvt->_context,
+						SECPKG_ATTR_LIFESPAN,
+						&l);
+		if (SSPI_ERROR(pvt->_sstatus))	{
+			#ifdef DEBUG_GSS
+			stdoutput.write("failed "
+				"(QueryContextAttributes("
+				"SECPKG_ATTR_LIFESPAN))\n\n");
+			#endif
+			return 0;
+		}
+		// FIXME: get now and subtract from l.tsExpiry.QuadPart
 		return 0;
 	#else
 		return 0;
@@ -2526,16 +2530,8 @@ const char *gsscontext::getInitiator() {
 	return pvt->_initiator;
 }
 
-const char *gsscontext::getInitiatorType() {
-	return pvt->_initiatortype;
-}
-
 const char *gsscontext::getAcceptor() {
 	return pvt->_acceptor;
-}
-
-const char *gsscontext::getAcceptorType() {
-	return pvt->_acceptortype;
 }
 
 bool gsscontext::getIsInitiator() {
