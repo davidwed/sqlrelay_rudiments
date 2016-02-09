@@ -85,6 +85,14 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		/** Deletes this instance of the gsscredentials class. */
 		~gsscredentials();
 
+		/** Sets the location of the keytab to use when acquiring
+		 *  credentials. */
+		bool		setKeytab(const char *keytab);
+
+		/** Returns the location of the keytab that will be used
+		 *  when acquiring credentials. */
+		const char	*getKeytab();
+
 		/** Sets the credentials-lifetime that will be requested during
 		 *  subsequent calls to the acquire methods.
 		 *  Setting "desiredlifetime" to the largest 32-bit unsigned
@@ -131,33 +139,19 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 
 		/** Acquires credentials for service principal "name".
 		 *  Returns true on success and false on failure. */
-		bool	acquireService(const char *name);
+		bool	acquireForService(const char *name);
 
 		/** Acquires credentials for user principal "name".
 		 *  Returns true on success and false on failure. */
-		bool	acquireUser(const char *name);
-
-		/** Acquires credentials for user principal "name" using
-		 *  "password" as the key.  Either "name" or "password" may
-		 *  be NULL if they are not required.
-		 *  Returns true on success and false on failure. */
-		bool	acquireUser(const char *name,
-					const char *password);
+		bool	acquireForUser(const char *name);
 
 		/** Acquires credentials for kerberos principal "name".
 		 *  Returns true on success and false on failure. */
-		bool	acquireKerberosPrincipal(const char *name);
-
-		/** Acquires credentials for kerberos principal "name" using
-		 *  "password" as the key.  Either "name" or "password" may
-		 *  be NULL if they are not required.
-		 *  Returns true on success and false on failure. */
-		bool	acquireKerberosPrincipal(const char *name,
-							const char *password);
+		bool	acquireForKrbPrincipal(const char *name);
 
 		/** Acquires credentials for an anonymous principal.
 		 *  Returns true on success and false on failure. */
-		bool	acquireAnonymous();
+		bool	acquireForAnonymous();
 
 
 		/** Releases any previously acquired credentials. */

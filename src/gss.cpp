@@ -3,6 +3,7 @@
 
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
+#include <rudiments/environment.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/stringbuffer.h>
@@ -19,7 +20,7 @@
 #if defined(RUDIMENTS_HAS_GSS)
 
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
-		// for gss_acquire_cred_with_password and gss_str_to_oid
+		// for gss_str_to_oid
 		#include <gssapi/gssapi_ext.h>
 	#endif
 
@@ -28,14 +29,14 @@
 		#include "gssoid.cpp"
 	#endif
 
-	#ifndef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
+	/*#ifndef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
 		// for direct krb5 functions
 		#if defined(RUDIMENTS_HAS_KRB5_KRB5_H)
 			#include <krb5/krb5.h>
 		#elif defined(RUDIMENTS_HAS_KRB5_H)
 			#include <krb5.h>
 		#endif
-	#endif
+	#endif*/
 
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 		// for GSS_KRB5_NT_PRINCIPAL_NAME on some platforms
@@ -50,8 +51,6 @@
 		#define GSS_C_NT_HOSTBASED_SERVICE gss_nt_service_name
 		#define GSS_C_NT_USER_NAME gss_nt_user_name
 		#define GSS_KRB5_NT_PRINCIPAL_NAME gss_nt_krb5_principal
-		#define GSS_C_NT_MACHINE_UID_NAME gss_nt_machine_uid_name
-		#define GSS_C_NT_STRING_UID_NAME gss_nt_string_uid_name
 	#endif
 
 #elif defined(RUDIMENTS_HAS_SSPI)
@@ -384,6 +383,30 @@ gsscredentials::~gsscredentials() {
 	delete pvt;
 }
 
+bool gsscredentials::setKeytab(const char *keytab) {
+	#if defined(RUDIMENTS_HAS_GSS)
+		return (keytab)?
+			environment::setValue("KRB5_KTNAME",keytab):
+			environment::remove("KRB5_KTNAME");
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: ???
+		return true;
+	#else
+		return false;
+	#endif
+}
+
+const char *gsscredentials::getKeytab() {
+	#if defined(RUDIMENTS_HAS_GSS)
+		return environment::getValue("KRB5_KTNAME");
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: ???
+		return NULL;
+	#else
+		return NULL;
+	#endif
+}
+
 void gsscredentials::setDesiredLifetime(uint32_t desiredlifetime) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_desiredlifetime=desiredlifetime;
@@ -468,62 +491,53 @@ gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 	return NULL;
 }
 
-bool gsscredentials::acquireService(const char *name) {
+bool gsscredentials::acquireForService(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_ACCEPT;
 		return acquire(name,charstring::length(name)+1,
-					NULL,GSS_C_NT_HOSTBASED_SERVICE);
+						GSS_C_NT_HOSTBASED_SERVICE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_INBOUND;
-		return acquire(name,0,NULL,NULL);
+		return acquire(name,0,NULL);
 	#else
 		return false;
 	#endif
 }
 
-bool gsscredentials::acquireUser(const char *name) {
-	return acquireUser(name,NULL);
-}
-
-bool gsscredentials::acquireUser(const char *name, const char *password) {
+bool gsscredentials::acquireForUser(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(name,charstring::length(name)+1,
-					password,GSS_C_NT_USER_NAME);
+						GSS_C_NT_USER_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire(name,0,password,NULL);
+		return acquire(name,0,NULL);
 	#else
 		return false;
 	#endif
 }
 
-bool gsscredentials::acquireKerberosPrincipal(const char *name) {
-	return acquireKerberosPrincipal(name,NULL);
-}
-
-bool gsscredentials::acquireKerberosPrincipal(const char *name,
-						const char *password) {
+bool gsscredentials::acquireForKrbPrincipal(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
 		return acquire(name,charstring::length(name)+1,
-				password,(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
+					(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire(name,0,password,NULL);
+		return acquire(name,0,NULL);
 	#else
 		return false;
 	#endif
 }
 
-bool gsscredentials::acquireAnonymous() {
+bool gsscredentials::acquireForAnonymous() {
 	#if defined(RUDIMENTS_HAS_GSS) && \
 		defined(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS)
 		pvt->_credusage=GSS_C_INITIATE;
-		return acquire("",0,NULL,GSS_C_NT_ANONYMOUS);
+		return acquire("",0,GSS_C_NT_ANONYMOUS);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire("",0,NULL,NULL);
+		return acquire("",0,NULL);
 	#else
 		return false;
 	#endif
@@ -531,7 +545,6 @@ bool gsscredentials::acquireAnonymous() {
 
 bool gsscredentials::acquire(const void *name,
 				size_t namesize,
-				const char *password,
 				const void *nametype) {
 
 	// release any previously acquired credentials
@@ -542,8 +555,7 @@ bool gsscredentials::acquire(const void *name,
 	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
-			stdoutput.printf("acquire credentials\n(%s/%s/",
-					name,(password)?password:"(none)");
+			stdoutput.printf("acquire credentials\n(%s/",name,);
 			if ((gss_OID)nametype==
 					GSS_C_NT_HOSTBASED_SERVICE) {
 				stdoutput.write("GSS_C_NT_HOSTBASED_SERVICE");
@@ -570,7 +582,7 @@ bool gsscredentials::acquire(const void *name,
 		}
 
 		// degenerate case
-		if (!name && !password) {
+		if (!name) {
 			pvt->_major=GSS_S_COMPLETE;
 			#ifdef DEBUG_GSS
 				stdoutput.write("success (no credentials)\n\n");
@@ -578,7 +590,7 @@ bool gsscredentials::acquire(const void *name,
 			return true;
 		}
 
-		// Acquire credentials associated with "name" and "password",
+		// Acquire credentials associated with "name"
 		// where "name" is type "nametype"...
 
 		// by default, we'll use "no name"
@@ -647,112 +659,8 @@ bool gsscredentials::acquire(const void *name,
 			// FIXME: what if this fails?
 		}
 
-		// "log in"...
-
-		#ifdef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
-
-		if (password) {
-
-			// if a password was provided, then use it...
-
-			// create a data/length struct
-			// from the password string...
-			gss_buffer_desc	passwordbuffer;
-			passwordbuffer.value=(void *)password;
-			passwordbuffer.length=
-				charstring::length(
-					(const char *)passwordbuffer.value)+1;
-
-			// acquire the credentials associated
-			// with the name/password...
-			pvt->_major=gss_acquire_cred_with_password(
-						&pvt->_minor,
-						desiredname,
-						&passwordbuffer,
-						pvt->_desiredlifetime,
-						pvt->_desiredmechanisms,
-						pvt->_credusage,
-						&pvt->_credentials,
-						&pvt->_actualmechanisms,
-						&pvt->_actuallifetime);
-		} else {
-
-		#else
-
-		krb5_error_code	kerror=0;
-		if (password) {
-
-			// if a password was provided, then use it...
-
-			// the code below is analagous to calling
-			// kinit with a user/password...
-
-			// FIXME: Somehow the code below doesn't allow the
-			// user to use any mechanism but the default, but
-			// calling gss_acquire_cred_with_password() does.
-
-			krb5_context		kctx=NULL;
-			krb5_principal		kpr=NULL;
-			krb5_creds		kcrd;
-			bytestring::zero(&kcrd,sizeof(kcrd));
-
-			// create a context
-			kerror=krb5_init_context(&kctx);
-
-			// authenticate with the KDC
-			if (!kerror) {
-				kerror=krb5_parse_name(kctx,
-						(const char *)name,&kpr);
-			}
-			if (!kerror) {
-				// older implementations have a char *
-				// type for argument 4
-				kerror=krb5_get_init_creds_password(
-						kctx,&kcrd,kpr,
-						(char *)password,
-						NULL,NULL,0,NULL,NULL);
-			}
-
-			// cache the credentials
-			krb5_ccache	kcc=NULL;
-			if (!kerror) {
-				kerror=krb5_cc_default(kctx,&kcc);
-			}
-			if (!kerror) {
-				kerror=krb5_cc_initialize(kctx,kcc,kpr);
-			}
-			if (!kerror) {
-				kerror=krb5_cc_store_cred(kctx,kcc,&kcrd);
-			}
-			krb5_cc_close(kctx,kcc);
-
-			// clean up
-			krb5_free_cred_contents(kctx,&kcrd);
-			krb5_free_principal(kctx,kpr);
-			krb5_free_context(kctx);
-
-			// At this point, the cred cache should contain
-			// credentials for the specified user/password.
-			//
-			// The call to gss_acquire_cred() below will fetch
-			// these creds from the cache.
-
-			if (kerror) {
-				// make the whole method fail
-				// FIXME: getStatus() won't return why though...
-				pvt->_major=GSS_S_FAILURE;
-				#ifdef DEBUG_GSS
-					stdoutput.write("failed (kinit) ");
-				#endif
-			}
-		}
-
-		if (!kerror) {
-
-		#endif
-
-			// acquire the credentials associated with the name...
-			pvt->_major=gss_acquire_cred(&pvt->_minor,
+		// acquire the credentials associated with the name...
+		pvt->_major=gss_acquire_cred(&pvt->_minor,
 						desiredname,
 						pvt->_desiredlifetime,
 						pvt->_desiredmechanisms,
@@ -760,7 +668,6 @@ bool gsscredentials::acquire(const void *name,
 						&pvt->_credentials,
 						&pvt->_actualmechanisms,
 						&pvt->_actuallifetime);
-		}
 
 		// success/failure
 		retval=(pvt->_major==GSS_S_COMPLETE);
@@ -794,8 +701,7 @@ bool gsscredentials::acquire(const void *name,
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
 		#ifdef DEBUG_GSS
-			stdoutput.printf("acquire credentials\n(%s/%s/",
-					name,(password)?password:"(none)");
+			stdoutput.printf("acquire credentials\n(%s/",name);
 			if (pvt->_credusage==SECPKG_CRED_INBOUND) {
 				stdoutput.write("inbound");
 			} else if (pvt->_credusage==SECPKG_CRED_OUTBOUND) {
@@ -810,7 +716,7 @@ bool gsscredentials::acquire(const void *name,
 		pvt->_name=(const char *)name;
 
 		// degenerate case
-		if (!name && !password) {
+		if (!name) {
 			pvt->_sstatus=SEC_E_OK;
 			#ifdef DEBUG_GSS
 				stdoutput.write("success (no credentials)\n\n");

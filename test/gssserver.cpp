@@ -34,22 +34,22 @@ int main(int argc, const char **argv) {
 		service=cmdl.getValue("service");
 	}
 
-	// configure keytab
-	if (!charstring::isNullOrEmpty(keytab) &&
-			!environment::setValue("KRB5_KTNAME",keytab)) {
-		stdoutput.printf("failed to configure keytab\n");
-		process::exit(1);
-	}
-
 	// print available mechs
 	if (verbose) {
 		displayAvailableMechanisms();
 	}
 
-	// get the credentials for this service from the keytab
 	gsscredentials	gcred;
-	if (!gcred.acquireService(service)) {
-		stdoutput.printf("acquireService():\n");
+
+	// set which keytab to use
+	if (!charstring::isNullOrEmpty(keytab) && !gcred.setKeytab(keytab)) {
+		stdoutput.printf("failed to configure keytab\n");
+		process::exit(1);
+	}
+
+	// acquire the credentials for this service
+	if (!gcred.acquireForService(service)) {
+		stdoutput.printf("acquireForService():\n");
 		stdoutput.printf("%s\n",gcred.getStatus());
 		process::exit(1);
 	}

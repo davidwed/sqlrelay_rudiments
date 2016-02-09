@@ -11,7 +11,7 @@ static void usage() {
 	stdoutput.printf("Usage: gss-client "
 			"[-host host] [-port port] [-service service] "
 			"[-message msg] "
-			"[-user user] [-pass pw] "
+			"[-user user] "
 			"[-ccount count] [-mcount count] [-dcount count] "
 			"[-mech mechanism] [-flags flags] [-verbose]\n");
 }
@@ -44,9 +44,8 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	// user, password
+	// user
 	const char	*username=cmdl.getValue("user");
-	const char	*password=cmdl.getValue("pass");
 
 	// connection and message count
 	int64_t	ccount=charstring::toInteger(cmdl.getValue("ccount"));
@@ -113,8 +112,8 @@ int main(int argc, const char **argv) {
 	if (!charstring::isNullOrEmpty(username)) {
 
 		gcred.addDesiredMechanism(&gmech);
-		if (!gcred.acquireUser(username,password)) {
-			stdoutput.printf("acquireUser():\n");
+		if (!gcred.acquireForUser(username)) {
+			stdoutput.printf("acquireForUser():\n");
 			stdoutput.printf("%s\n",gcred.getStatus());
 			stdoutput.printf("}\n");
 			process::exit(1);
