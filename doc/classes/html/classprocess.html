@@ -42,6 +42,7 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classprocess-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -49,6 +50,15 @@
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:abe4c3ec1e5d19e63ec428c14b14f0caf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#abe4c3ec1e5d19e63ec428c14b14f0caf">retryFailedFork</a> ()</td></tr>
+<tr class="separator:abe4c3ec1e5d19e63ec428c14b14f0caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa01e45b2a0f72a8f72d0a8d5725a8450"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#aa01e45b2a0f72a8f72d0a8d5725a8450">dontRetryFailedFork</a> ()</td></tr>
+<tr class="separator:aa01e45b2a0f72a8f72d0a8d5725a8450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b617b0aade619f4bb1c8e7bfcae1e40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#a5b617b0aade619f4bb1c8e7bfcae1e40">getRetryFailedFork</a> ()</td></tr>
+<tr class="separator:a5b617b0aade619f4bb1c8e7bfcae1e40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:adf19980c0cbb800325eef8783e93b4bf"><td class="memItemLeft" align="right" valign="top">static pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classprocess.html#adf19980c0cbb800325eef8783e93b4bf">getProcessId</a> ()</td></tr>
@@ -250,6 +260,22 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Detaches the current process from the controlling tty, creates a new session, changes directory to / and sets the file creation mask to 0. Use this method to "fork your
 process into the background." Returns true on success and false on failure. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa01e45b2a0f72a8f72d0a8d5725a8450"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void process::dontRetryFailedFork </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Causes <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> calls not to be automatically retried if they fail because of insufficient system resources. If set, if a <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> fails, the system error is set to EAGAIN and the <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> must be retried by the calling program. </p>
 
 </div>
 </div>
@@ -708,6 +734,22 @@ process into the background." Returns true on success and false on failure. </p>
 
 </div>
 </div>
+<a class="anchor" id="a5b617b0aade619f4bb1c8e7bfcae1e40"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> process::getRetryFailedFork </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if failed <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> calls will be retried and false otherwise. </p>
+
+</div>
+</div>
 <a class="anchor" id="a122bfeb9ef597c253ea6f99b6582b665"></a>
 <div class="memitem">
 <div class="memproto">
@@ -852,6 +894,22 @@ process into the background." Returns true on success and false on failure. </p>
 </table>
 </div><div class="memdoc">
 <p>Creates a new session, sets the calling process to be the process group leader and detaches from the controlling terminal. Returns the session id on success or -1 if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="abe4c3ec1e5d19e63ec428c14b14f0caf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void process::retryFailedFork </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Causes <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> calls to be automatically retried if they fail because of insufficient system resources. This is the default behavior. Otherwise, if a <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> fails, the system error is set to EAGAIN and the <a class="el" href="classprocess.html#a444ff4495b747cebdc0b27596f8e5735">fork()</a> must be retried by the calling program. </p>
 
 </div>
 </div>
@@ -1360,7 +1418,7 @@ process into the background." Returns true on success and false on failure. </p>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 25 2016 13:46:01 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 8 2016 19:29:37 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
