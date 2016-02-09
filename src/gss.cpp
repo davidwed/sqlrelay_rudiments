@@ -29,15 +29,6 @@
 		#include "gssoid.cpp"
 	#endif
 
-	/*#ifndef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
-		// for direct krb5 functions
-		#if defined(RUDIMENTS_HAS_KRB5_KRB5_H)
-			#include <krb5/krb5.h>
-		#elif defined(RUDIMENTS_HAS_KRB5_H)
-			#include <krb5.h>
-		#endif
-	#endif*/
-
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 		// for GSS_KRB5_NT_PRINCIPAL_NAME on some platforms
 		#include <gssapi/gssapi_krb5.h>

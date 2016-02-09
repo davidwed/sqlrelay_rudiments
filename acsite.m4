@@ -1063,24 +1063,11 @@ then
 			FW_TRY_LINK([#include <gssapi/gssapi.h>
 #include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,GSS has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
-			AC_MSG_CHECKING(for krb5.h)
-			FW_TRY_LINK([#include <krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_KRB5_H,1,GSS has krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
-			AC_MSG_CHECKING(for krb5/krb5.h)
-			FW_TRY_LINK([#include <krb5/krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_KRB5_KRB5_H,1,GSS has krb5/krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
 			AC_MSG_CHECKING(for GSS_C_NT_ANONYMOUS)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_ANONYMOUS;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS,1,GSS has GSS_C_NT_ANONYMOUS) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss_str_to_oid)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,GSS has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
-			AC_MSG_CHECKING(for gss_acquire_cred_with_password)
-			FW_TRY_LINK([#include <gssapi/gssapi.h>
-#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
-	#include <gssapi/gssapi_ext.h>
-#endif
-],[gss_acquire_cred_with_password(0,0,0,0,0,0,0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD,1,GSS has gss_acquire_cred_with_password) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss name types)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_NAME_TYPES,1,GSS has gss name types) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])

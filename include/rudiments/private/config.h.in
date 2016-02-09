@@ -91,9 +91,6 @@
 /* GSS has gssapi/gssapi_krb5.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 
-/* GSS has gss_acquire_cred_with_password */
-#undef RUDIMENTS_HAS_GSS_ACQUIRE_CRED_WITH_PASSWORD
-
 /* GSS has GSS_C_NT_ANONYMOUS */
 #undef RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS
 
@@ -102,12 +99,6 @@
 
 /* GSS has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID
-
-/* GSS has krb5.h */
-#undef RUDIMENTS_HAS_KRB5_H
-
-/* GSS has krb5/krb5.h */
-#undef RUDIMENTS_HAS_KRB5_KRB5_H
 
 /* Rudiments supports libcurl */
 #undef RUDIMENTS_HAS_LIBCURL
