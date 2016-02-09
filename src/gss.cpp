@@ -1399,6 +1399,76 @@ void gsscontext::setDesiredFlags(uint32_t desiredflags) {
 	pvt->_desiredflags=desiredflags;
 }
 
+void gsscontext::setDesiredFlags(const char *desiredflags) {
+
+	char		**df;
+	uint64_t	dfcount;
+	charstring::split(desiredflags,",",true,&df,&dfcount);
+
+	pvt->_desiredflags=0;
+	for (uint64_t i=0; i<dfcount; i++) {
+		#ifdef GSS_C_DELEG_FLAG
+		if (!charstring::compare(df[i],"GSS_C_DELEG_FLAG")) {
+			pvt->_desiredflags|=GSS_C_DELEG_FLAG;
+		}
+		#endif
+		#ifdef GSS_C_MUTUAL_FLAG
+		if (!charstring::compare(df[i],"GSS_C_MUTUAL_FLAG")) {
+			pvt->_desiredflags|=GSS_C_MUTUAL_FLAG;
+		}
+		#endif
+		#ifdef GSS_C_REPLAY_FLAG
+		if (!charstring::compare(df[i],"GSS_C_REPLAY_FLAG")) {
+			pvt->_desiredflags|=GSS_C_REPLAY_FLAG;
+		}
+		#endif
+		#ifdef GSS_C_SEQUENCE_FLAG
+		if (!charstring::compare(df[i],"GSS_C_SEQUENCE_FLAG")) {
+			pvt->_desiredflags|=GSS_C_SEQUENCE_FLAG;
+		}
+		#endif
+		#ifdef GSS_C_CONF_FLAG
+		if (!charstring::compare(df[i],"GSS_C_CONF_FLAG")) {
+			pvt->_desiredflags|=GSS_C_CONF_FLAG;
+		}
+		#endif
+		#if !defined(RUDIMENTS_HAS_SSPI)
+			#ifdef GSS_C_INTEG_FLAG
+			if (!charstring::compare(df[i],
+						"GSS_C_INTEG_FLAG")) {
+				pvt->_desiredflags|=GSS_C_INTEG_FLAG;
+			}
+			#endif
+			#ifdef GSS_C_ANON_FLAG
+			if (!charstring::compare(df[i],
+						"GSS_C_ANON_FLAG")) {
+				pvt->_desiredflags|=GSS_C_ANON_FLAG;
+			}
+			#endif
+			#ifdef GSS_C_PROT_READY_FLAG
+			if (!charstring::compare(df[i],
+						"GSS_C_PROT_READY_FLAG")) {
+				pvt->_desiredflags|=GSS_C_PROT_READY_FLAG;
+			}
+			#endif
+			#ifdef GSS_C_TRANS_FLAG
+			if (!charstring::compare(df[i],
+						"GSS_C_TRANS_FLAG")) {
+				pvt->_desiredflags|=GSS_C_TRANS_FLAG;
+			}
+			#endif
+			#ifdef GSS_C_DELEG_POLICY_FLAG
+			if (!charstring::compare(df[i],
+						"GSS_C_DELEG_POLICY_FLAG")) {
+				pvt->_desiredflags|=GSS_C_DELEG_POLICY_FLAG;
+			}
+			#endif
+		#endif
+		delete[] df[i];
+	}
+	delete[] df;
+}
+
 uint32_t gsscontext::getDesiredFlags() {
 	return pvt->_desiredflags;
 }

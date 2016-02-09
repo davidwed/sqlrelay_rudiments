@@ -297,6 +297,10 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		 *  subsequent calls to initiate() or accept(). */
 		void	setDesiredFlags(uint32_t desiredflags);
 
+		/** Sets the context-flags that will be requested during
+		 *  subsequent calls to initiate() or accept(). */
+		void	setDesiredFlags(const char *desiredflags);
+
 		/** Returns the context-flags set by a previous call to
 		 *  setDesiredFlags() or 0 if no flags have been set. */
 		uint32_t	getDesiredFlags();

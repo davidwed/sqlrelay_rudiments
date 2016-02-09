@@ -13,9 +13,7 @@ static void usage() {
 			"[-message msg] "
 			"[-user user] [-pass pw] "
 			"[-ccount count] [-mcount count] [-dcount count] "
-			"[-mech mechanism] "
-			"[-deleg] [-seq] [-noreplay] [-nomutual] "
-			"[-verbose]\n");
+			"[-mech mechanism] [-flags flags] [-verbose]\n");
 }
 
 int main(int argc, const char **argv) {
@@ -78,11 +76,10 @@ int main(int argc, const char **argv) {
 	const char	*mechanism=cmdl.getValue("mech");
 
 	// flags
-	uint32_t	flags=0 |
-			((cmdl.found("deleg"))?GSS_C_DELEG_FLAG:0) |
-			((cmdl.found("seq"))?GSS_C_SEQUENCE_FLAG:0) |
-			((cmdl.found("noreplay"))?0:GSS_C_REPLAY_FLAG) |
-			((cmdl.found("nomutual"))?0:GSS_C_MUTUAL_FLAG);
+	const char	*flags="GSS_C_REPLAY_FLAG,GSS_C_MUTUAL_FLAG";
+	if (cmdl.found("flags")) {
+		flags=cmdl.getValue("flags");
+	}
 
 	// verbose
 	bool	verbose=cmdl.found("verbose");
