@@ -58,8 +58,8 @@ PROGS2= dynamicarray \
 	memorymap \
 	character \
 	bytestring \
-	sslsvr \
-	sslclnt \
+	sslserver \
+	sslclient \
 	oneshotsvr \
 	oneshotclnt \
 	lock1 \
@@ -114,8 +114,8 @@ server: server.cpp server.$(OBJ)
 nullserver: nullserver.cpp nullserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) nullserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-sslsvr: sslsvr.cpp sslsvr.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sslsvr.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+sslserver: sslserver.cpp sslserver.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sslserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 listener: listener.cpp listener.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) listener.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
@@ -123,8 +123,8 @@ listener: listener.cpp listener.$(OBJ)
 inetsocketclient: inetsocketclient.cpp inetsocketclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-sslclnt: sslclnt.cpp sslclnt.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sslclnt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+sslclient: sslclient.cpp sslclient.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sslclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 unixsocketclient: unixsocketclient.cpp unixsocketclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) unixsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

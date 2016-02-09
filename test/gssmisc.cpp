@@ -84,35 +84,35 @@ void displayCredentials(gsscredentials *gcred) {
 
 static void displayFlags(uint32_t flags) {
 	if (flags&GSS_C_DELEG_FLAG) {
-		stdoutput.write("GSS_C_DELEG_FLAG ");
+		stdoutput.write("GSS_C_DELEG_FLAG,");
 	}
 	if (flags&GSS_C_MUTUAL_FLAG) {
-		stdoutput.write("GSS_C_MUTUAL_FLAG ");
+		stdoutput.write("GSS_C_MUTUAL_FLAG,");
 	}
 	if (flags&GSS_C_REPLAY_FLAG) {
-		stdoutput.write("GSS_C_REPLAY_FLAG ");
+		stdoutput.write("GSS_C_REPLAY_FLAG,");
 	}
 	if (flags&GSS_C_SEQUENCE_FLAG) {
-		stdoutput.write("GSS_C_SEQUENCE_FLAG ");
+		stdoutput.write("GSS_C_SEQUENCE_FLAG,");
 	}
 	if (flags&GSS_C_CONF_FLAG) {
-		stdoutput.write("GSS_C_CONF_FLAG ");
+		stdoutput.write("GSS_C_CONF_FLAG,");
 	}
 	if (flags&GSS_C_INTEG_FLAG) {
-		stdoutput.write("GSS_C_INTEG_FLAG ");
+		stdoutput.write("GSS_C_INTEG_FLAG,");
 	}
 	if (flags&GSS_C_ANON_FLAG) {
-		stdoutput.write("GSS_C_ANON_FLAG ");
+		stdoutput.write("GSS_C_ANON_FLAG,");
 	}
 	if (flags&GSS_C_PROT_READY_FLAG) {
-		stdoutput.write("GSS_C_PROT_READY_FLAG ");
+		stdoutput.write("GSS_C_PROT_READY_FLAG,");
 	}
 	if (flags&GSS_C_TRANS_FLAG) {
-		stdoutput.write("GSS_C_TRANS_FLAG ");
+		stdoutput.write("GSS_C_TRANS_FLAG,");
 	}
 	#ifdef GSS_C_DELEG_POLICY_FLAG
 	if (flags&GSS_C_DELEG_POLICY_FLAG) {
-		stdoutput.write("GSS_C_DELEG_POLICY_FLAG ");
+		stdoutput.write("GSS_C_DELEG_POLICY_FLAG,");
 	}
 	#endif
 }
