@@ -1443,9 +1443,9 @@ bool gsscontext::initiate(const void *name,
 		stdoutput.write("initiate context...\n");
 	#endif
 
-	bool	error=false;
-
 	#if defined(RUDIMENTS_HAS_GSS)
+
+		bool	error=false;
 
 		// by default, we'll use "no name"
 		gss_name_t	desiredname=GSS_C_NO_NAME;
@@ -1593,6 +1593,8 @@ bool gsscontext::initiate(const void *name,
 		}
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		bool	error=false;
 
 		// get maxiumum message size...
 		// At this point, we don't definitively know what mech
@@ -2150,9 +2152,9 @@ bool gsscontext::accept() {
 		stdoutput.write("accept context...\n");
 	#endif
 
-	bool	error=false;
-
 	#if defined(RUDIMENTS_HAS_GSS)
+
+		bool	error=false;
 
 		// accept the context...
 		gss_buffer_desc	inputtoken;
@@ -2254,6 +2256,8 @@ bool gsscontext::accept() {
 		pvt->_actualmechanism.initialize(actualmechoid);
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		bool	error=false;
 
 		// get maxiumum message size...
 		// At this point, we don't definitively know what mech
