@@ -336,8 +336,9 @@ class gsscredentialsprivate {
 		#elif defined(RUDIMENTS_HAS_SSPI)
 			ULONG			_credusage;
 			CredHandle		_credentials;
-			bool			_acquired;
 		#endif
+
+		bool				_acquired;
 
 		linkedlist< gssmechanism * >	_dmlist;
 		linkedlist< gssmechanism * >	_amlist;
@@ -374,8 +375,8 @@ gsscredentials::gsscredentials() {
 		pvt->_credentials=GSS_C_NO_CREDENTIAL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_BOTH;
-		pvt->_acquired=false;
 	#endif
+	pvt->_acquired=false;
 }
 
 gsscredentials::~gsscredentials() {
@@ -800,11 +801,11 @@ bool gsscredentials::acquire(const void *name,
 		gssmechanism	*mech=new gssmechanism;
 		mech->initialize(mechname);
 		pvt->_amlist.append(mech);
-
-		pvt->_acquired=retval;
 	#else
 		retval=false;
 	#endif
+
+	pvt->_acquired=retval;
 
 	#ifdef DEBUG_GSS
 	if (retval) {
@@ -858,6 +859,10 @@ bool gsscredentials::acquire(const void *name,
 	return retval;
 }
 
+bool gsscredentials::acquired() {
+	return pvt->_acquired;
+}
+
 void gsscredentials::release() {
 
 	// release the credentials
@@ -893,6 +898,7 @@ void gsscredentials::release() {
 	#else
 		pvt->_actuallifetime=UINT_MAX;
 	#endif
+	pvt->_acquired=false;
 }
 
 const char *gsscredentials::getName() {

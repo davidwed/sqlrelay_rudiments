@@ -154,6 +154,11 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		bool	acquireForAnonymous();
 
 
+		/** Returns true if credentials are currently
+		 *  acquired and false otherwise. */
+		bool	acquired();
+
+
 		/** Releases any previously acquired credentials. */
 		void	release();
 
