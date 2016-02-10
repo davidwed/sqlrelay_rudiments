@@ -1084,6 +1084,12 @@ then
 	#include <gssapi/gssapi_ext.h>
 #endif],[gss_oid_to_str(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_OID_TO_STR,1,GSS has gss_oid_to_str) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+			AC_MSG_CHECKING(for gss_release_oid)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+	#include <gssapi/gssapi_ext.h>
+#endif],[gss_release_oid(0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_RELEASE_OID,1,GSS has gss_release_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 			AC_MSG_CHECKING(for gss name types)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_NAME_TYPES,1,GSS has gss name types) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi

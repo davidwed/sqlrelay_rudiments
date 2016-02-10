@@ -106,6 +106,9 @@
 /* GSS has gss_oid_to_str */
 #undef RUDIMENTS_HAS_GSS_OID_TO_STR
 
+/* GSS has gss_release_oid */
+#undef RUDIMENTS_HAS_GSS_RELEASE_OID
+
 /* GSS has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID
 
