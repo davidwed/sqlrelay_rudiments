@@ -4,14 +4,16 @@
 #ifndef RUDIMENTS_DLL_H
 #define RUDIMENTS_DLL_H
 
-#ifdef _WIN32
-	#ifdef LIBRUDIMENTS_EXPORTS
-		#define RUDIMENTS_DLLSPEC __declspec(dllexport)
+#ifndef RUDIMENTS_DLLSPEC
+	#ifdef _WIN32
+		#ifdef LIBRUDIMENTS_EXPORTS
+			#define RUDIMENTS_DLLSPEC __declspec(dllexport)
+		#else
+			#define RUDIMENTS_DLLSPEC __declspec(dllimport)
+		#endif
 	#else
-		#define RUDIMENTS_DLLSPEC __declspec(dllimport)
+		#define RUDIMENTS_DLLSPEC
 	#endif
-#else
-	#define RUDIMENTS_DLLSPEC
 #endif
-
+	
 #endif
