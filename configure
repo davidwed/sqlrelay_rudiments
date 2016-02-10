@@ -31599,11 +31599,11 @@ SONAME_VERSION_INFO="2:0:0"
 
 
 
-HEADERS0="resultcodes.h"
+HEADERS0="resultcodes.h debugprint.h"
 HEADERS1="linkedlist.h singlylinkedlist.h"
 HEADERS2="dictionary.h"
 HEADERS3="dynamicarray.h staticarray.h"
-PRIVATEHEADERS0="config.h"
+PRIVATEHEADERS0="config.h debugprint.h"
 PRIVATEHEADERS1="rudimentsinlines.h inttypes.h new.h"
 PRIVATEHEADERS2="winsock.h dll.h"
 PRIVATEHEADERS3="linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h linkedlistutilinlines.h"

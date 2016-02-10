@@ -137,6 +137,7 @@ lobjs="winsock.obj "+_
 	"url.obj"
 
 headers0="resultcodes.h "+_
+	"debugprint.h "+_
 	"linkedlist.h "+_
 	"singlylinkedlist.h "+_
 	"dictionary.h "+_
@@ -205,6 +206,7 @@ headers3="xmldom.h "+_
 	"gss.h"
 
 privateheaders0="config.h "+_
+	"debugprint.h "+_
 	"rudimentsinlines.h "+_
 	"inttypes.h "+_
 	"new.h "+_
