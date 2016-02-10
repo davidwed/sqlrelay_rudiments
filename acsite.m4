@@ -1051,6 +1051,12 @@ then
 
 		if ( test -n "$GSSLIBS" )
 		then
+			AC_MSG_CHECKING(for gssapi.h)
+			FW_TRY_LINK([#include <gssapi.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_H,1,GSS has gssapi.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+			AC_MSG_CHECKING(for gssapi/gssapi.h)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_H,1,GSS has gssapi/gssapi.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 			AC_MSG_CHECKING(for gssapi/gssapi_generic.h)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>
 #include <gssapi/gssapi_generic.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H,1,GSS has gssapi/gssapi_generic.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
@@ -1067,7 +1073,16 @@ then
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_ANONYMOUS;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS,1,GSS has GSS_C_NT_ANONYMOUS) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss_str_to_oid)
-			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,GSS has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+	#include <gssapi/gssapi_ext.h>
+#endif],[gss_str_to_oid(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_STR_TO_OID,1,GSS has gss_str_to_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+			AC_MSG_CHECKING(for gss_oid_to_str)
+			FW_TRY_LINK([#include <gssapi/gssapi.h>
+#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
+	#include <gssapi/gssapi_ext.h>
+#endif],[gss_oid_to_str(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_OID_TO_STR,1,GSS has gss_oid_to_str) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 			AC_MSG_CHECKING(for gss name types)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_NAME_TYPES,1,GSS has gss name types) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])

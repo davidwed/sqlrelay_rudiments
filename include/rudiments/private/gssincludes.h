@@ -7,7 +7,11 @@
 #include <rudiments/stringbuffer.h>
 
 #ifdef RUDIMENTS_HAS_GSS
-	#include <gssapi/gssapi.h>
+	#if defined(RUDIMENTS_HAS_GSSAPI_GSSAPI_H)
+		#include <gssapi/gssapi.h>
+	#elif defined(RUDIMENTS_HAS_GSSAPI_H)
+		#include <gssapi.h>
+	#endif
 #endif
 
 #ifdef RUDIMENTS_HAS_SSPI

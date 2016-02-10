@@ -88,14 +88,23 @@
 /* GSS has gssapi/gssapi_generic.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H
 
+/* GSS has gssapi/gssapi.h */
+#undef RUDIMENTS_HAS_GSSAPI_GSSAPI_H
+
 /* GSS has gssapi/gssapi_krb5.h */
 #undef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
+
+/* GSS has gssapi.h */
+#undef RUDIMENTS_HAS_GSSAPI_H
 
 /* GSS has GSS_C_NT_ANONYMOUS */
 #undef RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS
 
 /* GSS has gss name types */
 #undef RUDIMENTS_HAS_GSS_NAME_TYPES
+
+/* GSS has gss_oid_to_str */
+#undef RUDIMENTS_HAS_GSS_OID_TO_STR
 
 /* GSS has gss_str_to_oid */
 #undef RUDIMENTS_HAS_GSS_STR_TO_OID

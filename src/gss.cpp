@@ -29,6 +29,11 @@
 		#include "gssoid.cpp"
 	#endif
 
+	#ifndef RUDIMENTS_HAS_GSS_OID_TO_STR
+		// for local gss_oid_to_str implementation
+		// FIXME: ...
+	#endif
+
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 		// for GSS_KRB5_NT_PRINCIPAL_NAME on some platforms
 		#include <gssapi/gssapi_krb5.h>
