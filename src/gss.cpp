@@ -34,6 +34,11 @@
 		// FIXME: ...
 	#endif
 
+	#ifndef RUDIMENTS_HAS_GSS_RELEASE_OID
+		// for local gss_release_oid implementation
+		// FIXME: ...
+	#endif
+
 	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
 		// for GSS_KRB5_NT_PRINCIPAL_NAME on some platforms
 		#include <gssapi/gssapi_krb5.h>
