@@ -206,7 +206,8 @@ headers3="xmldom.h "+_
 	"socketclient.h "+_
 	"url.h "+_
 	"gss.h" +_
-	"tls.h"
+	"tls.h" +_
+	"security.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
