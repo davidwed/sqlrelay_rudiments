@@ -3670,11 +3670,20 @@ then
 	SRCS="$SRCS filedescriptor.cpp stdio.cpp"
 	LOBJS="$LOBJS filedescriptor.lo stdio.lo"
 
+	#include security too
+	HEADERS3="$HEADERS3 security.h"
+
 	# include GSS too
 	HEADERS3="$HEADERS3 gss.h"
 	PRIVATEHEADERS7="$PRIVATEHEADERS7 gss.h gssmechanism.h gsscredentials.h gsscontext.h gssincludes.h"
 	SRCS="$SRCS gss.cpp"
 	LOBJS="$LOBJS gss.lo"
+
+	# include TLS too
+	HEADERS3="$HEADERS3 tls.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 tlscontext.h tlscertificate.h tlsincludes.h"
+	SRCS="$SRCS tls.cpp"
+	LOBJS="$LOBJS tls.lo"
 fi
 
 if ( test "$INCLUDE_FILESYSTEM" = "1" )

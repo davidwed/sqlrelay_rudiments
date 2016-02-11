@@ -4,6 +4,7 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
+#include <rudiments/security.h>
 #include <rudiments/stringbuffer.h>
 
 #ifdef RUDIMENTS_HAS_GSS

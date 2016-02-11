@@ -110,19 +110,14 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  the exact error. */
 		int32_t	getSSLResult() const;
 
-		/** Returns true rudiments was built with GSS support
-		 *  and false otherwise. */
-		bool	supportsGSS();
+		/** Associates a securitycontext "ctx" with the filedescriptor.
+		 *  To remove the current context, pass in a NULL for "ctx". */
+		void	setSecurityContext(securitycontext *ctx);
 
-		/** Associates a gsscontext "ctx" with the filedescriptor.
-		 *  To remove the current gsscontext, pass in a NULL for
-		 *  "ctx". */
-		void	setGSSContext(gsscontext *ctx);
-
-		/** Returns the gsscontext currently associated
+		/** Returns the securitycontext currently associated
 		 *  with the filedescriptor or NULL if none
 		 *  is currently associated. */
-		gsscontext	*getGSSContext();
+		securitycontext	*getSecurityContext();
 
 		/** Returns true if the client socket supports
 		 *  blocking/nonblocking modes and false otherwise. */

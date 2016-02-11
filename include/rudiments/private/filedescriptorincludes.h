@@ -4,11 +4,12 @@
 #include <rudiments/private/dll.h>
 #include <rudiments/private/inttypes.h>
 
-#include <rudiments/gss.h>
-
+#include <rudiments/security.h>
 #include <rudiments/resultcodes.h>
 
-#include <sys/types.h>
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_SYS_SOCKET_H
 	// IRIX appears to need this but OpenBSD can't

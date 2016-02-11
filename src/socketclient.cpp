@@ -448,11 +448,11 @@ wsacleanup:
 	}
 	#endif
 
-	// GSS-connect if necessary
-	if (retval==RESULT_SUCCESS && gssctx()) {
-		gssctx()->setFileDescriptor(this);
-		if (!gssctx()->initiate()) {
-			gssctx()->setFileDescriptor(NULL);
+	// securitycontext-connect if necessary
+	if (retval==RESULT_SUCCESS && secctx()) {
+		secctx()->setFileDescriptor(this);
+		if (!secctx()->connect()) {
+			secctx()->setFileDescriptor(NULL);
 			close();
 			return RESULT_ERROR;
 		}

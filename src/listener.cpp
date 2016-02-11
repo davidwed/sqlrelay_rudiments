@@ -238,10 +238,10 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 			}
 		#endif
 		
-		gsscontext	*gctx=node->getValue()->fd->getGSSContext();
-		if (gctx && gctx->pending()) {
-			pvt->_readreadylist.append(
-					node->getValue()->fd);
+		securitycontext	*sctx=
+			node->getValue()->fd->getSecurityContext();
+		if (sctx && sctx->pending()) {
+			pvt->_readreadylist.append(node->getValue()->fd);
 			result++;
 		}
 	}

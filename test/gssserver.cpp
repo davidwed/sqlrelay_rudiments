@@ -65,7 +65,7 @@ int main(int argc, const char **argv) {
 
 	// create socket
 	inetsocketserver	iss;
-	iss.setGSSContext(&gctx);
+	iss.setSecurityContext(&gctx);
 	if (iss.listen(NULL,port,0)) {
 		for (;;) {
 

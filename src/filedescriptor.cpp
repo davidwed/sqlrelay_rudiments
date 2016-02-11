@@ -21,6 +21,8 @@
 #include <rudiments/charstring.h>
 #include <rudiments/character.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/security.h>
 #if defined(DEBUG_PASSFD) || defined(DEBUG_WRITE) || \
 		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
@@ -219,7 +221,7 @@ class filedescriptorprivate {
 		int32_t	_sslresult;
 		#endif
 
-		gsscontext	*_gssctx;
+		securitycontext	*_secctx;
 
 		const char	*_type;
 
@@ -273,7 +275,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_ssl=NULL;
 	pvt->_sslresult=1;
 #endif
-	pvt->_gssctx=NULL;
+	pvt->_secctx=NULL;
 	pvt->_type="filedescriptor";
 	pvt->_writebuffer=NULL;
 	pvt->_writebufferend=NULL;
@@ -300,7 +302,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_ssl=f.pvt->_ssl;
 	pvt->_sslresult=f.pvt->_sslresult;
 #endif
-	pvt->_gssctx=f.pvt->_gssctx;
+	pvt->_secctx=f.pvt->_secctx;
 	if (f.pvt->_writebuffer) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
 						f.pvt->_writebuffer;
@@ -488,20 +490,12 @@ void *filedescriptor::newSSLBIO() const {
 #endif
 }
 
-bool filedescriptor::supportsGSS() {
-#ifdef RUDIMENTS_HAS_GSS
-	return true;
-#else
-	return false;
-#endif
+void filedescriptor::setSecurityContext(securitycontext *ctx) {
+	pvt->_secctx=ctx;
 }
 
-void filedescriptor::setGSSContext(gsscontext *ctx) {
-	pvt->_gssctx=ctx;
-}
-
-gsscontext *filedescriptor::getGSSContext() {
-	return pvt->_gssctx;
+securitycontext *filedescriptor::getSecurityContext() {
+	return pvt->_secctx;
 }
 
 bool filedescriptor::supportsBlockingNonBlockingModes() {
@@ -1269,13 +1263,13 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			}
 		} else
 		#endif
-		if (pvt->_gssctx) {
+		if (pvt->_secctx) {
 
 			#ifdef DEBUG_READ
-		        debugPrintf(" (GSS) ");
+		        debugPrintf(" (SecurityContext) ");
 			#endif
 
-			actualread=pvt->_gssctx->read(ptr,sizetoread);
+			actualread=pvt->_secctx->read(ptr,sizetoread);
 		} else {
 			actualread=lowLevelRead(ptr,sizetoread);
 		}
@@ -1560,13 +1554,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			}
 		} else
 		#endif
-		if (pvt->_gssctx) {
+		if (pvt->_secctx) {
 
 			#ifdef DEBUG_WRITE
-		        debugPrintf(" (GSS) ");
+		        debugPrintf(" (SecurityContext) ");
 			#endif
 
-			actualwrite=pvt->_gssctx->write(ptr,sizetowrite);
+			actualwrite=pvt->_secctx->write(ptr,sizetowrite);
 		} else {
 			actualwrite=lowLevelWrite(ptr,sizetowrite);
 		}
@@ -2352,8 +2346,8 @@ void filedescriptor::sslresult(int32_t sslrslt) {
 #endif
 }
 
-gsscontext *filedescriptor::gssctx() {
-	return pvt->_gssctx;
+securitycontext *filedescriptor::secctx() {
+	return pvt->_secctx;
 }
 
 bool filedescriptor::closeOnExec() {

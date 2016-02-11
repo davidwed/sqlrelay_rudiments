@@ -225,8 +225,8 @@ filedescriptor *inetsocketserver::accept() {
 		return NULL;
 	}
 
-	// handle GSS-accept if necessary
-	if (!gssAccept(returnsock)) {
+	// handle securitycontext-accept if necessary
+	if (!securityContextAccept(returnsock)) {
 		delete returnsock;
 		return NULL;
 	}

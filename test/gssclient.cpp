@@ -132,7 +132,7 @@ int main(int argc, const char **argv) {
 	inetsocketclient	fd;
 	fd.setWriteBufferSize(65536);
 	fd.setReadBufferSize(65536);
-	fd.setGSSContext(&gctx);
+	fd.setSecurityContext(&gctx);
 
 	// loop, having sessions with server
 	for (int64_t i=0; i<ccount; i++) {

@@ -160,20 +160,20 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 
 
 		/** Releases any previously acquired credentials. */
-		void	release();
+		void	close();
 
 
 		/** Returns the name for which credentials were requested in
 		 *  the most recent call to acquire, if the name was provided
 		 *  as a string.  Returns NULL if no call to an acquire method
-		 *  has been made, or if release() has been called. */
+		 *  has been made, or if close() has been called. */
 		const char	*getName();
 
 		/** Returns the actual lifetime of the credentials, assigned
 		 *  during the most recent call to an aquire method.  Returns
 		 *  the largest unsigned 32-bit integer (indicating an
 		 *  indefinite lifetime, the default) if no call to an acquire
-		 *  method has been made, or if release() has been called. */
+		 *  method has been made, or if close() has been called. */
 		uint32_t	getActualLifetime();
 
 		/** Returns true if security mechanism "mech" is in the list of
@@ -186,14 +186,14 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		 *  security mechanisms that were actually used during the
 		 *  most recent call to one of the acquire methods or
 		 *  0 if no call to an acquire method has been made, or if
-		 *  release() has been called. */
+		 *  close() has been called. */
 		uint64_t	getActualMechanismCount();
 
 		/** Returns the "index"'th security mechanism from the list of
 		 *  security mechanisms that were actually used during the
 		 *  most recent call to one of the acquire methods or NULL
 		 *  if no call to an acquire method has been made, or if
-		 *  release() has been called. */
+		 *  close() has been called. */
 		gssmechanism	*getActualMechanism(uint64_t index);
 
 
@@ -228,14 +228,14 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 
 		/** Returns a platform-specific binary internal representation
 		 *  of the credentials, or NULL if no call has been made to an
-		 *  acquire method, or if release() has been called. */
+		 *  acquire method, or if close() has been called. */
 		const void	*getCredentials();
 
 	#include <rudiments/private/gsscredentials.h>
 };
 
 
-class RUDIMENTS_DLLSPEC gsscontext {
+class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 	public:
 		/** Creates an instance of the gsscontext class. */
 		gsscontext();
@@ -244,7 +244,7 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		~gsscontext();
 		
 		/** Sets the credentials that will be used during subsequent
-		 *  calls to one of initiate() or accept(). */
+		 *  calls to one of connect() or accept(). */
 		void	setCredentials(gsscredentials *credentials);
 
 		/** Returns the credentials set by a previous call to
@@ -252,7 +252,7 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		gsscredentials	*getCredentials();
 
 		/** Sets the filedescriptor that will be used during subsequent
-		 *  calls to one of initiate() or accept().
+		 *  calls to one of connect() or accept().
 		 *
 		 *  Note that if this instance is set as the current GSS
 		 *  context of a child of the socketclient class, then this
@@ -272,7 +272,7 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		filedescriptor	*getFileDescriptor();
 
 		/** Sets the context-lifetime that will be requested during
-		 *  subsequent calls to initiate() or accept().
+		 *  subsequent calls to connect() or accept().
 		 *  Setting "desiredlifetime" to the largest 32-bit unsigned
 		 *  integer requests an indefinite lifetime. */
 		void	setDesiredLifetime(uint32_t desiredlifetime);
@@ -284,7 +284,7 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		uint32_t	getDesiredLifetime();
 
 		/** Sets the security mechanism that will be requested during
-		 *  subsequent calls to initiate() or accept(). */
+		 *  subsequent calls to connect() or accept(). */
 		void	setDesiredMechanism(gssmechanism *desiredmechanism);
 
 		/** Returns the security mechanism set by a previous call to
@@ -293,11 +293,11 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		gssmechanism	*getDesiredMechanism();
 
 		/** Sets the context-flags that will be requested during
-		 *  subsequent calls to initiate() or accept(). */
+		 *  subsequent calls to connect() or accept(). */
 		void	setDesiredFlags(uint32_t desiredflags);
 
 		/** Sets the context-flags that will be requested during
-		 *  subsequent calls to initiate() or accept(). */
+		 *  subsequent calls to connect() or accept(). */
 		void	setDesiredFlags(const char *desiredflags);
 
 		/** Returns the context-flags set by a previous call to
@@ -305,11 +305,11 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		uint32_t	getDesiredFlags();
 
 		/** Sets the service that will be requested during subsequent
- 		 *  calls to initiate(). */
+ 		 *  calls to connect(). */
 		void	setService(const char *service);
 
 		/** Returns the service that will be requested during
- 		 *  subsequent calls to initiate(). */
+ 		 *  subsequent calls to connect(). */
 		const char	*getService();
 
 
@@ -323,7 +323,7 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		 *  connect().
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	initiate();
+		bool	connect();
 
 
 		/** Accepts a security context from a principal with whom a
@@ -339,29 +339,29 @@ class RUDIMENTS_DLLSPEC gsscontext {
 		bool	accept();
 
 
-		/** Releases any security context established using an initiate
+		/** Releases any security context established using an connect
 		 *  or accept method. */
-		void	release();
+		bool	close();
 
 
 		/** Returns the actual lifetime of the context, assigned
-		 *  during the most recent call to an initiate or accept method.
+		 *  during the most recent call to an connect or accept method.
 		 *  Returns the largest unsigned 32-bit integer (indicating an
-		 *  indefinite lifetime, the default) if no call to an initiate
-		 *  or accept method has been made, or if release() has been
+		 *  indefinite lifetime, the default) if no call to an connect
+		 *  or accept method has been made, or if close() has been
 		 *  called. */
 		uint32_t	getActualLifetime();
 
 		/** Returns the security mechanism that was actually used
-		 *  during the most recent call to one of initiate() or
-		 *  accept() or NULL if no call to initiate() or accept()
-		 *  has been made, or if release() has been called. */
+		 *  during the most recent call to one of connect() or
+		 *  accept() or NULL if no call to connect() or accept()
+		 *  has been made, or if close() has been called. */
 		gssmechanism	*getActualMechanism();
 
 		/** Returns the context flags that were actually used during
-		 *  the most recent call to one of initiate() or accept()
-		 *  or 0 if no call to an initiate() or accept() method
-		 *  has been made, or if release() has been called. */
+		 *  the most recent call to one of connect() or accept()
+		 *  or 0 if no call to an connect() or accept() method
+		 *  has been made, or if close() has been called. */
 		uint32_t	getActualFlags();
 
 		/** Returns the remaining lifetime of the context. */

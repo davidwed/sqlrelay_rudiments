@@ -1,7 +1,9 @@
 // Copyright (c) 2002 David Muse
 // See the COPYING file for more information.
 
+	friend class securitycontext;
 	friend class gsscontext;
+	friend class tlscontext;
 	protected:
 
 		void	filedescriptorInit();
@@ -41,7 +43,7 @@
 		int32_t	sslresult();
 		void	sslresult(int32_t sslrslt);
 
-		gsscontext	*gssctx();
+		securitycontext	*secctx();
 
 	private:
 		filedescriptorprivate	*pvt;

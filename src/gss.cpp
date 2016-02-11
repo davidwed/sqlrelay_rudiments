@@ -381,7 +381,7 @@ gsscredentials::gsscredentials() {
 }
 
 gsscredentials::~gsscredentials() {
-	release();
+	close();
 	delete pvt;
 }
 
@@ -550,7 +550,7 @@ bool gsscredentials::acquire(const void *name,
 				const void *nametype) {
 
 	// release any previously acquired credentials
-	release();
+	close();
 
 	bool	retval=false;
 
@@ -864,7 +864,7 @@ bool gsscredentials::acquired() {
 	return pvt->_acquired;
 }
 
-void gsscredentials::release() {
+void gsscredentials::close() {
 
 	// release the credentials
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -1260,7 +1260,7 @@ gsscontext::gsscontext() {
 }
 
 gsscontext::~gsscontext() {
-	release();
+	close();
 	delete pvt;
 }
 
@@ -1395,7 +1395,7 @@ const char *gsscontext::getService() {
 	return pvt->_service;
 }
 
-bool gsscontext::initiate() {
+bool gsscontext::connect() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return initiate(pvt->_service,pvt->_servicelength+1,
 						GSS_C_NT_HOSTBASED_SERVICE);
@@ -1447,7 +1447,7 @@ bool gsscontext::initiate(const void *name,
 				const void *nametype) {
 
 	// release any previously initialized context
-	release();
+	close();
 
 	#ifdef DEBUG_GSS
 		stdoutput.write("initiate context...\n");
@@ -1528,7 +1528,7 @@ bool gsscontext::initiate(const void *name,
 						"(init_sec_context)\n%s\n",
 						getStatus());
 				#endif
-				release();
+				close();
 				error=true;
 				break;
 			}
@@ -1549,7 +1549,7 @@ bool gsscontext::initiate(const void *name,
 					OM_uint32	minor;
 					gss_release_buffer(&minor,
 							&outputtoken);
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -1582,7 +1582,7 @@ bool gsscontext::initiate(const void *name,
 					OM_uint32	minor;
 					gss_release_buffer(&minor,&outputtoken);
 
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -1679,7 +1679,7 @@ bool gsscontext::initiate(const void *name,
 						"\n%s\n",
 						getStatus());
 				#endif
-				release();
+				close();
 				error=true;
 				break;
 			}
@@ -1700,7 +1700,7 @@ bool gsscontext::initiate(const void *name,
 							"\n%s\n",
 							getStatus());
 					#endif
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -1720,7 +1720,7 @@ bool gsscontext::initiate(const void *name,
 						stdoutput.write(
 							"failed (send)\n\n");
 					#endif
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -1743,7 +1743,7 @@ bool gsscontext::initiate(const void *name,
 						stdoutput.write(
 							"failed (receive)\n\n");
 					#endif
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -2156,7 +2156,7 @@ bool gsscontext::inquire() {
 bool gsscontext::accept() {
 
 	// release any previously accepted context
-	release();
+	close();
 
 	#ifdef DEBUG_GSS
 		stdoutput.write("accept context...\n");
@@ -2197,7 +2197,7 @@ bool gsscontext::accept() {
 
 				// clean up
 				delete[] (unsigned char *)inputtoken.value;
-				release();
+				close();
 				error=true;
 				break;
 			}
@@ -2229,7 +2229,7 @@ bool gsscontext::accept() {
 						"(accept_sec_context) %d\n%s\n",
 						pvt->_major,getStatus());
 				#endif
-				release();
+				close();
 				error=true;
 				break;
 			}
@@ -2245,7 +2245,7 @@ bool gsscontext::accept() {
 					OM_uint32	minor;
 					gss_release_buffer(&minor,&outputtoken);
 
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -2320,7 +2320,7 @@ bool gsscontext::accept() {
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
 				#endif
-				release();
+				close();
 				error=true;
 				break;
 			}
@@ -2354,7 +2354,7 @@ bool gsscontext::accept() {
 						"\n%s\n",
 						getStatus());
 				#endif
-				release();
+				close();
 				error=true;
 				break;
 			}
@@ -2375,7 +2375,7 @@ bool gsscontext::accept() {
 							"\n%s\n",
 							getStatus());
 					#endif
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -2397,7 +2397,7 @@ bool gsscontext::accept() {
 						stdoutput.write(
 							"failed (send)\n\n");
 					#endif
-					release();
+					close();
 					error=true;
 					break;
 				}
@@ -2422,7 +2422,7 @@ bool gsscontext::accept() {
 	return inquire();
 }
 
-void gsscontext::release() {
+bool gsscontext::close() {
 
 	#if defined(RUDIMENTS_HAS_GSS)
 		// delete the context
@@ -2464,6 +2464,8 @@ void gsscontext::release() {
 	pvt->_isopen=false;
 	pvt->_readbuffer.clear();
 	pvt->_readbufferpos=0;
+
+	return true;
 }
 
 uint32_t gsscontext::getActualLifetime() {
