@@ -175,9 +175,13 @@ bool tlscontext::setCertificateAuthority(const char *cafile,
 	#endif
 }
 
-void tlscontext::setVerifyDepth(uint32_t depth) {
+bool tlscontext::setVerifyDepth(uint32_t depth) {
 	#ifdef RUDIMENTS_HAS_SSL
+		if (!depth) {
+			return false;
+		}
 		SSL_CTX_set_verify_depth(pvt->_ctx,depth);
+		return true;
 	#else
 	#endif
 }

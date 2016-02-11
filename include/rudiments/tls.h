@@ -30,7 +30,7 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		bool	setCertificateAuthorityFile(const char *cafile);
 		bool	setCertificateAuthorityPath(const char *capath);
 
-		void	setVerifyDepth(uint32_t depth);
+		bool	setVerifyDepth(uint32_t depth);
 
 		bool	useDiffieHellmanKeyExchange(const char *dhcert);
 		
