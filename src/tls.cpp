@@ -61,7 +61,19 @@ tlscontext::~tlscontext() {
 
 void tlscontext::init() {
 	#ifdef RUDIMENTS_HAS_SSL
-		pvt->_ctx=SSL_CTX_new(TLSv1_2_method());
+		pvt->_ctx=SSL_CTX_new(
+				#if defined(RUDIMENTS_HAS_TLSV1_2_METHOD)
+					TLSv1_2_method()
+				#elif defined(RUDIMENTS_HAS_TLSV1_1_METHOD)
+					TLSv1_1_method()
+				#elif defined(RUDIMENTS_HAS_TLSV1_METHOD)
+					TLSv1_method()
+				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
+					SSLv23_method()
+				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
+					SSLv2_method()
+				#endif
+				);
 		pvt->_ssl=NULL;
 		pvt->_bio=NULL;
 		SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
