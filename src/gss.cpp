@@ -1224,7 +1224,7 @@ class gsscontextprivate {
 		uint64_t		_readbufferpos;
 };
 
-gsscontext::gsscontext() {
+gsscontext::gsscontext() : securitycontext() {
 	pvt=new gsscontextprivate;
 	pvt->_credentials=NULL;
 	pvt->_fd=NULL;

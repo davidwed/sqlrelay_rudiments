@@ -15,6 +15,8 @@ class	filedescriptor;
 
 class RUDIMENTS_DLLSPEC securitycontext {
 	public:
+		securitycontext() {};
+		virtual ~securitycontext() {};
 		virtual	void	setFileDescriptor(filedescriptor *fd)=0;
 		virtual	filedescriptor	*getFileDescriptor()=0;
 

@@ -47,7 +47,7 @@ class tlscontextprivate {
 		#endif
 };
 
-tlscontext::tlscontext() {
+tlscontext::tlscontext() : securitycontext() {
 	tls::initTLS();
 	pvt=new tlscontextprivate;
 	pvt->_fd=NULL;
@@ -192,6 +192,7 @@ bool tlscontext::setVerificationDepth(uint32_t depth) {
 		SSL_CTX_set_verify_depth(pvt->_ctx,depth);
 		return true;
 	#else
+		return false;
 	#endif
 }
 
