@@ -16,7 +16,7 @@ class RUDIMENTS_DLLSPEC tls {
 class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 	public:
 		tlscontext();
-		~tlscontext();
+		virtual	~tlscontext();
 
 		bool	setCertificateChainFile(const char *filename);
 

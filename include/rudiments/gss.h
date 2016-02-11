@@ -241,7 +241,7 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		gsscontext();
 
 		/** Deletes this instance of the gsscontext class. */
-		~gsscontext();
+		virtual	~gsscontext();
 		
 		/** Sets the credentials that will be used during subsequent
 		 *  calls to one of connect() or accept(). */
