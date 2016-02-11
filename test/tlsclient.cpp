@@ -36,7 +36,7 @@ int main(int argc, const char **argv) {
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust
-	ctx.setVerifyDepth(1);
+	ctx.setVerificationDepth(1);
 
 	// create an inet socket client
 	inetsocketclient	clnt;

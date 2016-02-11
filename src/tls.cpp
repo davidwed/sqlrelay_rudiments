@@ -176,7 +176,7 @@ bool tlscontext::setCertificateAuthority(const char *cafile,
 	#endif
 }
 
-bool tlscontext::setVerifyDepth(uint32_t depth) {
+bool tlscontext::setVerificationDepth(uint32_t depth) {
 	#ifdef RUDIMENTS_HAS_SSL
 		if (!depth) {
 			return false;

@@ -58,8 +58,6 @@ PROGS2= dynamicarray \
 	memorymap \
 	character \
 	bytestring \
-	sslserver \
-	sslclient \
 	tlsserver \
 	tlsclient \
 	oneshotsvr \
@@ -116,9 +114,6 @@ server: server.cpp server.$(OBJ)
 nullserver: nullserver.cpp nullserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) nullserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-sslserver: sslserver.cpp sslserver.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sslserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tlsserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
@@ -127,9 +122,6 @@ listener: listener.cpp listener.$(OBJ)
 
 inetsocketclient: inetsocketclient.cpp inetsocketclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-sslclient: sslclient.cpp sslclient.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sslclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 tlsclient: tlsclient.cpp tlsclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tlsclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

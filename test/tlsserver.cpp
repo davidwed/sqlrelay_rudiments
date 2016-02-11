@@ -67,10 +67,9 @@ void myserver::listen() {
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust
-	ctx.setVerifyDepth(1);
+	ctx.setVerificationDepth(1);
 
-	// Instruct the context to use an ephemeral
-	// dh key for encrypting the session.
+	// Instruct the context to use a dh key for encrypting the session.
 	if (!ctx.useDiffieHellmanKeyExchange("dh1024.pem")) {
 		stdoutput.printf("use dh key exchange failed\n%s\n",
 						ctx.getErrorString());
