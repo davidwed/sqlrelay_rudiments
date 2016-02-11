@@ -36,7 +36,7 @@ void myserver::listen() {
 	// is running and can also be used to kill the process
 	process::createPidFile("svr.pid",permissions::ownerReadWrite());
 
-	tlsservercontext	ctx;
+	tlscontext	ctx;
 
 	// load the server's certificate chain
 	if (!ctx.setCertificateChainFile("server.pem")) {

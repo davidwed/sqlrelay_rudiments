@@ -10,7 +10,7 @@
 
 int main(int argc, const char **argv) {
 
-	tlsclientcontext	ctx;
+	tlscontext	ctx;
 
 	// load the client's certificate chain
 	if (!ctx.setCertificateChainFile("client.pem")) {

@@ -15,6 +15,7 @@ class RUDIMENTS_DLLSPEC tls {
 
 class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 	public:
+		tlscontext();
 		~tlscontext();
 
 		bool	setCertificateChainFile(const char *filename);
@@ -61,16 +62,6 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		const char	*getErrorString();
 
 	#include <rudiments/private/tlscontext.h>
-};
-
-class RUDIMENTS_DLLSPEC tlsclientcontext : public tlscontext {
-	public:
-		tlsclientcontext() : tlscontext(false) {};
-};
-
-class RUDIMENTS_DLLSPEC tlsservercontext : public tlscontext {
-	public:
-		tlsservercontext() : tlscontext(true) {};
 };
 
 class RUDIMENTS_DLLSPEC tlscertificate {

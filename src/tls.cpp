@@ -38,7 +38,6 @@ void tls::initTLS() {
 class tlscontextprivate {
 	friend class tlscontext;
 	private:
-		bool			_server;
 		filedescriptor		*_fd;
 		int32_t			_error;
 		#ifdef RUDIMENTS_HAS_SSL
@@ -48,10 +47,9 @@ class tlscontextprivate {
 		#endif
 };
 
-tlscontext::tlscontext(bool server) {
+tlscontext::tlscontext() {
 	tls::initTLS();
 	pvt=new tlscontextprivate;
-	pvt->_server=server;
 	pvt->_fd=NULL;
 	pvt->_error=0;
 	init();
@@ -63,9 +61,7 @@ tlscontext::~tlscontext() {
 
 void tlscontext::init() {
 	#ifdef RUDIMENTS_HAS_SSL
-		pvt->_ctx=SSL_CTX_new((pvt->_server)?
-					TLSv1_2_server_method():
-					TLSv1_2_client_method());
+		pvt->_ctx=SSL_CTX_new(TLSv1_2_method());
 		pvt->_ssl=NULL;
 		pvt->_bio=NULL;
 		SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
