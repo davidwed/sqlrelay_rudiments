@@ -205,8 +205,8 @@ headers3="xmldom.h "+_
 	"socketserver.h "+_
 	"socketclient.h "+_
 	"url.h "+_
-	"gss.h " +_
-	"tls.h " +_
+	"gss.h "+_
+	"tls.h "+_
 	"security.h"
 
 privateheaders0="config.h "+_
@@ -360,10 +360,10 @@ privateheaders7="codetree.h "+_
 	"gssincludes.h "+_
 	"gssmechanism.h "+_
 	"gsscredentials.h "+_
-	"gsscontext.h " +_
+	"gsscontext.h "+_
 	"tls.h "+_
 	"tlsincludes.h "+_
-	"tlscontext.h" +_
+	"tlscontext.h "+_
 	"tlscertificate.h"
 
 ' version
