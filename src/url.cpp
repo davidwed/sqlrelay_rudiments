@@ -280,7 +280,13 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 			// authentication for ssh protocols, or otherwise
 			// allow curl to choose an appropriate auth type
 			#ifdef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES
-			((password &&
+			((
+			#if defined(RUDIMENTS_HAS_CURLOPT_USERNAME)
+			password
+			#elif defined(RUDIMENTS_HAS_CURLOPT_USERPWD)
+			userpwd
+			#endif
+			&&
 			curl_easy_setopt(pvt->_curl,
 				CURLOPT_SSH_AUTH_TYPES,
 				CURLSSH_AUTH_PASSWORD)==CURLE_OK) ||
