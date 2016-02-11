@@ -13,30 +13,37 @@ int main(int argc, const char **argv) {
 	tlsclientcontext	ctx;
 
 	// load the client's certificate chain
-	if (!ctx.useCertificateChainFile("client.pem")) {
-		stdoutput.printf("use cert chain file failed\n%s\n",
+	if (!ctx.setCertificateChainFile("client.pem")) {
+		stdoutput.printf("set cert chain file failed\n%s\n",
 						ctx.getErrorString());
 		process::exit(0);
 	}
 
 	// load the client's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	if (!ctx.usePrivateKeyFile("client.pem","password")) {
-		stdoutput.printf("use private key file failed\n%s\n",
+	if (!ctx.setPrivateKeyFile("client.pem","password")) {
+		stdoutput.printf("set private key file failed\n%s\n",
 						ctx.getErrorString());
 		process::exit(0);
 	}
 
 	// load certificates for the signing authorities that we trust
-	ctx.loadVerifyLocations("ca.pem",NULL);
-	//ctx.setVerifyDepth(1);
+	if (!ctx.setCertificateAuthorityFile("ca.pem")) {
+		stdoutput.printf("set cert authority file failed\n%s\n",
+						ctx.getErrorString());
+		process::exit(0);
+	}
+
+	// peer certificates must be directly signed by
+	// one of the signing authorities that we trust
+	ctx.setVerifyDepth(1);
 
 	// create an inet socket client
 	inetsocketclient	clnt;
 	clnt.setSecurityContext(&ctx);
 
-	// connect to a server on localhost, listening on port 8000
-	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
+	// connect to a server on localhost, listening on port 9000
+	if (clnt.connect("127.0.0.1",9000,-1,-1,1,1)<0) {
 		if (errno) {
 			stdoutput.printf("connect failed: %s\n",
 						error::getErrorString());
@@ -48,6 +55,12 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
+	if (!ctx.peerCertificateIsValid()) {
+		stdoutput.printf("peer certificate was invalidd\n");
+		clnt.close();
+		process::exit(1);
+	}
+
 	// make sure the server sent a certificate
 	tlscertificate	*certificate=ctx.getPeerCertificate();
 	if (!certificate) {
@@ -55,29 +68,23 @@ int main(int argc, const char **argv) {
 		clnt.close();
 		process::exit(1);
 	}
-/*
-	// make sure the certificate was valid
-	long	result=SSL_get_verify_result(ssl);
-	if (result!=X509_V_OK) {
-		stdoutput.printf("SSL_get_verify_result failed: %ld\n",result);
-		clnt.close();
-		process::exit(1);
-	}
-
+	
 	// Make sure the commonname in the certificate is the one we expect it
 	// to be (server.localdomain).
 	// (we may also want to check the subject name field or certificate
 	// extension for the commonname because sometimes it's there instead
 	// of in the commonname field)
-	char	commonname[256];
-	X509_NAME_get_text_by_NID(X509_get_subject_name(certificate),
-					NID_commonName,commonname,256);
+	const char	*commonname=certificate->getCommonName();
 	if (charstring::compareIgnoringCase(commonname,"server.localdomain")) {
 		stdoutput.printf("%s!=server.localdomain\n",commonname);
 		clnt.close();
 		process::exit(1);
 	}
-*/
+
+	stdoutput.printf("Server certificate {\n");
+	stdoutput.printf("  common name: %s\n",commonname);
+	stdoutput.printf("}\n\n");
+
 	// write "hello" to the server
 	clnt.write("hello",5);
 

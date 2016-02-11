@@ -39,16 +39,16 @@ void myserver::listen() {
 	tlsservercontext	ctx;
 
 	// load the server's certificate chain
-	if (!ctx.useCertificateChainFile("server.pem")) {
-		stdoutput.printf("use cert chain file failed\n%s\n",
+	if (!ctx.setCertificateChainFile("server.pem")) {
+		stdoutput.printf("set cert chain file failed\n%s\n",
 						ctx.getErrorString());
 		return;
 	}
 
 	// load the server's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	if (!ctx.usePrivateKeyFile("server.pem","password")) {
-		stdoutput.printf("use private key failed\n%s\n",
+	if (!ctx.setPrivateKeyFile("server.pem","password")) {
+		stdoutput.printf("set private key failed\n%s\n",
 						ctx.getErrorString());
 		return;
 	}
@@ -56,14 +56,18 @@ void myserver::listen() {
 	// Instruct the server to request the client's certificate.  Servers
 	// always send certificates to clients, but in order for a client to
 	// send a certificate to a server, the server must request it.
-	ctx.setVerifyPeer();
+	ctx.verifyPeer();
 
 	// load certificates for the signing authorities that we trust
-	ctx.loadVerifyLocations("ca.pem",NULL);
+	if (!ctx.setCertificateAuthorityFile("ca.pem")) {
+		stdoutput.printf("set cert authority file failed\n%s\n",
+						ctx.getErrorString());
+		return;
+	}
 
-	// client certificates must be directly signed
-	// by one of the signing authorities that we trust
-	//ctx.setVerifyDepth(1);
+	// peer certificates must be directly signed by
+	// one of the signing authorities that we trust
+	ctx.setVerifyDepth(1);
 
 	// Instruct the context to use an ephemeral
 	// dh key for encrypting the session.
@@ -73,9 +77,9 @@ void myserver::listen() {
 		return;
 	}
 
-	// listen on inet socket port 8000
-	if (!inetsocketserver::listen(NULL,8000,15)) {
-		stdoutput.printf("couldn't listen on port 8000\n");
+	// listen on inet socket port 9000
+	if (!inetsocketserver::listen(NULL,9000,15)) {
+		stdoutput.printf("couldn't listen on port 9000\n");
 		return;
 	}
 
@@ -124,6 +128,10 @@ void myserver::listen() {
 				delete clientsock;
 				continue;
 			}
+
+			stdoutput.printf("Client certificate {\n");
+			stdoutput.printf("  common name: %s\n",commonname);
+			stdoutput.printf("}\n\n");
 
 			// read 5 bytes from the client and display it
 			char	buffer[6];

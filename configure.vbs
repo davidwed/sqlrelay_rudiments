@@ -32,6 +32,7 @@ srcs="winsock.cpp "+_
 	"file.cpp "+_
 	"filedescriptor.cpp "+_
 	"gss.cpp "+_
+	"tls.cpp "+_
 	"stdio.cpp "+_
 	"filesystem.cpp "+_
 	"groupentry.cpp "+_
@@ -92,6 +93,7 @@ lobjs="winsock.obj "+_
 	"file.obj "+_
 	"filedescriptor.obj "+_
 	"gss.obj "+_
+	"tls.obj "+_
 	"stdio.obj "+_
 	"filesystem.obj "+_
 	"groupentry.obj "+_
@@ -203,7 +205,8 @@ headers3="xmldom.h "+_
 	"socketserver.h "+_
 	"socketclient.h "+_
 	"url.h "+_
-	"gss.h"
+	"gss.h" +_
+	"tls.h"
 
 privateheaders0="config.h "+_
 	"debugprint.h "+_
@@ -356,7 +359,11 @@ privateheaders7="codetree.h "+_
 	"gssincludes.h "+_
 	"gssmechanism.h "+_
 	"gsscredentials.h "+_
-	"gsscontext.h"
+	"gsscontext.h" +_
+	"tls.h "+_
+	"tlsincludes.h "+_
+	"tlscontext.h" +_
+	"tlscertificate.h"
 
 ' version
 RUDIMENTS_VERSION="0.55.0"

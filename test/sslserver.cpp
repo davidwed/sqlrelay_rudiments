@@ -103,9 +103,9 @@ void myserver::listen() {
 	// Supply the context with the dh parameters for generating the key.
 	SSL_CTX_set_tmp_dh(ctx,dh);
 
-	// listen on inet socket port 8000
-	if (!inetsocketserver::listen(NULL,8000,15)) {
-		stdoutput.printf("couldn't listen on port 8000\n");
+	// listen on inet socket port 9000
+	if (!inetsocketserver::listen(NULL,9000,15)) {
+		stdoutput.printf("couldn't listen on port 9000\n");
 		return;
 	}
 

@@ -31906,7 +31906,7 @@ then
 
 	# include TLS too
 	HEADERS3="$HEADERS3 tls.h"
-	PRIVATEHEADERS7="$PRIVATEHEADERS7 tlscontext.h tlscertificate.h tlsincludes.h"
+	PRIVATEHEADERS7="$PRIVATEHEADERS7 tls.h tlscontext.h tlscertificate.h tlsincludes.h"
 	SRCS="$SRCS tls.cpp"
 	LOBJS="$LOBJS tls.lo"
 fi

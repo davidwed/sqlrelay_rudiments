@@ -60,8 +60,8 @@ int main(int argc, const char **argv) {
 	inetsocketclient	clnt;
 	clnt.setSSLContext((void *)ctx);
 
-	// connect to a server on localhost, listening on port 8000
-	if (clnt.connect("127.0.0.1",8000,-1,-1,1,1)<0) {
+	// connect to a server on localhost, listening on port 9000
+	if (clnt.connect("127.0.0.1",9000,-1,-1,1,1)<0) {
 		if (errno) {
 			stdoutput.printf("connect failed: %s\n",
 						error::getErrorString());
