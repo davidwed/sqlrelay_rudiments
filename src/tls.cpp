@@ -365,8 +365,13 @@ int32_t tlscontext::getError() {
 }
 
 const char *tlscontext::getErrorString() {
-// FIXME: this needs to output the same as ERR_print_errors_fp(stdout)
-	return ERR_error_string(pvt->_error,NULL);
+	#ifdef RUDIMENTS_HAS_SSL
+		// FIXME: this needs to output the same as
+		// ERR_print_errors_fp(stdout)
+		return ERR_error_string(pvt->_error,NULL);
+	#else
+		return NULL;
+	#endif
 }
 
 
@@ -411,6 +416,5 @@ void tlscertificate::setCertificate(void *cert) {
 	#ifdef RUDIMENTS_HAS_SSL
 		pvt->_cert=(X509 *)cert;
 	#else
-		return NULL;
 	#endif
 }
