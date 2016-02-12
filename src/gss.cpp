@@ -2026,6 +2026,7 @@ bool gsscontext::inquire() {
 
 			// try to get the target
 			char	*target=NULL;
+			#ifdef SECPKG_ATTR_CLIENT_SPECIFIED_TARGET,
 			SecPkgContext_ClientSpecifiedTarget	csp;
 			pvt->_sstatus=QueryContextAttributes(
 					&pvt->_context,
@@ -2042,6 +2043,9 @@ bool gsscontext::inquire() {
 				}
 				target=unicodeToAscii((WCHAR *)csp.sTargetName);
 			}
+			#else
+				// FIXME: what to do???
+			#endif
 
 			// set initiator
 			delete[] pvt->_initiator;
