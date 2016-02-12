@@ -464,7 +464,9 @@ bool tlscontext::close() {
 void tlscontext::clearError() {
 	pvt->_error=0;
 	pvt->_errorstr.clear();
-	while (ERR_get_error()) {}
+	#ifdef RUDIMENTS_HAS_SSL
+		while (ERR_get_error()) {}
+	#endif
 }
 
 void tlscontext::setError(int32_t ret) {

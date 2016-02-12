@@ -2026,7 +2026,7 @@ bool gsscontext::inquire() {
 
 			// try to get the target
 			char	*target=NULL;
-			#ifdef SECPKG_ATTR_CLIENT_SPECIFIED_TARGET,
+			#ifdef SECPKG_ATTR_CLIENT_SPECIFIED_TARGET
 			SecPkgContext_ClientSpecifiedTarget	csp;
 			pvt->_sstatus=QueryContextAttributes(
 					&pvt->_context,
