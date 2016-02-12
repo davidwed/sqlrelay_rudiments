@@ -48,14 +48,14 @@ void myserver::listen() {
 	// Instruct the server to request the client's certificate.  Servers
 	// always send certificates to clients, but in order for a client to
 	// send a certificate to a server, the server must request it.
-	ctx.setVerifyPeer(true);
+	ctx.setValidatePeer(true);
 
 	// load certificates for the signing authorities that we trust
 	ctx.setCertificateAuthorityFile("ca.pem");
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust
-	ctx.setVerificationDepth(1);
+	ctx.setValidationDepth(1);
 
 	// Instruct the context to use a dh key for encrypting the session.
 	ctx.setKeyExchangeCertificate("dh1024.pem");

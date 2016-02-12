@@ -43,7 +43,7 @@ class tlscontextprivate {
 		const char		*_pvtkey;
 		const char		*_pvtkeypwd;
 		const char		*_ciphers;
-		bool			_verifypeer;
+		bool			_validatepeer;
 		const char		*_cafile;
 		const char		*_capath;
 		uint32_t		_depth;
@@ -65,7 +65,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_pvtkey=NULL;
 	pvt->_pvtkeypwd=NULL;
 	pvt->_ciphers=NULL;
-	pvt->_verifypeer=NULL;
+	pvt->_validatepeer=NULL;
 	pvt->_cafile=NULL;
 	pvt->_capath=NULL;
 	pvt->_depth=0;
@@ -129,15 +129,6 @@ const char *tlscontext::getCiphers() {
 	return pvt->_ciphers;
 }
 
-void tlscontext::setVerifyPeer(bool verify) {
-	pvt->_dirty=true;
-	pvt->_verifypeer=verify;
-}
-
-bool tlscontext::getVerifyPeer() {
-	return pvt->_verifypeer;
-}
-
 void tlscontext::setCertificateAuthorityFile(const char *cafile) {
 	pvt->_dirty=true;
 	pvt->_cafile=cafile;
@@ -156,13 +147,22 @@ const char *tlscontext::getCertificateAuthorityPath() {
 	return pvt->_capath;
 }
 
-void tlscontext::setVerificationDepth(uint32_t depth) {
+void tlscontext::setValidationDepth(uint32_t depth) {
 	pvt->_dirty=true;
 	pvt->_depth=depth;
 }
 
-uint32_t tlscontext::getVerificationDepth() {
+uint32_t tlscontext::getValidationDepth() {
 	return pvt->_depth;
+}
+
+void tlscontext::setValidatePeer(bool validate) {
+	pvt->_dirty=true;
+	pvt->_validatepeer=validate;
+}
+
+bool tlscontext::getValidatePeer() {
+	return pvt->_validatepeer;
 }
 
 void tlscontext::setKeyExchangeCertificate(const char *kecert) {
@@ -288,11 +288,6 @@ bool tlscontext::init() {
 			}
 		}
 
-		// set whether to verify peer or not
-		if (retval && pvt->_verifypeer) {
-			SSL_CTX_set_verify(pvt->_ctx,SSL_VERIFY_PEER,NULL);
-		}
-
 		// set the certificate authority file/path
 		if (retval) {
 			if (!charstring::isNullOrEmpty(pvt->_cafile)) {
@@ -308,9 +303,14 @@ bool tlscontext::init() {
 			}
 		}
 
-		// set the verification depth
+		// set the validation depth
 		if (retval && pvt->_depth) {
 			SSL_CTX_set_verify_depth(pvt->_ctx,pvt->_depth);
+		}
+
+		// set whether to validate peer or not
+		if (retval && pvt->_validatepeer) {
+			SSL_CTX_set_verify(pvt->_ctx,SSL_VERIFY_PEER,NULL);
 		}
 
 		// use diffie-hellman key exchange

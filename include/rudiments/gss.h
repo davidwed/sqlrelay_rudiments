@@ -244,7 +244,7 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		virtual	~gsscontext();
 		
 		/** Sets the credentials that will be used during subsequent
-		 *  calls to one of connect() or accept(). */
+		 *  calls to connect() or accept(). */
 		void	setCredentials(gsscredentials *credentials);
 
 		/** Returns the credentials set by a previous call to
@@ -252,7 +252,7 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		gsscredentials	*getCredentials();
 
 		/** Sets the filedescriptor that will be used during subsequent
-		 *  calls to one of connect() or accept().
+		 *  calls to connect() or accept().
 		 *
 		 *  Note that if this instance is set as the current GSS
 		 *  context of a child of the socketclient class, then this
@@ -313,11 +313,11 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		const char	*getService();
 
 
-		/** Initiates a context with service principal "name" with
-		 *  whom a connection is established across the filedescriptor
-		 *  previously set using setPeer().
+		/** Initiates a security context with the server with whom
+		 *  a connection is already established across the
+		 *  filedescriptor previously set using setFileDescriptor().
 		 *
-		 *  Note that if this instance is set as the current GSS
+		 *  Note that if this instance is set as the current security
 		 *  context of a child of the socketclient class, then this
 		 *  method is called implicitly during a successful call to
 		 *  connect().
@@ -326,9 +326,9 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		bool	connect();
 
 
-		/** Accepts a security context from a principal with whom a
-		 *  connection is established across the filedescriptor
-		 *  previously set using setPeer().
+		/** Accepts a security context from the client with whom
+		 *  a connection is already established across the
+		 *  filedescriptor previously set using setFileDescriptor().
 		 *
 		 *  Note that if this instance is set as the current GSS
 		 *  context of a child of the socketserver class, then this
@@ -339,29 +339,24 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		bool	accept();
 
 
-		/** Releases any security context established using an connect
-		 *  or accept method. */
-		bool	close();
-
-
 		/** Returns the actual lifetime of the context, assigned
-		 *  during the most recent call to an connect or accept method.
+		 *  during the most recent call to connect() or accept().
 		 *  Returns the largest unsigned 32-bit integer (indicating an
-		 *  indefinite lifetime, the default) if no call to an connect
-		 *  or accept method has been made, or if close() has been
+		 *  indefinite lifetime, the default) if no call to connect()
+		 *  or accept() has been made, or if close() has been
 		 *  called. */
 		uint32_t	getActualLifetime();
 
 		/** Returns the security mechanism that was actually used
-		 *  during the most recent call to one of connect() or
-		 *  accept() or NULL if no call to connect() or accept()
-		 *  has been made, or if close() has been called. */
+		 *  during the most recent call to connect() or accept() or
+		 *  NULL if no call to connect() or accept() has been made,
+		 *  or if close() has been called. */
 		gssmechanism	*getActualMechanism();
 
 		/** Returns the context flags that were actually used during
-		 *  the most recent call to one of connect() or accept()
-		 *  or 0 if no call to an connect() or accept() method
-		 *  has been made, or if close() has been called. */
+		 *  the most recent call to connect() or accept() or 0 if no
+		 *  call to an connect() or accept() method has been made, or
+		 *  if close() has been called. */
 		uint32_t	getActualFlags();
 
 		/** Returns the remaining lifetime of the context. */
@@ -454,22 +449,28 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 					size_t micsize);
 
 
-		/** Reads tokens from the file descriptor configured by
-		 *  setFileDescriptor(), unwraps them, and writes the unwrapped
-		 *  data to "buf" until "count" bytes have been read.
+		/** Reads tokens from the file descriptor previously configured
+		 *  by setFileDescriptor(), unwraps them, and writes the
+		 *  unwrapped data to "buf" until "count" bytes have been read.
 		 *  Returns the number of unwrapped bytes that were written
 		 *  to "buf" or RESULT_ERROR if an error occurred. */
 		ssize_t	read(void *buf, ssize_t count);
 
-		/** Wraps "buf" of size "count" bytes and writes it to the
-		 *  file descriptor set by setFileDescriptor().
-		 *  Returns the number of unwrapped bytes that were written
-		 *  or RESULT_ERROR if an error occurred. */
+		/** Wraps "count" bytes from "buf" and writes them to the
+		 *  file descriptor previously configured by
+		 *  setFileDescriptor().
+		 *  Returns the number of unwrapped bytes that were written or
+		 *  RESULT_ERROR if an error occurred. */
 		ssize_t	write(const void *buf, ssize_t count);
 
 		/** Returns the number of bytes that are buffered and available
 		 *  for immediate read. */
 		ssize_t pending();
+
+
+		/** Releases any security context established during the
+		 *  previous call to connect() or accept(). */
+		bool	close();
 
 
 		/** Returns the major-status code of the most recently failed
