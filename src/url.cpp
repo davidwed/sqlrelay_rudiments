@@ -753,18 +753,21 @@ bool url::curlPerform() {
 		// Figure out how long we shold wait here.
 		uint32_t	sec=60;
 		uint32_t	usec=0;
-		long		timeout=-1;
-		if (curl_multi_timeout(pvt->_curlm,&timeout)!=CURLM_OK) {
-			return false;
-		}
-		if (timeout>=0) {
-			sec=timeout/1000;
-			if (sec>1) {
-				sec=1;
-			} else {
-				usec=(timeout%1000)*1000;
+		#ifdef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT
+			long		timeout=-1;
+			if (curl_multi_timeout(pvt->_curlm,
+						&timeout)!=CURLM_OK) {
+				return false;
 			}
-		}
+			if (timeout>=0) {
+				sec=timeout/1000;
+				if (sec>1) {
+					sec=1;
+				} else {
+					usec=(timeout%1000)*1000;
+				}
+			}
+		#endif
 
 		// Try to get the file descriptors associated with this thing.
 		int	maxfd=-1;

@@ -27433,8 +27433,8 @@ LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CURLINFO_ACTIVESOCKET" >&5
-$as_echo_n "checking for CURLINFO_ACTIVESOCKET... " >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for curl_multi_timeout" >&5
+$as_echo_n "checking for curl_multi_timeout... " >&6; }
 
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
@@ -27449,14 +27449,14 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-int o=CURLINFO_ACTIVESOCKET;
+curl_multi_timeout(0,0)
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
-$as_echo "#define RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET 1" >>confdefs.h
+$as_echo "#define RUDIMENTS_HAS_CURL_MULTI_TIMEOUT 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else

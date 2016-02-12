@@ -67,9 +67,6 @@
 /* getsockopt has a void * on most systems */
 #undef RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE
 
-/* libcurl has CURLINFO_ACTIVESOCKET */
-#undef RUDIMENTS_HAS_CURLINFO_ACTIVESOCKET
-
 /* libcurl has CURLOPT_SSH_AUTH_TYPES */
 #undef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES
 
@@ -78,6 +75,9 @@
 
 /* libcurl has CURLOPT_USERPWD */
 #undef RUDIMENTS_HAS_CURLOPT_USERPWD
+
+/* libcurl has curl_multi_timeout */
+#undef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT
 
 /* Rudiments supports GSS */
 #undef RUDIMENTS_HAS_GSS
