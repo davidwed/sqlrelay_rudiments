@@ -14,10 +14,18 @@
 
 	// degenerate debug macros for really incapable compilers
 	// (old microsoft compilers, unixware native compiler)
-	extern "C" static void debugFunction() {}
-	extern "C" static void debugPrintf() {}
-	extern "C" static void debugSafePrint() {}
-	extern "C" static void debugPrintBits() {}
+	static void debugFunction() {}
+	static void debugPrintf(const char *format, ...) {}
+	static void debugSafePrint(const char *data, int32_t length) {}
+	static void debugSafePrint(const unsigned char *data, int32_t length) {}
+	static void debugPrintBits(unsigned char value) {}
+	static void debugPrintBits(uint16_t value) {}
+	static void debugPrintBits(uint32_t value) {}
+	static void debugPrintBits(uint64_t value) {}
+	static void debugPrintBits(char value) {}
+	static void debugPrintBits(int16_t value) {}
+	static void debugPrintBits(int32_t value) {}
+	static void debugPrintBits(int64_t value) {}
 
 #else
 
