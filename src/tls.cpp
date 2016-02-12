@@ -60,7 +60,6 @@ class tlscontextprivate {
 };
 
 tlscontext::tlscontext() : securitycontext() {
-	tls::initTLS();
 	pvt=new tlscontextprivate;
 	pvt->_cert=NULL;
 	pvt->_pvtkey=NULL;
@@ -217,6 +216,8 @@ bool tlscontext::init() {
 		if (!pvt->_dirty) {
 			return true;
 		}
+
+		tls::initTLS();
 
 		close();
 
