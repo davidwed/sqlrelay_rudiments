@@ -215,12 +215,6 @@ filedescriptor *unixsocketserver::accept() {
 		return NULL;
 	}
 
-	// handle SSL-accept if necessary
-	if (!sslAccept(returnsock)) {
-		delete returnsock;
-		return NULL;
-	}
-
 	// handle securitycontext-accept if necessary
 	if (!securityContextAccept(returnsock)) {
 		delete returnsock;

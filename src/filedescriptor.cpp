@@ -32,14 +32,6 @@
 
 #include <rudiments/private/winsock.h>
 
-#ifdef RUDIMENTS_HAS_SSL
-	// Redhat 6.2 needs _GNU_SOURCE
-	#ifndef _GNU_SOURCE
-		#define _GNU_SOURCE
-	#endif
-	#include <openssl/ssl.h>
-#endif
-
 #ifdef RUDIMENTS_HAVE_IO_H
 	#include <io.h>
 #endif
@@ -214,13 +206,6 @@ class filedescriptorprivate {
 
 		int32_t	_fd;
 
-		#ifdef RUDIMENTS_HAS_SSL
-		SSL_CTX	*_sslctx;
-		SSL	*_ssl;
-		BIO	*_bio;
-		int32_t	_sslresult;
-		#endif
-
 		securitycontext	*_secctx;
 
 		const char	*_type;
@@ -269,12 +254,6 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_allowshortreads=false;
 	pvt->_allowshortwrites=false;
 	pvt->_translatebyteorder=false;
-#ifdef RUDIMENTS_HAS_SSL
-	pvt->_sslctx=NULL;
-	pvt->_bio=NULL;
-	pvt->_ssl=NULL;
-	pvt->_sslresult=1;
-#endif
 	pvt->_secctx=NULL;
 	pvt->_type="filedescriptor";
 	pvt->_writebuffer=NULL;
@@ -296,12 +275,6 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 	pvt->_retryinterruptedioctl=f.pvt->_retryinterruptedioctl;
 	pvt->_allowshortreads=f.pvt->_allowshortreads;
 	pvt->_allowshortwrites=f.pvt->_allowshortwrites;
-#ifdef RUDIMENTS_HAS_SSL
-	pvt->_sslctx=f.pvt->_sslctx;
-	pvt->_bio=f.pvt->_bio;
-	pvt->_ssl=f.pvt->_ssl;
-	pvt->_sslresult=f.pvt->_sslresult;
-#endif
 	pvt->_secctx=f.pvt->_secctx;
 	if (f.pvt->_writebuffer) {
 		ssize_t	writebuffersize=f.pvt->_writebufferend-
@@ -324,9 +297,6 @@ filedescriptor::~filedescriptor() {
 	delete[] pvt->_readbuffer;
 	delete[] pvt->_writebuffer;
 	close();
-#ifdef RUDIMENTS_HAS_SSL
-	setSSLContext(NULL);
-#endif
 	delete pvt;
 }
 
@@ -414,80 +384,6 @@ bool filedescriptor::duplicate(int32_t newfd) const {
 		#endif
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 	return (result==newfd);
-}
-
-bool filedescriptor::supportsSSL() {
-#ifdef RUDIMENTS_HAS_SSL
-	return true;
-#else
-	return false;
-#endif
-}
-
-void filedescriptor::setSSLContext(void *ctx) {
-#ifdef RUDIMENTS_HAS_SSL
-	if (!ctx) {
-		deInitializeSSL();
-	}
-	pvt->_sslctx=(SSL_CTX *)ctx;
-#endif
-}
-
-void *filedescriptor::getSSLContext() {
-#ifdef RUDIMENTS_HAS_SSL
-	return (void *)pvt->_sslctx;
-#else
-	return NULL;
-#endif
-}
-
-bool filedescriptor::initializeSSL() {
-#ifdef RUDIMENTS_HAS_SSL
-	if (pvt->_fd==-1) {
-		return false;
-	}
-	deInitializeSSL();
-	if (pvt->_sslctx) {
-		pvt->_bio=(BIO *)newSSLBIO();
-		pvt->_ssl=SSL_new(pvt->_sslctx);
-		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
-	}
-	return true;
-#else
-	return false;
-#endif
-}
-
-void filedescriptor::deInitializeSSL() {
-#ifdef RUDIMENTS_HAS_SSL
-	if (pvt->_ssl) {
-		SSL_free(pvt->_ssl);
-		pvt->_ssl=NULL;
-	}
-	if (pvt->_bio) {
-		// BIO_free causes a segfault, and none of the example code
-		// that I've seen calls it, but the function exists so
-		// presumably it has a purpose.
-		//BIO_free(pvt->_bio);
-		pvt->_bio=NULL;
-	}
-#endif
-}
-
-void *filedescriptor::getSSL() const {
-#ifdef RUDIMENTS_HAS_SSL
-	return (void *)pvt->_ssl;
-#else
-	return NULL;
-#endif
-}
-
-void *filedescriptor::newSSLBIO() const {
-#ifdef RUDIMENTS_HAS_SSL
-	return (void *)BIO_new_fd(pvt->_fd,BIO_NOCLOSE);
-#else
-	return NULL;
-#endif
 }
 
 void filedescriptor::setSecurityContext(securitycontext *ctx) {
@@ -839,11 +735,6 @@ ssize_t filedescriptor::read(void *buffer, size_t size,
 }
 
 bool filedescriptor::close() {
-#ifdef RUDIMENTS_HAS_SSL
-	if (pvt->_ssl) {
-		pvt->_sslresult=SSL_shutdown(pvt->_ssl);
-	}
-#endif
 	if (pvt->_fd!=-1) {
 		int32_t	result;
 		error::clearError();
@@ -1188,13 +1079,6 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			(int)process::getProcessId(),(int)pvt->_fd,(int)count);
 	#endif
 
-	// The result of SSL_read may be undefined if count=0
-	#ifdef RUDIMENTS_HAS_SSL
-	if (!count) {
-		return 0;
-	}
-	#endif
-
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
 	ssize_t	actualread;
@@ -1229,40 +1113,6 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// read...
 		error::clearError();
-		#ifdef RUDIMENTS_HAS_SSL
-		if (pvt->_ssl) {
-
-			#ifdef DEBUG_READ
-		        debugPrintf(" (SSL) ");
-			#endif
-
-			for (bool done=false; !done ;) {
-
-				#ifdef RUDIMENTS_SSL_VOID_PTR
-				actualread=SSL_read(pvt->_ssl,ptr,sizetoread);
-				#else
-				actualread=SSL_read(pvt->_ssl,
-						static_cast<char *>(ptr),
-						sizetoread);
-				#endif
-				pvt->_sslresult=actualread;
-
-				switch (SSL_get_error(pvt->_ssl,actualread)) {
-					case SSL_ERROR_WANT_READ:
-					case SSL_ERROR_WANT_WRITE:
-						continue;
-					case SSL_ERROR_WANT_X509_LOOKUP:
-					case SSL_ERROR_SSL:
-						actualread=-1;
-					case SSL_ERROR_ZERO_RETURN:
-					case SSL_ERROR_SYSCALL:
-					case SSL_ERROR_NONE:
-					default:
-						done=true;
-				}
-			}
-		} else
-		#endif
 		if (pvt->_secctx) {
 
 			#ifdef DEBUG_READ
@@ -1481,13 +1331,6 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
-	// The result of SSL_write may be undefined if count=0
-	#ifdef RUDIMENTS_HAS_SSL
-	if (!count) {
-		return 0;
-	}
-	#endif
-
 	ssize_t	totalwrite=0;
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
@@ -1520,40 +1363,6 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 				totalwrite);
 
 		error::clearError();
-		#ifdef RUDIMENTS_HAS_SSL
-		if (pvt->_ssl) {
-
-			#ifdef DEBUG_WRITE
-		        debugPrintf(" (SSL) ");
-			#endif
-			
-			for (bool done=false; !done ;) {
-
-				#ifdef RUDIMENTS_SSL_VOID_PTR
-				actualwrite=::SSL_write(pvt->_ssl,ptr,count);
-				#else
-				actualwrite=::SSL_write(pvt->_ssl,
-						static_cast<const char *>(ptr),
-						sizetowrite);
-				#endif
-				pvt->_sslresult=actualwrite;
-
-				switch (SSL_get_error(pvt->_ssl,actualwrite)) {
-					case SSL_ERROR_WANT_READ:
-					case SSL_ERROR_WANT_WRITE:
-						continue;
-					case SSL_ERROR_WANT_X509_LOOKUP:
-					case SSL_ERROR_SSL:
-						actualwrite=-1;
-					case SSL_ERROR_ZERO_RETURN:
-					case SSL_ERROR_SYSCALL:
-					case SSL_ERROR_NONE:
-					default:
-						done=true;
-				}
-			}
-		} else
-		#endif
 		if (pvt->_secctx) {
 
 			#ifdef DEBUG_WRITE
@@ -1732,12 +1541,6 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 		#endif
 	#endif
 }
-
-#ifdef RUDIMENTS_HAS_SSL
-int32_t filedescriptor::getSSLResult() const {
-	return pvt->_sslresult;
-}
-#endif
 
 int32_t filedescriptor::fCntl(int32_t cmd, long arg) const {
 	#ifdef RUDIMENTS_HAVE_FCNTL
@@ -2314,36 +2117,6 @@ int32_t filedescriptor::fd() const {
 
 void filedescriptor::fd(int32_t filedes) {
 	setFileDescriptor(filedes);
-}
-
-void *filedescriptor::sslctx() {
-#ifdef RUDIMENTS_HAS_SSL
-	return (void *)pvt->_sslctx;
-#else
-	return NULL;
-#endif
-}
-
-void *filedescriptor::ssl() {
-#ifdef RUDIMENTS_HAS_SSL
-	return (void *)pvt->_ssl;
-#else
-	return NULL;
-#endif
-}
-
-int32_t filedescriptor::sslresult() {
-#ifdef RUDIMENTS_HAS_SSL
-	return pvt->_sslresult;
-#else
-	return 0;
-#endif
-}
-
-void filedescriptor::sslresult(int32_t sslrslt) {
-#ifdef RUDIMENTS_HAS_SSL
-	pvt->_sslresult=sslrslt;
-#endif
 }
 
 securitycontext *filedescriptor::secctx() {

@@ -2,8 +2,6 @@
 // See the COPYING file for more information.
 
 	protected:
-		void	*newSSLBIO() const;
-		bool	sslAccept(filedescriptor *sock);
 		bool	securityContextAccept(filedescriptor *sock);
 
 		ssize_t	lowLevelRead(void *buf, ssize_t count);

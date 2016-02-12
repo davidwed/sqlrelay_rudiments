@@ -8,14 +8,6 @@
 // for FD_ZERO/FD_SET on windows
 #include <rudiments/private/winsock.h>
 
-#ifdef RUDIMENTS_HAS_SSL
-	// Redhat 6.2 needs _GNU_SOURCE
-	#ifndef _GNU_SOURCE
-		#define _GNU_SOURCE
-	#endif
-	#include <openssl/ssl.h>
-#endif
-
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -224,20 +216,10 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 	pvt->_readreadylist.clear();
 
 	// return immediately if any of the filedescriptors
-	// have SSL or GSS data pending
+	// have data pending from the security context
 	for (linkedlistnode< fddata_t * >	*node=
 					pvt->_fdlist.getFirst();
 					node; node=node->getNext()) {
-
-		#ifdef RUDIMENTS_HAS_SSL
-			SSL	*ssl=(SSL *)node->getValue()->fd->getSSL();
-			if (ssl && SSL_pending(ssl)) {
-				pvt->_readreadylist.append(
-						node->getValue()->fd);
-				result++;
-			}
-		#endif
-		
 		securitycontext	*sctx=
 			node->getValue()->fd->getSecurityContext();
 		if (sctx && sctx->pending()) {
@@ -397,20 +379,16 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 
 					FD_SET(fd,&readlist);
 
-					// if we support SSL, check here to
-					// see if the filedescriptor has SSL
-					// data pending
-					#ifdef RUDIMENTS_HAS_SSL
-						SSL	*ssl=(SSL *)node->
-							getValue()->fd->getSSL();
-						if (ssl && SSL_pending(ssl)) {
-							pvt->_readreadylist.
-								append(
-								node->
-								getValue()->fd);
-							result++;
-						}
-					#endif
+					// check here to see if the security
+					// context has data pending
+					securitycontext	*sctx=
+						node->getValue()->fd->
+							getSecurityContext();
+					if (sctx && sctx->pending()) {
+						pvt->_readreadylist.append(
+							node->getValue()->fd);
+						result++;
+					}
 				}
 
 				if (node->getValue()->write) {
@@ -426,13 +404,11 @@ int32_t listener::listen(int32_t sec, int32_t usec) {
 				}
 			}
 
-			// if we support SSL then return here if even 1 of the
-			// filedescriptors had SSL data pending
-			#ifdef RUDIMENTS_HAS_SSL
-				if (result) {
-					return result;
-				}
-			#endif
+			// return here if even 1 of the filedescriptors's
+			// security contexts had data pending
+			if (result) {
+				return result;
+			}
 
 			// wait for data to be available on the file descriptor
 			result=select(largest+1,

@@ -69,7 +69,7 @@ void myserver::listen() {
 	// loop...
 	for (;;) {
 
-		// attach the ssl context to the server
+		// attach the context to the server
 		setSecurityContext(&ctx);
 
 		// accept a client connection

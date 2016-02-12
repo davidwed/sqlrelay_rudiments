@@ -7,14 +7,6 @@
 
 #include <rudiments/private/winsock.h>
 
-#ifdef RUDIMENTS_HAS_SSL
-	// Redhat 6.2 needs _GNU_SOURCE
-	#ifndef _GNU_SOURCE
-		#define _GNU_SOURCE
-	#endif
-	#include <openssl/ssl.h>
-#endif
-
 #include <stdio.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
@@ -153,12 +145,6 @@ int32_t socketclient::ioCtl(int32_t cmd, void *arg) const {
 		return filedescriptor::ioCtl(cmd,arg);
 	#endif
 }
-
-#ifdef RUDIMENTS_HAS_SSL
-void *socketclient::newSSLBIO() const {
-	return (void *)BIO_new_socket(fd(),BIO_NOCLOSE);
-}
-#endif
 
 int32_t socketclient::connect(const struct sockaddr *addr,
 						socklen_t addrlen,
@@ -428,21 +414,6 @@ wsacleanup:
 				&& error::getErrorNumber()!=EOPNOTSUPP
 				#endif
 				) {
-			return RESULT_ERROR;
-		}
-	}
-	#endif
-
-	// SSL-connect if necessary
-	#ifdef RUDIMENTS_HAS_SSL
-	if (retval==RESULT_SUCCESS && sslctx()) {
-		if (!initializeSSL()) {
-			close();
-			return RESULT_ERROR;
-		}
-		sslresult(SSL_connect((SSL *)ssl()));
-		if (sslresult()!=1) {
-			close();
 			return RESULT_ERROR;
 		}
 	}

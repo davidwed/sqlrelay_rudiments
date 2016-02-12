@@ -58,58 +58,6 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  Returns true on success and false on failure. */
 		bool	duplicate(int32_t newfd) const;
 
-		/** Returns true rudiments was built with SSL support
-		 *  and false otherwise. */
-		bool	supportsSSL();
-
-		/** Associates an SSL context "ctx" with the filedescriptor.
-		 *  To remove the current SSL context, pass in a NULL for
-		 *  "ctx".  Passing in a NULL for "ctx" has the additional side
-		 *  effect of calling deInitializeSSL() below.
-		 *
-		 *  When using OpenSSL, pass in a pointer to an
-		 *  instance of the SSL_CTX structure here. */
-		void	setSSLContext(void *ctx);
-
-		/** Returns the SSL context currently associated
-		 *  with the filedescriptor or NULL if none
-		 *  is currently associated.
-		 *
-		 *  When using OpenSSL, cast the result to a
-		 *  pointer to an SSL_CTX structure. */
-		void	*getSSLContext();
-
-		/** Should be called after calling setSSLContext().
-		 *  Causes the appropriate GSS function to be called
-		 *  instead of, or in concert with, read(), write(),
-		 *  connect(), accept() and close() methods.
-		 * 
-		 *  Returns true on success and false on failure. */
-		bool	initializeSSL();
-
-		/** Returns a pointer to the currently
-		 *  initialized SSL handle or NULL if
-		 *  initializeSSL() has not been called or
-		 *  failed.
-		 *
-		 *  When using OpenSSL, cast the result to a
-		 *  pointer to an SSL structure. */
-		void	*getSSL() const;
-
-		/** Causes read(), write(), connect(), accept()
-		 *  and close() methods to be performed
-		 *  without the accompanying SSL-specific
-		 *  functions. */
-		void	deInitializeSSL();
-
-		/** Returns the result code of the previously
-		 *  executed SSL command.  If a method fails
-		 *  but errno is 0 then an SSL-related error
-		 *  occurred.  You may call SSL_get_error()
-		 *  on the result of this method to determine
-		 *  the exact error. */
-		int32_t	getSSLResult() const;
-
 		/** Associates a securitycontext "ctx" with the filedescriptor.
 		 *  To remove the current context, pass in a NULL for "ctx". */
 		void	setSecurityContext(securitycontext *ctx);
