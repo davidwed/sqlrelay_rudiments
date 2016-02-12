@@ -18,47 +18,48 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		tlscontext();
 		virtual	~tlscontext();
 
-		bool	setCertificateChainFile(const char *filename);
+		void		setCertificateChainFile(const char *filename);
+		const char	*getCertificateChainFile();
 
-		bool	setPrivateKeyFile(const char *filename,
-						const char *password);
+		void		setPrivateKeyFile(const char *filename,
+							const char *password);
+		const char	*getPrivateKeyFile();
+		const char	*getPrivateKeyPassword();
 
-		bool	setCiphers(const char *ciphers);
+		void		setCiphers(const char *ciphers);
+		const char	*getCiphers();
 
-		void	verifyPeer();
-		void	dontVerifyPeer();
+		void		setVerifyPeer(bool verify);
+		bool		getVerifyPeer();
 
-		bool	setCertificateAuthorityFile(const char *cafile);
-		bool	setCertificateAuthorityPath(const char *capath);
+		void		setCertificateAuthorityFile(const char *cafile);
+		const char	*getCertificateAuthorityFile();
 
-		bool	setVerificationDepth(uint32_t depth);
+		void		setCertificateAuthorityPath(const char *capath);
+		const char	*getCertificateAuthorityPath();
 
-		bool	useDiffieHellmanKeyExchange(const char *dhcert);
-		
-		void	setFileDescriptor(filedescriptor *fd);
+		void		setVerificationDepth(uint32_t depth);
+		uint32_t	getVerificationDepth();
 
-		filedescriptor	*getFileDescriptor();
+		void		setKeyExchangeCertificate(const char *dhcert);
+		const char	*getKeyExchangeCertificate();
 
 		bool	connect();
-
 		bool	accept();
+		
+		void		setFileDescriptor(filedescriptor *fd);
+		filedescriptor	*getFileDescriptor();
 
-
-		bool	peerCertificateIsValid();
-
+		bool		peerCertificateIsValid();
 		tlscertificate	*getPeerCertificate();
 
-
 		ssize_t	read(void *buf, ssize_t count);
-
 		ssize_t	write(const void *buf, ssize_t count);
-
 		ssize_t pending();
 
 		bool	close();
 
 		int32_t		getError();
-
 		const char	*getErrorString();
 
 	#include <rudiments/private/tlscontext.h>

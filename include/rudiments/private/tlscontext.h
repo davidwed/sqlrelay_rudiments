@@ -2,11 +2,8 @@
 // See the COPYING file for more information.
 
 	private:
-		void	init();
-		void	clear();
-		bool	setCertificateAuthority(const char *cafile,
-						const char *capath);
+		bool	init();
 		void	clearError();
-		void	getError(int32_t ret);
+		void	setError(int32_t ret);
 
 		tlscontextprivate	*pvt;

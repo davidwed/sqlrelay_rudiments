@@ -13,26 +13,14 @@ int main(int argc, const char **argv) {
 	tlscontext	ctx;
 
 	// load the client's certificate chain
-	if (!ctx.setCertificateChainFile("client.pem")) {
-		stdoutput.printf("set cert chain file failed\n%s\n",
-						ctx.getErrorString());
-		process::exit(0);
-	}
+	ctx.setCertificateChainFile("client.pem");
 
 	// load the client's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	if (!ctx.setPrivateKeyFile("client.pem","password")) {
-		stdoutput.printf("set private key file failed\n%s\n",
-						ctx.getErrorString());
-		process::exit(0);
-	}
+	ctx.setPrivateKeyFile("client.pem","password");
 
 	// load certificates for the signing authorities that we trust
-	if (!ctx.setCertificateAuthorityFile("ca.pem")) {
-		stdoutput.printf("set cert authority file failed\n%s\n",
-						ctx.getErrorString());
-		process::exit(0);
-	}
+	ctx.setCertificateAuthorityFile("ca.pem");
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust

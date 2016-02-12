@@ -39,42 +39,26 @@ void myserver::listen() {
 	tlscontext	ctx;
 
 	// load the server's certificate chain
-	if (!ctx.setCertificateChainFile("server.pem")) {
-		stdoutput.printf("set cert chain file failed\n%s\n",
-						ctx.getErrorString());
-		return;
-	}
+	ctx.setCertificateChainFile("server.pem");
 
 	// load the server's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	if (!ctx.setPrivateKeyFile("server.pem","password")) {
-		stdoutput.printf("set private key failed\n%s\n",
-						ctx.getErrorString());
-		return;
-	}
+	ctx.setPrivateKeyFile("server.pem","password");
 
 	// Instruct the server to request the client's certificate.  Servers
 	// always send certificates to clients, but in order for a client to
 	// send a certificate to a server, the server must request it.
-	ctx.verifyPeer();
+	ctx.setVerifyPeer(true);
 
 	// load certificates for the signing authorities that we trust
-	if (!ctx.setCertificateAuthorityFile("ca.pem")) {
-		stdoutput.printf("set cert authority file failed\n%s\n",
-						ctx.getErrorString());
-		return;
-	}
+	ctx.setCertificateAuthorityFile("ca.pem");
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust
 	ctx.setVerificationDepth(1);
 
 	// Instruct the context to use a dh key for encrypting the session.
-	if (!ctx.useDiffieHellmanKeyExchange("dh1024.pem")) {
-		stdoutput.printf("use dh key exchange failed\n%s\n",
-						ctx.getErrorString());
-		return;
-	}
+	ctx.setKeyExchangeCertificate("dh1024.pem");
 
 	// listen on inet socket port 9000
 	if (!inetsocketserver::listen(NULL,9000,15)) {
@@ -156,6 +140,9 @@ void myserver::listen() {
 
 		// close the socket and clean up
 		delete clientsock;
+
+		//ctx.close();
+		//ctx.setCertificateChainFile("server.pem");
 	}
 }
 
