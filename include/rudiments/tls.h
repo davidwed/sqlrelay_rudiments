@@ -24,7 +24,9 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		virtual	~tlscontext();
 
 		/** Sets the location of the certificate chain file to use
-		 *  during the next call to connect() or accept(). */
+		 *  during the next call to connect() or accept().
+		 *  If "filename" is NULL or empty then no certificate chain
+		 *  file will be sent to the peer. */
 		void		setCertificateChainFile(const char *filename);
 
 		/** Returns the location of the certificate chain file that
@@ -35,7 +37,9 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		/** Sets the location of the private key file to use
 		 *  during the next call to connect() or accept().
 		 *  If a password is required to access the private key,
-		 *  then the password may also be provided. */
+		 *  then the password may also be provided.
+		 *  If "filename" is NULL or empty then no private key
+		 *  will be used. */
 		void		setPrivateKeyFile(const char *filename,
 							const char *password);
 
@@ -63,6 +67,10 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  when validating the peer's certificate during the next call
 		 *  to connect() or accept().
 		 *
+		 *  If "cafile" is NULL or empty then no certificate chain file
+		 *  will be used.  Unless setCertificateAuthorityPath() is
+		 *  called, validation of the peer certificate will fail.
+		 *
 		 *  Note that, alternatively, a directory containing multiple
 		 *  certificate chain files can be specified using
 		 *  setCertificateAuthorityPath(). */
@@ -78,7 +86,15 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  during the next call to connect() or accept().  If a
 		 *  directory is specified, then each of the certificate
 		 *  chain files found in that directory will be used during
-		 *  validation. */
+		 *  validation.
+		 *
+		 *  If "cafile" is NULL or empty then no certificate chain file
+		 *  will be used.  Unless setCertificateAuthorityPath() is
+		 *  called, validation of the peer certificate will fail.
+		 *
+		 *  Note that, alternatively, a file containing s single
+		 *  certificate chain can be specified using
+		 *  setCertificateAuthorityFile(). */
 		void		setCertificateAuthorityPath(const char *capath);
 
 		/** Returns the location of the directory containing

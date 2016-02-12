@@ -550,6 +550,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getKeyExchang
       </table>
 </div><div class="memdoc">
 <p>Sets the location of the certificate chain file to use when validating the peer's certificate during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>.</p>
+<p>If "cafile" is NULL or empty then no certificate chain file will be used. Unless <a class="el" href="classtlscontext.html#a6f73b4e7d45128f1ba9be62df5aae663">setCertificateAuthorityPath()</a> is called, validation of the peer certificate will fail.</p>
 <p>Note that, alternatively, a directory containing multiple certificate chain files can be specified using <a class="el" href="classtlscontext.html#a6f73b4e7d45128f1ba9be62df5aae663">setCertificateAuthorityPath()</a>. </p>
 
 </div>
@@ -567,7 +568,9 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getKeyExchang
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the location of the directory containing certificate chain files to use when validating the peer's certificate during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. If a directory is specified, then each of the certificate chain files found in that directory will be used during validation. </p>
+<p>Sets the location of the directory containing certificate chain files to use when validating the peer's certificate during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. If a directory is specified, then each of the certificate chain files found in that directory will be used during validation.</p>
+<p>If "cafile" is NULL or empty then no certificate chain file will be used. Unless <a class="el" href="classtlscontext.html#a6f73b4e7d45128f1ba9be62df5aae663">setCertificateAuthorityPath()</a> is called, validation of the peer certificate will fail.</p>
+<p>Note that, alternatively, a file containing s single certificate chain can be specified using <a class="el" href="classtlscontext.html#afa741ac7866270f3a0bbe27dd3a69d86">setCertificateAuthorityFile()</a>. </p>
 
 </div>
 </div>
@@ -584,7 +587,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getKeyExchang
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the location of the certificate chain file to use during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. </p>
+<p>Sets the location of the certificate chain file to use during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. If "filename" is NULL or empty then no certificate chain file will be sent to the peer. </p>
 
 </div>
 </div>
@@ -672,7 +675,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getKeyExchang
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the location of the private key file to use during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. If a password is required to access the private key, then the password may also be provided. </p>
+<p>Sets the location of the private key file to use during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. If a password is required to access the private key, then the password may also be provided. If "filename" is NULL or empty then no private key will be used. </p>
 
 </div>
 </div>
@@ -763,7 +766,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>getKeyExchang
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 12 2016 15:59:46 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 12 2016 16:05:21 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
