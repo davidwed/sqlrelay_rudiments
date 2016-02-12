@@ -72,20 +72,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad967e6cbdaa87b8df42dc1636d119675"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45a2f0627c0214cfac74de0c28fb0b7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a45a2f0627c0214cfac74de0c28fb0b7c">duplicate</a> (int32_t newfd) const </td></tr>
 <tr class="separator:a45a2f0627c0214cfac74de0c28fb0b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fa8280fdfe278cb05e427af67eb2e97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a6fa8280fdfe278cb05e427af67eb2e97">supportsSSL</a> ()</td></tr>
-<tr class="separator:a6fa8280fdfe278cb05e427af67eb2e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e445ca60e77eca850d68b126a9528af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a2e445ca60e77eca850d68b126a9528af">setSSLContext</a> (void *ctx)</td></tr>
-<tr class="separator:a2e445ca60e77eca850d68b126a9528af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a345ec188474cd72eb043a939fa8da4fa"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a345ec188474cd72eb043a939fa8da4fa">getSSLContext</a> ()</td></tr>
-<tr class="separator:a345ec188474cd72eb043a939fa8da4fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74ec861594a9d5700259ccf0469e06c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a74ec861594a9d5700259ccf0469e06c7">initializeSSL</a> ()</td></tr>
-<tr class="separator:a74ec861594a9d5700259ccf0469e06c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5761dea05e2f947e4b53b89c1915b0a"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ac5761dea05e2f947e4b53b89c1915b0a">getSSL</a> () const </td></tr>
-<tr class="separator:ac5761dea05e2f947e4b53b89c1915b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab91e8390c94f6db309e0d757e4c0c97a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ab91e8390c94f6db309e0d757e4c0c97a">deInitializeSSL</a> ()</td></tr>
-<tr class="separator:ab91e8390c94f6db309e0d757e4c0c97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62e87f104a9d146aca8dbff5591ff490"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a62e87f104a9d146aca8dbff5591ff490">getSSLResult</a> () const </td></tr>
-<tr class="separator:a62e87f104a9d146aca8dbff5591ff490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e077d4780acd07b63932897a81f6a4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#a4e077d4780acd07b63932897a81f6a4f">setSecurityContext</a> (<a class="el" href="classsecuritycontext.html">securitycontext</a> *ctx)</td></tr>
 <tr class="separator:a4e077d4780acd07b63932897a81f6a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3090f0d9aad119a6f4a121313cac579"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsecuritycontext.html">securitycontext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfiledescriptor.html#ad3090f0d9aad119a6f4a121313cac579">getSecurityContext</a> ()</td></tr>
@@ -505,22 +491,6 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>If the close-on-exec status is false (the default), then the file descriptor will remain open across an execve() call, otherwise it will be closed.</p>
 <p>This method sets the close-on-exec status to true. </p>
-
-</div>
-</div>
-<a class="anchor" id="ab91e8390c94f6db309e0d757e4c0c97a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::deInitializeSSL </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Causes <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a>, <a class="el" href="classfiledescriptor.html#abe28a94af94bce6122c606072da0cd04">write()</a>, connect(), accept() and <a class="el" href="classfiledescriptor.html#a67442522f75c98d34ce5778ab5eeb754">close()</a> methods to be performed without the accompanying SSL-specific functions. </p>
 
 </div>
 </div>
@@ -967,56 +937,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac5761dea05e2f947e4b53b89c1915b0a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* filedescriptor::getSSL </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns a pointer to the currently initialized SSL handle or NULL if <a class="el" href="classfiledescriptor.html#a74ec861594a9d5700259ccf0469e06c7">initializeSSL()</a> has not been called or failed.</p>
-<p>When using OpenSSL, cast the result to a pointer to an SSL structure. </p>
-
-</div>
-</div>
-<a class="anchor" id="a345ec188474cd72eb043a939fa8da4fa"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void* filedescriptor::getSSLContext </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the SSL context currently associated with the filedescriptor or NULL if none is currently associated.</p>
-<p>When using OpenSSL, cast the result to a pointer to an SSL_CTX structure. </p>
-
-</div>
-</div>
-<a class="anchor" id="a62e87f104a9d146aca8dbff5591ff490"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int32_t filedescriptor::getSSLResult </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the result code of the previously executed SSL command. If a method fails but errno is 0 then an SSL-related error occurred. You may call SSL_get_error() on the result of this method to determine the exact error. </p>
-
-</div>
-</div>
 <a class="anchor" id="a5bf0a1af7a070fe41262d39d0ec23281"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1139,23 +1059,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Converts an unsigned 64-bit integer from host byte order to network byte order. </p>
-
-</div>
-</div>
-<a class="anchor" id="a74ec861594a9d5700259ccf0469e06c7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::initializeSSL </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Should be called after calling <a class="el" href="classfiledescriptor.html#a2e445ca60e77eca850d68b126a9528af">setSSLContext()</a>. Causes the appropriate GSS function to be called instead of, or in concert with, <a class="el" href="classfiledescriptor.html#aacf81fad5ccb63d72f7ba7f712df1efa">read()</a>, <a class="el" href="classfiledescriptor.html#abe28a94af94bce6122c606072da0cd04">write()</a>, connect(), accept() and <a class="el" href="classfiledescriptor.html#a67442522f75c98d34ce5778ab5eeb754">close()</a> methods.</p>
-<p>Returns true on success and false on failure. </p>
 
 </div>
 </div>
@@ -2850,24 +2753,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2e445ca60e77eca850d68b126a9528af"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void filedescriptor::setSSLContext </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>ctx</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Associates an SSL context "ctx" with the filedescriptor. To remove the current SSL context, pass in a NULL for "ctx". Passing in a NULL for "ctx" has the additional side effect of calling <a class="el" href="classfiledescriptor.html#ab91e8390c94f6db309e0d757e4c0c97a">deInitializeSSL()</a> below.</p>
-<p>When using OpenSSL, pass in a pointer to an instance of the SSL_CTX structure here. </p>
-
-</div>
-</div>
 <a class="anchor" id="a7cd820738744ec4723be54351b026339"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2945,22 +2830,6 @@ Static Public Member Functions</h2></td></tr>
 <p>Returns true if the client socket supports blocking/nonblocking modes and false otherwise. </p>
 
 <p>Reimplemented in <a class="el" href="classsocketserver.html#af62d33f4bfb8e80c01a795d6b2aa931c">socketserver</a>, and <a class="el" href="classsocketclient.html#a837eef34e0bf89326ac4bc1c037d8fd6">socketclient</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6fa8280fdfe278cb05e427af67eb2e97"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classbool.html">bool</a> filedescriptor::supportsSSL </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns true rudiments was built with SSL support and false otherwise. </p>
 
 </div>
 </div>
@@ -3963,7 +3832,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 12 2016 16:05:20 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 12 2016 16:44:57 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

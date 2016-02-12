@@ -15,6 +15,7 @@
 	added a generic securitycontext class and integrated it with
 		filedescriptor
 	implemented GSS/SSPI and TLS/SSL children of securitycontext
+	removed old SSL integration with filedescriptor
 	updated inet/unixsocketclient to close() as the first step of connect()
 	updated charstring::to(Unsigned)Integer-with-endptr methods to have
 		const char **endptr arguments
