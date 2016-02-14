@@ -176,7 +176,11 @@ int main(int argc, const char **argv) {
 				stdoutput.printf("\n  write() msg failed\n");
 				break;
 			}
-			fd.flushWriteBuffer(-1,-1);
+			if (!fd.flushWriteBuffer(-1,-1)) {
+				stdoutput.printf("\n  flushWriteBuffer() "
+								"failed\n");
+				break;
+			}
 
 			stdoutput.printf("\n  Receiving response...");
 

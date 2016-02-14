@@ -12,10 +12,10 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-//#define DEBUG_GSS 1
-//#define DEBUG_GSS_WRAP 1
-//#define DEBUG_GSS_SEND 1
-//#define DEBUG_GSS_RECEIVE 1
+#define DEBUG_GSS 1
+#define DEBUG_GSS_WRAP 1
+#define DEBUG_GSS_SEND 1
+#define DEBUG_GSS_RECEIVE 1
 
 #if defined(RUDIMENTS_HAS_GSS)
 
@@ -128,6 +128,7 @@ const char * const *gss::getAvailableMechanisms() {
 		// FIXME: this is overly complex, but hopefully there's
 		// a programatic way of getting this list that this can
 		// easily be adapted to
+		// see EnumerateSecurityPackages
 		const char	*mechs[]={
 					"Negotiate",
 					"Kerberos",
@@ -1180,9 +1181,12 @@ class gsscontextprivate {
 		#elif defined(RUDIMENTS_HAS_SSPI)
 			TimeStamp	_actuallifetime;
 			DWORD		_maxmsgsize;
+			DWORD		_streamheadersize;
+			DWORD		_streamtrailersize;
 			DWORD		_trailersize;
 			DWORD		_blksize;
 			bool		_kerberos;
+			bool		_schannel;
 		#else
 			uint32_t	_desiredlifetime;
 			uint32_t	_actuallifetime;
@@ -1233,9 +1237,12 @@ gsscontext::gsscontext() : securitycontext() {
 		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_maxmsgsize=0;
+		pvt->_streamheadersize=0;
+		pvt->_streamtrailersize=0;
 		pvt->_trailersize=0;
 		pvt->_blksize=0;
 		pvt->_kerberos=false;
+		pvt->_schannel=false;
 		pvt->_actuallifetime.u.LowPart=0;
 		pvt->_actuallifetime.u.HighPart=0;
 	#else
@@ -1623,7 +1630,7 @@ bool gsscontext::initiate(const void *name,
 		inputtoken.BufferType=SECBUFFER_TOKEN;
 
 		SecBufferDesc     inputtokendesc;
-		inputtokendesc.ulVersion=0;
+		inputtokendesc.ulVersion=SECBUFFER_VERSION;
 		inputtokendesc.cBuffers=1;
 		inputtokendesc.pBuffers=&inputtoken;
 
@@ -1635,7 +1642,7 @@ bool gsscontext::initiate(const void *name,
 		outputtoken.pvBuffer=outbuf;
 
 		SecBufferDesc     outputtokendesc;
-		outputtokendesc.ulVersion=0;
+		outputtokendesc.ulVersion=SECBUFFER_VERSION;
 		outputtokendesc.cBuffers=1;
 		outputtokendesc.pBuffers=&outputtoken;
 
@@ -1980,10 +1987,10 @@ bool gsscontext::inquire() {
 					#endif
 					return false;
 				}
-				clientname=unicodeToAscii(
-						(WCHAR *)nn.sClientName);
-				servername=unicodeToAscii(
-						(WCHAR *)nn.sServerName);
+				clientname=charstring::duplicate(
+							nn.sClientName);
+				servername=charstring::duplicate(
+							nn.sServerName);
 			}
 
 			// set initiator
@@ -2087,6 +2094,11 @@ bool gsscontext::inquire() {
 					pvt->_actualmechanism.getString(),
 					"Kerberos");
 
+		// are we using schannel?
+		pvt->_schannel=!charstring::compareIgnoringCase(
+					pvt->_actualmechanism.getString(),
+					"SChannel");
+
 		// FIXME: Arguably, we should reset the max message size,
 		// now that we know the actual mechanism that we're using.
 		// As it might be smaller.
@@ -2115,6 +2127,25 @@ bool gsscontext::inquire() {
 		}
 		pvt->_trailersize=sizes.cbSecurityTrailer;
 		pvt->_blksize=sizes.cbBlockSize;
+
+		// get stream header and trailer sizes (SChannel only)
+		if (pvt->_schannel) {
+			SecPkgContext_StreamSizes	streamsizes;
+			pvt->_sstatus=QueryContextAttributes(
+						&pvt->_context,
+						SECPKG_ATTR_STREAM_SIZES,
+						&streamsizes);
+			if (SSPI_ERROR(pvt->_sstatus)) {
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_STREAM_SIZES))\n\n");
+				#endif
+				return false;
+			}
+			pvt->_streamheadersize=streamsizes.cbHeader;
+			pvt->_streamtrailersize=streamsizes.cbTrailer;
+		}
 
 		retval=true;
 
@@ -2287,7 +2318,7 @@ bool gsscontext::accept() {
 		inputtoken.BufferType=SECBUFFER_TOKEN;
 
 		SecBufferDesc	inputtokendesc;
-		inputtokendesc.ulVersion=0;
+		inputtokendesc.ulVersion=SECBUFFER_VERSION;
 		inputtokendesc.cBuffers=1;
 		inputtokendesc.pBuffers=&inputtoken;
 
@@ -2299,7 +2330,7 @@ bool gsscontext::accept() {
 		outputtoken.pvBuffer=outbuf;
 
 		SecBufferDesc	outputtokendesc;
-		outputtokendesc.ulVersion=0;
+		outputtokendesc.ulVersion=SECBUFFER_VERSION;
 		outputtokendesc.cBuffers=1;
 		outputtokendesc.pBuffers=&outputtoken;
 
@@ -2452,9 +2483,12 @@ bool gsscontext::close() {
 		pvt->_actuallifetime=0;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_maxmsgsize=0;
+		pvt->_streamheadersize=0;
+		pvt->_streamtrailersize=0;
 		pvt->_trailersize=0;
 		pvt->_blksize=0;
 		pvt->_kerberos=false;
+		pvt->_schannel=false;
 		pvt->_actuallifetime.u.LowPart=0;
 		pvt->_actuallifetime.u.HighPart=0;
 	#else
@@ -2612,8 +2646,6 @@ bool gsscontext::wrap(const unsigned char *input,
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		ULONG	qop=0;
-
 		// EncryptMessage encrypts into a set of buffers.  Exactly what
 		// buffers and how the encrypted data is formatted in them
 		// depends on the encryption package.
@@ -2625,6 +2657,9 @@ bool gsscontext::wrap(const unsigned char *input,
 		//
 		// For kerberos, a "padding" buffer is also required for
 		// who-knows-what.
+		//
+		// For schannel, "stream header", "stream trailer", and "empty"
+		// buffers are required.
 
 		if (pvt->_kerberos) {
 
@@ -2638,13 +2673,14 @@ bool gsscontext::wrap(const unsigned char *input,
 
 			// prepare security buffers
 			SecBuffer         secbuf[3];
-			secbuf[0].BufferType=SECBUFFER_DATA;
-			secbuf[0].cbBuffer=inputsize;
-			secbuf[0].pvBuffer=*output;
+			secbuf[0].BufferType=SECBUFFER_TOKEN;
+			secbuf[0].cbBuffer=pvt->_trailersize;
+			secbuf[0].pvBuffer=*output+inputsize;
 
-			secbuf[1].BufferType=SECBUFFER_TOKEN;
-			secbuf[1].cbBuffer=pvt->_trailersize;
-			secbuf[1].pvBuffer=*output+inputsize;
+			secbuf[1].BufferType=SECBUFFER_DATA;
+			// FIXME: this can't be larger than pvt->_maxmsgsize
+			secbuf[1].cbBuffer=inputsize;
+			secbuf[1].pvBuffer=*output;
 
 			secbuf[2].BufferType=SECBUFFER_PADDING;
 			secbuf[2].cbBuffer=pvt->_blksize;
@@ -2657,7 +2693,49 @@ bool gsscontext::wrap(const unsigned char *input,
 
 			// encrypt the input
 			pvt->_sstatus=EncryptMessage(
-					&pvt->_context,qop,&secbufdesc,0);
+					&pvt->_context,0,&secbufdesc,0);
+
+		} else if (pvt->_schannel) {
+
+			// allocate the output buffer, large enough to hold the
+			// input, trailer, and padding
+			*outputsize=pvt->_streamheadersize+
+					inputsize+pvt->_streamtrailersize;
+			*output=new BYTE[*outputsize];
+
+			// initialize the output buffer with the input
+			bytestring::copy(*output+pvt->_streamheadersize,
+							input,inputsize);
+
+			// prepare security buffers
+			SecBuffer         secbuf[4];
+			secbuf[0].BufferType=SECBUFFER_STREAM_HEADER;
+			secbuf[0].cbBuffer=pvt->_streamheadersize;
+			secbuf[0].pvBuffer=*output;
+
+			secbuf[1].BufferType=SECBUFFER_DATA;
+			// FIXME: this can't be larger than pvt->_maxmsgsize
+			secbuf[1].cbBuffer=inputsize;
+			secbuf[1].pvBuffer=*output+pvt->_streamheadersize;
+
+			secbuf[2].BufferType=SECBUFFER_STREAM_TRAILER;
+			secbuf[2].cbBuffer=pvt->_trailersize;
+			secbuf[2].pvBuffer=*output+
+						pvt->_streamheadersize+
+						inputsize;
+
+			secbuf[3].BufferType=SECBUFFER_EMPTY;
+			secbuf[3].cbBuffer=0;
+			secbuf[3].pvBuffer=NULL;
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=SECBUFFER_VERSION;
+			secbufdesc.cBuffers=4;
+			secbufdesc.pBuffers=secbuf;
+
+			// encrypt the input
+			pvt->_sstatus=EncryptMessage(
+					&pvt->_context,0,&secbufdesc,0);
 
 		} else {
 
@@ -2677,6 +2755,7 @@ bool gsscontext::wrap(const unsigned char *input,
 			// prepare security buffers
 			SecBuffer         secbuf[2];
 			secbuf[0].BufferType=SECBUFFER_DATA;
+			// FIXME: this can't be larger than pvt->_maxmsgsize
 			secbuf[0].cbBuffer=inputsize;
 			secbuf[0].pvBuffer=*output+sizeof(DWORD);
 
@@ -2686,13 +2765,13 @@ bool gsscontext::wrap(const unsigned char *input,
 						inputsize+sizeof(DWORD);
 
 			SecBufferDesc     secbufdesc;
-			secbufdesc.ulVersion=0;
+			secbufdesc.ulVersion=SECBUFFER_VERSION;
 			secbufdesc.cBuffers=2;
 			secbufdesc.pBuffers=secbuf;
 
 			// encrypt the input
 			pvt->_sstatus=EncryptMessage(
-					&pvt->_context,qop,&secbufdesc,0);
+					&pvt->_context,0,&secbufdesc,0);
 		}
 
 		if (!SSPI_ERROR(pvt->_sstatus)) {
@@ -2705,7 +2784,7 @@ bool gsscontext::wrap(const unsigned char *input,
 	#endif
 
 	#ifdef DEBUG_GSS_WRAP
-		stdoutput.write(" failed\n\n");
+		stdoutput.printf(" failed\n%s\n\n",getStatus());
 	#endif
 
 	return false;
@@ -2782,7 +2861,37 @@ bool gsscontext::unwrap(const unsigned char *input,
 		// buffers and how the encrypted data is formatted in them
 		// depends on the encryption package...
 
-		if (!pvt->_kerberos) {
+		if (pvt->_kerberos) {
+
+			// For kerberos, "data", "trailer", and "padding"
+			// buffers were required to store the encrypted data,
+			// but apparently, information for how to do the
+			// decryption was stored in there too, so
+			// DecryptMessage just needs the input buffer as a
+			// single "stream".  It will allocate a buffer
+			// internally to store the decrypted data.  A pointer
+			// to this buffer must be designated in the "data"
+			// buffer.
+
+			// prepare buffers
+			SecBuffer         secbuf[2];
+			secbuf[0].BufferType=SECBUFFER_STREAM;
+			secbuf[0].cbBuffer=inputsize;
+			secbuf[0].pvBuffer=(void *)input;
+
+			secbuf[1].BufferType=SECBUFFER_DATA;
+			secbuf[1].cbBuffer=*outputsize;
+			secbuf[1].pvBuffer=*output;
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=SECBUFFER_VERSION;
+			secbufdesc.cBuffers=2;
+			secbufdesc.pBuffers=secbuf;
+
+			pvt->_sstatus=DecryptMessage(
+					&pvt->_context,&secbufdesc,0,&qop);
+
+		} else {
 
 			// In the general case, "data" and "trailer" buffers
 			// were required to store the encrypted data.
@@ -2816,36 +2925,6 @@ bool gsscontext::unwrap(const unsigned char *input,
 			secbuf[1].pvBuffer=trailer;
 
 			SecBufferDesc     secbufdesc;
-			secbufdesc.ulVersion=0;
-			secbufdesc.cBuffers=2;
-			secbufdesc.pBuffers=secbuf;
-
-			pvt->_sstatus=DecryptMessage(
-					&pvt->_context,&secbufdesc,0,&qop);
-
-		} else {
-
-			// For kerberos, "data", "trailer", and "padding"
-			// buffers were required to store the encrypted data,
-			// but apparently, information for how to do the
-			// decryption was stored in there too, so
-			// DecryptMessage just needs the input buffer as a
-			// single "stream".  It will allocate a buffer
-			// internally to store the decrypted data.  A pointer
-			// to this buffer must be designated in the "data"
-			// buffer.
-
-			// prepare buffers
-			SecBuffer         secbuf[2];
-			secbuf[0].BufferType=SECBUFFER_STREAM;
-			secbuf[0].cbBuffer=inputsize;
-			secbuf[0].pvBuffer=(void *)input;
-
-			secbuf[1].BufferType=SECBUFFER_DATA;
-			secbuf[1].cbBuffer=*outputsize;
-			secbuf[1].pvBuffer=*output;
-
-			SecBufferDesc     secbufdesc;
 			secbufdesc.ulVersion=SECBUFFER_VERSION;
 			secbufdesc.cBuffers=2;
 			secbufdesc.pBuffers=secbuf;
@@ -2863,7 +2942,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			stdoutput.safePrint(*output,*outputsize);
 			stdoutput.write(") success\n\n");
 		} else {
-			stdoutput.write("unwrap() failed\n\n");
+			stdoutput.printf("unwrap() failed\n%s\n\n",getStatus());
 		}
 	#endif
 

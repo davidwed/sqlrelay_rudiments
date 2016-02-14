@@ -1170,7 +1170,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 			} else if (actualread==-1) {
 				// error condition
 				#ifdef DEBUG_READ
-				debugPrintf(")\n");
+				debugPrintf(" ERROR )\n");
 				#endif
 				return RESULT_ERROR;
 			}
@@ -1411,7 +1411,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			} else if (actualwrite==-1) {
 				// error condition
 				#ifdef DEBUG_WRITE
-				debugPrintf(")\n");
+				debugPrintf(" ERROR )\n");
 				#endif
 				return RESULT_ERROR;
 			}

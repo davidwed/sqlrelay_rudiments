@@ -129,7 +129,13 @@ int main(int argc, const char **argv) {
 					delete[] msg;
 					break;
 				}
-				fd->flushWriteBuffer(-1,-1);
+				if (!fd->flushWriteBuffer(-1,-1)) {
+					stdoutput.printf(
+						"\n  flushWriteBuffer() msg "
+						"failed\n");
+					delete[] msg;
+					break;
+				}
 
 				delete[] msg;
 
