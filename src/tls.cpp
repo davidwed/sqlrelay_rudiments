@@ -102,14 +102,14 @@ tlscontext::tlscontext() : securitycontext() {
 		pvt->_algids=NULL;
 
 		pvt->_gmech.initialize(UNISP_NAME_A);
+
 		pvt->_gcred.addDesiredMechanism(&pvt->_gmech);
 		pvt->_gcred.setPackageSpecificData(&pvt->_scred);
+
 		pvt->_gctx.setDesiredMechanism(&pvt->_gmech);
 		pvt->_gctx.setDesiredFlags(ISC_REQ_SEQUENCE_DETECT|
 						ISC_REQ_REPLAY_DETECT|
-						ISC_REQ_CONFIDENTIALITY|
 						ISC_RET_EXTENDED_ERROR|
-						ISC_REQ_ALLOCATE_MEMORY|
 						ISC_REQ_STREAM);
 		pvt->_gctx.setCredentials(&pvt->_gcred);
 	#endif
@@ -687,6 +687,9 @@ bool tlscontext::init() {
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
 			pvt->_scred.dwFlags=flags;*/
+			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1;
+			pvt->_scred.dwFlags=SCH_CRED_NO_DEFAULT_CREDS|
+						SCH_CRED_MANUAL_CRED_VALIDATION;
 
 			retval=pvt->_gcred.acquireForUser(NULL);
 

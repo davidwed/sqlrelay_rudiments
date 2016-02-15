@@ -1643,6 +1643,9 @@ bool gsscontext::initiate(const void *name,
 		outputtokendesc.cBuffers=1;
 		outputtokendesc.pBuffers=&outputtoken;
 
+		// use confidentiality, whether requested or not
+		pvt->_desiredflags|=ISC_REQ_CONFIDENTIALITY;
+
 		// get credentials
 		CredHandle	*credentials=
 			(pvt->_credentials)?
