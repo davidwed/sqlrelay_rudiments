@@ -2938,6 +2938,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			*output=(unsigned char *)bytestring::duplicate(
 							secbuf[1].pvBuffer,
 							*outputsize);
+			// FIXME: FreeContextBuffer(secbuf[1].pvBuffer) ???
 
 		} else {
 

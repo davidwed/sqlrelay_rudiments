@@ -66,7 +66,7 @@ class tlscontextprivate {
 			gssmechanism	_gmech;
 			gsscredentials	_gcred;
 			gsscontext	_gctx;
-			HCERTSTORE	_mycstore;
+			HCERTSTORE	_cstore;
 			PCCERT_CONTEXT	*_cctx;
 			SCHANNEL_CRED	_scred;
 			DWORD		_algidcount;
@@ -95,7 +95,7 @@ tlscontext::tlscontext() : securitycontext() {
 		pvt->_ctx=NULL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		pvt->_mycstore=NULL;
+		pvt->_cstore=NULL;
 		pvt->_cctx=NULL;
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 		pvt->_algidcount=0;
@@ -129,8 +129,8 @@ tlscontext::~tlscontext() {
 			pvt->_ctx=NULL;
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		if (pvt->_mycstore) {
-			CertCloseStore(pvt->_mycstore,0);
+		if (pvt->_cstore) {
+			CertCloseStore(pvt->_cstore,0);
 		}
 		if (pvt->_cctx) {
 			CertFreeCertificateContext(pvt->_cctx[0]);
@@ -601,14 +601,14 @@ bool tlscontext::init() {
 		DWORD	flags=0;
 
 		// open the cert store, if necessary
-		if (!pvt->_mycstore) {
-			pvt->_mycstore=CertOpenStore(
+		if (!pvt->_cstore) {
+			pvt->_cstore=CertOpenStore(
 					CERT_STORE_PROV_FILENAME_A,
 					X509_ASN_ENCODING,
 					NULL,
 					0,
 					pvt->_cert);
-			if (!pvt->_mycstore) {
+			if (!pvt->_cstore) {
 				retval=false;
 			}
 		}
@@ -617,7 +617,7 @@ bool tlscontext::init() {
 		if (retval && !charstring::isNullOrEmpty(pvt->_cert)) {
 			pvt->_cctx=new PCCERT_CONTEXT[1];
 			pvt->_cctx[0]=CertFindCertificateInStore(
-							pvt->_mycstore,
+							pvt->_cstore,
 							X509_ASN_ENCODING,
 							0,
 							CERT_FIND_ANY,
@@ -687,9 +687,10 @@ bool tlscontext::init() {
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
 			pvt->_scred.dwFlags=flags;*/
-			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1;
+			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1_2;
 			pvt->_scred.dwFlags=SCH_CRED_NO_DEFAULT_CREDS|
 						SCH_CRED_MANUAL_CRED_VALIDATION;
+			pvt->_gctx.setService("fedora");
 
 			retval=pvt->_gcred.acquireForUser(NULL);
 
