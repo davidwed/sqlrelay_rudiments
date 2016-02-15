@@ -565,7 +565,7 @@ bool gsscredentials::acquire(const void *name,
 	#if defined(RUDIMENTS_HAS_GSS)
 
 		#ifdef DEBUG_GSS
-			stdoutput.printf("acquire credentials\n(%s/",name,);
+			stdoutput.printf("acquire credentials\n(%s/",name);
 			if ((gss_OID)nametype==
 					GSS_C_NT_HOSTBASED_SERVICE) {
 				stdoutput.write("GSS_C_NT_HOSTBASED_SERVICE");
