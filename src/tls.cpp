@@ -469,12 +469,8 @@ bool tlscontext::init() {
 		// create the context
 		// FIXME: I think these leak...
 		pvt->_ctx=SSL_CTX_new(
-				#if defined(RUDIMENTS_HAS_TLSV1_2_METHOD)
-					TLSv1_2_method()
-				#elif defined(RUDIMENTS_HAS_TLSV1_1_METHOD)
-					TLSv1_1_method()
-				#elif defined(RUDIMENTS_HAS_TLSV1_METHOD)
-					TLSv1_method()
+				#if defined(RUDIMENTS_HAS_TLS_METHOD)
+					TLS_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
 					SSLv23_method()
 				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
