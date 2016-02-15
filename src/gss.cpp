@@ -2661,45 +2661,41 @@ bool gsscontext::wrap(const unsigned char *input,
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// EncryptMessage encrypts into a set of buffers.  Exactly what
+		// EncryptMessage encrypts a set of buffers.  Exactly what
 		// buffers and how the encrypted data is formatted in them
-		// depends on the encryption package.
-		//
-		// In the general case, a "data" and "trailer" buffer are
-		// required and the data buffer must hold the unencrypted data.
-		// This data will be overwritten and any overflow will be
-		// placed in the trailer.
-		//
-		// For kerberos, a "padding" buffer is also required for
-		// who-knows-what.
-		//
-		// For schannel, "stream header", "stream trailer", and "empty"
-		// buffers are required.
+		// depends on the encryption package...
 
 		if (pvt->_kerberos) {
 
-			// allocate the output buffer, large enough to hold the
-			// input, trailer, and padding
-			*outputsize=inputsize+pvt->_trailersize+pvt->_blksize;
-			*output=new BYTE[*outputsize];
+			// For kerberos, "trailer", "data", and "padding"
+			// buffers are required, in that order.
 
-			// initialize the output buffer with the input
-			bytestring::copy(*output,input,inputsize);
+			// allocate a temp buffer, large enough to hold the
+			// input, trailer, and padding
+			size_t	tempsize=pvt->_trailersize+
+						inputsize+
+						pvt->_blksize;
+			BYTE	*temp=new BYTE[tempsize];
+			bytestring::zero(temp,tempsize);
+
+			// initialize the temp buffer with the input
+			bytestring::copy(temp+pvt->_trailersize,
+						input,inputsize);
 
 			// prepare security buffers
 			SecBuffer         secbuf[3];
 			secbuf[0].BufferType=SECBUFFER_TOKEN;
 			secbuf[0].cbBuffer=pvt->_trailersize;
-			secbuf[0].pvBuffer=*output+inputsize;
+			secbuf[0].pvBuffer=temp;
 
 			secbuf[1].BufferType=SECBUFFER_DATA;
 			// FIXME: this can't be larger than pvt->_maxmsgsize
 			secbuf[1].cbBuffer=inputsize;
-			secbuf[1].pvBuffer=*output;
+			secbuf[1].pvBuffer=temp+pvt->_trailersize;
 
 			secbuf[2].BufferType=SECBUFFER_PADDING;
 			secbuf[2].cbBuffer=pvt->_blksize;
-			secbuf[2].pvBuffer=*output+inputsize+pvt->_trailersize;
+			secbuf[2].pvBuffer=temp+pvt->_trailersize+inputsize;
 
 			SecBufferDesc     secbufdesc;
 			secbufdesc.ulVersion=SECBUFFER_VERSION;
@@ -2710,7 +2706,26 @@ bool gsscontext::wrap(const unsigned char *input,
 			pvt->_sstatus=EncryptMessage(
 					&pvt->_context,0,&secbufdesc,0);
 
+			// copy out the parts of the buffers
+			// that EncryptMessage ended up using
+			*outputsize=secbuf[0].cbBuffer+
+					secbuf[1].cbBuffer+
+					secbuf[2].cbBuffer;
+			*output=new BYTE[*outputsize];
+			bytestring::copy(*output,secbuf[0].pvBuffer,
+						secbuf[0].cbBuffer);
+			bytestring::copy(*output+secbuf[0].cbBuffer,
+						secbuf[1].pvBuffer,
+						secbuf[1].cbBuffer);
+			bytestring::copy(*output+secbuf[0].cbBuffer+
+						secbuf[1].cbBuffer,
+						secbuf[2].pvBuffer,
+						secbuf[2].cbBuffer);
+
 		} else if (pvt->_schannel) {
+
+			// For schannel, "stream header", "stream trailer",
+			// and "empty" buffers are required, in that order.
 
 			// allocate the output buffer, large enough to hold the
 			// input, trailer, and padding
@@ -2753,6 +2768,11 @@ bool gsscontext::wrap(const unsigned char *input,
 					&pvt->_context,0,&secbufdesc,0);
 
 		} else {
+
+			// In the general case, a "data" and "trailer" buffer
+			// are required and the data buffer must hold the
+			// unencrypted data. This data will be overwritten and
+			// any overflow will be placed in the trailer.
 
 			// allocate a buffer to hold the input size,
 			// input, trailer size, and trailer
@@ -2878,15 +2898,11 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 		if (pvt->_kerberos) {
 
-			// For kerberos, "data", "trailer", and "padding"
-			// buffers were required to store the encrypted data,
-			// but apparently, information for how to do the
-			// decryption was stored in there too, so
-			// DecryptMessage just needs the input buffer as a
-			// single "stream".  It will allocate a buffer
-			// internally to store the decrypted data.  A pointer
-			// to this buffer must be designated in the "data"
-			// buffer.
+			// For kerberos, "stream" and "data" buffers are
+			// required, in that order.  DecryptMessage will
+			// allocate space to store the decrypted data and
+			// update the "data" buffer to point to it and 
+			// store its size.
 
 			// prepare buffers
 			SecBuffer         secbuf[2];
@@ -2895,8 +2911,8 @@ bool gsscontext::unwrap(const unsigned char *input,
 			secbuf[0].pvBuffer=(void *)input;
 
 			secbuf[1].BufferType=SECBUFFER_DATA;
-			secbuf[1].cbBuffer=*outputsize;
-			secbuf[1].pvBuffer=*output;
+			secbuf[1].cbBuffer=0;
+			secbuf[1].pvBuffer=NULL;
 
 			SecBufferDesc     secbufdesc;
 			secbufdesc.ulVersion=SECBUFFER_VERSION;
@@ -2905,6 +2921,11 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 			pvt->_sstatus=DecryptMessage(
 					&pvt->_context,&secbufdesc,0,&qop);
+
+			*outputsize=secbuf[1].cbBuffer;
+			*output=(unsigned char *)bytestring::duplicate(
+							secbuf[1].pvBuffer,
+							*outputsize);
 
 		} else {
 
