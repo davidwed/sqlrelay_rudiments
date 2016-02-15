@@ -1250,15 +1250,22 @@ gsscontext::~gsscontext() {
 }
 
 void gsscontext::setCredentials(gsscredentials *credentials) {
-	if (pvt->_freecredentials) {
-		delete pvt->_credentials;
-	}
-	pvt->_freecredentials=false;
+	#if defined(RUDIMENTS_HAS_SSPI)
+		if (pvt->_freecredentials) {
+			delete pvt->_credentials;
+		}
+		pvt->_freecredentials=false;
+	#endif
 	pvt->_credentials=credentials;
 }
 
 gsscredentials *gsscontext::getCredentials() {
-	return (!pvt->_freecredentials)?pvt->_credentials:NULL;
+	#if defined(RUDIMENTS_HAS_SSPI)
+		if (pvt->_freecredentials) {
+			return NULL;
+		}
+	#endif
+	return pvt->_credentials;
 }
 
 void gsscontext::setFileDescriptor(filedescriptor *fd) {
