@@ -682,11 +682,9 @@ bool tlscontext::init() {
 			pvt->_scred.paCred=pvt->_cctx;
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
-			pvt->_scred.dwFlags=flags;*/
-			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1_2;
+			pvt->_scred.dwFlags=flags;
 			pvt->_scred.dwFlags=SCH_CRED_NO_DEFAULT_CREDS|
-						SCH_CRED_MANUAL_CRED_VALIDATION;
-			pvt->_gctx.setService("fedora");
+					SCH_CRED_MANUAL_CRED_VALIDATION;*/
 
 			retval=pvt->_gcred.acquireForUser(NULL);
 
