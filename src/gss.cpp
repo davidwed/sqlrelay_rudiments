@@ -1457,6 +1457,15 @@ bool gsscontext::initiate(const void *name,
 		stdoutput.write("initiate context...\n");
 	#endif
 
+	// There is currently no option to no wrap/encrypt or unwrap/decrypt
+	// in this class, so confidentiality should always be requested.
+	// If it's not, SSPI will return SEC_E_UNSUPPORTED_FUNCTION when
+	// calling EncryptMessage/DecryptMessage.  MIT GSSPI doesn't appear to
+	// mind if you call gss_wrap/gss_unwrap, but who knows what other
+	// implementations might do.  Just to be safe, we'll force
+	// confidentiality, whether it was requested or not.
+	pvt->_desiredflags|=GSS_C_CONF_FLAG;
+
 	#if defined(RUDIMENTS_HAS_GSS)
 
 		bool	error=false;
@@ -1642,9 +1651,6 @@ bool gsscontext::initiate(const void *name,
 		outputtokendesc.ulVersion=SECBUFFER_VERSION;
 		outputtokendesc.cBuffers=1;
 		outputtokendesc.pBuffers=&outputtoken;
-
-		// use confidentiality, whether requested or not
-		pvt->_desiredflags|=ISC_REQ_CONFIDENTIALITY;
 
 		// get credentials
 		CredHandle	*credentials=
