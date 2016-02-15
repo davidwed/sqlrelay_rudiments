@@ -536,19 +536,6 @@ bool gsscredentials::acquireForKrbPrincipal(const char *name) {
 	#endif
 }
 
-bool gsscredentials::acquireForAnonymous() {
-	#if defined(RUDIMENTS_HAS_GSS) && \
-		defined(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS)
-		pvt->_credusage=GSS_C_INITIATE;
-		return acquire("",0,GSS_C_NT_ANONYMOUS);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire("",0,NULL);
-	#else
-		return false;
-	#endif
-}
-
 void gsscredentials::setPackageSpecificData(void *psd) {
 	pvt->_psd=psd;
 }
@@ -1176,6 +1163,7 @@ class gsscontextprivate {
 			DWORD		_blksize;
 			bool		_kerberos;
 			bool		_schannel;
+			bool		_freecredentials;
 		#else
 			uint32_t	_desiredlifetime;
 			uint32_t	_actuallifetime;
@@ -1234,6 +1222,7 @@ gsscontext::gsscontext() : securitycontext() {
 		pvt->_schannel=false;
 		pvt->_actuallifetime.u.LowPart=0;
 		pvt->_actuallifetime.u.HighPart=0;
+		pvt->_freecredentials=false;
 	#else
 		pvt->_desiredlifetime=UINT_MAX;
 		pvt->_actuallifetime=0;
@@ -1261,11 +1250,15 @@ gsscontext::~gsscontext() {
 }
 
 void gsscontext::setCredentials(gsscredentials *credentials) {
+	if (pvt->_freecredentials) {
+		delete pvt->_credentials;
+	}
+	pvt->_freecredentials=false;
 	pvt->_credentials=credentials;
 }
 
 gsscredentials *gsscontext::getCredentials() {
-	return pvt->_credentials;
+	return (!pvt->_freecredentials)?pvt->_credentials:NULL;
 }
 
 void gsscontext::setFileDescriptor(filedescriptor *fd) {
@@ -1653,10 +1646,18 @@ bool gsscontext::initiate(const void *name,
 		outputtokendesc.pBuffers=&outputtoken;
 
 		// get credentials
-		CredHandle	*credentials=
-			(pvt->_credentials)?
-			(CredHandle *)(pvt->_credentials->getCredentials()):
-			NULL;
+		// GSSAPI acquires credentials implicitly if none are specified,
+		// but SSPI does not.  Fortunately, acquiring credentials for a
+		// NULL user grabs the current user's credentials.
+		CredHandle	*credentials=NULL;
+		if (!pvt->_credentials) {
+			pvt->_credentials=new gsscredentials();
+			pvt->_credentials->addDesiredMechanism(
+						pvt->_desiredmechanism);
+			pvt->_credentials->acquireForUser(NULL);
+			pvt->_freecredentials=true;
+		} 
+		credentials=(CredHandle *)pvt->_credentials->getCredentials();
 
 		for (;;) {
 
@@ -2484,6 +2485,10 @@ bool gsscontext::close() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		DeleteSecurityContext(&pvt->_context);
 		bytestring::zero(&pvt->_context,sizeof(pvt->_context));
+		if (pvt->_freecredentials) {
+			delete pvt->_credentials;
+		}
+		pvt->_freecredentials=false;
 	#endif
 
 	// reset initiator and acceptor names

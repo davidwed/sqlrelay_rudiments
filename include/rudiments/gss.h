@@ -149,10 +149,6 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		 *  Returns true on success and false on failure. */
 		bool	acquireForKrbPrincipal(const char *name);
 
-		/** Acquires credentials for an anonymous principal.
-		 *  Returns true on success and false on failure. */
-		bool	acquireForAnonymous();
-
 
 		/** Returns true if credentials are currently
 		 *  acquired and false otherwise. */
