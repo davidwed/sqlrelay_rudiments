@@ -1,6 +1,7 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
+#include <rudiments/commandline.h>
 #include <rudiments/tls.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/charstring.h>
@@ -9,6 +10,20 @@
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
+
+	commandline	cmdl(argc,argv);
+	if (cmdl.found("help")) {
+		stdoutput.printf("tlsclient [-host host] [-port port]\n");
+		process::exit(0);
+	}
+	const char	*host="127.0.0.1";
+	if (cmdl.found("host")) {
+		host=cmdl.getValue("host");
+	}
+	uint16_t	port=9000;
+	if (cmdl.found("port")) {
+		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+	}
 
 	tlscontext	ctx;
 
@@ -31,7 +46,7 @@ int main(int argc, const char **argv) {
 	clnt.setSecurityContext(&ctx);
 
 	// connect to a server on localhost, listening on port 9000
-	if (clnt.connect("127.0.0.1",9000,-1,-1,1,1)<0) {
+	if (clnt.connect(host,port,-1,-1,1,1)<0) {
 		if (errno) {
 			stdoutput.printf("connect failed: %s\n",
 						error::getErrorString());

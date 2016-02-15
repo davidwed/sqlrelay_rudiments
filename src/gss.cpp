@@ -57,6 +57,7 @@
 #elif defined(RUDIMENTS_HAS_SSPI)
 
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
+	#include <schannel.h>
 
 #else
 	// for UINT_MAX
@@ -341,6 +342,7 @@ class gsscredentialsprivate {
 		#endif
 
 		bool				_acquired;
+		void				*_psd;
 
 		linkedlist< gssmechanism * >	_dmlist;
 		linkedlist< gssmechanism * >	_amlist;
@@ -379,6 +381,7 @@ gsscredentials::gsscredentials() {
 		pvt->_credusage=SECPKG_CRED_BOTH;
 	#endif
 	pvt->_acquired=false;
+	pvt->_psd=NULL;
 }
 
 gsscredentials::~gsscredentials() {
@@ -546,6 +549,10 @@ bool gsscredentials::acquireForAnonymous() {
 	#endif
 }
 
+void gsscredentials::setPackageSpecificData(void *psd) {
+	pvt->_psd=psd;
+}
+
 bool gsscredentials::acquire(const void *name,
 				size_t namesize,
 				const void *nametype) {
@@ -582,15 +589,6 @@ bool gsscredentials::acquire(const void *name,
 			(gss_OID)nametype==
 				(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME) {
 			pvt->_name=(const char *)name;
-		}
-
-		// degenerate case
-		if (!name) {
-			pvt->_major=GSS_S_COMPLETE;
-			#ifdef DEBUG_GSS
-				stdoutput.write("success (no credentials)\n\n");
-			#endif
-			return true;
 		}
 
 		// Acquire credentials associated with "name"
@@ -718,15 +716,6 @@ bool gsscredentials::acquire(const void *name,
 		// keep track of the name
 		pvt->_name=(const char *)name;
 
-		// degenerate case
-		if (!name) {
-			pvt->_sstatus=SEC_E_OK;
-			#ifdef DEBUG_GSS
-				stdoutput.write("success (no credentials)\n\n");
-			#endif
-			return true;
-		}
-
 		// try each desired mechanism...
 		bool		first=true;
 		const char	*mechname=NULL;
@@ -777,7 +766,7 @@ bool gsscredentials::acquire(const void *name,
 							(SEC_CHAR *)mechname,
 							pvt->_credusage,
 							NULL,
-							NULL,
+							pvt->_psd,
 							NULL,
 							NULL,
 							&pvt->_credentials,
@@ -1413,6 +1402,14 @@ bool gsscontext::connect() {
 	#endif
 }
 
+void *gsscontext::getContext() {
+	#if defined(RUDIMENTS_HAS_SSPI)
+		return (void *)&pvt->_context;
+	#else
+		return NULL;
+	#endif
+}
+
 bool gsscontext::getMaxMessageSize(const char *mechname) {
 
 	#if defined(RUDIMENTS_HAS_SSPI)
@@ -1652,8 +1649,7 @@ bool gsscontext::initiate(const void *name,
 			(CredHandle *)(pvt->_credentials->getCredentials()):
 			NULL;
 
-		bool	done=false;
-		while (!done) {
+		for (;;) {
 
 			outputtoken.cbBuffer=pvt->_maxmsgsize;
 
@@ -1713,10 +1709,6 @@ bool gsscontext::initiate(const void *name,
 				}
 			}
 
-			// are we done?
-			done=!(pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
-				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
-
 			// send token to peer, if necessary
 			if (outputtoken.cbBuffer) {
 				if (sendToken(TOKEN_FLAGS_TYPE_INITIATE,
@@ -1733,8 +1725,11 @@ bool gsscontext::initiate(const void *name,
 				}
 			}
 
-			// receive token from peer, if necessary
-			if (!done) {
+			// receive token from peer,
+			// into inputtoken, if necessary
+			if (pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
+
 				void	*inbuftemp;
 				size_t	inbufsizetemp;
 				uint32_t	flags=0;
@@ -1754,6 +1749,11 @@ bool gsscontext::initiate(const void *name,
 					error=true;
 					break;
 				}
+
+			} else {
+
+				// break out if we've completed the process
+				break;
 			}
 		}
 
@@ -2095,9 +2095,18 @@ bool gsscontext::inquire() {
 					"Kerberos");
 
 		// are we using schannel?
-		pvt->_schannel=!charstring::compareIgnoringCase(
+		static const char *schannels[]={
+						UNISP_NAME_A,
+						SSL2SP_NAME_A,
+						SSL3SP_NAME_A,
+						TLS1SP_NAME_A,
+						PCT1SP_NAME_A,
+						SCHANNEL_NAME_A,
+						NULL
+					};
+		pvt->_schannel=charstring::inSetIgnoringCase(
 					pvt->_actualmechanism.getString(),
-					"SChannel");
+					schannels);
 
 		// FIXME: Arguably, we should reset the max message size,
 		// now that we know the actual mechanism that we're using.
@@ -2128,7 +2137,7 @@ bool gsscontext::inquire() {
 		pvt->_trailersize=sizes.cbSecurityTrailer;
 		pvt->_blksize=sizes.cbBlockSize;
 
-		// get stream header and trailer sizes (SChannel only)
+		// get stream header and trailer sizes (Schannel only)
 		if (pvt->_schannel) {
 			SecPkgContext_StreamSizes	streamsizes;
 			pvt->_sstatus=QueryContextAttributes(
@@ -2340,9 +2349,8 @@ bool gsscontext::accept() {
 			(CredHandle *)(pvt->_credentials->getCredentials()):
 			NULL;
 
-		bool	done=false;
 		bool	first=true;
-		while (!done) {
+		do {
 
 			// receive token from peer, into inputtoken...
 			uint32_t	flags=0;
@@ -2416,10 +2424,6 @@ bool gsscontext::accept() {
 				}
 			}
 
-			// are we done?
-			done=!(pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
-				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
-
 			first=false;
 
 			// send token to peer, if necessary
@@ -2437,7 +2441,9 @@ bool gsscontext::accept() {
 					break;
 				}
 			}
-		}
+
+		} while (pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
 
 		delete[] outbuf;
 

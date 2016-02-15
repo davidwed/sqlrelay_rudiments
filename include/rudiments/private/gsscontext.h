@@ -1,6 +1,8 @@
 // Copyright (c) 2015 David Muse
 // See the COPYING file for more information.
 
+		void	*getContext();
+
 	private:
 		bool	getMaxMessageSize(const char *mechname);
 		bool	inquire();
