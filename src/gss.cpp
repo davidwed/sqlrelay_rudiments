@@ -3487,69 +3487,6 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 
 		const char	*str="";
 		switch (status) {
-			case SEC_E_INSUFFICIENT_MEMORY:
-				str="SEC_E_INSUFFICIENT_MEMORY";
-				break;
-			case SEC_E_INVALID_HANDLE:
-				str="SEC_E_INVALID_HANDLE";
-				break;
-			case SEC_E_UNSUPPORTED_FUNCTION:
-				str="SEC_E_UNSUPPORTED_FUNCTION";
-				break;
-			case SEC_E_TARGET_UNKNOWN:
-				str="SEC_E_TARGET_UNKNOWN";
-				break;
-			case SEC_E_INTERNAL_ERROR:
-				str="SEC_E_INTERNAL_ERROR";
-				break;
-			case SEC_E_SECPKG_NOT_FOUND:
-				str="SEC_E_SECPKG_NOT_FOUND";
-				break;
-			case SEC_E_NOT_OWNER:
-				str="SEC_E_NOT_OWNER";
-				break;
-			case SEC_E_CANNOT_INSTALL:
-				str="SEC_E_CANNOT_INSTALL";
-				break;
-			case SEC_E_INVALID_TOKEN:
-				str="SEC_E_INVALID_TOKEN";
-				break;
-			case SEC_E_CANNOT_PACK:
-				str="SEC_E_CANNOT_PACK";
-				break;
-			case SEC_E_QOP_NOT_SUPPORTED:
-				str="SEC_E_QOP_NOT_SUPPORTED";
-				break;
-			case SEC_E_NO_IMPERSONATION:
-				str="SEC_E_NO_IMPERSONATION";
-				break;
-			case SEC_E_LOGON_DENIED:
-				str="SEC_E_LOGON_DENIED";
-				break;
-			case SEC_E_UNKNOWN_CREDENTIALS:
-				str="SEC_E_UNKNOWN_CREDENTIALS";
-				break;
-			case SEC_E_NO_CREDENTIALS:
-				str="SEC_E_NO_CREDENTIALS";
-				break;
-			case SEC_E_MESSAGE_ALTERED:
-				str="SEC_E_MESSAGE_ALTERED";
-				break;
-			case SEC_E_OUT_OF_SEQUENCE:
-				str="SEC_E_OUT_OF_SEQUENCE";
-				break;
-			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
-				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
-				break;
-			case SEC_E_CONTEXT_EXPIRED:
-				str="SEC_E_CONTEXT_EXPIRED";
-				break;
-			case SEC_E_INCOMPLETE_MESSAGE:
-				str="SEC_E_INCOMPLETE_MESSAGE";
-				break;
-			case SEC_E_OK:
-				str="SEC_E_OK";
-				break;
 			default:
 				str="";
 		}
