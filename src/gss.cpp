@@ -1114,11 +1114,200 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
 				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
 				break;
+			case SEC_I_CONTINUE_NEEDED:
+				str="SEC_I_CONTINUE_NEEDED";
+				break;
+			case SEC_I_COMPLETE_NEEDED:
+				str="SEC_I_COMPLETE_NEEDED";
+				break;
+			case SEC_I_COMPLETE_AND_CONTINUE:
+				str="SEC_I_COMPLETE_AND_CONTINUE";
+				break;
+			case SEC_I_LOCAL_LOGON:
+				str="SEC_I_LOCAL_LOGON";
+				break;
+			case SEC_E_BAD_PKGID:
+				str="SEC_E_BAD_PKGID";
+				break;
 			case SEC_E_CONTEXT_EXPIRED:
 				str="SEC_E_CONTEXT_EXPIRED";
 				break;
+			case SEC_I_CONTEXT_EXPIRED:
+				str="SEC_I_CONTEXT_EXPIRED";
+				break;
 			case SEC_E_INCOMPLETE_MESSAGE:
 				str="SEC_E_INCOMPLETE_MESSAGE";
+				break;
+			case SEC_E_INCOMPLETE_CREDENTIALS:
+				str="SEC_E_INCOMPLETE_CREDENTIALS";
+				break;
+			case SEC_E_BUFFER_TOO_SMALL:
+				str="SEC_E_BUFFER_TOO_SMALL";
+				break;
+			case SEC_I_INCOMPLETE_CREDENTIALS:
+				str="SEC_I_INCOMPLETE_CREDENTIALS";
+				break;
+			case SEC_I_RENEGOTIATE:
+				str="SEC_I_RENEGOTIATE";
+				break;
+			case SEC_E_WRONG_PRINCIPAL:
+				str="SEC_E_WRONG_PRINCIPAL";
+				break;
+			case SEC_I_NO_LSA_CONTEXT:
+				str="SEC_I_NO_LSA_CONTEXT";
+				break;
+			case SEC_E_TIME_SKEW:
+				str="SEC_E_TIME_SKEW";
+				break;
+			case SEC_E_UNTRUSTED_ROOT:
+				str="SEC_E_UNTRUSTED_ROOT";
+				break;
+			case SEC_E_ILLEGAL_MESSAGE:
+				str="SEC_E_ILLEGAL_MESSAGE";
+				break;
+			case SEC_E_CERT_UNKNOWN:
+				str="SEC_E_CERT_UNKNOWN";
+				break;
+			case SEC_E_CERT_EXPIRED:
+				str="SEC_E_CERT_EXPIRED";
+				break;
+			case SEC_E_ENCRYPT_FAILURE:
+				str="SEC_E_ENCRYPT_FAILURE";
+				break;
+			case SEC_E_DECRYPT_FAILURE:
+				str="SEC_E_DECRYPT_FAILURE";
+				break;
+			case SEC_E_ALGORITHM_MISMATCH:
+				str="SEC_E_ALGORITHM_MISMATCH";
+				break;
+			case SEC_E_SECURITY_QOS_FAILED:
+				str="SEC_E_SECURITY_QOS_FAILED";
+				break;
+			case SEC_E_UNFINISHED_CONTEXT_DELETED:
+				str="SEC_E_UNFINISHED_CONTEXT_DELETED";
+				break;
+			case SEC_E_NO_TGT_REPLY:
+				str="SEC_E_NO_TGT_REPLY";
+				break;
+			case SEC_E_NO_IP_ADDRESSES:
+				str="SEC_E_NO_IP_ADDRESSES";
+				break;
+			case SEC_E_WRONG_CREDENTIAL_HANDLE:
+				str="SEC_E_WRONG_CREDENTIAL_HANDLE";
+				break;
+			case SEC_E_CRYPTO_SYSTEM_INVALID:
+				str="SEC_E_CRYPTO_SYSTEM_INVALID";
+				break;
+			case SEC_E_MAX_REFERRALS_EXCEEDED:
+				str="SEC_E_MAX_REFERRALS_EXCEEDED";
+				break;
+			case SEC_E_MUST_BE_KDC:
+				str="SEC_E_MUST_BE_KDC";
+				break;
+			case SEC_E_STRONG_CRYPTO_NOT_SUPPORTED:
+				str="SEC_E_STRONG_CRYPTO_NOT_SUPPORTED";
+				break;
+			case SEC_E_TOO_MANY_PRINCIPALS:
+				str="SEC_E_TOO_MANY_PRINCIPALS";
+				break;
+			case SEC_E_NO_PA_DATA:
+				str="SEC_E_NO_PA_DATA";
+				break;
+			case SEC_E_PKINIT_NAME_MISMATCH:
+				str="SEC_E_PKINIT_NAME_MISMATCH";
+				break;
+			case SEC_E_SMARTCARD_LOGON_REQUIRED:
+				str="SEC_E_SMARTCARD_LOGON_REQUIRED";
+				break;
+			case SEC_E_SHUTDOWN_IN_PROGRESS:
+				str="SEC_E_SHUTDOWN_IN_PROGRESS";
+				break;
+			case SEC_E_KDC_INVALID_REQUEST:
+				str="SEC_E_KDC_INVALID_REQUEST";
+				break;
+			case SEC_E_KDC_UNABLE_TO_REFER:
+				str="SEC_E_KDC_UNABLE_TO_REFER";
+				break;
+			case SEC_E_KDC_UNKNOWN_ETYPE:
+				str="SEC_E_KDC_UNKNOWN_ETYPE";
+				break;
+			case SEC_E_UNSUPPORTED_PREAUTH:
+				str="SEC_E_UNSUPPORTED_PREAUTH";
+				break;
+			case SEC_E_DELEGATION_REQUIRED:
+				str="SEC_E_DELEGATION_REQUIRED";
+				break;
+			case SEC_E_BAD_BINDINGS:
+				str="SEC_E_BAD_BINDINGS";
+				break;
+			case SEC_E_MULTIPLE_ACCOUNTS:
+				str="SEC_E_MULTIPLE_ACCOUNTS";
+				break;
+			case SEC_E_NO_KERB_KEY:
+				str="SEC_E_NO_KERB_KEY";
+				break;
+			case SEC_E_CERT_WRONG_USAGE:
+				str="SEC_E_CERT_WRONG_USAGE";
+				break;
+			case SEC_E_DOWNGRADE_DETECTED:
+				str="SEC_E_DOWNGRADE_DETECTED";
+				break;
+			case SEC_E_SMARTCARD_CERT_REVOKED:
+				str="SEC_E_SMARTCARD_CERT_REVOKED";
+				break;
+			case SEC_E_ISSUING_CA_UNTRUSTED:
+				str="SEC_E_ISSUING_CA_UNTRUSTED";
+				break;
+			case SEC_E_REVOCATION_OFFLINE_C:
+				str="SEC_E_REVOCATION_OFFLINE_C";
+				break;
+			case SEC_E_PKINIT_CLIENT_FAILURE:
+				str="SEC_E_PKINIT_CLIENT_FAILURE";
+				break;
+			case SEC_E_SMARTCARD_CERT_EXPIRED:
+				str="SEC_E_SMARTCARD_CERT_EXPIRED";
+				break;
+			case SEC_E_NO_S4U_PROT_SUPPORT:
+				str="SEC_E_NO_S4U_PROT_SUPPORT";
+				break;
+			case SEC_E_CROSSREALM_DELEGATION_FAILURE:
+				str="SEC_E_CROSSREALM_DELEGATION_FAILURE";
+				break;
+			case SEC_E_REVOCATION_OFFLINE_KDC:
+				str="SEC_E_REVOCATION_OFFLINE_KDC";
+				break;
+			case SEC_E_ISSUING_CA_UNTRUSTED_KDC:
+				str="SEC_E_ISSUING_CA_UNTRUSTED_KDC";
+				break;
+			case SEC_E_KDC_CERT_EXPIRED:
+				str="SEC_E_KDC_CERT_EXPIRED";
+				break;
+			case SEC_E_KDC_CERT_REVOKED:
+				str="SEC_E_KDC_CERT_REVOKED";
+				break;
+			case SEC_I_SIGNATURE_NEEDED:
+				str="SEC_I_SIGNATURE_NEEDED";
+				break;
+			case SEC_E_INVALID_PARAMETER:
+				str="SEC_E_INVALID_PARAMETER";
+				break;
+			case SEC_E_DELEGATION_POLICY:
+				str="SEC_E_DELEGATION_POLICY";
+				break;
+			case SEC_E_POLICY_NLTM_ONLY:
+				str="SEC_E_POLICY_NLTM_ONLY";
+				break;
+			case SEC_I_NO_RENEGOTIATION:
+				str="SEC_I_NO_RENEGOTIATION";
+				break;
+			case SEC_E_NO_CONTEXT:
+				str="SEC_E_NO_CONTEXT";
+				break;
+			case SEC_E_PKU2U_CERT_FAILURE:
+				str="SEC_E_PKU2U_CERT_FAILURE";
+				break;
+			case SEC_E_MUTUAL_AUTH_FAILED:
+				str="SEC_E_MUTUAL_AUTH_FAILED";
 				break;
 			case SEC_E_OK:
 				str="SEC_E_OK";
@@ -3487,6 +3676,258 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 
 		const char	*str="";
 		switch (status) {
+			case SEC_E_INSUFFICIENT_MEMORY:
+				str="SEC_E_INSUFFICIENT_MEMORY";
+				break;
+			case SEC_E_INVALID_HANDLE:
+				str="SEC_E_INVALID_HANDLE";
+				break;
+			case SEC_E_UNSUPPORTED_FUNCTION:
+				str="SEC_E_UNSUPPORTED_FUNCTION";
+				break;
+			case SEC_E_TARGET_UNKNOWN:
+				str="SEC_E_TARGET_UNKNOWN";
+				break;
+			case SEC_E_INTERNAL_ERROR:
+				str="SEC_E_INTERNAL_ERROR";
+				break;
+			case SEC_E_SECPKG_NOT_FOUND:
+				str="SEC_E_SECPKG_NOT_FOUND";
+				break;
+			case SEC_E_NOT_OWNER:
+				str="SEC_E_NOT_OWNER";
+				break;
+			case SEC_E_CANNOT_INSTALL:
+				str="SEC_E_CANNOT_INSTALL";
+				break;
+			case SEC_E_INVALID_TOKEN:
+				str="SEC_E_INVALID_TOKEN";
+				break;
+			case SEC_E_CANNOT_PACK:
+				str="SEC_E_CANNOT_PACK";
+				break;
+			case SEC_E_QOP_NOT_SUPPORTED:
+				str="SEC_E_QOP_NOT_SUPPORTED";
+				break;
+			case SEC_E_NO_IMPERSONATION:
+				str="SEC_E_NO_IMPERSONATION";
+				break;
+			case SEC_E_LOGON_DENIED:
+				str="SEC_E_LOGON_DENIED";
+				break;
+			case SEC_E_UNKNOWN_CREDENTIALS:
+				str="SEC_E_UNKNOWN_CREDENTIALS";
+				break;
+			case SEC_E_NO_CREDENTIALS:
+				str="SEC_E_NO_CREDENTIALS";
+				break;
+			case SEC_E_MESSAGE_ALTERED:
+				str="SEC_E_MESSAGE_ALTERED";
+				break;
+			case SEC_E_OUT_OF_SEQUENCE:
+				str="SEC_E_OUT_OF_SEQUENCE";
+				break;
+			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
+				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
+				break;
+			case SEC_I_CONTINUE_NEEDED:
+				str="SEC_I_CONTINUE_NEEDED";
+				break;
+			case SEC_I_COMPLETE_NEEDED:
+				str="SEC_I_COMPLETE_NEEDED";
+				break;
+			case SEC_I_COMPLETE_AND_CONTINUE:
+				str="SEC_I_COMPLETE_AND_CONTINUE";
+				break;
+			case SEC_I_LOCAL_LOGON:
+				str="SEC_I_LOCAL_LOGON";
+				break;
+			case SEC_E_BAD_PKGID:
+				str="SEC_E_BAD_PKGID";
+				break;
+			case SEC_E_CONTEXT_EXPIRED:
+				str="SEC_E_CONTEXT_EXPIRED";
+				break;
+			case SEC_I_CONTEXT_EXPIRED:
+				str="SEC_I_CONTEXT_EXPIRED";
+				break;
+			case SEC_E_INCOMPLETE_MESSAGE:
+				str="SEC_E_INCOMPLETE_MESSAGE";
+				break;
+			case SEC_E_INCOMPLETE_CREDENTIALS:
+				str="SEC_E_INCOMPLETE_CREDENTIALS";
+				break;
+			case SEC_E_BUFFER_TOO_SMALL:
+				str="SEC_E_BUFFER_TOO_SMALL";
+				break;
+			case SEC_I_INCOMPLETE_CREDENTIALS:
+				str="SEC_I_INCOMPLETE_CREDENTIALS";
+				break;
+			case SEC_I_RENEGOTIATE:
+				str="SEC_I_RENEGOTIATE";
+				break;
+			case SEC_E_WRONG_PRINCIPAL:
+				str="SEC_E_WRONG_PRINCIPAL";
+				break;
+			case SEC_I_NO_LSA_CONTEXT:
+				str="SEC_I_NO_LSA_CONTEXT";
+				break;
+			case SEC_E_TIME_SKEW:
+				str="SEC_E_TIME_SKEW";
+				break;
+			case SEC_E_UNTRUSTED_ROOT:
+				str="SEC_E_UNTRUSTED_ROOT";
+				break;
+			case SEC_E_ILLEGAL_MESSAGE:
+				str="SEC_E_ILLEGAL_MESSAGE";
+				break;
+			case SEC_E_CERT_UNKNOWN:
+				str="SEC_E_CERT_UNKNOWN";
+				break;
+			case SEC_E_CERT_EXPIRED:
+				str="SEC_E_CERT_EXPIRED";
+				break;
+			case SEC_E_ENCRYPT_FAILURE:
+				str="SEC_E_ENCRYPT_FAILURE";
+				break;
+			case SEC_E_DECRYPT_FAILURE:
+				str="SEC_E_DECRYPT_FAILURE";
+				break;
+			case SEC_E_ALGORITHM_MISMATCH:
+				str="SEC_E_ALGORITHM_MISMATCH";
+				break;
+			case SEC_E_SECURITY_QOS_FAILED:
+				str="SEC_E_SECURITY_QOS_FAILED";
+				break;
+			case SEC_E_UNFINISHED_CONTEXT_DELETED:
+				str="SEC_E_UNFINISHED_CONTEXT_DELETED";
+				break;
+			case SEC_E_NO_TGT_REPLY:
+				str="SEC_E_NO_TGT_REPLY";
+				break;
+			case SEC_E_NO_IP_ADDRESSES:
+				str="SEC_E_NO_IP_ADDRESSES";
+				break;
+			case SEC_E_WRONG_CREDENTIAL_HANDLE:
+				str="SEC_E_WRONG_CREDENTIAL_HANDLE";
+				break;
+			case SEC_E_CRYPTO_SYSTEM_INVALID:
+				str="SEC_E_CRYPTO_SYSTEM_INVALID";
+				break;
+			case SEC_E_MAX_REFERRALS_EXCEEDED:
+				str="SEC_E_MAX_REFERRALS_EXCEEDED";
+				break;
+			case SEC_E_MUST_BE_KDC:
+				str="SEC_E_MUST_BE_KDC";
+				break;
+			case SEC_E_STRONG_CRYPTO_NOT_SUPPORTED:
+				str="SEC_E_STRONG_CRYPTO_NOT_SUPPORTED";
+				break;
+			case SEC_E_TOO_MANY_PRINCIPALS:
+				str="SEC_E_TOO_MANY_PRINCIPALS";
+				break;
+			case SEC_E_NO_PA_DATA:
+				str="SEC_E_NO_PA_DATA";
+				break;
+			case SEC_E_PKINIT_NAME_MISMATCH:
+				str="SEC_E_PKINIT_NAME_MISMATCH";
+				break;
+			case SEC_E_SMARTCARD_LOGON_REQUIRED:
+				str="SEC_E_SMARTCARD_LOGON_REQUIRED";
+				break;
+			case SEC_E_SHUTDOWN_IN_PROGRESS:
+				str="SEC_E_SHUTDOWN_IN_PROGRESS";
+				break;
+			case SEC_E_KDC_INVALID_REQUEST:
+				str="SEC_E_KDC_INVALID_REQUEST";
+				break;
+			case SEC_E_KDC_UNABLE_TO_REFER:
+				str="SEC_E_KDC_UNABLE_TO_REFER";
+				break;
+			case SEC_E_KDC_UNKNOWN_ETYPE:
+				str="SEC_E_KDC_UNKNOWN_ETYPE";
+				break;
+			case SEC_E_UNSUPPORTED_PREAUTH:
+				str="SEC_E_UNSUPPORTED_PREAUTH";
+				break;
+			case SEC_E_DELEGATION_REQUIRED:
+				str="SEC_E_DELEGATION_REQUIRED";
+				break;
+			case SEC_E_BAD_BINDINGS:
+				str="SEC_E_BAD_BINDINGS";
+				break;
+			case SEC_E_MULTIPLE_ACCOUNTS:
+				str="SEC_E_MULTIPLE_ACCOUNTS";
+				break;
+			case SEC_E_NO_KERB_KEY:
+				str="SEC_E_NO_KERB_KEY";
+				break;
+			case SEC_E_CERT_WRONG_USAGE:
+				str="SEC_E_CERT_WRONG_USAGE";
+				break;
+			case SEC_E_DOWNGRADE_DETECTED:
+				str="SEC_E_DOWNGRADE_DETECTED";
+				break;
+			case SEC_E_SMARTCARD_CERT_REVOKED:
+				str="SEC_E_SMARTCARD_CERT_REVOKED";
+				break;
+			case SEC_E_ISSUING_CA_UNTRUSTED:
+				str="SEC_E_ISSUING_CA_UNTRUSTED";
+				break;
+			case SEC_E_REVOCATION_OFFLINE_C:
+				str="SEC_E_REVOCATION_OFFLINE_C";
+				break;
+			case SEC_E_PKINIT_CLIENT_FAILURE:
+				str="SEC_E_PKINIT_CLIENT_FAILURE";
+				break;
+			case SEC_E_SMARTCARD_CERT_EXPIRED:
+				str="SEC_E_SMARTCARD_CERT_EXPIRED";
+				break;
+			case SEC_E_NO_S4U_PROT_SUPPORT:
+				str="SEC_E_NO_S4U_PROT_SUPPORT";
+				break;
+			case SEC_E_CROSSREALM_DELEGATION_FAILURE:
+				str="SEC_E_CROSSREALM_DELEGATION_FAILURE";
+				break;
+			case SEC_E_REVOCATION_OFFLINE_KDC:
+				str="SEC_E_REVOCATION_OFFLINE_KDC";
+				break;
+			case SEC_E_ISSUING_CA_UNTRUSTED_KDC:
+				str="SEC_E_ISSUING_CA_UNTRUSTED_KDC";
+				break;
+			case SEC_E_KDC_CERT_EXPIRED:
+				str="SEC_E_KDC_CERT_EXPIRED";
+				break;
+			case SEC_E_KDC_CERT_REVOKED:
+				str="SEC_E_KDC_CERT_REVOKED";
+				break;
+			case SEC_I_SIGNATURE_NEEDED:
+				str="SEC_I_SIGNATURE_NEEDED";
+				break;
+			case SEC_E_INVALID_PARAMETER:
+				str="SEC_E_INVALID_PARAMETER";
+				break;
+			case SEC_E_DELEGATION_POLICY:
+				str="SEC_E_DELEGATION_POLICY";
+				break;
+			case SEC_E_POLICY_NLTM_ONLY:
+				str="SEC_E_POLICY_NLTM_ONLY";
+				break;
+			case SEC_I_NO_RENEGOTIATION:
+				str="SEC_I_NO_RENEGOTIATION";
+				break;
+			case SEC_E_NO_CONTEXT:
+				str="SEC_E_NO_CONTEXT";
+				break;
+			case SEC_E_PKU2U_CERT_FAILURE:
+				str="SEC_E_PKU2U_CERT_FAILURE";
+				break;
+			case SEC_E_MUTUAL_AUTH_FAILED:
+				str="SEC_E_MUTUAL_AUTH_FAILED";
+				break;
+			case SEC_E_OK:
+				str="SEC_E_OK";
+				break;
 			default:
 				str="";
 		}
