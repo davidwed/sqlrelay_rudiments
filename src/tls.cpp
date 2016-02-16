@@ -67,6 +67,7 @@ class tlscontextprivate {
 			gsscredentials	_gcred;
 			gsscontext	_gctx;
 			HCERTSTORE	_cstore;
+			DWORD		_cctxcount;
 			PCCERT_CONTEXT	*_cctx;
 			SCHANNEL_CRED	_scred;
 			DWORD		_algidcount;
@@ -96,10 +97,11 @@ tlscontext::tlscontext() : securitycontext() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
 		pvt->_cstore=NULL;
+		pvt->_cctxcount=0;
 		pvt->_cctx=NULL;
-		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 		pvt->_algidcount=0;
 		pvt->_algids=NULL;
+		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 
 		pvt->_gmech.initialize(UNISP_NAME_A);
 
@@ -133,8 +135,11 @@ tlscontext::~tlscontext() {
 			CertCloseStore(pvt->_cstore,0);
 		}
 		if (pvt->_cctx) {
-			CertFreeCertificateContext(pvt->_cctx[0]);
+			for (DWORD i=0; i<pvt->_cctxcount; i++) {
+				CertFreeCertificateContext(pvt->_cctx[i]);
+			}
 			delete[] pvt->_cctx;
+			pvt->_cctxcount=0;
 		}
 		delete[] pvt->_algids;
 	#else
@@ -236,7 +241,7 @@ filedescriptor *tlscontext::getFileDescriptor() {
 }
 
 bool tlscontext::connect() {
-	if (!init()) {
+	if (!init(true)) {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -438,7 +443,7 @@ static unsigned int *getCipherAlgs(const char *ciphers,
 }
 #endif
 
-bool tlscontext::init() {
+bool tlscontext::init(bool client) {
 	#if defined(RUDIMENTS_HAS_SSL)
 
 		if (!pvt->_dirty) {
@@ -605,29 +610,49 @@ bool tlscontext::init() {
 					0,
 					pvt->_cert);
 			if (!pvt->_cstore) {
+				char	*errstr=error::getNativeErrorString();
+				setError(error::getNativeErrorNumber(),errstr);
+				delete[] errstr;
 				retval=false;
 			}
 		}
 
 		// set certificate chain file
+		flags|=SCH_CRED_USE_DEFAULT_CREDS;
 		if (retval && !charstring::isNullOrEmpty(pvt->_cert)) {
-			pvt->_cctx=new PCCERT_CONTEXT[1];
-			pvt->_cctx[0]=CertFindCertificateInStore(
+
+			// count certificates
+			pvt->_cctxcount=0;
+			PCCERT_CONTEXT	cctx=NULL;
+			do {
+				cctx=CertFindCertificateInStore(
+							pvt->_cstore,
+							X509_ASN_ENCODING,
+							0,
+							CERT_FIND_ANY,
+							0,
+							cctx);
+				if (cctx) {
+					pvt->_cctxcount++;
+				}
+			} while (cctx);
+
+			// load certificates
+			if (pvt->_cctxcount) {
+				pvt->_cctx=new PCCERT_CONTEXT[pvt->_cctxcount];
+				for (DWORD i=0; i<pvt->_cctxcount; i++) {
+					pvt->_cctx[i]=
+						CertFindCertificateInStore(
 							pvt->_cstore,
 							X509_ASN_ENCODING,
 							0,
 							CERT_FIND_ANY,
 							0,
 							NULL);
-			if (!pvt->_cctx[0]) {
-				retval=false;
+				}
+				flags|=SCH_CRED_NO_DEFAULT_CREDS;
 			}
-			flags|=SCH_CRED_NO_DEFAULT_CREDS;
-		} else {
-			flags|=SCH_CRED_USE_DEFAULT_CREDS;
 		}
-							
-		// auto-retry mode is enabled by default
 
 		// set private key (and password, if provided)
 		if (retval && !charstring::isNullOrEmpty(pvt->_pvtkey)) {
@@ -652,7 +677,7 @@ bool tlscontext::init() {
 		}
 
 		// set whether to validate peer or not
-		if (retval && pvt->_validatepeer) {
+		if (retval && (client || pvt->_validatepeer)) {
 			flags|=SCH_CRED_AUTO_CRED_VALIDATION;
 		} else {
 			flags|=SCH_CRED_MANUAL_CRED_VALIDATION;
@@ -675,28 +700,43 @@ bool tlscontext::init() {
 
 		// build schannel creds and acquire credentials
 		if (retval) {
+
+			// configure schannel creds
 			bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 			pvt->_scred.dwVersion=SCHANNEL_CRED_VERSION;
-			// FIXME: fix this...
-			/*pvt->_scred.cCreds=1;
+			pvt->_scred.cCreds=pvt->_cctxcount;
 			pvt->_scred.paCred=pvt->_cctx;
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
 			pvt->_scred.dwFlags=flags;
-			pvt->_scred.dwFlags=SCH_CRED_NO_DEFAULT_CREDS|
-					SCH_CRED_MANUAL_CRED_VALIDATION;*/
+			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1_2;
 
-			retval=pvt->_gcred.acquireForUser(NULL);
+			// acquire credentials
+			if (client) {
+				retval=pvt->_gcred.acquireForUser(NULL);
+			} else {
+				retval=pvt->_gcred.acquireForService(NULL);
+			}
 
-			pvt->_dirty=false;
+			if (retval) {
+				pvt->_dirty=false;
+			} else {
+				pvt->_error=pvt->_gcred.getMajorStatus();
+				pvt->_errorstr.clear();
+				pvt->_errorstr.append(pvt->_gcred.getStatus());
+			}
 		}
 
 		// clean up on failure
 		if (!retval) {
 			if (pvt->_cctx) {
-				CertFreeCertificateContext(pvt->_cctx[0]);
+				for (DWORD i=0; i<pvt->_cctxcount; i++) {
+					CertFreeCertificateContext(
+							pvt->_cctx[i]);
+				}
 				delete[] pvt->_cctx;
 				pvt->_cctx=NULL;
+				pvt->_cctxcount=0;
 			}
 			bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 		}
@@ -709,7 +749,7 @@ bool tlscontext::init() {
 }
 
 bool tlscontext::accept() {
-	if (!init()) {
+	if (!init(false)) {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -865,11 +905,15 @@ void tlscontext::setError(int32_t ret) {
 				ERR_error_string(pvt->_error,NULL));
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_error=pvt->_gctx.getMajorStatus();
-		pvt->_errorstr.clear();
-		pvt->_errorstr.append(pvt->_gctx.getStatus());
+		setError(pvt->_gctx.getMajorStatus(),pvt->_gctx.getStatus());
 	#else
 	#endif
+}
+
+void tlscontext::setError(int32_t err, const char *errstr) {
+	pvt->_error=err;
+	pvt->_errorstr.clear();
+	pvt->_errorstr.append(errstr);
 }
 
 int32_t tlscontext::getError() {

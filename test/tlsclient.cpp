@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsclient [-host host] [-port port]\n");
+		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-cafile cafile]\n");
 		process::exit(0);
 	}
 	const char	*host="127.0.0.1";
@@ -24,18 +24,26 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("port")) {
 		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
 	}
+	const char	*cert="client.pem";
+	if (cmdl.found("cert")) {
+		cert=cmdl.getValue("cert");
+	}
+	const char	*cafile="ca.pem";
+	if (cmdl.found("cafile")) {
+		cafile=cmdl.getValue("cafile");
+	}
 
 	tlscontext	ctx;
 
 	// load the client's certificate chain
-	ctx.setCertificateChainFile("client.pem");
+	ctx.setCertificateChainFile(cert);
 
 	// load the client's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	ctx.setPrivateKeyFile("client.pem","password");
+	ctx.setPrivateKeyFile(cert,"password");
 
 	// load certificates for the signing authorities that we trust
-	ctx.setCertificateAuthorityFile("ca.pem");
+	ctx.setCertificateAuthorityFile(cafile);
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust

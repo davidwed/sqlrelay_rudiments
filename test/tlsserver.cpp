@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/tls.h>
+#include <rudiments/commandline.h>
 #include <rudiments/permissions.h>
 #include <rudiments/inetsocketserver.h>
 #include <rudiments/charstring.h>
@@ -13,11 +14,13 @@
 class myserver : public inetsocketserver {
 	public:
 			myserver() : inetsocketserver() {}
-		void	listen();
+		void	listen(uint16_t port,
+				const char *cert,
+				const char *cafile);
 };
 
 
-void myserver::listen() {
+void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 
 
 	// make sure that only one instance is running
@@ -39,30 +42,30 @@ void myserver::listen() {
 	tlscontext	ctx;
 
 	// load the server's certificate chain
-	//ctx.setCertificateChainFile("server.pem");
+	ctx.setCertificateChainFile(cert);
 
 	// load the server's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	//ctx.setPrivateKeyFile("server.pem","password");
+	ctx.setPrivateKeyFile(cert,"password");
 
 	// Instruct the server to request the client's certificate.  Servers
 	// always send certificates to clients, but in order for a client to
 	// send a certificate to a server, the server must request it.
-	//ctx.setValidatePeer(true);
+	ctx.setValidatePeer(true);
 
 	// load certificates for the signing authorities that we trust
-	//ctx.setCertificateAuthorityFile("ca.pem");
+	ctx.setCertificateAuthorityFile(cafile);
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust
-	//ctx.setValidationDepth(1);
+	ctx.setValidationDepth(1);
 
 	// Instruct the context to use a dh key for encrypting the session.
-	//ctx.setKeyExchangeCertificate("dh1024.pem");
+	ctx.setKeyExchangeCertificate("dh1024.pem");
 
-	// listen on inet socket port 9000
-	if (!inetsocketserver::listen(NULL,9000,15)) {
-		stdoutput.printf("couldn't listen on port 9000\n");
+	// listen on inet socket
+	if (!inetsocketserver::listen(NULL,port,15)) {
+		stdoutput.printf("couldn't listen on port %d\n",port);
 		return;
 	}
 
@@ -160,6 +163,26 @@ void shutDown(int32_t sig) {
 
 int main(int argc, const char **argv) {
 
+	commandline	cmdl(argc,argv);
+
+	if (cmdl.found("help")) {
+		stdoutput.printf("tlsserver [-port port] [-cert cert] [-cafile cafile]\n");
+		process::exit(0);
+	}
+
+	uint16_t	port=9000;
+	if (cmdl.found("port")) {
+		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+	}
+	const char	*cert="server.pem";
+	if (cmdl.found("cert")) {
+		cert=cmdl.getValue("cert");
+	}
+	const char	*cafile="server.pem";
+	if (cmdl.found("cafile")) {
+		cafile=cmdl.getValue("cafile");
+	}
+
 	mysvr=new myserver();
 
 	// set up signal handlers for clean shutdown
@@ -167,7 +190,7 @@ int main(int argc, const char **argv) {
 	process::handleShutDown(shutDown);
 	process::handleCrash(shutDown);
 
-	mysvr->listen();
+	mysvr->listen(port,cert,cafile);
 
 	file::remove("svr.pid");
 	process::exit(1);

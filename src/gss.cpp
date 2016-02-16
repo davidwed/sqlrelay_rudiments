@@ -3176,6 +3176,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 			// FIXME: If there was extra data,
 			// then the peer wants to renegotiate.
+			// pvt->_sstatus should also be SEC_I_RENEGOTIATE
 			if (extrabuf) {
 				stdoutput.printf("FIXME: peer wants "
 							"to renegotiate\n");
