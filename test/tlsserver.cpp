@@ -79,7 +79,7 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 		filedescriptor	*clientsock=accept();
 
 		if (clientsock) {
-/*
+
 			// make sure the client sent a certificate
 			tlscertificate	*certificate=ctx.getPeerCertificate();
 			if (!certificate) {
@@ -118,7 +118,7 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 			stdoutput.printf("Client certificate {\n");
 			stdoutput.printf("  common name: %s\n",commonname);
 			stdoutput.printf("}\n\n");
-*/
+
 			// read 5 bytes from the client and display it
 			char	buffer[6];
 			buffer[5]=(char)NULL;
@@ -144,8 +144,7 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 		// close the socket and clean up
 		delete clientsock;
 
-		//ctx.close();
-		//ctx.setCertificateChainFile("server.pem");
+		ctx.close();
 	}
 }
 
