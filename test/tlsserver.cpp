@@ -39,26 +39,26 @@ void myserver::listen() {
 	tlscontext	ctx;
 
 	// load the server's certificate chain
-	ctx.setCertificateChainFile("server.pem");
+	//ctx.setCertificateChainFile("server.pem");
 
 	// load the server's private key (which is also stored in client.pem)
 	// if the private key requires a password then supply "password"
-	ctx.setPrivateKeyFile("server.pem","password");
+	//ctx.setPrivateKeyFile("server.pem","password");
 
 	// Instruct the server to request the client's certificate.  Servers
 	// always send certificates to clients, but in order for a client to
 	// send a certificate to a server, the server must request it.
-	ctx.setValidatePeer(true);
+	//ctx.setValidatePeer(true);
 
 	// load certificates for the signing authorities that we trust
-	ctx.setCertificateAuthorityFile("ca.pem");
+	//ctx.setCertificateAuthorityFile("ca.pem");
 
 	// peer certificates must be directly signed by
 	// one of the signing authorities that we trust
-	ctx.setValidationDepth(1);
+	//ctx.setValidationDepth(1);
 
 	// Instruct the context to use a dh key for encrypting the session.
-	ctx.setKeyExchangeCertificate("dh1024.pem");
+	//ctx.setKeyExchangeCertificate("dh1024.pem");
 
 	// listen on inet socket port 9000
 	if (!inetsocketserver::listen(NULL,9000,15)) {
@@ -76,7 +76,7 @@ void myserver::listen() {
 		filedescriptor	*clientsock=accept();
 
 		if (clientsock) {
-
+/*
 			// make sure the client sent a certificate
 			tlscertificate	*certificate=ctx.getPeerCertificate();
 			if (!certificate) {
@@ -115,7 +115,7 @@ void myserver::listen() {
 			stdoutput.printf("Client certificate {\n");
 			stdoutput.printf("  common name: %s\n",commonname);
 			stdoutput.printf("}\n\n");
-
+*/
 			// read 5 bytes from the client and display it
 			char	buffer[6];
 			buffer[5]=(char)NULL;

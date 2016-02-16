@@ -105,7 +105,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile test.xml ca.pem server.pem client.pem
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile test.xml ca.pem server.pem client.pem ca.pfx server.pfx client.pfx
 	cd certificates $(AND) $(MAKE) clean
 
 server: server.cpp server.$(OBJ) 
@@ -344,3 +344,6 @@ server.pem:
 	cp certificates/certificates/ca.pem .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .
+	cp certificates/certificates/ca.pfx .
+	cp certificates/certificatechains/server.pfx .
+	cp certificates/certificatechains/client.pfx .
