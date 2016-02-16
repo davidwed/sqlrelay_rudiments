@@ -2931,14 +2931,66 @@ bool gsscontext::unwrap(const unsigned char *input,
 			secbufdesc.cBuffers=2;
 			secbufdesc.pBuffers=secbuf;
 
+			// decrypt the input
 			pvt->_sstatus=DecryptMessage(
 					&pvt->_context,&secbufdesc,0,&qop);
 
+			// copy out the decrypted data
 			*outputsize=secbuf[1].cbBuffer;
 			*output=(unsigned char *)bytestring::duplicate(
 							secbuf[1].pvBuffer,
 							*outputsize);
 			// FIXME: FreeContextBuffer(secbuf[1].pvBuffer) ???
+
+		} else if (pvt->_schannel) {
+
+			// For schannel, 4 "empty" buffers are required.
+
+			// prepare buffers
+			SecBuffer         secbuf[4];
+			secbuf[0].BufferType=SECBUFFER_EMPTY;
+			secbuf[1].BufferType=SECBUFFER_EMPTY;
+			secbuf[2].BufferType=SECBUFFER_EMPTY;
+			secbuf[3].BufferType=SECBUFFER_EMPTY;
+
+			SecBufferDesc     secbufdesc;
+			secbufdesc.ulVersion=SECBUFFER_VERSION;
+			secbufdesc.cBuffers=4;
+			secbufdesc.pBuffers=secbuf;
+
+			// decrypt the input
+			pvt->_sstatus=DecryptMessage(
+					&pvt->_context,&secbufdesc,0,&qop);
+
+			// One of the buffers will contain the decrypted
+			// data.  Another may contain "extra" data.
+			SecBuffer         *databuf=NULL;
+			SecBuffer         *extrabuf=NULL;
+			for (uint8_t i=0; i<4; i++) {
+				if (secbuf[i].BufferType==
+							SECBUFFER_DATA) {
+					databuf=secbuf;
+				} else if (secbuf[i].BufferType==
+							SECBUFFER_EXTRA) {
+					extrabuf=secbuf;
+				}
+			}
+
+			// copy out the decrypted data
+			if (databuf) {
+				*outputsize=databuf->cbBuffer;
+				*output=(unsigned char *)
+					bytestring::duplicate(
+							databuf->pvBuffer,
+							*outputsize);
+			}
+
+			// FIXME: If there was extra data,
+			// then the peer wants to renegotiate.
+			if (extrabuf) {
+				stdoutput.printf("FIXME: peer wants "
+							"to renegotiate\n");
+			}
 
 		} else {
 
@@ -2978,6 +3030,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			secbufdesc.cBuffers=2;
 			secbufdesc.pBuffers=secbuf;
 
+			// decrypt the input
 			pvt->_sstatus=DecryptMessage(
 					&pvt->_context,&secbufdesc,0,&qop);
 		}
