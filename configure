@@ -19603,6 +19603,9 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
 #include <gssapi/gssapi.h>
 #include <gssapi/gssapi_krb5.h>
 int
