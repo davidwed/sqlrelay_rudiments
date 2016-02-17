@@ -82,7 +82,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_pvtkey=NULL;
 	pvt->_pvtkeypwd=NULL;
 	pvt->_ciphers=NULL;
-	pvt->_validatepeer=NULL;
+	pvt->_validatepeer=false;
 	pvt->_cafile=NULL;
 	pvt->_capath=NULL;
 	pvt->_depth=0;
