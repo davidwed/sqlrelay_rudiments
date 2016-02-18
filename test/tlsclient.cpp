@@ -35,19 +35,23 @@ int main(int argc, const char **argv) {
 
 	tlscontext	ctx;
 
-	// load the client's certificate chain
-	ctx.setCertificateChainFile(cert);
+	if (!charstring::isNullOrEmpty(cert)) {
+		// load the certificate chain
+		ctx.setCertificateChainFile(cert);
 
-	// load the client's private key (which is also stored in client.pem)
-	// if the private key requires a password then supply "password"
-	ctx.setPrivateKeyFile(cert,"password");
+		// load the private key, supplying password "password"
+		ctx.setPrivateKeyFile(cert,"password");
+	}
 
-	// load certificates for the signing authorities that we trust
-	ctx.setCertificateAuthorityFile(cafile);
+	if (!charstring::isNullOrEmpty(cafile)) {
 
-	// peer certificates must be directly signed by
-	// one of the signing authorities that we trust
-	ctx.setValidationDepth(1);
+		// load certificates for the signing authorities that we trust
+		ctx.setCertificateAuthorityFile(cafile);
+
+		// peer certificates must be directly signed by
+		// one of the signing authorities that we trust
+		ctx.setValidationDepth(1);
+	}
 
 	// create an inet socket client
 	inetsocketclient	clnt;

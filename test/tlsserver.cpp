@@ -41,24 +41,30 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 
 	tlscontext	ctx;
 
-	// load the server's certificate chain
-	ctx.setCertificateChainFile(cert);
+	if (!charstring::isNullOrEmpty(cert)) {
 
-	// load the server's private key (which is also stored in client.pem)
-	// if the private key requires a password then supply "password"
-	ctx.setPrivateKeyFile(cert,"password");
+		// load the certificate chain
+		ctx.setCertificateChainFile(cert);
 
-	// Instruct the server to request the client's certificate.  Servers
-	// always send certificates to clients, but in order for a client to
-	// send a certificate to a server, the server must request it.
-	ctx.setValidatePeer(true);
+		// load the private key, supplying password "password"
+		ctx.setPrivateKeyFile(cert,"password");
+	}
 
-	// load certificates for the signing authorities that we trust
-	ctx.setCertificateAuthorityFile(cafile);
+	if (!charstring::isNullOrEmpty(cafile)) {
 
-	// peer certificates must be directly signed by
-	// one of the signing authorities that we trust
-	ctx.setValidationDepth(1);
+		// Instruct the server to request the client's certificate.
+		// Servers always send certificates to clients, but in order
+		// for a client to send a certificate to a server, the server
+		// must request it.
+		ctx.setValidatePeer(true);
+
+		// load certificates for the signing authorities that we trust
+		ctx.setCertificateAuthorityFile(cafile);
+
+		// peer certificates must be directly signed by
+		// one of the signing authorities that we trust
+		ctx.setValidationDepth(1);
+	}
 
 	// Instruct the context to use a dh key for encrypting the session.
 	ctx.setKeyExchangeCertificate("dh1024.pem");

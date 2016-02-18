@@ -4,6 +4,7 @@
 #include <rudiments/tls.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/linkedlist.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
@@ -15,6 +16,8 @@
 	#include <rudiments/bytestring.h>
 	#include <schannel.h>
 #endif
+
+#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
@@ -131,9 +134,8 @@ tlscontext::~tlscontext() {
 			pvt->_ctx=NULL;
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		if (pvt->_cstore) {
-			CertCloseStore(pvt->_cstore,0);
-		}
+		// FIXME: move this into a generic clean-up method
+		delete[] pvt->_algids;
 		if (pvt->_cctx) {
 			for (DWORD i=0; i<pvt->_cctxcount; i++) {
 				CertFreeCertificateContext(pvt->_cctx[i]);
@@ -141,7 +143,9 @@ tlscontext::~tlscontext() {
 			delete[] pvt->_cctx;
 			pvt->_cctxcount=0;
 		}
-		delete[] pvt->_algids;
+		if (pvt->_cstore) {
+			CertCloseStore(pvt->_cstore,0);
+		}
 	#else
 	#endif
 }
@@ -264,182 +268,243 @@ static int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 #endif 
 
 #if defined(RUDIMENTS_HAS_SSPI)
-static unsigned int *getCipherAlgs(const char *ciphers,
-					bool adddh, DWORD *agcount) {
+static void getCipherAlgs(const char *ciphers, bool adddh,
+				ALG_ID **algids, DWORD *algidcount) {
 
+	#ifdef DEBUG_TLS
+		stdoutput.printf("  ciphers {\n");
+	#endif
+
+	// split the cipher list on commas
 	char		**c;
 	uint64_t	ccount;
 	charstring::split(ciphers,",",true,&c,&ccount);
 
-	unsigned int	*algids=new unsigned int[ccount+((adddh)?1:0)];
+	// handle empty lists
+	if (!ccount) {
+		*algidcount=0;
+		*algids=NULL;
+		#ifdef DEBUG_TLS
+			stdoutput.printf("    cipher count: %d\n",*algidcount);
+			stdoutput.printf("  }\n");
+		#endif
+		return;
+	}
+
+	// create an array of ALG_ID's
+	uint64_t	algindex=0;
+	*algids=new ALG_ID[ccount+((adddh)?1:0)];
+
+	// for each requested algorithm...
 	for (uint64_t i=0; i<ccount; i++) {
 
+		// clean up the algorithm name
+		charstring::bothTrim(c[i]);
+		charstring::upper(c[i]);
+		charstring::replace(c[i],'-','_');
+
+		#ifdef DEBUG_TLS
+			uint64_t	oldalgindex=algindex;
+			stdoutput.printf("    cipher %s - ",c[i]);
+		#endif
+
+		// add the corresponding algorithm to the array
 		if (!charstring::compareIgnoringCase(c[i],"3DES")) {
-			algids[i]=CALG_3DES;
+			(*algids)[algindex++]=CALG_3DES;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"3DES_112")) {
-			algids[i]=CALG_3DES_112;
+			(*algids)[algindex++]=CALG_3DES_112;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES")) {
-			algids[i]=CALG_AES;
+			(*algids)[algindex++]=CALG_AES;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_128")) {
-			algids[i]=CALG_AES_128;
+			(*algids)[algindex++]=CALG_AES_128;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_192")) {
-			algids[i]=CALG_AES_192;
+			(*algids)[algindex++]=CALG_AES_192;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_256")) {
-			algids[i]=CALG_AES_256;
+			(*algids)[algindex++]=CALG_AES_256;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AGREEDKEY_ANY")) {
-			algids[i]=CALG_AGREEDKEY_ANY;
+			(*algids)[algindex++]=CALG_AGREEDKEY_ANY;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"CYLINK_MEK")) {
-			algids[i]=CALG_CYLINK_MEK;
+			(*algids)[algindex++]=CALG_CYLINK_MEK;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"DES")) {
-			algids[i]=CALG_DES;
+			(*algids)[algindex++]=CALG_DES;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"DESX")) {
-			algids[i]=CALG_DESX;
+			(*algids)[algindex++]=CALG_DESX;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"DH_EPHEM")) {
-			algids[i]=CALG_DH_EPHEM;
+			(*algids)[algindex++]=CALG_DH_EPHEM;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"DH_SF")) {
-			algids[i]=CALG_DH_SF;
+			(*algids)[algindex++]=CALG_DH_SF;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"DSS_SIGN")) {
-			algids[i]=CALG_DSS_SIGN;
+			(*algids)[algindex++]=CALG_DSS_SIGN;
 		#ifdef CALG_ECDH
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"ECDH")) {
-			algids[i]=CALG_ECDH;
+			(*algids)[algindex++]=CALG_ECDH;
 		#endif
 		#ifdef CALG_ECDH_EPHEM
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"ECDH_EPHEM")) {
-			algids[i]=CALG_ECDH_EPHEM;
+			(*algids)[algindex++]=CALG_ECDH_EPHEM;
 		#endif
 		#ifdef CALG_ECDSA
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"ECDSA")) {
-			algids[i]=CALG_ECDSA;
+			(*algids)[algindex++]=CALG_ECDSA;
 		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"ECMQV")) {
-			algids[i]=CALG_ECMQV;
+			(*algids)[algindex++]=CALG_ECMQV;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HASH_REPLACE_OWF")) {
-			algids[i]=CALG_HASH_REPLACE_OWF;
+			(*algids)[algindex++]=CALG_HASH_REPLACE_OWF;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HUGHES_MD5")) {
-			algids[i]=CALG_HUGHES_MD5;
+			(*algids)[algindex++]=CALG_HUGHES_MD5;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HMAC")) {
-			algids[i]=CALG_HMAC;
+			(*algids)[algindex++]=CALG_HMAC;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"KEA_KEYX")) {
-			algids[i]=CALG_KEA_KEYX;
+			(*algids)[algindex++]=CALG_KEA_KEYX;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"MAC")) {
-			algids[i]=CALG_MAC;
+			(*algids)[algindex++]=CALG_MAC;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"MD2")) {
-			algids[i]=CALG_MD2;
+			(*algids)[algindex++]=CALG_MD2;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"MD4")) {
-			algids[i]=CALG_MD4;
+			(*algids)[algindex++]=CALG_MD4;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"MD5")) {
-			algids[i]=CALG_MD5;
+			(*algids)[algindex++]=CALG_MD5;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"NO_SIGN")) {
-			algids[i]=CALG_NO_SIGN;
+			(*algids)[algindex++]=CALG_NO_SIGN;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_CNG_ONLY")) {
-			algids[i]=CALG_OID_INFO_CNG_ONLY;
+			(*algids)[algindex++]=CALG_OID_INFO_CNG_ONLY;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_PARAMETERS")) {
-			algids[i]=CALG_OID_INFO_PARAMETERS;
+			(*algids)[algindex++]=CALG_OID_INFO_PARAMETERS;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"PCT1_MASTER")) {
-			algids[i]=CALG_PCT1_MASTER;
+			(*algids)[algindex++]=CALG_PCT1_MASTER;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"RC2")) {
-			algids[i]=CALG_RC2;
+			(*algids)[algindex++]=CALG_RC2;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"RC4")) {
-			algids[i]=CALG_RC4;
+			(*algids)[algindex++]=CALG_RC4;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"RC5")) {
-			algids[i]=CALG_RC5;
+			(*algids)[algindex++]=CALG_RC5;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"RSA_KEYX")) {
-			algids[i]=CALG_RSA_KEYX;
+			(*algids)[algindex++]=CALG_RSA_KEYX;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"RSA_SIGN")) {
-			algids[i]=CALG_RSA_SIGN;
+			(*algids)[algindex++]=CALG_RSA_SIGN;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SCHANNEL_ENC_KEY")) {
-			algids[i]=CALG_SCHANNEL_ENC_KEY;
+			(*algids)[algindex++]=CALG_SCHANNEL_ENC_KEY;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SCHANNEL_MAC_KEY")) {
-			algids[i]=CALG_SCHANNEL_MAC_KEY;
+			(*algids)[algindex++]=CALG_SCHANNEL_MAC_KEY;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SCHANNEL_MASTER_HASH")) {
-			algids[i]=CALG_SCHANNEL_MASTER_HASH;
+			(*algids)[algindex++]=CALG_SCHANNEL_MASTER_HASH;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SEAL")) {
-			algids[i]=CALG_SEAL;
+			(*algids)[algindex++]=CALG_SEAL;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA")) {
-			algids[i]=CALG_SHA;
+			(*algids)[algindex++]=CALG_SHA;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA1")) {
-			algids[i]=CALG_SHA1;
+			(*algids)[algindex++]=CALG_SHA1;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_256")) {
-			algids[i]=CALG_SHA_256;
+			(*algids)[algindex++]=CALG_SHA_256;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_384")) {
-			algids[i]=CALG_SHA_384;
+			(*algids)[algindex++]=CALG_SHA_384;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_512")) {
-			algids[i]=CALG_SHA_512;
+			(*algids)[algindex++]=CALG_SHA_512;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SKIPJACK")) {
-			algids[i]=CALG_SKIPJACK;
+			(*algids)[algindex++]=CALG_SKIPJACK;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SSL2_MASTER")) {
-			algids[i]=CALG_SSL2_MASTER;
+			(*algids)[algindex++]=CALG_SSL2_MASTER;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SSL3_MASTER")) {
-			algids[i]=CALG_SSL3_MASTER;
+			(*algids)[algindex++]=CALG_SSL3_MASTER;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SSL3_SHAMD5")) {
-			algids[i]=CALG_SSL3_SHAMD5;
+			(*algids)[algindex++]=CALG_SSL3_SHAMD5;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"TEK")) {
-			algids[i]=CALG_TEK;
+			(*algids)[algindex++]=CALG_TEK;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"TLS1_MASTER")) {
-			algids[i]=CALG_TLS1_MASTER;
+			(*algids)[algindex++]=CALG_TLS1_MASTER;
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"TLS1PRF")) {
-			algids[i]=CALG_TLS1PRF;
+			(*algids)[algindex++]=CALG_TLS1PRF;
 		}
+
+		// clean up
 		delete[] c[i];
+
+		#ifdef DEBUG_TLS
+			if (algindex==oldalgindex) {
+				stdoutput.printf("failed\n");
+			} else {
+				stdoutput.printf("success\n");
+			}
+		#endif
 	}
+
+	// clean up
 	delete[] c;
 
+	// add Diffie-Hellman if requested
 	if (adddh) {
-		algids[ccount]=CALG_DH_EPHEM;
+		#ifdef DEBUG_TLS
+			uint64_t	oldalgindex=algindex;
+			stdoutput.printf("    cipher DH_EPHEM - ");
+		#endif
+		(*algids)[algindex++]=CALG_DH_EPHEM;
+
+		#ifdef DEBUG_TLS
+			if (algindex==oldalgindex) {
+				stdoutput.printf("failed\n");
+			} else {
+				stdoutput.printf("success\n");
+			}
+		#endif
 	}
 
-	*agcount=ccount;
-	return algids;
+	// copy out the final algorithm count
+	*algidcount=algindex;
+
+	#ifdef DEBUG_TLS
+		stdoutput.printf("    cipher count: %d\n",*algidcount);
+		stdoutput.printf("  }\n");
+	#endif
 }
 #endif
 
@@ -598,68 +663,243 @@ bool tlscontext::init(bool client) {
 
 		close();
 
+		// clean up from previous runs
+		// FIXME: move this into a generic clean-up method
+		if (pvt->_algids) {
+			delete[] pvt->_algids;
+			pvt->_algids=NULL;
+			pvt->_algidcount=0;
+		}
+		if (pvt->_cctx) {
+			CertFreeCertificateContext(pvt->_cctx[0]);
+			delete[] pvt->_cctx;
+			pvt->_cctx=NULL;
+			pvt->_cctxcount=0;
+		}
+		if (pvt->_cstore) {
+			CertCloseStore(pvt->_cstore,0);
+			pvt->_cstore=NULL;
+		}
+		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
+
+		#ifdef DEBUG_TLS
+			stdoutput.printf("schannel_cred {\n");
+		#endif
+
 		bool	retval=true;
 		DWORD	flags=0;
 
-		// open the cert store, if necessary
-		if (!pvt->_cstore) {
+		// set certificate chain file
+		bool	loadedcert=false;
+		if (!charstring::isNullOrEmpty(pvt->_cert)) {
+
+			// open the specified certificate store
 			pvt->_cstore=CertOpenStore(
 					CERT_STORE_PROV_FILENAME_A,
-					X509_ASN_ENCODING,
+					X509_ASN_ENCODING|
+					PKCS_7_ASN_ENCODING,
 					NULL,
 					0,
 					pvt->_cert);
-			if (!pvt->_cstore) {
-				char	*errstr=error::getNativeErrorString();
-				setError(error::getNativeErrorNumber(),errstr);
-				delete[] errstr;
-				retval=false;
-			}
-		}
 
-		// set certificate chain file
-		flags|=SCH_CRED_USE_DEFAULT_CREDS;
-		if (retval && !charstring::isNullOrEmpty(pvt->_cert)) {
+			if (pvt->_cstore) {
 
-			// count certificates
-			pvt->_cctxcount=0;
-			PCCERT_CONTEXT	cctx=NULL;
-			do {
-				cctx=CertFindCertificateInStore(
-							pvt->_cstore,
-							X509_ASN_ENCODING,
-							0,
-							CERT_FIND_ANY,
-							0,
-							cctx);
-				if (cctx) {
-					pvt->_cctxcount++;
-				}
-			} while (cctx);
-
-			// load certificates
-			if (pvt->_cctxcount) {
-				pvt->_cctx=new PCCERT_CONTEXT[pvt->_cctxcount];
-				for (DWORD i=0; i<pvt->_cctxcount; i++) {
-					pvt->_cctx[i]=
+				// get the first certificate
+				PCCERT_CONTEXT	cctx=
 						CertFindCertificateInStore(
 							pvt->_cstore,
-							X509_ASN_ENCODING,
+							X509_ASN_ENCODING|
+							PKCS_7_ASN_ENCODING,
 							0,
 							CERT_FIND_ANY,
 							0,
 							NULL);
+				if (cctx) {
+
+					pvt->_cctx=new PCCERT_CONTEXT[1];
+					pvt->_cctx[0]=cctx;
+					pvt->_cctxcount=1;
+
+					// it's actually possible for an error
+					// to occur but a cert to still be
+					// returned, so catch that too
+					if (error::getNativeErrorNumber()) {
+						retval=false;
+					} else {
+						loadedcert=true;
+					}
 				}
-				flags|=SCH_CRED_NO_DEFAULT_CREDS;
+			} else {
+				retval=false;
+			}
+
+			// if a legitimate error occurred, then make it
+			// available to be returned by getStatus()
+			if (!retval) {
+				char	*errstr=error::getNativeErrorString();
+				setError(error::getNativeErrorNumber(),errstr);
+				delete[] errstr;
 			}
 		}
+
+		if (retval && !loadedcert) {
+
+			// Either no certificate store was specified or there
+			// was no certificate in the store.
+			/*if (client) {
+
+				// For clients, just fall back to default creds.
+				flags|=SCH_CRED_USE_DEFAULT_CREDS;
+
+			} else {*/
+
+				// For servers, create a self-signed cert...
+
+				// acquire a crypto context
+				HCRYPTPROV	cp=NULL;
+				if (!CryptAcquireContext(&cp,NULL,
+							MS_DEF_PROV,
+							PROV_RSA_FULL,
+							CRYPT_VERIFYCONTEXT
+							#if _WIN32_WINNT>0x0400
+							|CRYPT_SILENT
+							#endif
+							)) {
+					retval=false;
+				}
+
+				// create an 2048-bit rsa key pair
+				// FIXME: how is this used?
+				HCRYPTKEY 	key=NULL;
+				if (retval && !CryptGenKey(cp,
+							AT_SIGNATURE,
+							0x08000000,
+							&key)) {
+					retval=false;
+				}
+
+				// encode the subject
+				const char	*x500="CN=Test, T=Test";
+				BYTE		*buffer=NULL;
+				DWORD		buffersize=0;
+				if (retval && !CertStrToName(
+						X509_ASN_ENCODING,
+						x500,CERT_X500_NAME_STR,NULL,
+						NULL,&buffersize,NULL)) {
+					retval=false;
+				}
+				if (retval) {
+					buffer=new BYTE[buffersize];
+					if (!CertStrToName(
+						X509_ASN_ENCODING,
+						x500,CERT_X500_NAME_STR,NULL,
+						buffer,&buffersize,NULL)) {
+						retval=false;
+					}
+				}
+
+				// create the cert
+				if (retval) {
+					CERT_NAME_BLOB	cnb;
+					bytestring::zero(&cnb,sizeof(cnb));
+					cnb.pbData=buffer;
+					cnb.cbData=buffersize;
+
+					CRYPT_KEY_PROV_INFO	ckpi;
+					bytestring::zero(&ckpi,sizeof(ckpi));
+					ckpi.pwszContainerName=NULL;
+					ckpi.pwszProvName=NULL;
+					ckpi.dwProvType=PROV_RSA_FULL;
+					ckpi.dwFlags=CRYPT_MACHINE_KEYSET;
+					ckpi.cProvParam=0;
+					ckpi.rgProvParam=NULL;
+					ckpi.dwKeySpec=AT_SIGNATURE;
+
+					CRYPT_ALGORITHM_IDENTIFIER	cai;
+					bytestring::zero(&cai,sizeof(cai));
+					cai.pszObjId=szOID_RSA_SHA1RSA;
+
+					SYSTEMTIME	expiration;
+					GetSystemTime(&expiration);
+					expiration.wYear+=10;
+
+					PCCERT_CONTEXT	cctx=
+						CertCreateSelfSignCertificate(
+								NULL,
+								&cnb,0,
+								&ckpi,
+								&cai,0,
+								&expiration,0);
+					if (cctx) {
+						pvt->_cctx=
+							new PCCERT_CONTEXT[1];
+						pvt->_cctx[0]=cctx;
+						pvt->_cctxcount=1;
+						loadedcert=true;
+					} else {
+						retval=false;
+					}
+				}
+
+				// clean up...
+				if (buffer) {
+					delete[] buffer;
+				}
+				if (key) {
+					CryptDestroyKey(key);
+				}
+				if (cp) {
+					CryptReleaseContext(cp,0);
+				}
+
+				// catch errors
+				if (!retval) {
+					char	*errstr=
+						error::getNativeErrorString();
+					setError(error::getNativeErrorNumber(),
+									errstr);
+					delete[] errstr;
+				}
+			//}
+		}
+
+		if (retval && loadedcert) {
+			flags|=SCH_CRED_NO_DEFAULT_CREDS;
+		}
+
+if (pvt->_cctx[0]) {
+	HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
+	DWORD				keyspec;
+	BOOL				flag=FALSE;
+	if (!CryptAcquireCertificatePrivateKey(pvt->_cctx[0],
+						0,NULL,&kh,&keyspec,&flag)) {
+		stdoutput.printf("failed to load private key from cert\n");
+	} else {
+		stdoutput.printf("loaded private key from cert successfully\n");
+	}
+}
+
+		// FIXME: A client can use default creds, but a server must
+		// have a valid certificate loaded.  Just setting
+		// SCH_CRED_USE_DEFAULT_CREDS isn't sufficient.  Both sides
+		// will eventually fail with SEC_E_ALGORITHM_MISMATCH.
+
+		#ifdef DEBUG_TLS
+			stdoutput.printf("  cert store: %s - (%s)\n",
+					pvt->_cert,
+					(pvt->_cstore)?"valid":"invalid");
+			stdoutput.printf("  cert count: %d\n",pvt->_cctxcount);
+			stdoutput.printf("  use default creds: %s\n",
+					(flags&SCH_CRED_USE_DEFAULT_CREDS)?
+					"yes":"no");
+		#endif
 
 		// set private key (and password, if provided)
 		if (retval && !charstring::isNullOrEmpty(pvt->_pvtkey)) {
 			if (pvt->_pvtkeypwd) {
 				// FIXME: how?
 			}
-			// FIXME: how?
+			// FIXME: CryptAcquireCertificatePrivateKey
 		}
 
 		// set the certificate authority file/path
@@ -676,16 +916,19 @@ bool tlscontext::init(bool client) {
 			// FIXME: how?
 		}
 
-		// set whether to validate peer or not
-		if (retval && (client || pvt->_validatepeer)) {
+		// set whether to auto-validate peer or not
+		// (force this true for the server)
+		if (retval && (!client || pvt->_validatepeer)) {
 			flags|=SCH_CRED_AUTO_CRED_VALIDATION;
 		} else {
 			flags|=SCH_CRED_MANUAL_CRED_VALIDATION;
 		}
 
 		// use diffie-hellman key exchange
+		// (disable this on the client side)
 		bool	usedh=false;
-		if (retval && !charstring::isNullOrEmpty(pvt->_kecert)) {
+		if (retval && !client &&
+			!charstring::isNullOrEmpty(pvt->_kecert)) {
 			// FIXME: cert...
 			usedh=true;
 		}
@@ -693,9 +936,18 @@ bool tlscontext::init(bool client) {
 		// set ciphers
 		if (retval && (usedh ||
 				!charstring::isNullOrEmpty(pvt->_ciphers))) {
-			pvt->_algids=getCipherAlgs(pvt->_ciphers,usedh,
-							&pvt->_algidcount);
+			getCipherAlgs(pvt->_ciphers,usedh,
+					&pvt->_algids,&pvt->_algidcount);
 		}
+
+		#ifdef DEBUG_TLS
+			stdoutput.printf("  auto-validation: %s\n",
+					(flags&SCH_CRED_AUTO_CRED_VALIDATION)?
+					"yes":"no");
+			stdoutput.printf("  dh key exchange: %s\n",
+					(usedh)?"yes":"no");
+			stdoutput.printf("}\n");
+		#endif
 
 
 		// build schannel creds and acquire credentials
@@ -729,14 +981,21 @@ bool tlscontext::init(bool client) {
 
 		// clean up on failure
 		if (!retval) {
+			// FIXME: move this into a generic clean-up method
+			if (pvt->_algids) {
+				delete[] pvt->_algids;
+				pvt->_algids=NULL;
+				pvt->_algidcount=0;
+			}
 			if (pvt->_cctx) {
-				for (DWORD i=0; i<pvt->_cctxcount; i++) {
-					CertFreeCertificateContext(
-							pvt->_cctx[i]);
-				}
+				CertFreeCertificateContext(pvt->_cctx[0]);
 				delete[] pvt->_cctx;
 				pvt->_cctx=NULL;
 				pvt->_cctxcount=0;
+			}
+			if (pvt->_cstore) {
+				CertCloseStore(pvt->_cstore,0);
+				pvt->_cstore=NULL;
 			}
 			bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 		}
