@@ -1033,7 +1033,7 @@ ssize_t tlscontext::read(void *buf, ssize_t count) {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
-			return RESULt_ERROR;
+			return RESULT_ERROR;
 		}
 		int	ret=SSL_read(pvt->_ssl,buf,count);
 		setError(ret);
