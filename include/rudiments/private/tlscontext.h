@@ -2,7 +2,9 @@
 // See the COPYING file for more information.
 
 	private:
-		bool	init(bool client);
+		void	initContext();
+		void	freeContext();
+		bool	reInit(bool client);
 		void	clearError();
 		void	setError(int32_t ret);
 		void	setError(int32_t err, const char *errstr);

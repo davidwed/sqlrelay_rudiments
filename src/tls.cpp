@@ -81,6 +81,14 @@ class tlscontextprivate {
 
 tlscontext::tlscontext() : securitycontext() {
 	pvt=new tlscontextprivate;
+	initContext();
+}
+
+tlscontext::~tlscontext() {
+	freeContext();
+}
+
+void tlscontext::initContext() {
 	pvt->_cert=NULL;
 	pvt->_pvtkey=NULL;
 	pvt->_pvtkeypwd=NULL;
@@ -121,7 +129,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_fd=NULL;
 }
 
-tlscontext::~tlscontext() {
+void tlscontext::freeContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (pvt->_ctx) {
 			if (pvt->_ssl) {
@@ -134,14 +142,12 @@ tlscontext::~tlscontext() {
 			pvt->_ctx=NULL;
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: move this into a generic clean-up method
 		delete[] pvt->_algids;
 		if (pvt->_cctx) {
 			for (DWORD i=0; i<pvt->_cctxcount; i++) {
 				CertFreeCertificateContext(pvt->_cctx[i]);
 			}
 			delete[] pvt->_cctx;
-			pvt->_cctxcount=0;
 		}
 		if (pvt->_cstore) {
 			CertCloseStore(pvt->_cstore,0);
@@ -245,7 +251,7 @@ filedescriptor *tlscontext::getFileDescriptor() {
 }
 
 bool tlscontext::connect() {
-	if (!init(true)) {
+	if (!reInit(true)) {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -510,7 +516,7 @@ static void getCipherAlgs(const char *ciphers, bool adddh,
 }
 #endif
 
-bool tlscontext::init(bool client) {
+bool tlscontext::reInit(bool client) {
 	#if defined(RUDIMENTS_HAS_SSL)
 
 		if (!pvt->_dirty) {
@@ -520,6 +526,10 @@ bool tlscontext::init(bool client) {
 		tls::initTLS();
 
 		close();
+
+		// re-init from previous runs
+		freeContext();
+		initContext();
 
 		bool	retval=true;
 
@@ -627,6 +637,7 @@ bool tlscontext::init(bool client) {
 			}
 		}
 
+		// build "bio" and "ssl"
 		if (retval) {
 			// these must be created here rather than above,
 			// apparently modifying the context after creating an
@@ -647,9 +658,12 @@ bool tlscontext::init(bool client) {
 			SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
 
 			pvt->_dirty=false;
-		} else {
-			SSL_CTX_free(pvt->_ctx);
-			pvt->_ctx=NULL;
+		}
+
+		// re-init on failure
+		if (!retval) {
+			freeContext();
+			initContext();
 		}
 
 		// return success or failure
@@ -665,24 +679,9 @@ bool tlscontext::init(bool client) {
 
 		close();
 
-		// clean up from previous runs
-		// FIXME: move this into a generic clean-up method
-		if (pvt->_algids) {
-			delete[] pvt->_algids;
-			pvt->_algids=NULL;
-			pvt->_algidcount=0;
-		}
-		if (pvt->_cctx) {
-			CertFreeCertificateContext(pvt->_cctx[0]);
-			delete[] pvt->_cctx;
-			pvt->_cctx=NULL;
-			pvt->_cctxcount=0;
-		}
-		if (pvt->_cstore) {
-			CertCloseStore(pvt->_cstore,0);
-			pvt->_cstore=NULL;
-		}
-		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
+		// re-init from previous runs
+		freeContext();
+		initContext();
 
 		#ifdef DEBUG_TLS
 			stdoutput.printf("schannel_cred {\n");
@@ -937,8 +936,7 @@ bool tlscontext::init(bool client) {
 			}
 		#endif
 
-
-		// build schannel creds and acquire credentials
+		// build schannel creds and acquire credentials...
 		if (retval) {
 
 			// configure schannel creds
@@ -967,25 +965,10 @@ bool tlscontext::init(bool client) {
 			}
 		}
 
-		// clean up on failure
+		// re-init on failure
 		if (!retval) {
-			// FIXME: move this into a generic clean-up method
-			if (pvt->_algids) {
-				delete[] pvt->_algids;
-				pvt->_algids=NULL;
-				pvt->_algidcount=0;
-			}
-			if (pvt->_cctx) {
-				CertFreeCertificateContext(pvt->_cctx[0]);
-				delete[] pvt->_cctx;
-				pvt->_cctx=NULL;
-				pvt->_cctxcount=0;
-			}
-			if (pvt->_cstore) {
-				CertCloseStore(pvt->_cstore,0);
-				pvt->_cstore=NULL;
-			}
-			bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
+			freeContext();
+			initContext();
 		}
 
 		// return success or failure
@@ -996,7 +979,7 @@ bool tlscontext::init(bool client) {
 }
 
 bool tlscontext::accept() {
-	if (!init(false)) {
+	if (!reInit(false)) {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -1047,16 +1030,15 @@ tlscertificate *tlscontext::getPeerCertificate() {
 }
 
 ssize_t tlscontext::read(void *buf, ssize_t count) {
+	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
-		clearError();
 		if (!pvt->_ssl) {
-			return false;
+			return RESULt_ERROR;
 		}
 		int	ret=SSL_read(pvt->_ssl,buf,count);
 		setError(ret);
 		return ret;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		clearError();
 		ssize_t	ret=pvt->_gctx.read(buf,count);
 		if (ret!=count) {
 			setError(ret);
@@ -1071,13 +1053,12 @@ ssize_t tlscontext::write(const void *buf, ssize_t count) {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
-			return -1;
+			return RESULT_ERROR;
 		}
 		int	ret=SSL_write(pvt->_ssl,buf,count);
 		setError(ret);
 		return ret;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		clearError();
 		ssize_t	ret=pvt->_gctx.write(buf,count);
 		if (ret!=count) {
 			setError(ret);
@@ -1092,7 +1073,7 @@ ssize_t tlscontext::pending() {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (!pvt->_ssl) {
-			return -1;
+			return RESULT_ERROR;
 		}
 		int	ret=SSL_pending(pvt->_ssl);
 		setError(ret);
@@ -1118,6 +1099,7 @@ bool tlscontext::close() {
 		}
 		return (ret==1);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		clearError();
 		return true;
 	#else
 		return false;
@@ -1215,6 +1197,14 @@ class tlscertificateprivate {
 
 tlscertificate::tlscertificate() {
 	pvt=new tlscertificateprivate;
+	initCertificate();
+}
+
+tlscertificate::~tlscertificate() {
+	freeCertificate();
+}
+
+void tlscertificate::initCertificate() {
 	pvt->_cert=NULL;
 	pvt->_version=0;
 	pvt->_serialnumber=0;
@@ -1228,17 +1218,17 @@ tlscertificate::tlscertificate() {
 	pvt->_pkbits=0;
 }
 
-tlscertificate::~tlscertificate() {
+void tlscertificate::freeCertificate() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		free(pvt->_issuer);
 		free(pvt->_subject);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		delete[] pvt->_sigalg;
 		delete[] pvt->_issuer;
 		delete[] pvt->_subject;
-		delete[] pvt->_pkalg;
-		delete[] pvt->_pk;
 	#endif
+	delete[] pvt->_sigalg;
+	delete[] pvt->_pkalg;
+	delete[] pvt->_pk;
 }
 
 uint32_t tlscertificate::getVersion() {
@@ -1282,6 +1272,10 @@ uint64_t tlscertificate::getPrivateKeyBitLength() {
 }
 
 void tlscertificate::setCertificate(void *cert) {
+
+	freeCertificate();
+	initCertificate();
+
 	#if defined(RUDIMENTS_HAS_SSL)
 
 		pvt->_cert=(X509 *)cert;
