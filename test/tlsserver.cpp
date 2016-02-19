@@ -85,7 +85,7 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 		filedescriptor	*clientsock=accept();
 
 		if (clientsock) {
-
+/*
 			// make sure the client sent a certificate
 			tlscertificate	*certificate=ctx.getPeerCertificate();
 			if (!certificate) {
@@ -124,25 +124,43 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 			stdoutput.printf("Client certificate {\n");
 			stdoutput.printf("  common name: %s\n",commonname);
 			stdoutput.printf("}\n\n");
-
+*/
 			// read 5 bytes from the client and display it
 			char	buffer[6];
 			buffer[5]=(char)NULL;
-			clientsock->read((char *)buffer,5);
-			stdoutput.printf("%s\n",buffer);
+			if (clientsock->read((char *)buffer,5)<0) {
+				if (error::getErrorNumber()) {
+					stdoutput.printf(
+						"read failed (1): %s\n",
+						error::getErrorString());
+				} else {
+					stdoutput.printf(
+						"read failed (2): %s\n",
+						ctx.getErrorString());
+				}
+			} else {
+				stdoutput.printf("%s\n",buffer);
+			}
 
 			// write "hello" back to the client
-			clientsock->write("hello",5);
+			if (clientsock->write("hello",5)<0) {
+				if (error::getErrorNumber()) {
+					stdoutput.printf(
+						"write failed (1): %s\n",
+						error::getErrorString());
+				} else {
+					stdoutput.printf(
+						"write failed (2): %s\n",
+						ctx.getErrorString());
+				}
+			}
 
 		} else {
-
-			// if errno>0 then we got a system error, otherwise we
-			// got a tls-specific error
-			if (errno) {
-				stdoutput.printf("accept failed: %s\n",
+			if (error::getErrorNumber()) {
+				stdoutput.printf("accept failed (1): %s\n",
 						error::getErrorString());
 			} else {
-				stdoutput.printf("accept failed: %s\n",
+				stdoutput.printf("accept failed (2): %s\n",
 						ctx.getErrorString());
 			}
 		}

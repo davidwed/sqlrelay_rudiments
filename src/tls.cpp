@@ -253,7 +253,9 @@ bool tlscontext::connect() {
 		setError(ret);
 		return (ret==1);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return pvt->_gctx.connect();
+		bool	ret=pvt->_gctx.connect();
+		setError(ret);
+		return ret;
 	#else
 		return false;
 	#endif
@@ -693,7 +695,9 @@ bool tlscontext::init(bool client) {
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
 
 			// don't use default creds
-			flags|=SCH_CRED_NO_DEFAULT_CREDS;
+			if (client) {
+				flags|=SCH_CRED_NO_DEFAULT_CREDS;
+			}
 
 			// open the specified certificate store
 			pvt->_cstore=CertOpenStore(
@@ -760,9 +764,6 @@ bool tlscontext::init(bool client) {
 			// no cert specified...
 
 			// for servers, create a self-signed cert...
-
-			// don't use default creds
-			flags|=SCH_CRED_NO_DEFAULT_CREDS;
 
 			// acquire a crypto context
 			HCRYPTPROV	cp=NULL;
@@ -897,12 +898,13 @@ bool tlscontext::init(bool client) {
 			// FIXME: how?
 		}
 
-		// set whether to auto-validate peer or not
-		// (force this true for the server)
-		if (retval && (!client || pvt->_validatepeer)) {
-			flags|=SCH_CRED_AUTO_CRED_VALIDATION;
-		} else {
-			flags|=SCH_CRED_MANUAL_CRED_VALIDATION;
+		if (client) {
+			// set whether to auto-validate peer or not
+			// (this flag only valid for client and the default
+			// is to validate)
+			if (retval && !pvt->_validatepeer) {
+				flags|=SCH_CRED_MANUAL_CRED_VALIDATION;
+			}
 		}
 
 		// use diffie-hellman key exchange
@@ -1002,7 +1004,9 @@ bool tlscontext::accept() {
 		setError(ret);
 		return (ret==1);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		return pvt->_gctx.accept();
+		bool	ret=pvt->_gctx.accept();
+		setError(ret);
+		return ret;
 	#else
 		return false;
 	#endif
@@ -1150,6 +1154,9 @@ void tlscontext::setError(int32_t ret) {
 				ERR_error_string(pvt->_error,NULL));
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		if (ret>0) {
+			return;
+		}
 		setError(pvt->_gctx.getMajorStatus(),pvt->_gctx.getStatus());
 	#else
 	#endif

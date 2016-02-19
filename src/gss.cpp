@@ -12,10 +12,10 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/gss.h>
 
-#define DEBUG_GSS 1
-#define DEBUG_GSS_WRAP 1
-#define DEBUG_GSS_SEND 1
-#define DEBUG_GSS_RECEIVE 1
+//#define DEBUG_GSS 1
+//#define DEBUG_GSS_WRAP 1
+//#define DEBUG_GSS_SEND 1
+//#define DEBUG_GSS_RECEIVE 1
 
 #if defined(RUDIMENTS_HAS_GSS)
 
@@ -2071,6 +2071,16 @@ static CHAR *unicodeToAscii(const WCHAR *in) {
 	}
 	return out;
 }
+
+static const char *schannels[]={
+			UNISP_NAME_A,
+			SSL2SP_NAME_A,
+			SSL3SP_NAME_A,
+			TLS1SP_NAME_A,
+			PCT1SP_NAME_A,
+			SCHANNEL_NAME_A,
+			NULL
+			};
 #endif
 
 bool gsscontext::inquire() {
@@ -2222,20 +2232,25 @@ bool gsscontext::inquire() {
 		} else {
 
 			// get the user name
+			char	*username=NULL;
 			SecPkgContext_Names	n;
 			pvt->_sstatus=QueryContextAttributes(
 						&pvt->_context,
 						SECPKG_ATTR_NAMES,
 						&n);
-			if (SSPI_ERROR(pvt->_sstatus))	{
-				#ifdef DEBUG_GSS
-				stdoutput.write("failed "
-				"(QueryContextAttributes("
-				"SECPKG_ATTR_NAMES))\n\n");
-				#endif
-				return false;
+			if (pvt->_sstatus!=SEC_E_UNSUPPORTED_FUNCTION) {
+				if (SSPI_ERROR(pvt->_sstatus))	{
+					#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_NAMES))\n\n");
+					#endif
+					return false;
+				}
+				username=charstring::duplicate(n.sUserName);
+			} else {
+				// FIXME: what to do???
 			}
-			char	*username=charstring::duplicate(n.sUserName);
 
 			// try to get the target
 			char	*target=NULL;
@@ -2245,16 +2260,20 @@ bool gsscontext::inquire() {
 					&pvt->_context,
 					SECPKG_ATTR_CLIENT_SPECIFIED_TARGET,
 					&csp);
-			if (pvt->_sstatus!=SEC_E_TARGET_UNKNOWN) {
+			if (pvt->_sstatus!=SEC_E_UNSUPPORTED_FUNCTION &&
+				pvt->_sstatus!=SEC_E_TARGET_UNKNOWN) {
 				if (SSPI_ERROR(pvt->_sstatus))	{
 					#ifdef DEBUG_GSS
 					stdoutput.write("failed "
 					"(QueryContextAttributes("
-					"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
+					"SECPKG_ATTR_CLIENT_"
+					"SPECIFIED_TARGET))\n\n");
 					#endif
 					return false;
 				}
 				target=unicodeToAscii((WCHAR *)csp.sTargetName);
+			} else {
+				// FIXME: what to do???
 			}
 			#else
 				// FIXME: what to do???
@@ -2283,47 +2302,56 @@ bool gsscontext::inquire() {
 					&pvt->_context,
 					SECPKG_ATTR_NEGOTIATION_INFO,
 					&neginfo);
-		if (SSPI_ERROR(pvt->_sstatus))	{
-			#ifdef DEBUG_GSS
-				stdoutput.write("failed "
-				"(QueryContextAttributes("
-				"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
-			#endif
-			return false;
-		}
+		if (pvt->_sstatus!=SEC_E_UNSUPPORTED_FUNCTION) {
+			if (SSPI_ERROR(pvt->_sstatus))	{
+				#ifdef DEBUG_GSS
+					stdoutput.write("failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_NEGOTIATION_INFO))\n\n");
+				#endif
+				return false;
+			}
 
-		// set actual mechanism
-		pvt->_actualmechanism.initialize(neginfo.PackageInfo->Name);
+			// set actual mechanism
+			pvt->_actualmechanism.initialize(
+					neginfo.PackageInfo->Name);
 
-		// are we using kerberos?
-		pvt->_kerberos=!charstring::compareIgnoringCase(
+			// are we using kerberos?
+			pvt->_kerberos=!charstring::compareIgnoringCase(
 					pvt->_actualmechanism.getString(),
 					"Kerberos");
 
-		// are we using schannel?
-		static const char *schannels[]={
-						UNISP_NAME_A,
-						SSL2SP_NAME_A,
-						SSL3SP_NAME_A,
-						TLS1SP_NAME_A,
-						PCT1SP_NAME_A,
-						SCHANNEL_NAME_A,
-						NULL
-					};
-		pvt->_schannel=charstring::inSetIgnoringCase(
+			// are we using schannel?
+			pvt->_schannel=charstring::inSetIgnoringCase(
 					pvt->_actualmechanism.getString(),
 					schannels);
 
-		// FIXME: Arguably, we should reset the max message size,
-		// now that we know the actual mechanism that we're using.
-		// As it might be smaller.
+			// FIXME: Arguably, we should reset the max message
+			// size, now that we know the actual mechanism that
+			// we're using. As it might be smaller.
 
-		// set isopen
-		pvt->_isopen=(neginfo.NegotiationState==
-					SECPKG_NEGOTIATION_COMPLETE);
+			// set isopen
+			pvt->_isopen=(neginfo.NegotiationState==
+						SECPKG_NEGOTIATION_COMPLETE);
 
-		// clean up
-		FreeContextBuffer(neginfo.PackageInfo);
+			// clean up
+			FreeContextBuffer(neginfo.PackageInfo);
+
+		} else {
+
+			// FIXME: what to do???
+			// set actual mechanism
+
+			// are we using kerberos?
+
+			// are we using schannel?
+			// FIXME: not reliable
+			pvt->_schannel=charstring::inSetIgnoringCase(
+					pvt->_desiredmechanism->getString(),
+					schannels);
+
+			// set isopen
+		}
 
 
 		// get trailer and block sizes
@@ -2397,6 +2425,12 @@ bool gsscontext::inquire() {
 			(pvt->_isinitiator)?"yes":"no");
 		stdoutput.printf("  is open: %s\n",
 			(pvt->_isopen)?"yes":"no");
+		#if defined(RUDIMENTS_HAS_SSPI)
+			stdoutput.printf("  is kerberos: %s\n",
+				(pvt->_kerberos)?"yes":"no");
+			stdoutput.printf("  is schannel: %s\n",
+				(pvt->_schannel)?"yes":"no");
+		#endif
 		stdoutput.write("}\n");
 	#endif
 
@@ -3133,11 +3167,14 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 		} else if (pvt->_schannel) {
 
-			// For schannel, 4 "empty" buffers are required.
+			// For schannel, 1 "data" buffer and 3 "empty" buffers
+			// are required.
 
 			// prepare buffers
 			SecBuffer         secbuf[4];
-			secbuf[0].BufferType=SECBUFFER_EMPTY;
+			secbuf[0].BufferType=SECBUFFER_DATA;
+			secbuf[0].cbBuffer=inputsize;
+			secbuf[0].pvBuffer=(void *)input;
 			secbuf[1].BufferType=SECBUFFER_EMPTY;
 			secbuf[2].BufferType=SECBUFFER_EMPTY;
 			secbuf[3].BufferType=SECBUFFER_EMPTY;
@@ -3153,31 +3190,25 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 			// One of the buffers will contain the decrypted
 			// data.  Another may contain "extra" data.
-			SecBuffer         *databuf=NULL;
 			SecBuffer         *extrabuf=NULL;
 			for (uint8_t i=0; i<4; i++) {
 				if (secbuf[i].BufferType==
 							SECBUFFER_DATA) {
-					databuf=secbuf;
+					// copy out the decrypted data
+					*outputsize=secbuf[i].cbBuffer;
+					*output=(unsigned char *)
+						bytestring::duplicate(
+							secbuf[i].pvBuffer,
+							*outputsize);
 				} else if (secbuf[i].BufferType==
 							SECBUFFER_EXTRA) {
 					extrabuf=secbuf;
 				}
 			}
 
-			// copy out the decrypted data
-			if (databuf) {
-				*outputsize=databuf->cbBuffer;
-				*output=(unsigned char *)
-					bytestring::duplicate(
-							databuf->pvBuffer,
-							*outputsize);
-			}
-
-			// FIXME: If there was extra data,
-			// then the peer wants to renegotiate.
-			// pvt->_sstatus should also be SEC_I_RENEGOTIATE
-			if (extrabuf) {
+			// FIXME: The peer might want to renegotiate.
+			// That extrabuf is necessary to do that...
+			if (pvt->_sstatus==SEC_I_RENEGOTIATE) {
 				stdoutput.printf("FIXME: peer wants "
 							"to renegotiate\n");
 			}

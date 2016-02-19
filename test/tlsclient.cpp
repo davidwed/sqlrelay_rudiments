@@ -59,19 +59,19 @@ int main(int argc, const char **argv) {
 
 	// connect to a server on localhost, listening on port 9000
 	if (clnt.connect(host,port,-1,-1,1,1)<0) {
-		if (errno) {
-			stdoutput.printf("connect failed: %s\n",
+		if (error::getErrorNumber()) {
+			stdoutput.printf("connect failed (1): %s\n",
 						error::getErrorString());
 		} else {
-			stdoutput.printf("connect failed: %s\n",
+			stdoutput.printf("connect failed (2): %s\n",
 						ctx.getErrorString());
 		}
 		clnt.close();
 		process::exit(1);
 	}
-
+/*
 	if (!ctx.peerCertificateIsValid()) {
-		stdoutput.printf("peer certificate was invalidd\n");
+		stdoutput.printf("peer certificate was invalid\n");
 		clnt.close();
 		process::exit(1);
 	}
@@ -99,15 +99,33 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Server certificate {\n");
 	stdoutput.printf("  common name: %s\n",commonname);
 	stdoutput.printf("}\n\n");
-
+*/
 	// write "hello" to the server
-	clnt.write("hello",5);
+	if (clnt.write("hello",5)<0) {
+		if (error::getErrorNumber()) {
+			stdoutput.printf("write failed (1): %s\n",
+						error::getErrorString());
+		} else {
+			stdoutput.printf("write failed (2): %s\n",
+						ctx.getErrorString());
+		}
+	}
 
 	// read 10 bytes from the server and display them
 	char	buffer[11];
-	int	sizeread=clnt.read(buffer,10);
-	buffer[sizeread]=(char)NULL;
-	stdoutput.printf("%s\n",buffer);
+	ssize_t	sizeread=clnt.read(buffer,10);
+	if (sizeread<0) {
+		if (error::getErrorNumber()) {
+			stdoutput.printf("read failed (1): %s\n",
+						error::getErrorString());
+		} else {
+			stdoutput.printf("read failed (2): %s\n",
+						ctx.getErrorString());
+		}
+	} else {
+		buffer[sizeread]=(char)NULL;
+		stdoutput.printf("%s\n",buffer);
+	}
 
 	// close the connection to the server
 	clnt.close();
