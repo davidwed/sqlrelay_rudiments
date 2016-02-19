@@ -61,6 +61,7 @@ class tlscontextprivate {
 		int32_t			_error;
 		stringbuffer		_errorstr;
 		bool			_dirty;
+		filedescriptor		*_fd;
 		#if defined(RUDIMENTS_HAS_SSL)
 			SSL_CTX		*_ctx;
 			SSL		*_ssl;
@@ -76,19 +77,10 @@ class tlscontextprivate {
 			DWORD		_algidcount;
 			ALG_ID		*_algids;
 		#endif
-		filedescriptor		*_fd;
 };
 
 tlscontext::tlscontext() : securitycontext() {
 	pvt=new tlscontextprivate;
-	initContext();
-}
-
-tlscontext::~tlscontext() {
-	freeContext();
-}
-
-void tlscontext::initContext() {
 	pvt->_cert=NULL;
 	pvt->_pvtkey=NULL;
 	pvt->_pvtkeypwd=NULL;
@@ -101,6 +93,15 @@ void tlscontext::initContext() {
 	pvt->_error=0;
 	pvt->_errorstr.clear();
 	pvt->_dirty=true;
+	pvt->_fd=NULL;
+	initContext();
+}
+
+tlscontext::~tlscontext() {
+	freeContext();
+}
+
+void tlscontext::initContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		pvt->_bio=NULL;
 		pvt->_ssl=NULL;
@@ -112,10 +113,12 @@ void tlscontext::initContext() {
 		pvt->_cctx=NULL;
 		pvt->_algidcount=0;
 		pvt->_algids=NULL;
+
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 
 		pvt->_gmech.initialize(UNISP_NAME_A);
 
+		pvt->_gcred.clearDesiredMechanisms();
 		pvt->_gcred.addDesiredMechanism(&pvt->_gmech);
 		pvt->_gcred.setPackageSpecificData(&pvt->_scred);
 
@@ -126,7 +129,6 @@ void tlscontext::initContext() {
 						ISC_REQ_STREAM);
 		pvt->_gctx.setCredentials(&pvt->_gcred);
 	#endif
-	pvt->_fd=NULL;
 }
 
 void tlscontext::freeContext() {
@@ -135,11 +137,8 @@ void tlscontext::freeContext() {
 			if (pvt->_ssl) {
 				// SSL_free frees the BIO too
 				SSL_free(pvt->_ssl);
-				pvt->_ssl=NULL;
-				pvt->_bio=NULL;
 			}
 			SSL_CTX_free(pvt->_ctx);
-			pvt->_ctx=NULL;
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		delete[] pvt->_algids;
@@ -517,21 +516,26 @@ static void getCipherAlgs(const char *ciphers, bool adddh,
 #endif
 
 bool tlscontext::reInit(bool client) {
+
+	if (!pvt->_dirty) {
+		return true;
+	}
+
+	tls::initTLS();
+
+	close();
+
+	// re-init from previous runs
+	freeContext();
+	initContext();
+
+	bool	retval=true;
+
+	#ifdef DEBUG_TLS
+		stdoutput.printf("tls context {\n");
+	#endif
+
 	#if defined(RUDIMENTS_HAS_SSL)
-
-		if (!pvt->_dirty) {
-			return true;
-		}
-
-		tls::initTLS();
-
-		close();
-
-		// re-init from previous runs
-		freeContext();
-		initContext();
-
-		bool	retval=true;
 
 		// We do all of this here, at once, rather than spreading it
 		// out over the various methods of the class for various
@@ -549,7 +553,6 @@ bool tlscontext::reInit(bool client) {
 		//   across openssl versions or other ssl implementations.
 
 		// create the context
-		// FIXME: I think these leak...
 		pvt->_ctx=SSL_CTX_new(
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
 					TLS_method()
@@ -637,57 +640,40 @@ bool tlscontext::reInit(bool client) {
 			}
 		}
 
+		#ifdef DEBUG_TLS
+			stdoutput.printf("  cert chain: %s\n",pvt->_cert);
+			stdoutput.printf("  private key: %s (%s)\n",
+						pvt->_pvtkey,pvt->_pvtkeypwd);
+			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
+			stdoutput.printf("  ca file: %s\n",pvt->_cafile);
+			stdoutput.printf("  ca path: %s\n",pvt->_capath);
+			stdoutput.printf("  depth: %d\n",pvt->_depth);
+			stdoutput.printf("  validate peer: %d\n",
+						pvt->_validatepeer);
+			stdoutput.printf("  dh key cert: %s\n",pvt->_kecert);
+		#endif
+
 		// build "bio" and "ssl"
 		if (retval) {
 			// these must be created here rather than above,
 			// apparently modifying the context after creating an
 			// SSL prevents the SSL from working properly...
 
-			// create bio and set the file descriptor, if possible
-			// FIXME: I think these leak...
+			// create bio and set the file descriptor
 			pvt->_bio=BIO_new(BIO_s_fd());
-			if (pvt->_fd) {
-				BIO_set_fd(pvt->_bio,
-						pvt->_fd->getFileDescriptor(),
-						BIO_NOCLOSE);
-			}
+			BIO_set_fd(pvt->_bio,
+				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
+				BIO_NOCLOSE);
 
 			// create ssl and attach bio
-			// FIXME: I think these leak...
 			pvt->_ssl=SSL_new(pvt->_ctx);
 			SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
 
 			pvt->_dirty=false;
 		}
 
-		// re-init on failure
-		if (!retval) {
-			freeContext();
-			initContext();
-		}
-
-		// return success or failure
-		return retval;
-
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		if (!pvt->_dirty) {
-			return true;
-		}
-
-		tls::initTLS();
-
-		close();
-
-		// re-init from previous runs
-		freeContext();
-		initContext();
-
-		#ifdef DEBUG_TLS
-			stdoutput.printf("schannel_cred {\n");
-		#endif
-
-		bool	retval=true;
 		DWORD	flags=0;
 
 		// set certificate chain file
@@ -865,16 +851,6 @@ bool tlscontext::reInit(bool client) {
 			}
 		}
 
-		#ifdef DEBUG_TLS
-			stdoutput.printf("  cert store: %s - (%s)\n",
-					pvt->_cert,
-					(pvt->_cstore)?"valid":"invalid");
-			stdoutput.printf("  cert count: %d\n",pvt->_cctxcount);
-			stdoutput.printf("  use default creds: %s\n",
-					(flags&SCH_CRED_USE_DEFAULT_CREDS)?
-					"yes":"no");
-		#endif
-
 		// set private key (and password, if provided)
 		if (retval && !charstring::isNullOrEmpty(pvt->_pvtkey)) {
 			if (pvt->_pvtkeypwd) {
@@ -915,6 +891,16 @@ bool tlscontext::reInit(bool client) {
 			usedh=true;
 		}
 
+		#ifdef DEBUG_TLS
+			stdoutput.printf("  cert store: %s - (%s)\n",
+					pvt->_cert,
+					(pvt->_cstore)?"valid":"invalid");
+			stdoutput.printf("  cert count: %d\n",pvt->_cctxcount);
+			stdoutput.printf("  use default creds: %s\n",
+					(flags&SCH_CRED_USE_DEFAULT_CREDS)?
+					"yes":"no");
+		#endif
+
 		// set ciphers
 		if (retval && (usedh ||
 				!charstring::isNullOrEmpty(pvt->_ciphers))) {
@@ -928,7 +914,6 @@ bool tlscontext::reInit(bool client) {
 					"yes":"no");
 			stdoutput.printf("  dh key exchange: %s\n",
 					(usedh)?"yes":"no");
-			stdoutput.printf("}\n");
 
 			if (pvt->_cctx) {
 				tlscertificate	cert;
@@ -964,18 +949,22 @@ bool tlscontext::reInit(bool client) {
 				pvt->_errorstr.append(pvt->_gcred.getStatus());
 			}
 		}
-
-		// re-init on failure
-		if (!retval) {
-			freeContext();
-			initContext();
-		}
-
-		// return success or failure
-		return retval;
 	#else
-		return false;
+		retval=false;
 	#endif
+
+	#ifdef DEBUG_TLS
+		stdoutput.printf("}\n");
+	#endif
+
+	// re-init on failure
+	if (!retval) {
+		freeContext();
+		initContext();
+	}
+
+	// return success or failure
+	return retval;
 }
 
 bool tlscontext::accept() {
@@ -996,8 +985,8 @@ bool tlscontext::accept() {
 }
 
 bool tlscontext::peerCertificateIsValid() {
+	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
-		clearError();
 		return (pvt->_ssl &&
 			SSL_get_verify_result(pvt->_ssl)==X509_V_OK);
 	#elif defined(RUDIMENTS_HAS_SSPI)
@@ -1009,8 +998,8 @@ bool tlscontext::peerCertificateIsValid() {
 }
 
 tlscertificate *tlscontext::getPeerCertificate() {
+	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
-		clearError();
 		if (!pvt->_ssl) {
 			return NULL;
 		}
@@ -1086,10 +1075,10 @@ ssize_t tlscontext::pending() {
 }
 
 bool tlscontext::close() {
+	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
 		int	ret=1;
 		if (pvt->_ssl) {
-			clearError();
 			ret=SSL_shutdown(pvt->_ssl);
 			if (!ret) {
 				clearError();
@@ -1099,7 +1088,6 @@ bool tlscontext::close() {
 		}
 		return (ret==1);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		clearError();
 		return true;
 	#else
 		return false;
