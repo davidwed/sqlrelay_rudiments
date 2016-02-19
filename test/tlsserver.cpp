@@ -16,11 +16,11 @@ class myserver : public inetsocketserver {
 			myserver() : inetsocketserver() {}
 		void	listen(uint16_t port,
 				const char *cert,
-				const char *cafile);
+				const char *ca);
 };
 
 
-void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
+void myserver::listen(uint16_t port, const char *cert, const char *ca) {
 
 
 	// make sure that only one instance is running
@@ -42,7 +42,6 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 	tlscontext	ctx;
 
 	if (!charstring::isNullOrEmpty(cert)) {
-
 		// load the certificate chain
 		ctx.setCertificateChainFile(cert);
 
@@ -50,16 +49,9 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 		ctx.setPrivateKeyFile(cert,"password");
 	}
 
-	if (!charstring::isNullOrEmpty(cafile)) {
-
-		// Instruct the server to request the client's certificate.
-		// Servers always send certificates to clients, but in order
-		// for a client to send a certificate to a server, the server
-		// must request it.
-		ctx.setValidatePeer(true);
-
+	if (!charstring::isNullOrEmpty(ca)) {
 		// load certificates for the signing authorities that we trust
-		ctx.setCertificateAuthorityFile(cafile);
+		ctx.setCertificateAuthority(ca);
 
 		// peer certificates must be directly signed by
 		// one of the signing authorities that we trust
@@ -89,18 +81,11 @@ void myserver::listen(uint16_t port, const char *cert, const char *cafile) {
 			// make sure the client sent a certificate
 			tlscertificate	*certificate=ctx.getPeerCertificate();
 			if (!certificate) {
-				stdoutput.printf("peer sent no certificate\n");
-				clientsock->close();
-				delete clientsock;
-				continue;
-			}
-
-			// make sure the certificate was valid
-			if (!ctx.peerCertificateIsValid()) {
-				stdoutput.printf("peer certificate "
-						"is valid failed\n%s\n",
+				stdoutput.printf("peer sent no "
+						"certificate\n%s\n",
 						ctx.getErrorString());
 				clientsock->close();
+				delete clientsock;
 				continue;
 			}
 
@@ -189,7 +174,7 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsserver [-port port] [-cert cert] [-cafile cafile]\n");
+		stdoutput.printf("tlsserver [-port port] [-cert cert] [-ca ca]\n");
 		process::exit(0);
 	}
 
@@ -201,9 +186,9 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
-	const char	*cafile="server.pem";
-	if (cmdl.found("cafile")) {
-		cafile=cmdl.getValue("cafile");
+	const char	*ca="server.pem";
+	if (cmdl.found("ca")) {
+		ca=cmdl.getValue("ca");
 	}
 
 	mysvr=new myserver();
@@ -213,7 +198,7 @@ int main(int argc, const char **argv) {
 	process::handleShutDown(shutDown);
 	process::handleCrash(shutDown);
 
-	mysvr->listen(port,cert,cafile);
+	mysvr->listen(port,cert,ca);
 
 	file::remove("svr.pid");
 	process::exit(1);

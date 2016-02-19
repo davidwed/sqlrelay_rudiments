@@ -56,8 +56,8 @@
 
 #elif defined(RUDIMENTS_HAS_SSPI)
 
-	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 	#include <schannel.h>
+	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 
 #else
 	// for UINT_MAX
@@ -980,16 +980,16 @@ const char *gsscredentials::getStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_status.append("GSS - major:\n");
-		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_GSS_CODE);
 		pvt->_status.append("GSS - minor:\n");
-		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_GSS_CODE);
 		pvt->_status.append("MECH - major:\n");
-		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_MECH_CODE);
 		pvt->_status.append("MECH - minor:\n");
-		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_MECH_CODE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_status.append("SSPI - status:\n");
-		getStatus(pvt->_sstatus,0,&pvt->_status);
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -997,9 +997,9 @@ const char *gsscredentials::getStatus() {
 const char *gsscredentials::getGSSMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_GSS_CODE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		getStatus(pvt->_sstatus,0,&pvt->_status);
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -1007,7 +1007,7 @@ const char *gsscredentials::getGSSMajorStatus() {
 const char *gsscredentials::getGSSMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_GSS_CODE);
 	#endif
 	return pvt->_status.getString();
 }
@@ -1015,7 +1015,7 @@ const char *gsscredentials::getGSSMinorStatus() {
 const char *gsscredentials::getMechanismMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_MECH_CODE);
 	#endif
 	return pvt->_status.getString();
 }
@@ -1023,13 +1023,12 @@ const char *gsscredentials::getMechanismMajorStatus() {
 const char *gsscredentials::getMechanismMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_MECH_CODE);
 	#endif
 	return pvt->_status.getString();
 }
 
-void gsscredentials::getStatus(uint32_t status, int32_t type,
-						stringbuffer *strb) {
+void gsscredentials::setStatus(uint32_t status, int32_t type) {
 
 	#if defined(RUDIMENTS_HAS_GSS)
 		gss_buffer_desc	statusbuffer;
@@ -1048,10 +1047,10 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 				break;
 			}
 
-			strb->append((unsigned char *)
+			pvt->_status.append((unsigned char *)
 						statusbuffer.value,
 						statusbuffer.length);
-			strb->append('\n');
+			pvt->_status.append('\n');
 
 			gss_release_buffer(&minor,&statusbuffer);
 		} while (msgctx);
@@ -1315,7 +1314,7 @@ void gsscredentials::getStatus(uint32_t status, int32_t type,
 			default:
 				str="";
 		}
-		strb->append(str)->append("\n");
+		pvt->_status.append(str)->append("\n");
 	#endif
 }
 
@@ -3628,16 +3627,16 @@ const char *gsscontext::getStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_status.append("GSS - major:\n");
-		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_GSS_CODE);
 		pvt->_status.append("GSS - minor:\n");
-		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_GSS_CODE);
 		pvt->_status.append("MECH - major:\n");
-		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_MECH_CODE);
 		pvt->_status.append("MECH - minor:\n");
-		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_MECH_CODE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_status.append("SSPI - status:\n");
-		getStatus(pvt->_sstatus,0,&pvt->_status);
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3645,9 +3644,9 @@ const char *gsscontext::getStatus() {
 const char *gsscontext::getGSSMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_major,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_GSS_CODE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		getStatus(pvt->_sstatus,0,&pvt->_status);
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3655,7 +3654,7 @@ const char *gsscontext::getGSSMajorStatus() {
 const char *gsscontext::getGSSMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_minor,GSS_C_GSS_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_GSS_CODE);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3663,7 +3662,7 @@ const char *gsscontext::getGSSMinorStatus() {
 const char *gsscontext::getMechanismMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_major,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_major,GSS_C_MECH_CODE);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3671,12 +3670,22 @@ const char *gsscontext::getMechanismMajorStatus() {
 const char *gsscontext::getMechanismMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
-		getStatus(pvt->_minor,GSS_C_MECH_CODE,&pvt->_status);
+		setStatus(pvt->_minor,GSS_C_MECH_CODE);
 	#endif
 	return pvt->_status.getString();
 }
 
-void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
+void gsscontext::setMajorStatus(uint32_t status) {
+	// FIXME: This method is only used by the tls class.
+	// There should be a cleaner way to do what it needs to do.
+	#if defined(RUDIMENTS_HAS_GSS)
+		pvt->_major=status;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_sstatus=status;
+	#endif
+}
+
+void gsscontext::setStatus(uint32_t status, int32_t type) {
 
 	#if defined(RUDIMENTS_HAS_GSS)
 
@@ -3696,10 +3705,10 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 				break;
 			}
 
-			strb->append((unsigned char *)
+			pvt->_status.append((unsigned char *)
 						statusbuffer.value,
 						statusbuffer.length);
-			strb->append('\n');
+			pvt->_status.append('\n');
 
 			gss_release_buffer(&minor,&statusbuffer);
 		} while (msgctx);
@@ -3963,6 +3972,6 @@ void gsscontext::getStatus(uint32_t status, int32_t type, stringbuffer *strb) {
 			default:
 				str="";
 		}
-		strb->append(str)->append("\n");
+		pvt->_status.append(str)->append("\n");
 	#endif
 }

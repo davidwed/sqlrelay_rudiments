@@ -4,6 +4,7 @@
 #include <rudiments/tls.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/directory.h>
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
@@ -15,6 +16,7 @@
 	#include <rudiments/gss.h>
 	#include <rudiments/bytestring.h>
 	#include <schannel.h>
+	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 #endif
 
 #define DEBUG_TLS 1
@@ -49,13 +51,13 @@ void tls::initTLS() {
 class tlscontextprivate {
 	friend class tlscontext;
 	private:
+		bool			_isclient;
 		const char		*_cert;
 		const char		*_pvtkey;
 		const char		*_pvtkeypwd;
 		const char		*_ciphers;
 		bool			_validatepeer;
-		const char		*_cafile;
-		const char		*_capath;
+		const char		*_ca;
 		uint32_t		_depth;
 		const char		*_kecert;
 		int32_t			_error;
@@ -81,13 +83,13 @@ class tlscontextprivate {
 
 tlscontext::tlscontext() : securitycontext() {
 	pvt=new tlscontextprivate;
+	pvt->_isclient=false;
 	pvt->_cert=NULL;
 	pvt->_pvtkey=NULL;
 	pvt->_pvtkeypwd=NULL;
 	pvt->_ciphers=NULL;
 	pvt->_validatepeer=false;
-	pvt->_cafile=NULL;
-	pvt->_capath=NULL;
+	pvt->_ca=NULL;
 	pvt->_depth=0;
 	pvt->_kecert=NULL;
 	pvt->_error=0;
@@ -187,22 +189,13 @@ const char *tlscontext::getCiphers() {
 	return pvt->_ciphers;
 }
 
-void tlscontext::setCertificateAuthorityFile(const char *cafile) {
+void tlscontext::setCertificateAuthority(const char *ca) {
 	pvt->_dirty=true;
-	pvt->_cafile=cafile;
+	pvt->_ca=ca;
 }
 
-const char *tlscontext::getCertificateAuthorityFile() {
-	return pvt->_cafile;
-}
-
-void tlscontext::setCertificateAuthorityPath(const char *capath) {
-	pvt->_dirty=true;
-	pvt->_capath=capath;
-}
-
-const char *tlscontext::getCertificateAuthorityPath() {
-	return pvt->_capath;
+const char *tlscontext::getCertificateAuthority() {
+	return pvt->_ca;
 }
 
 void tlscontext::setValidationDepth(uint32_t depth) {
@@ -212,15 +205,6 @@ void tlscontext::setValidationDepth(uint32_t depth) {
 
 uint32_t tlscontext::getValidationDepth() {
 	return pvt->_depth;
-}
-
-void tlscontext::setValidatePeer(bool validate) {
-	pvt->_dirty=true;
-	pvt->_validatepeer=validate;
-}
-
-bool tlscontext::getValidatePeer() {
-	return pvt->_validatepeer;
 }
 
 void tlscontext::setKeyExchangeCertificate(const char *kecert) {
@@ -260,6 +244,11 @@ bool tlscontext::connect() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		bool	ret=pvt->_gctx.connect();
 		setError(ret);
+		if (ret && !pvt->_isclient && pvt->_validatepeer) {
+			// FIXME: manually validate the peer certificate...
+			// CertGetCertificateChain
+			// CertVerifyCertificateChain
+		}
 		return ret;
 	#else
 		return false;
@@ -288,7 +277,7 @@ static void getCipherAlgs(const char *ciphers, bool adddh,
 	charstring::split(ciphers,",",true,&c,&ccount);
 
 	// handle empty lists
-	if (!ccount) {
+	if (!ccount && !adddh) {
 		*algidcount=0;
 		*algids=NULL;
 		#ifdef DEBUG_TLS
@@ -515,7 +504,7 @@ static void getCipherAlgs(const char *ciphers, bool adddh,
 }
 #endif
 
-bool tlscontext::reInit(bool client) {
+bool tlscontext::reInit(bool isclient) {
 
 	if (!pvt->_dirty) {
 		return true;
@@ -528,6 +517,8 @@ bool tlscontext::reInit(bool client) {
 	// re-init from previous runs
 	freeContext();
 	initContext();
+
+	pvt->_isclient=isclient;
 
 	bool	retval=true;
 
@@ -598,16 +589,21 @@ bool tlscontext::reInit(bool client) {
 			}
 		}
 
-		// set the certificate authority file/path
+		// set the certificate authority
 		if (retval) {
-			if (!charstring::isNullOrEmpty(pvt->_cafile)) {
+			if (!charstring::isNullOrEmpty(pvt->_ca)) {
+
+				pvt->_validatepeer=true;
+
+				// file or directory?
+				directory	d;
+				bool	ispath=d.open(pvt->_ca);
+				d.close();
+
 				if (SSL_CTX_load_verify_locations(
-					pvt->_ctx,pvt->_cafile,NULL)!=1) {
-					retval=false;
-				}
-			} else if (!charstring::isNullOrEmpty(pvt->_capath)) {
-				if (SSL_CTX_load_verify_locations(
-					pvt->_ctx,NULL,pvt->_capath)!=1) {
+						pvt->_ctx,
+						(ispath)?NULL:pvt->_ca,
+						(ispath)?pvt->_ca:NULL)!=1) {
 					retval=false;
 				}
 			}
@@ -619,8 +615,13 @@ bool tlscontext::reInit(bool client) {
 		}
 
 		// set whether to validate peer or not
-		if (retval && pvt->_validatepeer) {
-			SSL_CTX_set_verify(pvt->_ctx,SSL_VERIFY_PEER,NULL);
+		if (retval) {
+			SSL_CTX_set_verify(pvt->_ctx,
+				(pvt->_validatepeer)?
+					(SSL_VERIFY_PEER|
+					SSL_VERIFY_FAIL_IF_NO_PEER_CERT):
+					SSL_VERIFY_NONE,
+				NULL);
 		}
 
 		// use diffie-hellman key exchange
@@ -645,11 +646,8 @@ bool tlscontext::reInit(bool client) {
 			stdoutput.printf("  private key: %s (%s)\n",
 						pvt->_pvtkey,pvt->_pvtkeypwd);
 			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
-			stdoutput.printf("  ca file: %s\n",pvt->_cafile);
-			stdoutput.printf("  ca path: %s\n",pvt->_capath);
+			stdoutput.printf("  ca: %s\n",pvt->_ca);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
-			stdoutput.printf("  validate peer: %d\n",
-						pvt->_validatepeer);
 			stdoutput.printf("  dh key cert: %s\n",pvt->_kecert);
 		#endif
 
@@ -680,7 +678,7 @@ bool tlscontext::reInit(bool client) {
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
 
 			// don't use default creds
-			if (client) {
+			if (isclient) {
 				flags|=SCH_CRED_NO_DEFAULT_CREDS;
 			}
 
@@ -737,7 +735,7 @@ bool tlscontext::reInit(bool client) {
 				retval=false;
 			}
 
-		} else if (client) {
+		} else if (isclient) {
 
 			// no cert specified...
 
@@ -856,14 +854,20 @@ bool tlscontext::reInit(bool client) {
 			if (pvt->_pvtkeypwd) {
 				// FIXME: how?
 			}
-			// FIXME: CryptAcquireCertificatePrivateKey
+			// FIXME: how?
 		}
 
-		// set the certificate authority file/path
+		// set the certificate authority
 		if (retval) {
-			if (!charstring::isNullOrEmpty(pvt->_cafile)) {
-				// FIXME: how?
-			} else if (!charstring::isNullOrEmpty(pvt->_capath)) {
+			if (!charstring::isNullOrEmpty(pvt->_ca)) {
+
+				pvt->_validatepeer=true;
+
+				// file or directory?
+				directory	d;
+				bool	ispath=d.open(pvt->_ca);
+				d.close();
+
 				// FIXME: how?
 			}
 		}
@@ -873,19 +877,22 @@ bool tlscontext::reInit(bool client) {
 			// FIXME: how?
 		}
 
-		if (client) {
-			// set whether to auto-validate peer or not
-			// (this flag only valid for client and the default
-			// is to validate)
-			if (retval && !pvt->_validatepeer) {
-				flags|=SCH_CRED_MANUAL_CRED_VALIDATION;
-			}
+		if (retval && isclient) {
+			// Set whether to validate the peer or not.
+			// These flags are only valid on the client-side.
+			// On the server side, if we want to validate the
+			// peer, we'll have to do it manually.
+			// FIXME: SCH_CRED_AUTO_CRED_VALIDATION currently
+			// causes the connect to fail with SEC_E_WRONG_PRINCIPAL
+			flags|=(pvt->_validatepeer)?
+					SCH_CRED_AUTO_CRED_VALIDATION:
+					SCH_CRED_MANUAL_CRED_VALIDATION;
 		}
 
 		// use diffie-hellman key exchange
 		// (disable this on the client side)
 		bool	usedh=false;
-		if (retval && !client &&
+		if (retval && !isclient &&
 			!charstring::isNullOrEmpty(pvt->_kecert)) {
 			// FIXME: cert...
 			usedh=true;
@@ -896,9 +903,13 @@ bool tlscontext::reInit(bool client) {
 					pvt->_cert,
 					(pvt->_cstore)?"valid":"invalid");
 			stdoutput.printf("  cert count: %d\n",pvt->_cctxcount);
+			if (pvt->_cctx) {
+				tlscertificate	cert;
+				cert.setCertificate(pvt->_cctx[0]->pCertInfo);
+			}
 			stdoutput.printf("  use default creds: %s\n",
 					(flags&SCH_CRED_USE_DEFAULT_CREDS)?
-					"yes":"no");
+					"1":"0");
 		#endif
 
 		// set ciphers
@@ -909,16 +920,9 @@ bool tlscontext::reInit(bool client) {
 		}
 
 		#ifdef DEBUG_TLS
-			stdoutput.printf("  auto-validation: %s\n",
-					(flags&SCH_CRED_AUTO_CRED_VALIDATION)?
-					"yes":"no");
-			stdoutput.printf("  dh key exchange: %s\n",
-					(usedh)?"yes":"no");
-
-			if (pvt->_cctx) {
-				tlscertificate	cert;
-				cert.setCertificate(pvt->_cctx[0]->pCertInfo);
-			}
+			stdoutput.printf("  ca: %s\n",pvt->_ca);
+			stdoutput.printf("  depth: %d\n",pvt->_depth);
+			stdoutput.printf("  dh key exchange: %d\n",usedh);
 		#endif
 
 		// build schannel creds and acquire credentials...
@@ -935,7 +939,7 @@ bool tlscontext::reInit(bool client) {
 			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1_2;
 
 			// acquire credentials
-			if (client) {
+			if (isclient) {
 				retval=pvt->_gcred.acquireForUser(NULL);
 			} else {
 				retval=pvt->_gcred.acquireForService(NULL);
@@ -984,38 +988,45 @@ bool tlscontext::accept() {
 	#endif
 }
 
-bool tlscontext::peerCertificateIsValid() {
-	clearError();
-	#if defined(RUDIMENTS_HAS_SSL)
-		return (pvt->_ssl &&
-			SSL_get_verify_result(pvt->_ssl)==X509_V_OK);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: how?
-		return false;
-	#else
-		return false;
-	#endif
-}
-
 tlscertificate *tlscontext::getPeerCertificate() {
 	clearError();
-	#if defined(RUDIMENTS_HAS_SSL)
-		if (!pvt->_ssl) {
-			return NULL;
-		}
-		X509	*cert=SSL_get_peer_certificate(pvt->_ssl);
-		if (!cert) {
-			return NULL;
-		}
-		tlscertificate	*tlscert=new tlscertificate();
-		tlscert->setCertificate((void *)cert);
-		return tlscert;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: how?
-		return NULL;
-	#else
-		return NULL;
+	#ifdef DEBUG_TLS
+		stdoutput.printf("get peer certificate {\n");
 	#endif
+	tlscertificate	*tlscert=NULL;
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (pvt->_ssl) {
+			X509	*cert=SSL_get_peer_certificate(pvt->_ssl);
+			if (cert) {
+				tlscert=new tlscertificate();
+				tlscert->setCertificate((void *)cert);
+			}
+		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		PCERT_CONTEXT	cert=NULL;
+		SECURITY_STATUS	sstatus=QueryContextAttributes(
+					(_SecHandle *)pvt->_gctx.getContext(),
+					SECPKG_ATTR_REMOTE_CERT_CONTEXT,
+					&cert);
+		if (SSPI_ERROR(sstatus)) {
+			#ifdef DEBUG_TLS
+				stdoutput.write("  failed "
+					"(QueryContextAttributes("
+					"SECPKG_ATTR_REMOTE_CERT_CONTEXT))\n");
+			#endif
+			// FIXME: there should be a cleaner way to do this
+			pvt->_gctx.setMajorStatus(sstatus);
+			setError(pvt->_gctx.getMajorStatus(),
+					pvt->_gctx.getStatus());
+		} else {
+			tlscert=new tlscertificate();
+			tlscert->setCertificate((void *)cert->pCertInfo);
+		}
+	#endif
+	#ifdef DEBUG_TLS
+		stdoutput.printf("}\n");
+	#endif
+	return tlscert;
 }
 
 ssize_t tlscontext::read(void *buf, ssize_t count) {
@@ -1210,9 +1221,11 @@ void tlscertificate::freeCertificate() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		free(pvt->_issuer);
 		free(pvt->_subject);
+		// FIXME: free pvt->_cert
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		delete[] pvt->_issuer;
 		delete[] pvt->_subject;
+		// FIXME: free pvt->_cert
 	#endif
 	delete[] pvt->_sigalg;
 	delete[] pvt->_pkalg;
@@ -1380,22 +1393,23 @@ void tlscertificate::setCertificate(void *cert) {
 	}
 
 	#ifdef DEBUG_TLS
-		stdoutput.printf("certificate {\n");
-		stdoutput.printf("  version: %d\n",pvt->_version);
-		stdoutput.printf("  serial number: %lld\n",pvt->_serialnumber);
-		stdoutput.printf("  signature algorithm: %s\n",pvt->_sigalg);
-		stdoutput.printf("  issuer: %s\n",pvt->_issuer);
-		stdoutput.printf("  valid-from: %s\n",
-					pvt->_validfrom.getString());
-		stdoutput.printf("  valid-to: %s\n",
-					pvt->_validto.getString());
-		stdoutput.printf("  subject: %s\n",pvt->_subject);
-		stdoutput.printf("  public key algorithm: %s\n",pvt->_pkalg);
-		stdoutput.printf("  public key:\n");
-		stdoutput.safePrint(pvt->_pk,pvt->_pklen);
-		stdoutput.printf("\n");
-		stdoutput.printf("  public key bits: %lld\n",pvt->_pkbits);
-		stdoutput.printf("  common name: %s\n",pvt->_commonname);
-		stdoutput.printf("}\n");
+		stdoutput.printf("  certificate {\n");
+		stdoutput.printf("    version: %d\n",pvt->_version);
+		stdoutput.printf("    serial number: %lld\n",
+						pvt->_serialnumber);
+		stdoutput.printf("    signature algorithm: %s\n",pvt->_sigalg);
+		stdoutput.printf("    issuer: %s\n",pvt->_issuer);
+		stdoutput.printf("    valid-from: %s\n",
+						pvt->_validfrom.getString());
+		stdoutput.printf("    valid-to: %s\n",
+						pvt->_validto.getString());
+		stdoutput.printf("    subject: %s\n",pvt->_subject);
+		stdoutput.printf("    public key algorithm: %s\n",pvt->_pkalg);
+		stdoutput.printf("    public key: ");
+		stdoutput.safePrint(pvt->_pk,(pvt->_pklen<5)?pvt->_pklen:5);
+		stdoutput.printf("...\n");
+		stdoutput.printf("    public key bits: %lld\n",pvt->_pkbits);
+		stdoutput.printf("    common name: %s\n",pvt->_commonname);
+		stdoutput.printf("  }\n");
 	#endif
 }

@@ -4,7 +4,7 @@
 	private:
 		void	initContext();
 		void	freeContext();
-		bool	reInit(bool client);
+		bool	reInit(bool isclient);
 		void	clearError();
 		void	setError(int32_t ret);
 		void	setError(int32_t err, const char *errstr);

@@ -63,45 +63,24 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  next call to connect() or accept(). */
 		const char	*getCiphers();
 
-		/** Sets the location of the certificate chain file to use
-		 *  when validating the peer's certificate during the next call
+		/** Sets the location of the certificate authority to use when
+		 *  validating the peer's certificate during the next call
 		 *  to connect() or accept().
 		 *
-		 *  If "cafile" is NULL or empty then no certificate chain file
-		 *  will be used.  Unless setCertificateAuthorityPath() is
-		 *  called, validation of the peer certificate will fail.
+		 *  "ca" can be either a file or directory name.  If it is a
+		 *  directory name, then all certificate authority files found
+		 *  in that directory will be used.  If it a file name, then
+		 *  only that file will be used.
 		 *
-		 *  Note that, alternatively, a directory containing multiple
-		 *  certificate chain files can be specified using
-		 *  setCertificateAuthorityPath(). */
-		void		setCertificateAuthorityFile(const char *cafile);
+		 *  If "ca" is NULL or empty then no validation of the peer
+		 *  certificate will occur during the next call to connect() or
+		 *  accept(). */
+		void		setCertificateAuthority(const char *ca);
 
-		/** Returns the location of the certificate chain file that
+		/** Returns the location of the certificate authority that
 		 *  will be used when validating the peer's certificate during
 		 *  the next call to connect() or accept(). */
-		const char	*getCertificateAuthorityFile();
-
-		/** Sets the location of the directory containing certificate
-		 *  chain files to use when validating the peer's certificate
-		 *  during the next call to connect() or accept().  If a
-		 *  directory is specified, then each of the certificate
-		 *  chain files found in that directory will be used during
-		 *  validation.
-		 *
-		 *  If "cafile" is NULL or empty then no certificate chain file
-		 *  will be used.  Unless setCertificateAuthorityPath() is
-		 *  called, validation of the peer certificate will fail.
-		 *
-		 *  Note that, alternatively, a file containing s single
-		 *  certificate chain can be specified using
-		 *  setCertificateAuthorityFile(). */
-		void		setCertificateAuthorityPath(const char *capath);
-
-		/** Returns the location of the directory containing
-		 *  certificate chain file that will be used when validating
-		 *  the peer's certificate during the next call to connect() or
-		 *  accept(). */
-		const char	*getCertificateAuthorityPath();
+		const char	*getCertificateAuthority();
 
 		/** Sets the validation depth to use when validating the peer's
 		 *  certificate during the next call to connect() or accept().
@@ -131,25 +110,13 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  connect() or accept(). */
 		uint32_t	getValidationDepth();
 
-		/** Instructs the context whether to request and validate the
-		 *  peer's certificate during the next call to connect() or
-		 *  accept().
-		 *
-		 *  Defaults to true for connect() and false for accept().
-		 *
-		 *  If enabled, then peerCertificateValid() can be called after
-		 *  a successful call to connect() or accept() to find out
-		 *  whether the peer's certificate was valid or not. */
-		void		setValidatePeer(bool validate);
-
-		/** Returns whether or not the requesting and validating the
-		 *  peer's certificate during the next call to connect() or
-		 *  accept() has been explicitly enabled. */
-		bool		getValidatePeer();
-
 		/** Sets the certificate to use for Diffie-Hellman key exchange
-		 *  during the next call accept(). */
+		 *  during the next call to accept(). */
 		void		setKeyExchangeCertificate(const char *dhcert);
+
+		/** Returns the certificate that will be used for
+		 *  Diffie-Hellman key exchange during the next call to
+		 *  accept(). */
 		const char	*getKeyExchangeCertificate();
 
 		/** Sets the file descriptor that is currently used to
@@ -186,38 +153,9 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  Returns true on success and false on failure. */
 		bool	accept();
 
-
-		/** Returns whether or not the certificate received from the
-		 *  peer in the most recent call to connect() or accept() is
-		 *  valid.
-		 *
-		 *  Returns true if the certificate was received and is valid.
-		 *
-		 *  Returns false if:
-		 *      * setValidatePeer(true) was not called prior to
-		 *        accept()
-		 *      * setValidatePeer(false) was called prior to
-		 *        connect() or accept()
-		 *      * no certificate authority file or path was set using
-		 *        setCertificateAuthorityFile() or
-		 *        setCertificateAuthorityPath()
-		 *      * the peer didn't send a certificate
-		 *      * the peer's certificate chain was deeper than the
-		 *        value set by setValidationDepth()
-		 *      * the peer's certificate is not valid
-		 */
-		bool		peerCertificateIsValid();
-
 		/** Returns the certificate sent by the peer during the most
-		 *  recent call to connect() or accept().
-		 *
-		 *  Returns NULL if:
-		 *      * setValidatePeer(true) was not called prior to
-		 *        accept()
-		 *      * setValidatePeer(false) was called prior to
-		 *        connect() or accept()
-		 *      * the peer didn't send a certificate
-		 */
+		 *  recent call to connect() or accept() or NULL if the peer
+		 *  didn't send a certificate. */
 		tlscertificate	*getPeerCertificate();
 
 		/** Reads from the file descriptor previously configured by

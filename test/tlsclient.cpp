@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-cafile cafile]\n");
+		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-ca ca]\n");
 		process::exit(0);
 	}
 	const char	*host="127.0.0.1";
@@ -28,9 +28,9 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
-	const char	*cafile="ca.pem";
-	if (cmdl.found("cafile")) {
-		cafile=cmdl.getValue("cafile");
+	const char	*ca="ca.pem";
+	if (cmdl.found("ca")) {
+		ca=cmdl.getValue("ca");
 	}
 
 	tlscontext	ctx;
@@ -43,10 +43,9 @@ int main(int argc, const char **argv) {
 		ctx.setPrivateKeyFile(cert,"password");
 	}
 
-	if (!charstring::isNullOrEmpty(cafile)) {
-
+	if (!charstring::isNullOrEmpty(ca)) {
 		// load certificates for the signing authorities that we trust
-		ctx.setCertificateAuthorityFile(cafile);
+		ctx.setCertificateAuthority(ca);
 
 		// peer certificates must be directly signed by
 		// one of the signing authorities that we trust
@@ -69,21 +68,16 @@ int main(int argc, const char **argv) {
 		clnt.close();
 		process::exit(1);
 	}
-/*
-	if (!ctx.peerCertificateIsValid()) {
-		stdoutput.printf("peer certificate was invalid\n");
-		clnt.close();
-		process::exit(1);
-	}
 
 	// make sure the server sent a certificate
 	tlscertificate	*certificate=ctx.getPeerCertificate();
 	if (!certificate) {
-		stdoutput.printf("peer sent no certificate\n");
+		stdoutput.printf("peer sent no certificate\n%s\n",
+						ctx.getErrorString());
 		clnt.close();
 		process::exit(1);
 	}
-	
+
 	// Make sure the commonname in the certificate is the one we expect it
 	// to be (server.localdomain).
 	// (we may also want to check the subject name field or certificate
@@ -99,7 +93,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Server certificate {\n");
 	stdoutput.printf("  common name: %s\n",commonname);
 	stdoutput.printf("}\n\n");
-*/
+
 	// write "hello" to the server
 	if (clnt.write("hello",5)<0) {
 		if (error::getErrorNumber()) {

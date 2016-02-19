@@ -7,7 +7,6 @@
 		bool	acquire(const void *name,
 					size_t namelength,
 					const void *nametype);
-		void	getStatus(uint32_t status, int32_t type,
-						stringbuffer *strb);
+		void	setStatus(uint32_t status, int32_t type);
 
 		gsscredentialsprivate	*pvt;
