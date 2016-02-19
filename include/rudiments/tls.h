@@ -110,15 +110,6 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  connect() or accept(). */
 		uint32_t	getValidationDepth();
 
-		/** Sets the certificate to use for Diffie-Hellman key exchange
-		 *  during the next call to accept(). */
-		void		setKeyExchangeCertificate(const char *dhcert);
-
-		/** Returns the certificate that will be used for
-		 *  Diffie-Hellman key exchange during the next call to
-		 *  accept(). */
-		const char	*getKeyExchangeCertificate();
-
 		/** Sets the file descriptor that is currently used to
 		 *  communicate with the peer. */
 		void		setFileDescriptor(filedescriptor *fd);

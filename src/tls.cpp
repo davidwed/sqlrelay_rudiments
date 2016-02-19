@@ -59,7 +59,6 @@ class tlscontextprivate {
 		bool			_validatepeer;
 		const char		*_ca;
 		uint32_t		_depth;
-		const char		*_kecert;
 		int32_t			_error;
 		stringbuffer		_errorstr;
 		bool			_dirty;
@@ -91,7 +90,6 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_validatepeer=false;
 	pvt->_ca=NULL;
 	pvt->_depth=0;
-	pvt->_kecert=NULL;
 	pvt->_error=0;
 	pvt->_errorstr.clear();
 	pvt->_dirty=true;
@@ -207,15 +205,6 @@ uint32_t tlscontext::getValidationDepth() {
 	return pvt->_depth;
 }
 
-void tlscontext::setKeyExchangeCertificate(const char *kecert) {
-	pvt->_dirty=true;
-	pvt->_kecert=kecert;
-}
-
-const char *tlscontext::getKeyExchangeCertificate() {
-	return pvt->_kecert;
-}
-
 void tlscontext::setFileDescriptor(filedescriptor *fd) {
 	pvt->_fd=fd;
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -264,7 +253,7 @@ static int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 #endif 
 
 #if defined(RUDIMENTS_HAS_SSPI)
-static void getCipherAlgs(const char *ciphers, bool adddh,
+static void getCipherAlgs(const char *ciphers,
 				ALG_ID **algids, DWORD *algidcount) {
 
 	#ifdef DEBUG_TLS
@@ -276,20 +265,9 @@ static void getCipherAlgs(const char *ciphers, bool adddh,
 	uint64_t	ccount;
 	charstring::split(ciphers,",",true,&c,&ccount);
 
-	// handle empty lists
-	if (!ccount && !adddh) {
-		*algidcount=0;
-		*algids=NULL;
-		#ifdef DEBUG_TLS
-			stdoutput.printf("    cipher count: %d\n",*algidcount);
-			stdoutput.printf("  }\n");
-		#endif
-		return;
-	}
-
 	// create an array of ALG_ID's
 	uint64_t	algindex=0;
-	*algids=new ALG_ID[ccount+((adddh)?1:0)];
+	*algids=new ALG_ID[ccount+1];
 
 	// for each requested algorithm...
 	for (uint64_t i=0; i<ccount; i++) {
@@ -477,22 +455,11 @@ static void getCipherAlgs(const char *ciphers, bool adddh,
 	// clean up
 	delete[] c;
 
-	// add Diffie-Hellman if requested
-	if (adddh) {
-		#ifdef DEBUG_TLS
-			uint64_t	oldalgindex=algindex;
-			stdoutput.printf("    cipher DH_EPHEM - ");
-		#endif
-		(*algids)[algindex++]=CALG_DH_EPHEM;
-
-		#ifdef DEBUG_TLS
-			if (algindex==oldalgindex) {
-				stdoutput.printf("failed\n");
-			} else {
-				stdoutput.printf("success\n");
-			}
-		#endif
-	}
+	// use diffie-hellman key exchange
+	#ifdef DEBUG_TLS
+		stdoutput.printf("    cipher DH_EPHEM - success\n");
+	#endif
+	(*algids)[algindex++]=CALG_DH_EPHEM;
 
 	// copy out the final algorithm count
 	*algidcount=algindex;
@@ -589,6 +556,9 @@ bool tlscontext::reInit(bool isclient) {
 			}
 		}
 
+		// use ephemeral diffie-hellman key exchange
+		SSL_CTX_set_options(pvt->_ctx,SSL_OP_SINGLE_DH_USE);
+
 		// set the certificate authority
 		if (retval) {
 			if (!charstring::isNullOrEmpty(pvt->_ca)) {
@@ -624,23 +594,6 @@ bool tlscontext::reInit(bool isclient) {
 				NULL);
 		}
 
-		// use diffie-hellman key exchange
-		if (retval && !charstring::isNullOrEmpty(pvt->_kecert)) {
-			SSL_CTX_set_options(pvt->_ctx,SSL_OP_SINGLE_DH_USE);
-			BIO	*bio=BIO_new_file(pvt->_kecert,"r");
-			#if (OPENSSL_VERSION_NUMBER < 0x00904000)
-				DH	*dh=
-				PEM_read_bio_DHparams(bio,NULL,NULL);
-			#else
-				DH	*dh=
-				PEM_read_bio_DHparams(bio,NULL,NULL,NULL);
-			#endif
-			BIO_free(bio);
-			if (!dh || SSL_CTX_set_tmp_dh(pvt->_ctx,dh)!=1) {
-				retval=false;
-			}
-		}
-
 		#ifdef DEBUG_TLS
 			stdoutput.printf("  cert chain: %s\n",pvt->_cert);
 			stdoutput.printf("  private key: %s (%s)\n",
@@ -648,7 +601,6 @@ bool tlscontext::reInit(bool isclient) {
 			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
 			stdoutput.printf("  ca: %s\n",pvt->_ca);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
-			stdoutput.printf("  dh key cert: %s\n",pvt->_kecert);
 		#endif
 
 		// build "bio" and "ssl"
@@ -889,15 +841,6 @@ bool tlscontext::reInit(bool isclient) {
 					SCH_CRED_MANUAL_CRED_VALIDATION;
 		}
 
-		// use diffie-hellman key exchange
-		// (disable this on the client side)
-		bool	usedh=false;
-		if (retval && !isclient &&
-			!charstring::isNullOrEmpty(pvt->_kecert)) {
-			// FIXME: cert...
-			usedh=true;
-		}
-
 		#ifdef DEBUG_TLS
 			stdoutput.printf("  cert store: %s - (%s)\n",
 					pvt->_cert,
@@ -912,17 +855,15 @@ bool tlscontext::reInit(bool isclient) {
 					"1":"0");
 		#endif
 
-		// set ciphers
-		if (retval && (usedh ||
-				!charstring::isNullOrEmpty(pvt->_ciphers))) {
-			getCipherAlgs(pvt->_ciphers,usedh,
+		// set ciphers (automatically adds ephemeral diffie-hellman)
+		if (retval) {
+			getCipherAlgs(pvt->_ciphers,
 					&pvt->_algids,&pvt->_algidcount);
 		}
 
 		#ifdef DEBUG_TLS
 			stdoutput.printf("  ca: %s\n",pvt->_ca);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
-			stdoutput.printf("  dh key exchange: %d\n",usedh);
 		#endif
 
 		// build schannel creds and acquire credentials...

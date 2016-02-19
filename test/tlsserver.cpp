@@ -58,9 +58,6 @@ void myserver::listen(uint16_t port, const char *cert, const char *ca) {
 		ctx.setValidationDepth(1);
 	}
 
-	// Instruct the context to use a dh key for encrypting the session.
-	ctx.setKeyExchangeCertificate("dh1024.pem");
-
 	// listen on inet socket
 	if (!inetsocketserver::listen(NULL,port,15)) {
 		stdoutput.printf("couldn't listen on port %d\n",port);
