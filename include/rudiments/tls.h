@@ -258,8 +258,37 @@ class RUDIMENTS_DLLSPEC tlscertificate {
 		/** Deletes this instance of the tlscertificate class. */
 		~tlscertificate();
 
+		/** Returns the version from the certificate. */
+		uint32_t	getVersion();
+
+		/** Returns the serial number from the certificate. */
+		uint64_t	getSerialNumber();
+
+		/** Returns the signature algorithm from the certificate. */
+		const char	*getSignatureAlgorithm();
+
+		/** Returns the issuer from the certificate. */
+		const char	*getIssuer();
+
+		/** Returns the subject from the certificate. */
+		const char	*getSubject();
+
 		/** Returns the common name from the certificate. */
 		const char	*getCommonName();
+
+		/** Returns the private key algorithm from the certificate. */
+		const char	*getPrivateKeyAlgorithm();
+
+		/** Returns the private key from the certificate. */
+		const unsigned char	*getPrivateKey();
+
+		/** Returns the length of the private key, in bytes,
+		 *  from the certificate. */
+		uint64_t	getPrivateKeyByteLength();
+
+		/** Returns the length of the private key, in bits,
+		 *  from the certificate. */
+		uint64_t	getPrivateKeyBitLength();
 
 	#include <rudiments/private/tlscertificate.h>
 };

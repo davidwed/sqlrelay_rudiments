@@ -4,7 +4,7 @@
 #include <rudiments/tls.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
-#include <rudiments/linkedlist.h>
+#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
@@ -690,8 +690,10 @@ bool tlscontext::init(bool client) {
 		DWORD	flags=0;
 
 		// set certificate chain file
-		bool	loadedcert=false;
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
+
+			// don't use default creds
+			flags|=SCH_CRED_NO_DEFAULT_CREDS;
 
 			// open the specified certificate store
 			pvt->_cstore=CertOpenStore(
@@ -716,173 +718,152 @@ bool tlscontext::init(bool client) {
 							NULL);
 				if (cctx) {
 
+					// verify that the cert
+					// contained a private key
+					HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
+					DWORD	keytype;
+					BOOL	mustfree=FALSE;
+					CryptAcquireCertificatePrivateKey(
+								cctx,
+								0,
+								NULL,
+								&kh,
+								&keytype,
+								&mustfree);
+
 					pvt->_cctx=new PCCERT_CONTEXT[1];
 					pvt->_cctx[0]=cctx;
 					pvt->_cctxcount=1;
-
-					// it's actually possible for an error
-					// to occur but a cert to still be
-					// returned, so catch that too
-					if (error::getNativeErrorNumber()) {
-						retval=false;
-					} else {
-						loadedcert=true;
-					}
 				}
-			} else {
+			}
+
+			// If CertOpenStoreFailed, CertFindCertificateInStore
+			// failed (but still returned a cert, which it can
+			// apparently do), or CryptAcquireCertificatePrivateKey
+			// failed to find a private key in, then an error
+			// will be set.  Catch that error here to decide
+			// whether this process succeeded or not.
+			if (error::getNativeErrorNumber()) {
+				setNativeError();
 				retval=false;
 			}
 
-			// if a legitimate error occurred, then make it
-			// available to be returned by getStatus()
+		} else if (client) {
+
+			// no cert specified...
+
+			// for clients, just fall back to default creds
+			flags|=SCH_CRED_USE_DEFAULT_CREDS;
+
+		} else {
+
+			// no cert specified...
+
+			// for servers, create a self-signed cert...
+
+			// don't use default creds
+			flags|=SCH_CRED_NO_DEFAULT_CREDS;
+
+			// acquire a crypto context
+			HCRYPTPROV	cp=NULL;
+			if (!CryptAcquireContext(&cp,NULL,
+						MS_DEF_PROV,
+						PROV_RSA_FULL,
+						CRYPT_VERIFYCONTEXT
+						#if _WIN32_WINNT>0x0400
+						|CRYPT_SILENT
+						#endif
+						)) {
+				retval=false;
+			}
+
+			// create an 2048-bit rsa key pair
+			// FIXME: how is this used?
+			HCRYPTKEY 	key=NULL;
+			if (retval && !CryptGenKey(cp,
+						AT_SIGNATURE,
+						0x08000000,
+						&key)) {
+				retval=false;
+			}
+
+			// encode the subject
+			const char	*x500="CN=Test, T=Test";
+			BYTE		*buffer=NULL;
+			DWORD		buffersize=0;
+			if (retval && !CertStrToName(
+					X509_ASN_ENCODING,
+					x500,CERT_X500_NAME_STR,NULL,
+					NULL,&buffersize,NULL)) {
+				retval=false;
+			}
+			if (retval) {
+				buffer=new BYTE[buffersize];
+				if (!CertStrToName(
+					X509_ASN_ENCODING,
+					x500,CERT_X500_NAME_STR,NULL,
+					buffer,&buffersize,NULL)) {
+					retval=false;
+				}
+			}
+
+			// create the cert
+			if (retval) {
+				CERT_NAME_BLOB	cnb;
+				bytestring::zero(&cnb,sizeof(cnb));
+				cnb.pbData=buffer;
+				cnb.cbData=buffersize;
+
+				CRYPT_KEY_PROV_INFO	ckpi;
+				bytestring::zero(&ckpi,sizeof(ckpi));
+				ckpi.pwszContainerName=NULL;
+				ckpi.pwszProvName=NULL;
+				ckpi.dwProvType=PROV_RSA_FULL;
+				ckpi.dwFlags=CRYPT_MACHINE_KEYSET;
+				ckpi.cProvParam=0;
+				ckpi.rgProvParam=NULL;
+				ckpi.dwKeySpec=AT_SIGNATURE;
+
+				CRYPT_ALGORITHM_IDENTIFIER	cai;
+				bytestring::zero(&cai,sizeof(cai));
+				cai.pszObjId=szOID_RSA_SHA1RSA;
+
+				SYSTEMTIME	expiration;
+				GetSystemTime(&expiration);
+				expiration.wYear+=10;
+
+				PCCERT_CONTEXT	cctx=
+					CertCreateSelfSignCertificate(
+							NULL,
+							&cnb,0,
+							&ckpi,
+							&cai,0,
+							&expiration,0);
+				if (cctx) {
+					pvt->_cctx=new PCCERT_CONTEXT[1];
+					pvt->_cctx[0]=cctx;
+					pvt->_cctxcount=1;
+				} else {
+					retval=false;
+				}
+			}
+
+			// clean up...
+			if (buffer) {
+				delete[] buffer;
+			}
+			if (key) {
+				CryptDestroyKey(key);
+			}
+			if (cp) {
+				CryptReleaseContext(cp,0);
+			}
+
+			// catch errors
 			if (!retval) {
-				char	*errstr=error::getNativeErrorString();
-				setError(error::getNativeErrorNumber(),errstr);
-				delete[] errstr;
+				setNativeError();
 			}
 		}
-
-		if (retval && !loadedcert) {
-
-			// Either no certificate store was specified or there
-			// was no certificate in the store.
-			/*if (client) {
-
-				// For clients, just fall back to default creds.
-				flags|=SCH_CRED_USE_DEFAULT_CREDS;
-
-			} else {*/
-
-				// For servers, create a self-signed cert...
-
-				// acquire a crypto context
-				HCRYPTPROV	cp=NULL;
-				if (!CryptAcquireContext(&cp,NULL,
-							MS_DEF_PROV,
-							PROV_RSA_FULL,
-							CRYPT_VERIFYCONTEXT
-							#if _WIN32_WINNT>0x0400
-							|CRYPT_SILENT
-							#endif
-							)) {
-					retval=false;
-				}
-
-				// create an 2048-bit rsa key pair
-				// FIXME: how is this used?
-				HCRYPTKEY 	key=NULL;
-				if (retval && !CryptGenKey(cp,
-							AT_SIGNATURE,
-							0x08000000,
-							&key)) {
-					retval=false;
-				}
-
-				// encode the subject
-				const char	*x500="CN=Test, T=Test";
-				BYTE		*buffer=NULL;
-				DWORD		buffersize=0;
-				if (retval && !CertStrToName(
-						X509_ASN_ENCODING,
-						x500,CERT_X500_NAME_STR,NULL,
-						NULL,&buffersize,NULL)) {
-					retval=false;
-				}
-				if (retval) {
-					buffer=new BYTE[buffersize];
-					if (!CertStrToName(
-						X509_ASN_ENCODING,
-						x500,CERT_X500_NAME_STR,NULL,
-						buffer,&buffersize,NULL)) {
-						retval=false;
-					}
-				}
-
-				// create the cert
-				if (retval) {
-					CERT_NAME_BLOB	cnb;
-					bytestring::zero(&cnb,sizeof(cnb));
-					cnb.pbData=buffer;
-					cnb.cbData=buffersize;
-
-					CRYPT_KEY_PROV_INFO	ckpi;
-					bytestring::zero(&ckpi,sizeof(ckpi));
-					ckpi.pwszContainerName=NULL;
-					ckpi.pwszProvName=NULL;
-					ckpi.dwProvType=PROV_RSA_FULL;
-					ckpi.dwFlags=CRYPT_MACHINE_KEYSET;
-					ckpi.cProvParam=0;
-					ckpi.rgProvParam=NULL;
-					ckpi.dwKeySpec=AT_SIGNATURE;
-
-					CRYPT_ALGORITHM_IDENTIFIER	cai;
-					bytestring::zero(&cai,sizeof(cai));
-					cai.pszObjId=szOID_RSA_SHA1RSA;
-
-					SYSTEMTIME	expiration;
-					GetSystemTime(&expiration);
-					expiration.wYear+=10;
-
-					PCCERT_CONTEXT	cctx=
-						CertCreateSelfSignCertificate(
-								NULL,
-								&cnb,0,
-								&ckpi,
-								&cai,0,
-								&expiration,0);
-					if (cctx) {
-						pvt->_cctx=
-							new PCCERT_CONTEXT[1];
-						pvt->_cctx[0]=cctx;
-						pvt->_cctxcount=1;
-						loadedcert=true;
-					} else {
-						retval=false;
-					}
-				}
-
-				// clean up...
-				if (buffer) {
-					delete[] buffer;
-				}
-				if (key) {
-					CryptDestroyKey(key);
-				}
-				if (cp) {
-					CryptReleaseContext(cp,0);
-				}
-
-				// catch errors
-				if (!retval) {
-					char	*errstr=
-						error::getNativeErrorString();
-					setError(error::getNativeErrorNumber(),
-									errstr);
-					delete[] errstr;
-				}
-			//}
-		}
-
-		if (retval && loadedcert) {
-			flags|=SCH_CRED_NO_DEFAULT_CREDS;
-		}
-
-if (pvt->_cctx[0]) {
-	HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
-	DWORD				keyspec;
-	BOOL				flag=FALSE;
-	if (!CryptAcquireCertificatePrivateKey(pvt->_cctx[0],
-						0,NULL,&kh,&keyspec,&flag)) {
-		stdoutput.printf("failed to load private key from cert\n");
-	} else {
-		stdoutput.printf("loaded private key from cert successfully\n");
-	}
-}
-
-		// FIXME: A client can use default creds, but a server must
-		// have a valid certificate loaded.  Just setting
-		// SCH_CRED_USE_DEFAULT_CREDS isn't sufficient.  Both sides
-		// will eventually fail with SEC_E_ALGORITHM_MISMATCH.
 
 		#ifdef DEBUG_TLS
 			stdoutput.printf("  cert store: %s - (%s)\n",
@@ -947,6 +928,11 @@ if (pvt->_cctx[0]) {
 			stdoutput.printf("  dh key exchange: %s\n",
 					(usedh)?"yes":"no");
 			stdoutput.printf("}\n");
+
+			if (pvt->_cctx) {
+				tlscertificate	cert;
+				cert.setCertificate(pvt->_cctx[0]->pCertInfo);
+			}
 		#endif
 
 
@@ -1169,6 +1155,16 @@ void tlscontext::setError(int32_t ret) {
 	#endif
 }
 
+void tlscontext::setNativeError() {
+	#if defined(RUDIMENTS_HAS_SSPI)
+		pvt->_errorstr.clear();
+		pvt->_error=error::getNativeErrorNumber();
+		char	*errstr=error::getNativeErrorString();
+		pvt->_errorstr.append(errstr);
+		delete[] errstr;
+	#endif
+}
+
 void tlscontext::setError(int32_t err, const char *errstr) {
 	pvt->_error=err;
 	pvt->_errorstr.clear();
@@ -1189,47 +1185,228 @@ class tlscertificateprivate {
 	friend class tlscertificate;
 	private:
 		#if defined(RUDIMENTS_HAS_SSL)
-			X509	*_cert;
-			char	_commonname[1024];
+			X509		*_cert;
 		#elif defined(RUDIMENTS_HAS_SSPI)
+			CERT_INFO	*_cert;
 		#endif
+		uint32_t	_version;
+		uint64_t	_serialnumber;
+		char		*_sigalg;
+		char		*_issuer;
+		datetime	_validfrom;
+		datetime	_validto;
+		char		*_subject;
+		char		*_commonname;
+		char		*_pkalg;
+		unsigned char	*_pk;
+		uint64_t	_pklen;
+		uint64_t	_pkbits;
+		// FIXME: issuer unique id
+		// FIXME: subject unique id
+		// FIXME: extensions
 };
 
 tlscertificate::tlscertificate() {
 	pvt=new tlscertificateprivate;
-	#if defined(RUDIMENTS_HAS_SSL)
-		pvt->_cert=NULL;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-	#endif
+	pvt->_cert=NULL;
+	pvt->_version=0;
+	pvt->_serialnumber=0;
+	pvt->_sigalg=NULL;
+	pvt->_issuer=NULL;
+	pvt->_subject=NULL;
+	pvt->_commonname=NULL;
+	pvt->_pkalg=NULL;
+	pvt->_pk=NULL;
+	pvt->_pklen=0;
+	pvt->_pkbits=0;
 }
 
 tlscertificate::~tlscertificate() {
 	#if defined(RUDIMENTS_HAS_SSL)
+		free(pvt->_issuer);
+		free(pvt->_subject);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		delete[] pvt->_sigalg;
+		delete[] pvt->_issuer;
+		delete[] pvt->_subject;
+		delete[] pvt->_pkalg;
+		delete[] pvt->_pk;
 	#endif
 }
 
+uint32_t tlscertificate::getVersion() {
+	return pvt->_version;
+}
+
+uint64_t tlscertificate::getSerialNumber() {
+	return pvt->_serialnumber;
+}
+
+const char *tlscertificate::getSignatureAlgorithm() {
+	return pvt->_sigalg;
+}
+
+const char *tlscertificate::getIssuer() {
+	return pvt->_issuer;
+}
+
+const char *tlscertificate::getSubject() {
+	return pvt->_subject;
+}
+
 const char *tlscertificate::getCommonName() {
-	#if defined(RUDIMENTS_HAS_SSL)
-		return (!pvt->_cert ||
-			// FIXME: X509_NAME_get_text_by_NID is deprecated
-			X509_NAME_get_text_by_NID(
-				X509_get_subject_name(pvt->_cert),
-				NID_commonName,
-				pvt->_commonname,
-				sizeof(pvt->_commonname))==-1)?
-				NULL:pvt->_commonname;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		return NULL;
-	#else
-		return NULL;
-	#endif
+	return pvt->_commonname;
+}
+
+const char *tlscertificate::getPrivateKeyAlgorithm() {
+	return pvt->_pkalg;
+}
+
+const unsigned char *tlscertificate::getPrivateKey() {
+	return pvt->_pk;
+}
+
+uint64_t tlscertificate::getPrivateKeyByteLength() {
+	return pvt->_pklen;
+}
+
+uint64_t tlscertificate::getPrivateKeyBitLength() {
+	return pvt->_pkbits;
 }
 
 void tlscertificate::setCertificate(void *cert) {
 	#if defined(RUDIMENTS_HAS_SSL)
+
 		pvt->_cert=(X509 *)cert;
+
+		// FIXME: version
+		// FIXME: serial number
+		// FIXME: signature algorithm
+
+		// get the issuer
+		X409_NAME	*issuer=X509_get_issuer_name(pvt->_cert);
+		pvt->_issuer=X509_NAME_oneline(issuer,NULL,0);
+
+		// FIXME: valid-from
+		// FIXME: valid-to
+
+		// get the subject
+		X409_NAME	*subject=X509_get_subject_name(pvt->_cert);
+		pvt->_subject=X509_NAME_oneline(subject,NULL,0);
+
+		// FIXME: public key info
+		// FIXME: issuer unique id
+		// FIXME: subject unique id
+		// FIXME: extensions
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
+
+		pvt->_cert=(CERT_INFO *)cert;
+
+		// get the version
+		switch (pvt->_cert->dwVersion) {
+			case CERT_V2:
+				pvt->_version=2;
+			case CERT_V3:
+				pvt->_version=3;
+			default:
+				pvt->_version=1;
+		}
+
+		// get the serial number
+		pvt->_serialnumber=0;
+		for (DWORD i=0; i<pvt->_cert->SerialNumber.cbData && i<4; i++) {
+			pvt->_serialnumber=(pvt->_serialnumber<<8)|
+				(uint64_t)(pvt->_cert->SerialNumber.pbData[i]);
+		}
+
+		// signature algorithm
+		pvt->_sigalg=charstring::duplicate(
+				pvt->_cert->SignatureAlgorithm.pszObjId);
+		// FIXME: signature algorithm parameters
+
+		// get the issuer
+		DWORD	size=CertNameToStr(X509_ASN_ENCODING,
+					&pvt->_cert->Issuer,
+					CERT_X500_NAME_STR,NULL,0);
+		pvt->_issuer=new char[size];
+		CertNameToStr(X509_ASN_ENCODING,
+					&pvt->_cert->Issuer,
+					CERT_X500_NAME_STR,
+					pvt->_issuer,size);
+
+		// get valid-from
+		// (see datetime::getSystemDateAndTime)
+		uint64_t	t=
+		(((((uint64_t)pvt->_cert->NotBefore.dwHighDateTime)<<32)|
+				pvt->_cert->NotBefore.dwLowDateTime)/10)-
+				11644473600000000ULL;
+		pvt->_validfrom.initialize(t/1000000,t%1000000);
+
+		// get valid-to
+		t=(((((uint64_t)pvt->_cert->NotAfter.dwHighDateTime)<<32)|
+				pvt->_cert->NotAfter.dwLowDateTime)/10)-
+				11644473600000000ULL;
+		pvt->_validto.initialize(t/1000000,t%1000000);
+
+		// get the subject
+		size=CertNameToStr(X509_ASN_ENCODING,
+				&pvt->_cert->Subject,
+				CERT_X500_NAME_STR,NULL,0);
+		pvt->_subject=new char[size];
+		CertNameToStr(X509_ASN_ENCODING,
+				&pvt->_cert->Subject,
+				CERT_X500_NAME_STR,
+				pvt->_subject,size);
+
+		// public key algorithm
+		pvt->_pkalg=charstring::duplicate(
+			pvt->_cert->SubjectPublicKeyInfo.Algorithm.pszObjId);
+		// FIXME: public key algorithm parameters
+
+		// public key...
+		pvt->_pklen=pvt->_cert->SubjectPublicKeyInfo.
+						PublicKey.cbData;
+		pvt->_pk=(unsigned char *)
+			bytestring::duplicate(
+			pvt->_cert->SubjectPublicKeyInfo.PublicKey.pbData,
+			pvt->_pklen);
+		pvt->_pkbits=(pvt->_pklen*8)-pvt->_cert->SubjectPublicKeyInfo.
+							PublicKey.cUnusedBits;
+
+		// FIXME: issuer unique id
+		// FIXME: subject unique id
+		// FIXME: extensions
 	#else
+	#endif
+
+	// get the common name
+	const char	*cn=charstring::findFirst(pvt->_subject,"CN=");
+	if (cn) {
+		pvt->_commonname=charstring::duplicate(cn+3);
+		char	*end=charstring::findFirstOrEnd(pvt->_commonname,",");
+		if (end) {
+			*end='\0';
+		}
+	}
+
+	#ifdef DEBUG_TLS
+		stdoutput.printf("certificate {\n");
+		stdoutput.printf("  version: %d\n",pvt->_version);
+		stdoutput.printf("  serial number: %lld\n",pvt->_serialnumber);
+		stdoutput.printf("  signature algorithm: %s\n",pvt->_sigalg);
+		stdoutput.printf("  issuer: %s\n",pvt->_issuer);
+		stdoutput.printf("  valid-from: %s\n",
+					pvt->_validfrom.getString());
+		stdoutput.printf("  valid-to: %s\n",
+					pvt->_validto.getString());
+		stdoutput.printf("  subject: %s\n",pvt->_subject);
+		stdoutput.printf("  public key algorithm: %s\n",pvt->_pkalg);
+		stdoutput.printf("  public key:\n");
+		stdoutput.safePrint(pvt->_pk,pvt->_pklen);
+		stdoutput.printf("\n");
+		stdoutput.printf("  public key bits: %lld\n",pvt->_pkbits);
+		stdoutput.printf("  common name: %s\n",pvt->_commonname);
+		stdoutput.printf("}\n");
 	#endif
 }
