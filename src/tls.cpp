@@ -1284,14 +1284,14 @@ void tlscertificate::setCertificate(void *cert) {
 		// FIXME: signature algorithm
 
 		// get the issuer
-		X409_NAME	*issuer=X509_get_issuer_name(pvt->_cert);
+		X509_NAME	*issuer=X509_get_issuer_name(pvt->_cert);
 		pvt->_issuer=X509_NAME_oneline(issuer,NULL,0);
 
 		// FIXME: valid-from
 		// FIXME: valid-to
 
 		// get the subject
-		X409_NAME	*subject=X509_get_subject_name(pvt->_cert);
+		X509_NAME	*subject=X509_get_subject_name(pvt->_cert);
 		pvt->_subject=X509_NAME_oneline(subject,NULL,0);
 
 		// FIXME: public key info
