@@ -10,6 +10,7 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/stdio.h>
 #include <rudiments/bytebuffer.h>
+#include <rudiments/error.h>
 #include <rudiments/gss.h>
 
 //#define DEBUG_GSS 1
@@ -126,27 +127,17 @@ const char * const *gss::getAvailableMechanisms() {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// FIXME: this is overly complex, but hopefully there's
-		// a programatic way of getting this list that this can
-		// easily be adapted to
-		// see EnumerateSecurityPackages
-		const char	*mechs[]={
-					"Negotiate",
-					"Kerberos",
-					"NTLM",
-					"Digest",
-					"Schannel",
-					NULL
-		};
-		pvt->_mechs=new char *[6+1];
-		size_t	i=0;
-		for (const char * const *m=mechs; *m; m++) {
-			pvt->_mechs[i++]=charstring::duplicate(*m);
+		ULONG		packagecount;
+		PSecPkgInfo	packages;
+		EnumerateSecurityPackages(&packagecount,&packages);
+		pvt->_mechs=new char *[packagecount+1];
+		for (ULONG i=0; i<packagecount; i++) {
+			pvt->_mechs[i]=charstring::duplicate(packages[i].Name);
 			#ifdef DEBUG_GSS
-				stdoutput.printf("  %s\n",*m);
+				stdoutput.printf("  %s\n",pvt->_mechs[i]);
 			#endif
 		}
-		pvt->_mechs[i]=NULL;
+		pvt->_mechs[packagecount]=NULL;
 
 	#endif
 
@@ -175,6 +166,266 @@ bool gss::supportsGSS() {
 	#else
 		return false;
 	#endif
+}
+
+const char *gss::getSspiStatusString(uint32_t status) {
+
+	switch (status) {
+		case SEC_E_INSUFFICIENT_MEMORY:
+			return "SEC_E_INSUFFICIENT_MEMORY";
+			break;
+		case SEC_E_INVALID_HANDLE:
+			return "SEC_E_INVALID_HANDLE";
+			break;
+		case SEC_E_UNSUPPORTED_FUNCTION:
+			return "SEC_E_UNSUPPORTED_FUNCTION";
+			break;
+		case SEC_E_TARGET_UNKNOWN:
+			return "SEC_E_TARGET_UNKNOWN";
+			break;
+		case SEC_E_INTERNAL_ERROR:
+			return "SEC_E_INTERNAL_ERROR";
+			break;
+		case SEC_E_SECPKG_NOT_FOUND:
+			return "SEC_E_SECPKG_NOT_FOUND";
+			break;
+		case SEC_E_NOT_OWNER:
+			return "SEC_E_NOT_OWNER";
+			break;
+		case SEC_E_CANNOT_INSTALL:
+			return "SEC_E_CANNOT_INSTALL";
+			break;
+		case SEC_E_INVALID_TOKEN:
+			return "SEC_E_INVALID_TOKEN";
+			break;
+		case SEC_E_CANNOT_PACK:
+			return "SEC_E_CANNOT_PACK";
+			break;
+		case SEC_E_QOP_NOT_SUPPORTED:
+			return "SEC_E_QOP_NOT_SUPPORTED";
+			break;
+		case SEC_E_NO_IMPERSONATION:
+			return "SEC_E_NO_IMPERSONATION";
+			break;
+		case SEC_E_LOGON_DENIED:
+			return "SEC_E_LOGON_DENIED";
+			break;
+		case SEC_E_UNKNOWN_CREDENTIALS:
+			return "SEC_E_UNKNOWN_CREDENTIALS";
+			break;
+		case SEC_E_NO_CREDENTIALS:
+			return "SEC_E_NO_CREDENTIALS";
+			break;
+		case SEC_E_MESSAGE_ALTERED:
+			return "SEC_E_MESSAGE_ALTERED";
+			break;
+		case SEC_E_OUT_OF_SEQUENCE:
+			return "SEC_E_OUT_OF_SEQUENCE";
+			break;
+		case SEC_E_NO_AUTHENTICATING_AUTHORITY:
+			return "SEC_E_NO_AUTHENTICATING_AUTHORITY";
+			break;
+		case SEC_I_CONTINUE_NEEDED:
+			return "SEC_I_CONTINUE_NEEDED";
+			break;
+		case SEC_I_COMPLETE_NEEDED:
+			return "SEC_I_COMPLETE_NEEDED";
+			break;
+		case SEC_I_COMPLETE_AND_CONTINUE:
+			return "SEC_I_COMPLETE_AND_CONTINUE";
+			break;
+		case SEC_I_LOCAL_LOGON:
+			return "SEC_I_LOCAL_LOGON";
+			break;
+		case SEC_E_BAD_PKGID:
+			return "SEC_E_BAD_PKGID";
+			break;
+		case SEC_E_CONTEXT_EXPIRED:
+			return "SEC_E_CONTEXT_EXPIRED";
+			break;
+		case SEC_I_CONTEXT_EXPIRED:
+			return "SEC_I_CONTEXT_EXPIRED";
+			break;
+		case SEC_E_INCOMPLETE_MESSAGE:
+			return "SEC_E_INCOMPLETE_MESSAGE";
+			break;
+		case SEC_E_INCOMPLETE_CREDENTIALS:
+			return "SEC_E_INCOMPLETE_CREDENTIALS";
+			break;
+		case SEC_E_BUFFER_TOO_SMALL:
+			return "SEC_E_BUFFER_TOO_SMALL";
+			break;
+		case SEC_I_INCOMPLETE_CREDENTIALS:
+			return "SEC_I_INCOMPLETE_CREDENTIALS";
+			break;
+		case SEC_I_RENEGOTIATE:
+			return "SEC_I_RENEGOTIATE";
+			break;
+		case SEC_E_WRONG_PRINCIPAL:
+			return "SEC_E_WRONG_PRINCIPAL";
+			break;
+		case SEC_I_NO_LSA_CONTEXT:
+			return "SEC_I_NO_LSA_CONTEXT";
+			break;
+		case SEC_E_TIME_SKEW:
+			return "SEC_E_TIME_SKEW";
+			break;
+		case SEC_E_UNTRUSTED_ROOT:
+			return "SEC_E_UNTRUSTED_ROOT";
+			break;
+		case SEC_E_ILLEGAL_MESSAGE:
+			return "SEC_E_ILLEGAL_MESSAGE";
+			break;
+		case SEC_E_CERT_UNKNOWN:
+			return "SEC_E_CERT_UNKNOWN";
+			break;
+		case SEC_E_CERT_EXPIRED:
+			return "SEC_E_CERT_EXPIRED";
+			break;
+		case SEC_E_ENCRYPT_FAILURE:
+			return "SEC_E_ENCRYPT_FAILURE";
+			break;
+		case SEC_E_DECRYPT_FAILURE:
+			return "SEC_E_DECRYPT_FAILURE";
+			break;
+		case SEC_E_ALGORITHM_MISMATCH:
+			return "SEC_E_ALGORITHM_MISMATCH";
+			break;
+		case SEC_E_SECURITY_QOS_FAILED:
+			return "SEC_E_SECURITY_QOS_FAILED";
+			break;
+		case SEC_E_UNFINISHED_CONTEXT_DELETED:
+			return "SEC_E_UNFINISHED_CONTEXT_DELETED";
+			break;
+		case SEC_E_NO_TGT_REPLY:
+			return "SEC_E_NO_TGT_REPLY";
+			break;
+		case SEC_E_NO_IP_ADDRESSES:
+			return "SEC_E_NO_IP_ADDRESSES";
+			break;
+		case SEC_E_WRONG_CREDENTIAL_HANDLE:
+			return "SEC_E_WRONG_CREDENTIAL_HANDLE";
+			break;
+		case SEC_E_CRYPTO_SYSTEM_INVALID:
+			return "SEC_E_CRYPTO_SYSTEM_INVALID";
+			break;
+		case SEC_E_MAX_REFERRALS_EXCEEDED:
+			return "SEC_E_MAX_REFERRALS_EXCEEDED";
+			break;
+		case SEC_E_MUST_BE_KDC:
+			return "SEC_E_MUST_BE_KDC";
+			break;
+		case SEC_E_STRONG_CRYPTO_NOT_SUPPORTED:
+			return "SEC_E_STRONG_CRYPTO_NOT_SUPPORTED";
+			break;
+		case SEC_E_TOO_MANY_PRINCIPALS:
+			return "SEC_E_TOO_MANY_PRINCIPALS";
+			break;
+		case SEC_E_NO_PA_DATA:
+			return "SEC_E_NO_PA_DATA";
+			break;
+		case SEC_E_PKINIT_NAME_MISMATCH:
+			return "SEC_E_PKINIT_NAME_MISMATCH";
+			break;
+		case SEC_E_SMARTCARD_LOGON_REQUIRED:
+			return "SEC_E_SMARTCARD_LOGON_REQUIRED";
+			break;
+		case SEC_E_SHUTDOWN_IN_PROGRESS:
+			return "SEC_E_SHUTDOWN_IN_PROGRESS";
+			break;
+		case SEC_E_KDC_INVALID_REQUEST:
+			return "SEC_E_KDC_INVALID_REQUEST";
+			break;
+		case SEC_E_KDC_UNABLE_TO_REFER:
+			return "SEC_E_KDC_UNABLE_TO_REFER";
+			break;
+		case SEC_E_KDC_UNKNOWN_ETYPE:
+			return "SEC_E_KDC_UNKNOWN_ETYPE";
+			break;
+		case SEC_E_UNSUPPORTED_PREAUTH:
+			return "SEC_E_UNSUPPORTED_PREAUTH";
+			break;
+		case SEC_E_DELEGATION_REQUIRED:
+			return "SEC_E_DELEGATION_REQUIRED";
+			break;
+		case SEC_E_BAD_BINDINGS:
+			return "SEC_E_BAD_BINDINGS";
+			break;
+		case SEC_E_MULTIPLE_ACCOUNTS:
+			return "SEC_E_MULTIPLE_ACCOUNTS";
+			break;
+		case SEC_E_NO_KERB_KEY:
+			return "SEC_E_NO_KERB_KEY";
+			break;
+		case SEC_E_CERT_WRONG_USAGE:
+			return "SEC_E_CERT_WRONG_USAGE";
+			break;
+		case SEC_E_DOWNGRADE_DETECTED:
+			return "SEC_E_DOWNGRADE_DETECTED";
+			break;
+		case SEC_E_SMARTCARD_CERT_REVOKED:
+			return "SEC_E_SMARTCARD_CERT_REVOKED";
+			break;
+		case SEC_E_ISSUING_CA_UNTRUSTED:
+			return "SEC_E_ISSUING_CA_UNTRUSTED";
+			break;
+		case SEC_E_REVOCATION_OFFLINE_C:
+			return "SEC_E_REVOCATION_OFFLINE_C";
+			break;
+		case SEC_E_PKINIT_CLIENT_FAILURE:
+			return "SEC_E_PKINIT_CLIENT_FAILURE";
+			break;
+		case SEC_E_SMARTCARD_CERT_EXPIRED:
+			return "SEC_E_SMARTCARD_CERT_EXPIRED";
+			break;
+		case SEC_E_NO_S4U_PROT_SUPPORT:
+			return "SEC_E_NO_S4U_PROT_SUPPORT";
+			break;
+		case SEC_E_CROSSREALM_DELEGATION_FAILURE:
+			return "SEC_E_CROSSREALM_DELEGATION_FAILURE";
+			break;
+		case SEC_E_REVOCATION_OFFLINE_KDC:
+			return "SEC_E_REVOCATION_OFFLINE_KDC";
+			break;
+		case SEC_E_ISSUING_CA_UNTRUSTED_KDC:
+			return "SEC_E_ISSUING_CA_UNTRUSTED_KDC";
+			break;
+		case SEC_E_KDC_CERT_EXPIRED:
+			return "SEC_E_KDC_CERT_EXPIRED";
+			break;
+		case SEC_E_KDC_CERT_REVOKED:
+			return "SEC_E_KDC_CERT_REVOKED";
+			break;
+		case SEC_I_SIGNATURE_NEEDED:
+			return "SEC_I_SIGNATURE_NEEDED";
+			break;
+		case SEC_E_INVALID_PARAMETER:
+			return "SEC_E_INVALID_PARAMETER";
+			break;
+		case SEC_E_DELEGATION_POLICY:
+			return "SEC_E_DELEGATION_POLICY";
+			break;
+		case SEC_E_POLICY_NLTM_ONLY:
+			return "SEC_E_POLICY_NLTM_ONLY";
+			break;
+		case SEC_I_NO_RENEGOTIATION:
+			return "SEC_I_NO_RENEGOTIATION";
+			break;
+		case SEC_E_NO_CONTEXT:
+			return "SEC_E_NO_CONTEXT";
+			break;
+		case SEC_E_PKU2U_CERT_FAILURE:
+			return "SEC_E_PKU2U_CERT_FAILURE";
+			break;
+		case SEC_E_MUTUAL_AUTH_FAILED:
+			return "SEC_E_MUTUAL_AUTH_FAILED";
+			break;
+		case SEC_E_OK:
+			return "SEC_E_OK";
+			break;
+		default:
+			return "";
+	}
 }
 
 
@@ -1057,264 +1308,13 @@ void gsscredentials::setStatus(uint32_t status, int32_t type) {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		const char	*str="";
-		switch (status) {
-			case SEC_E_INSUFFICIENT_MEMORY:
-				str="SEC_E_INSUFFICIENT_MEMORY";
-				break;
-			case SEC_E_INVALID_HANDLE:
-				str="SEC_E_INVALID_HANDLE";
-				break;
-			case SEC_E_UNSUPPORTED_FUNCTION:
-				str="SEC_E_UNSUPPORTED_FUNCTION";
-				break;
-			case SEC_E_TARGET_UNKNOWN:
-				str="SEC_E_TARGET_UNKNOWN";
-				break;
-			case SEC_E_INTERNAL_ERROR:
-				str="SEC_E_INTERNAL_ERROR";
-				break;
-			case SEC_E_SECPKG_NOT_FOUND:
-				str="SEC_E_SECPKG_NOT_FOUND";
-				break;
-			case SEC_E_NOT_OWNER:
-				str="SEC_E_NOT_OWNER";
-				break;
-			case SEC_E_CANNOT_INSTALL:
-				str="SEC_E_CANNOT_INSTALL";
-				break;
-			case SEC_E_INVALID_TOKEN:
-				str="SEC_E_INVALID_TOKEN";
-				break;
-			case SEC_E_CANNOT_PACK:
-				str="SEC_E_CANNOT_PACK";
-				break;
-			case SEC_E_QOP_NOT_SUPPORTED:
-				str="SEC_E_QOP_NOT_SUPPORTED";
-				break;
-			case SEC_E_NO_IMPERSONATION:
-				str="SEC_E_NO_IMPERSONATION";
-				break;
-			case SEC_E_LOGON_DENIED:
-				str="SEC_E_LOGON_DENIED";
-				break;
-			case SEC_E_UNKNOWN_CREDENTIALS:
-				str="SEC_E_UNKNOWN_CREDENTIALS";
-				break;
-			case SEC_E_NO_CREDENTIALS:
-				str="SEC_E_NO_CREDENTIALS";
-				break;
-			case SEC_E_MESSAGE_ALTERED:
-				str="SEC_E_MESSAGE_ALTERED";
-				break;
-			case SEC_E_OUT_OF_SEQUENCE:
-				str="SEC_E_OUT_OF_SEQUENCE";
-				break;
-			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
-				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
-				break;
-			case SEC_I_CONTINUE_NEEDED:
-				str="SEC_I_CONTINUE_NEEDED";
-				break;
-			case SEC_I_COMPLETE_NEEDED:
-				str="SEC_I_COMPLETE_NEEDED";
-				break;
-			case SEC_I_COMPLETE_AND_CONTINUE:
-				str="SEC_I_COMPLETE_AND_CONTINUE";
-				break;
-			case SEC_I_LOCAL_LOGON:
-				str="SEC_I_LOCAL_LOGON";
-				break;
-			case SEC_E_BAD_PKGID:
-				str="SEC_E_BAD_PKGID";
-				break;
-			case SEC_E_CONTEXT_EXPIRED:
-				str="SEC_E_CONTEXT_EXPIRED";
-				break;
-			case SEC_I_CONTEXT_EXPIRED:
-				str="SEC_I_CONTEXT_EXPIRED";
-				break;
-			case SEC_E_INCOMPLETE_MESSAGE:
-				str="SEC_E_INCOMPLETE_MESSAGE";
-				break;
-			case SEC_E_INCOMPLETE_CREDENTIALS:
-				str="SEC_E_INCOMPLETE_CREDENTIALS";
-				break;
-			case SEC_E_BUFFER_TOO_SMALL:
-				str="SEC_E_BUFFER_TOO_SMALL";
-				break;
-			case SEC_I_INCOMPLETE_CREDENTIALS:
-				str="SEC_I_INCOMPLETE_CREDENTIALS";
-				break;
-			case SEC_I_RENEGOTIATE:
-				str="SEC_I_RENEGOTIATE";
-				break;
-			case SEC_E_WRONG_PRINCIPAL:
-				str="SEC_E_WRONG_PRINCIPAL";
-				break;
-			case SEC_I_NO_LSA_CONTEXT:
-				str="SEC_I_NO_LSA_CONTEXT";
-				break;
-			case SEC_E_TIME_SKEW:
-				str="SEC_E_TIME_SKEW";
-				break;
-			case SEC_E_UNTRUSTED_ROOT:
-				str="SEC_E_UNTRUSTED_ROOT";
-				break;
-			case SEC_E_ILLEGAL_MESSAGE:
-				str="SEC_E_ILLEGAL_MESSAGE";
-				break;
-			case SEC_E_CERT_UNKNOWN:
-				str="SEC_E_CERT_UNKNOWN";
-				break;
-			case SEC_E_CERT_EXPIRED:
-				str="SEC_E_CERT_EXPIRED";
-				break;
-			case SEC_E_ENCRYPT_FAILURE:
-				str="SEC_E_ENCRYPT_FAILURE";
-				break;
-			case SEC_E_DECRYPT_FAILURE:
-				str="SEC_E_DECRYPT_FAILURE";
-				break;
-			case SEC_E_ALGORITHM_MISMATCH:
-				str="SEC_E_ALGORITHM_MISMATCH";
-				break;
-			case SEC_E_SECURITY_QOS_FAILED:
-				str="SEC_E_SECURITY_QOS_FAILED";
-				break;
-			case SEC_E_UNFINISHED_CONTEXT_DELETED:
-				str="SEC_E_UNFINISHED_CONTEXT_DELETED";
-				break;
-			case SEC_E_NO_TGT_REPLY:
-				str="SEC_E_NO_TGT_REPLY";
-				break;
-			case SEC_E_NO_IP_ADDRESSES:
-				str="SEC_E_NO_IP_ADDRESSES";
-				break;
-			case SEC_E_WRONG_CREDENTIAL_HANDLE:
-				str="SEC_E_WRONG_CREDENTIAL_HANDLE";
-				break;
-			case SEC_E_CRYPTO_SYSTEM_INVALID:
-				str="SEC_E_CRYPTO_SYSTEM_INVALID";
-				break;
-			case SEC_E_MAX_REFERRALS_EXCEEDED:
-				str="SEC_E_MAX_REFERRALS_EXCEEDED";
-				break;
-			case SEC_E_MUST_BE_KDC:
-				str="SEC_E_MUST_BE_KDC";
-				break;
-			case SEC_E_STRONG_CRYPTO_NOT_SUPPORTED:
-				str="SEC_E_STRONG_CRYPTO_NOT_SUPPORTED";
-				break;
-			case SEC_E_TOO_MANY_PRINCIPALS:
-				str="SEC_E_TOO_MANY_PRINCIPALS";
-				break;
-			case SEC_E_NO_PA_DATA:
-				str="SEC_E_NO_PA_DATA";
-				break;
-			case SEC_E_PKINIT_NAME_MISMATCH:
-				str="SEC_E_PKINIT_NAME_MISMATCH";
-				break;
-			case SEC_E_SMARTCARD_LOGON_REQUIRED:
-				str="SEC_E_SMARTCARD_LOGON_REQUIRED";
-				break;
-			case SEC_E_SHUTDOWN_IN_PROGRESS:
-				str="SEC_E_SHUTDOWN_IN_PROGRESS";
-				break;
-			case SEC_E_KDC_INVALID_REQUEST:
-				str="SEC_E_KDC_INVALID_REQUEST";
-				break;
-			case SEC_E_KDC_UNABLE_TO_REFER:
-				str="SEC_E_KDC_UNABLE_TO_REFER";
-				break;
-			case SEC_E_KDC_UNKNOWN_ETYPE:
-				str="SEC_E_KDC_UNKNOWN_ETYPE";
-				break;
-			case SEC_E_UNSUPPORTED_PREAUTH:
-				str="SEC_E_UNSUPPORTED_PREAUTH";
-				break;
-			case SEC_E_DELEGATION_REQUIRED:
-				str="SEC_E_DELEGATION_REQUIRED";
-				break;
-			case SEC_E_BAD_BINDINGS:
-				str="SEC_E_BAD_BINDINGS";
-				break;
-			case SEC_E_MULTIPLE_ACCOUNTS:
-				str="SEC_E_MULTIPLE_ACCOUNTS";
-				break;
-			case SEC_E_NO_KERB_KEY:
-				str="SEC_E_NO_KERB_KEY";
-				break;
-			case SEC_E_CERT_WRONG_USAGE:
-				str="SEC_E_CERT_WRONG_USAGE";
-				break;
-			case SEC_E_DOWNGRADE_DETECTED:
-				str="SEC_E_DOWNGRADE_DETECTED";
-				break;
-			case SEC_E_SMARTCARD_CERT_REVOKED:
-				str="SEC_E_SMARTCARD_CERT_REVOKED";
-				break;
-			case SEC_E_ISSUING_CA_UNTRUSTED:
-				str="SEC_E_ISSUING_CA_UNTRUSTED";
-				break;
-			case SEC_E_REVOCATION_OFFLINE_C:
-				str="SEC_E_REVOCATION_OFFLINE_C";
-				break;
-			case SEC_E_PKINIT_CLIENT_FAILURE:
-				str="SEC_E_PKINIT_CLIENT_FAILURE";
-				break;
-			case SEC_E_SMARTCARD_CERT_EXPIRED:
-				str="SEC_E_SMARTCARD_CERT_EXPIRED";
-				break;
-			case SEC_E_NO_S4U_PROT_SUPPORT:
-				str="SEC_E_NO_S4U_PROT_SUPPORT";
-				break;
-			case SEC_E_CROSSREALM_DELEGATION_FAILURE:
-				str="SEC_E_CROSSREALM_DELEGATION_FAILURE";
-				break;
-			case SEC_E_REVOCATION_OFFLINE_KDC:
-				str="SEC_E_REVOCATION_OFFLINE_KDC";
-				break;
-			case SEC_E_ISSUING_CA_UNTRUSTED_KDC:
-				str="SEC_E_ISSUING_CA_UNTRUSTED_KDC";
-				break;
-			case SEC_E_KDC_CERT_EXPIRED:
-				str="SEC_E_KDC_CERT_EXPIRED";
-				break;
-			case SEC_E_KDC_CERT_REVOKED:
-				str="SEC_E_KDC_CERT_REVOKED";
-				break;
-			case SEC_I_SIGNATURE_NEEDED:
-				str="SEC_I_SIGNATURE_NEEDED";
-				break;
-			case SEC_E_INVALID_PARAMETER:
-				str="SEC_E_INVALID_PARAMETER";
-				break;
-			case SEC_E_DELEGATION_POLICY:
-				str="SEC_E_DELEGATION_POLICY";
-				break;
-			case SEC_E_POLICY_NLTM_ONLY:
-				str="SEC_E_POLICY_NLTM_ONLY";
-				break;
-			case SEC_I_NO_RENEGOTIATION:
-				str="SEC_I_NO_RENEGOTIATION";
-				break;
-			case SEC_E_NO_CONTEXT:
-				str="SEC_E_NO_CONTEXT";
-				break;
-			case SEC_E_PKU2U_CERT_FAILURE:
-				str="SEC_E_PKU2U_CERT_FAILURE";
-				break;
-			case SEC_E_MUTUAL_AUTH_FAILED:
-				str="SEC_E_MUTUAL_AUTH_FAILED";
-				break;
-			case SEC_E_OK:
-				str="SEC_E_OK";
-				break;
-			default:
-				str="";
-		}
+		const char	*str=gss::getSspiStatusString(status);
 		pvt->_status.append(str)->append("\n");
+		if (error::getNativeErrorNumber()) {
+			char	*errstr=error::getNativeErrorString();
+			pvt->_status.append(errstr)->append("\n");
+			delete[] errstr;
+		}
 	#endif
 }
 
@@ -3675,16 +3675,6 @@ const char *gsscontext::getMechanismMinorStatus() {
 	return pvt->_status.getString();
 }
 
-void gsscontext::setMajorStatus(uint32_t status) {
-	// FIXME: This method is only used by the tls class.
-	// There should be a cleaner way to do what it needs to do.
-	#if defined(RUDIMENTS_HAS_GSS)
-		pvt->_major=status;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_sstatus=status;
-	#endif
-}
-
 void gsscontext::setStatus(uint32_t status, int32_t type) {
 
 	#if defined(RUDIMENTS_HAS_GSS)
@@ -3715,263 +3705,12 @@ void gsscontext::setStatus(uint32_t status, int32_t type) {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		const char	*str="";
-		switch (status) {
-			case SEC_E_INSUFFICIENT_MEMORY:
-				str="SEC_E_INSUFFICIENT_MEMORY";
-				break;
-			case SEC_E_INVALID_HANDLE:
-				str="SEC_E_INVALID_HANDLE";
-				break;
-			case SEC_E_UNSUPPORTED_FUNCTION:
-				str="SEC_E_UNSUPPORTED_FUNCTION";
-				break;
-			case SEC_E_TARGET_UNKNOWN:
-				str="SEC_E_TARGET_UNKNOWN";
-				break;
-			case SEC_E_INTERNAL_ERROR:
-				str="SEC_E_INTERNAL_ERROR";
-				break;
-			case SEC_E_SECPKG_NOT_FOUND:
-				str="SEC_E_SECPKG_NOT_FOUND";
-				break;
-			case SEC_E_NOT_OWNER:
-				str="SEC_E_NOT_OWNER";
-				break;
-			case SEC_E_CANNOT_INSTALL:
-				str="SEC_E_CANNOT_INSTALL";
-				break;
-			case SEC_E_INVALID_TOKEN:
-				str="SEC_E_INVALID_TOKEN";
-				break;
-			case SEC_E_CANNOT_PACK:
-				str="SEC_E_CANNOT_PACK";
-				break;
-			case SEC_E_QOP_NOT_SUPPORTED:
-				str="SEC_E_QOP_NOT_SUPPORTED";
-				break;
-			case SEC_E_NO_IMPERSONATION:
-				str="SEC_E_NO_IMPERSONATION";
-				break;
-			case SEC_E_LOGON_DENIED:
-				str="SEC_E_LOGON_DENIED";
-				break;
-			case SEC_E_UNKNOWN_CREDENTIALS:
-				str="SEC_E_UNKNOWN_CREDENTIALS";
-				break;
-			case SEC_E_NO_CREDENTIALS:
-				str="SEC_E_NO_CREDENTIALS";
-				break;
-			case SEC_E_MESSAGE_ALTERED:
-				str="SEC_E_MESSAGE_ALTERED";
-				break;
-			case SEC_E_OUT_OF_SEQUENCE:
-				str="SEC_E_OUT_OF_SEQUENCE";
-				break;
-			case SEC_E_NO_AUTHENTICATING_AUTHORITY:
-				str="SEC_E_NO_AUTHENTICATING_AUTHORITY";
-				break;
-			case SEC_I_CONTINUE_NEEDED:
-				str="SEC_I_CONTINUE_NEEDED";
-				break;
-			case SEC_I_COMPLETE_NEEDED:
-				str="SEC_I_COMPLETE_NEEDED";
-				break;
-			case SEC_I_COMPLETE_AND_CONTINUE:
-				str="SEC_I_COMPLETE_AND_CONTINUE";
-				break;
-			case SEC_I_LOCAL_LOGON:
-				str="SEC_I_LOCAL_LOGON";
-				break;
-			case SEC_E_BAD_PKGID:
-				str="SEC_E_BAD_PKGID";
-				break;
-			case SEC_E_CONTEXT_EXPIRED:
-				str="SEC_E_CONTEXT_EXPIRED";
-				break;
-			case SEC_I_CONTEXT_EXPIRED:
-				str="SEC_I_CONTEXT_EXPIRED";
-				break;
-			case SEC_E_INCOMPLETE_MESSAGE:
-				str="SEC_E_INCOMPLETE_MESSAGE";
-				break;
-			case SEC_E_INCOMPLETE_CREDENTIALS:
-				str="SEC_E_INCOMPLETE_CREDENTIALS";
-				break;
-			case SEC_E_BUFFER_TOO_SMALL:
-				str="SEC_E_BUFFER_TOO_SMALL";
-				break;
-			case SEC_I_INCOMPLETE_CREDENTIALS:
-				str="SEC_I_INCOMPLETE_CREDENTIALS";
-				break;
-			case SEC_I_RENEGOTIATE:
-				str="SEC_I_RENEGOTIATE";
-				break;
-			case SEC_E_WRONG_PRINCIPAL:
-				str="SEC_E_WRONG_PRINCIPAL";
-				break;
-			case SEC_I_NO_LSA_CONTEXT:
-				str="SEC_I_NO_LSA_CONTEXT";
-				break;
-			case SEC_E_TIME_SKEW:
-				str="SEC_E_TIME_SKEW";
-				break;
-			case SEC_E_UNTRUSTED_ROOT:
-				str="SEC_E_UNTRUSTED_ROOT";
-				break;
-			case SEC_E_ILLEGAL_MESSAGE:
-				str="SEC_E_ILLEGAL_MESSAGE";
-				break;
-			case SEC_E_CERT_UNKNOWN:
-				str="SEC_E_CERT_UNKNOWN";
-				break;
-			case SEC_E_CERT_EXPIRED:
-				str="SEC_E_CERT_EXPIRED";
-				break;
-			case SEC_E_ENCRYPT_FAILURE:
-				str="SEC_E_ENCRYPT_FAILURE";
-				break;
-			case SEC_E_DECRYPT_FAILURE:
-				str="SEC_E_DECRYPT_FAILURE";
-				break;
-			case SEC_E_ALGORITHM_MISMATCH:
-				str="SEC_E_ALGORITHM_MISMATCH";
-				break;
-			case SEC_E_SECURITY_QOS_FAILED:
-				str="SEC_E_SECURITY_QOS_FAILED";
-				break;
-			case SEC_E_UNFINISHED_CONTEXT_DELETED:
-				str="SEC_E_UNFINISHED_CONTEXT_DELETED";
-				break;
-			case SEC_E_NO_TGT_REPLY:
-				str="SEC_E_NO_TGT_REPLY";
-				break;
-			case SEC_E_NO_IP_ADDRESSES:
-				str="SEC_E_NO_IP_ADDRESSES";
-				break;
-			case SEC_E_WRONG_CREDENTIAL_HANDLE:
-				str="SEC_E_WRONG_CREDENTIAL_HANDLE";
-				break;
-			case SEC_E_CRYPTO_SYSTEM_INVALID:
-				str="SEC_E_CRYPTO_SYSTEM_INVALID";
-				break;
-			case SEC_E_MAX_REFERRALS_EXCEEDED:
-				str="SEC_E_MAX_REFERRALS_EXCEEDED";
-				break;
-			case SEC_E_MUST_BE_KDC:
-				str="SEC_E_MUST_BE_KDC";
-				break;
-			case SEC_E_STRONG_CRYPTO_NOT_SUPPORTED:
-				str="SEC_E_STRONG_CRYPTO_NOT_SUPPORTED";
-				break;
-			case SEC_E_TOO_MANY_PRINCIPALS:
-				str="SEC_E_TOO_MANY_PRINCIPALS";
-				break;
-			case SEC_E_NO_PA_DATA:
-				str="SEC_E_NO_PA_DATA";
-				break;
-			case SEC_E_PKINIT_NAME_MISMATCH:
-				str="SEC_E_PKINIT_NAME_MISMATCH";
-				break;
-			case SEC_E_SMARTCARD_LOGON_REQUIRED:
-				str="SEC_E_SMARTCARD_LOGON_REQUIRED";
-				break;
-			case SEC_E_SHUTDOWN_IN_PROGRESS:
-				str="SEC_E_SHUTDOWN_IN_PROGRESS";
-				break;
-			case SEC_E_KDC_INVALID_REQUEST:
-				str="SEC_E_KDC_INVALID_REQUEST";
-				break;
-			case SEC_E_KDC_UNABLE_TO_REFER:
-				str="SEC_E_KDC_UNABLE_TO_REFER";
-				break;
-			case SEC_E_KDC_UNKNOWN_ETYPE:
-				str="SEC_E_KDC_UNKNOWN_ETYPE";
-				break;
-			case SEC_E_UNSUPPORTED_PREAUTH:
-				str="SEC_E_UNSUPPORTED_PREAUTH";
-				break;
-			case SEC_E_DELEGATION_REQUIRED:
-				str="SEC_E_DELEGATION_REQUIRED";
-				break;
-			case SEC_E_BAD_BINDINGS:
-				str="SEC_E_BAD_BINDINGS";
-				break;
-			case SEC_E_MULTIPLE_ACCOUNTS:
-				str="SEC_E_MULTIPLE_ACCOUNTS";
-				break;
-			case SEC_E_NO_KERB_KEY:
-				str="SEC_E_NO_KERB_KEY";
-				break;
-			case SEC_E_CERT_WRONG_USAGE:
-				str="SEC_E_CERT_WRONG_USAGE";
-				break;
-			case SEC_E_DOWNGRADE_DETECTED:
-				str="SEC_E_DOWNGRADE_DETECTED";
-				break;
-			case SEC_E_SMARTCARD_CERT_REVOKED:
-				str="SEC_E_SMARTCARD_CERT_REVOKED";
-				break;
-			case SEC_E_ISSUING_CA_UNTRUSTED:
-				str="SEC_E_ISSUING_CA_UNTRUSTED";
-				break;
-			case SEC_E_REVOCATION_OFFLINE_C:
-				str="SEC_E_REVOCATION_OFFLINE_C";
-				break;
-			case SEC_E_PKINIT_CLIENT_FAILURE:
-				str="SEC_E_PKINIT_CLIENT_FAILURE";
-				break;
-			case SEC_E_SMARTCARD_CERT_EXPIRED:
-				str="SEC_E_SMARTCARD_CERT_EXPIRED";
-				break;
-			case SEC_E_NO_S4U_PROT_SUPPORT:
-				str="SEC_E_NO_S4U_PROT_SUPPORT";
-				break;
-			case SEC_E_CROSSREALM_DELEGATION_FAILURE:
-				str="SEC_E_CROSSREALM_DELEGATION_FAILURE";
-				break;
-			case SEC_E_REVOCATION_OFFLINE_KDC:
-				str="SEC_E_REVOCATION_OFFLINE_KDC";
-				break;
-			case SEC_E_ISSUING_CA_UNTRUSTED_KDC:
-				str="SEC_E_ISSUING_CA_UNTRUSTED_KDC";
-				break;
-			case SEC_E_KDC_CERT_EXPIRED:
-				str="SEC_E_KDC_CERT_EXPIRED";
-				break;
-			case SEC_E_KDC_CERT_REVOKED:
-				str="SEC_E_KDC_CERT_REVOKED";
-				break;
-			case SEC_I_SIGNATURE_NEEDED:
-				str="SEC_I_SIGNATURE_NEEDED";
-				break;
-			case SEC_E_INVALID_PARAMETER:
-				str="SEC_E_INVALID_PARAMETER";
-				break;
-			case SEC_E_DELEGATION_POLICY:
-				str="SEC_E_DELEGATION_POLICY";
-				break;
-			case SEC_E_POLICY_NLTM_ONLY:
-				str="SEC_E_POLICY_NLTM_ONLY";
-				break;
-			case SEC_I_NO_RENEGOTIATION:
-				str="SEC_I_NO_RENEGOTIATION";
-				break;
-			case SEC_E_NO_CONTEXT:
-				str="SEC_E_NO_CONTEXT";
-				break;
-			case SEC_E_PKU2U_CERT_FAILURE:
-				str="SEC_E_PKU2U_CERT_FAILURE";
-				break;
-			case SEC_E_MUTUAL_AUTH_FAILED:
-				str="SEC_E_MUTUAL_AUTH_FAILED";
-				break;
-			case SEC_E_OK:
-				str="SEC_E_OK";
-				break;
-			default:
-				str="";
-		}
+		const char	*str=gss::getSspiStatusString(status);
 		pvt->_status.append(str)->append("\n");
+		if (error::getNativeErrorNumber()) {
+			char	*errstr=error::getNativeErrorString();
+			pvt->_status.append(errstr)->append("\n");
+			delete[] errstr;
+		}
 	#endif
 }

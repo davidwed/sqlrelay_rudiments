@@ -2,7 +2,6 @@
 // See the COPYING file for more information.
 
 		void	*getContext();
-		void	setMajorStatus(uint32_t status);
 
 	private:
 		bool	getMaxMessageSize(const char *mechname);

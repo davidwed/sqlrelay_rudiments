@@ -940,10 +940,7 @@ tlscertificate *tlscontext::getPeerCertificate() {
 					"(QueryContextAttributes("
 					"SECPKG_ATTR_REMOTE_CERT_CONTEXT))\n");
 			#endif
-			// FIXME: there should be a cleaner way to do this
-			pvt->_gctx.setMajorStatus(sstatus);
-			setError(pvt->_gctx.getMajorStatus(),
-					pvt->_gctx.getStatus());
+			setError(sstatus,gss::getSspiStatusString(sstatus));
 		} else {
 			tlscert=new tlscertificate();
 			tlscert->setCertificate((void *)cert->pCertInfo);
