@@ -39,8 +39,8 @@ int main(int argc, const char **argv) {
 		// load the certificate chain
 		ctx.setCertificateChainFile(cert);
 
-		// load the private key, supplying password "password"
-		ctx.setPrivateKeyFile(cert,"password");
+		// set password for accesing the private key
+		ctx.setPrivateKeyPassword("password");
 	}
 
 	if (!charstring::isNullOrEmpty(ca)) {

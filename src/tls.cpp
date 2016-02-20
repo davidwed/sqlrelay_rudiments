@@ -53,8 +53,7 @@ class tlscontextprivate {
 	private:
 		bool			_isclient;
 		const char		*_cert;
-		const char		*_pvtkey;
-		const char		*_pvtkeypwd;
+		const char		*_pkpwd;
 		const char		*_ciphers;
 		bool			_validatepeer;
 		const char		*_ca;
@@ -84,8 +83,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt=new tlscontextprivate;
 	pvt->_isclient=false;
 	pvt->_cert=NULL;
-	pvt->_pvtkey=NULL;
-	pvt->_pvtkeypwd=NULL;
+	pvt->_pkpwd=NULL;
 	pvt->_ciphers=NULL;
 	pvt->_validatepeer=false;
 	pvt->_ca=NULL;
@@ -164,18 +162,13 @@ const char *tlscontext::getCertificateChainFile() {
 	return pvt->_cert;
 }
 
-void tlscontext::setPrivateKeyFile(const char *filename, const char *password) {
+void tlscontext::setPrivateKeyPassword(const char *password) {
 	pvt->_dirty=true;
-	pvt->_pvtkey=filename;
-	pvt->_pvtkeypwd=password;
-}
-
-const char *tlscontext::getPrivateKeyFile() {
-	return pvt->_pvtkey;
+	pvt->_pkpwd=password;
 }
 
 const char *tlscontext::getPrivateKeyPassword() {
-	return pvt->_pvtkeypwd;
+	return pvt->_pkpwd;
 }
 
 void tlscontext::setCiphers(const char *ciphers) {
@@ -524,28 +517,29 @@ bool tlscontext::reInit(bool isclient) {
 		// set auto-retry mode
 		SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
 
-		// set certificate chain file
+		// load certificate chain file and private key,
+		// using a password, if supplied
+		#ifdef DEBUG_TLS
+		bool	certloaded=false;
+		#endif
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
-			if (SSL_CTX_use_certificate_chain_file(
-						pvt->_ctx,pvt->_cert)!=1) {
-				retval=false;
-			}
-		}
-
-		// set private key (and password, if provided)
-		if (retval && !charstring::isNullOrEmpty(pvt->_pvtkey)) {
-			if (pvt->_pvtkeypwd) {
+			if (pvt->_pkpwd) {
 				SSL_CTX_set_default_passwd_cb(
 					pvt->_ctx,passwdCallback);
 				SSL_CTX_set_default_passwd_cb_userdata(
-					pvt->_ctx,(void *)pvt->_pvtkeypwd);
+					pvt->_ctx,(void *)pvt->_pkpwd);
 			}
-			if (SSL_CTX_use_PrivateKey_file(
-						pvt->_ctx,pvt->_pvtkey,
+			if (SSL_CTX_use_certificate_chain_file(
+						pvt->_ctx,pvt->_cert)!=1 ||
+				SSL_CTX_use_PrivateKey_file(
+						pvt->_ctx,pvt->_cert,
 						SSL_FILETYPE_PEM)!=1 ||
 				SSL_CTX_check_private_key(pvt->_ctx)!=1) {
 				retval=false;
 			}
+			#ifdef DEBUG_TLS
+			certloaded=retval;
+			#endif
 		}
 
 		// set ciphers
@@ -560,22 +554,20 @@ bool tlscontext::reInit(bool isclient) {
 		SSL_CTX_set_options(pvt->_ctx,SSL_OP_SINGLE_DH_USE);
 
 		// set the certificate authority
-		if (retval) {
-			if (!charstring::isNullOrEmpty(pvt->_ca)) {
+		if (retval && !charstring::isNullOrEmpty(pvt->_ca)) {
 
-				pvt->_validatepeer=true;
+			pvt->_validatepeer=true;
 
-				// file or directory?
-				directory	d;
-				bool	ispath=d.open(pvt->_ca);
-				d.close();
+			// file or directory?
+			directory	d;
+			bool	ispath=d.open(pvt->_ca);
+			d.close();
 
-				if (SSL_CTX_load_verify_locations(
-						pvt->_ctx,
-						(ispath)?NULL:pvt->_ca,
-						(ispath)?pvt->_ca:NULL)!=1) {
-					retval=false;
-				}
+			if (SSL_CTX_load_verify_locations(
+					pvt->_ctx,
+					(ispath)?NULL:pvt->_ca,
+					(ispath)?pvt->_ca:NULL)!=1) {
+				retval=false;
 			}
 		}
 
@@ -595,9 +587,9 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		#ifdef DEBUG_TLS
-			stdoutput.printf("  cert chain: %s\n",pvt->_cert);
-			stdoutput.printf("  private key: %s (%s)\n",
-						pvt->_pvtkey,pvt->_pvtkeypwd);
+			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
+					pvt->_cert,pvt->_pkpwd,
+					(certloaded)?"valid":"invalid");
 			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
 			stdoutput.printf("  ca: %s\n",pvt->_ca);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
@@ -627,6 +619,7 @@ bool tlscontext::reInit(bool isclient) {
 		DWORD	flags=0;
 
 		// set certificate chain file
+		// FIXME: private key password)
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
 
 			// don't use default creds
@@ -801,27 +794,17 @@ bool tlscontext::reInit(bool isclient) {
 			}
 		}
 
-		// set private key (and password, if provided)
-		if (retval && !charstring::isNullOrEmpty(pvt->_pvtkey)) {
-			if (pvt->_pvtkeypwd) {
-				// FIXME: how?
-			}
-			// FIXME: how?
-		}
-
 		// set the certificate authority
-		if (retval) {
-			if (!charstring::isNullOrEmpty(pvt->_ca)) {
+		if (retval && !charstring::isNullOrEmpty(pvt->_ca)) {
 
-				pvt->_validatepeer=true;
+			pvt->_validatepeer=true;
 
-				// file or directory?
-				directory	d;
-				bool	ispath=d.open(pvt->_ca);
-				d.close();
+			// file or directory?
+			directory	d;
+			bool	ispath=d.open(pvt->_ca);
+			d.close();
 
-				// FIXME: how?
-			}
+			// FIXME: how?
 		}
 
 		// set the validation depth
@@ -842,10 +825,9 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		#ifdef DEBUG_TLS
-			stdoutput.printf("  cert store: %s - (%s)\n",
-					pvt->_cert,
-					(pvt->_cstore)?"valid":"invalid");
-			stdoutput.printf("  cert count: %d\n",pvt->_cctxcount);
+			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
+					pvt->_cert,pvt->_pkpwd,
+					(pvt->_cctxcount)?"valid":"invalid");
 			if (pvt->_cctx) {
 				tlscertificate	cert;
 				cert.setCertificate(pvt->_cctx[0]->pCertInfo);
@@ -917,6 +899,9 @@ bool tlscontext::accept() {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)
+		// FIXME: if accept fails with peer did not return a
+		// certificate, then all subsequent accepts fail with the same
+		// error, though it appears to recover from other errors
 		int	ret=SSL_accept(pvt->_ssl);
 		setError(ret);
 		return (ret==1);
@@ -1113,11 +1098,6 @@ const char *tlscontext::getErrorString() {
 class tlscertificateprivate {
 	friend class tlscertificate;
 	private:
-		#if defined(RUDIMENTS_HAS_SSL)
-			X509		*_cert;
-		#elif defined(RUDIMENTS_HAS_SSPI)
-			CERT_INFO	*_cert;
-		#endif
 		uint32_t	_version;
 		uint64_t	_serialnumber;
 		char		*_sigalg;
@@ -1145,7 +1125,6 @@ tlscertificate::~tlscertificate() {
 }
 
 void tlscertificate::initCertificate() {
-	pvt->_cert=NULL;
 	pvt->_version=0;
 	pvt->_serialnumber=0;
 	pvt->_sigalg=NULL;
@@ -1162,11 +1141,9 @@ void tlscertificate::freeCertificate() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		free(pvt->_issuer);
 		free(pvt->_subject);
-		// FIXME: free pvt->_cert
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		delete[] pvt->_issuer;
 		delete[] pvt->_subject;
-		// FIXME: free pvt->_cert
 	#endif
 	delete[] pvt->_sigalg;
 	delete[] pvt->_pkalg;
@@ -1220,21 +1197,21 @@ void tlscertificate::setCertificate(void *cert) {
 
 	#if defined(RUDIMENTS_HAS_SSL)
 
-		pvt->_cert=(X509 *)cert;
+		X509	*c=(X509 *)cert;
 
 		// FIXME: version
 		// FIXME: serial number
 		// FIXME: signature algorithm
 
 		// get the issuer
-		X509_NAME	*issuer=X509_get_issuer_name(pvt->_cert);
+		X509_NAME	*issuer=X509_get_issuer_name(c);
 		pvt->_issuer=X509_NAME_oneline(issuer,NULL,0);
 
 		// FIXME: valid-from
 		// FIXME: valid-to
 
 		// get the subject
-		X509_NAME	*subject=X509_get_subject_name(pvt->_cert);
+		X509_NAME	*subject=X509_get_subject_name(c);
 		pvt->_subject=X509_NAME_oneline(subject,NULL,0);
 
 		// FIXME: public key info
@@ -1244,10 +1221,10 @@ void tlscertificate::setCertificate(void *cert) {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		pvt->_cert=(CERT_INFO *)cert;
+		CERT_INFO	*c=(CERT_INFO *)cert;
 
 		// get the version
-		switch (pvt->_cert->dwVersion) {
+		switch (c->dwVersion) {
 			case CERT_V2:
 				pvt->_version=2;
 			case CERT_V3:
@@ -1258,63 +1235,63 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// get the serial number
 		pvt->_serialnumber=0;
-		for (DWORD i=0; i<pvt->_cert->SerialNumber.cbData && i<4; i++) {
+		for (DWORD i=0; i<c->SerialNumber.cbData && i<4; i++) {
 			pvt->_serialnumber=(pvt->_serialnumber<<8)|
-				(uint64_t)(pvt->_cert->SerialNumber.pbData[i]);
+				(uint64_t)(c->SerialNumber.pbData[i]);
 		}
 
 		// signature algorithm
 		pvt->_sigalg=charstring::duplicate(
-				pvt->_cert->SignatureAlgorithm.pszObjId);
+				c->SignatureAlgorithm.pszObjId);
 		// FIXME: signature algorithm parameters
 
 		// get the issuer
 		DWORD	size=CertNameToStr(X509_ASN_ENCODING,
-					&pvt->_cert->Issuer,
+					&c->Issuer,
 					CERT_X500_NAME_STR,NULL,0);
 		pvt->_issuer=new char[size];
 		CertNameToStr(X509_ASN_ENCODING,
-					&pvt->_cert->Issuer,
+					&c->Issuer,
 					CERT_X500_NAME_STR,
 					pvt->_issuer,size);
 
 		// get valid-from
 		// (see datetime::getSystemDateAndTime)
 		uint64_t	t=
-		(((((uint64_t)pvt->_cert->NotBefore.dwHighDateTime)<<32)|
-				pvt->_cert->NotBefore.dwLowDateTime)/10)-
+		(((((uint64_t)c->NotBefore.dwHighDateTime)<<32)|
+				c->NotBefore.dwLowDateTime)/10)-
 				11644473600000000ULL;
 		pvt->_validfrom.initialize(t/1000000,t%1000000);
 
 		// get valid-to
-		t=(((((uint64_t)pvt->_cert->NotAfter.dwHighDateTime)<<32)|
-				pvt->_cert->NotAfter.dwLowDateTime)/10)-
+		t=(((((uint64_t)c->NotAfter.dwHighDateTime)<<32)|
+				c->NotAfter.dwLowDateTime)/10)-
 				11644473600000000ULL;
 		pvt->_validto.initialize(t/1000000,t%1000000);
 
 		// get the subject
 		size=CertNameToStr(X509_ASN_ENCODING,
-				&pvt->_cert->Subject,
+				&c->Subject,
 				CERT_X500_NAME_STR,NULL,0);
 		pvt->_subject=new char[size];
 		CertNameToStr(X509_ASN_ENCODING,
-				&pvt->_cert->Subject,
+				&c->Subject,
 				CERT_X500_NAME_STR,
 				pvt->_subject,size);
 
 		// public key algorithm
 		pvt->_pkalg=charstring::duplicate(
-			pvt->_cert->SubjectPublicKeyInfo.Algorithm.pszObjId);
+			c->SubjectPublicKeyInfo.Algorithm.pszObjId);
 		// FIXME: public key algorithm parameters
 
 		// public key...
-		pvt->_pklen=pvt->_cert->SubjectPublicKeyInfo.
+		pvt->_pklen=c->SubjectPublicKeyInfo.
 						PublicKey.cbData;
 		pvt->_pk=(unsigned char *)
 			bytestring::duplicate(
-			pvt->_cert->SubjectPublicKeyInfo.PublicKey.pbData,
+			c->SubjectPublicKeyInfo.PublicKey.pbData,
 			pvt->_pklen);
-		pvt->_pkbits=(pvt->_pklen*8)-pvt->_cert->SubjectPublicKeyInfo.
+		pvt->_pkbits=(pvt->_pklen*8)-c->SubjectPublicKeyInfo.
 							PublicKey.cUnusedBits;
 
 		// FIXME: issuer unique id

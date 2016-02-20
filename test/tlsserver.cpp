@@ -45,8 +45,8 @@ void myserver::listen(uint16_t port, const char *cert, const char *ca) {
 		// load the certificate chain
 		ctx.setCertificateChainFile(cert);
 
-		// load the private key, supplying password "password"
-		ctx.setPrivateKeyFile(cert,"password");
+		// set password for accesing the private key
+		ctx.setPrivateKeyPassword("password");
 	}
 
 	if (!charstring::isNullOrEmpty(ca)) {

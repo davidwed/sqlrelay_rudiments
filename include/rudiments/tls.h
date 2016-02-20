@@ -25,6 +25,8 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 
 		/** Sets the location of the certificate chain file to use
 		 *  during the next call to connect() or accept().
+		 *  If a password is required to access the private key,
+		 *  then the password may also be provided.
 		 *  If "filename" is NULL or empty then no certificate chain
 		 *  file will be sent to the peer. */
 		void		setCertificateChainFile(const char *filename);
@@ -34,19 +36,9 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  accept(). */
 		const char	*getCertificateChainFile();
 
-		/** Sets the location of the private key file to use
-		 *  during the next call to connect() or accept().
-		 *  If a password is required to access the private key,
-		 *  then the password may also be provided.
-		 *  If "filename" is NULL or empty then no private key
-		 *  will be used. */
-		void		setPrivateKeyFile(const char *filename,
-							const char *password);
-
-		/** Returns the location of the private key file that
-		 *  will be used during the next call to connect() or
-		 *  accept(). */
-		const char	*getPrivateKeyFile();
+		/** Sets the password to use when accessing the private key
+		 *  during the next call to connect() or accept(). */
+		void		setPrivateKeyPassword(const char *password);
 
 		/** Returns the password that will be used to access the
 		 *  private key during the next call to connect() or
