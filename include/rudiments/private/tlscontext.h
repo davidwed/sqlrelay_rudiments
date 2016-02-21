@@ -5,6 +5,8 @@
 		void	initContext();
 		void	freeContext();
 		bool	reInit(bool isclient);
+		bool	isPeerCertValid();
+		bool	loadPeerCert();
 		void	clearError();
 		void	setError(int32_t ret);
 		void	setError(int32_t err, const char *errstr);

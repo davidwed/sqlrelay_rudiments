@@ -66,6 +66,7 @@ class tlscontextprivate {
 			SSL_CTX		*_ctx;
 			SSL		*_ssl;
 			BIO		*_bio;
+			X509		*_peercert;
 		#elif defined(RUDIMENTS_HAS_SSPI)
 			gssmechanism	_gmech;
 			gsscredentials	_gcred;
@@ -76,6 +77,8 @@ class tlscontextprivate {
 			SCHANNEL_CRED	_scred;
 			DWORD		_algidcount;
 			ALG_ID		*_algids;
+			HCERTSTORE	_castore;
+			PCERT_CONTEXT	_peercert;
 		#endif
 };
 
@@ -87,7 +90,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_ciphers=NULL;
 	pvt->_validatepeer=false;
 	pvt->_ca=NULL;
-	pvt->_depth=0;
+	pvt->_depth=9;
 	pvt->_error=0;
 	pvt->_errorstr.clear();
 	pvt->_dirty=true;
@@ -104,6 +107,7 @@ void tlscontext::initContext() {
 		pvt->_bio=NULL;
 		pvt->_ssl=NULL;
 		pvt->_ctx=NULL;
+		pvt->_peercert=NULL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
 		pvt->_cstore=NULL;
@@ -111,6 +115,8 @@ void tlscontext::initContext() {
 		pvt->_cctx=NULL;
 		pvt->_algidcount=0;
 		pvt->_algids=NULL;
+		pvt->_castore=NULL;
+		pvt->_peercert=NULL;
 
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
 
@@ -121,10 +127,6 @@ void tlscontext::initContext() {
 		pvt->_gcred.setPackageSpecificData(&pvt->_scred);
 
 		pvt->_gctx.setDesiredMechanism(&pvt->_gmech);
-		pvt->_gctx.setDesiredFlags(ISC_REQ_SEQUENCE_DETECT|
-						ISC_REQ_REPLAY_DETECT|
-						ISC_RET_EXTENDED_ERROR|
-						ISC_REQ_STREAM);
 		pvt->_gctx.setCredentials(&pvt->_gcred);
 	#endif
 }
@@ -139,6 +141,9 @@ void tlscontext::freeContext() {
 			SSL_CTX_free(pvt->_ctx);
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		if (pvt->_castore) {
+			CertCloseStore(pvt->_castore,0);
+		}
 		delete[] pvt->_algids;
 		if (pvt->_cctx) {
 			for (DWORD i=0; i<pvt->_cctxcount; i++) {
@@ -191,7 +196,7 @@ const char *tlscontext::getCertificateAuthority() {
 
 void tlscontext::setValidationDepth(uint32_t depth) {
 	pvt->_dirty=true;
-	pvt->_depth=depth;
+	pvt->_depth=(depth>0 && depth<=9)?depth:9;
 }
 
 uint32_t tlscontext::getValidationDepth() {
@@ -226,14 +231,180 @@ bool tlscontext::connect() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		bool	ret=pvt->_gctx.connect();
 		setError(ret);
-		if (ret && !pvt->_isclient && pvt->_validatepeer) {
-			// FIXME: manually validate the peer certificate...
-			// CertGetCertificateChain
-			// CertVerifyCertificateChain
+		if (ret && pvt->_validatepeer) {
+			ret=isPeerCertValid();
 		}
 		return ret;
 	#else
 		return false;
+	#endif
+}
+
+bool tlscontext::isPeerCertValid() {
+	#if defined(RUDIMENTS_HAS_SSPI)
+
+		#ifdef DEBUG_TLS
+			stdoutput.write("is peer cert valid - ");
+		#endif
+
+		// make sure the peer cert has been loaded
+		if (!loadPeerCert()) {
+			#ifdef DEBUG_TLS
+				stdoutput.write("  failed - "
+						"(loadPeerCert)\n");
+			#endif
+			return false;
+		}
+
+		// get cert chain from the peer certificate...
+		PCCERT_CHAIN_CONTEXT	ccctx;
+
+		CERT_CHAIN_PARA	ccp;
+		bytestring::zero(&ccp,sizeof(ccp));
+		ccp.cbSize=sizeof(ccp);
+		ccp.RequestedUsage.dwType=USAGE_MATCH_TYPE_OR;
+		ccp.RequestedUsage.Usage.cUsageIdentifier=3;
+		LPSTR	usages[]={
+			szOID_PKIX_KP_SERVER_AUTH,
+			szOID_SERVER_GATED_CRYPTO,
+			szOID_SGC_NETSCAPE
+		};
+		ccp.RequestedUsage.Usage.rgpszUsageIdentifier=usages;
+
+		if (!CertGetCertificateChain(
+					NULL,
+					pvt->_peercert,
+					NULL,
+					(pvt->_castore)?
+						pvt->_castore:
+						pvt->_peercert->hCertStore,
+					&ccp,
+					0,
+					NULL,
+					&ccctx)) {
+			#ifdef DEBUG_TLS
+				stdoutput.write("  failed "
+					"(CertGetCertificateChain)\n");
+			#endif
+			setNativeError();
+			return false;
+		}
+
+		// validate cert chain...
+		CERT_CHAIN_POLICY_PARA		ccpp;
+		bytestring::zero(&ccpp,sizeof(ccpp));
+		ccpp.cbSize=sizeof(ccpp);
+
+		CERT_CHAIN_POLICY_STATUS	ccpstatus;
+		bytestring::zero(&ccpstatus,sizeof(ccpstatus));
+		ccpstatus.cbSize=sizeof(ccpstatus);
+
+		// FIXME: validation depth?
+
+		if (!CertVerifyCertificateChainPolicy(
+					CERT_CHAIN_POLICY_SSL,
+					ccctx,
+					&ccpp,
+					&ccpstatus)) {
+			#ifdef DEBUG_TLS
+				stdoutput.write("  failed "
+					"(CertVerifyCertificateChainPolicy)");
+			#endif
+			setNativeError();
+			return false;
+		}
+
+		#ifdef DEBUG_TLS
+		if (ccpstatus.dwError==CERT_E_UNTRUSTEDROOT) {
+			stdoutput.write(" (self-signed)");
+			if (pvt->_castore) {
+				stdoutput.write(" (permitted)");
+			} else {
+				stdoutput.write(" (not permitted)");
+			}
+		}
+		#endif
+
+		// handle validation errors...
+		// Untrusted-root occurs when the certificate was self-signed.
+		// We'll allow this, if we were supplied a ca to validate
+		// against.
+		// FIXME: I'd think there'd be a better way to do this.  Can't
+		// we somehow add the supplied ca to the list of trusted root?
+		if (ccpstatus.dwError &&
+			!(pvt->_castore &&
+				ccpstatus.dwError==CERT_E_UNTRUSTEDROOT)) {
+
+			#ifdef DEBUG_TLS
+				stdoutput.write("  failed\n");
+			#endif
+
+			const char	*str="";
+    			switch(ccpstatus.dwError) {
+				case CERT_E_EXPIRED:
+					str="CERT_E_EXPIRED";
+					break;
+           			case CERT_E_VALIDITYPERIODNESTING:
+  					str="CERT_E_VALIDITYPERIODNESTING";
+   					break;
+				case CERT_E_ROLE:
+					str="CERT_E_ROLE";
+					break;
+				case CERT_E_PATHLENCONST:
+					str="CERT_E_PATHLENCONST";
+					break;
+				case CERT_E_CRITICAL:
+					str="CERT_E_CRITICAL";
+					break;
+				case CERT_E_PURPOSE:
+					str="CERT_E_PURPOSE";
+					break;
+				case CERT_E_ISSUERCHAINING:
+					str="CERT_E_ISSUERCHAINING";
+					break;
+				case CERT_E_MALFORMED:
+					str="CERT_E_MALFORMED";
+					break;
+				case CERT_E_UNTRUSTEDROOT:
+					str="CERT_E_UNTRUSTEDROOT";
+					break;
+				case CERT_E_CHAINING:
+					str="CERT_E_CHAINING";
+					break;
+				case TRUST_E_FAIL:
+					str="TRUST_E_FAIL";
+					break;
+				case CERT_E_REVOKED:
+					str="CERT_E_REVOKED";
+					break;
+				case CERT_E_UNTRUSTEDTESTROOT:
+					str="CERT_E_UNTRUSTEDTESTROOT";
+					break;
+				case CERT_E_REVOCATION_FAILURE:
+					str="CERT_E_REVOCATION_FAILURE";
+					break;
+				case CERT_E_CN_NO_MATCH:
+					str="CERT_E_CN_NO_MATCH";
+					break;
+				case CERT_E_WRONG_USAGE:
+					str="CERT_E_WRONG_USAGE";
+					break;
+				default:
+					str="";
+                     			break;
+			}
+			setError(ccpstatus.dwError,str);
+			return false;
+		}
+
+		#ifdef DEBUG_TLS
+			stdoutput.write("  success\n");
+		#endif
+
+		return true;
+	#else
+		// this method is only called for SSPI
+		return true;
 	#endif
 }
 
@@ -505,6 +676,7 @@ bool tlscontext::reInit(bool isclient) {
 
 		// create the context
 		pvt->_ctx=SSL_CTX_new(
+				// FIXME: use client/server versions of these
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
 					TLS_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
@@ -572,7 +744,7 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		// set the validation depth
-		if (retval && pvt->_depth) {
+		if (retval) {
 			SSL_CTX_set_verify_depth(pvt->_ctx,pvt->_depth);
 		}
 
@@ -616,15 +788,45 @@ bool tlscontext::reInit(bool isclient) {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		DWORD	flags=0;
+		// intialize flags...
+		// 
+		// On the client side, there's no way to specify a ca cert
+		// store to use during automatic validation of the server's
+		// certificate.  Thus, to support self-signed certificates,
+		// certificates must be manually validated.
+		// 
+		// The flags SCH_CRED_MANUAL_CRED_VALIDATION and
+		// ISC_REQ_MANUAL_CRED_VALIDATION are used together to
+		// disable automatic validatation of server certificates.
+		// These flags MUST be used together.  If one or the other is
+		// missing then either automatic validation doesn't actually
+		// get disabled, or initializing the security context fails
+		// with SEC_E_UNSUPPORTED_FUNCTION.
+		// 
+		// Analogous flags do not need to be set on the server side
+		// because servers never automatically validate client
+		// certificates, and don't even request them by default.
+		DWORD		credflags=(isclient)?
+					SCH_CRED_MANUAL_CRED_VALIDATION:0;
+		uint32_t	ctxflags=(isclient)?
+					(ISC_REQ_SEQUENCE_DETECT|
+						ISC_REQ_REPLAY_DETECT|
+						ISC_RET_EXTENDED_ERROR|
+						ISC_REQ_MANUAL_CRED_VALIDATION|
+						ISC_REQ_STREAM):
+					(ASC_REQ_SEQUENCE_DETECT|
+						ASC_REQ_REPLAY_DETECT|
+						ASC_RET_EXTENDED_ERROR|
+						ASC_REQ_STREAM);
 
 		// set certificate chain file
-		// FIXME: private key password)
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
+
+			// cert specified...
 
 			// don't use default creds
 			if (isclient) {
-				flags|=SCH_CRED_NO_DEFAULT_CREDS;
+				credflags|=SCH_CRED_NO_DEFAULT_CREDS;
 			}
 
 			// open the specified certificate store
@@ -648,20 +850,26 @@ bool tlscontext::reInit(bool isclient) {
 							CERT_FIND_ANY,
 							0,
 							NULL);
+
+				// FIXME: support private key password
+
+				// FIXME: This automatically loads the private
+				// key for .pkx files, but not for .pem files,
+				// causing CryptAcquireCertificatePrivateKey
+				// below to fail.
+
 				if (cctx) {
 
 					// verify that the cert
 					// contained a private key
 					HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
-					DWORD	keytype;
-					BOOL	mustfree=FALSE;
 					CryptAcquireCertificatePrivateKey(
 								cctx,
 								0,
 								NULL,
 								&kh,
-								&keytype,
-								&mustfree);
+								NULL,
+								NULL);
 
 					pvt->_cctx=new PCCERT_CONTEXT[1];
 					pvt->_cctx[0]=cctx;
@@ -685,7 +893,7 @@ bool tlscontext::reInit(bool isclient) {
 			// no cert specified...
 
 			// for clients, just fall back to default creds
-			flags|=SCH_CRED_USE_DEFAULT_CREDS;
+			credflags|=SCH_CRED_USE_DEFAULT_CREDS;
 
 		} else {
 
@@ -696,8 +904,8 @@ bool tlscontext::reInit(bool isclient) {
 			// acquire a crypto context
 			HCRYPTPROV	cp=NULL;
 			if (!CryptAcquireContext(&cp,NULL,
-						MS_DEF_PROV,
-						PROV_RSA_FULL,
+						MS_ENH_RSA_AES_PROV,
+						PROV_RSA_AES,
 						CRYPT_VERIFYCONTEXT
 						#if _WIN32_WINNT>0x0400
 						|CRYPT_SILENT
@@ -706,18 +914,21 @@ bool tlscontext::reInit(bool isclient) {
 				retval=false;
 			}
 
-			// create an 2048-bit rsa key pair
-			// FIXME: how is this used?
+			// create an 2048-bit rsa key pair in the context
 			HCRYPTKEY 	key=NULL;
 			if (retval && !CryptGenKey(cp,
-						AT_SIGNATURE,
-						0x08000000,
+						AT_KEYEXCHANGE,
+						((2048<<16)|CRYPT_EXPORTABLE),
 						&key)) {
 				retval=false;
 			}
 
 			// encode the subject
-			const char	*x500="CN=Test, T=Test";
+			//const char	*x500="CN=Test, T=Test";
+			const char	*x500=
+					"C=US, ST=Georgia, O=Rudiments, "
+					"OU=Rudiments Server Department, "
+					"CN=server.localdomain";
 			BYTE		*buffer=NULL;
 			DWORD		buffersize=0;
 			if (retval && !CertStrToName(
@@ -748,27 +959,29 @@ bool tlscontext::reInit(bool isclient) {
 				ckpi.pwszContainerName=NULL;
 				ckpi.pwszProvName=NULL;
 				ckpi.dwProvType=PROV_RSA_FULL;
-				ckpi.dwFlags=CRYPT_MACHINE_KEYSET;
+				ckpi.dwFlags=CRYPT_MACHINE_KEYSET
+						#if _WIN32_WINNT>0x0400
+						|CRYPT_SILENT
+						#endif
+						;
 				ckpi.cProvParam=0;
 				ckpi.rgProvParam=NULL;
-				ckpi.dwKeySpec=AT_SIGNATURE;
-
-				CRYPT_ALGORITHM_IDENTIFIER	cai;
-				bytestring::zero(&cai,sizeof(cai));
-				cai.pszObjId=szOID_RSA_SHA1RSA;
-
-				SYSTEMTIME	expiration;
-				GetSystemTime(&expiration);
-				expiration.wYear+=10;
+				ckpi.dwKeySpec=AT_KEYEXCHANGE;
 
 				PCCERT_CONTEXT	cctx=
 					CertCreateSelfSignCertificate(
 							NULL,
 							&cnb,0,
 							&ckpi,
-							&cai,0,
-							&expiration,0);
+							NULL,NULL,NULL,0);
 				if (cctx) {
+					cctx->pCertInfo->
+						dwVersion=CERT_V1;
+					cctx->pCertInfo->
+						SerialNumber.cbData=1;
+					cctx->pCertInfo->
+						SerialNumber.pbData[0]=1;
+
 					pvt->_cctx=new PCCERT_CONTEXT[1];
 					pvt->_cctx[0]=cctx;
 					pvt->_cctxcount=1;
@@ -799,29 +1012,33 @@ bool tlscontext::reInit(bool isclient) {
 
 			pvt->_validatepeer=true;
 
-			// file or directory?
-			directory	d;
-			bool	ispath=d.open(pvt->_ca);
-			d.close();
+			// instruct the server to request the client's
+			// certificate (it won't by default)
+			// (the same doesn't need to be done on the client-side
+			// because the server always sends its certificate)
+			if (!isclient) {
+				ctxflags|=ASC_RET_MUTUAL_AUTH;
+			}
 
-			// FIXME: how?
+			// FIXME: support directories...
+
+			// open the specified certificate authority store
+			pvt->_castore=CertOpenStore(
+					CERT_STORE_PROV_FILENAME_A,
+					X509_ASN_ENCODING|
+					PKCS_7_ASN_ENCODING,
+					NULL,
+					0,
+					pvt->_ca);
+			if (!pvt->_castore) {
+				setNativeError();
+				retval=false;
+			}
 		}
 
 		// set the validation depth
-		if (retval && pvt->_depth) {
+		if (retval) {
 			// FIXME: how?
-		}
-
-		if (retval && isclient) {
-			// Set whether to validate the peer or not.
-			// These flags are only valid on the client-side.
-			// On the server side, if we want to validate the
-			// peer, we'll have to do it manually.
-			// FIXME: SCH_CRED_AUTO_CRED_VALIDATION currently
-			// causes the connect to fail with SEC_E_WRONG_PRINCIPAL
-			flags|=(pvt->_validatepeer)?
-					SCH_CRED_AUTO_CRED_VALIDATION:
-					SCH_CRED_MANUAL_CRED_VALIDATION;
 		}
 
 		#ifdef DEBUG_TLS
@@ -833,7 +1050,7 @@ bool tlscontext::reInit(bool isclient) {
 				cert.setCertificate(pvt->_cctx[0]->pCertInfo);
 			}
 			stdoutput.printf("  use default creds: %s\n",
-					(flags&SCH_CRED_USE_DEFAULT_CREDS)?
+					(credflags&SCH_CRED_USE_DEFAULT_CREDS)?
 					"1":"0");
 		#endif
 
@@ -858,8 +1075,12 @@ bool tlscontext::reInit(bool isclient) {
 			pvt->_scred.paCred=pvt->_cctx;
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
-			pvt->_scred.dwFlags=flags;
+			// FIXME: support more protcols
 			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1_2;
+			pvt->_scred.dwFlags=credflags;
+
+			// set security context flags
+			pvt->_gctx.setDesiredFlags(ctxflags);
 
 			// acquire credentials
 			if (isclient) {
@@ -908,6 +1129,9 @@ bool tlscontext::accept() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		bool	ret=pvt->_gctx.accept();
 		setError(ret);
+		if (ret && pvt->_validatepeer) {
+			ret=isPeerCertValid();
+		}
 		return ret;
 	#else
 		return false;
@@ -921,19 +1145,35 @@ tlscertificate *tlscontext::getPeerCertificate() {
 	#endif
 	tlscertificate	*tlscert=NULL;
 	#if defined(RUDIMENTS_HAS_SSL)
-		if (pvt->_ssl) {
-			X509	*cert=SSL_get_peer_certificate(pvt->_ssl);
-			if (cert) {
-				tlscert=new tlscertificate();
-				tlscert->setCertificate((void *)cert);
-			}
+		if (pvt->_ssl && loadPeerCert()) {
+			tlscert=new tlscertificate();
+			tlscert->setCertificate((void *)pvt->_peercert);
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		PCERT_CONTEXT	cert=NULL;
+		if (loadPeerCert()) {
+			tlscert=new tlscertificate();
+			tlscert->setCertificate(
+				(void *)pvt->_peercert->pCertInfo);
+		}
+	#endif
+	#ifdef DEBUG_TLS
+		stdoutput.printf("}\n");
+	#endif
+	return tlscert;
+}
+
+bool tlscontext::loadPeerCert() {
+	if (pvt->_peercert) {
+		return true;
+	}
+	#if defined(RUDIMENTS_HAS_SSL)
+		pvt->_peercert=SSL_get_peer_certificate(pvt->_ssl);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_peercert=NULL;
 		SECURITY_STATUS	sstatus=QueryContextAttributes(
 					(_SecHandle *)pvt->_gctx.getContext(),
 					SECPKG_ATTR_REMOTE_CERT_CONTEXT,
-					&cert);
+					&pvt->_peercert);
 		if (SSPI_ERROR(sstatus)) {
 			#ifdef DEBUG_TLS
 				stdoutput.write("  failed "
@@ -941,15 +1181,10 @@ tlscertificate *tlscontext::getPeerCertificate() {
 					"SECPKG_ATTR_REMOTE_CERT_CONTEXT))\n");
 			#endif
 			setError(sstatus,gss::getSspiStatusString(sstatus));
-		} else {
-			tlscert=new tlscertificate();
-			tlscert->setCertificate((void *)cert->pCertInfo);
+			pvt->_peercert=NULL;
 		}
 	#endif
-	#ifdef DEBUG_TLS
-		stdoutput.printf("}\n");
-	#endif
-	return tlscert;
+	return (pvt->_peercert!=NULL);
 }
 
 ssize_t tlscontext::read(void *buf, ssize_t count) {

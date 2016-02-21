@@ -25,10 +25,20 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 
 		/** Sets the location of the certificate chain file to use
 		 *  during the next call to connect() or accept().
-		 *  If a password is required to access the private key,
-		 *  then the password may also be provided.
-		 *  If "filename" is NULL or empty then no certificate chain
-		 *  file will be sent to the peer. */
+		 *  
+		 *  The file should contain:
+		 *      * the client's certificate
+		 *      * the client's private key
+		 *      * a chain of signing certificates, terminating in
+		 *        a certificate for a root certificate authority
+		 *  
+		 *  Note that the supported file formats may vary between
+		 *  platforms.  A variety of formats are generally supported
+		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
+		 *  the .pfx format is currently supported on Windows.
+		 * 
+		 *  If "filename" is NULL or empty then no certificate will
+		 *  be sent to the peer. */
 		void		setCertificateChainFile(const char *filename);
 
 		/** Returns the location of the certificate chain file that
@@ -37,12 +47,13 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		const char	*getCertificateChainFile();
 
 		/** Sets the password to use when accessing the private key
-		 *  during the next call to connect() or accept(). */
+		 *  in the certificate chain file during the next call to
+		 *  connect() or accept(). */
 		void		setPrivateKeyPassword(const char *password);
 
 		/** Returns the password that will be used to access the
-		 *  private key during the next call to connect() or
-		 *  accept(). */
+		 *  private key in the certificate chain file during the next
+		 *  call to connect() or accept(). */
 		const char	*getPrivateKeyPassword();
 
 		/** Sets the list of ciphers to allow during the next call to
@@ -93,8 +104,10 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  only allow "depth" certificates between the peer
 		 *  certificate and a top-level authority.
 		 *
-		 *  Setting depth to 0 allows any number of intermediate
-		 *  certificates. */
+		 *  The default, and maximum depth is 9.  Setting a depth
+		 *  greater than 9 has the same effect as setting it to 9.
+		 *  Setting the depth to 0 also has the same effect as setting
+		 *  it to 9. */
 		void		setValidationDepth(uint32_t depth);
 		
 		/** Returns the validation depth that will be used when

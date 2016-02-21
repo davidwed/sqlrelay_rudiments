@@ -13,7 +13,7 @@
 #include <rudiments/error.h>
 #include <rudiments/gss.h>
 
-//#define DEBUG_GSS 1
+#define DEBUG_GSS 1
 //#define DEBUG_GSS_WRAP 1
 //#define DEBUG_GSS_SEND 1
 //#define DEBUG_GSS_RECEIVE 1
@@ -1820,13 +1820,17 @@ bool gsscontext::initiate(const void *name,
 		BYTE	*inbuf=NULL;
 		DWORD	inbufsize=0;
 
-		SecBuffer         inputtoken;
-		inputtoken.BufferType=SECBUFFER_TOKEN;
+		SecBuffer         inputtoken[2];
+		inputtoken[0].BufferType=SECBUFFER_TOKEN;
+
+		inputtoken[1].BufferType=SECBUFFER_EMPTY;
+		inputtoken[1].cbBuffer=0;
+		inputtoken[1].pvBuffer=NULL;
 
 		SecBufferDesc     inputtokendesc;
 		inputtokendesc.ulVersion=SECBUFFER_VERSION;
-		inputtokendesc.cBuffers=1;
-		inputtokendesc.pBuffers=&inputtoken;
+		inputtokendesc.cBuffers=2;
+		inputtokendesc.pBuffers=inputtoken;
 
 		// output buffer
 		BYTE	*outbuf=new BYTE[pvt->_maxmsgsize];
@@ -1859,8 +1863,8 @@ bool gsscontext::initiate(const void *name,
 			outputtoken.cbBuffer=pvt->_maxmsgsize;
 
 			if (inbuf) {
-				inputtoken.cbBuffer=inbufsize;
-				inputtoken.pvBuffer=inbuf;
+				inputtoken[0].cbBuffer=inbufsize;
+				inputtoken[0].pvBuffer=inbuf;
 			}
 
 			// attempt to init the context
@@ -1935,8 +1939,8 @@ bool gsscontext::initiate(const void *name,
 			if (pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
 				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
 
-				void	*inbuftemp;
-				size_t	inbufsizetemp;
+				void	*inbuftemp=NULL;
+				size_t	inbufsizetemp=0;
 				uint32_t	flags=0;
 				ssize_t		result=
 					receiveToken(&flags,
@@ -1957,9 +1961,24 @@ bool gsscontext::initiate(const void *name,
 
 			} else {
 
+				// FIXME: for Schannel (and maybe other
+				// providers), it's possible for
+				// InitializeSecurityContext to have returned
+				// SEC_I_INCOMPLETE_CREDENTIALS.  What should
+				// we do in that case?
+
 				// break out if we've completed the process
 				break;
 			}
+		}
+
+		// handle "extra" data
+		if (inputtoken[1].BufferType==SECBUFFER_EXTRA) {
+			// FIXME: For Schannel (and maybe other providers),
+			// some "extra" data may have been returned from this
+			// process.  We should probably do something other than
+			// just free it.  But what?
+			FreeContextBuffer(inputtoken[1].pvBuffer);
 		}
 
 		// actual mechanism will be populated by inquire() below...
@@ -2206,6 +2225,9 @@ bool gsscontext::inquire() {
 							nn.sClientName);
 				servername=charstring::duplicate(
 							nn.sServerName);
+			} else {
+				// reset status
+				pvt->_sstatus=SEC_E_OK;
 			}
 
 			// set initiator
@@ -2249,6 +2271,8 @@ bool gsscontext::inquire() {
 				username=charstring::duplicate(n.sUserName);
 			} else {
 				// FIXME: what to do???
+				// reset status
+				pvt->_sstatus=SEC_E_OK;
 			}
 
 			// try to get the target
@@ -2273,6 +2297,8 @@ bool gsscontext::inquire() {
 				target=unicodeToAscii((WCHAR *)csp.sTargetName);
 			} else {
 				// FIXME: what to do???
+				// reset status
+				pvt->_sstatus=SEC_E_OK;
 			}
 			#else
 				// FIXME: what to do???
@@ -2295,7 +2321,18 @@ bool gsscontext::inquire() {
 		}
 
 
-		// get negotiation info
+		// get actual mechanism...
+		// If we specified the Negotiate mechanism, then we need to get
+		// the actual mechanism that was eventually agreed upon.  We'll
+		// also get whether the process was complete or not and use that
+		// for our "isopen" status.
+		// If we specified a mechanism other than Negotiate then the
+		// query will fail.  To handle that case, we'll default to
+		// the requested mech and isopen=true.
+		const char	*mech=(pvt->_desiredmechanism)?
+					pvt->_desiredmechanism->getString():
+					"Negotiate";
+		bool		isopen=true;
 		SecPkgContext_NegotiationInfo	neginfo;
 		pvt->_sstatus=QueryContextAttributes(
 					&pvt->_context,
@@ -2310,46 +2347,29 @@ bool gsscontext::inquire() {
 				#endif
 				return false;
 			}
+			mech=neginfo.PackageInfo->Name;
+			isopen=(neginfo.NegotiationState==
+					SECPKG_NEGOTIATION_COMPLETE);
+		}
 
-			// set actual mechanism
-			pvt->_actualmechanism.initialize(
-					neginfo.PackageInfo->Name);
+		// set actual mechanism
+		pvt->_actualmechanism.initialize(mech);
 
-			// are we using kerberos?
-			pvt->_kerberos=!charstring::compareIgnoringCase(
-					pvt->_actualmechanism.getString(),
-					"Kerberos");
+		// are we using kerberos or schannel?
+		pvt->_kerberos=!charstring::compareIgnoringCase(
+						mech,"Kerberos");
+		pvt->_schannel=charstring::inSetIgnoringCase(
+						mech,schannels);
 
-			// are we using schannel?
-			pvt->_schannel=charstring::inSetIgnoringCase(
-					pvt->_actualmechanism.getString(),
-					schannels);
+		// set isopen
+		pvt->_isopen=isopen;
 
-			// FIXME: Arguably, we should reset the max message
-			// size, now that we know the actual mechanism that
-			// we're using. As it might be smaller.
-
-			// set isopen
-			pvt->_isopen=(neginfo.NegotiationState==
-						SECPKG_NEGOTIATION_COMPLETE);
-
-			// clean up
-			FreeContextBuffer(neginfo.PackageInfo);
-
+		// clean up
+		if (pvt->_sstatus==SEC_E_UNSUPPORTED_FUNCTION) {
+			// reset status
+			pvt->_sstatus=SEC_E_OK;
 		} else {
-
-			// FIXME: what to do???
-			// set actual mechanism
-
-			// are we using kerberos?
-
-			// are we using schannel?
-			// FIXME: not reliable
-			pvt->_schannel=charstring::inSetIgnoringCase(
-					pvt->_desiredmechanism->getString(),
-					schannels);
-
-			// set isopen
+			FreeContextBuffer(neginfo.PackageInfo);
 		}
 
 
@@ -2593,8 +2613,8 @@ bool gsscontext::accept() {
 
 			// receive token from peer, into inputtoken...
 			uint32_t	flags=0;
-			void		*inbuf;
-			size_t		inbufsize;
+			void		*inbuf=NULL;
+			size_t		inbufsize=0;
 			ssize_t		result=receiveToken(&flags,
 								&inbuf,
 								&inbufsize);

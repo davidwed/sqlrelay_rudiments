@@ -183,7 +183,7 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
-	const char	*ca="server.pem";
+	const char	*ca="ca.pem";
 	if (cmdl.found("ca")) {
 		ca=cmdl.getValue("ca");
 	}
