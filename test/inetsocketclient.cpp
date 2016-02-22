@@ -1,6 +1,7 @@
 // Copyright (c) 2001  David Muse
 // See the file COPYING for more information
 
+#include <rudiments/commandline.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/randomnumber.h>
 #include <rudiments/error.h>
@@ -9,12 +10,21 @@
 
 int main(int argc, const char **argv) {
 
+	commandline	cmdl(argc,argv);
+	const char	*host="127.0.0.1";
+	if (cmdl.found("host")) {
+		host=cmdl.getValue("host");
+	}
+	uint16_t	port=8000;
+	if (cmdl.found("port")) {
+		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+	}
+
 	// create an inet socket client
 	inetsocketclient	clnt;
 
-	// connect to a server on localhost, listening on port 8000
-	if (clnt.connect("127.0.0.1",8000,-1,-1,0,0)<0) {
-	//if (clnt.connect("192.168.123.2",8000,-1,-1,1,1)<0) {
+	// connect to the server
+	if (clnt.connect(host,port,-1,-1,1,1)<0) {
 		stdoutput.printf("connect failed: %s\n",
 					error::getErrorString());
 		process::exit(1);
