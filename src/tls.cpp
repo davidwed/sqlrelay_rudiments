@@ -245,13 +245,13 @@ bool tlscontext::isPeerCertValid() {
 	#if defined(RUDIMENTS_HAS_SSPI)
 
 		#ifdef DEBUG_TLS
-			stdoutput.write("is peer cert valid - ");
+			stdoutput.write("is peer cert valid -");
 		#endif
 
 		// make sure the peer cert has been loaded
 		if (!loadPeerCert()) {
 			#ifdef DEBUG_TLS
-				stdoutput.write("  failed - "
+				stdoutput.write(" failed "
 						"(loadPeerCert)\n");
 			#endif
 			return false;
@@ -284,7 +284,7 @@ bool tlscontext::isPeerCertValid() {
 					NULL,
 					&ccctx)) {
 			#ifdef DEBUG_TLS
-				stdoutput.write("  failed "
+				stdoutput.write(" failed "
 					"(CertGetCertificateChain)\n");
 			#endif
 			setNativeError();
@@ -308,7 +308,7 @@ bool tlscontext::isPeerCertValid() {
 					&ccpp,
 					&ccpstatus)) {
 			#ifdef DEBUG_TLS
-				stdoutput.write("  failed "
+				stdoutput.write(" failed "
 					"(CertVerifyCertificateChainPolicy)");
 			#endif
 			setNativeError();
@@ -335,10 +335,6 @@ bool tlscontext::isPeerCertValid() {
 		if (ccpstatus.dwError &&
 			!(pvt->_castore &&
 				ccpstatus.dwError==CERT_E_UNTRUSTEDROOT)) {
-
-			#ifdef DEBUG_TLS
-				stdoutput.write("  failed\n");
-			#endif
 
 			const char	*str="";
     			switch(ccpstatus.dwError) {
@@ -372,9 +368,6 @@ bool tlscontext::isPeerCertValid() {
 				case CERT_E_CHAINING:
 					str="CERT_E_CHAINING";
 					break;
-				case TRUST_E_FAIL:
-					str="TRUST_E_FAIL";
-					break;
 				case CERT_E_REVOKED:
 					str="CERT_E_REVOKED";
 					break;
@@ -390,16 +383,75 @@ bool tlscontext::isPeerCertValid() {
 				case CERT_E_WRONG_USAGE:
 					str="CERT_E_WRONG_USAGE";
 					break;
+				case CERT_E_UNTRUSTEDCA:
+					str="CERT_E_UNTRUSTEDCA";
+					break;
+				case CERT_E_INVALID_POLICY:
+					str="CERT_E_INVALID_POLICY";
+					break;
+				case CERT_E_INVALID_NAME:
+					str="CERT_E_INVALID_NAME";
+					break;
+				case TRUST_E_SYSTEM_ERROR:
+					str="TRUST_E_SYSTEM_ERROR";
+					break;
+				case TRUST_E_NO_SIGNER_CERT:
+					str="TRUST_E_NO_SIGNER_CERT";
+					break;
+				case TRUST_E_COUNTER_SIGNER:
+					str="TRUST_E_COUNTER_SIGNER";
+					break;
+				case TRUST_E_CERT_SIGNATURE:
+					str="TRUST_E_CERT_SIGNATURE";
+					break;
+				case TRUST_E_TIME_STAMP:
+					str="TRUST_E_TIME_STAMP";
+					break;
+				case TRUST_E_BAD_DIGEST:
+					str="TRUST_E_BAD_DIGEST";
+					break;
+				case TRUST_E_BASIC_CONSTRAINTS:
+					str="TRUST_E_BASIC_CONSTRAINTS";
+					break;
+				case TRUST_E_FINANCIAL_CRITERIA:
+					str="TRUST_E_FINANCIAL_CRITERIA";
+					break;
+				case TRUST_E_PROVIDER_UNKNOWN:
+					str="TRUST_E_PROVIDER_UNKNOWN";
+					break;
+				case TRUST_E_ACTION_UNKNOWN:
+					str="TRUST_E_ACTION_UNKNOWN";
+					break;
+				case TRUST_E_SUBJECT_FORM_UNKNOWN:
+					str="TRUST_E_SUBJECT_FORM_UNKNOWN";
+					break;
+				case TRUST_E_SUBJECT_NOT_TRUSTED:
+					str="TRUST_E_SUBJECT_NOT_TRUSTED";
+					break;
+				case TRUST_E_NOSIGNATURE:
+					str="TRUST_E_NOSIGNATURE";
+					break;
+				case TRUST_E_FAIL:
+					str="TRUST_E_FAIL";
+					break;
+				case TRUST_E_EXPLICIT_DISTRUST:
+					str="TRUST_E_EXPLICIT_DISTRUST";
+					break;
 				default:
 					str="";
                      			break;
 			}
+
+			#ifdef DEBUG_TLS
+				stdoutput.write(" failed\n");
+			#endif
+
 			setError(ccpstatus.dwError,str);
 			return false;
 		}
 
 		#ifdef DEBUG_TLS
-			stdoutput.write("  success\n");
+			stdoutput.write(" success\n");
 		#endif
 
 		return true;
@@ -1224,7 +1276,7 @@ bool tlscontext::loadPeerCert() {
 					&pvt->_peercert);
 		if (SSPI_ERROR(sstatus)) {
 			#ifdef DEBUG_TLS
-				stdoutput.write("  failed "
+				stdoutput.write(" failed "
 					"(QueryContextAttributes("
 					"SECPKG_ATTR_REMOTE_CERT_CONTEXT))\n");
 			#endif
