@@ -66,24 +66,11 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  next call to connect() or accept(). */
 		const char	*getCiphers();
 
-		/** Sets the location of the certificate authority to use when
-		 *  validating the peer's certificate during the next call
-		 *  to connect() or accept().
-		 *
-		 *  "ca" can be either a file or directory name.  If it is a
-		 *  directory name, then all certificate authority files found
-		 *  in that directory will be used.  If it a file name, then
-		 *  only that file will be used.
-		 *
-		 *  If "ca" is NULL or empty then no validation of the peer
-		 *  certificate will occur during the next call to connect() or
-		 *  accept(). */
-		void		setCertificateAuthority(const char *ca);
+		/** FIXME: document... */
+		void		setValidatePeer(bool validatepeer);
 
-		/** Returns the location of the certificate authority that
-		 *  will be used when validating the peer's certificate during
-		 *  the next call to connect() or accept(). */
-		const char	*getCertificateAuthority();
+		/** FIXME: document... */
+		bool		getValidatePeer();
 
 		/** Sets the validation depth to use when validating the peer's
 		 *  certificate during the next call to connect() or accept().
@@ -114,6 +101,25 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  validating the peer's certificate during the next call to
 		 *  connect() or accept(). */
 		uint32_t	getValidationDepth();
+
+		/** Sets the location of the certificate authority to use when
+		 *  validating the peer's certificate during the next call
+		 *  to connect() or accept().
+		 *
+		 *  "ca" can be either a file or directory name.  If it is a
+		 *  directory name, then all certificate authority files found
+		 *  in that directory will be used.  If it a file name, then
+		 *  only that file will be used.
+		 *
+		 *  If "ca" is NULL or empty then no validation of the peer
+		 *  certificate will occur during the next call to connect() or
+		 *  accept(). */
+		void		setCertificateAuthority(const char *ca);
+
+		/** Returns the location of the certificate authority that
+		 *  will be used when validating the peer's certificate during
+		 *  the next call to connect() or accept(). */
+		const char	*getCertificateAuthority();
 
 		/** Sets the file descriptor that is currently used to
 		 *  communicate with the peer. */
