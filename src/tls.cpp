@@ -128,6 +128,7 @@ void tlscontext::initContext() {
 
 		pvt->_gctx.setDesiredMechanism(&pvt->_gmech);
 		pvt->_gctx.setCredentials(&pvt->_gcred);
+		pvt->_gctx.setTokenFormat(GSSTOKENFORMAT_TLS);
 	#endif
 }
 

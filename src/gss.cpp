@@ -13,7 +13,7 @@
 #include <rudiments/error.h>
 #include <rudiments/gss.h>
 
-#define DEBUG_GSS 1
+//#define DEBUG_GSS 1
 //#define DEBUG_GSS_WRAP 1
 //#define DEBUG_GSS_SEND 1
 //#define DEBUG_GSS_RECEIVE 1
@@ -1321,8 +1321,6 @@ void gsscredentials::setStatus(uint32_t status, int32_t type) {
 	#endif
 }
 
-
-
 class gsscontextprivate {
 	friend class gsscontext;
 	private:
@@ -1394,6 +1392,8 @@ class gsscontextprivate {
 
 		bytebuffer		_readbuffer;
 		uint64_t		_readbufferpos;
+
+		gsstokenformat_t	_tokenformat;
 };
 
 gsscontext::gsscontext() : securitycontext() {
@@ -1433,6 +1433,7 @@ gsscontext::gsscontext() : securitycontext() {
 	pvt->_isinitiator=false;
 	pvt->_isopen=false;
 	pvt->_readbufferpos=0;
+	pvt->_tokenformat=GSSTOKENFORMAT_KRB;
 }
 
 gsscontext::~gsscontext() {
@@ -1599,6 +1600,10 @@ void *gsscontext::getContext() {
 	#else
 		return NULL;
 	#endif
+}
+
+void gsscontext::setTokenFormat(gsstokenformat_t tokenformat) {
+	pvt->_tokenformat=tokenformat;
 }
 
 bool gsscontext::getMaxMessageSize(const char *mechname) {
@@ -1773,7 +1778,8 @@ bool gsscontext::initiate(const void *name,
 				if (receiveToken(&flags,
 						&inputtoken.value,
 						&inputtoken.length)<=0 ||
-					flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+					!checkFlags(flags,
+						TOKEN_FLAGS_TYPE_ACCEPT)) {
 
 					#ifdef DEBUG_GSS
 						stdoutput.write(
@@ -1952,7 +1958,8 @@ bool gsscontext::initiate(const void *name,
 				inbuf=(BYTE *)inbuftemp;
 				inbufsize=inbufsizetemp;
 				if (result<=0 ||
-					flags!=TOKEN_FLAGS_TYPE_ACCEPT) {
+					!checkFlags(flags,
+						TOKEN_FLAGS_TYPE_ACCEPT)) {
 					#ifdef DEBUG_GSS
 						stdoutput.write(
 							"failed (receive)\n\n");
@@ -2495,7 +2502,7 @@ bool gsscontext::accept() {
 			if (receiveToken(&flags,
 					&inputtoken.value,
 					&inputtoken.length)<=0 ||
-				flags!=TOKEN_FLAGS_TYPE_INITIATE) {
+				!checkFlags(flags,TOKEN_FLAGS_TYPE_INITIATE)) {
 
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
@@ -2621,7 +2628,8 @@ bool gsscontext::accept() {
 			ssize_t		result=receiveToken(&flags,
 								&inbuf,
 								&inbufsize);
-			if (result<=0 || flags!=TOKEN_FLAGS_TYPE_INITIATE) {
+			if (result<=0 ||
+				!checkFlags(flags,TOKEN_FLAGS_TYPE_INITIATE)) {
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
 				#endif
@@ -2651,7 +2659,8 @@ bool gsscontext::accept() {
 			delete[] inbuf;
 
 			// bail on error
-			if (SSPI_ERROR(pvt->_sstatus)) {
+			if (SSPI_ERROR(pvt->_sstatus) &&
+				pvt->_sstatus!=SEC_E_INCOMPLETE_MESSAGE) {
 				#ifdef DEBUG_GSS
 					stdoutput.printf(
 						"failed "
@@ -2689,7 +2698,8 @@ bool gsscontext::accept() {
 			first=false;
 
 			// send token to peer, if necessary
-			if (outputtoken.cbBuffer) {
+			if (outputtoken.cbBuffer &&
+				pvt->_sstatus!=SEC_E_INCOMPLETE_MESSAGE) {
 				if (sendToken(TOKEN_FLAGS_TYPE_ACCEPT,
 						outbuf,
 						outputtoken.cbBuffer)!=
@@ -2705,7 +2715,8 @@ bool gsscontext::accept() {
 			}
 
 		} while (pvt->_sstatus==SEC_I_CONTINUE_NEEDED ||
-				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE);
+				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE ||
+				pvt->_sstatus==SEC_E_INCOMPLETE_MESSAGE);
 
 		delete[] outbuf;
 
@@ -3422,7 +3433,7 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 	void		*tokendata=NULL;
 	size_t		tokensize=0;
 	ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
-	if (result<=0 || !(tokenflags&TOKEN_FLAGS_TYPE_DATA)) {
+	if (result<=0 || !checkFlags(tokenflags,TOKEN_FLAGS_TYPE_DATA)) {
 		return result;
 	}
 
@@ -3455,9 +3466,22 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize) {
+	switch (pvt->_tokenformat) {
+		case GSSTOKENFORMAT_KRB:
+			return receiveKrbToken(tokenflags,tokendata,tokensize);
+		case GSSTOKENFORMAT_TLS:
+			return receiveSslToken(tokenflags,tokendata,tokensize);
+		default:
+			return RESULT_ERROR;
+	}
+}
+
+ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
+					void **tokendata,
+					size_t *tokensize) {
 
 	#ifdef DEBUG_GSS_RECEIVE
-		stdoutput.write("receiveToken(");
+		stdoutput.write("receiveKrbToken(");
 	#endif
 
 	// read token flags
@@ -3489,8 +3513,21 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 		stdoutput.printf("%d,",size);
 	#endif
 
-	// copy size out and create data buffer
+	// FIXME: do this for GSSAPI too...
+	#if defined(RUDIMENTS_HAS_SSPI)
+		if (size>pvt->_maxmsgsize) {
+			#ifdef DEBUG_GSS_RECEIVE
+				stdoutput.write(") failed (size too large)\n");
+			#endif
+			// FIXME: set native error to something...
+			return RESULT_ERROR;
+		}
+	#endif
+
+	// copy size out
 	*tokensize=size;
+
+	// read data
 	*tokendata=NULL;
 	if (size) {
 		*tokendata=new unsigned char[size];
@@ -3510,6 +3547,75 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 		stdoutput.write(") success\n\n");
 	#endif
 	return result;
+}
+
+ssize_t gsscontext::receiveSslToken(uint32_t *tokenflags,
+					void **tokendata,
+					size_t *tokensize) {
+
+	#ifdef DEBUG_GSS_RECEIVE
+		stdoutput.write("receiveSslToken(");
+	#endif
+
+	// read header
+	// header format:
+	// * record type - 1 byte
+	// * tls/ssl version - 2 bytes (network byte order)
+	// * data size - 2 bytes (network byte order)
+	unsigned char	header[5];
+	ssize_t		result=fullRead(header,sizeof(header));
+	if (result!=sizeof(header)) {
+		#ifdef DEBUG_GSS_RECEIVE
+			stdoutput.write(") failed (header)\n");
+		#endif
+		return (result<=0)?result:RESULT_ERROR;
+	}
+
+	// get record size
+	uint16_t	size=*((uint16_t *)&(header[3]));
+	size=pvt->_fd->netToHost(size);
+	#ifdef DEBUG_GSS_RECEIVE
+		stdoutput.printf("%d,",size);
+	#endif
+
+	// FIXME: do this for GSSAPI too...
+	#if defined(RUDIMENTS_HAS_SSPI)
+		if (size>pvt->_maxmsgsize) {
+			#ifdef DEBUG_GSS_RECEIVE
+				stdoutput.write(") failed (size too large)\n");
+			#endif
+			// FIXME: set native error to something...
+			return RESULT_ERROR;
+		}
+	#endif
+
+	// copy out flags and size
+	*tokenflags=0;
+	*tokensize=size+5;
+
+	// read data
+	*tokendata=NULL;
+	if (size) {
+		*tokendata=new unsigned char[*tokensize];
+
+		// include the header in the data
+		bytestring::copy(*tokendata,header,sizeof(header));
+
+		// read token data
+		result=fullRead(((unsigned char *)(*tokendata))+5,size);
+		if (result!=(ssize_t)size) {
+			#ifdef DEBUG_GSS_RECEIVE
+				stdoutput.write(") failed (data)\n");
+			#endif
+			return (result<=0)?result:RESULT_ERROR;
+		}
+	}
+	
+	#ifdef DEBUG_GSS_RECEIVE
+		stdoutput.safePrint((unsigned char *)*tokendata,*tokensize);
+		stdoutput.printf(") success (%d bytes)\n\n",*tokensize);
+	#endif
+	return *tokensize;
 }
 
 ssize_t gsscontext::write(const void *buf, ssize_t count) {
@@ -3532,9 +3638,22 @@ ssize_t gsscontext::write(const void *buf, ssize_t count) {
 ssize_t gsscontext::sendToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize) {
+	switch (pvt->_tokenformat) {
+		case GSSTOKENFORMAT_KRB:
+			return sendKrbToken(tokenflags,tokendata,tokensize);
+		case GSSTOKENFORMAT_TLS:
+			return sendSslToken(tokenflags,tokendata,tokensize);
+		default:
+			return RESULT_ERROR;
+	}
+}
+
+ssize_t gsscontext::sendKrbToken(uint32_t tokenflags,
+					const void *tokendata,
+					size_t tokensize) {
 
 	#ifdef DEBUG_GSS_SEND
-		stdoutput.printf("sendToken(%08x,%d,",tokenflags,tokensize);
+		stdoutput.printf("sendKrbToken(%08x,%d,",tokenflags,tokensize);
 		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
 		stdoutput.write(") ");
 	#endif
@@ -3561,6 +3680,31 @@ ssize_t gsscontext::sendToken(uint32_t tokenflags,
 
 	// write token data
 	result=fullWrite(tokendata,tokensize);
+	if (result!=(ssize_t)tokensize) {
+		#ifdef DEBUG_GSS_SEND
+			stdoutput.write("failed (data)\n");
+		#endif
+		return (result<=0)?result:RESULT_ERROR;
+	}
+
+	#ifdef DEBUG_GSS_SEND
+		stdoutput.write("success\n\n");
+	#endif
+	return result;
+}
+
+ssize_t gsscontext::sendSslToken(uint32_t tokenflags,
+					const void *tokendata,
+					size_t tokensize) {
+
+	#ifdef DEBUG_GSS_SEND
+		stdoutput.printf("sendSslToken(%08x,%d,",tokenflags,tokensize);
+		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
+		stdoutput.write(") ");
+	#endif
+
+	// write token data
+	ssize_t	result=fullWrite(tokendata,tokensize);
 	if (result!=(ssize_t)tokensize) {
 		#ifdef DEBUG_GSS_SEND
 			stdoutput.write("failed (data)\n");
@@ -3620,6 +3764,15 @@ ssize_t gsscontext::fullWrite(const void *data, ssize_t size) {
 		bytestowrite-=result;
 	}
 	return byteswritten;
+}
+
+bool gsscontext::checkFlags(uint32_t actualflags, uint32_t desiredflags) {
+	switch (pvt->_tokenformat) {
+		case GSSTOKENFORMAT_KRB:
+			return (actualflags&desiredflags);
+		default:
+			return true;
+	}
 }
 
 ssize_t gsscontext::pending() {

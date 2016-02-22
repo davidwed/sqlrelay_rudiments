@@ -41,6 +41,12 @@
 	#define	GSS_C_DELEG_POLICY_FLAG	0
 #endif
 
+
+enum gsstokenformat_t {
+	GSSTOKENFORMAT_KRB=0,
+	GSSTOKENFORMAT_TLS
+};
+
 class gssprivate;
 class gssmechanismprivate;
 class gsscredentialsprivate;
