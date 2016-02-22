@@ -56,8 +56,8 @@ class tlscontextprivate {
 		const char		*_pkpwd;
 		const char		*_ciphers;
 		bool			_validatepeer;
-		const char		*_ca;
 		uint32_t		_depth;
+		const char		*_ca;
 		int32_t			_error;
 		stringbuffer		_errorstr;
 		bool			_dirty;
@@ -89,8 +89,8 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_pkpwd=NULL;
 	pvt->_ciphers=NULL;
 	pvt->_validatepeer=false;
-	pvt->_ca=NULL;
 	pvt->_depth=9;
+	pvt->_ca=NULL;
 	pvt->_error=0;
 	pvt->_errorstr.clear();
 	pvt->_dirty=true;
@@ -186,13 +186,13 @@ const char *tlscontext::getCiphers() {
 	return pvt->_ciphers;
 }
 
-void tlscontext::setCertificateAuthority(const char *ca) {
+void tlscontext::setValidatePeer(bool validatepeer) {
 	pvt->_dirty=true;
-	pvt->_ca=ca;
+	pvt->_validatepeer=validatepeer;
 }
 
-const char *tlscontext::getCertificateAuthority() {
-	return pvt->_ca;
+bool tlscontext::getValidatePeer() {
+	return pvt->_validatepeer;
 }
 
 void tlscontext::setValidationDepth(uint32_t depth) {
@@ -202,6 +202,15 @@ void tlscontext::setValidationDepth(uint32_t depth) {
 
 uint32_t tlscontext::getValidationDepth() {
 	return pvt->_depth;
+}
+
+void tlscontext::setCertificateAuthority(const char *ca) {
+	pvt->_dirty=true;
+	pvt->_ca=ca;
+}
+
+const char *tlscontext::getCertificateAuthority() {
+	return pvt->_ca;
 }
 
 void tlscontext::setFileDescriptor(filedescriptor *fd) {
@@ -789,8 +798,6 @@ bool tlscontext::reInit(bool isclient) {
 		// set the certificate authority
 		if (retval && !charstring::isNullOrEmpty(pvt->_ca)) {
 
-			pvt->_validatepeer=true;
-
 			// file or directory?
 			directory	d;
 			bool	ispath=d.open(pvt->_ca);
@@ -824,8 +831,8 @@ bool tlscontext::reInit(bool isclient) {
 					pvt->_cert,pvt->_pkpwd,
 					(certloaded)?"valid":"invalid");
 			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
-			stdoutput.printf("  ca: %s\n",pvt->_ca);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
+			stdoutput.printf("  ca: %s\n",pvt->_ca);
 		#endif
 
 		// build "bio" and "ssl"
@@ -1071,8 +1078,6 @@ bool tlscontext::reInit(bool isclient) {
 		// set the certificate authority
 		if (retval && !charstring::isNullOrEmpty(pvt->_ca)) {
 
-			pvt->_validatepeer=true;
-
 			// instruct the server to request the client's
 			// certificate (it won't by default)
 			// (the same doesn't need to be done on the client-side
@@ -1122,8 +1127,8 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		#ifdef DEBUG_TLS
-			stdoutput.printf("  ca: %s\n",pvt->_ca);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
+			stdoutput.printf("  ca: %s\n",pvt->_ca);
 		#endif
 
 		// build schannel creds and acquire credentials...
