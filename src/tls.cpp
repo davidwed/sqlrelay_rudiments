@@ -676,13 +676,21 @@ bool tlscontext::reInit(bool isclient) {
 
 		// create the context
 		pvt->_ctx=SSL_CTX_new(
-				// FIXME: use client/server versions of these
+				(isclient)?
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
-					TLS_method()
+					TLS_client_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
-					SSLv23_method()
+					SSLv23_client_method()
 				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
-					SSLv2_method()
+					SSLv2_client_method()
+				#endif
+					:
+				#if defined(RUDIMENTS_HAS_TLS_METHOD)
+					TLS_server_method()
+				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
+					SSLv23_server_method()
+				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
+					SSLv2_server_method()
 				#endif
 				);
 
@@ -1075,8 +1083,47 @@ bool tlscontext::reInit(bool isclient) {
 			pvt->_scred.paCred=pvt->_cctx;
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
-			// FIXME: support more protcols
-			pvt->_scred.grbitEnabledProtocols=SP_PROT_TLS1_2;
+			pvt->_scred.grbitEnabledProtocols=(isclient)?
+				(0
+				#ifdef SP_PROT_TLS1_2_CLIENT
+					|SP_PROT_TLS1_2_CLIENT
+				#endif
+				#ifdef SP_PROT_TLS1_1_CLIENT
+					|SP_PROT_TLS1_1_CLIENT
+				#endif
+				#ifdef SP_PROT_TLS1_CLIENT
+					|SP_PROT_TLS1_CLIENT
+				#endif
+				#ifdef SP_PROT_SSL3_CLIENT
+					|SP_PROT_SSL3_CLIENT
+				#endif
+				#if !defined(SP_PROT_TLS1_2_CLIENT) && \
+					!defined(SP_PROT_TLS1_1_CLIENT) && \
+					!defined(SP_PROT_TLS1_CLIENT) && \
+					!defined(SP_PROT_SSL3_CLIENT)
+					|SP_PROT_SSL2_CLIENT
+				#endif
+				):
+				(0
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_TLS1_2_SERVER
+				#endif
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_TLS1_1_SERVER
+				#endif
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_TLS1_SERVER
+				#endif
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_SSL3_SERVER
+				#endif
+				#if !defined(SP_PROT_TLS1_2_SERVER) && \
+					!defined(SP_PROT_TLS1_1_SERVER) && \
+					!defined(SP_PROT_TLS1_SERVER) && \
+					!defined(SP_PROT_SSL3_SERVER)
+					|SP_PROT_SSL2_SERVER
+				#endif
+				);
 			pvt->_scred.dwFlags=credflags;
 
 			// set security context flags
