@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-validate (yes|no)] [-depth depth] [-ca ca]\n");
+		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca]\n");
 		process::exit(0);
 	}
 	const char	*host="127.0.0.1";
@@ -28,6 +28,10 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
+	const char	*ciphers=NULL;
+	if (cmdl.found("ciphers")) {
+		ciphers=cmdl.getValue("ciphers");
+	}
 	bool	validate=true;
 	if (cmdl.found("validate")) {
 		validate=charstring::compare(cmdl.getValue("validate"),"no");
@@ -41,27 +45,14 @@ int main(int argc, const char **argv) {
 		ca=cmdl.getValue("ca");
 	}
 
+	// create the tls context
 	tlscontext	ctx;
-
-	if (!charstring::isNullOrEmpty(cert)) {
-		// load the certificate chain
-		ctx.setCertificateChainFile(cert);
-
-		// set password for accesing the private key
-		ctx.setPrivateKeyPassword("password");
-	}
-
-	// set whether or not to validate the peer's certificate
+	ctx.setCertificateChainFile(cert);
+	ctx.setPrivateKeyPassword("password");
+	ctx.setCiphers(ciphers);
 	ctx.setValidatePeer(validate);
-
-	// peer certificates must be directly signed by
-	// one of the signing authorities that we trust
 	ctx.setValidationDepth(depth);
-
-	if (!charstring::isNullOrEmpty(ca)) {
-		// load certificates for the signing authorities that we trust
-		ctx.setCertificateAuthority(ca);
-	}
+	ctx.setCertificateAuthority(ca);
 
 	// create an inet socket client
 	inetsocketclient	clnt;

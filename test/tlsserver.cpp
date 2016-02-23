@@ -16,14 +16,15 @@ class myserver : public inetsocketserver {
 			myserver() : inetsocketserver() {}
 		void	listen(uint16_t port,
 				const char *cert,
+				const char *ciphers,
 				bool validate,
 				uint16_t depth,
 				const char *ca);
 };
 
 
-void myserver::listen(uint16_t port, const char *cert,
-			bool validate, uint16_t depth, const char *ca) {
+void myserver::listen(uint16_t port, const char *cert, const char *ciphers,
+				bool validate, uint16_t depth, const char *ca) {
 
 
 	// make sure that only one instance is running
@@ -43,26 +44,12 @@ void myserver::listen(uint16_t port, const char *cert,
 	process::createPidFile("svr.pid",permissions::ownerReadWrite());
 
 	tlscontext	ctx;
-
-	if (!charstring::isNullOrEmpty(cert)) {
-		// load the certificate chain
-		ctx.setCertificateChainFile(cert);
-
-		// set password for accesing the private key
-		ctx.setPrivateKeyPassword("password");
-	}
-
-	// set whether or not to validate the peer's certificate
+	ctx.setCertificateChainFile(cert);
+	ctx.setPrivateKeyPassword("password");
+	ctx.setCiphers(ciphers);
 	ctx.setValidatePeer(validate);
-
-	// peer certificates must be directly signed by
-	// one of the signing authorities that we trust
 	ctx.setValidationDepth(depth);
-
-	if (!charstring::isNullOrEmpty(ca)) {
-		// load certificates for the signing authorities that we trust
-		ctx.setCertificateAuthority(ca);
-	}
+	ctx.setCertificateAuthority(ca);
 
 	// listen on inet socket
 	if (!inetsocketserver::listen(NULL,port,15)) {
@@ -189,6 +176,10 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
+	const char	*ciphers=NULL;
+	if (cmdl.found("ciphers")) {
+		ciphers=cmdl.getValue("ciphers");
+	}
 	bool	validate=false;
 	if (cmdl.found("validate")) {
 		validate=!charstring::compare(cmdl.getValue("validate"),"yes");
@@ -209,7 +200,7 @@ int main(int argc, const char **argv) {
 	process::handleShutDown(shutDown);
 	process::handleCrash(shutDown);
 
-	mysvr->listen(port,cert,validate,depth,ca);
+	mysvr->listen(port,cert,ciphers,validate,depth,ca);
 
 	file::remove("svr.pid");
 	process::exit(1);
