@@ -19,12 +19,14 @@ class myserver : public inetsocketserver {
 				const char *ciphers,
 				bool validate,
 				uint16_t depth,
-				const char *ca);
+				const char *ca,
+				const char *commonname);
 };
 
 
 void myserver::listen(uint16_t port, const char *cert, const char *ciphers,
-				bool validate, uint16_t depth, const char *ca) {
+				bool validate, uint16_t depth, const char *ca,
+				const char *commonname) {
 
 
 	// make sure that only one instance is running
@@ -67,44 +69,48 @@ void myserver::listen(uint16_t port, const char *cert, const char *ciphers,
 		filedescriptor	*clientsock=accept();
 
 		if (clientsock) {
-/*
-			// make sure the client sent a certificate
-			tlscertificate	*certificate=ctx.getPeerCertificate();
-			if (!certificate) {
-				stdoutput.printf("peer sent no "
-						"certificate\n%s\n",
-						ctx.getErrorString());
-				clientsock->close();
-				delete clientsock;
-				continue;
+
+			if (validate) {
+
+				// make sure the client sent a certificate
+				tlscertificate	*certificate=
+						ctx.getPeerCertificate();
+				if (!certificate) {
+					stdoutput.printf("peer sent no "
+							"certificate\n%s\n",
+							ctx.getErrorString());
+					clientsock->close();
+					delete clientsock;
+					continue;
+				}
+
+				// Make sure the commonname in the certificate
+				// is the one we expect it to be
+				const char	*cn=
+						certificate->getCommonName();
+				if (charstring::compareIgnoringCase(
+							cn,commonname)) {
+					stdoutput.printf("%s!=%s\n",
+							cn,commonname);
+					clientsock->close();
+					delete clientsock;
+					continue;
+				}
+
+				stdoutput.printf("client certificate {\n");
+				stdoutput.printf("  common name: %s\n",cn);
+				stdoutput.printf("}\n\n");
 			}
 
-			// Make sure the commonname in the certificate is the
-			// one we expect it to be (client.localdomain).
-			// (we may also want to check the subject name field or
-			// certificate extension for the commonname because
-			// sometimes it's there instead of in the commonname
-			// field)
-			const char	*commonname=
-					certificate->getCommonName();
-			if (charstring::compareIgnoringCase(commonname,
-							"client.localdomain")) {
-				stdoutput.printf("%s!=client.localdomain\n",
-								commonname);
-				clientsock->close();
-				delete clientsock;
-				continue;
-			}
-
-			stdoutput.printf("Client certificate {\n");
-			stdoutput.printf("  common name: %s\n",commonname);
-			stdoutput.printf("}\n\n");
-*/
 			// read 5 bytes from the client and display it
 			char	buffer[6];
 			buffer[5]=(char)NULL;
-			if (clientsock->read((char *)buffer,5)<0) {
-				if (error::getErrorNumber()) {
+			ssize_t	sizeread=clientsock->read((char *)buffer,5);
+			if (sizeread<=0) {
+				if (sizeread==0) {
+					stdoutput.printf(
+						"read failed (0): eof\n");
+				} else if (error::getErrorNumber()) {
 					stdoutput.printf(
 						"read failed (1): %s\n",
 						error::getErrorString());
@@ -118,8 +124,12 @@ void myserver::listen(uint16_t port, const char *cert, const char *ciphers,
 			}
 
 			// write "hello" back to the client
-			if (clientsock->write("hello",5)<0) {
-				if (error::getErrorNumber()) {
+			ssize_t	sizewritten=clientsock->write("hello",5);
+			if (sizewritten<=0) {
+				if (sizeread==0) {
+					stdoutput.printf(
+						"write failed (0): eof\n");
+				} else if (error::getErrorNumber()) {
 					stdoutput.printf(
 						"write failed (1): %s\n",
 						error::getErrorString());
@@ -164,7 +174,7 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsserver [-port port] [-cert cert] [-validate (yes|no)] [-depth depth] [-ca ca]\n");
+		stdoutput.printf("tlsserver [-port port] [-cert cert] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
 		process::exit(0);
 	}
 
@@ -192,6 +202,10 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("ca")) {
 		ca=cmdl.getValue("ca");
 	}
+	const char	*commonname="client.localdomain";
+	if (cmdl.found("commonname")) {
+		commonname=cmdl.getValue("commonname");
+	}
 
 	mysvr=new myserver();
 
@@ -200,7 +214,7 @@ int main(int argc, const char **argv) {
 	process::handleShutDown(shutDown);
 	process::handleCrash(shutDown);
 
-	mysvr->listen(port,cert,ciphers,validate,depth,ca);
+	mysvr->listen(port,cert,ciphers,validate,depth,ca,commonname);
 
 	file::remove("svr.pid");
 	process::exit(1);

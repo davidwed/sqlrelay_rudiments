@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca]\n");
+		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
 		process::exit(0);
 	}
 	const char	*host="127.0.0.1";
@@ -44,6 +44,10 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("ca")) {
 		ca=cmdl.getValue("ca");
 	}
+	const char	*commonname="server.localdomain";
+	if (cmdl.found("commonname")) {
+		commonname=cmdl.getValue("commonname");
+	}
 
 	// create the tls context
 	tlscontext	ctx;
@@ -72,29 +76,28 @@ int main(int argc, const char **argv) {
 	}
 
 	// make sure the server sent a certificate
-	tlscertificate	*certificate=ctx.getPeerCertificate();
-	if (!certificate) {
-		stdoutput.printf("peer sent no certificate\n%s\n",
-						ctx.getErrorString());
-		clnt.close();
-		process::exit(1);
-	}
+	if (validate) {
+		tlscertificate	*certificate=ctx.getPeerCertificate();
+		if (!certificate) {
+			stdoutput.printf("peer sent no certificate\n%s\n",
+							ctx.getErrorString());
+			clnt.close();
+			process::exit(1);
+		}
 
-	// Make sure the commonname in the certificate is the one we expect it
-	// to be (server.localdomain).
-	// (we may also want to check the subject name field or certificate
-	// extension for the commonname because sometimes it's there instead
-	// of in the commonname field)
-	const char	*commonname=certificate->getCommonName();
-	if (charstring::compareIgnoringCase(commonname,"server.localdomain")) {
-		stdoutput.printf("%s!=server.localdomain\n",commonname);
-		clnt.close();
-		process::exit(1);
-	}
+		// Make sure the commonname in the certificate is the one we
+		// expect it to be.
+		const char	*cn=certificate->getCommonName();
+		if (charstring::compareIgnoringCase(cn,commonname)) {
+			stdoutput.printf("%s!=%s\n",cn,commonname);
+			clnt.close();
+			process::exit(1);
+		}
 
-	stdoutput.printf("Server certificate {\n");
-	stdoutput.printf("  common name: %s\n",commonname);
-	stdoutput.printf("}\n\n");
+		stdoutput.printf("server certificate {\n");
+		stdoutput.printf("  common name: %s\n",cn);
+		stdoutput.printf("}\n\n");
+	}
 
 	// write "hello" to the server
 	ssize_t	sizewritten=clnt.write("hello",5);

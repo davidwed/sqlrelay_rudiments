@@ -78,6 +78,8 @@ class tlscontextprivate {
 			DWORD		_algidcount;
 			ALG_ID		*_algids;
 			HCERTSTORE	_castore;
+			HCERTSTORE	_syscastore;
+			HCERTSTORE	_sysrootstore;
 			PCERT_CONTEXT	_peercert;
 		#endif
 };
@@ -100,6 +102,12 @@ tlscontext::tlscontext() : securitycontext() {
 
 tlscontext::~tlscontext() {
 	freeContext();
+	if (pvt->_syscastore) {
+		CertCloseStore(pvt->_syscastore,0);
+	}
+	if (pvt->_sysrootstore) {
+		CertCloseStore(pvt->_sysrootstore,0);
+	}
 }
 
 void tlscontext::initContext() {
@@ -116,6 +124,8 @@ void tlscontext::initContext() {
 		pvt->_algidcount=0;
 		pvt->_algids=NULL;
 		pvt->_castore=NULL;
+		pvt->_syscastore=NULL;
+		pvt->_sysrootstore=NULL;
 		pvt->_peercert=NULL;
 
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
@@ -256,13 +266,13 @@ bool tlscontext::connect() {
 bool tlscontext::isPeerCertValid() {
 
 	#ifdef DEBUG_TLS
-		stdoutput.write("is peer cert valid -");
+		stdoutput.write("is peer cert valid {\n");
 	#endif
 
 	// make sure the peer cert has been loaded
 	if (!loadPeerCert()) {
 		#ifdef DEBUG_TLS
-			stdoutput.write(" failed (loadPeerCert)\n");
+			stdoutput.write(" failed (loadPeerCert)\n}\n");
 		#endif
 		return false;
 	}
@@ -272,210 +282,139 @@ bool tlscontext::isPeerCertValid() {
 		if (SSL_get_verify_result(pvt->_ssl)!=X509_V_OK) {
 			#ifdef DEBUG_TLS
 				stdoutput.write(" failed "
-					"(SSL_get_verify_result)\n");
+					"(SSL_get_verify_result)\n}\n");
 			#endif
 			return false;
 		}
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
-		// get cert chain from the peer certificate...
-		PCCERT_CHAIN_CONTEXT	ccctx;
+		// Run through each cert in the chain.  If we reach the end
+		// of the chain and the last cert was self-signed, then
+		// the first cert (the peer cert) is valid...
 
-		CERT_CHAIN_PARA	ccp;
-		bytestring::zero(&ccp,sizeof(ccp));
-		ccp.cbSize=sizeof(ccp);
-		ccp.RequestedUsage.dwType=USAGE_MATCH_TYPE_OR;
-		ccp.RequestedUsage.Usage.cUsageIdentifier=3;
-		LPSTR	usages[]={
-			szOID_PKIX_KP_SERVER_AUTH,
-			szOID_SERVER_GATED_CRYPTO,
-			szOID_SGC_NETSCAPE
-		};
-		ccp.RequestedUsage.Usage.rgpszUsageIdentifier=usages;
+		// start with the peer cert
+		PCCERT_CONTEXT	cert=pvt->_peercert;
+		uint16_t	depth=0;
+		for (;;) {
 
-		if (!CertGetCertificateChain(
-					NULL,
-					pvt->_peercert,
-					NULL,
-					(pvt->_castore)?
-						pvt->_castore:
-						pvt->_peercert->hCertStore,
-					&ccp,
-					0,
-					NULL,
-					&ccctx)) {
 			#ifdef DEBUG_TLS
-				stdoutput.write(" failed "
-					"(CertGetCertificateChain)\n");
+				stdoutput.printf("  depth: %d...\n",depth);
+				tlscertificate	c;
+				c.setCertificate((void *)cert->pCertInfo);
 			#endif
-			setNativeError();
-			return false;
-		}
 
-		// validate cert chain...
-		CERT_CHAIN_POLICY_PARA		ccpp;
-		bytestring::zero(&ccpp,sizeof(ccpp));
-		ccpp.cbSize=sizeof(ccpp);
+			// get the issuer of the current cert
+			DWORD		flags=0;
+			PCCERT_CONTEXT	issuer=NULL;
 
-		CERT_CHAIN_POLICY_STATUS	ccpstatus;
-		bytestring::zero(&ccpstatus,sizeof(ccpstatus));
-		ccpstatus.cbSize=sizeof(ccpstatus);
-
-		// FIXME: validation depth?
-
-		if (!CertVerifyCertificateChainPolicy(
-					CERT_CHAIN_POLICY_SSL,
-					ccctx,
-					&ccpp,
-					&ccpstatus)) {
-			#ifdef DEBUG_TLS
-				stdoutput.write(" failed "
-					"(CertVerifyCertificateChainPolicy)");
-			#endif
-			setNativeError();
-			return false;
-		}
-
-		#ifdef DEBUG_TLS
-		if (ccpstatus.dwError==CERT_E_UNTRUSTEDROOT) {
-			stdoutput.write(" (self-signed)");
+			// try the provided ca store
 			if (pvt->_castore) {
-				stdoutput.write(" (permitted)");
-			} else {
-				stdoutput.write(" (not permitted)");
-			}
-		}
-		#endif
-
-		// handle validation errors...
-		// Untrusted-root occurs when the certificate was self-signed.
-		// We'll allow this, if we were supplied a ca to validate
-		// against.
-		// FIXME: I'd think there'd be a better way to do this.  Can't
-		// we somehow add the supplied ca to the list of trusted root?
-		if (ccpstatus.dwError &&
-			!(pvt->_castore &&
-				ccpstatus.dwError==CERT_E_UNTRUSTEDROOT)) {
-
-			const char	*str="";
-    			switch(ccpstatus.dwError) {
-				case CERT_E_EXPIRED:
-					str="CERT_E_EXPIRED";
-					break;
-           			case CERT_E_VALIDITYPERIODNESTING:
-  					str="CERT_E_VALIDITYPERIODNESTING";
-   					break;
-				case CERT_E_ROLE:
-					str="CERT_E_ROLE";
-					break;
-				case CERT_E_PATHLENCONST:
-					str="CERT_E_PATHLENCONST";
-					break;
-				case CERT_E_CRITICAL:
-					str="CERT_E_CRITICAL";
-					break;
-				case CERT_E_PURPOSE:
-					str="CERT_E_PURPOSE";
-					break;
-				case CERT_E_ISSUERCHAINING:
-					str="CERT_E_ISSUERCHAINING";
-					break;
-				case CERT_E_MALFORMED:
-					str="CERT_E_MALFORMED";
-					break;
-				case CERT_E_UNTRUSTEDROOT:
-					str="CERT_E_UNTRUSTEDROOT";
-					break;
-				case CERT_E_CHAINING:
-					str="CERT_E_CHAINING";
-					break;
-				case CERT_E_REVOKED:
-					str="CERT_E_REVOKED";
-					break;
-				case CERT_E_UNTRUSTEDTESTROOT:
-					str="CERT_E_UNTRUSTEDTESTROOT";
-					break;
-				case CERT_E_REVOCATION_FAILURE:
-					str="CERT_E_REVOCATION_FAILURE";
-					break;
-				case CERT_E_CN_NO_MATCH:
-					str="CERT_E_CN_NO_MATCH";
-					break;
-				case CERT_E_WRONG_USAGE:
-					str="CERT_E_WRONG_USAGE";
-					break;
-				case CERT_E_UNTRUSTEDCA:
-					str="CERT_E_UNTRUSTEDCA";
-					break;
-				case CERT_E_INVALID_POLICY:
-					str="CERT_E_INVALID_POLICY";
-					break;
-				case CERT_E_INVALID_NAME:
-					str="CERT_E_INVALID_NAME";
-					break;
-				case TRUST_E_SYSTEM_ERROR:
-					str="TRUST_E_SYSTEM_ERROR";
-					break;
-				case TRUST_E_NO_SIGNER_CERT:
-					str="TRUST_E_NO_SIGNER_CERT";
-					break;
-				case TRUST_E_COUNTER_SIGNER:
-					str="TRUST_E_COUNTER_SIGNER";
-					break;
-				case TRUST_E_CERT_SIGNATURE:
-					str="TRUST_E_CERT_SIGNATURE";
-					break;
-				case TRUST_E_TIME_STAMP:
-					str="TRUST_E_TIME_STAMP";
-					break;
-				case TRUST_E_BAD_DIGEST:
-					str="TRUST_E_BAD_DIGEST";
-					break;
-				case TRUST_E_BASIC_CONSTRAINTS:
-					str="TRUST_E_BASIC_CONSTRAINTS";
-					break;
-				case TRUST_E_FINANCIAL_CRITERIA:
-					str="TRUST_E_FINANCIAL_CRITERIA";
-					break;
-				case TRUST_E_PROVIDER_UNKNOWN:
-					str="TRUST_E_PROVIDER_UNKNOWN";
-					break;
-				case TRUST_E_ACTION_UNKNOWN:
-					str="TRUST_E_ACTION_UNKNOWN";
-					break;
-				case TRUST_E_SUBJECT_FORM_UNKNOWN:
-					str="TRUST_E_SUBJECT_FORM_UNKNOWN";
-					break;
-				case TRUST_E_SUBJECT_NOT_TRUSTED:
-					str="TRUST_E_SUBJECT_NOT_TRUSTED";
-					break;
-				case TRUST_E_NOSIGNATURE:
-					str="TRUST_E_NOSIGNATURE";
-					break;
-				case TRUST_E_FAIL:
-					str="TRUST_E_FAIL";
-					break;
-				case TRUST_E_EXPLICIT_DISTRUST:
-					str="TRUST_E_EXPLICIT_DISTRUST";
-					break;
-				default:
-					str="";
-                     			break;
+				flags=CERT_STORE_SIGNATURE_FLAG;
+				issuer=CertGetIssuerCertificateFromStore(
+							pvt->_castore,
+							cert,
+							NULL,
+							&flags);
+				#ifdef DEBUG_TLS
+					if (issuer) {
+						stdoutput.printf("  issuer "
+							"found in supplied "
+							"ca store\n");
+					} else {
+						stdoutput.printf("  issuer "
+							"not found in supplied "
+							"ca store\n");
+					}
+				#endif
 			}
 
-			#ifdef DEBUG_TLS
-				stdoutput.write(" failed\n");
-			#endif
+			// if we found a self-signed cert then we're done
+			if (!issuer && GetLastError()==CRYPT_E_SELF_SIGNED) {
+				break;
+			}
 
-			setError(ccpstatus.dwError,str);
-			return false;
+			// try the system CA store
+			if (!issuer && pvt->_syscastore) {
+				flags=CERT_STORE_SIGNATURE_FLAG;
+				issuer=CertGetIssuerCertificateFromStore(
+							pvt->_syscastore,
+							cert,
+							NULL,
+							&flags);
+				#ifdef DEBUG_TLS
+					if (issuer) {
+						stdoutput.printf("  issuer "
+							"found in system "
+							"ca store\n");
+					} else {
+						stdoutput.printf("  issuer "
+							"not found in systsem "
+							"ca store\n");
+					}
+				#endif
+			}
+
+			// if we found a self-signed cert then we're done
+			if (!issuer && GetLastError()==CRYPT_E_SELF_SIGNED) {
+				break;
+			}
+
+			// try the system ROOT store
+			if (!issuer && pvt->_sysrootstore) {
+				flags=CERT_STORE_SIGNATURE_FLAG;
+				issuer=CertGetIssuerCertificateFromStore(
+							pvt->_sysrootstore,
+							cert,
+							NULL,
+							&flags);
+				#ifdef DEBUG_TLS
+					if (issuer) {
+						stdoutput.printf("  issuer "
+							"found in system "
+							"root store\n");
+					} else {
+						stdoutput.printf("  issuer "
+							"not found in systsem "
+							"root store\n");
+					}
+				#endif
+			}
+
+			// if we found a self-signed cert then we're done
+			if (!issuer && GetLastError()==CRYPT_E_SELF_SIGNED) {
+				break;
+			}
+			
+			// No valid issuer was found.
+			if (!issuer) {
+				#ifdef DEBUG_TLS
+					stdoutput.write("  failed "
+					"(no valid issuer found)\n}\n");
+				#endif
+				setNativeError();
+				return false;
+			}
+
+			// increment/check depth
+			depth++;
+			if (depth>pvt->_depth) {
+				// we have exceeded the allowed validation depth
+				#ifdef DEBUG_TLS
+					stdoutput.write(
+						"  failed (depth)\n}\n");
+				#endif
+				return false;
+			}
+
+			// move on
+			cert=issuer;
 		}
 	#else
 	#endif
 
 	#ifdef DEBUG_TLS
-		stdoutput.write(" success\n");
+		stdoutput.write("  success\n}\n");
 	#endif
 
 	return true;
@@ -978,14 +917,6 @@ bool tlscontext::reInit(bool isclient) {
 		// set the certificate authority
 		if (retval && !charstring::isNullOrEmpty(pvt->_ca)) {
 
-			// instruct the server to request the client's
-			// certificate (it won't by default)
-			// (the same doesn't need to be done on the client-side
-			// because the server always sends its certificate)
-			if (!isclient) {
-				ctxflags|=ASC_RET_MUTUAL_AUTH;
-			}
-
 			// FIXME: support directories...
 
 			// open the specified certificate authority store
@@ -1002,9 +933,25 @@ bool tlscontext::reInit(bool isclient) {
 			}
 		}
 
-		// set the validation depth
-		if (retval) {
-			// FIXME: how?
+		// set whether to validate peer or not
+		if (retval && pvt->_validatepeer && !isclient) {
+			ctxflags|=ASC_RET_MUTUAL_AUTH;
+		}
+
+		// open system CA and ROOT stores
+		if (retval && !pvt->_syscastore) {
+			pvt->_syscastore=CertOpenSystemStore(NULL,"CA");
+			if (!pvt->_syscastore) {
+				setNativeError();
+				retval=false;
+			}
+		}
+		if (retval && !pvt->_sysrootstore) {
+			pvt->_sysrootstore=CertOpenSystemStore(NULL,"ROOT");
+			if (!pvt->_sysrootstore) {
+				setNativeError();
+				retval=false;
+			}
 		}
 
 		#ifdef DEBUG_TLS
