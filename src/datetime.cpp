@@ -163,6 +163,10 @@ bool datetime::initialize(const char *tmstring) {
 	ptr=charstring::findFirst(ptr,' ');
 	if (ptr) {
 		ptr=ptr+sizeof(char);
+		if (!charstring::compare(ptr,"Z")) {
+			ptr="GMT";
+			// FIXME: handle other military time zones
+		}
 		pvt->_zone=(ptr && ptr[0])?charstring::duplicate(ptr):NULL;
 	} else {
 		pvt->_zone=NULL;

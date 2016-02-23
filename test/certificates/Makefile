@@ -27,8 +27,8 @@ certificates/ca.pem: keys/ca.key
 certificates/ca.pfx: certificates/ca.pem
 	PASSWORD="" openssl pkcs12 -export -passout env:PASSWORD -in certificates/ca.pem -inkey keys/ca.key -out certificates/ca.pfx
 
-certificates/ca.der: certificates/ca.pem
-	openssl x509 -in certificates/ca.pem -outform der -out certificates/ca.der
+#certificates/ca.der: certificates/ca.pem
+	#openssl x509 -in certificates/ca.pem -outform der -out certificates/ca.der
 
 keys/client.key:
 	openssl genrsa -out keys/client.key
@@ -39,8 +39,8 @@ requests/client.csr: keys/client.key
 certificates/client.pem: requests/client.csr certificates/ca.pem
 	openssl ca -batch -config config/ca.cnf -in requests/client.csr -out certificates/client.pem
 
-certificates/client.der: certificates/client.pem
-	openssl x509 -in certificates/client.pem -outform der -out certificates/client.der
+#certificates/client.der: certificates/client.pem
+	#openssl x509 -in certificates/client.pem -outform der -out certificates/client.der
 
 certificatechains/client.pem: certificates/client.pem
 	cat certificates/client.pem > certificatechains/client.pem
@@ -59,8 +59,8 @@ requests/server.csr: keys/server.key certificates/ca.pem
 certificates/server.pem: requests/server.csr
 	openssl ca -batch -config config/ca.cnf -in requests/server.csr -out certificates/server.pem
 
-certificates/server.der: certificates/server.pem
-	openssl x509 -in certificates/server.pem -outform der -out certificates/server.der
+#certificates/server.der: certificates/server.pem
+	#openssl x509 -in certificates/server.pem -outform der -out certificates/server.der
 
 certificatechains/server.pem: certificates/server.pem
 	cat certificates/server.pem > certificatechains/server.pem

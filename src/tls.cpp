@@ -1428,6 +1428,63 @@ uint64_t tlscertificate::getPrivateKeyBitLength() {
 	return pvt->_pkbits;
 }
 
+#if defined(RUDIMENTS_HAS_SSL)
+void asn1timeToDateTime(datetime *dt, ASN1_TIME *asn1t) {
+	const char	*asn1str=(const char *)asn1t->data;
+	char		str[22];
+	if (asn1t->type==V_ASN1_UTCTIME) {
+		// mm/
+		str[0]=asn1str[2];
+		str[1]=asn1str[3];
+		str[2]='/';
+		// dd/
+		str[3]=asn1str[4];
+		str[4]=asn1str[5];
+		str[5]='/';
+		// yyyy
+		if (asn1str[0]>='7') {
+			str[6]='1';
+			str[7]='9';
+		} else {
+			str[6]='2';
+			str[7]='0';
+		}
+		str[8]=asn1str[0];
+		str[9]=asn1str[1];
+	} else {
+		// mm/
+		str[0]=asn1str[4];
+		str[1]=asn1str[5];
+		str[2]='/';
+		// dd/
+		str[3]=asn1str[6];
+		str[4]=asn1str[7];
+		str[5]='/';
+		// yyyy
+		str[6]=asn1str[0];
+		str[7]=asn1str[1];
+		str[8]=asn1str[2];
+		str[9]=asn1str[3];
+	}
+	str[10]=' ';
+	// hh:
+	str[11]=asn1str[8];
+	str[12]=asn1str[9];
+	str[13]=':';
+	// mm:
+	str[14]=asn1str[10];
+	str[15]=asn1str[11];
+	str[16]=':';
+	// ss:
+	str[17]='0';
+	str[18]='0';
+	str[19]=' ';
+	str[20]=asn1str[12];
+	str[21]='\0';
+	dt->initialize(str);
+}
+#endif
+
 void tlscertificate::setCertificate(void *cert) {
 
 	freeCertificate();
@@ -1437,22 +1494,44 @@ void tlscertificate::setCertificate(void *cert) {
 
 		X509	*c=(X509 *)cert;
 
-		// FIXME: version
-		// FIXME: serial number
-		// FIXME: signature algorithm
+		// get the version
+		pvt->_version=X509_get_version(c);
+
+		// get serial number
+		pvt->_serialnumber=ASN1_INTEGER_get(X509_get_serialNumber(c));
+
+		// get signature algorithm
+		pvt->_sigalg=new char[256];
+		OBJ_obj2txt(pvt->_sigalg,256,c->sig_alg->algorithm,0);
+		// FIXME: signature algorithm parameters
 
 		// get the issuer
 		X509_NAME	*issuer=X509_get_issuer_name(c);
 		pvt->_issuer=X509_NAME_oneline(issuer,NULL,0);
 
-		// FIXME: valid-from
-		// FIXME: valid-to
+		// get valid-from
+		asn1timeToDateTime(&pvt->_validfrom,X509_get_notBefore(c));
+
+		// get valid-to
+		asn1timeToDateTime(&pvt->_validto,X509_get_notAfter(c));
 
 		// get the subject
 		X509_NAME	*subject=X509_get_subject_name(c);
 		pvt->_subject=X509_NAME_oneline(subject,NULL,0);
 
-		// FIXME: public key info
+		// get the public key algorithm
+		EVP_PKEY	*pubkey=X509_get_pubkey(c);
+		pvt->_pkalg=charstring::duplicate(
+				(pubkey)?OBJ_nid2ln(pubkey->type):NULL);
+		// FIXME: public key algorithm parameters
+
+		// get the public key
+		pvt->_pklen=EVP_PKEY_size(pubkey);
+		pvt->_pk=(unsigned char *)bytestring::duplicate(
+						pubkey->pkey.ptr,
+						pvt->_pklen);
+		pvt->_pkbits=EVP_PKEY_bits(pubkey);
+
 		// FIXME: issuer unique id
 		// FIXME: subject unique id
 		// FIXME: extensions
@@ -1517,20 +1596,18 @@ void tlscertificate::setCertificate(void *cert) {
 				CERT_X500_NAME_STR,
 				pvt->_subject,size);
 
-		// public key algorithm
+		// get the public key algorithm
 		pvt->_pkalg=charstring::duplicate(
-			c->SubjectPublicKeyInfo.Algorithm.pszObjId);
+				c->SubjectPublicKeyInfo.Algorithm.pszObjId);
 		// FIXME: public key algorithm parameters
 
-		// public key...
-		pvt->_pklen=c->SubjectPublicKeyInfo.
-						PublicKey.cbData;
-		pvt->_pk=(unsigned char *)
-			bytestring::duplicate(
-			c->SubjectPublicKeyInfo.PublicKey.pbData,
-			pvt->_pklen);
-		pvt->_pkbits=(pvt->_pklen*8)-c->SubjectPublicKeyInfo.
-							PublicKey.cUnusedBits;
+		// get the public key
+		pvt->_pklen=c->SubjectPublicKeyInfo.PublicKey.cbData;
+		pvt->_pk=(unsigned char *)bytestring::duplicate(
+				c->SubjectPublicKeyInfo.PublicKey.pbData,
+				pvt->_pklen);
+		pvt->_pkbits=(pvt->_pklen*8)-
+				c->SubjectPublicKeyInfo.PublicKey.cUnusedBits;
 
 		// FIXME: issuer unique id
 		// FIXME: subject unique id
@@ -1564,6 +1641,7 @@ void tlscertificate::setCertificate(void *cert) {
 		stdoutput.printf("    public key: ");
 		stdoutput.safePrint(pvt->_pk,(pvt->_pklen<5)?pvt->_pklen:5);
 		stdoutput.printf("...\n");
+		stdoutput.printf("    public key length: %lld\n",pvt->_pklen);
 		stdoutput.printf("    public key bits: %lld\n",pvt->_pkbits);
 		stdoutput.printf("    common name: %s\n",pvt->_commonname);
 		stdoutput.printf("  }\n");
