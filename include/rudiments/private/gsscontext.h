@@ -17,7 +17,7 @@
 		ssize_t	receiveKrbToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize);
-		ssize_t	receiveSslToken(uint32_t *tokenflags,
+		ssize_t	receiveTlsToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize);
 
@@ -27,7 +27,7 @@
 		ssize_t sendKrbToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize);
-		ssize_t sendSslToken(uint32_t tokenflags,
+		ssize_t sendTlsToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize);
 

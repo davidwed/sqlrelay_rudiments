@@ -95,12 +95,12 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  greater than 9 has the same effect as setting it to 9.
 		 *  Setting the depth to 0 also has the same effect as setting
 		 *  it to 9. */
-		void		setValidationDepth(uint32_t depth);
+		void		setValidationDepth(uint16_t depth);
 		
 		/** Returns the validation depth that will be used when
 		 *  validating the peer's certificate during the next call to
 		 *  connect() or accept(). */
-		uint32_t	getValidationDepth();
+		uint16_t	getValidationDepth();
 
 		/** Sets the location of the certificate authority to use when
 		 *  validating the peer's certificate during the next call

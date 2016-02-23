@@ -16,11 +16,14 @@ class myserver : public inetsocketserver {
 			myserver() : inetsocketserver() {}
 		void	listen(uint16_t port,
 				const char *cert,
+				bool validate,
+				uint16_t depth,
 				const char *ca);
 };
 
 
-void myserver::listen(uint16_t port, const char *cert, const char *ca) {
+void myserver::listen(uint16_t port, const char *cert,
+			bool validate, uint16_t depth, const char *ca) {
 
 
 	// make sure that only one instance is running
@@ -49,13 +52,16 @@ void myserver::listen(uint16_t port, const char *cert, const char *ca) {
 		ctx.setPrivateKeyPassword("password");
 	}
 
+	// set whether or not to validate the peer's certificate
+	ctx.setValidatePeer(validate);
+
+	// peer certificates must be directly signed by
+	// one of the signing authorities that we trust
+	ctx.setValidationDepth(depth);
+
 	if (!charstring::isNullOrEmpty(ca)) {
 		// load certificates for the signing authorities that we trust
 		ctx.setCertificateAuthority(ca);
-
-		// peer certificates must be directly signed by
-		// one of the signing authorities that we trust
-		ctx.setValidationDepth(1);
 	}
 
 	// listen on inet socket
@@ -171,7 +177,7 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsserver [-port port] [-cert cert] [-ca ca]\n");
+		stdoutput.printf("tlsserver [-port port] [-cert cert] [-validate (yes|no)] [-depth depth] [-ca ca]\n");
 		process::exit(0);
 	}
 
@@ -179,11 +185,19 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("port")) {
 		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
 	}
-	const char	*cert="server.pem";
+	const char	*cert=NULL;
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
-	const char	*ca="ca.pem";
+	bool	validate=false;
+	if (cmdl.found("validate")) {
+		validate=!charstring::compare(cmdl.getValue("validate"),"yes");
+	}
+	uint16_t	depth=9;
+	if (cmdl.found("depth")) {
+		depth=charstring::toUnsignedInteger(cmdl.getValue("depth"));
+	}
+	const char	*ca=NULL;
 	if (cmdl.found("ca")) {
 		ca=cmdl.getValue("ca");
 	}
@@ -195,7 +209,7 @@ int main(int argc, const char **argv) {
 	process::handleShutDown(shutDown);
 	process::handleCrash(shutDown);
 
-	mysvr->listen(port,cert,ca);
+	mysvr->listen(port,cert,validate,depth,ca);
 
 	file::remove("svr.pid");
 	process::exit(1);

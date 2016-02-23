@@ -56,7 +56,7 @@ class tlscontextprivate {
 		const char		*_pkpwd;
 		const char		*_ciphers;
 		bool			_validatepeer;
-		uint32_t		_depth;
+		uint16_t		_depth;
 		const char		*_ca;
 		int32_t			_error;
 		stringbuffer		_errorstr;
@@ -195,12 +195,12 @@ bool tlscontext::getValidatePeer() {
 	return pvt->_validatepeer;
 }
 
-void tlscontext::setValidationDepth(uint32_t depth) {
+void tlscontext::setValidationDepth(uint16_t depth) {
 	pvt->_dirty=true;
 	pvt->_depth=(depth>0 && depth<=9)?depth:9;
 }
 
-uint32_t tlscontext::getValidationDepth() {
+uint16_t tlscontext::getValidationDepth() {
 	return pvt->_depth;
 }
 
@@ -237,6 +237,9 @@ bool tlscontext::connect() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		int	ret=SSL_connect(pvt->_ssl);
 		setError(ret);
+		if (ret && pvt->_validatepeer && !isPeerCertValid()) {
+			ret=0;
+		}
 		return (ret==1);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		bool	ret=pvt->_gctx.connect();
@@ -251,20 +254,30 @@ bool tlscontext::connect() {
 }
 
 bool tlscontext::isPeerCertValid() {
-	#if defined(RUDIMENTS_HAS_SSPI)
 
+	#ifdef DEBUG_TLS
+		stdoutput.write("is peer cert valid -");
+	#endif
+
+	// make sure the peer cert has been loaded
+	if (!loadPeerCert()) {
 		#ifdef DEBUG_TLS
-			stdoutput.write("is peer cert valid -");
+			stdoutput.write(" failed (loadPeerCert)\n");
 		#endif
+		return false;
+	}
 
-		// make sure the peer cert has been loaded
-		if (!loadPeerCert()) {
+	#if defined(RUDIMENTS_HAS_SSL)
+
+		if (SSL_get_verify_result(pvt->_ssl)!=X509_V_OK) {
 			#ifdef DEBUG_TLS
 				stdoutput.write(" failed "
-						"(loadPeerCert)\n");
+					"(SSL_get_verify_result)\n");
 			#endif
 			return false;
 		}
+
+	#elif defined(RUDIMENTS_HAS_SSPI)
 
 		// get cert chain from the peer certificate...
 		PCCERT_CHAIN_CONTEXT	ccctx;
@@ -458,16 +471,14 @@ bool tlscontext::isPeerCertValid() {
 			setError(ccpstatus.dwError,str);
 			return false;
 		}
-
-		#ifdef DEBUG_TLS
-			stdoutput.write(" success\n");
-		#endif
-
-		return true;
 	#else
-		// this method is only called for SSPI
-		return true;
 	#endif
+
+	#ifdef DEBUG_TLS
+		stdoutput.write(" success\n");
+	#endif
+
+	return true;
 }
 
 #if defined(RUDIMENTS_HAS_SSL)
@@ -1230,6 +1241,9 @@ bool tlscontext::accept() {
 		// error, though it appears to recover from other errors
 		int	ret=SSL_accept(pvt->_ssl);
 		setError(ret);
+		if (ret && pvt->_validatepeer && !isPeerCertValid()) {
+			ret=0;
+		}
 		return (ret==1);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		bool	ret=pvt->_gctx.accept();

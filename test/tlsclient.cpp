@@ -13,7 +13,7 @@ int main(int argc, const char **argv) {
 
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-ca ca]\n");
+		stdoutput.printf("tlsclient [-host host] [-port port] [-cert cert] [-validate (yes|no)] [-depth depth] [-ca ca]\n");
 		process::exit(0);
 	}
 	const char	*host="127.0.0.1";
@@ -24,11 +24,19 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("port")) {
 		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
 	}
-	const char	*cert="client.pem";
+	const char	*cert=NULL;
 	if (cmdl.found("cert")) {
 		cert=cmdl.getValue("cert");
 	}
-	const char	*ca="ca.pem";
+	bool	validate=true;
+	if (cmdl.found("validate")) {
+		validate=charstring::compare(cmdl.getValue("validate"),"no");
+	}
+	uint16_t	depth=9;
+	if (cmdl.found("depth")) {
+		depth=charstring::toUnsignedInteger(cmdl.getValue("depth"));
+	}
+	const char	*ca=NULL;
 	if (cmdl.found("ca")) {
 		ca=cmdl.getValue("ca");
 	}
@@ -43,13 +51,16 @@ int main(int argc, const char **argv) {
 		ctx.setPrivateKeyPassword("password");
 	}
 
+	// set whether or not to validate the peer's certificate
+	ctx.setValidatePeer(validate);
+
+	// peer certificates must be directly signed by
+	// one of the signing authorities that we trust
+	ctx.setValidationDepth(depth);
+
 	if (!charstring::isNullOrEmpty(ca)) {
 		// load certificates for the signing authorities that we trust
 		ctx.setCertificateAuthority(ca);
-
-		// peer certificates must be directly signed by
-		// one of the signing authorities that we trust
-		ctx.setValidationDepth(1);
 	}
 
 	// create an inet socket client

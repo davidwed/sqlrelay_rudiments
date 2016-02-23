@@ -3470,7 +3470,7 @@ ssize_t gsscontext::receiveToken(uint32_t *tokenflags,
 		case GSSTOKENFORMAT_KRB:
 			return receiveKrbToken(tokenflags,tokendata,tokensize);
 		case GSSTOKENFORMAT_TLS:
-			return receiveSslToken(tokenflags,tokendata,tokensize);
+			return receiveTlsToken(tokenflags,tokendata,tokensize);
 		default:
 			return RESULT_ERROR;
 	}
@@ -3549,12 +3549,12 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 	return result;
 }
 
-ssize_t gsscontext::receiveSslToken(uint32_t *tokenflags,
+ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 					void **tokendata,
 					size_t *tokensize) {
 
 	#ifdef DEBUG_GSS_RECEIVE
-		stdoutput.write("receiveSslToken(");
+		stdoutput.write("receiveTlsToken(");
 	#endif
 
 	// read header
@@ -3642,7 +3642,7 @@ ssize_t gsscontext::sendToken(uint32_t tokenflags,
 		case GSSTOKENFORMAT_KRB:
 			return sendKrbToken(tokenflags,tokendata,tokensize);
 		case GSSTOKENFORMAT_TLS:
-			return sendSslToken(tokenflags,tokendata,tokensize);
+			return sendTlsToken(tokenflags,tokendata,tokensize);
 		default:
 			return RESULT_ERROR;
 	}
@@ -3693,12 +3693,12 @@ ssize_t gsscontext::sendKrbToken(uint32_t tokenflags,
 	return result;
 }
 
-ssize_t gsscontext::sendSslToken(uint32_t tokenflags,
+ssize_t gsscontext::sendTlsToken(uint32_t tokenflags,
 					const void *tokendata,
 					size_t tokensize) {
 
 	#ifdef DEBUG_GSS_SEND
-		stdoutput.printf("sendSslToken(%08x,%d,",tokenflags,tokensize);
+		stdoutput.printf("sendTlsToken(%08x,%d,",tokenflags,tokensize);
 		stdoutput.safePrint((const unsigned char *)tokendata,tokensize);
 		stdoutput.write(") ");
 	#endif
