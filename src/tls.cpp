@@ -98,16 +98,22 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_dirty=true;
 	pvt->_fd=NULL;
 	initContext();
+	#if defined(RUDIMENTS_HAS_SSPI)
+		pvt->_syscastore=NULL;
+		pvt->_sysrootstore=NULL;
+	#endif
 }
 
 tlscontext::~tlscontext() {
 	freeContext();
-	if (pvt->_syscastore) {
-		CertCloseStore(pvt->_syscastore,0);
-	}
-	if (pvt->_sysrootstore) {
-		CertCloseStore(pvt->_sysrootstore,0);
-	}
+	#if defined(RUDIMENTS_HAS_SSPI)
+		if (pvt->_syscastore) {
+			CertCloseStore(pvt->_syscastore,0);
+		}
+		if (pvt->_sysrootstore) {
+			CertCloseStore(pvt->_sysrootstore,0);
+		}
+	#endif
 }
 
 void tlscontext::initContext() {
@@ -124,8 +130,6 @@ void tlscontext::initContext() {
 		pvt->_algidcount=0;
 		pvt->_algids=NULL;
 		pvt->_castore=NULL;
-		pvt->_syscastore=NULL;
-		pvt->_sysrootstore=NULL;
 		pvt->_peercert=NULL;
 
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
