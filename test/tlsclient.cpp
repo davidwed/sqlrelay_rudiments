@@ -97,8 +97,11 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("}\n\n");
 
 	// write "hello" to the server
-	if (clnt.write("hello",5)<0) {
-		if (error::getErrorNumber()) {
+	ssize_t	sizewritten=clnt.write("hello",5);
+	if (sizewritten<=0) {
+		if (sizewritten==0) {
+			stdoutput.printf("write failed (0): eof\n");
+		} else if (error::getErrorNumber()) {
 			stdoutput.printf("write failed (1): %s\n",
 						error::getErrorString());
 		} else {
@@ -110,8 +113,10 @@ int main(int argc, const char **argv) {
 	// read 10 bytes from the server and display them
 	char	buffer[11];
 	ssize_t	sizeread=clnt.read(buffer,10);
-	if (sizeread<0) {
-		if (error::getErrorNumber()) {
+	if (sizeread<=0) {
+		if (sizeread==0) {
+			stdoutput.printf("read failed (0): eof\n");
+		} else if (error::getErrorNumber()) {
 			stdoutput.printf("read failed (1): %s\n",
 						error::getErrorString());
 		} else {

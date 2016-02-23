@@ -1411,6 +1411,47 @@ void tlscontext::setError(int32_t ret) {
 			pvt->_errorstr.append(
 				ERR_error_string(pvt->_error,NULL));
 		}
+		if (!pvt->_errorstr.getStringLength()) {
+			const char	*str="";
+			switch (SSL_get_error(pvt->_ssl,ret)) {
+				case SSL_ERROR_NONE:
+					str="SSL_ERROR_NONE";
+					break;
+				case SSL_ERROR_ZERO_RETURN:
+					str="SSL_ERROR_ZERO_RETURN";
+					break;
+				case SSL_ERROR_WANT_READ:
+					str="SSL_ERROR_WANT_READ";
+					break;
+				case SSL_ERROR_WANT_WRITE:
+					str="SSL_ERROR_WANT_WRITE";
+					break;
+				case SSL_ERROR_WANT_CONNECT:
+					str="SSL_ERROR_WANT_CONNECT";
+					break;
+				case SSL_ERROR_WANT_ACCEPT:
+					str="SSL_ERROR_WANT_ACCEPT";
+					break;
+				case SSL_ERROR_WANT_X509_LOOKUP:
+					str="SSL_ERROR_WANT_X509_LOOKUP";
+					break;
+				#ifdef SSL_ERROR_WANT_ASYNC
+				case SSL_ERROR_WANT_ASYNC:
+					str="SSL_ERROR_WANT_ASYNC";
+					break;
+				#endif
+				case SSL_ERROR_SYSCALL:
+					str="SSL_ERROR_SYSCALL";
+					break;
+				case SSL_ERROR_SSL:
+					str="SSL_ERROR_SSL";
+					break;
+				default:
+					str="";
+			}
+			pvt->_error=ret;
+			pvt->_errorstr.append(str);
+		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		if (ret>0) {
 			return;
