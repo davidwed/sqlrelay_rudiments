@@ -407,6 +407,12 @@ bool tlscontext::isPeerCertValid() {
 				return false;
 			}
 
+			// free the previous cert
+			// (unless it was the original peer cert)
+			if (cert!=pvt->_peercert) {
+				CertFreeCertificateContext(cert);
+			}
+
 			// move on
 			cert=issuer;
 		}

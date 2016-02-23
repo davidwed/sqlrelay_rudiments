@@ -110,10 +110,12 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  validating the peer's certificate during the next call
 		 *  to connect() or accept().
 		 *
-		 *  "ca" can be either a file or directory name.  If it is a
-		 *  directory name, then all certificate authority files found
-		 *  in that directory will be used.  If it a file name, then
-		 *  only that file will be used.
+		 *  On Windows, "ca" must be a file name.
+		 *
+		 *  On non-Windows systems, "ca" can be either a file or
+		 *  directory name.  If it is a directory name, then all
+		 *  certificate authority files found in that directory will be
+		 *  used.  If it a file name, then only that file will be used.
 		 *
 		 *  If "ca" is NULL or empty then no validation of the peer
 		 *  certificate will occur during the next call to connect() or
