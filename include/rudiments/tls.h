@@ -66,10 +66,14 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  next call to connect() or accept(). */
 		const char	*getCiphers();
 
-		/** FIXME: document... */
+		/** Instructs the next call to connect() or accept() whether
+		 *  or not to validate the peer's certificate.  Defaults to
+		 *  true for connect() and false for accept(). */
 		void		setValidatePeer(bool validatepeer);
 
-		/** FIXME: document... */
+		/** Returns whether or not the peer's certificate was explicitly
+		 *  configured to be validated during the next call to connect()
+		 *  or accept(). */
 		bool		getValidatePeer();
 
 		/** Sets the validation depth to use when validating the peer's
