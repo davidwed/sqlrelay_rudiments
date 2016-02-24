@@ -5,6 +5,7 @@
 
 #include <rudiments/security.h>
 #include <rudiments/filedescriptor.h>
+#include <rudiments/datetime.h>
 #include <rudiments/threadmutex.h>
 
 class tlscontext;

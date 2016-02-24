@@ -19,7 +19,7 @@
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 #endif
 
-#define DEBUG_TLS 1
+//#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
@@ -439,7 +439,7 @@ static int passwdCallback(char *buf, int size, int rwflag, void *userdata) {
 #endif 
 
 #if defined(RUDIMENTS_HAS_SSPI)
-static void getCipherAlgs(const char *ciphers,
+static void getCipherAlgs(const char *ciphers, bool isclient,
 				ALG_ID **algids, DWORD *algidcount) {
 
 	#ifdef DEBUG_TLS
@@ -641,11 +641,13 @@ static void getCipherAlgs(const char *ciphers,
 	// clean up
 	delete[] c;
 
-	// use diffie-hellman key exchange
-	#ifdef DEBUG_TLS
-		stdoutput.printf("    cipher DH_EPHEM - success\n");
-	#endif
-	(*algids)[algindex++]=CALG_DH_EPHEM;
+	// add diffie-hellman key exchange on server
+	if (!isclient) {
+		#ifdef DEBUG_TLS
+			stdoutput.printf("    cipher DH_EPHEM - success\n");
+		#endif
+		(*algids)[algindex++]=CALG_DH_EPHEM;
+	}
 
 	// copy out the final algorithm count
 	*algidcount=algindex;
@@ -977,9 +979,10 @@ bool tlscontext::reInit(bool isclient) {
 					"1":"0");
 		#endif
 
-		// set ciphers (automatically adds ephemeral diffie-hellman)
+		// set ciphers
+		// (automatically adds ephemeral diffie-hellman on server)
 		if (retval) {
-			getCipherAlgs(pvt->_ciphers,
+			getCipherAlgs(pvt->_ciphers,isclient,
 					&pvt->_algids,&pvt->_algidcount);
 		}
 
@@ -1404,6 +1407,14 @@ const char *tlscertificate::getIssuer() {
 	return pvt->_issuer;
 }
 
+datetime *tlscertificate::getValidFrom() {
+	return &pvt->_validfrom;
+}
+
+datetime *tlscertificate::getValidTo() {
+	return &pvt->_validto;
+}
+
 const char *tlscertificate::getSubject() {
 	return pvt->_subject;
 }
@@ -1412,19 +1423,19 @@ const char *tlscertificate::getCommonName() {
 	return pvt->_commonname;
 }
 
-const char *tlscertificate::getPrivateKeyAlgorithm() {
+const char *tlscertificate::getPublicKeyAlgorithm() {
 	return pvt->_pkalg;
 }
 
-const unsigned char *tlscertificate::getPrivateKey() {
+const unsigned char *tlscertificate::getPublicKey() {
 	return pvt->_pk;
 }
 
-uint64_t tlscertificate::getPrivateKeyByteLength() {
+uint64_t tlscertificate::getPublicKeyByteLength() {
 	return pvt->_pklen;
 }
 
-uint64_t tlscertificate::getPrivateKeyBitLength() {
+uint64_t tlscertificate::getPublicKeyBitLength() {
 	return pvt->_pkbits;
 }
 

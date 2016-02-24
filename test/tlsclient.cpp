@@ -77,8 +77,8 @@ int main(int argc, const char **argv) {
 
 	// make sure the server sent a certificate
 	if (validate) {
-		tlscertificate	*certificate=ctx.getPeerCertificate();
-		if (!certificate) {
+		tlscertificate	*pcert=ctx.getPeerCertificate();
+		if (!pcert) {
 			stdoutput.printf("peer sent no certificate\n%s\n",
 							ctx.getErrorString());
 			clnt.close();
@@ -87,7 +87,7 @@ int main(int argc, const char **argv) {
 
 		// Make sure the commonname in the certificate is the one we
 		// expect it to be.
-		const char	*cn=certificate->getCommonName();
+		const char	*cn=pcert->getCommonName();
 		if (charstring::compareIgnoringCase(cn,commonname)) {
 			stdoutput.printf("%s!=%s\n",cn,commonname);
 			clnt.close();
@@ -95,8 +95,34 @@ int main(int argc, const char **argv) {
 		}
 
 		stdoutput.printf("server certificate {\n");
-		stdoutput.printf("  common name: %s\n",cn);
-		stdoutput.printf("}\n\n");
+		stdoutput.printf("  version: %d\n",
+					pcert->getVersion());
+		stdoutput.printf("  serial number: %lld\n",
+					pcert->getSerialNumber());
+		stdoutput.printf("  signature algorithm: %s\n",
+					pcert->getSignatureAlgorithm());
+		stdoutput.printf("  issuer: %s\n",
+					pcert->getIssuer());
+		stdoutput.printf("  valid-from: %s\n",
+					pcert->getValidFrom()->getString());
+		stdoutput.printf("  valid-to: %s\n",
+					pcert->getValidTo()->getString());
+		stdoutput.printf("  subject: %s\n",
+					pcert->getSubject());
+		stdoutput.printf("  public key algorithm: %s\n",
+					pcert->getPublicKeyAlgorithm());
+		stdoutput.printf("  public key: ");
+		stdoutput.safePrint(pcert->getPublicKey(),
+					(pcert->getPublicKeyByteLength()<5)?
+					pcert->getPublicKeyByteLength():5);
+		stdoutput.printf("...\n");
+		stdoutput.printf("  public key length: %lld\n",
+					pcert->getPublicKeyByteLength());
+		stdoutput.printf("  public key bits: %lld\n",
+					pcert->getPublicKeyBitLength());
+		stdoutput.printf("  common name: %s\n",
+					pcert->getCommonName());
+		stdoutput.printf("}\n");
 	}
 
 	// write "hello" to the server

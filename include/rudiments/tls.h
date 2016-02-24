@@ -225,25 +225,31 @@ class RUDIMENTS_DLLSPEC tlscertificate {
 		/** Returns the issuer from the certificate. */
 		const char	*getIssuer();
 
+		/** Returns the date the at the certificate is valid from. */
+		datetime	*getValidFrom();
+
+		/** Returns the date the at the certificate is valid to. */
+		datetime	*getValidTo();
+
 		/** Returns the subject from the certificate. */
 		const char	*getSubject();
 
 		/** Returns the common name from the certificate. */
 		const char	*getCommonName();
 
-		/** Returns the private key algorithm from the certificate. */
-		const char	*getPrivateKeyAlgorithm();
+		/** Returns the public key algorithm from the certificate. */
+		const char	*getPublicKeyAlgorithm();
 
-		/** Returns the private key from the certificate. */
-		const unsigned char	*getPrivateKey();
+		/** Returns the public key from the certificate. */
+		const unsigned char	*getPublicKey();
 
-		/** Returns the length of the private key, in bytes,
+		/** Returns the length of the public key, in bytes,
 		 *  from the certificate. */
-		uint64_t	getPrivateKeyByteLength();
+		uint64_t	getPublicKeyByteLength();
 
-		/** Returns the length of the private key, in bits,
+		/** Returns the length of the public key, in bits,
 		 *  from the certificate. */
-		uint64_t	getPrivateKeyBitLength();
+		uint64_t	getPublicKeyBitLength();
 
 	#include <rudiments/private/tlscertificate.h>
 };
