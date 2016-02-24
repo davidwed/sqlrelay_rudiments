@@ -174,7 +174,7 @@ int main(int argc, const char **argv) {
 	commandline	cmdl(argc,argv);
 
 	if (cmdl.found("help")) {
-		stdoutput.printf("tlsserver [-port port] [-cert cert] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
+		stdoutput.printf("tlsserver [-port port] [-cert cert] [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
 		process::exit(0);
 	}
 

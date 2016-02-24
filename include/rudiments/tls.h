@@ -62,13 +62,13 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  a default set of ciphers will be used.
 		 *
 		 *  For a list of valid ciphers on Linux and Unix platforms,
-		 *  run: openssl list-cipher-commands
+		 *  see:  man ciphers
 		 *
 		 *  For a list of valid ciphers on Windows platforms, see:
 		 *  https://msdn.microsoft.com/en-us/library/windows/desktop/aa375549%28v=vs.85%29.aspx
-		 *  On Windows platforms, the ciphers (alg_id) may be given
-		 *  in upper or lower case, with underscores or dashes.
-		 *  Eg. CALG_3DES_112 and calg-3des-112 are equivalent. */
+		 *  On Windows platforms, the ciphers (alg_id's) should omit
+		 *  CALG_ and may be given with underscores or dashes.
+		 *  For example: 3DES_112 */
 		void		setCiphers(const char *ciphers);
 
 		/** Returns the list of ciphers that will be allowed during the
