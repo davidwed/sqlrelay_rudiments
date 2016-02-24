@@ -40,11 +40,6 @@
 		// FIXME: ...
 	#endif
 
-	#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H
-		// for GSS_KRB5_NT_PRINCIPAL_NAME on some platforms
-		#include <gssapi/gssapi_krb5.h>
-	#endif
-
 	#ifndef RUDIMENTS_HAS_GSS_NAME_TYPES
 		#ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_GENERIC_H
 			// for gss_nt_* identifiers
@@ -52,7 +47,6 @@
 		#endif
 		#define GSS_C_NT_HOSTBASED_SERVICE gss_nt_service_name
 		#define GSS_C_NT_USER_NAME gss_nt_user_name
-		#define GSS_KRB5_NT_PRINCIPAL_NAME gss_nt_krb5_principal
 	#endif
 
 #elif defined(RUDIMENTS_HAS_SSPI)
@@ -655,7 +649,6 @@ bool gsscredentials::setKeytab(const char *keytab) {
 			environment::setValue("KRB5_KTNAME",keytab):
 			environment::remove("KRB5_KTNAME");
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: ???
 		return true;
 	#else
 		return false;
@@ -666,7 +659,6 @@ const char *gsscredentials::getKeytab() {
 	#if defined(RUDIMENTS_HAS_GSS)
 		return environment::getValue("KRB5_KTNAME");
 	#elif defined(RUDIMENTS_HAS_SSPI)
-		// FIXME: ???
 		return NULL;
 	#else
 		return NULL;
@@ -783,19 +775,6 @@ bool gsscredentials::acquireForUser(const char *name) {
 	#endif
 }
 
-bool gsscredentials::acquireForKrbPrincipal(const char *name) {
-	#if defined(RUDIMENTS_HAS_GSS)
-		pvt->_credusage=GSS_C_INITIATE;
-		return acquire(name,charstring::length(name)+1,
-					(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME);
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_credusage=SECPKG_CRED_OUTBOUND;
-		return acquire(name,0,NULL);
-	#else
-		return false;
-	#endif
-}
-
 void gsscredentials::setPackageSpecificData(void *psd) {
 	pvt->_psd=psd;
 }
@@ -820,10 +799,6 @@ bool gsscredentials::acquire(const void *name,
 			if ((gss_OID)nametype==(gss_OID)GSS_C_NT_USER_NAME) {
 				stdoutput.write("GSS_C_NT_USER_NAME");
 			}
-			if ((gss_OID)nametype==
-					(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME) {
-				stdoutput.write("GSS_KRB5_NT_PRINCIPAL_NAME");
-			}
 			stdoutput.write(") - ");
 		#endif
 
@@ -832,9 +807,7 @@ bool gsscredentials::acquire(const void *name,
 		if ((gss_OID)nametype==
 				GSS_C_NT_HOSTBASED_SERVICE ||
 			(gss_OID)nametype==
-				GSS_C_NT_USER_NAME ||
-			(gss_OID)nametype==
-				(gss_OID)GSS_KRB5_NT_PRINCIPAL_NAME) {
+				GSS_C_NT_USER_NAME) {
 			pvt->_name=(const char *)name;
 		}
 

@@ -1095,13 +1095,6 @@ then
 			FW_TRY_LINK([#include <gssapi/gssapi.h>
 #include <gssapi/gssapi_ext.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H,1,GSS has gssapi/gssapi_ext.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
-			AC_MSG_CHECKING(for gssapi/gssapi_krb5.h)
-			FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
-	#include <sys/types.h>
-#endif
-#include <gssapi/gssapi.h>
-#include <gssapi/gssapi_krb5.h>],[int a;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSSAPI_GSSAPI_KRB5_H,1,GSS has gssapi/gssapi_krb5.h) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
-
 			AC_MSG_CHECKING(for GSS_C_NT_ANONYMOUS)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_ANONYMOUS;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_C_NT_ANONYMOUS,1,GSS has GSS_C_NT_ANONYMOUS) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 

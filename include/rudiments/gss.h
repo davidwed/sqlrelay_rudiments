@@ -145,10 +145,6 @@ class RUDIMENTS_DLLSPEC gsscredentials {
 		 *  Returns true on success and false on failure. */
 		bool	acquireForUser(const char *name);
 
-		/** Acquires credentials for kerberos principal "name".
-		 *  Returns true on success and false on failure. */
-		bool	acquireForKrbPrincipal(const char *name);
-
 
 		/** Returns true if credentials are currently
 		 *  acquired and false otherwise. */
