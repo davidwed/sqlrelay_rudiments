@@ -60,6 +60,12 @@
 	#include <schannel.h>
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 
+	enum gss_mech_t {
+		GSS_MECH_KRB=0,
+		GSS_MECH_SCHANNEL,
+		GSS_MECH_OTHER
+	};
+
 #else
 	// for UINT_MAX
 	#ifdef RUDIMENTS_HAVE_LIMITS_H
@@ -1350,9 +1356,8 @@ class gsscontextprivate {
 			DWORD		_streamtrailersize;
 			DWORD		_trailersize;
 			DWORD		_blksize;
-			bool		_kerberos;
-			bool		_schannel;
 			bool		_freecredentials;
+			gss_mech_t	_mech;
 		#else
 			uint32_t	_desiredlifetime;
 			uint32_t	_actuallifetime;
@@ -1409,8 +1414,7 @@ gsscontext::gsscontext() : securitycontext() {
 		pvt->_streamtrailersize=0;
 		pvt->_trailersize=0;
 		pvt->_blksize=0;
-		pvt->_kerberos=false;
-		pvt->_schannel=false;
+		pvt->_mech=GSS_MECH_OTHER;
 		pvt->_actuallifetime.u.LowPart=0;
 		pvt->_actuallifetime.u.HighPart=0;
 		pvt->_freecredentials=false;
@@ -2366,10 +2370,11 @@ bool gsscontext::inquire() {
 		pvt->_actualmechanism.initialize(mech);
 
 		// are we using kerberos or schannel?
-		pvt->_kerberos=!charstring::compareIgnoringCase(
-						mech,"Kerberos");
-		pvt->_schannel=charstring::inSetIgnoringCase(
-						mech,schannels);
+		if (!charstring::compareIgnoringCase(mech,"Kerberos")) {
+			pvt->_mech=GSS_MECH_KRB;
+		} else if (charstring::inSetIgnoringCase(mech,schannels)) {
+			pvt->_mech=GSS_MECH_SCHANNEL;
+		}
 
 		// set isopen
 		pvt->_isopen=isopen;
@@ -2401,7 +2406,7 @@ bool gsscontext::inquire() {
 		pvt->_blksize=sizes.cbBlockSize;
 
 		// get stream header and trailer sizes (Schannel only)
-		if (pvt->_schannel) {
+		if (pvt->_mech==GSS_MECH_SCHANNEL) {
 			SecPkgContext_StreamSizes	streamsizes;
 			pvt->_sstatus=QueryContextAttributes(
 						&pvt->_context,
@@ -2454,12 +2459,6 @@ bool gsscontext::inquire() {
 			(pvt->_isinitiator)?"yes":"no");
 		stdoutput.printf("  is open: %s\n",
 			(pvt->_isopen)?"yes":"no");
-		#if defined(RUDIMENTS_HAS_SSPI)
-			stdoutput.printf("  is kerberos: %s\n",
-				(pvt->_kerberos)?"yes":"no");
-			stdoutput.printf("  is schannel: %s\n",
-				(pvt->_schannel)?"yes":"no");
-		#endif
 		stdoutput.write("}\n");
 	#endif
 
@@ -2770,8 +2769,7 @@ bool gsscontext::close() {
 		pvt->_streamtrailersize=0;
 		pvt->_trailersize=0;
 		pvt->_blksize=0;
-		pvt->_kerberos=false;
-		pvt->_schannel=false;
+		pvt->_mech=GSS_MECH_OTHER;
 		pvt->_actuallifetime.u.LowPart=0;
 		pvt->_actuallifetime.u.HighPart=0;
 	#else
@@ -2933,7 +2931,7 @@ bool gsscontext::wrap(const unsigned char *input,
 		// buffers and how the encrypted data is formatted in them
 		// depends on the encryption package...
 
-		if (pvt->_kerberos) {
+		if (pvt->_mech==GSS_MECH_KRB) {
 
 			// For kerberos, "trailer", "data", and "padding"
 			// buffers are required, in that order.
@@ -2990,7 +2988,7 @@ bool gsscontext::wrap(const unsigned char *input,
 						secbuf[2].pvBuffer,
 						secbuf[2].cbBuffer);
 
-		} else if (pvt->_schannel) {
+		} else if (pvt->_mech==GSS_MECH_SCHANNEL) {
 
 			// For schannel, "stream header", "stream trailer",
 			// and "empty" buffers are required, in that order.
@@ -3164,7 +3162,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 		// buffers and how the encrypted data is formatted in them
 		// depends on the encryption package...
 
-		if (pvt->_kerberos) {
+		if (pvt->_mech==GSS_MECH_KRB) {
 
 			// For kerberos, "stream" and "data" buffers are
 			// required, in that order.  DecryptMessage will
@@ -3198,7 +3196,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 							*outputsize);
 			// FIXME: FreeContextBuffer(secbuf[1].pvBuffer) ???
 
-		} else if (pvt->_schannel) {
+		} else if (pvt->_mech==GSS_MECH_SCHANNEL) {
 
 			// For schannel, 1 "data" buffer and 3 "empty" buffers
 			// are required.
