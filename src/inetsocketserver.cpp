@@ -27,7 +27,6 @@ typedef unsigned long	in_addr_t;
 class inetsocketserverprivate {
 	friend class inetsocketserver;
 	private:
-		uint32_t	dummy;
 };
 
 inetsocketserver::inetsocketserver() : socketserver(), inetsocketutil() {
