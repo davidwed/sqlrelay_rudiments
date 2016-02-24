@@ -1031,13 +1031,27 @@ then
 					KRB5CONFIG="$path/$KRB5CONFIG"
 				fi
 
-				dnl on some platforms (solaris), kerberos and
-				dnl gssapi are completely separate and
+				dnl On some platforms (solaris 10), kerberos
+				dnl and gssapi are completely separate and
 				dnl krb-config --libs gssapi returns "Unknown
-				dnl option `gssapi'..." to stdout though, oddly.
-				GSSLIBS=`$KRB5CONFIG --libs krb5 gssapi 2> /dev/null | grep -v Unknown`
+				dnl option `gssapi'..." to stdout, so we have
+				dnl to filter out that.
+
+				dnl On most platforms you can supply both
+				dnl krb5 and gssapi to the same krb-config
+				dnl call.  On some platforms (solaris 11),
+				dnl you have to supply them separately.
+				dnl Unfortunately this doubles-up libraries
+				dnl on most platforms, but we'll let libtool
+				dnl sort that out.
+
+				GSSLIBS=`$KRB5CONFIG --libs gssapi 2> /dev/null | grep -v Unknown`
+				KRBLIBS=`$KRB5CONFIG --libs krb5 2> /dev/null | grep -v Unknown`
+
 				if ( test -n "$GSSLIBS" )
 				then
+					GSSLIBS="$GSSLIBS $KRBLIBS"
+
 					dnl on openbsd, libcom_err is in
 					dnl /usr/local/lib, but this isn't
 					dnl returned by krb5-config
@@ -1045,7 +1059,14 @@ then
 					then
 						GSSLIBS="-L/usr/local/lib $GSSLIBS"
 					fi
-					GSSINCLUDES=`$KRB5CONFIG --cflags 2> /dev/null`
+
+					GSSINCLUDES=`$KRB5CONFIG --cflags gssapi 2> /dev/null | grep -v Unknown`
+					KRBINCLUDES=`$KRB5CONFIG --cflags krb5 2> /dev/null | grep -v Unknown`
+					if ( test -n "$GSSINCLUDES" )
+					then
+						GSSINCLUDES="$GSSINCLUDES $KRBINCLUDES"
+					fi
+
 					break
 				fi
 			done

@@ -773,14 +773,14 @@ FW_CHECK_PTHREAD_SIGMASK
 echo "******************************"
 
 
-dnl Checks for ssl library.
+dnl Checks for TLS/SSL library.
 echo
-echo "***** SSL ********************"
+echo "***** TLS/SSL ****************"
 FW_CHECK_SSL
 echo "******************************"
 
 
-dnl Checks for gss library.
+dnl Checks for GSS library.
 echo
 echo "***** GSS ********************"
 FW_CHECK_GSS
@@ -4167,7 +4167,7 @@ fi
 echo " Features     : Threads $HAS_THREADS"
 echo "                PCRE    $PCREBUILD"
 echo "                libcurl $LIBCURLBUILD"
-echo "                SSL     $SSLBUILD"
+echo "                TLS/SSL $SSLBUILD"
 echo "                GSS     $GSSBUILD"
 echo "******************************"
 echo
