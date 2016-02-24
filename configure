@@ -19294,7 +19294,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 int
 main ()
 {
-const SSL_METHOD *a=SSLv2_method();
+const SSL_METHOD *a=SSLv23_method();
   ;
   return 0;
 }

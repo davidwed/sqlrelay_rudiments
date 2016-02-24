@@ -976,7 +976,7 @@ then
 		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLS_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLS_METHOD,1,SSL has TLS_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for SSLv23_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv2_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV23_METHOD,1,SSL has SSLv23_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv23_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV23_METHOD,1,SSL has SSLv23_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for SSLv2_method)
 		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv2_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV2_METHOD,1,SSL has SSLv2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
