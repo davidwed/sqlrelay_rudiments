@@ -1278,9 +1278,11 @@ void tlscontext::setError(int32_t ret) {
 				case SSL_ERROR_WANT_CONNECT:
 					str="SSL_ERROR_WANT_CONNECT";
 					break;
+				#ifdef SSL_ERROR_WANT_ACCEPT
 				case SSL_ERROR_WANT_ACCEPT:
 					str="SSL_ERROR_WANT_ACCEPT";
 					break;
+				#endif
 				case SSL_ERROR_WANT_X509_LOOKUP:
 					str="SSL_ERROR_WANT_X509_LOOKUP";
 					break;
