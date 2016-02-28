@@ -1131,12 +1131,16 @@ tlscertificate *tlscontext::getPeerCertificate() {
 }
 
 bool tlscontext::loadPeerCert() {
-	if (pvt->_peercert) {
-		return true;
-	}
 	#if defined(RUDIMENTS_HAS_SSL)
+		if (pvt->_peercert) {
+			return true;
+		}
 		pvt->_peercert=SSL_get_peer_certificate(pvt->_ssl);
+		return (pvt->_peercert!=NULL);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		if (pvt->_peercert) {
+			return true;
+		}
 		pvt->_peercert=NULL;
 		SECURITY_STATUS	sstatus=QueryContextAttributes(
 					(_SecHandle *)pvt->_gctx.getContext(),
@@ -1151,8 +1155,8 @@ bool tlscontext::loadPeerCert() {
 			setError(sstatus,gss::getSspiStatusString(sstatus));
 			pvt->_peercert=NULL;
 		}
+		return (pvt->_peercert!=NULL);
 	#endif
-	return (pvt->_peercert!=NULL);
 }
 
 ssize_t tlscontext::read(void *buf, ssize_t count) {
