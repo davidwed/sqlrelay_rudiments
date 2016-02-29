@@ -1156,6 +1156,8 @@ bool tlscontext::loadPeerCert() {
 			pvt->_peercert=NULL;
 		}
 		return (pvt->_peercert!=NULL);
+	#else
+		return false;
 	#endif
 }
 
