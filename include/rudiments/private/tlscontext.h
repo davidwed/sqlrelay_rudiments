@@ -3,7 +3,9 @@
 
 	private:
 		void	initContext();
+		void	initSubContext();
 		void	freeContext();
+		void	freeSubContext();
 		bool	reInit(bool isclient);
 		bool	isPeerCertValid();
 		bool	loadPeerCert();

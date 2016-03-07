@@ -146,13 +146,24 @@ void tlscontext::initContext() {
 	#endif
 }
 
+void tlscontext::initSubContext() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		// create bio and set the file descriptor
+		pvt->_bio=BIO_new(BIO_s_fd());
+		BIO_set_fd(pvt->_bio,
+			(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
+			BIO_NOCLOSE);
+
+		// create ssl and attach bio
+		pvt->_ssl=SSL_new(pvt->_ctx);
+		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
+	#endif
+}
+
 void tlscontext::freeContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (pvt->_ctx) {
-			if (pvt->_ssl) {
-				// SSL_free frees the BIO too
-				SSL_free(pvt->_ssl);
-			}
+			freeSubContext();
 			SSL_CTX_free(pvt->_ctx);
 		}
 	#elif defined(RUDIMENTS_HAS_SSPI)
@@ -170,6 +181,15 @@ void tlscontext::freeContext() {
 			CertCloseStore(pvt->_cstore,0);
 		}
 	#else
+	#endif
+}
+
+void tlscontext::freeSubContext() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (pvt->_ssl) {
+			// SSL_free frees the BIO too
+			SSL_free(pvt->_ssl);
+		}
 	#endif
 }
 
@@ -251,7 +271,11 @@ bool tlscontext::connect() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		int	ret=SSL_connect(pvt->_ssl);
 		setError(ret);
-		if (ret && pvt->_validatepeer && !isPeerCertValid()) {
+		if (ret<1) {
+			// reinit the ssl and bio
+			freeSubContext();
+			initSubContext();
+		} else if (pvt->_validatepeer && !isPeerCertValid()) {
 			ret=0;
 		}
 		return (ret==1);
@@ -805,19 +829,10 @@ bool tlscontext::reInit(bool isclient) {
 
 		// build "bio" and "ssl"
 		if (retval) {
-			// these must be created here rather than above,
-			// apparently modifying the context after creating an
-			// SSL prevents the SSL from working properly...
-
-			// create bio and set the file descriptor
-			pvt->_bio=BIO_new(BIO_s_fd());
-			BIO_set_fd(pvt->_bio,
-				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
-				BIO_NOCLOSE);
-
-			// create ssl and attach bio
-			pvt->_ssl=SSL_new(pvt->_ctx);
-			SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
+			// this must be done here rather than above, as
+			// apparently modifying the context after creating
+			// an SSL prevents the SSL from working properly...
+			initSubContext();
 
 			pvt->_dirty=false;
 		}
@@ -1091,12 +1106,13 @@ bool tlscontext::accept() {
 		return false;
 	}
 	#if defined(RUDIMENTS_HAS_SSL)
-		// FIXME: if accept fails with peer did not return a
-		// certificate, then all subsequent accepts fail with the same
-		// error, though it appears to recover from other errors
 		int	ret=SSL_accept(pvt->_ssl);
 		setError(ret);
-		if (ret && pvt->_validatepeer && !isPeerCertValid()) {
+		if (ret<1) {
+			// reinit the ssl and bio
+			freeSubContext();
+			initSubContext();
+		} else if (pvt->_validatepeer && !isPeerCertValid()) {
 			ret=0;
 		}
 		return (ret==1);
