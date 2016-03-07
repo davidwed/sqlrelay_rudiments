@@ -3360,6 +3360,8 @@ bool gsscontext::getMic(const unsigned char *message,
 		// FIXME: are there cases where micbuffer
 		// should be cleaned up here too?
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: implement this using MakeSignature
+		RUDIMENTS_SET_ENOSYS
 	#else
 		RUDIMENTS_SET_ENOSYS
 	#endif
@@ -3394,6 +3396,8 @@ bool gsscontext::verifyMic(const unsigned char *message,
 		// return success/failure
 		return (pvt->_major==GSS_S_COMPLETE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: implement this using VerifySignature
+		RUDIMENTS_SET_ENOSYS
 	#else
 		RUDIMENTS_SET_ENOSYS
 	#endif
