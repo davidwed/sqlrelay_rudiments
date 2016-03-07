@@ -263,6 +263,7 @@ bool tlscontext::connect() {
 		}
 		return ret;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -421,6 +422,11 @@ bool tlscontext::isPeerCertValid() {
 			cert=issuer;
 		}
 	#else
+		#ifdef DEBUG_TLS
+			stdoutput.write(" failed (not supported)\n}\n");
+		#endif
+		RUDIMENTS_SET_ENOSYS
+		return false;
 	#endif
 
 	#ifdef DEBUG_TLS
@@ -1102,6 +1108,7 @@ bool tlscontext::accept() {
 		}
 		return ret;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1157,6 +1164,7 @@ bool tlscontext::loadPeerCert() {
 		}
 		return (pvt->_peercert!=NULL);
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1177,6 +1185,7 @@ ssize_t tlscontext::read(void *buf, ssize_t count) {
 		}
 		return ret;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1197,6 +1206,7 @@ ssize_t tlscontext::write(const void *buf, ssize_t count) {
 		}
 		return ret;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1213,6 +1223,7 @@ ssize_t tlscontext::pending() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return pvt->_gctx.pending();
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return 0;
 	#endif
 }
@@ -1233,6 +1244,7 @@ bool tlscontext::close() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return true;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }

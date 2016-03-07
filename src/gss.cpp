@@ -482,6 +482,7 @@ bool gssmechanism::initialize(const char *str) {
 		pvt->_oid=(void *)charstring::duplicate(str);
 		return true;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -528,6 +529,7 @@ bool gssmechanism::initialize(const void *oid) {
 		pvt->_oid=(void *)charstring::duplicate((const char *)oid);
 		return true;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -651,6 +653,7 @@ bool gsscredentials::setKeytab(const char *keytab) {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return true;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -758,6 +761,7 @@ bool gsscredentials::acquireForService(const char *name) {
 		pvt->_credusage=SECPKG_CRED_INBOUND;
 		return acquire(name,0,NULL);
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -771,6 +775,7 @@ bool gsscredentials::acquireForUser(const char *name) {
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
 		return acquire(name,0,NULL);
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -1185,6 +1190,7 @@ const void *gsscredentials::getCredentials() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return (pvt->_acquired)?&pvt->_credentials:NULL;
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return NULL;
 	#endif
 }
@@ -1567,6 +1573,7 @@ bool gsscontext::connect() {
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return initiate(pvt->_service,0,NULL);
 	#else
+		RUDIMENTS_SET_ENOSYS
 		return false;
 	#endif
 }
@@ -2698,6 +2705,12 @@ bool gsscontext::accept() {
 		if (error || pvt->_sstatus!=SEC_E_OK) {
 			return false;
 		}
+	#else
+		#ifdef DEBUG_GSS
+			stdoutput.write("failed (not supported)\n\n");
+		#endif
+		RUDIMENTS_SET_ENOSYS
+		return false;
 	#endif
 
 	#ifdef DEBUG_GSS
@@ -2898,6 +2911,10 @@ bool gsscontext::wrap(const unsigned char *input,
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
 
+		#ifdef DEBUG_GSS_WRAP
+			stdoutput.printf(" failed\n%s\n\n",getStatus());
+		#endif
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
 		// EncryptMessage encrypts a set of buffers.  Exactly what
@@ -3055,10 +3072,14 @@ bool gsscontext::wrap(const unsigned char *input,
 			return true;
 		}
 
-	#endif
-
-	#ifdef DEBUG_GSS_WRAP
-		stdoutput.printf(" failed\n%s\n\n",getStatus());
+		#ifdef DEBUG_GSS_WRAP
+			stdoutput.printf(" failed\n%s\n\n",getStatus());
+		#endif
+	#else
+		#ifdef DEBUG_GSS_WRAP
+			stdoutput.printf(" failed (not supported)\n\n");
+		#endif
+		RUDIMENTS_SET_ENOSYS
 	#endif
 
 	return false;
@@ -3126,6 +3147,17 @@ bool gsscontext::unwrap(const unsigned char *input,
 
 		// FIXME: are there cases where outputbuffer
 		// should be cleaned up here too?
+
+		#ifdef DEBUG_GSS_WRAP
+			if (retval) {
+				stdoutput.printf("unwrap(%d,",*outputsize);
+				stdoutput.safePrint(*output,*outputsize);
+				stdoutput.write(") success\n\n");
+			} else {
+				stdoutput.printf("unwrap() failed\n%s\n\n",
+								getStatus());
+			}
+		#endif
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
@@ -3261,16 +3293,23 @@ bool gsscontext::unwrap(const unsigned char *input,
 		}
 
 		retval=!SSPI_ERROR(pvt->_sstatus);
-	#endif
 
-	#ifdef DEBUG_GSS_WRAP
-		if (retval) {
-			stdoutput.printf("unwrap(%d,",*outputsize);
-			stdoutput.safePrint(*output,*outputsize);
-			stdoutput.write(") success\n\n");
-		} else {
-			stdoutput.printf("unwrap() failed\n%s\n\n",getStatus());
-		}
+		#ifdef DEBUG_GSS_WRAP
+			if (retval) {
+				stdoutput.printf("unwrap(%d,",*outputsize);
+				stdoutput.safePrint(*output,*outputsize);
+				stdoutput.write(") success\n\n");
+			} else {
+				stdoutput.printf("unwrap() failed\n%s\n\n",
+								getStatus());
+			}
+		#endif
+	#else
+		RUDIMENTS_SET_ENOSYS
+		#ifdef DEBUG_GSS
+			stdoutput.write("failed (not supported)\n\n");
+		#endif
+		RUDIMENTS_SET_ENOSYS
 	#endif
 
 	return retval;
@@ -3321,6 +3360,8 @@ bool gsscontext::getMic(const unsigned char *message,
 		// FIXME: are there cases where micbuffer
 		// should be cleaned up here too?
 	#elif defined(RUDIMENTS_HAS_SSPI)
+	#else
+		RUDIMENTS_SET_ENOSYS
 	#endif
 
 	return false;
@@ -3354,6 +3395,7 @@ bool gsscontext::verifyMic(const unsigned char *message,
 		return (pvt->_major==GSS_S_COMPLETE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 	#else
+		RUDIMENTS_SET_ENOSYS
 	#endif
 
 	return false;
