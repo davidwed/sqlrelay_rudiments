@@ -173,7 +173,6 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("clientSession {\n");
 
 			// read messages from the client...
-			uint64_t	renegcount=0;
 			for (;;) {
 
 				stdoutput.printf("\n  Receiving message...\n");
@@ -288,22 +287,6 @@ int main(int argc, const char **argv) {
 				delete[] msg;
 
 				stdoutput.printf("  success\n");
-
-				// renegotiate every 5th time
-				renegcount++;
-				if (renegcount==5) {
-					stdoutput.printf("\n  "
-							"Renegotiate...\n");
-					if (!ctx.renegotiate()) {
-						
-						stdoutput.printf(
-						"  failed: "
-						"%s\n",ctx.getErrorString());
-						break;
-					}
-					stdoutput.printf("  success\n");
-					renegcount=0;
-				}
 			}
 	
 			stdoutput.printf("}\n");
