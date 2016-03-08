@@ -1108,27 +1108,34 @@ then
 			FW_TRY_LINK([#include <gssapi/gssapi.h>
 #ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
 	#include <gssapi/gssapi_ext.h>
-#endif],[gss_oid_to_str(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_OID_TO_STR,1,GSS has gss_oid_to_str) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+#endif],[gss_oid_to_str(0,0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_OID_TO_STR,1,GSS has gss_oid_to_str) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); FAIL="yes"])
 
 			AC_MSG_CHECKING(for gss_release_oid)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>
 #ifdef RUDIMENTS_HAS_GSSAPI_GSSAPI_EXT_H
 	#include <gssapi/gssapi_ext.h>
-#endif],[gss_release_oid(0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_RELEASE_OID,1,GSS has gss_release_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+#endif],[gss_release_oid(0,0);],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_RELEASE_OID,1,GSS has gss_release_oid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); FAIL="yes"])
 
 			AC_MSG_CHECKING(for gss name types)
 			FW_TRY_LINK([#include <gssapi/gssapi.h>],[gss_OID a=GSS_C_NT_HOSTBASED_SERVICE;],[$CPPFLAGS $GSSINCLUDES],[$GSSLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_GSS_NAME_TYPES,1,GSS has gss name types) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 
+	dnl force-fail if gss_oid_to_str or gss_release_oid weren't found
+	if ( test -n "$FAIL" )
+	then
+		GSSLIBS=""
+		AC_MSG_WARN(gss_oid_to_str and gss_release_oid are required.)
+	fi
+
 	if ( test -n "$GSSLIBS" )
 	then
 		HAVE_GSS="yes"
 		AC_DEFINE(RUDIMENTS_HAS_GSS,1,Rudiments supports GSS)
-	fi
 
-	FW_INCLUDES(GSS,[$GSSINCLUDES])
-	FW_LIBS(GSS,[$GSSLIBS])
+		FW_INCLUDES(GSS,[$GSSINCLUDES])
+		FW_LIBS(GSS,[$GSSLIBS])
+	fi
 
 else
 

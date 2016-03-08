@@ -19718,7 +19718,7 @@ $as_echo "#define RUDIMENTS_HAS_GSS_OID_TO_STR 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+$as_echo "no" >&6; }; FAIL="yes"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -19759,7 +19759,7 @@ $as_echo "#define RUDIMENTS_HAS_GSS_RELEASE_OID 1" >>confdefs.h
 $as_echo "yes" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+$as_echo "no" >&6; }; FAIL="yes"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
@@ -19809,13 +19809,19 @@ export LD_LIBRARY_PATH
 		fi
 	fi
 
+		if ( test -n "$FAIL" )
+	then
+		GSSLIBS=""
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gss_oid_to_str and gss_release_oid are required." >&5
+$as_echo "$as_me: WARNING: gss_oid_to_str and gss_release_oid are required." >&2;}
+	fi
+
 	if ( test -n "$GSSLIBS" )
 	then
 		HAVE_GSS="yes"
 
 $as_echo "#define RUDIMENTS_HAS_GSS 1" >>confdefs.h
 
-	fi
 
 
 if ( test -n "$GSSINCLUDES" )
@@ -19829,6 +19835,7 @@ then
 	echo "GSS libs... $GSSLIBS"
 fi
 
+	fi
 
 else
 
