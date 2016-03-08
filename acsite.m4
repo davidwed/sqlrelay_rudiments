@@ -1125,7 +1125,7 @@ then
 	if ( test -n "$FAIL" )
 	then
 		GSSLIBS=""
-		AC_MSG_WARN(gss_oid_to_str and gss_release_oid are required.)
+		AC_MSG_WARN(gss_oid_to_str and gss_release_oid are required for GSS.)
 	fi
 
 	if ( test -n "$GSSLIBS" )

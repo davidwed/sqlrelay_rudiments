@@ -19812,8 +19812,8 @@ export LD_LIBRARY_PATH
 		if ( test -n "$FAIL" )
 	then
 		GSSLIBS=""
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gss_oid_to_str and gss_release_oid are required." >&5
-$as_echo "$as_me: WARNING: gss_oid_to_str and gss_release_oid are required." >&2;}
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gss_oid_to_str and gss_release_oid are required for GSS." >&5
+$as_echo "$as_me: WARNING: gss_oid_to_str and gss_release_oid are required for GSS." >&2;}
 	fi
 
 	if ( test -n "$GSSLIBS" )
