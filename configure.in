@@ -3193,12 +3193,19 @@ setuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETUID,1,Some systems have setuid) AC_MSG_RES
 
 AC_MSG_CHECKING(for setgroups)
 AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_SYS_PARAMS_H
+	#include <sys/param.h>
+#endif
 #if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
 	#include <sys/types.h>
 #endif
 #ifdef RUDIMENTS_HAVE_GRP_H
 	#include <grp.h>
-#endif],
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+],
 setgroups(0,0),AC_DEFINE(RUDIMENTS_HAVE_SETGROUPS,1,Some systems have setgroups) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 SETEUID=""
