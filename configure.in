@@ -487,7 +487,11 @@ AC_TRY_COMPILE([#include <unistd.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_UNISTD_H, 1, Some systems have unistd.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for grp.h)
-AC_TRY_COMPILE([#include <grp.h>],
+AC_TRY_COMPILE([
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
+#include <grp.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_GRP_H, 1, Some systems have grp.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 FW_CHECK_SCO_CFRONT_HACK
@@ -3189,6 +3193,9 @@ setuid(0),AC_DEFINE(RUDIMENTS_HAVE_SETUID,1,Some systems have setuid) AC_MSG_RES
 
 AC_MSG_CHECKING(for setgroups)
 AC_TRY_LINK([
+#if defined(RUDIMENTS_HAVE_SYS_TYPES_H)
+	#include <sys/types.h>
+#endif
 #ifdef RUDIMENTS_HAVE_GRP_H
 	#include <grp.h>
 #endif],
