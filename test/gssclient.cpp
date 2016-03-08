@@ -134,7 +134,7 @@ int main(int argc, const char **argv) {
 	fd.setReadBufferSize(65536);
 	fd.setSecurityContext(&gctx);
 
-	// loop, having sessions with server
+	// loop, having sessions with the server
 	for (int64_t i=0; i<ccount; i++) {
 
 		// connect (will also initiate context)
@@ -157,7 +157,8 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("serverSession {\n");
 
-		// write message to the server, the specified number of times...
+		// write the message to the server,
+		// the specified number of times...
 		for (int64_t j=0; j<mcount; j++) {
 
 			displayData("Sending message...",

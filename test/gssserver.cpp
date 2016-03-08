@@ -86,7 +86,7 @@ int main(int argc, const char **argv) {
 
 			stdoutput.printf("clientSession {\n");
 
-			// read messages from client...
+			// read messages from the client...
 			for (;;) {
 
 				uint64_t	msgsize;
