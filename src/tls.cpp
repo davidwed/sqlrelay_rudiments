@@ -19,7 +19,7 @@
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 #endif
 
-//#define DEBUG_TLS 1
+#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
@@ -318,6 +318,23 @@ bool tlscontext::isPeerCertValid() {
 
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
+		// build list of stores to iterate through:
+		// * provided store
+		// * system ca store
+		// * system root store
+		HCERTSTORE	stores[4];
+		uint16_t	i=0;
+		if (pvt->_castore) {
+			stores[i++]=pvt->_castore;
+		}
+		if (pvt->_syscastore) {
+			stores[i++]=pvt->_syscastore;
+		}
+		if (pvt->_sysrootstore) {
+			stores[i++]=pvt->_syscastore;
+		}
+		stores[i++]=NULL;
+
 		// Run through each cert in the chain.  If we reach the end
 		// of the chain and the last cert was self-signed, then
 		// the first cert (the peer cert) is valid...
@@ -333,89 +350,114 @@ bool tlscontext::isPeerCertValid() {
 				c.setCertificate((void *)cert->pCertInfo);
 			#endif
 
-			// get the issuer of the current cert
-			DWORD		flags=0;
 			PCCERT_CONTEXT	issuer=NULL;
+			bool		selfsignedfound=false;
 
-			// try the provided ca store
-			if (pvt->_castore) {
-				flags=CERT_STORE_SIGNATURE_FLAG;
-				issuer=CertGetIssuerCertificateFromStore(
-							pvt->_castore,
-							cert,
-							NULL,
-							&flags);
+			// for each cert, look for an issuing cert in the
+			// provided ca store, system ca store and system root
+			// store...
+			for (HCERTSTORE *store=stores; *store; store++) {
+
 				#ifdef DEBUG_TLS
-					if (issuer) {
-						stdoutput.printf("  issuer "
-							"found in supplied "
-							"ca store\n");
-					} else {
-						stdoutput.printf("  issuer "
-							"not found in supplied "
-							"ca store\n");
-					}
+					stdoutput.printf("  store loop...\n");
 				#endif
-			}
 
-			// if we found a self-signed cert then we're done
-			if (!issuer && GetLastError()==CRYPT_E_SELF_SIGNED) {
-				break;
-			}
+				// get the issuing cert of the current cert...
+				PCCERT_CONTEXT	prevcert=NULL;
+				for (;;) {
 
-			// try the system CA store
-			if (!issuer && pvt->_syscastore) {
-				flags=CERT_STORE_SIGNATURE_FLAG;
-				issuer=CertGetIssuerCertificateFromStore(
-							pvt->_syscastore,
-							cert,
-							NULL,
-							&flags);
-				#ifdef DEBUG_TLS
-					if (issuer) {
-						stdoutput.printf("  issuer "
-							"found in system "
-							"ca store\n");
-					} else {
-						stdoutput.printf("  issuer "
-							"not found in systsem "
-							"ca store\n");
+					#ifdef DEBUG_TLS
+						stdoutput.printf(
+							"    cert loop...\n");
+					#endif
+
+					// set some flags...
+					DWORD	flags=
+						CERT_STORE_SIGNATURE_FLAG|
+						CERT_STORE_TIME_VALIDITY_FLAG|
+						CERT_STORE_REVOCATION_FLAG;
+
+					// get the issuer
+					issuer=
+					CertGetIssuerCertificateFromStore(
+								*store,
+								cert,
+								prevcert,
+								&flags);
+
+					// if the issuing cert has expired or
+					// has been revoked then spin back and
+					// try again...
+					if (flags&
+						CERT_STORE_TIME_VALIDITY_FLAG) {
+						#ifdef DEBUG_TLS
+						stdoutput.printf("      "
+								"certificate "
+								"expired\n");
+						#endif
+						prevcert=issuer;
+						continue;
+					} else if (!(flags&
+						CERT_STORE_NO_CRL_FLAG)) {
+						#ifdef DEBUG_TLS
+						stdoutput.printf("      "
+								"certificate "
+								"revoked\n");
+						#endif
+						prevcert=issuer;
+						continue;
 					}
-				#endif
-			}
-
-			// if we found a self-signed cert then we're done
-			if (!issuer && GetLastError()==CRYPT_E_SELF_SIGNED) {
-				break;
-			}
-
-			// try the system ROOT store
-			if (!issuer && pvt->_sysrootstore) {
-				flags=CERT_STORE_SIGNATURE_FLAG;
-				issuer=CertGetIssuerCertificateFromStore(
-							pvt->_sysrootstore,
-							cert,
-							NULL,
-							&flags);
-				#ifdef DEBUG_TLS
-					if (issuer) {
-						stdoutput.printf("  issuer "
-							"found in system "
-							"root store\n");
-					} else {
-						stdoutput.printf("  issuer "
-							"not found in systsem "
-							"root store\n");
+				
+					#ifdef DEBUG_TLS
+					stdoutput.printf("      issuer ");
+					if (!issuer) {
+						stdoutput.printf("not ");
 					}
-				#endif
+					stdoutput.printf("found\n");
+					#endif
+
+					// if we found a valid issuing cert
+					// then we don't need to keep looking
+					// for valid issuing certs in the
+					// current store
+					if (issuer) {
+						break;
+					}
+
+					// if the current cert has no issuing
+					// cert because it is self-signed then
+					// we also don't need to keep looking
+					// for valid issuing certs in the
+					// current store
+					if (GetLastError()==
+						CRYPT_E_SELF_SIGNED) {
+						selfsignedfound=true;
+						#ifdef DEBUG_TLS
+						stdoutput.printf(
+							"      self signed\n");
+						#endif
+						break;
+					}
+				}
+
+				// if we found an issuing cert or if the
+				// current cert has no issuing cert because
+				// it is self-signed then we don't need to
+				// keep looking for issuing certs in other
+				// stores
+				if (issuer || selfsignedfound) {
+					break;
+				}
 			}
 
-			// if we found a self-signed cert then we're done
-			if (!issuer && GetLastError()==CRYPT_E_SELF_SIGNED) {
+			// if we found a self-signed cert then we're done,
+			// success
+			if (selfsignedfound) {
 				break;
 			}
 			
-			// No valid issuer was found.
+			// if no valid issuing cert was found then we're also
+			// done, failure
 			if (!issuer) {
 				#ifdef DEBUG_TLS
 					stdoutput.write("  failed "
@@ -425,10 +467,14 @@ bool tlscontext::isPeerCertValid() {
 				return false;
 			}
 
-			// increment/check depth
+			// we found a valid issuing cert and need to keep
+			// stepping through the chain...
+
+			// increment and check depth
 			depth++;
 			if (depth>pvt->_depth) {
-				// we have exceeded the allowed validation depth
+				// we have exceeded the allowed
+				// validation depth
 				#ifdef DEBUG_TLS
 					stdoutput.write(
 						"  failed (depth)\n}\n");
