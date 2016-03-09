@@ -116,6 +116,12 @@ tlscontext::~tlscontext() {
 	#endif
 }
 
+#if defined(RUDIMENTS_HAS_SSPI)
+static PCCERT_CONTEXT defaultcctx[1]={
+	NULL
+};
+#endif
+
 void tlscontext::initContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		pvt->_bio=NULL;
@@ -123,10 +129,9 @@ void tlscontext::initContext() {
 		pvt->_ctx=NULL;
 		pvt->_peercert=NULL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
-
 		pvt->_cstore=NULL;
 		pvt->_cctxcount=0;
-		pvt->_cctx=NULL;
+		pvt->_cctx=defaultcctx;
 		pvt->_algidcount=0;
 		pvt->_algids=NULL;
 		pvt->_castore=NULL;
@@ -171,7 +176,7 @@ void tlscontext::freeContext() {
 			CertCloseStore(pvt->_castore,0);
 		}
 		delete[] pvt->_algids;
-		if (pvt->_cctx) {
+		if (pvt->_cctx!=defaultcctx) {
 			for (DWORD i=0; i<pvt->_cctxcount; i++) {
 				CertFreeCertificateContext(pvt->_cctx[i]);
 			}
@@ -364,7 +369,7 @@ bool tlscontext::isPeerCertValid() {
 
 				// get the issuing cert of the current cert...
 				PCCERT_CONTEXT	prevcert=NULL;
-				for (;;) {
+				do {
 
 					#ifdef DEBUG_TLS
 						stdoutput.printf(
@@ -384,68 +389,56 @@ bool tlscontext::isPeerCertValid() {
 								cert,
 								prevcert,
 								&flags);
-
-					// if the issuing cert has expired or
-					// has been revoked then spin back and
-					// try again...
-					if (flags&
-						CERT_STORE_TIME_VALIDITY_FLAG) {
-						#ifdef DEBUG_TLS
-						stdoutput.printf("      "
-								"certificate "
-								"expired\n");
-						#endif
-						prevcert=issuer;
-						continue;
-					} else if (!(flags&
-						CERT_STORE_NO_CRL_FLAG)) {
-						#ifdef DEBUG_TLS
-						stdoutput.printf("      "
-								"certificate "
-								"revoked\n");
-						#endif
-						prevcert=issuer;
-						continue;
-					}
 				
 					#ifdef DEBUG_TLS
-					stdoutput.printf("      issuer ");
+					stdoutput.printf("      issuing cert ");
 					if (!issuer) {
 						stdoutput.printf("not ");
 					}
 					stdoutput.printf("found\n");
 					#endif
 
-					// if we found a valid issuing cert
-					// then we don't need to keep looking
-					// for valid issuing certs in the
-					// current store
 					if (issuer) {
-						break;
+						// if the issuing cert has
+						// expired or has been revoked
+						// then spin back and try
+						// again...
+						if (flags&
+						CERT_STORE_TIME_VALIDITY_FLAG) {
+							#ifdef DEBUG_TLS
+							stdoutput.printf(
+								"      "
+								"expired\n");
+							#endif
+							prevcert=issuer;
+						} else if (!(flags&
+						CERT_STORE_NO_CRL_FLAG)) {
+							#ifdef DEBUG_TLS
+							stdoutput.printf(
+								"      "
+								"revoked\n");
+							#endif
+							prevcert=issuer;
+						}
 					}
+				} while (prevcert);
 
-					// if the current cert has no issuing
-					// cert because it is self-signed then
-					// we also don't need to keep looking
-					// for valid issuing certs in the
-					// current store
-					if (GetLastError()==
-						CRYPT_E_SELF_SIGNED) {
-						selfsignedfound=true;
-						#ifdef DEBUG_TLS
-						stdoutput.printf(
-							"      self signed\n");
-						#endif
-						break;
-					}
+				// if we found a valid issuing cert then we
+				// don't need to keep looking for valid issuing
+				// certs in other stores
+				if (issuer) {
+					break;
 				}
 
-				// if we found an issuing cert or if the
-				// current cert has no issuing cert because
-				// it is self-signed then we don't need to
-				// keep looking for issuing certs in other
-				// stores
-				if (issuer || selfsignedfound) {
+				// if the current cert has no issuing cert
+				// because it is self-signed then we also don't
+				// need to keep looking for valid issuing certs
+				// in other stores
+				if (GetLastError()==CRYPT_E_SELF_SIGNED) {
+					selfsignedfound=true;
+					#ifdef DEBUG_TLS
+					stdoutput.printf("      self signed\n");
+					#endif
 					break;
 				}
 			}
@@ -737,6 +730,8 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 
 bool tlscontext::reInit(bool isclient) {
 
+	pvt->_peercert=NULL;
+
 	if (!pvt->_dirty) {
 		return true;
 	}
@@ -905,6 +900,7 @@ bool tlscontext::reInit(bool isclient) {
 		// certificates, and don't even request them by default.
 		DWORD		credflags=(isclient)?
 					SCH_CRED_MANUAL_CRED_VALIDATION:0;
+		// FIXME: add SCH_CRED_REVOCATION_CHAIN_CHECK?
 		uint32_t	ctxflags=(isclient)?
 					(ISC_REQ_SEQUENCE_DETECT|
 						ISC_REQ_REPLAY_DETECT|
@@ -1037,7 +1033,7 @@ bool tlscontext::reInit(bool isclient) {
 			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
 					pvt->_cert,pvt->_pkpwd,
 					(pvt->_cctxcount)?"valid":"invalid");
-			if (pvt->_cctx) {
+			if (pvt->_cctx!=defaultcctx) {
 				tlscertificate	cert;
 				cert.setCertificate(pvt->_cctx[0]->pCertInfo);
 			}
