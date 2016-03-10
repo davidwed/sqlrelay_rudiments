@@ -1286,11 +1286,9 @@ ssize_t tlscontext::pending() {
 bool tlscontext::close() {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
-		// Calling SSL_shutdown causes future connect()'s to fail
-		// randomly.  It doesn't appear to be strictly necessary
-		// to do either.  The SSPI examples don't do anything like
-		// this.
-		//
+		// FIXME: It ought to be ok to do this, but doing it on either
+		// side causes subsequent SSL_connects to fail and disabling
+		// the session cache doesn't help.
 		/*int	ret=1;
 		if (pvt->_ssl) {
 			ret=SSL_shutdown(pvt->_ssl);
@@ -1303,6 +1301,7 @@ bool tlscontext::close() {
 		return (ret==1);*/
 		return true;
 	#elif defined(RUDIMENTS_HAS_SSPI)
+		// FIXME: send the other side a close-notify message
 		return true;
 	#else
 		RUDIMENTS_SET_ENOSYS
