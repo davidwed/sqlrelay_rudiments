@@ -153,15 +153,17 @@ void tlscontext::initContext() {
 
 void tlscontext::initSubContext() {
 	#if defined(RUDIMENTS_HAS_SSL)
-		// create bio and set the file descriptor
-		pvt->_bio=BIO_new(BIO_s_fd());
-		BIO_set_fd(pvt->_bio,
-			(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
-			BIO_NOCLOSE);
+		if (pvt->_ctx) {
+			// create bio and set the file descriptor
+			pvt->_bio=BIO_new(BIO_s_fd());
+			BIO_set_fd(pvt->_bio,
+				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
+				BIO_NOCLOSE);
 
-		// create ssl and attach bio
-		pvt->_ssl=SSL_new(pvt->_ctx);
-		SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
+			// create ssl and attach bio
+			pvt->_ssl=SSL_new(pvt->_ctx);
+			SSL_set_bio(pvt->_ssl,pvt->_bio,pvt->_bio);
+		}
 	#endif
 }
 
@@ -253,16 +255,8 @@ const char *tlscontext::getCertificateAuthority() {
 }
 
 void tlscontext::setFileDescriptor(filedescriptor *fd) {
+	pvt->_dirty=true;
 	pvt->_fd=fd;
-	#if defined(RUDIMENTS_HAS_SSL)
-		if (pvt->_bio) {
-			BIO_set_fd(pvt->_bio,
-				(pvt->_fd)?pvt->_fd->getFileDescriptor():-1,
-				BIO_NOCLOSE);
-		}
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		pvt->_gctx.setFileDescriptor(pvt->_fd);
-	#endif
 }
 
 filedescriptor *tlscontext::getFileDescriptor() {
@@ -1107,6 +1101,9 @@ bool tlscontext::reInit(bool isclient) {
 				);
 			pvt->_scred.dwFlags=credflags;
 
+			// set file descriptor
+			pvt->_gctx.setFileDescriptor(pvt->_fd);
+
 			// set security context flags
 			pvt->_gctx.setDesiredFlags(ctxflags);
 
@@ -1289,7 +1286,12 @@ ssize_t tlscontext::pending() {
 bool tlscontext::close() {
 	clearError();
 	#if defined(RUDIMENTS_HAS_SSL)
-		int	ret=1;
+		// Calling SSL_shutdown causes future connect()'s to fail
+		// randomly.  It doesn't appear to be strictly necessary
+		// to do either.  The SSPI examples don't do anything like
+		// this.
+		//
+		/*int	ret=1;
 		if (pvt->_ssl) {
 			ret=SSL_shutdown(pvt->_ssl);
 			if (!ret) {
@@ -1298,7 +1300,8 @@ bool tlscontext::close() {
 			}
 			setError(ret);
 		}
-		return (ret==1);
+		return (ret==1);*/
+		return true;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return true;
 	#else
