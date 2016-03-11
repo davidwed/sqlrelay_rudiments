@@ -65,7 +65,7 @@ unixsocketserver::~unixsocketserver() {
 		// the delete below, so don't close anything here, just set the
 		// filedescriptor to -1 so the filedescriptor destructor
 		// doesn't try to close anything when it runs.
-		setFileDescriptor(-1);
+		filedescriptor::setFileDescriptor(-1);
 	#else
 		close();
 	#endif
@@ -175,6 +175,7 @@ bool unixsocketserver::listen(int32_t backlog) {
 filedescriptor *unixsocketserver::accept() {
 
 #if defined(_WIN32) || defined(__VMS)
+	pvt->_iss.setSecurityContext(getSecurityContext());
 	return pvt->_iss.accept();
 #else
 	// initialize a socket address structure

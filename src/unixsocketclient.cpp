@@ -110,6 +110,7 @@ int32_t unixsocketclient::connect() {
 	close();
 
 #if defined(_WIN32) || defined(__VMS)
+	pvt->_isc.setSecurityContext(getSecurityContext());
 	int32_t	result=pvt->_isc.connect();
 	if (result>-1) {
 		fd(pvt->_isc.getFileDescriptor());

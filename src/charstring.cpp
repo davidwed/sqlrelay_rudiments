@@ -1337,8 +1337,12 @@ void charstring::split(const char *string, ssize_t stringlength,
 	}
 	if (isNullOrEmpty(string) || !stringlength ||
 		isNullOrEmpty(delimiter) || !delimiterlength) {
-		(*list)=NULL;
-		(*listlength)=0;
+		if (list) {
+			(*list)=NULL;
+		}
+		if (listlength) {
+			(*listlength)=0;
+		}
 		return;
 	}
 

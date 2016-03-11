@@ -4,6 +4,7 @@
 #include <rudiments/unixsocketutil.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stdio.h>
 
 class unixsocketutilprivate {
 	friend class unixsocketutil;
