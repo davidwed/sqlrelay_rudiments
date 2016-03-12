@@ -48,12 +48,18 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 
 		/** Sets the password to use when accessing the private key
 		 *  in the certificate chain file during the next call to
-		 *  connect() or accept(). */
+		 *  connect() or accept().
+		 *
+		 *  Note: password-protected private keys are currently
+		 *  not supported on Windows platforms. */
 		void		setPrivateKeyPassword(const char *password);
 
 		/** Returns the password that will be used to access the
 		 *  private key in the certificate chain file during the next
-		 *  call to connect() or accept(). */
+		 *  call to connect() or accept().
+		 *
+		 *  Note: password-protected private keys are currently
+		 *  not supported on Windows platforms. */
 		const char	*getPrivateKeyPassword();
 
 		/** Sets the list of ciphers to allow during the next call to
@@ -136,12 +142,14 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  the next call to connect() or accept(). */
 		const char	*getCertificateAuthority();
 
-		/** Sets the file descriptor that is currently used to
-		 *  communicate with the peer. */
+		/** Sets the file descriptor that will be used to communicate
+		 *  with the peer during the next call to connect() or
+		 *  accept(). */
 		void		setFileDescriptor(filedescriptor *fd);
 
-		/** Returns the file descrptor that is currently used to
-		 *  communicate with the peer. */
+		/** Returns the file descrptor that will be used to communicate
+ 		 *  with the peer during the next call to connect() or
+ 		 *  accept(). */
 		filedescriptor	*getFileDescriptor();
 
 
