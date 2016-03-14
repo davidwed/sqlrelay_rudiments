@@ -1247,6 +1247,8 @@ const char *gsscredentials::getGSSMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		setStatus(pvt->_minor,GSS_C_GSS_CODE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -1255,6 +1257,8 @@ const char *gsscredentials::getMechanismMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		setStatus(pvt->_major,GSS_C_MECH_CODE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -1263,6 +1267,8 @@ const char *gsscredentials::getMechanismMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		setStatus(pvt->_minor,GSS_C_MECH_CODE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3848,6 +3854,8 @@ const char *gsscontext::getGSSMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		setStatus(pvt->_minor,GSS_C_GSS_CODE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3856,6 +3864,8 @@ const char *gsscontext::getMechanismMajorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		setStatus(pvt->_major,GSS_C_MECH_CODE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
@@ -3864,6 +3874,8 @@ const char *gsscontext::getMechanismMinorStatus() {
 	pvt->_status.clear();
 	#if defined(RUDIMENTS_HAS_GSS)
 		setStatus(pvt->_minor,GSS_C_MECH_CODE);
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		setStatus(pvt->_sstatus,0);
 	#endif
 	return pvt->_status.getString();
 }
