@@ -4,8 +4,8 @@
 		void	setPackageSpecificData(void *psd);
 
 	private:
-		bool	acquire(const void *name,
-					size_t namelength,
+		bool	acquire(const char *name,
+					size_t namelen,
 					const void *nametype);
 		void	setStatus(uint32_t status, int32_t type);
 

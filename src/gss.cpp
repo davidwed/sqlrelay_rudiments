@@ -755,7 +755,7 @@ gssmechanism *gsscredentials::getDesiredMechanism(uint64_t index) {
 bool gsscredentials::acquireForService(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_ACCEPT;
-		return acquire(name,charstring::length(name)+1,
+		return acquire(name,charstring::length(name),
 						GSS_C_NT_HOSTBASED_SERVICE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_INBOUND;
@@ -769,7 +769,7 @@ bool gsscredentials::acquireForService(const char *name) {
 bool gsscredentials::acquireForUser(const char *name) {
 	#if defined(RUDIMENTS_HAS_GSS)
 		pvt->_credusage=GSS_C_INITIATE;
-		return acquire(name,charstring::length(name)+1,
+		return acquire(name,charstring::length(name),
 						GSS_C_NT_USER_NAME);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_OUTBOUND;
@@ -784,8 +784,8 @@ void gsscredentials::setPackageSpecificData(void *psd) {
 	pvt->_psd=psd;
 }
 
-bool gsscredentials::acquire(const void *name,
-				size_t namesize,
+bool gsscredentials::acquire(const char *name,
+				size_t namelen,
 				const void *nametype) {
 
 	// release any previously acquired credentials
@@ -813,7 +813,7 @@ bool gsscredentials::acquire(const void *name,
 				GSS_C_NT_HOSTBASED_SERVICE ||
 			(gss_OID)nametype==
 				GSS_C_NT_USER_NAME) {
-			pvt->_name=(const char *)name;
+			pvt->_name=name;
 		}
 
 		// Acquire credentials associated with "name"
@@ -827,7 +827,7 @@ bool gsscredentials::acquire(const void *name,
 			// if a name was provided then use it...
 			gss_buffer_desc	namebuffer;
 			namebuffer.value=(void *)name;
-			namebuffer.length=namesize;
+			namebuffer.length=namelen+1;
 
 			// create an "internal form" struct from the name...
 			pvt->_major=gss_import_name(&pvt->_minor,
@@ -939,7 +939,7 @@ bool gsscredentials::acquire(const void *name,
 		#endif
 
 		// keep track of the name
-		pvt->_name=(const char *)name;
+		pvt->_name=name;
 
 		// try each desired mechanism...
 		bool		first=true;
@@ -1574,7 +1574,7 @@ const char *gsscontext::getService() {
 
 bool gsscontext::connect() {
 	#if defined(RUDIMENTS_HAS_GSS)
-		return initiate(pvt->_service,pvt->_servicelength+1,
+		return initiate(pvt->_service,pvt->_servicelength,
 						GSS_C_NT_HOSTBASED_SERVICE);
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		return initiate(pvt->_service,0,NULL);
@@ -1632,8 +1632,8 @@ bool gsscontext::getMaxMessageSize(const char *mechname) {
 	return true;
 }
 
-bool gsscontext::initiate(const void *name,
-				size_t namesize,
+bool gsscontext::initiate(const char *name,
+				size_t namelen,
 				const void *nametype) {
 
 	// release any previously initialized context
@@ -1664,7 +1664,7 @@ bool gsscontext::initiate(const void *name,
 			// if a name was provided then use it...
 			gss_buffer_desc	namebuffer;
 			namebuffer.value=(void *)name;
-			namebuffer.length=namesize;
+			namebuffer.length=namelen+1;
 
 			// create an "internal form" struct from the name...
 			pvt->_major=gss_import_name(&pvt->_minor,

@@ -7,8 +7,8 @@
 	private:
 		bool	getMaxMessageSize(const char *mechname);
 		bool	inquire();
-		bool	initiate(const void *name,
-					size_t size,
+		bool	initiate(const char *name,
+					size_t namelen,
 					const void *nametype);
 
 		ssize_t	receiveToken(uint32_t *tokenflags,
