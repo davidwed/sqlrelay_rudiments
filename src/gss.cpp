@@ -822,7 +822,7 @@ bool gsscredentials::acquire(const void *name,
 		// by default, we'll use "no name"
 		gss_name_t	desiredname=GSS_C_NO_NAME;
 
-		if (name) {
+		if (!charstring::isNullOrEmpty(name)) {
 
 			// if a name was provided then use it...
 			gss_buffer_desc	namebuffer;
@@ -1659,7 +1659,7 @@ bool gsscontext::initiate(const void *name,
 		// by default, we'll use "no name"
 		gss_name_t	desiredname=GSS_C_NO_NAME;
 
-		if (name) {
+		if (!charstring::isNullOrEmpty(name)) {
 
 			// if a name was provided then use it...
 			gss_buffer_desc	namebuffer;
@@ -1852,8 +1852,10 @@ bool gsscontext::initiate(const void *name,
 			pvt->_credentials=new gsscredentials();
 			pvt->_credentials->addDesiredMechanism(
 						pvt->_desiredmechanism);
-			pvt->_credentials->acquireForUser(NULL);
 			pvt->_freecredentials=true;
+		}
+		if (!pvt->_credentials->acquired()) {
+			pvt->_credentials->acquireForUser(NULL);
 		} 
 		credentials=(CredHandle *)pvt->_credentials->getCredentials();
 
