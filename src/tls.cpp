@@ -777,7 +777,8 @@ bool tlscontext::reInit(bool isclient) {
 
 		// decide on the protocol version
 		const SSL_METHOD	*method=NULL;
-		if (!charstring::compare(pvt->_version,"SSL2")) {
+		if (!charstring::compareIgnoringCase(
+					pvt->_version,"SSL2")) {
 			#if defined(RUDIMENTS_HAS_SSLV2_METHOD)
 			if (isclient) {
 				method=SSLv2_client_method();
@@ -785,28 +786,32 @@ bool tlscontext::reInit(bool isclient) {
 				method=SSLv2_server_method();
 			}
 			#endif
-		} else if (!charstring::compare(pvt->_version,"SSL3")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"SSL3")) {
 			// FIXME: if defined...
 			if (isclient) {
 				method=SSLv3_client_method();
 			} else {
 				method=SSLv3_server_method();
 			}
-		} else if (!charstring::compare(pvt->_version,"TLS1")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1")) {
 			// FIXME: if defined...
 			if (isclient) {
 				method=TLSv1_client_method();
 			} else {
 				method=TLSv1_server_method();
 			}
-		} else if (!charstring::compare(pvt->_version,"TLS1.1")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1.1")) {
 			// FIXME: if defined...
 			if (isclient) {
 				method=TLSv1_1_client_method();
 			} else {
 				method=TLSv1_1_server_method();
 			}
-		} else if (!charstring::compare(pvt->_version,"TLS1.2")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1.2")) {
 			// FIXME: if defined...
 			if (isclient) {
 				method=TLSv1_2_client_method();
@@ -967,7 +972,8 @@ bool tlscontext::reInit(bool isclient) {
 
 		// decide on the protocol version
 		DWORD	method=0;
-		if (!charstring::compare(pvt->_version,"SSL2")) {
+		if (!charstring::compareIgnoringCase(
+					pvt->_version,"SSL2")) {
 			if (isclient) {
 				#ifdef SP_PROT_SSL2_CLIENT
 				method=SP_PROT_SSL2_CLIENT;
@@ -977,7 +983,8 @@ bool tlscontext::reInit(bool isclient) {
 				method=SP_PROT_SSL2_SERVER;
 				#endif
 			}
-		} else if (!charstring::compare(pvt->_version,"SSL3")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"SSL3")) {
 			if (isclient) {
 				#ifdef SP_PROT_SSL3_CLIENT
 				method=SP_PROT_SSL3_CLIENT;
@@ -987,7 +994,8 @@ bool tlscontext::reInit(bool isclient) {
 				method=SP_PROT_SSL3_SERVER;
 				#endif
 			}
-		} else if (!charstring::compare(pvt->_version,"TLS1")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1")) {
 			if (isclient) {
 				#ifdef SP_PROT_TLS1_CLIENT
 				method=SP_PROT_TLS1_CLIENT;
@@ -997,7 +1005,8 @@ bool tlscontext::reInit(bool isclient) {
 				method=SP_PROT_TLS1_SERVER;
 				#endif
 			}
-		} else if (!charstring::compare(pvt->_version,"TLS1.1")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1.1")) {
 			if (isclient) {
 				#ifdef SP_PROT_TLS1_1_CLIENT
 				method=SP_PROT_TLS1_1_CLIENT;
@@ -1007,7 +1016,8 @@ bool tlscontext::reInit(bool isclient) {
 				method=SP_PROT_TLS1_1_SERVER;
 				#endif
 			}
-		} else if (!charstring::compare(pvt->_version,"TLS1.2")) {
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1.2")) {
 			if (isclient) {
 				#ifdef SP_PROT_TLS1_2_CLIENT
 				method=SP_PROT_TLS1_2_CLIENT;

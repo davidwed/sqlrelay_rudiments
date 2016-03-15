@@ -12,7 +12,7 @@
 
 static void usage() {
 	stdoutput.printf("tlsclient [-host host] [-port port] "
-			"[-cert cert] [-ciphers ciphers] "
+			"[-version version] [-cert cert] [-ciphers ciphers] "
 			"[-validate (yes|no)] [-depth depth] [-ca ca] "
 			"[-commonname name] "
 			"[-ccount count] [-mcount count] [-dcount count]\n");
@@ -32,6 +32,10 @@ int main(int argc, const char **argv) {
 	uint16_t	port=9000;
 	if (cmdl.found("port")) {
 		port=charstring::toUnsignedInteger(cmdl.getValue("port"));
+	}
+	const char	*version=NULL;
+	if (cmdl.found("version")) {
+		version=cmdl.getValue("version");
 	}
 	const char	*cert=NULL;
 	if (cmdl.found("cert")) {
@@ -92,6 +96,7 @@ int main(int argc, const char **argv) {
 
 	// create the tls context
 	tlscontext	ctx;
+	ctx.setProtocolVersion(version);
 	ctx.setCertificateChainFile(cert);
 	ctx.setPrivateKeyPassword("password");
 	ctx.setCiphers(ciphers);
