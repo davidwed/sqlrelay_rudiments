@@ -168,6 +168,12 @@ int main(int argc, const char **argv) {
 					pcert->getPublicKeyBitLength());
 			stdoutput.printf("  common name: %s\n",
 					pcert->getCommonName());
+			stdoutput.printf("  subject alternate names:\n");
+			for (linkedlistnode< char * > *node=
+				pcert->getSubjectAlternateNames()->getFirst();
+				node; node=node->getNext()) {
+				stdoutput.printf("    %s\n",node->getValue());
+			}
 			stdoutput.printf("}\n");
 		}
 

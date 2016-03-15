@@ -5,6 +5,7 @@
 [ req ]
 distinguished_name	= req_distinguished_name
 prompt			= no
+req_extensions		= v3_req
 
 [ req_distinguished_name ]
 0.organizationName	= Rudiments
@@ -14,3 +15,10 @@ localityName		= Atlanta
 stateOrProvinceName	= Georgia
 countryName		= US
 commonName		= client.localdomain
+
+[ v3_req ]
+subjectAltName		= @alt_names
+
+[ alt_names ]
+DNS.1			= client.localdomain
+DNS.2			= localdomain

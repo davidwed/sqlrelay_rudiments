@@ -1,0 +1,5 @@
+subjectAltName		= @alt_names
+
+[ alt_names ]
+DNS.1			= server.localdomain
+DNS.2			= localdomain

@@ -12,6 +12,7 @@
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/ssl.h>
 	#include <openssl/err.h>
+	#include <openssl/x509v3.h>
 #elif defined(RUDIMENTS_HAS_SSPI)
 	#include <rudiments/gss.h>
 	#include <rudiments/bytestring.h>
@@ -1434,6 +1435,7 @@ class tlscertificateprivate {
 		// FIXME: issuer unique id
 		// FIXME: subject unique id
 		// FIXME: extensions
+		linkedlist< char * >	_san;
 };
 
 tlscertificate::tlscertificate() {
@@ -1469,6 +1471,11 @@ void tlscertificate::freeCertificate() {
 	delete[] pvt->_sigalg;
 	delete[] pvt->_pkalg;
 	delete[] pvt->_pk;
+	for (linkedlistnode< char * > *node=pvt->_san.getFirst();
+					node; node=node->getNext()) {
+		delete[] node->getValue();
+	}
+	pvt->_san.clear();
 }
 
 uint32_t tlscertificate::getVersion() {
@@ -1517,6 +1524,10 @@ uint64_t tlscertificate::getPublicKeyByteLength() {
 
 uint64_t tlscertificate::getPublicKeyBitLength() {
 	return pvt->_pkbits;
+}
+
+linkedlist< char * > *tlscertificate::getSubjectAlternateNames() {
+	return &pvt->_san;
 }
 
 #if defined(RUDIMENTS_HAS_SSL)
@@ -1627,6 +1638,33 @@ void tlscertificate::setCertificate(void *cert) {
 		// FIXME: subject unique id
 		// FIXME: extensions
 
+		// get the subject alternate names
+		STACK_OF(GENERAL_NAME)	*names=(STACK_OF(GENERAL_NAME) *)
+						X509_get_ext_d2i(c,
+							NID_subject_alt_name,
+							NULL,NULL);
+		if (names) {
+			for (int i=0; i<sk_GENERAL_NAME_num(names); i++) {
+				const GENERAL_NAME	*cur=
+					sk_GENERAL_NAME_value(names,i);
+				if (cur->type==GEN_DNS) {
+					char	*dnsname=(char *)
+						ASN1_STRING_data(
+							cur->d.dNSName);
+					size_t	asn1len=
+						ASN1_STRING_length(
+							cur->d.dNSName);
+					size_t	strlen=
+						charstring::length(dnsname);
+					if (asn1len==strlen) {
+						pvt->_san.append(
+							charstring::duplicate(
+								dnsname));
+					}
+				}
+			}
+		}
+
 	#elif defined(RUDIMENTS_HAS_SSPI)
 
 		CERT_INFO	*c=(CERT_INFO *)cert;
@@ -1735,6 +1773,11 @@ void tlscertificate::setCertificate(void *cert) {
 		stdoutput.printf("    public key length: %lld\n",pvt->_pklen);
 		stdoutput.printf("    public key bits: %lld\n",pvt->_pkbits);
 		stdoutput.printf("    common name: %s\n",pvt->_commonname);
+		stdoutput.printf("    subject alternate names:\n");
+		for (linkedlistnode< char * > *node=pvt->_san.getFirst();
+						node; node=node->getNext()) {
+			stdoutput.printf("        %s\n",node->getValue());
+		}
 		stdoutput.printf("  }\n");
 	#endif
 }
