@@ -912,6 +912,7 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		#ifdef DEBUG_TLS
+			stdoutput.printf("  version: %s\n",pvt->_version);
 			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
 					pvt->_cert,pvt->_pkpwd,
 					(certloaded)?"valid":"invalid");
@@ -1039,7 +1040,7 @@ bool tlscontext::reInit(bool isclient) {
 					!defined(SP_PROT_SSL3_CLIENT)
 					|SP_PROT_SSL2_CLIENT
 				#endif
-				):
+				);
 			} else {
 				method=
 				(0
@@ -1183,6 +1184,7 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		#ifdef DEBUG_TLS
+			stdoutput.printf("  version: %s\n",pvt->_version);
 			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
 					pvt->_cert,pvt->_pkpwd,
 					(pvt->_cctxcount)?"valid":"invalid");
