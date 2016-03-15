@@ -53,6 +53,7 @@ class tlscontextprivate {
 	friend class tlscontext;
 	private:
 		bool			_isclient;
+		const char		*_version;
 		const char		*_cert;
 		const char		*_pkpwd;
 		const char		*_ciphers;
@@ -88,6 +89,7 @@ class tlscontextprivate {
 tlscontext::tlscontext() : securitycontext() {
 	pvt=new tlscontextprivate;
 	pvt->_isclient=false;
+	pvt->_version=NULL;
 	pvt->_cert=NULL;
 	pvt->_pkpwd=NULL;
 	pvt->_ciphers=NULL;
@@ -199,6 +201,15 @@ void tlscontext::freeSubContext() {
 			SSL_free(pvt->_ssl);
 		}
 	#endif
+}
+
+void tlscontext::setProtocolVersion(const char *version) {
+	pvt->_dirty=true;
+	pvt->_version=version;
+}
+
+const char *tlscontext::getProtocolVersion() {
+	return pvt->_version;
 }
 
 void tlscontext::setCertificateChainFile(const char *filename) {
@@ -764,9 +775,48 @@ bool tlscontext::reInit(bool isclient) {
 		//   is it clear whether any method to do it is consistent
 		//   across openssl versions or other ssl implementations.
 
-		// create the context
-		pvt->_ctx=SSL_CTX_new(
-				(isclient)?
+		// decide on the protocol version
+		const SSL_METHOD	*method=NULL;
+		if (!charstring::compare(pvt->_version,"SSL2")) {
+			#if defined(RUDIMENTS_HAS_SSLV2_METHOD)
+			if (isclient) {
+				method=SSLv2_client_method();
+			} else {
+				method=SSLv2_server_method();
+			}
+			#endif
+		} else if (!charstring::compare(pvt->_version,"SSL3")) {
+			// FIXME: if defined...
+			if (isclient) {
+				method=SSLv3_client_method();
+			} else {
+				method=SSLv3_server_method();
+			}
+		} else if (!charstring::compare(pvt->_version,"TLS1")) {
+			// FIXME: if defined...
+			if (isclient) {
+				method=TLSv1_client_method();
+			} else {
+				method=TLSv1_server_method();
+			}
+		} else if (!charstring::compare(pvt->_version,"TLS1.1")) {
+			// FIXME: if defined...
+			if (isclient) {
+				method=TLSv1_1_client_method();
+			} else {
+				method=TLSv1_1_server_method();
+			}
+		} else if (!charstring::compare(pvt->_version,"TLS1.2")) {
+			// FIXME: if defined...
+			if (isclient) {
+				method=TLSv1_2_client_method();
+			} else {
+				method=TLSv1_2_server_method();
+			}
+		}
+		if (!method) {
+			if (isclient) {
+				method=
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
 					TLS_client_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
@@ -774,7 +824,9 @@ bool tlscontext::reInit(bool isclient) {
 				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
 					SSLv2_client_method()
 				#endif
-					:
+				;
+			} else {
+				method=
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
 					TLS_server_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
@@ -782,7 +834,12 @@ bool tlscontext::reInit(bool isclient) {
 				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
 					SSLv2_server_method()
 				#endif
-				);
+				;
+			}
+		}
+
+		// create the context
+		pvt->_ctx=SSL_CTX_new(method);
 
 		// set auto-retry mode
 		SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
@@ -906,6 +963,107 @@ bool tlscontext::reInit(bool isclient) {
 						ASC_REQ_REPLAY_DETECT|
 						ASC_RET_EXTENDED_ERROR|
 						ASC_REQ_STREAM);
+
+		// decide on the protocol version
+		DWORD	method=0;
+		if (!charstring::compare(pvt->_version,"SSL2")) {
+			if (isclient) {
+				#ifdef SP_PROT_SSL2_CLIENT
+				method=SP_PROT_SSL2_CLIENT;
+				#endif
+			} else {
+				#ifdef SP_PROT_SSL2_SERVER
+				method=SP_PROT_SSL2_SERVER;
+				#endif
+			}
+		} else if (!charstring::compare(pvt->_version,"SSL3")) {
+			if (isclient) {
+				#ifdef SP_PROT_SSL3_CLIENT
+				method=SP_PROT_SSL3_CLIENT;
+				#endif
+			} else {
+				#ifdef SP_PROT_SSL3_SERVER
+				method=SP_PROT_SSL3_SERVER;
+				#endif
+			}
+		} else if (!charstring::compare(pvt->_version,"TLS1")) {
+			if (isclient) {
+				#ifdef SP_PROT_TLS1_CLIENT
+				method=SP_PROT_TLS1_CLIENT;
+				#endif
+			} else {
+				#ifdef SP_PROT_TLS1_SERVER
+				method=SP_PROT_TLS1_SERVER;
+				#endif
+			}
+		} else if (!charstring::compare(pvt->_version,"TLS1.1")) {
+			if (isclient) {
+				#ifdef SP_PROT_TLS1_1_CLIENT
+				method=SP_PROT_TLS1_1_CLIENT;
+				#endif
+			} else {
+				#ifdef SP_PROT_TLS1_1_SERVER
+				method=SP_PROT_TLS1_1_SERVER;
+				#endif
+			}
+		} else if (!charstring::compare(pvt->_version,"TLS1.2")) {
+			if (isclient) {
+				#ifdef SP_PROT_TLS1_2_CLIENT
+				method=SP_PROT_TLS1_2_CLIENT;
+				#endif
+			} else {
+				#ifdef SP_PROT_TLS1_2_SERVER
+				method=SP_PROT_TLS1_2_SERVER;
+				#endif
+			}
+		}
+		if (!method) {
+			if (isclient) {
+				method=
+				(0
+				#ifdef SP_PROT_TLS1_2_CLIENT
+					|SP_PROT_TLS1_2_CLIENT
+				#endif
+				#ifdef SP_PROT_TLS1_1_CLIENT
+					|SP_PROT_TLS1_1_CLIENT
+				#endif
+				#ifdef SP_PROT_TLS1_CLIENT
+					|SP_PROT_TLS1_CLIENT
+				#endif
+				#ifdef SP_PROT_SSL3_CLIENT
+					|SP_PROT_SSL3_CLIENT
+				#endif
+				#if !defined(SP_PROT_TLS1_2_CLIENT) && \
+					!defined(SP_PROT_TLS1_1_CLIENT) && \
+					!defined(SP_PROT_TLS1_CLIENT) && \
+					!defined(SP_PROT_SSL3_CLIENT)
+					|SP_PROT_SSL2_CLIENT
+				#endif
+				):
+			} else {
+				method=
+				(0
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_TLS1_2_SERVER
+				#endif
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_TLS1_1_SERVER
+				#endif
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_TLS1_SERVER
+				#endif
+				#ifdef SP_PROT_TLS1_2_SERVER
+					|SP_PROT_SSL3_SERVER
+				#endif
+				#if !defined(SP_PROT_TLS1_2_SERVER) && \
+					!defined(SP_PROT_TLS1_1_SERVER) && \
+					!defined(SP_PROT_TLS1_SERVER) && \
+					!defined(SP_PROT_SSL3_SERVER)
+					|SP_PROT_SSL2_SERVER
+				#endif
+				);
+			}
+		}
 
 		// set certificate chain file
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
@@ -1059,47 +1217,7 @@ bool tlscontext::reInit(bool isclient) {
 			pvt->_scred.paCred=pvt->_cctx;
 			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
 			pvt->_scred.palgSupportedAlgs=pvt->_algids;
-			pvt->_scred.grbitEnabledProtocols=(isclient)?
-				(0
-				#ifdef SP_PROT_TLS1_2_CLIENT
-					|SP_PROT_TLS1_2_CLIENT
-				#endif
-				#ifdef SP_PROT_TLS1_1_CLIENT
-					|SP_PROT_TLS1_1_CLIENT
-				#endif
-				#ifdef SP_PROT_TLS1_CLIENT
-					|SP_PROT_TLS1_CLIENT
-				#endif
-				#ifdef SP_PROT_SSL3_CLIENT
-					|SP_PROT_SSL3_CLIENT
-				#endif
-				#if !defined(SP_PROT_TLS1_2_CLIENT) && \
-					!defined(SP_PROT_TLS1_1_CLIENT) && \
-					!defined(SP_PROT_TLS1_CLIENT) && \
-					!defined(SP_PROT_SSL3_CLIENT)
-					|SP_PROT_SSL2_CLIENT
-				#endif
-				):
-				(0
-				#ifdef SP_PROT_TLS1_2_SERVER
-					|SP_PROT_TLS1_2_SERVER
-				#endif
-				#ifdef SP_PROT_TLS1_2_SERVER
-					|SP_PROT_TLS1_1_SERVER
-				#endif
-				#ifdef SP_PROT_TLS1_2_SERVER
-					|SP_PROT_TLS1_SERVER
-				#endif
-				#ifdef SP_PROT_TLS1_2_SERVER
-					|SP_PROT_SSL3_SERVER
-				#endif
-				#if !defined(SP_PROT_TLS1_2_SERVER) && \
-					!defined(SP_PROT_TLS1_1_SERVER) && \
-					!defined(SP_PROT_TLS1_SERVER) && \
-					!defined(SP_PROT_SSL3_SERVER)
-					|SP_PROT_SSL2_SERVER
-				#endif
-				);
+			pvt->_scred.grbitEnabledProtocols=method;
 			pvt->_scred.dwFlags=credflags;
 
 			// set file descriptor

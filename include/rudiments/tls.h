@@ -23,6 +23,19 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		/** Deletes this instance of the tlscontext class. */
 		virtual	~tlscontext();
 
+		/** Sets the protocol version to use during the next call to
+		 *  connect() or accept().
+		 *
+		 *  Valid values include SSL2, SSL3, TLS1, TLS1.1, TLS1.2 or
+		 *  any more recent version of TLS, as supported by and enabled
+		 *  in the underlying TLS/SSL library.  If left blank or empty
+		 *  then the highest supported version will be negotiated. */
+		void	setProtocolVersion(const char *version);
+
+		/** Returns the protocol version that will be used during the
+		 *  next call to connect() or accept(). */
+		const char	*getProtocolVersion();
+
 		/** Sets the location of the certificate chain file to use
 		 *  during the next call to connect() or accept().
 		 *  
