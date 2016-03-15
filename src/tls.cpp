@@ -1587,6 +1587,26 @@ void asn1timeToDateTime(datetime *dt, ASN1_TIME *asn1t) {
 }
 #endif
 
+#ifdef RUDIMENTS_HAS_SSPI
+// FIXME: move to charstring class
+static CHAR *unicodeToAscii(const WCHAR *in) {
+
+	BOOL	useddefaultchar;
+	int32_t	size=WideCharToMultiByte(CP_ACP,0,in,-1,NULL,0,NULL,NULL);
+	if (!size) {
+		return NULL;
+	}
+
+	CHAR	*out=new char[size];
+	if (!WideCharToMultiByte(CP_ACP,0,in,-1,out,size,
+						"?",&useddefaultchar)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+#endif
+
 void tlscertificate::setCertificate(void *cert) {
 
 	freeCertificate();
@@ -1636,7 +1656,6 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// FIXME: issuer unique id
 		// FIXME: subject unique id
-		// FIXME: extensions
 
 		// get the subject alternate names
 		STACK_OF(GENERAL_NAME)	*names=(STACK_OF(GENERAL_NAME) *)
@@ -1645,8 +1664,11 @@ void tlscertificate::setCertificate(void *cert) {
 							NULL,NULL);
 		if (names) {
 			for (int i=0; i<sk_GENERAL_NAME_num(names); i++) {
+
 				const GENERAL_NAME	*cur=
 					sk_GENERAL_NAME_value(names,i);
+
+				// FIXME: get other extensions
 				if (cur->type==GEN_DNS) {
 					char	*dnsname=(char *)
 						ASN1_STRING_data(
@@ -1740,7 +1762,52 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// FIXME: issuer unique id
 		// FIXME: subject unique id
-		// FIXME: extensions
+
+		// get the subject alternate names
+		for (DWORD i=0; i<c->cExtension; i++) {
+
+			CERT_EXTENSION	*ext=&c->rgExtension[i];
+
+			// FIXME: get other extensions
+			if (!charstring::compare(ext->pszObjId,
+						szOID_SUBJECT_ALT_NAME) ||
+				!charstring::compare(ext->pszObjId,
+						szOID_SUBJECT_ALT_NAME2)) {
+
+				DWORD	anisize=0;
+				if (CryptDecodeObject(
+					X509_ASN_ENCODING,
+					ext->pszObjId,
+					ext->Value.pbData,
+					ext->Value.cbData,
+					0,NULL,&anisize)==FALSE) {
+					continue;
+				}
+
+				CERT_ALT_NAME_INFO	*ani=
+					(CERT_ALT_NAME_INFO *)
+						new unsigned char[anisize];
+				if (CryptDecodeObject(
+					X509_ASN_ENCODING,
+					ext->pszObjId,
+					ext->Value.pbData,
+					ext->Value.cbData,
+					0,ani,&anisize)==FALSE) {
+					continue;
+				}
+					
+				for (DWORD j=0; j<ani->cAltEntry; j++) {
+					CERT_ALT_NAME_ENTRY	*ane=
+							&ani->rgAltEntry[j];
+					if (ane->dwAltNameChoice==
+						CERT_ALT_NAME_DNS_NAME) {
+						pvt->_san.append(
+							unicodeToAscii(
+							ane->pwszDNSName));
+					}
+				}
+			}
+		}
 	#else
 	#endif
 
