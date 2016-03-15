@@ -1926,6 +1926,8 @@ void tlscertificate::setCertificate(void *cert) {
 							ane->pwszDNSName));
 					}
 				}
+
+				delete[] (unsigned char *)ani;
 			}
 		}
 	#else
