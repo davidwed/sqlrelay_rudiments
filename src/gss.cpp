@@ -3550,7 +3550,7 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 	// (use getSizeMax()*2 to allow for the expansion of the encryption)
 	// FIXME: There's probably a more accurate way to decide what the
 	// maximum size of the encrypted data could be.
-	if (size>getSizeMax()*2) {
+	if (size>(uint32_t)getSizeMax()*2) {
 		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (size too large)\n");
 		#endif
@@ -3621,7 +3621,7 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	// (use getSizeMax()*2 to allow for the expansion of the encryption)
 	// FIXME: There's probably a more accurate way to decide what the
 	// maximum size of the encrypted data could be.
-	if (size>getSizeMax()*2) {
+	if ((uint32_t)size>(uint32_t)getSizeMax()*2) {
 		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (size too large)\n");
 		#endif
