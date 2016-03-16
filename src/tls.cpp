@@ -1956,6 +1956,7 @@ void tlscertificate::setCertificate(void *cert) {
 					ext->Value.pbData,
 					ext->Value.cbData,
 					0,ani,&anisize)==FALSE) {
+					delete[] (unsigned char *)ani;
 					continue;
 				}
 					
