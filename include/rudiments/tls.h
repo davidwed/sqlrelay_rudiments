@@ -193,7 +193,10 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 
 		/** Returns the certificate sent by the peer during the most
 		 *  recent call to connect() or accept() or NULL if the peer
-		 *  didn't send a certificate. */
+		 *  didn't send a certificate.
+		 *  Note that this method allocates an instance of
+		 *  tlscertificate internally and returns it.  The calling
+		 *  program must delete this instance. */
 		tlscertificate	*getPeerCertificate();
 
 		/** Reads from the file descriptor previously configured by

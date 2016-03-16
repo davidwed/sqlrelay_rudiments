@@ -96,6 +96,7 @@ int main(int argc, const char **argv) {
 		msgbuf.append(msg)->append(' ');
 	}
 
+{
 	// configure the security context
 	tlscontext	ctx;
 	ctx.setProtocolVersion(version);
@@ -137,6 +138,7 @@ int main(int argc, const char **argv) {
 					"peer sent no certificate\n%s\n",
 					ctx.getErrorString());
 				fd.close();
+				delete pcert;
 				continue;
 			}
 
@@ -146,6 +148,7 @@ int main(int argc, const char **argv) {
 			if (charstring::compareIgnoringCase(cn,commonname)) {
 				stdoutput.printf("%s!=%s\n",cn,commonname);
 				fd.close();
+				delete pcert;
 				continue;
 			}
 
@@ -184,6 +187,8 @@ int main(int argc, const char **argv) {
 				stdoutput.printf("    %s\n",node->getValue());
 			}
 			stdoutput.printf("}\n");
+
+			delete pcert;
 		}
 
 		stdoutput.printf("serverSession {\n");
@@ -338,6 +343,7 @@ int main(int argc, const char **argv) {
 		// close the connection to the server
 		fd.close();
 	}
+}
 
 	process::exit(0);
 }

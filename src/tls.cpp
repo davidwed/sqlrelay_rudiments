@@ -119,7 +119,11 @@ tlscontext::tlscontext() : securitycontext() {
 
 tlscontext::~tlscontext() {
 	freeContext();
-	#if defined(RUDIMENTS_HAS_SSPI)
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (pvt->_peercert) {
+			X509_free(pvt->_peercert);
+		}
+	#elif defined(RUDIMENTS_HAS_SSPI)
 		if (pvt->_syscastore) {
 			CertCloseStore(pvt->_syscastore,0);
 		}
@@ -746,6 +750,13 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 
 bool tlscontext::reInit(bool isclient) {
 
+	// free/clear any old peer certificate
+	#if defined(RUDIMENTS_HAS_SSL)
+		if (pvt->_peercert) {
+stdoutput.printf("X509_free\n");
+			X509_free(pvt->_peercert);
+		}
+	#endif
 	pvt->_peercert=NULL;
 
 	if (!pvt->_dirty) {
@@ -1593,6 +1604,7 @@ tlscertificate::tlscertificate() {
 
 tlscertificate::~tlscertificate() {
 	freeCertificate();
+	delete pvt;
 }
 
 void tlscertificate::initCertificate() {
@@ -1801,6 +1813,7 @@ void tlscertificate::setCertificate(void *cert) {
 						pubkey->pkey.ptr,
 						pvt->_pklen);
 		pvt->_pkbits=EVP_PKEY_bits(pubkey);
+		EVP_PKEY_free(pubkey);
 
 		// FIXME: issuer unique id
 		// FIXME: subject unique id
@@ -1833,6 +1846,8 @@ void tlscertificate::setCertificate(void *cert) {
 					}
 				}
 			}
+
+			sk_GENERAL_NAME_pop_free(names,GENERAL_NAME_free);
 		}
 
 	#elif defined(RUDIMENTS_HAS_SSPI)

@@ -102,6 +102,7 @@ int main(int argc, const char **argv) {
 							ctx.getErrorString());
 					fd->close();
 					delete fd;
+					delete pcert;
 					continue;
 				}
 
@@ -114,6 +115,7 @@ int main(int argc, const char **argv) {
 							cn,commonname);
 					fd->close();
 					delete fd;
+					delete pcert;
 					continue;
 				}
 
@@ -158,6 +160,8 @@ int main(int argc, const char **argv) {
 							node->getValue());
 				}
 				stdoutput.printf("}\n");
+
+				delete pcert;
 			}
 
 			stdoutput.printf("clientSession {\n");
