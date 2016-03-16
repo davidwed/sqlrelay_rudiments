@@ -2,7 +2,7 @@
 
 HOST=`hostname`
 
-./gssclient -host $HOST -message "ccount/mcount/dcount test" -ccount 5 -mcount 25 -dcount 100000
+./gssclient -host $HOST -message "ccount/mcount/dcount test" -ccount 5 -mcount 10 -dcount 100000
 
 # krb5
 ./gssclient -host $HOST -mech "{ 1 2 840 113554 1 2 2 }" -message "mech test 1" -verbose

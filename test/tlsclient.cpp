@@ -259,8 +259,8 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("\n  Sent message... "
 					"(size=%d):\n  ",msgbuf.getSize());
 			stdoutput.safePrint(msgbuf.getBuffer(),
-				(msgbuf.getSize()<=300)?msgbuf.getSize():300);
-			if (msgbuf.getSize()>300) {
+				(msgbuf.getSize()<=80)?msgbuf.getSize():80);
+			if (msgbuf.getSize()>80) {
 				stdoutput.write("...");
 			}
 			stdoutput.write('\n');

@@ -2505,9 +2505,6 @@ bool gsscontext::accept() {
 				break;
 			}
 
-			// FIXME: expose this in the API
-			gss_name_t	clientname;
-
 			// attempt to accept the context
 			pvt->_major=gss_accept_sec_context(
 						&pvt->_minor,
@@ -2515,17 +2512,14 @@ bool gsscontext::accept() {
 						credentials,
 						&inputtoken,
 						GSS_C_NO_CHANNEL_BINDINGS,
-						&clientname,
+						NULL,
 						&actualmechoid,
 						&outputtoken,
 						&pvt->_actualflags,
 						&pvt->_actuallifetime,
-						// FIXME: support
-						// delegated credentials
 						NULL);
 
 			// clean up
-			gss_release_name(&minor,&clientname);
 			delete[] (unsigned char *)inputtoken.value;
 
 			// bail on error

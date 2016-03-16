@@ -218,8 +218,8 @@ int main(int argc, const char **argv) {
 				stdoutput.printf("\nReceived message... "
 						"(size=%d):\n",msgsize);
 				stdoutput.safePrint(msg,
-					(msgsize<=300)?msgsize:300);
-				if (msgsize>300) {
+					(msgsize<=70)?msgsize:70);
+				if (msgsize>70) {
 					stdoutput.write("...");
 				}
 				stdoutput.write('\n');
