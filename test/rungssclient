@@ -2,10 +2,19 @@
 
 HOST=`hostname`
 
-# "krb5" mechanism
-#./gssclient -host $HOST -service gssserver -mech "{ 1 3 5 1 5 2 }" -message "krb5 mech test"
+./gssclient -host $HOST -message "ccount/mcount/dcount test" -ccount 5 -mcount 25 -dcount 100000
 
-# "iakerb" mechanism
-#./gssclient -host $HOST -service gssserver -mech "{ 1 3 6 1 5 2 5 }" -message "iakerb mech test"
+# krb5
+./gssclient -host $HOST -mech "{ 1 2 840 113554 1 2 2 }" -message "mech test 1" -verbose
 
-./gssclient -host $HOST -service gssserver -message "ccount/mcount test" -ccount 20 -mcount 100 -dcount 100000
+# krb5 oid2
+./gssclient -host $HOST -mech "{ 1 3 5 1 5 2 }" -message "mech test 2" -verbose
+
+# ms krb5
+./gssclient -host $HOST -mech "{ 1 2 840 48018 1 2 2 }" -message "mech test 3" -verbose
+
+# iakerb
+#./gssclient -host $HOST -mech "{ 1 3 6 1 5 2 5 }" -message "mech test 4" -verbose
+
+# spnego
+./gssclient -host $HOST -mech "{ 1 3 6 1 5 5 2 }" -message "mech test 5" -verbose
