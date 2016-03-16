@@ -809,6 +809,9 @@ bool gsscredentials::acquire(const char *name,
 			stdoutput.write(") - ");
 		#endif
 
+		OM_uint32	major;
+		OM_uint32	minor;
+
 		// keep track of the name for nametypes
 		// where the name is a string
 		if ((gss_OID)nametype==
@@ -849,7 +852,6 @@ bool gsscredentials::acquire(const char *name,
 
 		// release the old set and mark it nonexistent
 		if (pvt->_desiredmechanisms!=GSS_C_NO_OID_SET) {
-			OM_uint32	minor;
 			gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
 			pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
 		}
@@ -866,9 +868,6 @@ bool gsscredentials::acquire(const char *name,
 			if (mechoid==GSS_C_NO_OID) {
 				continue;
 			}
-
-			OM_uint32	major;
-			OM_uint32	minor;
 
 			// if the set doesn't exist already, then create it
 			if (pvt->_desiredmechanisms==GSS_C_NO_OID_SET) {
@@ -917,11 +916,9 @@ bool gsscredentials::acquire(const char *name,
 
 		// clean up
 		if (desiredname!=GSS_C_NO_NAME) {
-			OM_uint32	minor;
 			gss_release_name(&minor,&desiredname);
 		}
 		if (pvt->_desiredmechanisms!=GSS_C_NO_OID_SET) {
-			OM_uint32	minor;
 			gss_release_oid_set(&minor,&pvt->_desiredmechanisms);
 			pvt->_desiredmechanisms=GSS_C_NO_OID_SET;
 		}
@@ -1658,6 +1655,8 @@ bool gsscontext::initiate(const char *name,
 
 		bool	error=false;
 
+		OM_uint32	minor;
+
 		// by default, we'll use "no name"
 		gss_name_t	desiredname=GSS_C_NO_NAME;
 
@@ -1747,7 +1746,6 @@ bool gsscontext::initiate(const char *name,
 					#endif
 
 					// clean up
-					OM_uint32	minor;
 					gss_release_buffer(&minor,
 							&outputtoken);
 					close();
@@ -1757,7 +1755,6 @@ bool gsscontext::initiate(const char *name,
 			}
 
 			// clean up
-			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputtoken);
 
 			// receive token from peer,
@@ -1781,7 +1778,6 @@ bool gsscontext::initiate(const char *name,
 					delete[] (unsigned char *)
 							inputtoken.value;
 
-					OM_uint32	minor;
 					gss_release_buffer(&minor,&outputtoken);
 
 					close();
@@ -1797,6 +1793,11 @@ bool gsscontext::initiate(const char *name,
 				// break out if we've completed the process
 				break;
 			}
+		}
+
+		// clean up
+		if (desiredname!=GSS_C_NO_NAME) {
+			gss_release_name(&minor,&desiredname);
 		}
 
 		// bail on error
@@ -1968,8 +1969,8 @@ bool gsscontext::initiate(const char *name,
 				// FIXME: for Schannel (and maybe other
 				// providers), it's possible for
 				// InitializeSecurityContext to have returned
-				// SEC_I_INCOMPLETE_CREDENTIALS.  What should
-				// we do in that case?
+				// SEC_I_INCOMPLETE_CREDENTIALS.
+				// Handle that...
 
 				// break out if we've completed the process
 				break;
@@ -1980,8 +1981,9 @@ bool gsscontext::initiate(const char *name,
 		if (inputtoken[1].BufferType==SECBUFFER_EXTRA) {
 			// FIXME: For Schannel (and maybe other providers),
 			// some "extra" data may have been returned from this
-			// process.  We should probably do something other than
-			// just free it.  But what?
+			// process, usually (though not always) because a
+			// renegotiation occurred.  Handle that...
+
 			FreeContextBuffer(inputtoken[1].pvBuffer);
 		}
 
@@ -2468,6 +2470,8 @@ bool gsscontext::accept() {
 
 		bool	error=false;
 
+		OM_uint32	minor;
+
 		// accept the context...
 		gss_buffer_desc	inputtoken;
 		gss_buffer_desc	outputtoken;
@@ -2476,9 +2480,6 @@ bool gsscontext::accept() {
 			(pvt->_credentials)?
 			(gss_cred_id_t)pvt->_credentials->getCredentials():
 			GSS_C_NO_CREDENTIAL;
-
-		// FIXME: expose this in the API
-		gss_name_t	clientname;
 
 		gss_OID	actualmechoid=GSS_C_NO_OID;
 
@@ -2504,6 +2505,9 @@ bool gsscontext::accept() {
 				break;
 			}
 
+			// FIXME: expose this in the API
+			gss_name_t	clientname;
+
 			// attempt to accept the context
 			pvt->_major=gss_accept_sec_context(
 						&pvt->_minor,
@@ -2521,6 +2525,7 @@ bool gsscontext::accept() {
 						NULL);
 
 			// clean up
+			gss_release_name(&minor,&clientname);
 			delete[] (unsigned char *)inputtoken.value;
 
 			// bail on error
@@ -2544,7 +2549,6 @@ bool gsscontext::accept() {
 						(ssize_t)outputtoken.length) {
 
 					// clean up
-					OM_uint32	minor;
 					gss_release_buffer(&minor,&outputtoken);
 
 					close();
@@ -2554,7 +2558,6 @@ bool gsscontext::accept() {
 			}
 
 			// clean up
-			OM_uint32	minor;
 			gss_release_buffer(&minor,&outputtoken);
 
 		} while (pvt->_major==GSS_S_CONTINUE_NEEDED);
@@ -3467,6 +3470,7 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 	size_t		tokensize=0;
 	ssize_t	result=receiveToken(&tokenflags,&tokendata,&tokensize);
 	if (result<=0 || !checkFlags(tokenflags,TOKEN_FLAGS_TYPE_DATA)) {
+		delete[] (unsigned char *)tokendata;
 		return result;
 	}
 
@@ -3475,9 +3479,11 @@ ssize_t gsscontext::read(void *buf, ssize_t count) {
 	size_t		datasize=0;
 	if (!unwrap((unsigned char *)tokendata,tokensize,
 					&data,&datasize)) {
+		delete[] (unsigned char *)tokendata;
 		delete[] data;
 		return RESULT_ERROR;
 	}
+	delete[] (unsigned char *)tokendata;
 
 	// copy data out...
 	if (datasize<=(size_t)bytestoread) {
@@ -3554,7 +3560,12 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (size too large)\n");
 		#endif
-		// FIXME: set native error to something...
+		#ifdef EMSGSIZE
+			error::setErrorNumber(EMSGSIZE);
+		#endif
+		#ifdef WSAMSGSIZE
+			error::setNativeErrorNumber(WSAMSGSIZE);
+		#endif
 		return RESULT_ERROR;
 	}
 
@@ -3620,7 +3631,12 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 		#ifdef DEBUG_GSS_RECEIVE
 			stdoutput.write(") failed (size too large)\n");
 		#endif
-		// FIXME: set native error to something...
+		#ifdef EMSGSIZE
+			error::setErrorNumber(EMSGSIZE);
+		#endif
+		#ifdef WSAMSGSIZE
+			error::setNativeErrorNumber(WSAMSGSIZE);
+		#endif
 		return RESULT_ERROR;
 	}
 
@@ -3656,14 +3672,16 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 ssize_t gsscontext::write(const void *buf, ssize_t count) {
 
 	// create token
-	unsigned char	*tokendata;
-	size_t		tokensize;
+	unsigned char	*tokendata=NULL;
+	size_t		tokensize=0;
 	if (!wrap((const unsigned char *)buf,count,&tokendata,&tokensize)) {
+		delete[] tokendata;
 		return RESULT_ERROR;
 	}
 
 	// send token
 	ssize_t	result=sendToken(TOKEN_FLAGS_TYPE_DATA,tokendata,tokensize);
+	delete[] tokendata;
 	if (result!=(ssize_t)tokensize) {
 		return (result<=0)?result:RESULT_ERROR;
 	}
