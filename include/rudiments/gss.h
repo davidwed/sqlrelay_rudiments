@@ -465,6 +465,11 @@ class RUDIMENTS_DLLSPEC gsscontext : public securitycontext {
 		bool	close();
 
 
+		/** Returns the maximum size that can be written or read in
+		 *  a single call to write() or read(). */
+		ssize_t	getSizeMax();
+
+
 		/** Returns the major-status code of the most recently failed
 		 *  call. */
 		uint32_t	getMajorStatus();

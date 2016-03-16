@@ -1,4 +1,4 @@
-// Copyright (c) 2001  David Muse
+// Copyright (c) 2015-2016  David Muse
 // See the file COPYING for more information
 
 #include <rudiments/commandline.h>
@@ -11,7 +11,8 @@
 #include <rudiments/stdio.h>
 
 static void usage() {
-	stdoutput.printf("tlsclient [-host host] [-port port] "
+	stdoutput.printf("tlsclient "
+			"[-host host] [-port port] "
 			"[-version version] [-cert cert] [-ciphers ciphers] "
 			"[-validate (yes|no)] [-depth depth] [-ca ca] "
 			"[-commonname name] "
@@ -20,6 +21,7 @@ static void usage() {
 
 int main(int argc, const char **argv) {
 
+	// process the command line
 	commandline	cmdl(argc,argv);
 	if (cmdl.found("help")) {
 		usage();
@@ -94,7 +96,7 @@ int main(int argc, const char **argv) {
 		msgbuf.append(msg)->append(' ');
 	}
 
-	// create the tls context
+	// configure the security context
 	tlscontext	ctx;
 	ctx.setProtocolVersion(version);
 	ctx.setCertificateChainFile(cert);
@@ -106,6 +108,8 @@ int main(int argc, const char **argv) {
 
 	// create an inet socket client
 	inetsocketclient	fd;
+	fd.setWriteBufferSize(65536);
+	fd.setReadBufferSize(65536);
 
 	// attach the security context
 	fd.setSecurityContext(&ctx);
@@ -114,7 +118,7 @@ int main(int argc, const char **argv) {
 	for (int64_t i=0; i<ccount; i++) {
 
 		// connect 
-		if (fd.connect(host,port,-1,-1,1,1)<0) {
+		if (fd.connect(host,port,-1,-1,1,1)!=RESULT_SUCCESS) {
 			if (error::getErrorNumber()) {
 				stdoutput.printf("connect failed (1): %s\n",
 							error::getErrorString());
@@ -188,11 +192,6 @@ int main(int argc, const char **argv) {
 		// the specified number of times
 		for (int64_t j=0; j<mcount; j++) {
 
-			stdoutput.printf("\n  Sending message...\n");
-			stdoutput.safePrint(msgbuf.getBuffer(),
-						msgbuf.getSize());
-			stdoutput.printf("\n");
-
 			// write size
 			ssize_t	sizewritten=fd.write((uint64_t)
 						msgbuf.getSize());
@@ -257,9 +256,15 @@ int main(int argc, const char **argv) {
 				break;
 			}
 
-			stdoutput.printf("  success\n");
-
-			stdoutput.printf("\n  Receiving response...\n");
+			stdoutput.printf("\n  Sent message... "
+					"(size=%d):\n  ",msgbuf.getSize());
+			stdoutput.safePrint(msgbuf.getBuffer(),
+				(msgbuf.getSize()<=300)?msgbuf.getSize():300);
+			if (msgbuf.getSize()>300) {
+				stdoutput.write("...");
+			}
+			stdoutput.write('\n');
+			stdoutput.printf("\n  Receiving response...");
 
 			// read size
 			uint64_t	msgsize;

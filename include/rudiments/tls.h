@@ -216,6 +216,12 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  previous call to connect() or accept(). */
 		bool	close();
 
+
+		/** Returns the maximum size that can be written or read in
+		 *  a single call to write() or read(). */
+		ssize_t	getSizeMax();
+
+
 		/** Returns the error code of the most recently failed call. */
 		int32_t		getError();
 

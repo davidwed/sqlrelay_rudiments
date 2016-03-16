@@ -49,6 +49,8 @@
 		#define GSS_C_NT_USER_NAME gss_nt_user_name
 	#endif
 
+	#define	GSS_SIZE_MAX 65536
+
 #elif defined(RUDIMENTS_HAS_SSPI)
 
 	#include <schannel.h>
@@ -2433,9 +2435,9 @@ bool gsscontext::inquire() {
 			pvt->_desiredmechanism->getString():"(none)");
 		stdoutput.printf("  actual mechanism: %s\n",
 			pvt->_actualmechanism.getString());
-		stdoutput.printf("  desired flags:\n");
+		stdoutput.write("  desired flags:\n");
 		printFlags(pvt->_desiredflags);
-		stdoutput.printf("  actual flags:\n");
+		stdoutput.write("  actual flags:\n");
 		printFlags(pvt->_actualflags);
 		stdoutput.printf("  service: %s\n",
 			(pvt->_service)?pvt->_service:"(none)");
@@ -2779,6 +2781,12 @@ bool gsscontext::close() {
 	pvt->_readbufferpos=0;
 
 	return true;
+}
+
+ssize_t gsscontext::getSizeMax() {
+	// FIXME: there's probably an intelligent
+	// way of deciding what this should be
+	return 65536;
 }
 
 uint32_t gsscontext::getActualLifetime() {
@@ -3538,16 +3546,17 @@ ssize_t gsscontext::receiveKrbToken(uint32_t *tokenflags,
 		stdoutput.printf("%d,",size);
 	#endif
 
-	// FIXME: do this for GSSAPI too...
-	#if defined(RUDIMENTS_HAS_SSPI)
-		if (size>pvt->_maxmsgsize) {
-			#ifdef DEBUG_GSS_RECEIVE
-				stdoutput.write(") failed (size too large)\n");
-			#endif
-			// FIXME: set native error to something...
-			return RESULT_ERROR;
-		}
-	#endif
+	// reject tokens that are too large
+	// (use getSizeMax()*2 to allow for the expansion of the encryption)
+	// FIXME: There's probably a more accurate way to decide what the
+	// maximum size of the encrypted data could be.
+	if (size>getSizeMax()*2) {
+		#ifdef DEBUG_GSS_RECEIVE
+			stdoutput.write(") failed (size too large)\n");
+		#endif
+		// FIXME: set native error to something...
+		return RESULT_ERROR;
+	}
 
 	// copy size out
 	*tokensize=size;
@@ -3603,16 +3612,17 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 		stdoutput.printf("%d,",size);
 	#endif
 
-	// FIXME: do this for GSSAPI too...
-	#if defined(RUDIMENTS_HAS_SSPI)
-		if (size>pvt->_maxmsgsize) {
-			#ifdef DEBUG_GSS_RECEIVE
-				stdoutput.write(") failed (size too large)\n");
-			#endif
-			// FIXME: set native error to something...
-			return RESULT_ERROR;
-		}
-	#endif
+	// reject records that are too large
+	// (use getSizeMax()*2 to allow for the expansion of the encryption)
+	// FIXME: There's probably a more accurate way to decide what the
+	// maximum size of the encrypted data could be.
+	if (size>getSizeMax()*2) {
+		#ifdef DEBUG_GSS_RECEIVE
+			stdoutput.write(") failed (size too large)\n");
+		#endif
+		// FIXME: set native error to something...
+		return RESULT_ERROR;
+	}
 
 	// copy out flags and size
 	*tokenflags=0;

@@ -333,11 +333,11 @@ shutdown: shutdown.cpp shutdown.$(OBJ)
 url: url.cpp url.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) url.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-gssserver: gssserver.cpp gssserver.$(OBJ) gssmisc.cpp gssmisc.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssserver.$(OBJ) gssmisc.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+gssserver: gssserver.cpp gssserver.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-gssclient: gssclient.cpp gssclient.$(OBJ) gssmisc.cpp gssmisc.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssclient.$(OBJ) gssmisc.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+gssclient: gssclient.cpp gssclient.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all

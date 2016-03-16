@@ -11,15 +11,9 @@
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
-// define a function to shut down the process cleanly
-void shutDown(int32_t sig) {
-	stdoutput.printf("shutting down\n");
-	file::remove("svr.pid");
-	process::exit(0);
-}
-
 int main(int argc, const char **argv) {
 
+	// process the command line
 	commandline	cmdl(argc,argv);
 
 	if (cmdl.found("help")) {
@@ -60,23 +54,7 @@ int main(int argc, const char **argv) {
 		commonname=cmdl.getValue("commonname");
 	}
 
-	// make sure that only one instance is running
-	int	pid=process::checkForPidFile("svr.pid");
-	if (pid>-1) {
-		stdoutput.printf("Sorry, an instance of this server is already running with process id: %d\n",pid);
-		process::exit(1);
-	}
-
-	// create a pid file which is used to make sure that only one instance
-	// is running and can also be used to kill the process
-	process::createPidFile("svr.pid",permissions::ownerReadWrite());
-
-	// set up signal handlers for clean shutdown
-	process::waitForChildren();
-	process::handleShutDown(shutDown);
-	process::handleCrash(shutDown);
-
-	// set up the security context
+	// configure the security context
 	tlscontext	ctx;
 	ctx.setProtocolVersion(version);
 	ctx.setCertificateChainFile(cert);
@@ -86,7 +64,7 @@ int main(int argc, const char **argv) {
 	ctx.setValidationDepth(depth);
 	ctx.setCertificateAuthority(ca);
 
-	// create inet socket server
+	// create an inet socket server
 	inetsocketserver	iss;
 
 	// attach the security context
@@ -111,8 +89,8 @@ int main(int argc, const char **argv) {
 				}
 				continue;
 			}
-			//fd->setWriteBufferSize(65536);
-			//fd->setReadBufferSize(65536);
+			fd->setWriteBufferSize(65536);
+			fd->setReadBufferSize(65536);
 
 			if (validate) {
 
@@ -187,8 +165,6 @@ int main(int argc, const char **argv) {
 			// read messages from the client...
 			for (;;) {
 
-				stdoutput.printf("\n  Receiving message...\n");
-
 				uint64_t	msgsize;
 				ssize_t	sizeread=fd->read(&msgsize);
 				if (sizeread<=0) {
@@ -239,12 +215,15 @@ int main(int argc, const char **argv) {
 					break;
 				}
 
-				stdoutput.safePrint(msg,msgsize);
-				stdoutput.printf("\n");
-
-				stdoutput.printf("  success\n");
-
-				stdoutput.printf("\n  Sending response...\n");
+				stdoutput.printf("\nReceived message... "
+						"(size=%d):\n",msgsize);
+				stdoutput.safePrint(msg,
+					(msgsize<=300)?msgsize:300);
+				if (msgsize>300) {
+					stdoutput.write("...");
+				}
+				stdoutput.write('\n');
+				stdoutput.printf("\n  Sending response...");
 	
 				ssize_t	sizewritten=fd->write(msgsize);
 				if (sizewritten<=0) {
@@ -298,22 +277,27 @@ int main(int argc, const char **argv) {
 
 				delete[] msg;
 
+				if (!fd->flushWriteBuffer(-1,-1)) {
+					stdoutput.printf(
+						"\n  flushWriteBuffer() msg "
+						"failed\n");
+					break;
+				}
+
 				stdoutput.printf("  success\n");
 			}
 	
 			stdoutput.printf("}\n");
 
-			// close the socket and clean up
+			// close and delete the client socket
 			delete fd;
 
 			// FIXME: necessary?
 			ctx.close();
 		}
-	} else {
-		stdoutput.printf("couldn't listen on port %d\n%s\n",
-					port,error::getErrorString());
 	}
 
-	file::remove("svr.pid");
+	stdoutput.printf("error listening on port %d\n%s\n",
+				port,error::getErrorString());
 	process::exit(1);
 }

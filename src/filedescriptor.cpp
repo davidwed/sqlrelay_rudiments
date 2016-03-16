@@ -1085,10 +1085,16 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalread<count) {
 
-		// only read SSIZE_MAX at a time
+		// limit size of individual reads
 		sizetoread=count-totalread;
-		if (sizetoread>SSIZE_MAX) {
-			sizetoread=SSIZE_MAX;
+		if (pvt->_secctx) {
+			if (sizetoread>pvt->_secctx->getSizeMax()) {
+				sizetoread=pvt->_secctx->getSizeMax();
+			}
+		} else {
+			if (sizetoread>SSIZE_MAX) {
+				sizetoread=SSIZE_MAX;
+			}
 		}
 
 		// wait if necessary
@@ -1336,10 +1342,16 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	ssize_t	actualwrite;
 	while (totalwrite<count) {
 
-		// only write SSIZE_MAX at a time
+		// limit size of individual writes
 		sizetowrite=count-totalwrite;
-		if (sizetowrite>SSIZE_MAX) {
-			sizetowrite=SSIZE_MAX;
+		if (pvt->_secctx) {
+			if (sizetowrite>pvt->_secctx->getSizeMax()) {
+				sizetowrite=pvt->_secctx->getSizeMax();
+			}
+		} else {
+			if (sizetowrite>SSIZE_MAX) {
+				sizetowrite=SSIZE_MAX;
+			}
 		}
 
 		// wait if necessary

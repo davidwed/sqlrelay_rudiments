@@ -20,6 +20,16 @@
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
 #endif
 
+#ifdef RUDIMENTS_HAVE_LIMITS_H
+	#include <limits.h>
+#endif
+
+// if SSIZE_MAX is undefined, choose a good safe value
+// that should even work on 16-bit systems
+#ifndef SSIZE_MAX
+	#define SSIZE_MAX 32767
+#endif
+
 //#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
@@ -1437,6 +1447,14 @@ bool tlscontext::close() {
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;
+	#endif
+}
+
+ssize_t tlscontext::getSizeMax() {
+	#if defined(RUDIMENTS_HAS_SSPI)
+		return pvt->_gctx.getSizeMax();
+	#else
+		return SSIZE_MAX;
 	#endif
 }
 
