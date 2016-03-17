@@ -155,6 +155,7 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("}\n");
 	}
 
+{
 	// configure mechanisms
 	gssmechanism		mech;
 	mech.initialize(mechanism);
@@ -424,6 +425,7 @@ int main(int argc, const char **argv) {
 		// close the connection to the server
 		fd.close();
 	}
+}
 
 	process::exit(0);
 }

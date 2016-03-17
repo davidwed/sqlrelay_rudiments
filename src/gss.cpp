@@ -1739,13 +1739,10 @@ bool gsscontext::initiate(const char *name,
 						outputtoken.value,
 						outputtoken.length)!=
 						(ssize_t)outputtoken.length) {
-
 					#ifdef DEBUG_GSS
 						stdoutput.write(
 							"failed (send)\n\n");
 					#endif
-
-					// clean up
 					gss_release_buffer(&minor,
 							&outputtoken);
 					close();
@@ -1769,17 +1766,13 @@ bool gsscontext::initiate(const char *name,
 						&inputtoken.length)<=0 ||
 					!checkFlags(flags,
 						TOKEN_FLAGS_TYPE_ACCEPT)) {
-
 					#ifdef DEBUG_GSS
 						stdoutput.write(
 							"failed (receive)\n\n");
 					#endif
-			
 					delete[] (unsigned char *)
 							inputtoken.value;
-
 					gss_release_buffer(&minor,&outputtoken);
-
 					close();
 					error=true;
 					break;
@@ -1850,7 +1843,6 @@ bool gsscontext::initiate(const char *name,
 		// GSSAPI acquires credentials implicitly if none are specified,
 		// but SSPI does not.  Fortunately, acquiring credentials for a
 		// NULL user grabs the current user's credentials.
-		CredHandle	*credentials=NULL;
 		if (!pvt->_credentials) {
 			pvt->_credentials=new gsscredentials();
 			pvt->_credentials->addDesiredMechanism(
@@ -1860,7 +1852,8 @@ bool gsscontext::initiate(const char *name,
 		if (!pvt->_credentials->acquired()) {
 			pvt->_credentials->acquireForUser(NULL);
 		} 
-		credentials=(CredHandle *)pvt->_credentials->getCredentials();
+		CredHandle	*credentials=
+			(CredHandle *)pvt->_credentials->getCredentials();
 
 		for (;;) {
 
@@ -1885,6 +1878,9 @@ bool gsscontext::initiate(const char *name,
 						&outputtokendesc,
 						&pvt->_actualflags,
 						&pvt->_actuallifetime);
+
+			// clean up
+			delete[] inbuf;
 
 			// bail on error
 			if (SSPI_ERROR(pvt->_sstatus)) {
@@ -1959,6 +1955,7 @@ bool gsscontext::initiate(const char *name,
 						stdoutput.write(
 							"failed (receive)\n\n");
 					#endif
+					delete[] inbuf;
 					close();
 					error=true;
 					break;
@@ -1990,7 +1987,6 @@ bool gsscontext::initiate(const char *name,
 		// actual mechanism will be populated by inquire() below...
 
 		// clean up
-		delete[] inbuf;
 		delete[] outbuf;
 
 		// bail on error
@@ -2231,6 +2227,8 @@ bool gsscontext::inquire() {
 							nn.sClientName);
 				servername=charstring::duplicate(
 							nn.sServerName);
+				FreeContextBuffer(nn.sClientName);
+				FreeContextBuffer(nn.sServerName);
 			} else {
 				// reset status
 				pvt->_sstatus=SEC_E_OK;
@@ -2493,12 +2491,9 @@ bool gsscontext::accept() {
 					&inputtoken.value,
 					&inputtoken.length)<=0 ||
 				!checkFlags(flags,TOKEN_FLAGS_TYPE_INITIATE)) {
-
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
 				#endif
-
-				// clean up
 				delete[] (unsigned char *)inputtoken.value;
 				close();
 				error=true;
@@ -2541,10 +2536,7 @@ bool gsscontext::accept() {
 						outputtoken.value,
 						outputtoken.length)!=
 						(ssize_t)outputtoken.length) {
-
-					// clean up
 					gss_release_buffer(&minor,&outputtoken);
-
 					close();
 					error=true;
 					break;
@@ -2619,6 +2611,7 @@ bool gsscontext::accept() {
 				#ifdef DEBUG_GSS
 					stdoutput.write("failed (receive)\n\n");
 				#endif
+				delete[] inbuf;
 				close();
 				error=true;
 				break;
@@ -2662,11 +2655,9 @@ bool gsscontext::accept() {
 			// complete the token, if needed
 			if (pvt->_sstatus==SEC_I_COMPLETE_NEEDED ||
 				pvt->_sstatus==SEC_I_COMPLETE_AND_CONTINUE) {
-
 				pvt->_sstatus=CompleteAuthToken(
 							&pvt->_context,
 							&outputtokendesc);
-
 				if (SSPI_ERROR(pvt->_sstatus)) {
 					#ifdef DEBUG_GSS
 						stdoutput.printf(
@@ -2742,6 +2733,7 @@ bool gsscontext::close() {
 		bytestring::zero(&pvt->_context,sizeof(pvt->_context));
 		if (pvt->_freecredentials) {
 			delete pvt->_credentials;
+			pvt->_credentials=NULL;
 		}
 		pvt->_freecredentials=false;
 	#endif
