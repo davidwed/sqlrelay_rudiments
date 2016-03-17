@@ -334,7 +334,7 @@ url: url.cpp url.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) url.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 gssserver: gssserver.cpp gssserver.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS) -lefence
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 gssclient: gssclient.cpp gssclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
