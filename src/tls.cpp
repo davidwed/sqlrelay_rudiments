@@ -131,6 +131,7 @@ tlscontext::~tlscontext() {
 			CertCloseStore(pvt->_sysrootstore,0);
 		}
 	#endif
+	delete pvt;
 }
 
 #if defined(RUDIMENTS_HAS_SSPI)
