@@ -229,22 +229,6 @@ bool thread::detach() {
 	#endif
 }
 
-bool thread::cancel() {
-	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
-		if (pvt->_thr) {
-			return !pthread_cancel(pvt->_thr);
-		}
-		return true;
-	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
-		// FIXME: implement this for windows
-		RUDIMENTS_SET_ENOSYS
-		return false;
-	#else
-		RUDIMENTS_SET_ENOSYS
-		return false;
-	#endif
-}
-
 bool thread::raiseSignal(int32_t signum) {
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		if (pvt->_thr) {

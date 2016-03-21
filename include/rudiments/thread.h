@@ -63,9 +63,6 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  Returns true on success and false if an error occurred. */
 		bool	detach();
 
-		/** Cancels execution of the thread. */
-		bool	cancel();
-
 		/** Sends signal "signum" to the thread. */
 		bool	raiseSignal(int32_t signum);
 
