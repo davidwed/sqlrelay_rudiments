@@ -68,6 +68,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ace064708b3c106fa392d2b57d06a2f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a869a03bb5a50058527186bfb1a9ecbaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a869a03bb5a50058527186bfb1a9ecbaa">run</a> (void *arg)</td></tr>
 <tr class="separator:a869a03bb5a50058527186bfb1a9ecbaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae043f6325f1374fd5539b6bf3855790a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#ae043f6325f1374fd5539b6bf3855790a">runDetached</a> ()</td></tr>
+<tr class="separator:ae043f6325f1374fd5539b6bf3855790a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa85b1669267fe79b02da806d855912d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#aa85b1669267fe79b02da806d855912d0">runDetached</a> (void *arg)</td></tr>
+<tr class="separator:aa85b1669267fe79b02da806d855912d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af605ce8a6d487c45553d0a0e817132cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#af605ce8a6d487c45553d0a0e817132cf">exit</a> (int32_t *status)</td></tr>
 <tr class="separator:af605ce8a6d487c45553d0a0e817132cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67232bd1edf8cbefd057524bcc97d013"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classthread.html#a67232bd1edf8cbefd057524bcc97d013">join</a> (int32_t *status)</td></tr>
@@ -177,7 +181,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Causes a thread to exit with the value stored in the location pointed to by "status". If another thread is waiting on this thread using <a class="el" href="classthread.html#a67232bd1edf8cbefd057524bcc97d013">join()</a>, then that thread's <a class="el" href="classthread.html#a67232bd1edf8cbefd057524bcc97d013">join()</a> method will fall through. </p>
+<p>Causes a thread to exit with the value stored in the location pointed to by "status". Unless the calling thread is detached, if another thread is waiting on this thread using <a class="el" href="classthread.html#a67232bd1edf8cbefd057524bcc97d013">join()</a>, then that thread's <a class="el" href="classthread.html#a67232bd1edf8cbefd057524bcc97d013">join()</a> method will fall through. </p>
 
 </div>
 </div>
@@ -297,6 +301,39 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae043f6325f1374fd5539b6bf3855790a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> thread::runDetached </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Starts a new already-detached thread by running whatever function was set by the <a class="el" href="classthread.html#a988ec6fdd33b18c733feb82da6dd9a66">setFunction()</a> method and passing that function whatever argument was set by the <a class="el" href="classthread.html#a8424157b0a335d2dbb36b05a7af654d2">setArgument()</a> method. Returns true on success and false if an error occurred. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa85b1669267fe79b02da806d855912d0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> thread::runDetached </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>arg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Starts a new already-detached thread by running whatever function was set by the <a class="el" href="classthread.html#a988ec6fdd33b18c733feb82da6dd9a66">setFunction()</a> method, passing that function argument "arg". Returns true on success and false if an error occurred. </p>
+
+</div>
+</div>
 <a class="anchor" id="a8424157b0a335d2dbb36b05a7af654d2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -375,7 +412,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 20 2016 20:29:06 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 20 2016 21:00:40 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

@@ -45,10 +45,24 @@ class RUDIMENTS_DLLSPEC thread {
 		 *  occurred. */
 		bool	run(void *arg);
 
+		/** Starts a new already-detached thread by running whatever
+		 *  function was set by the setFunction() method and passing
+		 *  that function whatever argument was set by the setArgument()
+		 *  method.  Returns true on success and false if an error
+		 *  occurred. */
+		bool	runDetached();
+
+		/** Starts a new already-detached thread by running whatever
+		 *  function was set by the setFunction() method, passing that
+		 *  function argument "arg".  Returns true on success and false
+		 *  if an error occurred. */
+		bool	runDetached(void *arg);
+
 		/** Causes a thread to exit with the value stored in the
-		 *  location pointed to by "status".  If another thread is
-		 *  waiting on this thread using join(), then that thread's
-		 *  join() method will fall through.  */
+		 *  location pointed to by "status".  Unless the calling
+		 *  thread is detached, if another thread is waiting on this
+		 *  thread using join(), then that thread's join() method will
+		 *  fall through.  */
 		void	exit(int32_t *status);
 
 		/** Waits for the function set by setFunction() and run by

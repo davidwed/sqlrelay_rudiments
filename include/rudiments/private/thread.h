@@ -3,3 +3,5 @@
 
 	private:
 		threadprivate	*pvt;
+
+		bool	run(bool detached);

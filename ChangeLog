@@ -32,6 +32,7 @@
 	charstring::split doesn't crash if list or listlength are null now
 	added debugprint header
 	removed problematic thread::cancel() method
+	added thread::runDetached() methods
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
