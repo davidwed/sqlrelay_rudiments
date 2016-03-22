@@ -7,15 +7,9 @@
 
 stdiofiledescriptor::stdiofiledescriptor(int32_t fd) : filedescriptor(fd) {
 
-	// These are really for stdinput, nobody reads from stdout/err,
+	// This is really for stdinput, nobody reads from stdout/err,
 	// but it doesn't hurt them.
-
-	// Blocking mode is apparently not the default on some systems
-	// (Syllable for sure, maybe others) and this causes hilariously
-	// odd behavior when reading standard input.
-
 	allowShortReads();
-	useBlockingMode();
 }
 
 bool stdiofiledescriptor::flush() {

@@ -33,6 +33,9 @@
 	added debugprint header
 	removed problematic thread::cancel() method
 	added thread::runDetached() methods
+	removed useBlockingMode() call in stdio constructor as is caused
+		problems with apps like Apache that actually need stdin/out/err
+		to be in non-blocking mode sometimes
 
 0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
 	updated semaphoreset/sharedmemory destructors to remove the
