@@ -127,6 +127,9 @@
 /* SSL has SSLv3_method */
 #undef RUDIMENTS_HAS_SSLV3_METHOD
 
+/* SSL has dNSName */
+#undef RUDIMENTS_HAS_SSL_DNSNAME
+
 /* Rudiments supports SSPI */
 #undef RUDIMENTS_HAS_SSPI
 

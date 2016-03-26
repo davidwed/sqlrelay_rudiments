@@ -1838,12 +1838,16 @@ void tlscertificate::setCertificate(void *cert) {
 
 				// FIXME: get other extensions
 				if (cur->type==GEN_DNS) {
+					ASN1_IA5STRING	*dnsia5;
+					#ifdef RUDIMENT_HAS_SSL_DNSNAME
+						dnsia5=cur->d.dNSName;
+					#else
+						dnsia5=cur->d.ia5;
+					#endif
 					char	*dnsname=(char *)
-						ASN1_STRING_data(
-							cur->d.dNSName);
+						ASN1_STRING_data(dnsia5);
 					size_t	asn1len=
-						ASN1_STRING_length(
-							cur->d.dNSName);
+						ASN1_STRING_length(dnsia5);
 					size_t	strlen=
 						charstring::length(dnsname);
 					if (asn1len==strlen) {

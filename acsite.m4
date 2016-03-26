@@ -992,6 +992,9 @@ then
 
 		AC_MSG_CHECKING(for SSLv2_method)
 		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv2_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV2_METHOD,1,SSL has SSLv2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for dNSName)
+		FW_TRY_LINK([#include <openssl/x509v3.h>],[GENERAL_NAME g; g.d.dNSName=0;],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSL_DNSNAME,1,SSL has dNSName) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 	fi
 
 	FW_INCLUDES(ssl,[$SSLINCLUDES])
