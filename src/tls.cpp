@@ -810,36 +810,40 @@ stdoutput.printf("X509_free\n");
 			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"SSL3")) {
-			// FIXME: if defined...
+			#if defined(RUDIMENTS_HAS_SSLV3_METHOD)
 			if (isclient) {
 				method=SSLv3_client_method();
 			} else {
 				method=SSLv3_server_method();
 			}
+			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"TLS1")) {
-			// FIXME: if defined...
+			#if defined(RUDIMENTS_HAS_TLSV1_METHOD)
 			if (isclient) {
 				method=TLSv1_client_method();
 			} else {
 				method=TLSv1_server_method();
 			}
+			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"TLS1.1")) {
-			// FIXME: if defined...
+			#if defined(RUDIMENTS_HAS_TLSV1_1_METHOD)
 			if (isclient) {
 				method=TLSv1_1_client_method();
 			} else {
 				method=TLSv1_1_server_method();
 			}
+			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"TLS1.2")) {
-			// FIXME: if defined...
+			#if defined(RUDIMENTS_HAS_TLSV1_2_METHOD)
 			if (isclient) {
 				method=TLSv1_2_client_method();
 			} else {
 				method=TLSv1_2_server_method();
 			}
+			#endif
 		}
 		if (!method) {
 			if (isclient) {

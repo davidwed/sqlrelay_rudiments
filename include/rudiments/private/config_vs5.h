@@ -124,6 +124,9 @@
 /* SSL has SSLv2_method */
 /* #undef RUDIMENTS_HAS_SSLV2_METHOD */
 
+/* SSL has SSLv3_method */
+/* #undef RUDIMENTS_HAS_SSLV3_METHOD */
+
 /* Rudiments supports SSPI */
 #define RUDIMENTS_HAS_SSPI 1
 
@@ -132,6 +135,15 @@
 
 /* Some systems have timezone */
 #define RUDIMENTS_HAS_TIMEZONE 1
+
+/* SSL has TLSv1_1_method */
+/* #undef RUDIMENTS_HAS_TLSV1_1_METHOD */
+
+/* SSL has TLSv1_2_method */
+/* #undef RUDIMENTS_HAS_TLSV1_2_METHOD */
+
+/* SSL has TLSv1_method */
+/* #undef RUDIMENTS_HAS_TLSV1_METHOD */
 
 /* SSL has TLS_method */
 /* #undef RUDIMENTS_HAS_TLS_METHOD */
