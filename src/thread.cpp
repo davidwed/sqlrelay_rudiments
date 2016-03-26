@@ -128,8 +128,8 @@ bool thread::runDetached() {
 
 bool thread::run(bool detached) {
 	pvt->_needtojoin=false;
-	pvt->_thr=0;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
+		pvt->_thr=0;
 		error::clearError();
 		if (detached && pthread_attr_setdetachstate(&pvt->_attr,
 						PTHREAD_CREATE_DETACHED)) {
@@ -149,6 +149,7 @@ bool thread::run(bool detached) {
 		error::setErrorNumber(result);
 		return false;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
+		pvt->_thr=INVALID_HANDLE_VALUE;
 		pvt->_thr=CreateThread(NULL,pvt->_stacksize,
 					(LPTHREAD_START_ROUTINE)pvt->_function,
 					pvt->_arg,0,NULL);
