@@ -754,11 +754,12 @@ bool tlscontext::reInit(bool isclient) {
 	// free/clear any old peer certificate
 	#if defined(RUDIMENTS_HAS_SSL)
 		if (pvt->_peercert) {
-stdoutput.printf("X509_free\n");
 			X509_free(pvt->_peercert);
 		}
+		pvt->_peercert=NULL;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		pvt->_peercert=NULL;
 	#endif
-	pvt->_peercert=NULL;
 
 	if (!pvt->_dirty) {
 		return true;
