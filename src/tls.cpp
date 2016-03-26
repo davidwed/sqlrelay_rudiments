@@ -870,7 +870,8 @@ stdoutput.printf("X509_free\n");
 		}
 
 		// create the context
-		pvt->_ctx=SSL_CTX_new(method);
+		// (some versions take a non-const SSL_METHOD *)
+		pvt->_ctx=SSL_CTX_new((SSL_METHOD *)method);
 
 		// set auto-retry mode
 		SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
