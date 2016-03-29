@@ -1839,7 +1839,7 @@ void tlscertificate::setCertificate(void *cert) {
 				// FIXME: get other extensions
 				if (cur->type==GEN_DNS) {
 					ASN1_IA5STRING	*dnsia5;
-					#ifdef RUDIMENT_HAS_SSL_DNSNAME
+					#ifdef RUDIMENTS_HAS_SSL_DNSNAME
 						dnsia5=cur->d.dNSName;
 					#else
 						dnsia5=cur->d.ia5;

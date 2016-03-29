@@ -3603,7 +3603,12 @@ ssize_t gsscontext::receiveTlsToken(uint32_t *tokenflags,
 	}
 
 	// get record size
-	uint16_t	size=*((uint16_t *)&(header[3]));
+	// (some compiler options don't allow setting it directly:
+	// error: dereferencing type-punned pointer will break
+	//        strict-aliasing rules [-Werror=strict-aliasing])
+	//uint16_t	size=*((uint16_t *)&(header[3]));
+	uint16_t	size=0;
+	bytestring::copy(&size,&(header[3]),sizeof(uint16_t));
 	size=pvt->_fd->netToHost(size);
 	#ifdef DEBUG_GSS_RECEIVE
 		stdoutput.printf("%d,",size);
