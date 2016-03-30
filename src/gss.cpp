@@ -637,6 +637,7 @@ gsscredentials::gsscredentials() {
 		pvt->_credentials=GSS_C_NO_CREDENTIAL;
 	#elif defined(RUDIMENTS_HAS_SSPI)
 		pvt->_credusage=SECPKG_CRED_BOTH;
+		bytestring::zero(&pvt->_credentials,sizeof(pvt->_credentials));
 	#endif
 	pvt->_acquired=false;
 	pvt->_psd=NULL;
