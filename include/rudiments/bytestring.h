@@ -125,7 +125,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		static const void	*findFirst(const void *haystack,
 							size_t haystacksize,
 							const void *needle, 
-							size_t needleize);
+							size_t needlesize);
 
 		/** Returns a pointer to the last occurrance
 		 *  of "needle" in the first "size" bytes of
@@ -134,7 +134,7 @@ class RUDIMENTS_DLLSPEC bytestring {
 		static const void	*findLast(const void *haystack,
 							size_t haystacksize,
 							const void *needle, 
-							size_t needleize);
+							size_t needlesize);
 };
 
 #endif

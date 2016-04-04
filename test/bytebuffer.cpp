@@ -13,10 +13,10 @@ int main(int argc, const char **argv) {
 	// Create a bytebuffer.
 	bytebuffer	bb(10,10);
 	stdoutput.printf("create...\n");
-	test("create, getSize()",bb.getSize()==0);
-	test("create, getPosition()",bb.getPosition()==0);
-	test("create, getEnd()",bb.getEnd()==0);
-	test("create, getActualSize()",bb.getActualSize()==10);
+	test("create(), getSize()",bb.getSize()==0);
+	test("create(), getPosition()",bb.getPosition()==0);
+	test("create(), getEnd()",bb.getEnd()==0);
+	test("create(), getActualSize()",bb.getActualSize()==10);
 	stdoutput.printf("\n");
 
 	// Append some string sequences to the buffer.
@@ -321,5 +321,26 @@ int main(int argc, const char **argv) {
 
 		bb.clear();
 	}
+	stdoutput.printf("\n");
+
+	// truncate
+	stdoutput.printf("truncate...\n");
+	bb.clear();
+	bb.append("1234567890");
+	bb.truncate(5);
+	test("truncate(5), getSize",bb.getSize()==5);
+	test("truncate(5), compare",
+			!bytestring::compare(bb.getBuffer(),"12345",5));
+	bb.truncate(4);
+	test("truncate(4), getSize",bb.getSize()==4);
+	test("truncate(4), compare",
+			!bytestring::compare(bb.getBuffer(),"1234",4));
+	bb.truncate(3);
+	test("truncate(3), getSize",bb.getSize()==3);
+	test("truncate(3), compare",
+			!bytestring::compare(bb.getBuffer(),"123",3));
+	bb.setPosition(0);
+	bb.truncate();
+	test("truncate(), getSize",!bb.getSize());
 	stdoutput.printf("\n");
 }
