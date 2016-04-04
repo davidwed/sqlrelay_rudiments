@@ -442,7 +442,7 @@ void userentry::setMutex(threadmutex *mtx) {
 }
 
 bool userentry::initialize(const char *username) {
-	return initialize(username,0);
+	return initialize(username,(uid_t)-1);
 }
 
 bool userentry::initialize(uid_t userid) {

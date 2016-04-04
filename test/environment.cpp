@@ -2,46 +2,29 @@
 // See the file COPYING for more information
 
 #include <rudiments/environment.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
-
-void print() {
-	const char * const *env=environment::variables();
-	for (uint64_t index=0; env && env[index]; index++) {
-		stdoutput.printf("%s\n",env[index]);
-	}
-}
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
 
-	// print the environment variable "TEST"
-	stdoutput.printf("TEST=%s\n",environment::getValue("TEST"));
+	stdoutput.printf("environment:\n");
 
-	// set the value of "TEST" to "value"
-	if (environment::setValue("TEST","value")) {
-		stdoutput.printf("TEST=%s\n",environment::getValue("TEST"));
-	} else {
-		stdoutput.printf("setValue() failed\n");
-	}
-
-	// set the value of "TEST" to "newvalue"
-	if (environment::setValue("TEST","newvalue")) {
-		stdoutput.printf("TEST=%s\n",environment::getValue("TEST"));
-	} else {
-		stdoutput.printf("setValue() failed\n");
-	}
-
-	// remove "TEST" from the environment
+	// remove just in case
 	environment::remove("TEST");
 
-	// print the (non-existent) environment variable "TEST"
-	stdoutput.printf("TEST=%s\n",environment::getValue("TEST"));
-
-	stdoutput.printf("\n\n");
-	print();
-
-	stdoutput.printf("\n\n");
+	test("TEST is empty",!environment::getValue("TEST"));
+	test("setValue() TEST=value",
+		environment::setValue("TEST","value"));
+	test("getValue() TEST=value",
+		!charstring::compare(environment::getValue("TEST"),"value"));
+	test("setValue() TEST=newvalue",
+		environment::setValue("TEST","newvalue"));
+	test("getValue() TEST=newvalue",
+		!charstring::compare(environment::getValue("TEST"),"newvalue"));
+	test("remove() TEST",
+		!charstring::compare(environment::getValue("TEST"),""));
+	environment::setValue("TEST","value");
 	environment::clear();
-
-	stdoutput.printf("\n\nclear?\n");
-	print();
+	test("clear()",!environment::getValue("TEST"));
 }

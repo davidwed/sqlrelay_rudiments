@@ -9,10 +9,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 
-static const char	debugfile[]="C:\\cygwin64\\home\\dmuse\\sqlrdebug.txt";
-
-static file f;
-
 int main(int argc, const char **argv) {
 
 	// remove the file (in case it already exists)

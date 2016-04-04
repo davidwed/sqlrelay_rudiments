@@ -1,3 +1,5 @@
+0.56.0 - userentry/groupentry::initialize(NULL) don't load root any more
+
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now
 	fixed a bug with filedescriptor::printf when printing to non-buffered

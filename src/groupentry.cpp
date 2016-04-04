@@ -299,7 +299,7 @@ void groupentry::setMutex(threadmutex *mtx) {
 }
 
 bool groupentry::initialize(const char *groupname) {
-	return initialize(groupname,0);
+	return initialize(groupname,(gid_t)-1);
 }
 
 bool groupentry::initialize(gid_t groupid) {

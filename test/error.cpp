@@ -2,16 +2,19 @@
 // See the file COPYING for more information
 
 #include <rudiments/error.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
 
 	error::setErrorNumber(EINTR);
-	stdoutput.printf("error number: %d\n",error::getErrorNumber());
-	stdoutput.printf("error string: %s\n",error::getErrorString());
+	test("getErrorNumber()",error::getErrorNumber()==EINTR);
+	test("getErrorString()",
+		!charstring::compare(error::getErrorString(),
+					"Interrupted system call"));
 	error::clearError();
-	stdoutput.printf("error number (after clear): %d\n",
-						error::getErrorNumber());
-	stdoutput.printf("error string (after clear) : %s\n",
-						error::getErrorString());
+	test("clearError()/getErrorNumber()",!error::getErrorNumber());
+	test("clearError()/getErrorString()",
+		!charstring::compare(error::getErrorString(),"Success"));
 }

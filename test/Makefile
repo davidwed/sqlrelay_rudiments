@@ -39,9 +39,7 @@ PROGS1= dictionary \
 	kill \
 	stringbuffer \
 	bytebuffer \
-	device \
 	serialport \
-	chat \
 	crypt
 
 PROGS2= dynamicarray \
@@ -263,14 +261,8 @@ inetclntbench: inetclntbench.cpp inetclntbench.$(OBJ)
 inetsvrbench: inetsvrbench.cpp inetsvrbench.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsvrbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-device: device.cpp device.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) device.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
 serialport: serialport.cpp serialport.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) serialport.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-chat: chat.cpp chat.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) chat.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 crypt: crypt.cpp crypt.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) crypt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

@@ -367,7 +367,7 @@ privateheaders7="codetree.h "+_
 	"tlscertificate.h"
 
 ' version
-RUDIMENTS_VERSION="0.55.0"
+RUDIMENTS_VERSION="0.56.0"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"

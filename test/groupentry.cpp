@@ -2,7 +2,9 @@
 // See the file COPYING for more information
 
 #include <rudiments/groupentry.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
 #ifdef _WIN32
 const char	*groupname="None";
@@ -25,35 +27,58 @@ void print(groupentry *grent) {
 
 int main(int argc, const char **argv) {
 
-	// get the group entry for the groupname
 	groupentry	grent;
+
 	stdoutput.printf("uninitialized:\n");
-	print(&grent);
+	test("name",!grent.getName());
+	test("group id",grent.getGroupId()==(gid_t)-1);
+	test("members",!grent.getMembers());
+	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	stdoutput.printf("\n");
 
-	// get the group entry for the groupname
-	grent.initialize(groupname);
-	stdoutput.printf("groupname: %s...\n",groupname);
-	print(&grent);
+	stdoutput.printf("%s:\n",groupname);
+	test("initialize",grent.initialize(groupname));
+	test("name",!charstring::compare(grent.getName(),groupname));
+	test("group id",grent.getGroupId()==1);
+	test("members",grent.getMembers() && !grent.getMembers()[0]);
+	test("sid",!charstring::compare(grent.getSidString(),"1"));
+	stdoutput.printf("\n");
 
-	// get the group entry for group id of the group we just looked up
 	gid_t	id=grent.getGroupId();
-	grent.initialize(id);
-	stdoutput.printf("groupid: %d...\n",id);
-	print(&grent);
+	stdoutput.printf("%d:\n",id);
+	test("initialize",grent.initialize(id));
+	test("name",!charstring::compare(grent.getName(),groupname));
+	test("group id",grent.getGroupId()==1);
+	test("members",grent.getMembers() && !grent.getMembers()[0]);
+	test("sid",!charstring::compare(grent.getSidString(),"1"));
+	stdoutput.printf("\n");
 
-	// invalid group
-	grent.initialize("invalidgroupname");
-	stdoutput.printf("groupname: invalidgroupname...\n");
-	print(&grent);
+	stdoutput.printf("invalid group name\n");
+	grent.initialize("invalid group name");
+	test("initialize",!grent.initialize("invalid group name"));
+	test("name",!grent.getName());
+	test("group id",grent.getGroupId()==(gid_t)-1);
+	test("members",!grent.getMembers());
+	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	stdoutput.printf("\n");
 
 	// invalid group id
 	id=grent.getGroupId();
+	stdoutput.printf("%d:\n",id);
 	grent.initialize(id);
-	stdoutput.printf("groupid: %d (invalid)...\n",id);
-	print(&grent);
+	test("initialize",!grent.initialize("invalid group name"));
+	test("name",!grent.getName());
+	test("group id",grent.getGroupId()==(gid_t)-1);
+	test("members",!grent.getMembers());
+	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	stdoutput.printf("\n");
 
 	// null-safety
-	grent.initialize((const char *)NULL);
-	stdoutput.printf("NULL:\n");
-	print(&grent);
+	stdoutput.printf("NULL\n");
+	test("initialize",!grent.initialize((const char *)NULL));
+	test("name",!grent.getName());
+	test("group id",grent.getGroupId()==(gid_t)-1);
+	test("members",!grent.getMembers());
+	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	stdoutput.printf("\n");
 }

@@ -32045,7 +32045,7 @@ rm -f core conftest.err conftest.$ac_objext \
 echo "******************************"
 
 
-RUDIMENTS_VERSION="0.55.0"
+RUDIMENTS_VERSION="0.56.0"
 
 
 cat >>confdefs.h <<_ACEOF
