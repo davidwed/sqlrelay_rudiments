@@ -12,6 +12,6 @@ void test(const char *printstring, bool result) {
 	stdoutput.printf((result)?": success":": failed");
 	stdoutput.printf("\n");
 	if (!result) {
-		process::exit(0);
+		process::exit(1);
 	}
 }
