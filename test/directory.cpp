@@ -48,12 +48,14 @@ int main(int argc, const char **argv) {
 	test("open",d.open("testdir"));
 	d.rewind();
 	char	*name;
+#ifndef _WIN32
 	name=d.read();
 	test(".",!charstring::compare(name,"."));
 	delete[] name;
 	name=d.read();
 	test("..",!charstring::compare(name,".."));
 	delete[] name;
+#endif
 	name=d.read();
 	test("testfile1",!charstring::compare(name,"testfile1"));
 	delete[] name;
@@ -62,12 +64,14 @@ int main(int argc, const char **argv) {
 	delete[] name;
 
 	d.rewind();
+#ifndef _WIN32
 	name=d.read();
 	test(".",!charstring::compare(name,"."));
 	delete[] name;
 	name=d.read();
 	test("..",!charstring::compare(name,".."));
 	delete[] name;
+#endif
 	name=d.read();
 	test("testfile1",!charstring::compare(name,"testfile1"));
 	delete[] name;
@@ -93,16 +97,19 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("contents by index...\n");
 	test("open",d.open("testdir"));
 	test("count",d.getChildCount()==4);
-	name=d.getChildName(0);
+	uint64_t	i=0;
+#ifndef _WIN32
+	name=d.getChildName(i++);
 	test(".",!charstring::compare(name,"."));
 	delete[] name;
-	name=d.getChildName(1);
+	name=d.getChildName(i++);
 	test("..",!charstring::compare(name,".."));
 	delete[] name;
-	name=d.getChildName(2);
+#endif
+	name=d.getChildName(i++);
 	test("testfile1",!charstring::compare(name,"testfile1"));
 	delete[] name;
-	name=d.getChildName(3);
+	name=d.getChildName(i++);
 	test("testfile2",!charstring::compare(name,"testfile2"));
 	delete[] name;
 	d.close();

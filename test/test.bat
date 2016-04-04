@@ -1,19 +1,46 @@
 bytebuffer.exe
+if %errorlevel% neq 0 exit /b
+
 bytestring.exe
+if %errorlevel% neq 0 exit /b
+
 character.exe
+if %errorlevel% neq 0 exit /b
+
 rem charstring.exe
+
 commandline.exe
-crypt.exe
+if %errorlevel% neq 0 exit /b
+
+rem crypt.exe
+rem if %errorlevel% neq 0 exit /b
+
 rem datetime.exe
+
 dictionary.exe
+if %errorlevel% neq 0 exit /b
+
 directory.exe
+if %errorlevel% neq 0 exit /b
+
 dynamicarray.exe
+if %errorlevel% neq 0 exit /b
+
 dynamiclib.exe
+if %errorlevel% neq 0 exit /b
+
 environment.exe
+if %errorlevel% neq 0 exit /b
+
 error.exe
+if %errorlevel% neq 0 exit /b
+
 rem file.exe
 rem filesystem.exe
+
 groupentry.exe
+if %errorlevel% neq 0 exit /b
+
 rem gssclient.exe
 rem gssserver.exe
 rem halt.exe
