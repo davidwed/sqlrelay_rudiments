@@ -10,7 +10,6 @@ PROGS0 = server \
 	inetsocketclient \
 	unixsocketclient \
 	directory \
-	daemon \
 	groupentry \
 	commandline \
 	parameterstring \
@@ -131,9 +130,6 @@ unixsocketclient: unixsocketclient.cpp unixsocketclient.$(OBJ)
 
 directory: directory.cpp directory.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) directory.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-daemon: daemon.cpp daemon.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) daemon.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 commandline: commandline.cpp commandline.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) commandline.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

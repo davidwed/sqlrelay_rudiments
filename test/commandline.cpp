@@ -5,27 +5,57 @@
 #include <rudiments/charstring.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
 
-	commandline     cmdline(argc,argv);
+	// if we're called with no arguments then
+	// re-call ourself with some arguments
+	if (argc==1) {
 
-	// if -help was specified, display a usage message
-	if (cmdline.found("-help")) {
-		stdoutput.printf(
-			"usage:  divide -divisor number -dividend number\n");
+		process::waitForChildren();
+
+		const char	*args[]={
+			"commandline",
+			"-one","1",
+			"-two",
+			"--three=3",
+			"--four",
+			NULL
+		};
+
+		process::spawn(
+			#ifdef _WIN32
+			"commandline.exe",
+			#else
+			"./commandline",
+			#endif
+			args,false);
+	
 		process::exit(0);
 	}
 
-	// If -divisor and -dividend are supplied, use them.  Otherwise
-	// display an error message.
-	if (cmdline.found("-divisor") && cmdline.found("-dividend")) {
-		double	divisor=charstring::toFloat(
-					cmdline.getValue("-divisor"));
-		double	dividend=charstring::toFloat(
-					cmdline.getValue("-dividend"));
-		stdoutput.printf("%0.2f\n",divisor/dividend);
-	} else {
-		stdoutput.printf("You must supply a divisor and a dividend.\n");
-	}
+	commandline     cmdline(argc,argv);
+
+	// found
+	stdoutput.printf("found...\n");
+	test("found(), -(value)",cmdline.found("one"));
+	test("found(), -(no value)",cmdline.found("two"));
+	test("found(), --(value)",cmdline.found("three"));
+	test("found(), --(no value)",cmdline.found("four"));
+	stdoutput.printf("\n");
+
+	// getValue
+	stdoutput.printf("getValue...\n");
+	test("getValue(), -(value)",
+		!charstring::compare(cmdline.getValue("one"),"1"));
+	test("getValue(), -(no value)",
+		!charstring::compare(cmdline.getValue("two"),""));
+	test("getValue(), --(value)",
+		!charstring::compare(cmdline.getValue("three"),"3"));
+	test("getValue(), --(no value)",
+		!charstring::compare(cmdline.getValue("four"),""));
+	stdoutput.printf("\n");
+
+	process::exit(0);
 }

@@ -267,11 +267,12 @@ int main(int argc, const char **argv) {
 
 	for (unsigned char c=0; c<128; c++) {
 
+		stdoutput.printf("\t0x%02x \"%c\":\n",c,c);
 		test("\tisAlphanumeric",
 			character::isAlphanumeric(c)==isalphanumeric[c]);
 		test("\tisAlphabetical",
 			character::isAlphabetical(c)==isalphabetical[c]);
-		test("\tisLowerCase",
+		test("\tisLowerase",
 			character::isLowerCase(c)==islowercase[c]);
 		test("\tisUpperCase",
 			character::isUpperCase(c)==isuppercase[c]);
