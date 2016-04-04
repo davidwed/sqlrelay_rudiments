@@ -35,6 +35,8 @@ int main(int argc, const char **argv) {
 		process::exit(0);
 	}
 
+	header("commandline");
+
 	commandline     cmdline(argc,argv);
 
 	// found

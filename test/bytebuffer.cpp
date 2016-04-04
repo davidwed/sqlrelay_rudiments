@@ -8,7 +8,7 @@
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("bytebuffer:\n");
+	header("bytebuffer");
 
 	// Create a bytebuffer.
 	bytebuffer	bb(10,10);

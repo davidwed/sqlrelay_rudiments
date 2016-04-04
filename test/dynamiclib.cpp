@@ -8,7 +8,7 @@
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("dynamiclib:\n");
+	header("dynamiclib");
 
 	// decide on a file to use
 	const char	*dirs[]={

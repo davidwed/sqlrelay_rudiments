@@ -8,7 +8,7 @@
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("environment:\n");
+	header("environment");
 
 	// remove just in case
 	environment::remove("TEST");

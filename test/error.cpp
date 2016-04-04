@@ -8,6 +8,8 @@
 
 int main(int argc, const char **argv) {
 
+	header("error");
+
 	error::setErrorNumber(EINTR);
 	test("getErrorNumber()",error::getErrorNumber()==EINTR);
 	test("getErrorString()",

@@ -17,6 +17,7 @@ const char	*dir="/usr/local";
 
 int main(int argc, const char **argv) {
 
+	header("directory");
 
 	// clean up, just in case
 	file::remove("testdir/testfile1");

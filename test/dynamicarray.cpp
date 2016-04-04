@@ -37,7 +37,7 @@ void testclass::setValue(uint32_t value) {
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("dynamicarray:\n");
+	header("dynamicarray");
 
 	// Create a dynamicarray
 	dynamicarray<struct test>	da1(25,10);

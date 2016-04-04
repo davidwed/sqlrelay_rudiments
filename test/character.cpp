@@ -7,6 +7,8 @@
 
 int main(int argc, const char **argv) {
 
+	header("character");
+
 	bool	isalphanumeric[]={
 		false,false,false,false,false,false,false,false,false,false,
 		false,false,false,false,false,false,false,false,false,false,

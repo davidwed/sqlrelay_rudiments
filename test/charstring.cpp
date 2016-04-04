@@ -9,7 +9,7 @@
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("charstring:\n");
+	header("charstring");
 
 	// create a new string 50 bytes long
 	char	s[50];

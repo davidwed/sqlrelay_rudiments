@@ -7,6 +7,8 @@
 
 int main(int argc, const char **argv) {
 
+	header("dictionary");
+
 	// string/string
 	stdoutput.printf("string keys, string values:\n");
 	dictionary< const char *, const char * >	strstrdict;

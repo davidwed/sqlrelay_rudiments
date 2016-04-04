@@ -8,6 +8,8 @@
 
 int main(int argc, const char **argv) {
 
+	header("crypt");
+
 	const char	*salts[]={
 		"FW",
 		"fw",

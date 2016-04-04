@@ -12,20 +12,9 @@ const char	*groupname="None";
 const char	*groupname="bin";
 #endif
 
-void print(groupentry *grent) {
-
-	stdoutput.printf("	Name:		%s\n",grent->getName());
-	stdoutput.printf("	Group Id:	%d\n",grent->getGroupId());
-	stdoutput.printf("	Members:\n");
-	int i;
-	for (i=0; grent->getMembers() && grent->getMembers()[i]; i++) {
-		stdoutput.printf("		%s\n",grent->getMembers()[i]);
-	}
-	stdoutput.printf("	SID:		%s\n",grent->getSidString());
-	stdoutput.printf("\n");
-}
-
 int main(int argc, const char **argv) {
+
+	header("groupentry");
 
 	groupentry	grent;
 

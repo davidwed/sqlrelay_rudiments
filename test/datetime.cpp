@@ -2,12 +2,15 @@
 // See the file COPYING for more information
 
 #include <rudiments/datetime.h>
-#include <stdio.h>
+#include <rudiments/stdio.h>
+#include "test.cpp"
 
 const char	*tz="EST5EDT";
 const char	*switchtz="PST8PDT";
 
 int main(int argc, const char **argv) {
+
+	header("datetime");
 
 	// set current time zone
 	stdoutput.printf("setting TZ=%s...\n",tz);

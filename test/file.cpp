@@ -8,8 +8,11 @@
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
+
+	header("file");
 
 	// remove the file (in case it already exists)
 	file::remove("testfile");

@@ -4,6 +4,7 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/file.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
 const char	*filename=
 #ifdef _WIN32
@@ -57,6 +58,8 @@ void print(filesystem *fs) {
 }
 
 int main(int argc, const char **argv) {
+
+	header("filesystem");
 
 	filesystem	fs;
 	stdoutput.printf("uninitialized:\n");

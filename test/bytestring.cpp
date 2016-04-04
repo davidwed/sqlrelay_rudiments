@@ -7,6 +7,8 @@
 
 int main(int argc, const char **argv) {
 
+	header("bytestring");
+
 	// duplicate
 	stdoutput.printf("duplicate...\n");
 	unsigned char	*dup=(unsigned char *)bytestring::duplicate(
