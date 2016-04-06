@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/charstring.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/stdio.h>
 #include <limits.h>
@@ -11,11 +12,9 @@ int main(int argc, const char **argv) {
 
 	header("charstring");
 
-	// create a new string 50 bytes long
+	// zero
+	stdoutput.printf("zero...\n");
 	char	s[50];
-
-
-	// set every byte in the string to NULL
 	charstring::zero(s,50);
 	bool	zeros=true;
 	for (int zi=0; zi<50; zi++) {
@@ -24,151 +23,178 @@ int main(int argc, const char **argv) {
 		}
 	}
 	test("zeros",zeros);
+	stdoutput.printf("\n");
 
-
-	// Append "hello there dave" to the string and display it.
-	// The 3rd call to append() only appends the first 4 bytes of "dave !!!"
+	// append
+	stdoutput.printf("append...\n");
 	charstring::append(s,"hello ");
 	charstring::append(s,"there ");
 	charstring::append(s,"dave !!!",4);
-	stdoutput.printf("\"%s\"\n",s);
+	test("append",!charstring::compare(s,"hello there dave"));
+	stdoutput.printf("\n");
 
 
-	// Replace the contents of the string and display it over and over.
-	// Note that the 2nd and 4th call to copy() only copy part of the
-	// string passed into them.
+	// copy
+	stdoutput.printf("copy...\n");
 	charstring::copy(s,"what's ");
-	stdoutput.printf("\"%s\"\n",s);
+	test("append",!charstring::compare(s,"what's "));
 	charstring::copy(s,"up !!!",2);
-	stdoutput.printf("\"%s\"\n",s);
+	test("append",!charstring::compare(s,"upat's "));
 	charstring::copy(s,2," !!!");
-	stdoutput.printf("\"%s\"\n",s);
+	test("append",!charstring::compare(s,"up !!!"));
 	charstring::copy(s,6,"!!!!!!",1);
-	stdoutput.printf("\"%s\"\n",s);
+	test("append",!charstring::compare(s,"up !!!!"));
+	stdoutput.printf("\n");
 
 
-	// clear the string again.
+	// compare
+	stdoutput.printf("compare...\n");
 	charstring::zero(s,50);
-
-
-	// Append "hello" to the string.
 	charstring::append(s,"hello");
-
-	// perform several comparisons, all of which should return 0
-	stdoutput.printf("compare: %d=0\n",
-				charstring::compare(s,"hello"));
-	stdoutput.printf("compare: %d=0\n",
-				charstring::compare(s,"hello",3));
-	stdoutput.printf("compare: %d=0\n",
-				charstring::compareIgnoringCase(s,"HELLO"));
-	stdoutput.printf("compare: %d=0\n",
-				charstring::compareIgnoringCase(s,"HELLO",3));
-
-	// perform several contains() comparisons
-	stdoutput.printf("findFirst: \"%s\"=llo\n",
-				charstring::findFirst(s,"llo"));
-	stdoutput.printf("contains: %d\n",
-				charstring::contains(s,"llo"));
-	stdoutput.printf("findFirst: \"%s\"=llo\n",
-				charstring::findFirst(s,'l'));
-	stdoutput.printf("contains: %d\n",
-				charstring::contains(s,"llo"));
+	test("compare",!charstring::compare(s,"hello"));
+	test("compare",!charstring::compare(s,"hello",3));
+	test("compare",!charstring::compareIgnoringCase(s,"HELLO"));
+	test("compare",!charstring::compareIgnoringCase(s,"HELLO",3));
+	stdoutput.printf("\n");
 
 
+	// findFirst/contains
+	stdoutput.printf("findFirst/contains...\n");
+	test("findFirst",charstring::findFirst(s,"llo"));
+	test("contains",charstring::contains(s,"llo"));
+	test("findFirst",charstring::findFirst(s,'l'));
+	test("contains",charstring::contains(s,"llo"));
+	stdoutput.printf("\n");
 
-	// duplicate the string and display the duplicated string
+
+	// duplicate
+	stdoutput.printf("duplicate/subString...\n");
 	char	*hellothere=charstring::duplicate(s);
+	stdoutput.printf("duplicate",!charstring::compare(hellothere,"hello"));
 	char	*ell=charstring::subString(hellothere,1,3);
+	stdoutput.printf("subString",!charstring::compare(ell,"ell"));
 	char	*lle=charstring::subString(hellothere,3,1);
-	stdoutput.printf("hello: %s\n",hellothere);
-	stdoutput.printf("ell: %s\n",ell);
-	stdoutput.printf("ell: %s\n",lle);
-
-	// make sure to clean up what duplicate() returns
+	stdoutput.printf("subString",!charstring::compare(lle,"lle"));
 	delete[] hellothere;
 	delete[] ell;
 	delete[] lle;
+	stdoutput.printf("\n");
 
 
 	// split
+	stdoutput.printf("split...\n");
 	char		**list;
 	uint64_t	listlength;
 	charstring::split("hello||hi||bye||goodbye","||",false,
 						&list,&listlength);
-	stdoutput.printf("split(\"hello||hi||bye||goodbye\",\"||\")\n");
-	stdoutput.printf("%lld items\n",listlength);
-	uint64_t	i;
+	test("length",listlength==4);
+	test("list[0]",!charstring::compare(list[0],"hello"));
+	test("list[1]",!charstring::compare(list[1],"hi"));
+	test("list[2]",!charstring::compare(list[2],"bye"));
+	test("list[3]",!charstring::compare(list[3],"goodbye"));
+	uint64_t i;
 	for (i=0; i<listlength; i++) {
-		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
 	delete[] list;
 
 	charstring::split("hello||hi||bye||goodbye||","||",false,
 						&list,&listlength);
-	stdoutput.printf("split(\"hello||hi||bye||goodbye||\",\"||\")\n");
-	stdoutput.printf("%lld items\n",listlength);
+	test("length",listlength==5);
+	test("list[0]",!charstring::compare(list[0],"hello"));
+	test("list[1]",!charstring::compare(list[1],"hi"));
+	test("list[2]",!charstring::compare(list[2],"bye"));
+	test("list[3]",!charstring::compare(list[3],"goodbye"));
+	test("list[4]",!charstring::compare(list[4],""));
 	for (i=0; i<listlength; i++) {
-		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
 	delete[] list;
 
 	charstring::split("||hello||hi||bye||goodbye||","||",false,
 						&list,&listlength);
-	stdoutput.printf("split(\"||hello||hi||bye||goodbye||\",\"||\")\n");
-	stdoutput.printf("%lld items\n",listlength);
+	test("length",listlength==6);
+	test("list[0]",!charstring::compare(list[0],""));
+	test("list[1]",!charstring::compare(list[1],"hello"));
+	test("list[2]",!charstring::compare(list[2],"hi"));
+	test("list[3]",!charstring::compare(list[3],"bye"));
+	test("list[4]",!charstring::compare(list[4],"goodbye"));
+	test("list[5]",!charstring::compare(list[5],""));
 	for (i=0; i<listlength; i++) {
-		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
 	delete[] list;
 
 	charstring::split("||||hello||||hi||||bye||||goodbye||||","||",false,
 							&list,&listlength);
-	stdoutput.printf("split(\"||||hello||||hi||||bye||||goodbye||||\",\"||\")\n");
-	stdoutput.printf("%lld items\n",listlength);
+	test("length",listlength==11);
+	test("list[0]",!charstring::compare(list[0],""));
+	test("list[1]",!charstring::compare(list[1],""));
+	test("list[2]",!charstring::compare(list[2],"hello"));
+	test("list[3]",!charstring::compare(list[3],""));
+	test("list[4]",!charstring::compare(list[4],"hi"));
+	test("list[5]",!charstring::compare(list[5],""));
+	test("list[6]",!charstring::compare(list[6],"bye"));
+	test("list[7]",!charstring::compare(list[7],""));
+	test("list[8]",!charstring::compare(list[8],"goodbye"));
+	test("list[9]",!charstring::compare(list[9],""));
+	test("list[10]",!charstring::compare(list[10],""));
 	for (i=0; i<listlength; i++) {
-		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
 	delete[] list;
 
 	charstring::split("||||||||||","||",false,&list,&listlength);
-	stdoutput.printf("split(\"||||||||||\",\"||\")\n");
-	stdoutput.printf("%lld items\n",listlength);
+	test("length",listlength==6);
+	test("list[0]",!charstring::compare(list[0],""));
+	test("list[1]",!charstring::compare(list[1],""));
+	test("list[2]",!charstring::compare(list[2],""));
+	test("list[3]",!charstring::compare(list[3],""));
+	test("list[4]",!charstring::compare(list[4],""));
+	test("list[5]",!charstring::compare(list[5],""));
 	for (i=0; i<listlength; i++) {
-		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
 	delete[] list;
 
-	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",false,&list,&listlength);
-	stdoutput.printf("split(\"http://www.firstworks.com/application/app.cgi/skin/module/template.html\",\"/\"");
-	stdoutput.printf("%lld items\n",listlength);
+	charstring::split("http://www.firstworks.com/application/app.cgi/skin/module/template.html","/",true,&list,&listlength);
+	test("length",listlength==7);
+	test("list[0]",!charstring::compare(list[0],"http:"));
+	test("list[1]",!charstring::compare(list[1],"www.firstworks.com"));
+	test("list[2]",!charstring::compare(list[2],"application"));
+	test("list[3]",!charstring::compare(list[3],"app.cgi"));
+	test("list[4]",!charstring::compare(list[4],"skin"));
+	test("list[5]",!charstring::compare(list[5],"module"));
+	test("list[6]",!charstring::compare(list[6],"template.html"));
 	for (i=0; i<listlength; i++) {
-		stdoutput.printf("	%s\n",list[i]);
 		delete[] list[i];
 	}
 	delete[] list;
 
 	charstring::split("1.2.3.4.5.6",".",false,NULL,&listlength);
-	stdoutput.printf("1.2.3.4.5.6 with null list: ");
-	stdoutput.printf("%lld items\n",listlength);
+	test("length",listlength==6);
 
+	// this test just shouldn't crash
 	charstring::split("1.2.3.4.5.6",".",false,NULL,NULL);
-	stdoutput.printf("1.2.3.4.5.6 with null list and listlength\n");
+	stdoutput.printf("\n");
 
 
+	// escape/unescape
+	stdoutput.printf("escape/unescape...\n");
 	char	str[]="hello'\"\\hello'\"\\";
 	char	*escapedstr=charstring::escape(str,"\"'");
+	test("escape",!charstring::compare(escapedstr,
+					"hello\\'\\\"\\\\hello\\'\\\"\\\\"));
 	char	*unescapedstr=charstring::unescape(escapedstr);
-	stdoutput.printf("str		: %s\n",str);
-	stdoutput.printf("escapedstr	: %s\n",escapedstr);
-	stdoutput.printf("unescapedstr	: %s\n",unescapedstr);
+	test("unescape",!charstring::compare(unescapedstr,
+					"hello'\"\\hello'\"\\"));
 	delete[] unescapedstr;
 	delete[] escapedstr;
+	stdoutput.printf("\n");
 
+
+	// base64
+	stdoutput.printf("base64...\n");
 	// from Thomas Hobbes's Leviathan...
 	unsigned char	base64str1[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure.";
 	unsigned char	base64str2[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasure";
@@ -176,41 +202,29 @@ int main(int argc, const char **argv) {
 	unsigned char	base64str4[]="Man is distinguished, not only by his reason, but by this singular passion from other animals, which is a lust of the mind, that by a perseverance of delight in the continued and indefatigable generation of knowledge, exceeds the short vehemence of any carnal pleasu";
 
 	char	*encoded1=charstring::base64Encode(base64str1);
-	stdoutput.printf("str:\n%s\n",base64str1);
-	stdoutput.printf("encoded:\n%s\n",encoded1);
 	unsigned char	*decoded1=charstring::base64Decode(encoded1);
-	stdoutput.printf("decoded:\n%s\n",decoded1);
-	stdoutput.printf("same as original? %d\n",
+	test("base64 test 1",
 		!charstring::compare((char *)decoded1,(char *)base64str1));
 	delete[] encoded1;
 	delete[] decoded1;
 
 	char	*encoded2=charstring::base64Encode(base64str2);
-	stdoutput.printf("str:\n%s\n",base64str2);
-	stdoutput.printf("encoded:\n%s\n",encoded2);
 	unsigned char	*decoded2=charstring::base64Decode(encoded2);
-	stdoutput.printf("decoded:\n%s\n",decoded2);
-	stdoutput.printf("same as original? %d\n",
+	test("base64 test 2",
 		!charstring::compare((char *)decoded2,(char *)base64str2));
 	delete[] encoded2;
 	delete[] decoded2;
 
 	char	*encoded3=charstring::base64Encode(base64str3);
-	stdoutput.printf("str:\n%s\n",base64str3);
-	stdoutput.printf("encoded:\n%s\n",encoded3);
 	unsigned char	*decoded3=charstring::base64Decode(encoded3);
-	stdoutput.printf("decoded:\n%s\n",decoded3);
-	stdoutput.printf("same as original? %d\n",
+	test("base64 test 3",
 		!charstring::compare((char *)decoded3,(char *)base64str3));
 	delete[] encoded3;
 	delete[] decoded3;
 
 	char	*encoded4=charstring::base64Encode(base64str4);
-	stdoutput.printf("str:\n%s\n",base64str4);
-	stdoutput.printf("encoded:\n%s\n",encoded4);
 	unsigned char	*decoded4=charstring::base64Decode(encoded4);
-	stdoutput.printf("decoded:\n%s\n",decoded4);
-	stdoutput.printf("same as original? %d\n",
+	test("base64 test 4",
 		!charstring::compare((char *)decoded4,(char *)base64str4));
 	delete[] encoded4;
 	delete[] decoded4;
@@ -223,145 +237,112 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,6,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	stdoutput.printf("bytes: \"");
-	stdoutput.safePrint((char *)bytes,6);
-	stdoutput.printf("\"\n");
-	stdoutput.printf("encoded bytes: (%lld) \"%s\"\n",
-					encodedlen,encodedbytes);
-	stdoutput.printf("decoded bytes: \"");
-	stdoutput.safePrint((char *)decodedbytes,decodedlen);
-	stdoutput.printf("\"\n");
+	test("base64 test 5",
+		!bytestring::compare(decodedbytes,bytes,6));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
+
 	charstring::base64Encode(bytes,5,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	stdoutput.printf("bytes: \"");
-	stdoutput.safePrint((char *)bytes,5);
-	stdoutput.printf("\"\n");
-	stdoutput.printf("encoded bytes: (%lld) \"%s\"\n",
-					encodedlen,encodedbytes);
-	stdoutput.printf("decoded bytes: \"");
-	stdoutput.safePrint((char *)decodedbytes,decodedlen);
-	stdoutput.printf("\"\n");
+	test("base64 test 6",
+		!bytestring::compare(decodedbytes,bytes,5));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
+
 	charstring::base64Encode(bytes,4,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	stdoutput.printf("bytes: \"");
-	stdoutput.safePrint((char *)bytes,4);
-	stdoutput.printf("\"\n");
-	stdoutput.printf("encoded bytes: (%lld) \"%s\"\n",
-					encodedlen,encodedbytes);
-	stdoutput.printf("decoded bytes: \"");
-	stdoutput.safePrint((char *)decodedbytes,decodedlen);
-	stdoutput.printf("\"\n");
+	test("base64 test 7",
+		!bytestring::compare(decodedbytes,bytes,4));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
+
 	charstring::base64Encode(bytes,3,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	stdoutput.printf("bytes: \"");
-	stdoutput.safePrint((char *)bytes,3);
-	stdoutput.printf("\"\n");
-	stdoutput.printf("encoded bytes: (%lld) \"%s\"\n",
-					encodedlen,encodedbytes);
-	stdoutput.printf("decoded bytes: \"");
-	stdoutput.safePrint((char *)decodedbytes,decodedlen);
-	stdoutput.printf("\"\n");
+	test("base64 test 8",
+		!bytestring::compare(decodedbytes,bytes,3));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
+
 	charstring::base64Encode(bytes,2,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	stdoutput.printf("bytes: \"");
-	stdoutput.safePrint((char *)bytes,2);
-	stdoutput.printf("\"\n");
-	stdoutput.printf("encoded bytes: (%lld) \"%s\"\n",
-					encodedlen,encodedbytes);
-	stdoutput.printf("decoded bytes: \"");
-	stdoutput.safePrint((char *)decodedbytes,decodedlen);
-	stdoutput.printf("\"\n");
+	test("base64 test 9",
+		!bytestring::compare(decodedbytes,bytes,2));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
+
 	charstring::base64Encode(bytes,1,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	stdoutput.printf("bytes: \"");
-	stdoutput.safePrint((char *)bytes,1);
-	stdoutput.printf("\"\n");
-	stdoutput.printf("encoded bytes: (%lld) \"%s\"\n",
-					encodedlen,encodedbytes);
-	stdoutput.printf("decoded bytes: \"");
-	stdoutput.safePrint((char *)decodedbytes,decodedlen);
-	stdoutput.printf("\"\n");
+	test("base64 test 10",
+		!bytestring::compare(decodedbytes,bytes,1));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
-
-	
-	const char	*alphabet="aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";
-	stdoutput.printf("lengthContainingSet(\"%s\",\"gfedcba\")=%d\n",
-		alphabet,charstring::lengthContainingSet(alphabet,"gfedcba"));
-	stdoutput.printf("lengthNotContainingSet(\"%s\",\"hijklmnopqrstuvwxyz\")=%d\n",
-		alphabet,charstring::lengthNotContainingSet(alphabet,
-						"hijklmnopqrstuvwxyz"));
-
-
-	stdoutput.printf("findFirstOfSet(\"%s\",\"mlk\")=\"%s\"\n",
-		alphabet,charstring::findFirstOfSet(alphabet,"klm"));
-
-
-	// initialize a text buffer and print it out
-	char    buffer[100];
-	charstring::copy(buffer,"\r\n	     hello there buddy     	\r\n");
-	stdoutput.printf("!%s!\n",buffer);
-
-
-	// trim the spaces off of the right hand side
-	charstring::rightTrim(buffer);
-	stdoutput.printf("rtrim: !%s!\n",buffer);
-
-
-	// trim the spaces off of the left hand side
-	charstring::leftTrim(buffer);
-	stdoutput.printf("ltrim: !%s!\n",buffer);
-
-
-	// strip the spaces out
-	charstring::copy(buffer,"   hello      there   buddy  ");
-	charstring::strip(buffer,' ');
-	stdoutput.printf("strip space: !%s!\n",buffer);
-
-
-	// strip the "   " out
-	charstring::copy(buffer,"   hello       there  buddy  ");
-	charstring::strip(buffer,"   ");
-	stdoutput.printf("strip ds   : !%s!\n",buffer);
-
-
-	// convert buffer to uppercase
-	charstring::upper(buffer);
-	stdoutput.printf("upper: !%s!\n",buffer);
-
-
-	// convert buffer to lowercase
-	charstring::lower(buffer);
-	stdoutput.printf("lower: !%s!\n",buffer);
-
-
-	// capitalize buffer
-	charstring::capitalize(buffer);
-	stdoutput.printf("caps:  !%s!\n",buffer);
+	stdoutput.printf("\n");
 
 
 	// http escape the buffer
+	stdoutput.printf("http-escape...\n");
+	const char	*original="!@#$%^&*()hello-+";
 	char    *escbuffer=charstring::httpEscape("!@#$%^&*()hello-+");
-	stdoutput.printf("!@#$%%^&*()hello-+  http escaped is  %s\n",escbuffer);
+	test("escaped",!charstring::compare(escbuffer,
+					"!@#$%25%5E&*()hello-%2B"));
 	char	*unescbuffer=charstring::httpUnescape(escbuffer);
-	stdoutput.printf("http unescaped is  %s\n",unescbuffer);
-	delete escbuffer;
-	delete unescbuffer;
+	test("unescaped",!charstring::compare(unescbuffer,original));
+	delete[] escbuffer;
+	delete[] unescbuffer;
+	stdoutput.printf("\n");
+
+
+	// sets
+	stdoutput.printf("sets...\n");
+	const char	*alphabet=
+		"aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";
+	test("lengthContainingSet",
+		charstring::lengthContainingSet(
+				alphabet,"gfedcba")==14);
+	test("lengthNotContainingSet",
+		charstring::lengthNotContainingSet(
+				alphabet,"hijklmnopqrstuvwxyz")==14);
+	test("findFirstOfSet",charstring::findFirstOfSet(alphabet,"klm")==
+								(alphabet+20));
+	stdoutput.printf("\n");
+
+
+	// trim
+	stdoutput.printf("trim...\n");
+	char    buffer[100];
+	charstring::copy(buffer,"\r\n	     hello there buddy     	\r\n");
+	charstring::rightTrim(buffer);
+	test("rtrim",!charstring::compare(buffer,
+				"\r\n	     hello there buddy"));
+	charstring::leftTrim(buffer);
+	test("ltrim",!charstring::compare(buffer,"hello there buddy"));
+	stdoutput.printf("\n");
+
+	// strip
+	stdoutput.printf("strip...\n");
+	charstring::copy(buffer,"   hello      there   buddy  ");
+	charstring::strip(buffer,' ');
+	test("strip",!charstring::compare(buffer,"hellotherebuddy"));
+	charstring::copy(buffer,"   hello       there  buddy  ");
+	charstring::strip(buffer,"   ");
+	test("strip",!charstring::compare(buffer,"hello there  buddy  "));
+	stdoutput.printf("\n");
+
+
+	// case conversion
+	stdoutput.printf("case conversion...\n");
+	charstring::upper(buffer);
+	test("upper",!charstring::compare(buffer,"HELLO THERE  BUDDY  "));
+	charstring::lower(buffer);
+	test("lower",!charstring::compare(buffer,"hello there  buddy  "));
+	charstring::capitalize(buffer);
+	test("caps",!charstring::compare(buffer,"Hello There  Buddy  "));
+	stdoutput.printf("\n");
 	
 
 	// evaluate a string to see if it's a number

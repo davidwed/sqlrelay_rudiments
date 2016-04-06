@@ -389,7 +389,7 @@ char *charstring::httpEscape(const char *input) {
 				(*ptr>='A' && *ptr<='Z') ||
 				(*ptr>='0' && *ptr<='9') ||
 				character::inSet(*ptr,
-					"-._~:/?#[]@!$&'()*+,;=")) {
+					"-._~:/?#[]@!$&'()*,;=")) {
 			(*outptr)=*ptr;
 		} else {
 			(*outptr)='%';
