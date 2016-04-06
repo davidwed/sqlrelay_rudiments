@@ -418,34 +418,46 @@ int main(int argc, const char **argv) {
 	char		*teststr=charstring::parseNumber(testuint64);
 	test("parseNumber ULONG_MAX",
 		!charstring::compare(teststr,
-			"18446744073709551615"));
+			(testuint64==4294967295)
+				?"4294967295"
+				:"18446744073709551615"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testuint64,40);
 	test("parseNumber ULONG_MAX",
 		!charstring::compare(teststr,
-			"0000000000000000000018446744073709551615"));
+			(testuint64==4294967295)
+				?"0000000000000000000000000000004294967295"
+				:"0000000000000000000018446744073709551615"));
 	delete[] teststr;
 
 	int64_t		testint64=LONG_MAX;
 	teststr=charstring::parseNumber(testint64);
 	test("parseNumber LONG_MAX",
 		!charstring::compare(teststr,
-			"9223372036854775807"));
+			(testint64==2147483647)
+				?"2147483647"
+				:"9223372036854775807"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint64,40);
 	test("parseNumber LONG_MAX",
 		!charstring::compare(teststr,
-			"0000000000000000000009223372036854775807"));
+			(testint64==2147483647)
+				?"0000000000000000000000000000002147483647"
+				:"0000000000000000000009223372036854775807"));
 	testint64=-1*LONG_MAX;
 	teststr=charstring::parseNumber(testint64);
 	test("parseNumber -LONG_MAX",
 		!charstring::compare(teststr,
-			"-9223372036854775807"));
+			(testint64==-2147483647)
+				?"-2147483647"
+				:"-9223372036854775807"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint64,40);
 	test("parseNumber -LONG_MAX",
 		!charstring::compare(teststr,
-			"-000000000000000000009223372036854775807"));
+			(testint64==-2147483647)
+				?"-000000000000000000000000000002147483647"
+				:"-000000000000000000009223372036854775807"));
 	delete[] teststr;
 
 	uint32_t	testuint32=4294967295UL;
