@@ -323,6 +323,7 @@ int main(int argc, const char **argv) {
 	test("ltrim",!charstring::compare(buffer,"hello there buddy"));
 	stdoutput.printf("\n");
 
+
 	// strip
 	stdoutput.printf("strip...\n");
 	charstring::copy(buffer,"   hello      there   buddy  ");
@@ -331,6 +332,50 @@ int main(int argc, const char **argv) {
 	charstring::copy(buffer,"   hello       there  buddy  ");
 	charstring::strip(buffer,"   ");
 	test("strip",!charstring::compare(buffer,"hello there  buddy  "));
+	stdoutput.printf("\n");
+
+
+	// justification
+	stdoutput.printf("justification...\n");
+	char	hello[16];
+	charstring::copy(hello,"     hello     ");
+	charstring::leftJustify(hello,15);
+	test("left",!charstring::compare(hello,"hello          "));
+	charstring::rightJustify(hello,15);
+	test("right",!charstring::compare(hello,"          hello"));
+	charstring::copy(hello,"hello          ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello," hello         ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"  hello        ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"   hello       ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"    hello      ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"     hello     ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"      hello    ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"       hello   ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"        hello  ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"         hello ");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
+	charstring::copy(hello,"          hello");
+	charstring::center(hello,15);
+	test("center",!charstring::compare(hello,"     hello     "));
 	stdoutput.printf("\n");
 
 
@@ -345,160 +390,130 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 	
 
-	// evaluate a string to see if it's a number
-	if (charstring::isNumber("-100.5")) {
-		stdoutput.printf("-100.5 is a number\n");
-	}
-	if (!charstring::isNumber("-100.5.10")) {
-		stdoutput.printf("-100.5.10 is not a number\n");
-	}
-	
-
-	// evaluate a string to see if it's an integer
-	if (charstring::isInteger("-100")) {
-		stdoutput.printf("-100 is an integer\n");
-	}
-	if (!charstring::isInteger("-100.5")) {
-		stdoutput.printf("-100.5.10 is not an integer\n");
-	}
-
-
-	// create a new string containing text surrounded by spaces
-	char	hello[16];
-	charstring::copy(hello,"     hello     ");
-	stdoutput.printf("|%s|\n",hello);
-
-	// left justify the text
-	charstring::leftJustify(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-
-	// right justify the text
-	charstring::rightJustify(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-
-
-	// center the text over and over...
-	charstring::copy(hello,"hello          ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello," hello         ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"  hello        ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"   hello       ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"    hello      ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"     hello     ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"      hello    ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"       hello   ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"        hello  ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"         hello ");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-	charstring::copy(hello,"          hello");
-	charstring::center(hello,15);
-	stdoutput.printf("|%s|\n",hello);
-
-
-	// print the number of bytes necessary to store each number as a string
-	stdoutput.printf("size of 1 is: %d\n",
-			charstring::integerLength((int64_t)1));
-	stdoutput.printf("size of 10 is: %d\n",
-			charstring::integerLength((int64_t)10));
-	stdoutput.printf("size of 100 is: %d\n",
-			charstring::integerLength((int64_t)100));
-	stdoutput.printf("size of 1000 is: %d\n",
-			charstring::integerLength((int64_t)1000));
-	stdoutput.printf("size of -1 is: %d\n",
-			charstring::integerLength((int64_t)-1));
-	stdoutput.printf("size of -10 is: %d\n",
-			charstring::integerLength((int64_t)-10));
-	stdoutput.printf("size of -100 is: %d\n",
-			charstring::integerLength((int64_t)-100));
-	stdoutput.printf("size of -1000 is: %d\n",
-			charstring::integerLength((int64_t)-1000));
-
+	// numbers
+	stdoutput.printf("number...\n");
+	test("isNumber: -100.5",charstring::isNumber("-100.5"));
+	test("isNumber: -100.5.10",!charstring::isNumber("-100.5.10"));
+	test("isInteger: -100",charstring::isInteger("-100"));
+	test("isInteger: -100.5",!charstring::isInteger("-100.5"));
+	test("isInteger: -100.5.10",!charstring::isInteger("-100.5.10"));
+	test("integerLength: 1",
+			charstring::integerLength((int64_t)1)==1);
+	test("integerLength: 10",
+			charstring::integerLength((int64_t)10)==2);
+	test("integerLength: 100",
+			charstring::integerLength((int64_t)100)==3);
+	test("integerLength: 1000",
+			charstring::integerLength((int64_t)1000)==4);
+	test("integerLength: -1",
+			charstring::integerLength((int64_t)-1)==2);
+	test("integerLength: -10",
+			charstring::integerLength((int64_t)-10)==3);
+	test("integerLength: -100",
+			charstring::integerLength((int64_t)-100)==4);
+	test("integerLength: -1000",
+			charstring::integerLength((int64_t)-1000)==5);
 
 	uint64_t	testuint64=ULONG_MAX;
 	char		*teststr=charstring::parseNumber(testuint64);
-	stdoutput.printf("18446744073709551615=%s\n",teststr);
+	test("parseNumber ULONG_MAX",
+		!charstring::compare(teststr,
+			"18446744073709551615"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testuint64,40);
-	stdoutput.printf("18446744073709551615=%s\n",teststr);
+	test("parseNumber ULONG_MAX",
+		!charstring::compare(teststr,
+			"0000000000000000000018446744073709551615"));
 	delete[] teststr;
 
 	int64_t		testint64=LONG_MAX;
 	teststr=charstring::parseNumber(testint64);
-	stdoutput.printf("9223372036854775807=%s\n",teststr);
+	test("parseNumber LONG_MAX",
+		!charstring::compare(teststr,
+			"9223372036854775807"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint64,40);
-	stdoutput.printf("9223372036854775807=%s\n",teststr);
+	test("parseNumber LONG_MAX",
+		!charstring::compare(teststr,
+			"0000000000000000000009223372036854775807"));
 	testint64=-1*LONG_MAX;
 	teststr=charstring::parseNumber(testint64);
-	stdoutput.printf("-9223372036854775807=%s\n",teststr);
+	test("parseNumber -LONG_MAX",
+		!charstring::compare(teststr,
+			"-9223372036854775807"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint64,40);
-	stdoutput.printf("-9223372036854775807=%s\n",teststr);
+	test("parseNumber -LONG_MAX",
+		!charstring::compare(teststr,
+			"-000000000000000000009223372036854775807"));
 	delete[] teststr;
 
 	uint32_t	testuint32=4294967295UL;
 	teststr=charstring::parseNumber(testuint32);
-	stdoutput.printf("4294967295=%s\n",teststr);
+	test("parseNumber 2^32-1",
+		!charstring::compare(teststr,"4294967295"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testuint32,40);
-	stdoutput.printf("4294967295=%s\n",teststr);
+	test("parseNumber 2^32-1",
+		!charstring::compare(teststr,
+			"0000000000000000000000000000004294967295"));
 	delete[] teststr;
 
 	int32_t		testint32=2147483647;
 	teststr=charstring::parseNumber(testint32);
-	stdoutput.printf("2147483647=%s\n",teststr);
+	test("parseNumber 2^31-1",
+		!charstring::compare(teststr,"2147483647"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint32,40);
-	stdoutput.printf("2147483647=%s\n",teststr);
+	test("parseNumber 2^32-1",
+		!charstring::compare(teststr,
+			"0000000000000000000000000000002147483647"));
+	delete[] teststr;
 	testint32=-2147483647;
 	teststr=charstring::parseNumber(testint32);
-	stdoutput.printf("-2147483647=%s\n",teststr);
+	test("parseNumber -2^31-1",
+		!charstring::compare(teststr,"-2147483647"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint32,40);
-	stdoutput.printf("-2147483647=%s\n",teststr);
+	test("parseNumber -2^32-1",
+		!charstring::compare(teststr,
+			"-000000000000000000000000000002147483647"));
 	delete[] teststr;
 
 	uint16_t	testuint16=65535;
 	teststr=charstring::parseNumber(testuint16);
-	stdoutput.printf("65535=%s\n",teststr);
+	test("parseNumber 2^16-1",
+		!charstring::compare(teststr,"65535"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testuint16,40);
-	stdoutput.printf("65535=%s\n",teststr);
+	test("parseNumber 2^16-1",
+		!charstring::compare(teststr,
+			"0000000000000000000000000000000000065535"));
 	delete[] teststr;
 
 	int16_t		testint16=32767;
 	teststr=charstring::parseNumber(testint16);
-	stdoutput.printf("32767=%s\n",teststr);
+	test("parseNumber 2^15-1",
+		!charstring::compare(teststr,"32767"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint16,40);
-	stdoutput.printf("32767=%s\n",teststr);
+	test("parseNumber 2^15-1",
+		!charstring::compare(teststr,
+			"0000000000000000000000000000000000032767"));
 	testint16=-32767;
 	teststr=charstring::parseNumber(testint16);
-	stdoutput.printf("-32767=%s\n",teststr);
+	test("parseNumber -2^15-1",
+		!charstring::compare(teststr,"-32767"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testint16,40);
-	stdoutput.printf("-32767=%s\n",teststr);
+	test("parseNumber -2^15-1",
+		!charstring::compare(teststr,
+			"-000000000000000000000000000000000032767"));
 	delete[] teststr;
 
-	unsigned char	v8=0xC0;
+
+	// hosttonet/nettohost (why are these here?)
+	/*unsigned char	v8=0xC0;
 	uint16_t	v16=filedescriptor::hostToNet(
 						(uint16_t)0xC0C0);
 	uint32_t	v32=filedescriptor::hostToNet(
@@ -538,6 +553,5 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 	#endif
 	stdoutput.printBits(v8s,sizeof(v8s));
-	stdoutput.printf("\n");
-
+	stdoutput.printf("\n");*/
 }

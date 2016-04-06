@@ -7,7 +7,8 @@ if %errorlevel% neq 0 exit /b
 character.exe
 if %errorlevel% neq 0 exit /b
 
-rem charstring.exe
+charstring.exe
+if %errorlevel% neq 0 exit /b
 
 commandline.exe
 if %errorlevel% neq 0 exit /b

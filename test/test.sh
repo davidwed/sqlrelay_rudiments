@@ -3,7 +3,7 @@
 ./bytebuffer
 ./bytestring
 ./character
-#./charstring
+./charstring
 ./commandline
 ./crypt
 #./datetime
