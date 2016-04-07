@@ -137,7 +137,11 @@ char *dynamiclib::getError() const {
 
 		// copy the buffer and return that so the message can be
 		// freed using delete[] rather than having to use LocalFree
-		char	*retval=charstring::duplicate(buffer);
+		char	*retval=NULL;
+		if (charstring::compare(buffer,
+				"The operation completed successfully. ")) {
+			retval=charstring::duplicate(buffer);
+		}
 		LocalFree(buffer);
 		return retval;
 	#else

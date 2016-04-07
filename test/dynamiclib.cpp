@@ -10,6 +10,9 @@ int main(int argc, const char **argv) {
 
 	header("dynamiclib");
 
+#ifdef _WIN32
+	char	*f=charstring::duplicate("C:\\Windows\\System32\\msvcrt.dll");
+#else
 	// decide on a file to use
 	const char	*dirs[]={
 		"/lib64","/usr/lib64","/lib","/usr/lib",NULL
@@ -39,6 +42,7 @@ int main(int argc, const char **argv) {
 			break;
 		}
 	}
+#endif
 	test("file exists",f);
 
 	// open valid file and get a symbol
@@ -55,4 +59,6 @@ int main(int argc, const char **argv) {
 	// open invalid file
 	test("open: invalid file",!d.open("badfile",false,false));
 	test("getError: invalid file",d.getError());
+
+	delete[] f;
 }
