@@ -31,7 +31,9 @@ int main(int argc, const char **argv) {
 	// localhost
 	he.initialize("localhost");
 	stdoutput.printf("localhost:\n");
-	test("name",!charstring::compare(he.getName(),"localhost"));
+	// this shouldn't be empty, but there's no
+	// guarantee it'll actually be "localhost"
+	test("name",he.getName());
 	// it's likely there will be at least localhost.localdomain
 	test("alias list",he.getAliasList());
 	test("address type",he.getAddressType()==AF_INET);
@@ -43,7 +45,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("127.0.0.1:\n");
 	char	address[]={127,0,0,1};
 	he.initialize(address,4,AF_INET);
-	test("name",!charstring::compare(he.getName(),"localhost"));
+	// this shouldn't be empty, but there's no
+	// guarantee it'll actually be "localhost"
+	test("name",he.getName());
 	// it's likely there will be at least localhost.localdomain
 	test("alias list",he.getAliasList());
 	test("address type",he.getAddressType()==AF_INET);

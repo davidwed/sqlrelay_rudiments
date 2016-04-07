@@ -48,7 +48,10 @@ rem halt.exe
 rem handoff1.exe
 rem handoff2.exe
 rem handoffclient.exe
-rem hostentry.exe
+
+hostentry.exe
+if %errorlevel% neq 0 exit /b
+
 rem inetclntbench.exe
 rem inetsocketclient.exe
 rem inetsvrbench.exe
@@ -71,7 +74,10 @@ rem oneshotsvr.exe
 rem parameterstring.exe
 rem permissions.exe
 rem process.exe
-rem protocolentry.exe
+
+protocolentry.exe
+if %errorlevel% neq 0 exit /b
+
 rem randomnumber.exe
 rem reboot.exe
 rem regularexpression.exe
@@ -80,7 +86,10 @@ rem semaphoreset2.exe
 rem serialport.exe
 rem serialportprofile.exe
 rem server.exe
-rem serviceentry.exe
+
+serviceentry.exe
+if %errorlevel% neq 0 exit /b
+
 rem sharedmemory1.exe
 rem sharedmemory2.exe
 rem shutdown.exe
