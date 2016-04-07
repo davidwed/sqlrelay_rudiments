@@ -222,14 +222,15 @@ void directory::rewind() {
 		if (pvt->_dir) {
 			rewinddir(pvt->_dir);
 		}
-		pvt->_currentindex=0;
 	#endif
+	pvt->_currentindex=0;
 }
 
 bool directory::close() {
 	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
 		bool	retval=(FindClose(pvt->_dir)==TRUE);
 		pvt->_dir=INVALID_HANDLE_VALUE;
+		pvt->_currentindex=0;
 		return retval;
 	#else
 		bool	retval=true;

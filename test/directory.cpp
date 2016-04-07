@@ -9,19 +9,24 @@
 #include <rudiments/error.h>
 #include "test.cpp"
 
-#ifdef _WIN32
+/*#ifdef _WIN32
 const char	*dir="C:\\";
 #else
 const char	*dir="/usr/local";
-#endif
+#endif*/
 
 int main(int argc, const char **argv) {
 
 	header("directory");
 
 	// clean up, just in case
+	#ifdef _WIN32
+	file::remove("testdir\\testfile1");
+	file::remove("testdir\\testfile2");
+	#else
 	file::remove("testdir/testfile1");
 	file::remove("testdir/testfile2");
+	#endif
 	directory::remove("testdir");
 
 
@@ -113,26 +118,46 @@ int main(int argc, const char **argv) {
 	// current dir/change dir
 	stdoutput.printf("current dir/change dir...\n");
 	char	*cwd=directory::getCurrentWorkingDirectory();
+	#ifdef _WIN32
+	const char	*dir=charstring::findLast(cwd,"\\test");
+	test("\\test",!charstring::compare(dir,"\\test"));
+	#else
 	const char	*dir=charstring::findLast(cwd,"/test");
 	test("/test",!charstring::compare(dir,"/test"));
+	#endif
 	delete[] cwd;
 	directory::changeDirectory("testdir");
 	cwd=directory::getCurrentWorkingDirectory();
+	#ifdef _WIN32
+	dir=charstring::findLast(cwd,"\\test\\testdir");
+	test("\\test\\testdir",!charstring::compare(dir,"\\test\\testdir"));
+	#else
 	dir=charstring::findLast(cwd,"/test/testdir");
 	test("/test/testdir",!charstring::compare(dir,"/test/testdir"));
+	#endif
 	delete[] cwd;
 	directory::changeDirectory("..");
 	cwd=directory::getCurrentWorkingDirectory();
+	#ifdef _WIN32
+	dir=charstring::findLast(cwd,"\\test");
+	test("\\test",!charstring::compare(dir,"\\test"));
+	#else
 	dir=charstring::findLast(cwd,"/test");
 	test("/test",!charstring::compare(dir,"/test"));
+	#endif
 	delete[] cwd;
 	stdoutput.printf("\n");
 
 
 	// remove
 	stdoutput.printf("remove...\n");
+	#ifdef _WIN32
+	test("remove testdir\\testfile1",file::remove("testdir\\testfile1"));
+	test("remove testdir\\testfile2",file::remove("testdir\\testfile2"));
+	#else
 	test("remove testdir/testfile1",file::remove("testdir/testfile1"));
 	test("remove testdir/testfile2",file::remove("testdir/testfile2"));
+	#endif
 	test("remove testdir",directory::remove("testdir"));
 	stdoutput.printf("\n");
 
