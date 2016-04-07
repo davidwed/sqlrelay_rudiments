@@ -14,9 +14,20 @@ int main(int argc, const char **argv) {
 	test("getErrorNumber()",error::getErrorNumber()==EINTR);
 	test("getErrorString()",
 		!charstring::compare(error::getErrorString(),
-					"Interrupted system call"));
+				#ifdef _WIN32
+					"Interrupted function call"
+				#else
+					"Interrupted system call"
+				#endif
+				));
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
 	test("clearError()/getErrorString()",
-		!charstring::compare(error::getErrorString(),"Success"));
+		!charstring::compare(error::getErrorString(),
+				#ifdef _WIN32
+					"No error"
+				#else
+					"Success"
+				#endif
+				));
 }

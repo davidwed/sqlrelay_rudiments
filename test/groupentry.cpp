@@ -22,24 +22,38 @@ int main(int argc, const char **argv) {
 	test("name",!grent.getName());
 	test("group id",grent.getGroupId()==(gid_t)-1);
 	test("members",!grent.getMembers());
-	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
 
 	stdoutput.printf("%s:\n",groupname);
 	test("initialize",grent.initialize(groupname));
 	test("name",!charstring::compare(grent.getName(),groupname));
+#ifdef _WIN32
+	test("group id",grent.getGroupId()==0);
+	test("members",grent.getMembers() && grent.getMembers()[0]);
+	test("sid",!charstring::compare(grent.getSidString(),
+			"S-1-5-21-1873234618-1269098444-2064074030-513"));
+#else
 	test("group id",grent.getGroupId()==1);
 	test("members",grent.getMembers() && !grent.getMembers()[0]);
 	test("sid",!charstring::compare(grent.getSidString(),"1"));
+#endif
 	stdoutput.printf("\n");
 
 	gid_t	id=grent.getGroupId();
 	stdoutput.printf("%d:\n",id);
 	test("initialize",grent.initialize(id));
 	test("name",!charstring::compare(grent.getName(),groupname));
+#ifdef _WIN32
+	test("group id",grent.getGroupId()==0);
+	test("members",grent.getMembers() && grent.getMembers()[0]);
+	test("sid",!charstring::compare(grent.getSidString(),
+			"S-1-5-21-1873234618-1269098444-2064074030-513"));
+#else
 	test("group id",grent.getGroupId()==1);
 	test("members",grent.getMembers() && !grent.getMembers()[0]);
 	test("sid",!charstring::compare(grent.getSidString(),"1"));
+#endif
 	stdoutput.printf("\n");
 
 	stdoutput.printf("invalid group name\n");
@@ -48,7 +62,7 @@ int main(int argc, const char **argv) {
 	test("name",!grent.getName());
 	test("group id",grent.getGroupId()==(gid_t)-1);
 	test("members",!grent.getMembers());
-	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
 
 	// invalid group id
@@ -59,7 +73,7 @@ int main(int argc, const char **argv) {
 	test("name",!grent.getName());
 	test("group id",grent.getGroupId()==(gid_t)-1);
 	test("members",!grent.getMembers());
-	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
 
 	// null-safety
@@ -68,6 +82,6 @@ int main(int argc, const char **argv) {
 	test("name",!grent.getName());
 	test("group id",grent.getGroupId()==(gid_t)-1);
 	test("members",!grent.getMembers());
-	test("sid",!charstring::compare(grent.getSidString(),"-1"));
+	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
 }

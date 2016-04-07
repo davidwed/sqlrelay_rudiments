@@ -224,8 +224,6 @@ const char *groupentry::getSidString() const {
 		if (pvt->_grp) {
 			pvt->_sidstr=charstring::parseNumber(
 						(int64_t)pvt->_grp->gr_gid);
-		} else {
-			pvt->_sidstr=charstring::duplicate("-1");
 		}
 		pvt->_sid=pvt->_sidstr;
 		pvt->_sidsize=charstring::length(pvt->_sidstr);
@@ -242,8 +240,6 @@ const void *groupentry::getSid() const {
 		if (pvt->_grp) {
 			pvt->_sidstr=charstring::parseNumber(
 						(int64_t)pvt->_grp->gr_gid);
-		} else {
-			pvt->_sidstr=charstring::duplicate("-1");
 		}
 		pvt->_sid=pvt->_sidstr;
 		pvt->_sidsize=charstring::length(pvt->_sidstr);
@@ -260,8 +256,6 @@ uint64_t groupentry::getSidSize() const {
 		if (pvt->_grp) {
 			pvt->_sidstr=charstring::parseNumber(
 						(int64_t)pvt->_grp->gr_gid);
-		} else {
-			pvt->_sidstr=charstring::duplicate("-1");
 		}
 		pvt->_sid=pvt->_sidstr;
 		pvt->_sidsize=charstring::length(pvt->_sidstr);
