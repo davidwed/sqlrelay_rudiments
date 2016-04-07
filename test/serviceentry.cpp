@@ -2,40 +2,47 @@
 // See the file COPYING for more information
 
 #include <rudiments/serviceentry.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
-
-void print(serviceentry *se) {
-	stdoutput.printf("	Name:		%s\n",se->getName());
-	stdoutput.printf("	Port:		%d\n",se->getPort());
-	stdoutput.printf("	Protocol:	%s\n",se->getProtocol());
-	stdoutput.printf("	Alias list:\n");
-	int	i;
-	for (i=0; se->getAliasList() && se->getAliasList()[i]; i++) {
-		stdoutput.printf("		%s\n",se->getAliasList()[i]);
-	}
-	stdoutput.printf("\n");
-}
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
 
 	// uninitialized
 	serviceentry	se;
 	stdoutput.printf("uninitialized:\n");
-	print(&se);
-
+	test("name",!se.getName());
+	test("port",se.getPort()==-1);
+	test("protcol",!se.getProtocol());
+	test("alias list",!se.getAliasList());
+	stdoutput.printf("\n");
 
 	// get the service information for "smtp","tcp"
-	se.initialize("smtp","tcp");
 	stdoutput.printf("smtp/tcp:\n");
-	print(&se);
+	se.initialize("smtp","tcp");
+	test("name",!charstring::compare(se.getName(),"smtp"));
+	test("port",se.getPort()==25);
+	test("protcol",!charstring::compare(se.getProtocol(),"tcp"));
+	test("alias list",se.getAliasList() &&
+			!charstring::compare(se.getAliasList()[0],"mail"));
+	stdoutput.printf("\n");
 
 	// get the service information for the service on port 25, "tcp"
-	se.initialize(25,"tcp");
 	stdoutput.printf("25/tcp:\n");
-	print(&se);
+	se.initialize(25,"tcp");
+	test("name",!charstring::compare(se.getName(),"smtp"));
+	test("port",se.getPort()==25);
+	test("protcol",!charstring::compare(se.getProtocol(),"tcp"));
+	test("alias list",se.getAliasList() &&
+			!charstring::compare(se.getAliasList()[0],"mail"));
+	stdoutput.printf("\n");
 
 	// null-safety
 	se.initialize((const char *)NULL,NULL);
 	stdoutput.printf("NULL/NULL:\n");
-	print(&se);
+	test("name",!se.getName());
+	test("port",se.getPort()==-1);
+	test("protcol",!se.getProtocol());
+	test("alias list",!se.getAliasList());
+	stdoutput.printf("\n");
 }

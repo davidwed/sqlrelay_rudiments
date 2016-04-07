@@ -22,7 +22,7 @@
 #./handoff1
 #./handoff2
 #./handoffclient
-#./hostentry
+./hostentry
 #./inetclntbench
 #./inetsocketclient
 #./inetsvrbench
@@ -45,7 +45,7 @@
 #./parameterstring
 #./permissions
 #./process
-#./protocolentry
+./protocolentry
 #./randomnumber
 #./reboot
 #./regularexpression
@@ -54,7 +54,7 @@
 #./serialport
 #./serialportprofile
 #./server
-#./serviceentry
+./serviceentry
 #./sharedmemory1
 #./sharedmemory2
 #./shutdown
