@@ -22,8 +22,8 @@ int main(int argc, const char **argv) {
 		environment::setValue("TEST","newvalue"));
 	test("getValue() TEST=newvalue",
 		!charstring::compare(environment::getValue("TEST"),"newvalue"));
-	test("remove() TEST",
-		!charstring::compare(environment::getValue("TEST"),""));
+	environment::remove("TEST");
+	test("remove() TEST",!environment::getValue("TEST"));
 	environment::setValue("TEST","value");
 	environment::clear();
 	test("clear()",!environment::getValue("TEST"));
