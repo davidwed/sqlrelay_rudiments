@@ -32,7 +32,7 @@ int main(int argc, const char **argv) {
 	test("expiration date",
 			uent.getExpirationDate()==-1);
 	test("flag",uent.getFlag()==-1);
-	test("sid",!charstring::compare(uent.getSidString(),"-1"));
+	test("sid",!uent.getSidString());
 	stdoutput.printf("\n");
 
 	// get the user entry for "dmuse"
@@ -169,7 +169,7 @@ int main(int argc, const char **argv) {
 	test("expiration date",
 			uent.getExpirationDate()==-1);
 	test("flag",uent.getFlag()==-1);
-	test("sid",!charstring::compare(uent.getSidString(),"-1"));
+	test("sid",!uent.getSidString());
 	stdoutput.printf("\n");
 
 	// null-safety
@@ -195,6 +195,6 @@ int main(int argc, const char **argv) {
 	test("expiration date",
 			uent.getExpirationDate()==-1);
 	test("flag",uent.getFlag()==-1);
-	test("sid",!charstring::compare(uent.getSidString(),"-1"));
+	test("sid",!uent.getSidString());
 	stdoutput.printf("\n");
 }

@@ -3,9 +3,10 @@
 	directory::getChildByIndex() works correctly on windows now
 	dynamiclib::getError() returns NULL on all platforms when there is no
 		error now (used to return an "ok" string on Windows)
-	groupentry::getSidString() returns NULL on non-windows platforms when
-		uninitialized or initialized to an invalid group, used to
-		return NULL on Windows and -1 on unix-like platforms
+	userentry/groupentry::getSidString() returns NULL on non-windows
+		platforms when uninitialized or initialized to an invalid
+		group, used to return NULL on Windows and -1 on unix-like
+		platforms
 	fixed configure bug causing getspnam methods not to be detected
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
