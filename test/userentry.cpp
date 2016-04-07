@@ -39,7 +39,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("username: dmuse...\n");
 	uent.initialize("dmuse");
 	test("name",!charstring::compare(uent.getName(),"dmuse"));
+#ifndef _WIN32
 	test("password",uent.getPassword());
+#endif
 	test("user id",(int64_t)uent.getUserId()>-1);
 	test("primary group id",(int64_t)uent.getPrimaryGroupId()>-1);
 	test("real name",uent.getRealName());
@@ -50,7 +52,9 @@ int main(int argc, const char **argv) {
 	test("shell",uent.getShell());
 #endif
 	if (!process::getUserId()) {
+#ifndef _WIN32
 		test("encrypted password",uent.getEncryptedPassword());
+#endif
 		// no good way to validate these, they could legitimately
 		// be any number, including -1
 		/*test("last change date",uent.getLastChangeDate()==-1);
@@ -82,7 +86,9 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("userid: %d...\n",id);
 	uent.initialize(id);
 	test("name",!charstring::compare(uent.getName(),"dmuse"));
+#ifndef _WIN32
 	test("password",uent.getPassword());
+#endif
 	test("user id",(int64_t)uent.getUserId()>-1);
 	test("primary group id",(int64_t)uent.getPrimaryGroupId()>-1);
 	test("real name",uent.getRealName());
@@ -93,7 +99,9 @@ int main(int argc, const char **argv) {
 	test("shell",uent.getShell());
 #endif
 	if (!process::getUserId()) {
+#ifndef _WIN32
 		test("encrypted password",uent.getEncryptedPassword());
+#endif
 		// no good way to validate these, they could legitimately
 		// be any number, including -1
 		/*test("last change date",uent.getLastChangeDate()==-1);
