@@ -106,7 +106,10 @@ rem tlsclient.exe
 rem tlsserver.exe
 rem unixsocketclient.exe
 rem url.exe
-rem userentry.exe
+
+userentry.exe
+if %errorlevel% neq 0 exit /b
+
 rem xmld.exe
 rem xmlentities.exe
 rem xmls.exe

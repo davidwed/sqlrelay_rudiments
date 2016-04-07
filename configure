@@ -23941,7 +23941,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 
-if ( test "$INCLUDE_SHADOWENTRY" = "1" )
+if ( test "$INCLUDE_USERENTRY" = "1" )
 then
 
 HAVE_GETSPNAM_R=""

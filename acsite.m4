@@ -1310,7 +1310,7 @@ dnl checks for shadow entry functions and header files
 AC_DEFUN([FW_CHECK_SHADOW],
 [
 
-if ( test "$INCLUDE_SHADOWENTRY" = "1" )
+if ( test "$INCLUDE_USERENTRY" = "1" )
 then
 
 HAVE_GETSPNAM_R=""

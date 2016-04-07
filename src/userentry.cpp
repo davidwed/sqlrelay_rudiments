@@ -6,6 +6,7 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #if defined(RUDIMENTS_HAVE_GETSPNAM) || defined(RUDIMENTS_HAVE_GETSPNAM_R)
 	#define RUDIMENTS_HAVE_SHADOW

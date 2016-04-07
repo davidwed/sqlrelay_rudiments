@@ -71,7 +71,7 @@
 #./tlsserver
 #./unixsocketclient
 #./url
-#./userentry
+./userentry
 #./xmld
 #./xmlentities
 #./xmls
