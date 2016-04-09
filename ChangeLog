@@ -9,6 +9,7 @@
 		platforms
 	fixed configure bug causing getspnam methods not to be detected
 	datetime::addDays works correctly now
+	datetime::getTimeZoneOffset() works correctly on Windows now
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

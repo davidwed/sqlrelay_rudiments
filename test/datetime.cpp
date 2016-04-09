@@ -2,6 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/datetime.h>
+#include <rudiments/environment.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
@@ -19,6 +20,9 @@ const char	*datestringwithzerousec="04/08/2016 21:54:30:000 EDT";
 time_t		secsinceepoch=1460166870;
 
 int main(int argc, const char **argv) {
+
+	// set timezone so epoch to string will work correctly
+	environment::setValue("TZ","EST5EDT");
 
 	header("datetime");
 
@@ -98,6 +102,7 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==99);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",dt.isDaylightSavingsTime());
+stdoutput.printf("%s\n",dt.getTimeZoneString());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EDT"));
 	test("offset from GMT",dt.getTimeZoneOffset()==-14400);

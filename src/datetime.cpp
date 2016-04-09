@@ -773,6 +773,10 @@ void datetime::processTZ(void *tms) {
 		long	seconds;
 		_get_timezone(&seconds);
 		pvt->_gmtoff=-seconds;
+		// apparently _get_timezine doesn't take DST into account
+		if (pvt->_isdst) {
+			pvt->_gmtoff+=3600;
+		}
 	#elif defined(RUDIMENTS_HAS_TIMEZONE)
 		pvt->_gmtoff=-timezone;
 	#elif defined(RUDIMENTS_HAS__TIMEZONE)
