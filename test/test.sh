@@ -6,7 +6,7 @@
 ./charstring
 ./commandline
 ./crypt
-#./datetime
+./datetime
 ./dictionary
 ./directory
 ./dynamicarray

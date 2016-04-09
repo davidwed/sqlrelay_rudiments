@@ -374,7 +374,7 @@ bool datetime::addHours(int32_t hours) {
 }
 
 bool datetime::addDays(int32_t days) {
-	pvt->_yday=pvt->_yday+days;
+	pvt->_mday=pvt->_mday+days;
 	return normalize();
 }
 

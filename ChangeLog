@@ -8,6 +8,7 @@
 		group, used to return NULL on Windows and -1 on unix-like
 		platforms
 	fixed configure bug causing getspnam methods not to be detected
+	datetime::addDays works correctly now
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

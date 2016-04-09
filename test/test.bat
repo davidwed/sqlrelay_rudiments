@@ -16,7 +16,8 @@ if %errorlevel% neq 0 exit /b
 rem crypt.exe
 rem if %errorlevel% neq 0 exit /b
 
-rem datetime.exe
+datetime.exe
+if %errorlevel% neq 0 exit /b
 
 dictionary.exe
 if %errorlevel% neq 0 exit /b
