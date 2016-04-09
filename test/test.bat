@@ -59,7 +59,6 @@ rem inetsvrbench.exe
 rem kill.exe
 rem linkedlist.exe
 rem listener.exe
-rem listmetrics.exe
 rem lock1.exe
 rem lock2.exe
 rem logger.exe
@@ -72,7 +71,10 @@ rem nonhandoffclient.exe
 rem nullserver.exe
 rem oneshotclnt.exe
 rem oneshotsvr.exe
-rem parameterstring.exe
+
+parameterstring.exe
+if %errorlevel% neq 0 exit /b
+
 rem permissions.exe
 rem process.exe
 

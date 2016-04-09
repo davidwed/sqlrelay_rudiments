@@ -3,18 +3,20 @@
 
 #include <rudiments/parameterstring.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
 int main(int argc, char **argv) {
 
+	header("parameterstring");
+
 	parameterstring	pstr;
 
-	pstr.parse("name1=value1;name2='value2';name3='\\'value3\\'';name4=\\\\value4\\\\");
+	test("parse",pstr.parse("name1=value1;name2='value2';name3='\\'value3\\'';name4=\\\\value4\\\\"));
 
-	stdoutput.printf("By Name:\nname1=%s\nname2=%s\n"
-				"name3=%s\nname4=%s\nname5=%s\n",
-				pstr.getValue("name1"),
-				pstr.getValue("name2"),
-				pstr.getValue("name3"),
-				pstr.getValue("name4"),
-				pstr.getValue("name5"));
+	test("name1",!charstring::compare(pstr.getValue("name1"),"value1"));
+	test("name2",!charstring::compare(pstr.getValue("name2"),"value2"));
+	test("name3",!charstring::compare(pstr.getValue("name3"),"'value3'"));
+	test("name4",!charstring::compare(pstr.getValue("name4"),"\\value4\\"));
+	test("name5",!pstr.getValue("name5"));
+	stdoutput.printf("\n");
 }

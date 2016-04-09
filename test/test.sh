@@ -29,7 +29,6 @@
 #./kill
 #./linkedlist
 #./listener
-#./listmetrics
 #./lock1
 #./lock2
 #./logger
@@ -42,7 +41,7 @@
 #./nullserver
 #./oneshotclnt
 #./oneshotsvr
-#./parameterstring
+./parameterstring
 #./permissions
 #./process
 ./protocolentry
