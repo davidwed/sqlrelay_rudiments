@@ -5,6 +5,10 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+const char	*nondstdatestring="02/08/2016 21:54:30 EST";
+const char	*nondstdatestringwithzerousec="02/08/2016 21:54:30:000 EST";
+time_t		nondstsecsinceepoch=1454986470;
+
 const char	*datestring="04/08/2016 21:54:30 EDT";
 const char	*estdatestring="04/08/2016 21:54:30 EDT";
 const char	*cstdatestring="04/08/2016 20:54:30 CDT";
@@ -18,9 +22,39 @@ int main(int argc, const char **argv) {
 
 	header("datetime");
 
+	datetime	dt;
+
+	// init from string
+	stdoutput.printf("non-dst date from string:\n");
+	dt.initialize(nondstdatestring);
+	test("hour",dt.getHour()==21);
+	test("minutes",dt.getMinutes()==54);
+	test("seconds",dt.getSeconds()==30);
+	test("useconds",dt.getMicroseconds()==0);
+	test("month",dt.getMonth()==2);
+	test("month name",
+		!charstring::compare(dt.getMonthName(),"February"));
+	test("month abbr",
+		!charstring::compare(dt.getMonthAbbreviation(),"Feb"));
+	test("day of month",dt.getDayOfMonth()==8);
+	test("day of week",dt.getDayOfWeek()==2);
+	test("day of year",dt.getDayOfYear()==39);
+	test("year",dt.getYear()==2016);
+	test("daylight savings time",!dt.isDaylightSavingsTime());
+	test("time zone",
+		!charstring::compare(dt.getTimeZoneString(),"EST"));
+	test("offset from GMT",dt.getTimeZoneOffset()==-18000);
+	test("seconds since 1970",dt.getEpoch()==nondstsecsinceepoch);
+	test("date string",
+		!charstring::compare(dt.getString(),nondstdatestring));
+	test("date string (with usec)",
+		!charstring::compare(dt.getString(true),
+					nondstdatestringwithzerousec));
+	stdoutput.printf("\n");
+
+
 	// init from string
 	stdoutput.printf("date from string:\n");
-	datetime	dt;
 	dt.initialize(datestringwithusec);
 	test("hour",dt.getHour()==21);
 	test("minutes",dt.getMinutes()==54);
