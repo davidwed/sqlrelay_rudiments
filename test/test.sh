@@ -27,7 +27,7 @@
 #./inetsocketclient
 #./inetsvrbench
 #./kill
-#./linkedlist
+./linkedlist
 #./listener
 #./lock1
 #./lock2
