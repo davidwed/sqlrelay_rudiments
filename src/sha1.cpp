@@ -23,7 +23,7 @@ sha1::~sha1() {
 	delete pvt;
 }
 
-bool sha1::append(unsigned char *data, uint32_t length) {
+bool sha1::append(const unsigned char *data, uint32_t length) {
 	pvt->_err=SHA1_ERROR_SUCCESS;
 	int	result=SHA1Input(&pvt->_context,data,length);
 	setError(result);
@@ -39,6 +39,10 @@ const unsigned char *sha1::getHash() {
 		return pvt->_result;
 	}
 	return NULL;
+}
+
+uint32_t sha1::getHashLength() {
+	return SHA1HashSize;
 }
 
 bool sha1::clear() {
