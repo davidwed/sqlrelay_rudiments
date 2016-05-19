@@ -11,6 +11,7 @@
 	datetime::addDays works correctly now
 	datetime::getTimeZoneOffset() works correctly on Windows now
 	added sha1 class
+	printBits() correctly takes a const unsigned char * argument now
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

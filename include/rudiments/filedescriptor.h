@@ -370,7 +370,7 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 
 		/** Prints "value" to the file descriptor
 		 *  as a string of ones and zeros. */
-		void	printBits(unsigned char *bits, uint64_t size);
+		void	printBits(const unsigned char *bits, uint64_t size);
 
 		/** Reads an unsigned 16-bit integer from the file
 		 *  descriptor into "buffer".  Returns the number of bytes that
