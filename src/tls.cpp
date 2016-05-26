@@ -848,23 +848,21 @@ bool tlscontext::reInit(bool isclient) {
 		}
 		if (!method) {
 			if (isclient) {
-				method=
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
-					TLS_client_method()
+					method=TLS_client_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
-					SSLv23_client_method()
+					method=SSLv23_client_method()
 				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
-					SSLv2_client_method()
+					method=SSLv2_client_method()
 				#endif
 				;
 			} else {
-				method=
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
-					TLS_server_method()
+					method=TLS_server_method()
 				#elif defined(RUDIMENTS_HAS_SSLV23_METHOD)
-					SSLv23_server_method()
+					method=SSLv23_server_method()
 				#elif defined(RUDIMENTS_HAS_SSLV2_METHOD)
-					SSLv2_server_method()
+					method=SSLv2_server_method()
 				#endif
 				;
 			}
