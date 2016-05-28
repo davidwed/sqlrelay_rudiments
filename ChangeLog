@@ -14,6 +14,8 @@
 	printBits() correctly takes a const unsigned char * argument now
 	applied Kasyanov Dmitry's patch to fix a subtle bug in TLS/SSL method
 		initialization
+	added destructor to stdiofiledescriptor that prevents file descriptors
+		0, 1 and 2 from being closed when the instance is destroyed
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

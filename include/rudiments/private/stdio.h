@@ -3,3 +3,4 @@
 
 	public:
 		stdiofiledescriptor(int32_t fd);
+		~stdiofiledescriptor();
