@@ -75,7 +75,7 @@ srcs="winsock.cpp "+_
 	"unixsocketutil.cpp "+_
 	"socketserver.cpp "+_
 	"socketclient.cpp "+_
-	"url.cpp"+_
+	"url.cpp "+_
 	"sha1.cpp"
 
 lobjs="winsock.obj "+_
@@ -137,7 +137,7 @@ lobjs="winsock.obj "+_
 	"unixsocketutil.obj "+_
 	"socketserver.obj "+_
 	"socketclient.obj "+_
-	"url.obj"+_
+	"url.obj "+_
 	"sha1.obj"
 
 headers0="resultcodes.h "+_
@@ -209,7 +209,7 @@ headers3="xmldom.h "+_
 	"url.h "+_
 	"gss.h "+_
 	"tls.h "+_
-	"security.h"+_
+	"security.h "+_
 	"sha1.h"
 
 privateheaders0="config.h "+_
@@ -367,8 +367,8 @@ privateheaders7="codetree.h "+_
 	"tls.h "+_
 	"tlsincludes.h "+_
 	"tlscontext.h "+_
-	"tlscertificate.h"+_
-	"sha1.h"+_
+	"tlscertificate.h "+_
+	"sha1.h "+_
 	"sha1includes.h"
 
 ' version
