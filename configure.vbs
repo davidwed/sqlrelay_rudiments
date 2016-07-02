@@ -503,11 +503,15 @@ end if
 
 ' determine config.h template...
 
-' default to VS2013
-configwindowsh="include\\rudiments\\private\\config_vs2013.h"
+' default to VS2015
+configwindowsh="include\\rudiments\\private\\config_vs2015.h"
+
+' VS2013
+if version=18 then
+	configwindowsh="include\\rudiments\\private\\config_vs2013.h"
 
 ' VS2010 and VS2012
-if version<=17 and version>15 then
+elseif version<=17 and version>15 then
 	configwindowsh="include\\rudiments\\private\\config_vs2010.h"
 
 ' VS2005 and VS2008

@@ -399,7 +399,9 @@ bool url::httpOpen(const char *urlname, const char *userpwd) {
 	stringbuffer	request;
 	request.append("GET ")->append(path);
 	request.append(" HTTP/1.1\r\n");
-	request.append("User-Agent: rudiments/"RUDIMENTS_VERSION"\r\n");
+	request.append("User-Agent: rudiments/");
+	request.append(RUDIMENTS_VERSION);
+	request.append("\r\n");
 	request.append("Host: ")->append(host)->append("\r\n");
 	if (userpwd) {
 		request.append("Authorization: Basic ");
