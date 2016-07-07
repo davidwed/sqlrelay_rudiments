@@ -69,9 +69,9 @@
  	*  int_least16_t    integer of >= 16 bits
  	*
  	*/
-	typedef unsigned long int	uint32_t;
-	typedef unsigned char		uint8_t;
-	typedef short			int_least16_t;
+	typedef unsigned int	uint32_t;
+	typedef unsigned char	uint8_t;
+	typedef short		int_least16_t;
 #endif
 
 enum
