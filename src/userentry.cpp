@@ -565,11 +565,11 @@ bool userentry::initialize(const char *username, uid_t userid) {
 			}
 		}
 	#elif defined(RUDIMENTS_HAVE_GETSPNAM) 
-		if (!_uemutex || _uemutex->lock()) {
+		if (!uemutex || uemutex->lock()) {
 			pvt->_sp=getspnam(const_cast<char *>(getName()));
 		}
-		if (_uemutex) {
-			_uemutex->unlock();
+		if (uemutex) {
+			uemutex->unlock();
 		}
 	#endif
 
