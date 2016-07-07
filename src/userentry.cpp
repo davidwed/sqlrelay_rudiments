@@ -309,7 +309,7 @@ int32_t userentry::getExpirationDate() const {
 
 int32_t userentry::getFlag() const {
 	#if defined(RUDIMENTS_HAVE_SHADOW) && defined(RUDIMENTS_HAVE_SP_FLAG)
-		return (pvt->_sp)?pvt->_sp->sp_flag:-1;
+		return (pvt->_sp)?(int32_t)pvt->_sp->sp_flag:-1;
 	#else
 		return -1;
 	#endif
