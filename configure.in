@@ -310,6 +310,10 @@ AC_ARG_ENABLE(compiler,
 	[  --disable-compiler      Don't build compiler class],
 	INCLUDE_COMPILER="0",
 	INCLUDE_COMPILER="1")
+AC_ARG_ENABLE(prompt,
+	[  --disable-prompt        Don't build prompt class],
+	INCLUDE_PROMPT="0",
+	INCLUDE_PROMPT="1")
 
 if ( test -n "$SMALLCODE" ); then
 	AC_DEFINE_UNQUOTED(RUDIMENTS_SMALL_CODE,1,Use small rather than fast code)
@@ -1077,12 +1081,12 @@ AC_TRY_COMPILE([],
 echo "******************************"
 
 
-if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
-then
-
 dnl Checks associated with signal handling
 echo
 echo "***** Signal Handling ********"
+
+if ( test "$INCLUDE_SIGNALCLASSES" = "1" )
+then
 
 AC_MSG_CHECKING(for sigaction)
 AC_TRY_COMPILE([#include <signal.h>
@@ -1170,9 +1174,9 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 #endif],
 CreateTimerQueueTimer(0,0,0,0,0,0,0);,AC_DEFINE(RUDIMENTS_HAVE_CREATETIMERQUEUETIMER,1,Some systems have CreateTimerQueueTimer) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-echo "******************************"
-
 fi
+
+echo "******************************"
 
 dnl Checks associated with date and time
 echo
@@ -3525,6 +3529,78 @@ ExitWindowsEx(0,0),AC_DEFINE(RUDIMENTS_HAVE_EXITWINDOWSEX,1,Some systems have Ex
 echo "******************************"
 
 
+dnl Checks for prompt functions
+echo
+echo "***** Prompt Libraries *******"
+
+if ( test "$INCLUDE_PROMPT" = "1" )
+then
+	AC_MSG_CHECKING(for termcap)
+	FW_CHECK_HEADERS_AND_LIBS([/usr],[termcap],[termcap.h],[termcap],[""],[""],[TERMCAPINCLUDES],[TERMCAPLIBS],[TERMCAPLIBPATH],[TERMCAPSTATIC])
+	if ( test -n "$TERMCAPLIBS" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
+	dnl if there was no termcap, try curses instead
+	if ( test -z "$TERMCAPLIBS" )
+	then
+		AC_MSG_CHECKING(for curses)
+		FW_CHECK_HEADERS_AND_LIBS([/usr],[curses],[curses.h],[curses],[""],[""],[CURSESINCLUDES],[CURSESLIBS],[CURSESLIBPATH],[CURSESSTATIC])
+		if ( test -n "$CURSESLIBS" )
+		then
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+		fi
+	fi
+
+	AC_MSG_CHECKING(for history)
+	FW_CHECK_HEADERS_AND_LIBS([/usr],[history],[readline/history.h],[history],[""],[""],[HISTORYINCLUDES],[HISTORYLIBS],[HISTORYLIBPATH],[HISTORYSTATIC])
+	if ( test -n "$HISTORYLIBS" )
+	then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
+	AC_MSG_CHECKING(for readline)
+	FW_CHECK_HEADERS_AND_LIBS([/usr],[readline],[readline/readline.h],[readline],[""],[""],[READLINEINCLUDES],[READLINELIBS],[READLINELIBPATH],[READLINESTATIC])
+	if ( test -n "$READLINELIBS" )
+	then
+		READLINEINCLUDES="$READLINEINCLUDES $HISTORYINCLUDES $CURSESINCLUDES $TERMCAPINCLUDES"
+		READLINELIBS="$READLINELIBS $HISTORYLIBS $CURSESLIBS $TERMCAPLIBS"
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+	fi
+
+	AC_MSG_CHECKING(whether termcap/curses/history/readline work)
+	FW_TRY_LINK([#include <stdlib.h>
+	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$READLINEINCLUDES],[$READLINELIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); READLINELIBS=""])
+	AC_SUBST(READLINEINCLUDES)
+	AC_SUBST(READLINELIBS)
+	
+	if ( test -n "$READLINELIBS" )
+	then
+		AC_DEFINE_UNQUOTED(HAVE_READLINE,1,Do we have readline)
+	fi
+
+	case $host_os in
+		*haiku* )
+                	AC_DEFINE(ADD_NEWLINE_AFTER_READ_FROM_STDIN,1,On some platforms, you have to add a newline after reading from stdin)
+			;;
+		* )
+			;;
+	esac
+fi
+
+echo "******************************"
+
+
+
 dnl Semantic Versioning
 dnl Given a version number MAJOR.MINOR.PATCH, increment the:
 dnl 1. MAJOR when you make backwards-incompatible API changes
@@ -4071,6 +4147,14 @@ then
 	LOBJS="$LOBJS modemutil.lo"
 fi
 
+if ( test "$INCLUDE_PROMPT" = "1" )
+then
+	HEADERS3="$HEADERS3 prompt.h"
+	PRIVATEHEADERS6="$PRIVATEHEADERS6 prompt.h promptincludes.h"
+	SRCS="$SRCS prompt.cpp"
+	LOBJS="$LOBJS prompt.lo"
+fi
+
 
 AC_SUBST(HEADERS0)
 AC_SUBST(HEADERS1)
@@ -4177,13 +4261,19 @@ if ( test -n "$HAVE_GSS" )
 then
 	GSSBUILD="yes"
 fi
+READLINEBUILD="no"
+if ( test -n "$READLINELIBS" )
+then
+	READLINEBUILD="yes"
+fi
 
-echo " Features     : Threads $HAS_THREADS"
-echo "                PCRE    $PCREBUILD"
-echo "                libcurl $LIBCURLBUILD"
-echo "                TLS/SSL $SSLBUILD"
-echo "                GSS     $GSSBUILD"
-echo "******************************"
+echo " Features     : Threads  $HAS_THREADS"
+echo "                PCRE     $PCREBUILD"
+echo "                libcurl  $LIBCURLBUILD"
+echo "                TLS/SSL  $SSLBUILD"
+echo "                GSS      $GSSBUILD"
+echo "                Readline $READLINEBUILD"
+echo "*******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"
 echo "then the configure script probably couldn't find a package it needed to"

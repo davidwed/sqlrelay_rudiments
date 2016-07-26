@@ -1,5 +1,8 @@
 /* include/rudiments/private/config.h.in.  Generated from configure.in by autoheader.  */
 
+/* On some platforms */
+#undef ADD_NEWLINE_AFTER_READ_FROM_STDIN
+
 /* Use inline functions or not */
 #undef ENABLE_RUDIMENTS_INLINES
 
@@ -11,6 +14,9 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
+
+/* Do we have readline */
+#undef HAVE_READLINE
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
