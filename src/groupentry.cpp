@@ -212,7 +212,14 @@ gid_t groupentry::getGroupId() const {
 
 const char * const *groupentry::getMembers() const {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
-	return (pvt->_grp)?pvt->_grp->gr_mem:NULL;
+	// If a group has no members then pvt->_grp->gr_mem will be an
+	// array containing a single NULL or empty member.  Rather than
+	// returning that, just return NULL.
+	if (pvt->_grp && pvt->_grp->gr_mem &&
+		!charstring::isNullOrEmpty(pvt->_grp->gr_mem[0])) {
+		return pvt->_grp->gr_mem;
+	}
+	return NULL;
 #else
 	return pvt->_members;
 #endif

@@ -35,7 +35,7 @@ int main(int argc, const char **argv) {
 			"S-1-5-21-1873234618-1269098444-2064074030-513"));
 #else
 	test("group id",grent.getGroupId()==1);
-	test("members",grent.getMembers() && !grent.getMembers()[0]);
+	test("members",!grent.getMembers());
 	test("sid",!charstring::compare(grent.getSidString(),"1"));
 #endif
 	stdoutput.printf("\n");
@@ -51,7 +51,7 @@ int main(int argc, const char **argv) {
 			"S-1-5-21-1873234618-1269098444-2064074030-513"));
 #else
 	test("group id",grent.getGroupId()==1);
-	test("members",grent.getMembers() && !grent.getMembers()[0]);
+	test("members",!grent.getMembers());
 	test("sid",!charstring::compare(grent.getSidString(),"1"));
 #endif
 	stdoutput.printf("\n");
