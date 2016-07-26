@@ -5,6 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 
 #ifdef HAVE_READLINE
@@ -126,8 +127,9 @@ char *prompt::read() {
 
 		stdoutput.printf(pvt->_prompt);
 
-		char	*retval=new char[1024];
-		ssize_t	bytes=stdinput.read(retval,1024);
+		size_t	retvalsize=sys::getMaxLineLength();
+		char	*retval=new char[retvalsize];
+		ssize_t	bytes=stdinput.read(retval,retvalsize-1);
 		retval[bytes-1]='\0';
 		#ifdef ADD_NEWLINE_AFTER_READ_FROM_STDIN
 			stdoutput.printf("\n");
