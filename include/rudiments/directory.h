@@ -61,8 +61,8 @@ class RUDIMENTS_DLLSPEC directory {
 		/** Returns true if an attempt to access a
 		 *  file in directory "pathname" longer than the
 		 *  length returned by maxFileNameLength() will
-		 *  succeed or false if it will fail. */
-		bool	canAccessLongFileNames();
+		 *  succeed and false if it will fail. */
+		bool	canExceedMaxFileNameLength();
 
 		/** Creates a new directory "path" with permissions "perms". */
 		static bool	create(const char *path, mode_t perms);
@@ -95,8 +95,9 @@ class RUDIMENTS_DLLSPEC directory {
 		/** Returns true if an attempt to access a
 		 *  file in directory "pathname" longer than the
 		 *  length returned by maxFileNameLength() will
-		 *  succeed or false if it will fail. */
-		static bool	canAccessLongFileNames(const char *pathname);
+		 *  succeed and false if it will fail. */
+		static bool	canExceedMaxFileNameLength(
+						const char *pathname);
 
 		/** This method returns true if this class needs a mutex
 		 *  to operate safely in a threaded environment and false

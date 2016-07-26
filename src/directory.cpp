@@ -444,7 +444,7 @@ int64_t directory::maxPathLength(const char *pathname) {
 	return pathConf(pathname,_PC_PATH_MAX);
 }
 
-bool directory::canAccessLongFileNames(const char *pathname) {
+bool directory::canExceedMaxFileNameLength(const char *pathname) {
 	return !pathConf(pathname,_PC_NO_TRUNC);
 }
 
@@ -481,7 +481,7 @@ int64_t directory::maxPathLength() {
 	return fpathConf(_PC_PATH_MAX);
 }
 
-bool directory::canAccessLongFileNames() {
+bool directory::canExceedMaxFileNameLength() {
 	return !fpathConf(_PC_NO_TRUNC);
 }
 

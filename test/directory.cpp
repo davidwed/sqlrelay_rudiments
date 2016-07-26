@@ -176,9 +176,9 @@ int main(int argc, const char **argv) {
 	test("maxPathLength cross-check",
 			directory::maxPathLength(cwd)==
 			d.maxPathLength());
-	test("canAccessLongFileNames cross-check",
-			directory::canAccessLongFileNames(cwd)==
-			d.canAccessLongFileNames());
+	test("canExceedMaxFileNameLength cross-check",
+			directory::canExceedMaxFileNameLength(cwd)==
+			d.canExceedMaxFileNameLength());
 	d.close();
 	delete[] cwd;
 
