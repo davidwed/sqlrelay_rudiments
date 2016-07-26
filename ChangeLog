@@ -21,6 +21,7 @@
 	sys::getMaxLineLength defaults to SSIZE_MAX now
 	groupentry::getMembers() returns NULL instead of an array with a single
 		NULL member if the group has no members on all systems now
+	directory::fpathConf works correctly now
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

@@ -170,15 +170,6 @@ int main(int argc, const char **argv) {
 	test("maxPathLength valid",
 			directory::maxPathLength(cwd)>0);
 	d.open(cwd);
-stdoutput.printf("mfnl=%d/%d\n",
-		directory::maxFileNameLength(cwd),
-		d.maxFileNameLength());
-stdoutput.printf("mpl=%d/%d\n",
-		directory::maxPathLength(cwd),
-		d.maxPathLength());
-stdoutput.printf("c=%d/%d\n",
-		directory::canAccessLongFileNames(cwd),
-		d.canAccessLongFileNames());
 	test("maxFileNameLength cross-check",
 			directory::maxFileNameLength(cwd)==
 			d.maxFileNameLength());

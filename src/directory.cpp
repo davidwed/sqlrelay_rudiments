@@ -487,9 +487,9 @@ bool directory::canAccessLongFileNames() {
 
 int64_t directory::fpathConf(int32_t name) {
 	#if defined(RUDIMENTS_HAVE_FPATHCONF) && \
-			defined(RUDIMENTS_HAVE_DIRFD) && \
-			defined(RUDIMENTS_HAVE_DIR_DD_FD) && \
-			defined(RUDIMENTS_HAVE_DIR_D_FD)
+			(defined(RUDIMENTS_HAVE_DIRFD) || \
+			defined(RUDIMENTS_HAVE_DIR_DD_FD) || \
+			defined(RUDIMENTS_HAVE_DIR_D_FD))
 		int64_t	result;
 		error::clearError();
 		do {
