@@ -39,13 +39,14 @@ prompt::prompt() {
 	pvt=new promptprivate;
 	pvt->_historyfilename=NULL;
 	pvt->_historyread=false;
-	pvt->_maxhistorylines=0;
-	pvt->_maxhistoryqueue=0;
+	pvt->_maxhistorylines=1024;
+	pvt->_maxhistoryqueue=1024;
 	pvt->_queue=0;
 	pvt->_prompt=NULL;
 }
 
 prompt::~prompt() {
+	flushHistory();
 	delete[] pvt->_historyfilename;
 	delete[] pvt->_prompt;
 	delete pvt;
@@ -142,11 +143,13 @@ char *prompt::read() {
 
 void prompt::flushHistory() {
 	#ifdef HAVE_READLINE
-		if (!charstring::isNullOrEmpty(pvt->_historyfilename) &&
-							pvt->_maxhistorylines) {
+		if (!charstring::isNullOrEmpty(pvt->_historyfilename)) {
 			write_history(pvt->_historyfilename);
-			history_truncate_file(pvt->_historyfilename,
+			if (pvt->_maxhistorylines) {
+				history_truncate_file(
+						pvt->_historyfilename,
 						pvt->_maxhistorylines);
+			}
 		}
 	#endif
 }
