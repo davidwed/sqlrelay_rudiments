@@ -120,19 +120,19 @@ char *prompt::read() {
 				flushHistory();
 			}
 		} else {
-			stdoutput.printf("\n");
+			stdoutput.write('\n');
 		}
 
 	#else
 
-		stdoutput.printf(pvt->_prompt);
+		stdoutput.write(pvt->_prompt);
 
 		size_t	retvalsize=sys::getMaxLineLength();
 		char	*retval=new char[retvalsize];
 		ssize_t	bytes=stdinput.read(retval,retvalsize-1);
 		retval[bytes-1]='\0';
 		#ifdef ADD_NEWLINE_AFTER_READ_FROM_STDIN
-			stdoutput.printf("\n");
+			stdoutput.write('\n');
 		#endif
 
 	#endif

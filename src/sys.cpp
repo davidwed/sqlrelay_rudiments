@@ -79,6 +79,13 @@
 
 #include <stdio.h>
 
+// if SSIZE_MAX is undefined, choose a good safe value
+// that should even work on 16-bit systems
+#ifndef SSIZE_MAX
+        #define SSIZE_MAX 32767
+#endif
+
+
 char *sys::getOperatingSystemName() {
 	#if defined(RUDIMENTS_HAVE_UNAME)
 		struct utsname	u;
@@ -748,8 +755,7 @@ int64_t sys::getMaxLineLength() {
 	#if defined(_SC_LINE_MAX)
 		return sysConf(_SC_LINE_MAX);
 	#else
-		RUDIMENTS_SET_ENOSYS
-		return -1;
+		return SSIZE_MAX;
 	#endif
 }
 
