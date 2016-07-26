@@ -1499,7 +1499,7 @@ Optional Features:
   --disable-threads       Disable thread support
   --disable-character     Don't build character class
   --disable-charstring    Don't build charstring class
-  --disable-chat          Don't build chat
+  --enable-chat           Build chat class (disabled by default)
   --disable-client        Don't build client class
   --disable-commandline   Don't build commandline class
   --disable-crypt         Don't build crypt class
@@ -2664,9 +2664,9 @@ fi
 
 # Check whether --enable-chat was given.
 if test "${enable_chat+set}" = set; then :
-  enableval=$enable_chat; INCLUDE_CHAT="0"
+  enableval=$enable_chat; INCLUDE_CHAT="1"
 else
-  INCLUDE_CHAT="1"
+  INCLUDE_CHAT="0"
 fi
 
 # Check whether --enable-client was given.

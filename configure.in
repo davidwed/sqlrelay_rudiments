@@ -109,9 +109,9 @@ AC_ARG_ENABLE(charstring,
 	INCLUDE_CHARSTRING="0",
 	INCLUDE_CHARSTRING="1")
 AC_ARG_ENABLE(chat,
-	[  --disable-chat          Don't build chat],
-	INCLUDE_CHAT="0",
-	INCLUDE_CHAT="1")
+	[  --enable-chat           Build chat class (disabled by default)],
+	INCLUDE_CHAT="1",
+	INCLUDE_CHAT="0")
 AC_ARG_ENABLE(client,
 	[  --disable-client        Don't build client class],
 	INCLUDE_CLIENT="0",
