@@ -30,6 +30,18 @@ AC_ARG_WITH(pthread-prefix,
 	[  --with-pthread-prefix   Location of pthread library],
 	PTHREADPATH="$withval",
 	PTHREADPATH="")
+AC_ARG_ENABLE(readline,
+	[  --disable-readline       Disable readline support],
+	ENABLE_RUDIMENTS_READLINE="no",
+	ENABLE_RUDIMENTS_READLINE="yes")
+AC_ARG_WITH(readline-includes,
+	[  --with-readline-includes readline includes],
+	READLINEINCLUDES="$withval",
+	READLINEINCLUDES="")
+AC_ARG_WITH(readline-libs,
+	[  --with-readline-libs     readline libraries],
+	READLINELIBS="$withval",
+	READLINELIBS="")
 AC_ARG_ENABLE(ssl,
 	[  --disable-ssl           Disable SSL support],
 	ENABLE_RUDIMENTS_SSL="no",
@@ -3533,53 +3545,59 @@ dnl Checks for prompt functions
 echo
 echo "***** Prompt Libraries *******"
 
-if ( test "$INCLUDE_PROMPT" = "1" )
+if ( test "$INCLUDE_PROMPT" = "1" -a "$ENABLE_RUDIMENTS_READLINE" = "yes" )
 then
-	AC_MSG_CHECKING(for termcap)
-	FW_CHECK_HEADERS_AND_LIBS([/usr],[termcap],[termcap.h],[termcap],[""],[""],[TERMCAPINCLUDES],[TERMCAPLIBS],[TERMCAPLIBPATH],[TERMCAPSTATIC])
-	if ( test -n "$TERMCAPLIBS" )
-	then
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
 
-	dnl if there was no termcap, try curses instead
-	if ( test -z "$TERMCAPLIBS" )
+	if ( test -z "$READLINELIBS" -a -z "$READLINEINCLUDES" )
 	then
-		AC_MSG_CHECKING(for curses)
-		FW_CHECK_HEADERS_AND_LIBS([/usr],[curses],[curses.h],[curses],[""],[""],[CURSESINCLUDES],[CURSESLIBS],[CURSESLIBPATH],[CURSESSTATIC])
-		if ( test -n "$CURSESLIBS" )
+
+		AC_MSG_CHECKING(for termcap)
+		FW_CHECK_HEADERS_AND_LIBS([/usr],[termcap],[termcap.h],[termcap],[""],[""],[TERMCAPINCLUDES],[TERMCAPLIBS],[TERMCAPLIBPATH],[TERMCAPSTATIC])
+		if ( test -n "$TERMCAPLIBS" )
 		then
 			AC_MSG_RESULT(yes)
 		else
 			AC_MSG_RESULT(no)
 		fi
-	fi
 
-	AC_MSG_CHECKING(for history)
-	FW_CHECK_HEADERS_AND_LIBS([/usr],[history],[readline/history.h],[history],[""],[""],[HISTORYINCLUDES],[HISTORYLIBS],[HISTORYLIBPATH],[HISTORYSTATIC])
-	if ( test -n "$HISTORYLIBS" )
-	then
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
+		dnl if there was no termcap, try curses instead
+		if ( test -z "$TERMCAPLIBS" )
+		then
+			AC_MSG_CHECKING(for curses)
+			FW_CHECK_HEADERS_AND_LIBS([/usr],[curses],[curses.h],[curses],[""],[""],[CURSESINCLUDES],[CURSESLIBS],[CURSESLIBPATH],[CURSESSTATIC])
+			if ( test -n "$CURSESLIBS" )
+			then
+				AC_MSG_RESULT(yes)
+			else
+				AC_MSG_RESULT(no)
+			fi
+		fi
 
-	AC_MSG_CHECKING(for readline)
-	FW_CHECK_HEADERS_AND_LIBS([/usr],[readline],[readline/readline.h],[readline],[""],[""],[READLINEINCLUDES],[READLINELIBS],[READLINELIBPATH],[READLINESTATIC])
-	if ( test -n "$READLINELIBS" )
-	then
-		READLINEINCLUDES="$READLINEINCLUDES $HISTORYINCLUDES $CURSESINCLUDES $TERMCAPINCLUDES"
-		READLINELIBS="$READLINELIBS $HISTORYLIBS $CURSESLIBS $TERMCAPLIBS"
-		AC_MSG_RESULT(yes)
-	else
-		AC_MSG_RESULT(no)
-	fi
+		AC_MSG_CHECKING(for history)
+		FW_CHECK_HEADERS_AND_LIBS([/usr],[history],[readline/history.h],[history],[""],[""],[HISTORYINCLUDES],[HISTORYLIBS],[HISTORYLIBPATH],[HISTORYSTATIC])
+		if ( test -n "$HISTORYLIBS" )
+		then
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+		fi
 
-	AC_MSG_CHECKING(whether termcap/curses/history/readline work)
-	FW_TRY_LINK([#include <stdlib.h>
+		AC_MSG_CHECKING(for readline)
+		FW_CHECK_HEADERS_AND_LIBS([/usr],[readline],[readline/readline.h],[readline],[""],[""],[READLINEINCLUDES],[READLINELIBS],[READLINELIBPATH],[READLINESTATIC])
+		if ( test -n "$READLINELIBS" )
+		then
+			READLINEINCLUDES="$READLINEINCLUDES $HISTORYINCLUDES $CURSESINCLUDES $TERMCAPINCLUDES"
+			READLINELIBS="$READLINELIBS $HISTORYLIBS $CURSESLIBS $TERMCAPLIBS"
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+		fi
+
+		AC_MSG_CHECKING(whether termcap/curses/history/readline work)
+		FW_TRY_LINK([#include <stdlib.h>
 	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$READLINEINCLUDES],[$READLINELIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); READLINELIBS=""])
+	fi
+
 	AC_SUBST(READLINEINCLUDES)
 	AC_SUBST(READLINELIBS)
 	

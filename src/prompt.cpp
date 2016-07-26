@@ -124,9 +124,9 @@ char *prompt::read() {
 
 	#else
 
-		stdouptut.printf(prompt);
+		stdoutput.printf(pvt->_prompt);
 
-		char	retval=new char[1024];
+		char	*retval=new char[1024];
 		ssize_t	bytes=stdinput.read(retval,1024);
 		retval[bytes-1]='\0';
 		#ifdef ADD_NEWLINE_AFTER_READ_FROM_STDIN
