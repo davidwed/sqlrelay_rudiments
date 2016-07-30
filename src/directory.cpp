@@ -162,7 +162,9 @@ char *directory::read() {
 		}
 		pvt->_currentindex++;
 		return charstring::duplicate(pvt->_findfiledata.cFileName);
-	#elif defined(RUDIMENTS_HAVE_READDIR_R)
+
+	// readdir_r is actually deprecated.  readdir is generally thread-safe.
+	/*#elif defined(RUDIMENTS_HAVE_READDIR_R)
 		// get the size of the buffer
 		int64_t	size=bufferSize(this);
 		if (size==-1) {
@@ -188,7 +190,7 @@ char *directory::read() {
 		pvt->_currentindex++;
 		char	*retval=charstring::duplicate(result->d_name);
 		delete[] entry;
-		return retval;
+		return retval;*/
 	#else
 		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry;
