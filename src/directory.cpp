@@ -65,28 +65,6 @@ class directoryprivate {
 		uint64_t	_currentindex;
 };
 
-// LAME: not in the class
-#if !defined(RUDIMENTS_HAVE_READDIR_R)
-static threadmutex	*_rdmutex;
-#endif
-
-
-// lame that this isn't part of the class, but I can't think of another way to
-// keep #ifndef RUDIMENTS_HAVE_DIRENT_H out of the header file
-#ifdef RUDIMENTS_HAVE_READDIR_R
-static int64_t bufferSize(directory *d) {
-	int64_t	name_max=d->maxFileNameLength();
-	if (name_max==-1) {
-		return -1;
-	}
-	#ifdef RUDIMENTS_HAVE_DIRENT_H
-        	//return offsetof(struct dirent, d_name)+name_max+1;
-        	return sizeof(struct dirent)+name_max+1;
-	#else
-        	return sizeof(struct direct)+name_max+1;
-	#endif
-}
-#endif
 
 directory::directory() {
 	pvt=new directoryprivate;
@@ -162,44 +140,12 @@ char *directory::read() {
 		}
 		pvt->_currentindex++;
 		return charstring::duplicate(pvt->_findfiledata.cFileName);
-
-	// readdir_r is actually deprecated.  readdir is generally thread-safe.
-	/*#elif defined(RUDIMENTS_HAVE_READDIR_R)
-		// get the size of the buffer
-		int64_t	size=bufferSize(this);
-		if (size==-1) {
-			return NULL;
-		}
-		#ifdef RUDIMENTS_HAVE_DIRENT_H
-			dirent	*entry=reinterpret_cast<dirent *>(
-						new unsigned char[size]);
-		#else
-			direct	*entry=reinterpret_cast<direct *>(
-						new unsigned char[size]);
-		#endif
-		dirent	*result;
-		int32_t	rdresult;
-		error::clearError();
-		do {
-			rdresult=readdir_r(pvt->_dir,entry,&result);
-		} while (rdresult==-1 && error::getErrorNumber()==EINTR);
-		if (rdresult || !result) {
-			delete[] entry;
-			return NULL;
-		}
-		pvt->_currentindex++;
-		char	*retval=charstring::duplicate(result->d_name);
-		delete[] entry;
-		return retval;*/
 	#else
 		#ifdef RUDIMENTS_HAVE_DIRENT_H
 			dirent	*entry;
 		#else
 			direct	*entry;
 		#endif
-		if (_rdmutex && !_rdmutex->lock()) {
-			return NULL;
-		}
 		error::clearError();
 		do {
 			entry=readdir(pvt->_dir);
@@ -209,9 +155,6 @@ char *directory::read() {
 		}
 		pvt->_currentindex++;
 		char	*retval=charstring::duplicate(entry->d_name);
-		if (_rdmutex) {
-			_rdmutex->unlock();
-		}
 		return retval;
 	#endif
 }
@@ -413,22 +356,6 @@ bool directory::changeRoot(const char *path) {
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;
-	#endif
-}
-
-bool directory::needsMutex() {
-	#if defined(RUDIMENTS_HAVE_FINDFIRSTFILE)
-		return false;
-	#elif !defined(RUDIMENTS_HAVE_READDIR_R)
-		return true;
-	#else
-		return false;
-	#endif
-}
-
-void directory::setMutex(threadmutex *mtx) {
-	#if !defined(RUDIMENTS_HAVE_READDIR_R)
-		_rdmutex=mtx;
 	#endif
 }
 

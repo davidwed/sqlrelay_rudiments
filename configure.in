@@ -2976,17 +2976,6 @@ dnl Checks for directory functions
 echo
 echo "***** Directory Functions ****"
 
-AC_MSG_CHECKING(for readdir_r)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
-	#include <stdlib.h>
-#endif
-#if defined(RUDIMENTS_HAVE_DIRENT_H)
-	#include <dirent.h>
-#elif defined(RUDIMENTS_HAVE_DIRECT_H)
-	#include <direct.h>
-#endif],
-readdir_r(NULL,NULL,NULL);,AC_DEFINE(RUDIMENTS_HAVE_READDIR_R,1,Some systems have readdir_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for FindFirstFile)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>

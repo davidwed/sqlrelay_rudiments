@@ -945,9 +945,6 @@
 /* Some systems have read */
 #undef RUDIMENTS_HAVE_READ
 
-/* Some systems have readdir_r */
-#undef RUDIMENTS_HAVE_READDIR_R
-
 /* Some systems have readlink */
 #undef RUDIMENTS_HAVE_READLINK
 

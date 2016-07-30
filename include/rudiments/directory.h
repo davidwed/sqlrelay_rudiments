@@ -99,16 +99,6 @@ class RUDIMENTS_DLLSPEC directory {
 		static bool	canExceedMaxFileNameLength(
 						const char *pathname);
 
-		/** This method returns true if this class needs a mutex
-		 *  to operate safely in a threaded environment and false
-		 *  otherwise. */
-		static bool	needsMutex();
-
-		/** Allows you to supply a mutex is the class needs it.
-		 *  If your application is not multithreaded, then
-		 *  there is no need to supply a mutex. */
-		static void	setMutex(threadmutex *mtx);
-
 	#include <rudiments/private/directory.h>
 };
 

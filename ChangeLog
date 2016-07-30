@@ -24,7 +24,7 @@
 	directory::fpathConf works correctly now
 	renamed directory::canAccessLongFileNames() to
 		directory::canExceedMaxFileNameLength()
-	disabled deprecated readdir_r
+	disabled calls to deprecated readdir_r
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now
