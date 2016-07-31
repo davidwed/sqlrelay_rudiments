@@ -1516,6 +1516,31 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 	#endif
 }
 
+bool filedescriptor::createPipe(filedescriptor *readfd,
+				filedescriptor *writefd) {
+	int32_t	result;
+	int	fd[2];
+	error::clearError();
+	do {
+		#if defined(RUDIMENTS_HAVE_PIPE)
+			result=pipe(fd);
+		#elif defined(RUDIMENTS_HAVE__PIPE)
+			result=_pipe(fd,1024,0);
+		#else
+			#error no pipe or anything like it
+		#endif
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (!result) {
+		if (readfd) {
+			readfd->setFileDescriptor(fd[0]);
+		}
+		if (writefd) {
+			writefd->setFileDescriptor(fd[1]);
+		}
+	}
+	return !result;
+}
+
 uint16_t filedescriptor::netToHost(uint16_t value) {
 	return ntohs(value);
 }

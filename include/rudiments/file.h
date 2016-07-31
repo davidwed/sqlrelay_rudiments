@@ -845,11 +845,6 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Returns true on success and false on failure. */
 		static bool	createFifo(const char *filename, mode_t perms);
 
-		/** Creates a pipe and sets "readfd" to the read side and
-		 *  "writefd" to the write side. */
-		static bool	createPipe(filedescriptor *readfd,
-						filedescriptor *writefd);
-
 		/** Creates a temporary file using "templatefilename"
 		 *  as a template.  The last 6 characters of
 		 *  "templatefilename" must be XXXXXX and

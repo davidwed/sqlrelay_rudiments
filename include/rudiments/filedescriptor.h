@@ -998,6 +998,11 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  to true and false otherwise. */
 		bool	getCloseOnExec();
 
+		/** Creates a pipe and sets "readfd" to the read side and
+		 *  "writefd" to the write side. */
+		static bool	createPipe(filedescriptor *readfd,
+						filedescriptor *writefd);
+
 		/** Converts an unsigned 16-bit integer from host byte order to
 		 *  network byte order. */
 		static	uint16_t	hostToNet(uint16_t value);
