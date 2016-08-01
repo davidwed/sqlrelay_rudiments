@@ -681,10 +681,8 @@ void process::waitForChildrenToExit(int32_t signum) {
 	// If it returns > 0 then it successfully waited on a process and it
 	// should loop back to wait on another one.
 	// If it returns -1 then there was some error and the loop should exit.
-	int32_t	pid=0;
-	do {
-		pid=getChildStateChange(-1,false,true,true,NULL,NULL,NULL,NULL);
-	} while (pid>0);
+	do {} while (getChildStateChange(-1,false,true,true,
+						NULL,NULL,NULL,NULL)>0);
 
 	// FIXME: What if a SIGCHLD gets generated after waitpid() has returned
 	// but before the signal handler exits?   Will that SIGCHLD be lost?
@@ -692,6 +690,24 @@ void process::waitForChildrenToExit(int32_t signum) {
 	// Since we didn't use the SA_ONESHOT flag when we set up this signal
 	// handler, we don't need to reinstall the signal handler here, it will
 	// be done automatically.
+}
+
+bool process::waitForChildToExit(pid_t pid) {
+#ifdef _WIN32
+	HANDLE	h=OpenProcess(SYNCHRONIZE,TRUE,pid);
+	if (!h) {
+		return false;
+	}
+
+	bool	retval=(WaitForSingleObject(h,INFINITE)==WAIT_OBJECT_0);
+
+	CloseHandle(h);
+
+	return retval;
+#else
+	return (getChildStateChange(pid,true,true,true,
+					NULL,NULL,NULL,NULL)==pid);
+#endif
 }
 
 pid_t process::getChildStateChange(pid_t pid,
