@@ -855,6 +855,21 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  file on success and -1 on failure. */
 		static int32_t	createTemporaryFile(char *templatefilename);
 
+		/** Creates a temporary file using "templatefilename"
+		 *  as a template.  The last 6 characters of
+		 *  "templatefilename" must be XXXXXX and
+		 *  "templatefilename" will be modified to contain the
+		 *  name of the file that was actually created.
+		 *
+		 *  Sets the permissions of the file to "perms".  If
+		 *  permissions cannot be set then the file is removed and
+		 *  the call fails.
+		 * 
+		 *  Opens and returns the file descriptor handle of the
+		 *  file on success and -1 on failure. */
+		static int32_t	createTemporaryFile(char *templatefilename,
+								mode_t perms);
+
 		/** Creates a hard link between "oldpath" and "newpath".
 		 *  Returns true on success and false on failure. */
 		static bool	createHardLink(const char *oldpath,

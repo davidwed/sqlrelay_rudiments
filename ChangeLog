@@ -26,6 +26,7 @@
 		directory::canExceedMaxFileNameLength()
 	disabled calls to deprecated readdir_r
 	moved file::createPipe() to filedescriptor class
+	added file::createTemporaryFile() with permissions argument
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

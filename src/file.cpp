@@ -1604,6 +1604,17 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 	#endif
 }
 
+int32_t file::createTemporaryFile(char *templatefilename, mode_t perms) {
+	int32_t	result=createTemporaryFile(templatefilename);
+	if (result!=1) {
+		if (!permissions::setFilePermissions(result,perms)) {
+			remove(templatefilename);
+			return -1;
+		}
+	}
+	return result;
+}
+
 void *file::getInternalFileStatisticsStructure() {
 	return (void *)&(pvt->_st);
 }
