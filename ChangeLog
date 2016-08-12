@@ -28,6 +28,7 @@
 	moved file::createPipe() to filedescriptor class
 	added file::createTemporaryFile() with permissions argument
 	added process::waitForChildToExit()
+	added a missing clear-the-output-buffer in the compiler class
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now

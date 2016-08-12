@@ -386,6 +386,9 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 			outbufptr=output;
 		}
 
+		// clear the output buffer
+		outbufptr->clear();
+
 		// write the tree back out
 		if (!pvt->_ct.write(root,pvt->_outputgrammar,outbufptr)) {
 			pvt->_errorstr.append("failed to write output");
