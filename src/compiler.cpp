@@ -2,6 +2,7 @@
 // See the COPYING file for more information.
 
 #include <rudiments/compiler.h>
+#include <rudiments/character.h>
 #include <rudiments/sys.h>
 
 
@@ -519,7 +520,18 @@ bool compilermodule::setParameters(const char *parameters) {
 		this->parameters=NULL;
 	}
 	xmld=new xmldom();
-	if (!xmld->parseString(parameters)) {
+	bool	result=false;
+	if (parameters) {
+		while (character::isWhitespace(*parameters)) {
+			parameters++;
+		}
+		if (*parameters=='<') {
+			result=xmld->parseString(parameters);
+		} else {
+			result=xmld->parseFile(parameters);
+		}
+	}
+	if (!result) {
 		delete xmld;
 		xmld=NULL;
 		return false;
