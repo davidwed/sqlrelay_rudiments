@@ -31,6 +31,8 @@
 class regularexpressionprivate {
 	friend class regularexpression;
 	private:
+		bool	_null;
+
 		#ifdef RUDIMENTS_HAS_PCRE
 			pcre		*_expr;
 			pcre_extra	*_extra;
@@ -66,6 +68,7 @@ void regularexpression::regularexpressionInit() {
 	#else
 		bytestring::zero(&pvt->_expr,sizeof(pvt->_expr));
 	#endif
+	pvt->_null=false;
 	pvt->_matchcount=0;
 	pvt->_str=NULL;
 	bytestring::zero(pvt->_matches,sizeof(pvt->_matches));
@@ -86,6 +89,11 @@ regularexpression::~regularexpression() {
 }
 
 bool regularexpression::compile(const char *pattern) {
+	pvt->_null=false;
+	if (!pattern) {
+		pvt->_null=true;
+		return true;
+	}
 	#ifdef RUDIMENTS_HAS_PCRE
 		if (pvt->_expr) {
 			pcre_free(pvt->_expr);
@@ -105,6 +113,9 @@ bool regularexpression::compile(const char *pattern) {
 }
 
 bool regularexpression::study() {
+	if (pvt->_null) {
+		return true;
+	}
 	#ifdef RUDIMENTS_HAS_PCRE
 		const char	*error;
 		if (pvt->_extra) {
@@ -120,7 +131,7 @@ bool regularexpression::study() {
 
 bool regularexpression::match(const char *str) {
 	if (!str) {
-		return false;
+		return pvt->_null;
 	}
 	#ifdef RUDIMENTS_HAS_PCRE
 		pvt->_str=str;
@@ -146,6 +157,9 @@ bool regularexpression::match(const char *str) {
 }
 
 int32_t regularexpression::getSubstringCount() {
+	if (pvt->_null) {
+		return 0;
+	}
 	#ifndef RUDIMENTS_HAS_PCRE
 		if (pvt->_matchcount==-1) {
 			for (int32_t i=0; i<RUDIMENTS_REGEX_MATCHES; i++) {
@@ -163,7 +177,7 @@ int32_t regularexpression::getSubstringCount() {
 }
 
 int32_t regularexpression::getSubstringStartOffset(int32_t index) {
-	if (index<0 || index>pvt->_matchcount) {
+	if (pvt->_null || index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAS_PCRE
@@ -174,7 +188,7 @@ int32_t regularexpression::getSubstringStartOffset(int32_t index) {
 }
 
 int32_t regularexpression::getSubstringEndOffset(int32_t index) {
-	if (index<0 || index>pvt->_matchcount) {
+	if (pvt->_null || index<0 || index>pvt->_matchcount) {
 		return -1;
 	}
 	#ifdef RUDIMENTS_HAS_PCRE

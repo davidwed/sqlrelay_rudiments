@@ -174,4 +174,14 @@ int main(int argc, const char **argv) {
 			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
         }
 	printMatches(&re);
+
+	// NULL pattern
+	re.compile(NULL);
+	re.study();
+        if (re.match(NULL)) {
+                stdoutput.printf("The string NULL contains NULL\n");
+	} else {
+                stdoutput.printf("The string NULL does not contain NULL\n");
+	}
+	printMatches(&re);
 }
