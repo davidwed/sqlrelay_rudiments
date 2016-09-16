@@ -30,6 +30,7 @@
 	added process::waitForChildToExit()
 	added a missing clear-the-output-buffer in the compiler class
 	fixed a null regularexpression pattern crash
+	reduced default SSIZE_MAX to 16383 for Windows
 
 0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
 		Windows now
