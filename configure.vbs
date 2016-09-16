@@ -428,6 +428,9 @@ stdout=cmd.StdOut.ReadAll()
 stderr=cmd.StdErr.ReadLine()
 parts=split(stderr)
 arch=parts(ubound(parts))
+if arch="80x86" then
+	arch="x86"
+end if
 version=""
 for i=lbound(parts) to ubound(parts)
 	if parts(i)="Version" then
@@ -439,7 +442,7 @@ version=parts(0)
 
 ' determine VC++ architecture
 USE_32BIT_TIME_T=""
-if arch="80x86" then
+if arch="x86" then
 	USE_32BIT_TIME_T="/D _USE_32BIT_TIME_T"
 end if
 
