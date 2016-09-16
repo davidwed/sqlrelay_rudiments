@@ -169,7 +169,7 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 // if SSIZE_MAX is undefined, choose a good safe value
 // that should even work on 16-bit systems
 #ifndef SSIZE_MAX
-	#define SSIZE_MAX 32767
+	#define SSIZE_MAX 16383
 #endif
 
 // most platforms FILE struct have a member for the file descriptor,
