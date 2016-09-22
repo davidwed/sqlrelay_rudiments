@@ -708,7 +708,7 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
-	if (compareValue(*codeposition,value,&valuelength,casesensitive)) {
+	if (compareValue(*codeposition,value,valuelength,casesensitive)) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {
@@ -731,7 +731,7 @@ bool codetree::parseTerminal(xmldomnode *grammarnode,
 }
 
 bool codetree::compareValue(const char *code,
-				const char *value, size_t *valuelength,
+				const char *value, size_t valuelength,
 				const char *casesensitive) {
 
 	// first, check for beginning-of-line characters,
@@ -740,7 +740,7 @@ bool codetree::compareValue(const char *code,
 	if (value && value[0]==STX) {
 		if (code==pvt->_beginningofinput || *(code-1)=='\n') {
 			value++;
-			(*valuelength)--;
+			valuelength--;
 		} else {
 			return false;
 		}
@@ -748,8 +748,8 @@ bool codetree::compareValue(const char *code,
 
 	// see if the code matches this value
 	return (casesensitive && casesensitive[0]=='f')?
-		!charstring::compareIgnoringCase(value,code,*valuelength):
-		!charstring::compare(value,code,*valuelength);
+		!charstring::compareIgnoringCase(value,code,valuelength):
+		!charstring::compare(value,code,valuelength);
 }
 
 bool codetree::parseLetter(xmldomnode *grammarnode,
@@ -921,7 +921,7 @@ bool codetree::parseBreak(xmldomnode *grammarnode,
 
 	// return true or false but don't advance the code position or append
 	// the value to the nonterminal
-	if (compareValue(*codeposition,value,&valuelength,casesensitive)) {
+	if (compareValue(*codeposition,value,valuelength,casesensitive)) {
 		debugPrintIndent(2);
 		debugPrintf(2,"break \"");
 		debugSafePrint(2,value);
@@ -1079,8 +1079,8 @@ bool codetree::parseBreakStack(const char **codeposition) {
 			// do the next few characters match?
 			break_t	*b=listnode->getValue();
 			if (compareValue(*codeposition,
-					b->value,&(b->valuelength),
-					b->casesensitive)) {
+						b->value,b->valuelength,
+						b->casesensitive)) {
 
 				debugPrintIndent(2);
 				debugPrintf(2,"break \"");

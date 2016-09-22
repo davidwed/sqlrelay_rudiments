@@ -36,7 +36,7 @@
 					stringbuffer *ntbuffer);
 		bool	compareValue(const char *code,
 					const char *value,
-					size_t *valuelength,
+					size_t valuelength,
 					const char *casesensitive);
 		bool	parseLetter(xmldomnode *grammarnode,
 					xmldomnode *treeparent,
