@@ -1650,26 +1650,6 @@ bool filedescriptor::passFileDescriptor(int32_t fd) {
 		cmptr->cmsg_type=SCM_RIGHTS;
 		cmptr->cmsg_len=CMSG_LEN(sizeof(int32_t));
 
-		// Why this weirdness?
-		//
-		// You'd think that this would be simpler:
-		// 	*((int32_t *)CMSG_DATA(cmptr))=fd;
-		// and should work as CMSG_DATA(cmptr) just points to a generic
-		// buffer.
-		//
-		// The data type of that buffer varies from system to system
-		// though and on some systems, some versions of g++ will throw
-		// a warning like: "dereferencing type-punned pointer will break
-		// strict-aliasing rules" if you cast and then assign directly
-		// in one statement, presumably because it can't tell that it's
-		// a generic buffer, or how big it is, and worries that you
-		// might overrun it.
-		//
-		// What we want to do is safe though, and for some reason the
-		// compiler doesn't mind if you split it up like this, so we
-		// will.
-		/*int32_t	*data=(int32_t *)CMSG_DATA(cmptr);
-		*data=fd;*/
 		bytestring::copy((int32_t *)CMSG_DATA(cmptr),
 						&fd,sizeof(int32_t));
 	#else
