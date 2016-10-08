@@ -3043,11 +3043,10 @@ bool gsscontext::wrap(const unsigned char *input,
 			*output=new BYTE[*outputsize];
 
 			// store that data, in that order
-			*((DWORD *)*output)=inputsize;
-			bytestring::copy(*output+sizeof(DWORD),
-						input,inputsize);
-			*((DWORD *)(*output+sizeof(DWORD)+inputsize))=
-							pvt->_trailersize;
+			bytestring::copy(*output,&inputsize,sizeof(DWORD));
+			bytestring::copy(*output+sizeof(DWORD),input,inputsize);
+			bytestring::copy(*output+sizeof(DWORD)+inputsize,
+					&pvt->_trailersize,sizeof(DWORD));
 
 			// prepare security buffers
 			SecBuffer         secbuf[2];
@@ -3264,7 +3263,7 @@ bool gsscontext::unwrap(const unsigned char *input,
 			// "data" buffer.
 
 			// get output size, output, trailer size, and trailer
-			*outputsize=*((DWORD *)input);
+			bytestring::copy(outputsize,input,sizeof(DWORD));
 
 			// create a buffer to store the output and initialize
 			// it with the contents of the "data" buffer
@@ -3273,8 +3272,10 @@ bool gsscontext::unwrap(const unsigned char *input,
 							*outputsize);
 
 			// get the trailer size and location of the trailer
-			DWORD	trailersize=
-				*((DWORD *)(input+sizeof(DWORD)+*outputsize));
+			DWORD	trailersize;
+			bytestring::copy(&trailersize,
+				(DWORD *)(input+sizeof(DWORD)+*outputsize),
+				sizeof(DWORD));
 			BYTE	*trailer=(BYTE *)
 				(input+sizeof(DWORD)+*outputsize+sizeof(DWORD));
 
