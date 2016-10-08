@@ -1668,8 +1668,10 @@ bool filedescriptor::passFileDescriptor(int32_t fd) {
 		// What we want to do is safe though, and for some reason the
 		// compiler doesn't mind if you split it up like this, so we
 		// will.
-		int32_t	*data=(int32_t *)CMSG_DATA(cmptr);
-		*data=fd;
+		/*int32_t	*data=(int32_t *)CMSG_DATA(cmptr);
+		*data=fd;*/
+		bytestring::copy((int32_t *)CMSG_DATA(cmptr),
+						&fd,sizeof(int32_t));
 	#else
 		// old-style: the descriptor is passed in the accrights...
 		messageheader.msg_accrights=(caddr_t)&fd;
