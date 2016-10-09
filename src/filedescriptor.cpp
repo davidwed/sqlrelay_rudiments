@@ -1478,6 +1478,31 @@ void filedescriptor::dontTranslateByteOrder() {
 	pvt->_translatebyteorder=false;
 }
 
+bool filedescriptor::createPipe(filedescriptor *readfd,
+				filedescriptor *writefd) {
+	int32_t	result;
+	int	fd[2];
+	error::clearError();
+	do {
+		#if defined(RUDIMENTS_HAVE_PIPE)
+			result=pipe(fd);
+		#elif defined(RUDIMENTS_HAVE__PIPE)
+			result=_pipe(fd,1024,0);
+		#else
+			#error no pipe or anything like it
+		#endif
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (!result) {
+		if (readfd) {
+			readfd->setFileDescriptor(fd[0]);
+		}
+		if (writefd) {
+			writefd->setFileDescriptor(fd[1]);
+		}
+	}
+	return !result;
+}
+
 uint16_t filedescriptor::hostToNet(uint16_t value) {
 	return htons(value);
 }
@@ -1516,31 +1541,6 @@ uint64_t filedescriptor::hostToNet(uint64_t value) {
 	#endif
 }
 
-bool filedescriptor::createPipe(filedescriptor *readfd,
-				filedescriptor *writefd) {
-	int32_t	result;
-	int	fd[2];
-	error::clearError();
-	do {
-		#if defined(RUDIMENTS_HAVE_PIPE)
-			result=pipe(fd);
-		#elif defined(RUDIMENTS_HAVE__PIPE)
-			result=_pipe(fd,1024,0);
-		#else
-			#error no pipe or anything like it
-		#endif
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	if (!result) {
-		if (readfd) {
-			readfd->setFileDescriptor(fd[0]);
-		}
-		if (writefd) {
-			writefd->setFileDescriptor(fd[1]);
-		}
-	}
-	return !result;
-}
-
 uint16_t filedescriptor::netToHost(uint16_t value) {
 	return ntohs(value);
 }
@@ -1575,6 +1575,99 @@ uint64_t filedescriptor::netToHost(uint64_t value) {
 				(uint32_t)((value&0xFFFFFFFF00000000LL)>>32)));
 		#else
 			return ntohl(value);
+		#endif
+	#endif
+}
+
+uint16_t filedescriptor::hostToLittleEndian(uint16_t value) {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return value;
+	#else
+		value=hostToNet(value);
+		return (((value&0x00FF)<<8)|((value&0xFF00)>>8));
+	#endif
+}
+
+uint32_t filedescriptor::hostToLittleEndian(uint32_t value) {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return value;
+	#else
+		value=hostToNet(value);
+		return (((value&0x000000FF)<<24)|
+			((value&0x0000FF00)<<8)|
+			((value&0x00FF0000)>>8)|
+			((value&0xFF000000)>>24));
+	#endif
+}
+
+uint64_t filedescriptor::hostToLittleEndian(uint64_t value) {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return value;
+	#else
+		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			value=hostToNet(value);
+			uint32_t	low=(uint32_t)
+					(value&0x00000000FFFFFFFFLL);
+			uint32_t	high=(uint32_t)
+					((value&0xFFFFFFFF00000000LL)>>32);
+			low=(((low&0x000000FF)<<24)|
+				((low&0x0000FF00)<<8)|
+				((low&0x00FF0000)>>8)|
+				((low&0xFF000000)>>24));
+			high=(((high&0x000000FF)<<24)|
+				((high&0x0000FF00)<<8)|
+				((high&0x00FF0000)>>8)|
+				((high&0xFF000000)>>24));
+			return (((uint64_t)high)|(((uint64_t)low)<<32));
+		#else
+			return hostToLittleEndian((uint32_t)value);
+		#endif
+	#endif
+}
+
+uint16_t filedescriptor::littleEndianToHost(uint16_t value) {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return value;
+	#else
+		value=(((value&0x00FF)<<8)|
+			((value&0xFF00)>>8));
+		return netToHost(value);
+	#endif
+}
+
+uint32_t filedescriptor::littleEndianToHost(uint32_t value) {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return value;
+	#else
+		value=(((value&0x000000FF)<<24)|
+			((value&0x0000FF00)<<8)|
+			((value&0x00FF0000)>>8)|
+			((value&0xFF000000)>>24));
+		return netToHost(value);
+	#endif
+}
+
+uint64_t filedescriptor::littleEndianToHost(uint64_t value) {
+	#if __BYTE_ORDER == __LITTLE_ENDIAN
+		return value;
+	#else
+		#ifdef RUDIMENTS_HAVE_LONG_LONG
+			uint32_t	low=(uint32_t)
+					(value&0x00000000FFFFFFFFLL);
+			uint32_t	high=(uint32_t)
+					((value&0xFFFFFFFF00000000LL)>>32);
+			low=(((low&0x000000FF)<<24)|
+				((low&0x0000FF00)<<8)|
+				((low&0x00FF0000)>>8)|
+				((low&0xFF000000)>>24));
+			high=(((high&0x000000FF)<<24)|
+				((high&0x0000FF00)<<8)|
+				((high&0x00FF0000)>>8)|
+				((high&0xFF000000)>>24));
+			value=(((uint64_t)high)|(((uint64_t)low)<<32));
+			return netToHost(value);
+		#else
+			return littleEndianToHost((uint32_t)value);
 		#endif
 	#endif
 }
@@ -1818,8 +1911,6 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 				cmptr->cmsg_level==SOL_SOCKET &&
 				cmptr->cmsg_type==SCM_RIGHTS) {
 
-			/*int32_t	*data=(int32_t *)CMSG_DATA(cmptr);
-			*fd=*data;*/
 			bytestring::copy(fd,(int32_t *)CMSG_DATA(cmptr),
 							sizeof(int32_t));
 

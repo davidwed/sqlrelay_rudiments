@@ -1004,28 +1004,52 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 						filedescriptor *writefd);
 
 		/** Converts an unsigned 16-bit integer from host byte order to
-		 *  network byte order. */
+		 *  network byte order (big-endian). */
 		static	uint16_t	hostToNet(uint16_t value);
 
 		/** Converts an unsigned 32-bit integer from host byte order to
-		 *  network byte order. */
+		 *  network byte order (big-endian). */
 		static	uint32_t	hostToNet(uint32_t value);
 
 		/** Converts an unsigned 64-bit integer from host byte order to
-		 *  network byte order. */
+		 *  network byte order (big-endian). */
 		static	uint64_t	hostToNet(uint64_t value);
 
 		/** Converts an unsigned 16-bit integer from network byte order
-		 * to host byte order. */
+		 * (bit-endian) to host byte order. */
 		static	uint16_t	netToHost(uint16_t value);
 
 		/** Converts an unsigned 32-bit integer from network byte order
-		 * to host byte order. */
+		 * (bit-endian) to host byte order. */
 		static	uint32_t	netToHost(uint32_t value);
 
 		/** Converts an unsigned 64-bit integer from network byte order
-		 * to host byte order. */
+		 * (bit-endian) to host byte order. */
 		static	uint64_t	netToHost(uint64_t value);
+
+		/** Converts an unsigned 16-bit integer from host byte order to
+		 *  little-endian byte order. */
+		static	uint16_t	hostToLittleEndian(uint16_t value);
+
+		/** Converts an unsigned 32-bit integer from host byte order to
+		 *  little-endian byte order. */
+		static	uint32_t	hostToLittleEndian(uint32_t value);
+
+		/** Converts an unsigned 64-bit integer from host byte order to
+		 *  little-endian byte order. */
+		static	uint64_t	hostToLittleEndian(uint64_t value);
+
+		/** Converts an unsigned 16-bit integer from little-endian byte
+		 *  order to host byte order. */
+		static	uint16_t	littleEndianToHost(uint16_t value);
+
+		/** Converts an unsigned 32-bit integer from little-endian byte
+		 *  order to host byte order. */
+		static	uint32_t	littleEndianToHost(uint32_t value);
+
+		/** Converts an unsigned 64-bit integer from little-endian byte
+		 *  order to host byte order. */
+		static	uint64_t	littleEndianToHost(uint64_t value);
 
 	#include <rudiments/private/filedescriptor.h>
 };
