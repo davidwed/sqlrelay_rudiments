@@ -1583,7 +1583,6 @@ uint16_t filedescriptor::hostToLittleEndian(uint16_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
-		value=hostToNet(value);
 		return (((value&0x00FF)<<8)|((value&0xFF00)>>8));
 	#endif
 }
@@ -1592,7 +1591,6 @@ uint32_t filedescriptor::hostToLittleEndian(uint32_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
-		value=hostToNet(value);
 		return (((value&0x000000FF)<<24)|
 			((value&0x0000FF00)<<8)|
 			((value&0x00FF0000)>>8)|
@@ -1605,7 +1603,6 @@ uint64_t filedescriptor::hostToLittleEndian(uint64_t value) {
 		return value;
 	#else
 		#ifdef RUDIMENTS_HAVE_LONG_LONG
-			value=hostToNet(value);
 			uint32_t	low=(uint32_t)
 					(value&0x00000000FFFFFFFFLL);
 			uint32_t	high=(uint32_t)
@@ -1629,9 +1626,7 @@ uint16_t filedescriptor::littleEndianToHost(uint16_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
-		value=(((value&0x00FF)<<8)|
-			((value&0xFF00)>>8));
-		return netToHost(value);
+		return (((value&0x00FF)<<8)|((value&0xFF00)>>8));
 	#endif
 }
 
@@ -1639,11 +1634,10 @@ uint32_t filedescriptor::littleEndianToHost(uint32_t value) {
 	#if __BYTE_ORDER == __LITTLE_ENDIAN
 		return value;
 	#else
-		value=(((value&0x000000FF)<<24)|
+		return (((value&0x000000FF)<<24)|
 			((value&0x0000FF00)<<8)|
 			((value&0x00FF0000)>>8)|
 			((value&0xFF000000)>>24));
-		return netToHost(value);
 	#endif
 }
 
@@ -1664,8 +1658,7 @@ uint64_t filedescriptor::littleEndianToHost(uint64_t value) {
 				((high&0x0000FF00)<<8)|
 				((high&0x00FF0000)>>8)|
 				((high&0xFF000000)>>24));
-			value=(((uint64_t)high)|(((uint64_t)low)<<32));
-			return netToHost(value);
+			return (((uint64_t)high)|(((uint64_t)low)<<32));
 		#else
 			return littleEndianToHost((uint32_t)value);
 		#endif
