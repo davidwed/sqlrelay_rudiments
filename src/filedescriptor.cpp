@@ -1068,8 +1068,6 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 					int32_t sec, int32_t usec) {
 
-	// FIXME: is this what we want to do?
-	// maybe we should set some kind of error condition too
 	if (!buf) {
 		return 0;
 	}
@@ -1326,8 +1324,6 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) const {
 ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 					int32_t sec, int32_t usec) const {
 
-	// FIXME: is this what we want to do?
-	// maybe we should set some kind of error condition too
 	if (!buf) {
 		return 0;
 	}

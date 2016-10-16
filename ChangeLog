@@ -3,6 +3,7 @@
 		bytestring::copy() to avoid bus errors on sparc and other
 		platforms that require assignments from aligned locations
 	added filesystem::hostToLittlEndian/littleEndianToHost
+	added missing __LITTLE_ENDIAN definitions to filedescriptor.cpp
 
 0.56.0 - userentry/groupentry::initialize(NULL) don't load root any more
 	+ is properly http-escaped now
