@@ -4,7 +4,7 @@
 		platforms that require assignments from aligned locations
 	added filesystem::hostToLittlEndian/littleEndianToHost
 	added missing __LITTLE_ENDIAN definitions to filedescriptor.cpp
-	added process::backtrace() method
+	added minimal glibc-specific process::backtrace() method
 
 0.56.0 - userentry/groupentry::initialize(NULL) don't load root any more
 	+ is properly http-escaped now
