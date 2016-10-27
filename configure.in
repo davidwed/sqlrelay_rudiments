@@ -780,6 +780,10 @@ AC_TRY_COMPILE([#include <new>],
 AC_MSG_CHECKING(for new.h)
 AC_TRY_COMPILE([#include <new.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_NEW_H, 1, Some systems have new.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for execinfo.h)
+AC_TRY_COMPILE([#include <execinfo.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_EXECINFO_H, 1, Some systems have execinfo.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 
@@ -3350,6 +3354,13 @@ AC_TRY_LINK([
 	#include <stdlib.h>
 #endif],
 atexit(0),AC_DEFINE(RUDIMENTS_HAVE_ATEXIT,1,Some systems have atexit) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for backtrace)
+AC_TRY_LINK([
+#ifdef RUDIMENTS_HAVE_EXECINFO_H
+	#include <execinfo.h>
+#endif],
+backtrace(0,0),AC_DEFINE(RUDIMENTS_HAVE_BACKTRACE,1,Some systems have backtrace) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
 echo "******************************"
 

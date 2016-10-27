@@ -15,6 +15,9 @@
 	#include <rudiments/environment.h>
 	#include <rudiments/bytestring.h>
 #endif
+#ifdef RUDIMENTS_HAVE_EXECINFO_H
+	#include <execinfo.h>
+#endif
 
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -799,4 +802,46 @@ void process::dontRetryFailedFork() {
 
 bool process::getRetryFailedFork() {
 	return _retry;
+}
+
+void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
+	#ifdef RUDIMENTS_HAVE_BACKTRACE
+		unsigned char	**btarray=new unsigned char *[maxframes];
+		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
+		char	**btstrings=backtrace_symbols((void **)btarray,btsize);
+		for (size_t i=0; i<btsize; i++) {
+			buffer->append(btstrings[i])->append('\n');
+		}
+		delete[] btstrings;
+		delete[] btarray;
+	#endif
+}
+
+void process::backtrace(stringbuffer *buffer) {
+	backtrace(buffer,128);
+}
+
+void process::backtrace(filedescriptor *fd, uint32_t maxframes) {
+	#ifdef RUDIMENTS_HAVE_BACKTRACE
+		unsigned char	**btarray=new unsigned char *[maxframes];
+		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
+		backtrace_symbols_fd((void **)btarray,btsize,
+					fd->getFileDescriptor());
+		delete[] btarray;
+	#endif
+}
+
+void process::backtrace(filedescriptor *fd) {
+	backtrace(fd,128);
+}
+
+void process::backtrace(const char *filename, uint32_t maxframes) {
+	file	f;
+	if (f.open(filename,O_WRONLY|O_APPEND|O_CREAT)) {
+		backtrace(&f,maxframes);
+	}
+}
+
+void process::backtrace(const char *filename) {
+	backtrace(filename,128);
 }

@@ -330,17 +330,70 @@ class RUDIMENTS_DLLSPEC process {
 		 *  is the default behavior.  Otherwise, if a fork() fails,
 		 *  the system error is set to EAGAIN and the fork() must
 		 *  be retried by the calling program. */
-		void	retryFailedFork();
+		static void	retryFailedFork();
 
 		/** Causes fork() calls not to be automatically retried if
- 		 *  they fail because of insufficient system resources.  If
- 		 *  set, if a fork() fails, the system error is set to EAGAIN
- 		 *  and the fork() must be retried by the calling program. */
-		void	dontRetryFailedFork();
+		 *  they fail because of insufficient system resources.  If
+		 *  set, if a fork() fails, the system error is set to EAGAIN
+		 *  and the fork() must be retried by the calling program. */
+		static void	dontRetryFailedFork();
 
 		/** Returns true if failed fork() calls will be retried and
 		 *  false otherwise. */
-		bool	getRetryFailedFork();
+		static bool	getRetryFailedFork();
+
+		/** Writes the backtrace for the current thread to "buffer".
+		 *  
+		 *  "maxframes" indicates the maximum number of stack frames
+		 *  to include in the backtrace.
+		 *
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(stringbuffer *buffer,
+						uint32_t maxframes);
+
+		/** Writes the backtrace for the current thread to "buffer".
+		 *  
+		 *  A maximum of 128 stack frames will be included in the
+		 *  backtrace.
+		 *  
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(stringbuffer *buffer);
+
+		/** Writes the backtrace for the current thread to the
+		 *  filedescriptor "fd".
+		 *  
+		 *  "maxframes" indicates the maximum number of stack frames
+		 *  to include in the backtrace.
+		 *
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(filedescriptor *fd,
+						uint32_t maxframes);
+
+		/** Writes the backtrace for the current thread to the
+		 *  filedescriptor "fd".
+		 *  
+		 *  A maximum of 128 stack frames will be included in the
+		 *  backtrace.
+		 *  
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(filedescriptor *fd);
+
+		/** Appends the backtrace for the current thread to "filename".
+		 *  
+		 *  "maxframes" indicates the maximum number of stack frames
+		 *  to include in the backtrace.
+		 *
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(const char *filename,
+						uint32_t maxframes);
+
+		/** Appends the backtrace for the current thread to "filename".
+		 *  
+		 *  A maximum of 128 stack frames will be included in the
+		 *  backtrace.
+		 *  
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(const char *filename);
 
 	#include <rudiments/private/process.h>
 };

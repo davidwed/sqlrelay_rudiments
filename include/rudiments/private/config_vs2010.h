@@ -217,6 +217,9 @@
 /* Some systems have atexit */
 #define RUDIMENTS_HAVE_ATEXIT 1
 
+/* Some systems have backtrace */
+/* #undef RUDIMENTS_HAVE_BACKTRACE */
+
 /* SCO OSR < 5.0.7 has an incorrect struct msghdr definition */
 /* #undef RUDIMENTS_HAVE_BAD_SCO_MSGHDR */
 
@@ -363,6 +366,9 @@
 
 /* Some systems have errno.h */
 #define RUDIMENTS_HAVE_ERRNO_H 1
+
+/* Some systems have execinfo.h */
+/* #undef RUDIMENTS_HAVE_EXECINFO_H */
 
 /* Some systems have execvp */
 /* #undef RUDIMENTS_HAVE_EXECVP */

@@ -5,5 +5,7 @@
 #include <rudiments/private/inttypes.h>
 
 #include <rudiments/signalclasses.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/filedescriptor.h>
 
 #include <sys/types.h>
