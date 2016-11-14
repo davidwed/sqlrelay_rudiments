@@ -18,10 +18,10 @@ enum hasherror_t {
 class RUDIMENTS_DLLSPEC hash {
 	public:
 		/** Creates an instance of the hash class. */
-		hash();
+		hash() {};
 
 		/** Deletes this instance of the hash class. */
-		virtual	~hash();
+		virtual	~hash() {};
 
 		/** Appends "length" bytes of "data" to the data to be
 		 *  hashed.  Returns true on success or false if an error
