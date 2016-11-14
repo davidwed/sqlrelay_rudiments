@@ -59,14 +59,6 @@ class RUDIMENTS_DLLSPEC signalset {
  *  for signals. */
 class RUDIMENTS_DLLSPEC signalmanager {
 	public:
-		/** Send signal "signum" to process "processid".
-		 *  Returns true on success and false on failure. */
-		static	bool	sendSignal(pid_t processid, int32_t signum);
-
-		/** Send signal "signum" to self.
-		 *  Returns true on success and false on failure. */
-		static	bool	raiseSignal(int32_t signum);
-
 		/** Sends signal SIGALRM to self after "seconds"
 		 *  have elapsed.  If "seconds" is 0, the alarm
 		 *  is disabled.  Calling this method cancels

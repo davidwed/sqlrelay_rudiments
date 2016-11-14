@@ -200,6 +200,14 @@ class RUDIMENTS_DLLSPEC process {
 		  * the exit status to "status". */
 		static void	exitImmediately(int32_t status);
 
+		/** Send signal "signum" to process "processid".
+		 *  Returns true on success and false on failure. */
+		static	bool	sendSignal(pid_t processid, int32_t signum);
+
+		/** Send signal "signum" to self.
+		 *  Returns true on success and false on failure. */
+		static	bool	raiseSignal(int32_t signum);
+
 		/** Registers "function" to be called when the process
 		 *  exits normally.  Returns true on success and false on
 		 *  failure. */
