@@ -1491,7 +1491,7 @@ Optional Features:
   --enable-enosys-notify  enable runtime notification of methods that set ENOSYS
   --enable-inlines        use inline methods
   --disable-readline       Disable readline support
-  --disable-ssl           Disable SSL support
+  --disable-ssl           Disable TLS/SSL support
   --disable-gss           Disable GSS support
   --disable-pcre          Don't use PCRE for regular expressions
   --disable-libcurl       Disable libcurl support
@@ -1566,8 +1566,8 @@ Optional Packages:
   --with-pthread-prefix   Location of pthread library
   --with-readline-includes readline includes
   --with-readline-libs     readline libraries
-  --with-ssl-includes     SSL includes
-  --with-ssl-libs         SSL libraries
+  --with-ssl-includes     TLS/SSL includes
+  --with-ssl-libs         TLS/SSL libraries
   --with-gss-includes     GSS includes
   --with-gss-libs         GSS libraries
   --with-pcre-includes    PCRE includes

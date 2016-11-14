@@ -43,15 +43,15 @@ AC_ARG_WITH(readline-libs,
 	READLINELIBS="$withval",
 	READLINELIBS="")
 AC_ARG_ENABLE(ssl,
-	[  --disable-ssl           Disable SSL support],
+	[  --disable-ssl           Disable TLS/SSL support],
 	ENABLE_RUDIMENTS_SSL="no",
 	ENABLE_RUDIMENTS_SSL="yes")
 AC_ARG_WITH(ssl-includes,
-	[  --with-ssl-includes     SSL includes],
+	[  --with-ssl-includes     TLS/SSL includes],
 	SSLINCLUDES="$withval",
 	SSLINCLUDES="")
 AC_ARG_WITH(ssl-libs,
-	[  --with-ssl-libs         SSL libraries],
+	[  --with-ssl-libs         TLS/SSL libraries],
 	SSLLIBS="$withval",
 	SSLLIBS="")
 AC_ARG_ENABLE(gss,
