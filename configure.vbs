@@ -140,7 +140,6 @@ lobjs="winsock.obj "+_
 	"socketserver.obj "+_
 	"socketclient.obj "+_
 	"url.obj "+_
-	"hash.obj "+_
 	"sha1.obj "+_
 	"md5.obj "+_
 	"prompt.obj"
