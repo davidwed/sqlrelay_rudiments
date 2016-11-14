@@ -76,7 +76,6 @@ srcs="winsock.cpp "+_
 	"socketserver.cpp "+_
 	"socketclient.cpp "+_
 	"url.cpp "+_
-	"hash.cpp "+_
 	"sha1.cpp "+_
 	"md5.cpp "+_
 	"prompt.cpp"
