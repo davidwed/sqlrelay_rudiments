@@ -1,4 +1,5 @@
 1.0.0 - images directory and contents are installed with the docs now
+	added md5 class
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

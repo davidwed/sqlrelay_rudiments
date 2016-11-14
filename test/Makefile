@@ -81,7 +81,8 @@ PROGS3= handoff1 \
 	shutdown \
 	url \
 	gssserver \
-	gssclient
+	gssclient \
+	md5sum
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
@@ -326,6 +327,9 @@ gssserver: gssserver.cpp gssserver.$(OBJ)
 
 gssclient: gssclient.cpp gssclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) gssclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+md5sum: md5sum.cpp md5sum.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) md5sum.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
