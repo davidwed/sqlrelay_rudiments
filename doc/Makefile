@@ -10,6 +10,7 @@ install:
 	$(MKINSTALLDIRS) $(docdir)/classes/html
 	$(MKINSTALLDIRS) $(docdir)/features
 	$(MKINSTALLDIRS) $(docdir)/programming
+	$(MKINSTALLDIRS) $(docdir)/images
 	$(CP) installing.html $(docdir)
 	$(CP) index.html $(docdir)
 	$(CP) css/styles.css $(docdir)/css
@@ -19,6 +20,7 @@ install:
 	$(CP) classes/html/*.js $(docdir)/classes/html
 	$(CP) features/*.html $(docdir)/features
 	$(CP) programming/*.html $(docdir)/programming
+	$(CP) images/*.png $(docdir)/images
 	$(CHMOD) 644 $(docdir)/*.html
 	$(CHMOD) 644 $(docdir)/css/*
 	$(CHMOD) 644 $(docdir)/classes/html/a*.html
@@ -45,6 +47,7 @@ install:
 	$(CHMOD) 644 $(docdir)/classes/html/*.js
 	$(CHMOD) 644 $(docdir)/features/*.html
 	$(CHMOD) 644 $(docdir)/programming/*.html
+	$(CHMOD) 644 $(docdir)/images/*
 
 uninstall:
 	$(RMTREE) $(docdir)
