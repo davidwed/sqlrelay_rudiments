@@ -76,6 +76,7 @@ srcs="winsock.cpp "+_
 	"socketserver.cpp "+_
 	"socketclient.cpp "+_
 	"url.cpp "+_
+	"hash.cpp "+_
 	"sha1.cpp "+_
 	"md5.cpp "+_
 	"prompt.cpp"
@@ -140,6 +141,7 @@ lobjs="winsock.obj "+_
 	"socketserver.obj "+_
 	"socketclient.obj "+_
 	"url.obj "+_
+	"hash.obj "+_
 	"sha1.obj "+_
 	"md5.obj "+_
 	"prompt.obj"
@@ -214,6 +216,7 @@ headers3="xmldom.h "+_
 	"gss.h "+_
 	"tls.h "+_
 	"security.h "+_
+	"hash.h "+_
 	"sha1.h "+_
 	"md5.h "+_
 	"prompt.h"
@@ -374,6 +377,7 @@ privateheaders7="codetree.h "+_
 	"tlsincludes.h "+_
 	"tlscontext.h "+_
 	"tlscertificate.h "+_
+	"hashincludes.h "+_
 	"sha1.h "+_
 	"sha1includes.h "+_
 	"md5.h "+_
