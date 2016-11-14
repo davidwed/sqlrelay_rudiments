@@ -8,16 +8,8 @@
 
 class sha1private;
 
-/** sha1 errors */
-enum sha1error {
-	SHA1_ERROR_SUCCESS=0,
-	SHA1_ERROR_NULL,
-	SHA1_ERROR_INPUT_TOO_LONG,
-	SHA1_ERROR_STATE_ERROR
-};
-
 /** The sha1 class provides a simple sha1 implementation. */
-class RUDIMENTS_DLLSPEC sha1 {
+class RUDIMENTS_DLLSPEC sha1 : public hash {
 	public:
 		/** Creates an instance of the sha1 class. */
 		sha1();
@@ -44,7 +36,7 @@ class RUDIMENTS_DLLSPEC sha1 {
 		bool	clear();
 
 		/** Returns the most recent error. */
-		sha1error	getError();
+		hasherror_t	getError();
 
 	#include <rudiments/private/sha1.h>
 };

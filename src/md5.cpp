@@ -428,3 +428,7 @@ bool md5::clear() {
 	bytestring::zero(pvt->_buff,sizeof(pvt->_buff));
 	return true;
 }
+
+hasherror_t md5::getError() {
+	return HASH_ERROR_SUCCESS;
+}

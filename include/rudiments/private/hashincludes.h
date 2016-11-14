@@ -1,4 +1,5 @@
 // Copyright (c) 2016 David Muse
 // See the COPYING file for more information.
 
-#include <rudiments/hash.h>
+#include <rudiments/private/dll.h>
+#include <rudiments/private/inttypes.h>

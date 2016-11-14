@@ -11,10 +11,10 @@ class sha1private {
 	private:
 		SHA1Context	_context;
 		uint8_t		_result[SHA1HashSize+1];
-		sha1error	_err;
+		hasherror_t	_err;
 };
 
-sha1::sha1() {
+sha1::sha1() : hash() {
 	pvt=new sha1private;
 	clear();
 }
@@ -24,14 +24,14 @@ sha1::~sha1() {
 }
 
 bool sha1::append(const unsigned char *data, uint32_t length) {
-	pvt->_err=SHA1_ERROR_SUCCESS;
+	pvt->_err=HASH_ERROR_SUCCESS;
 	int	result=SHA1Input(&pvt->_context,data,length);
 	setError(result);
 	return (result==shaSuccess);
 }
 
 const unsigned char *sha1::getHash() {
-	pvt->_err=SHA1_ERROR_SUCCESS;
+	pvt->_err=HASH_ERROR_SUCCESS;
 	int	result=SHA1Result(&pvt->_context,pvt->_result);
 	setError(result);
 	if (result==shaSuccess) {
@@ -46,22 +46,26 @@ uint32_t sha1::getHashLength() {
 }
 
 bool sha1::clear() {
-	pvt->_err=SHA1_ERROR_SUCCESS;
+	pvt->_err=HASH_ERROR_SUCCESS;
 	int	result=SHA1Reset(&pvt->_context);
 	setError(result);
 	bytestring::zero(pvt->_result,sizeof(pvt->_result));
 	return (result==shaSuccess);
 }
 
+hasherror_t sha1::getError() {
+	return pvt->_err;
+}
+
 void sha1::setError(int32_t err) {
 	switch (err) {
 		case shaNull:
-			pvt->_err=SHA1_ERROR_NULL;
+			pvt->_err=HASH_ERROR_NULL;
 		case shaInputTooLong:
-			pvt->_err=SHA1_ERROR_INPUT_TOO_LONG;
+			pvt->_err=HASH_ERROR_INPUT_TOO_LONG;
 		case shaStateError:
-			pvt->_err=SHA1_ERROR_STATE_ERROR;
+			pvt->_err=HASH_ERROR_STATE_ERROR;
 		default:
-			pvt->_err=SHA1_ERROR_SUCCESS;
+			pvt->_err=HASH_ERROR_SUCCESS;
 	}
 }

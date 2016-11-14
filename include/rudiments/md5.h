@@ -9,7 +9,7 @@
 class md5private;
 
 /** The md5 class provides a simple md5 implementation. */
-class RUDIMENTS_DLLSPEC md5 {
+class RUDIMENTS_DLLSPEC md5 : public hash {
 	public:
 		/** Creates an instance of the md5 class. */
 		md5();
@@ -34,6 +34,9 @@ class RUDIMENTS_DLLSPEC md5 {
  		 *  previously been appended.  Returns true on success or
  		 *  false if an error occurred. */
 		bool	clear();
+
+		/** Returns the most recent error. */
+		hasherror_t	getError();
 
 	#include <rudiments/private/md5.h>
 };
