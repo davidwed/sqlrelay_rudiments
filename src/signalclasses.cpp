@@ -7,6 +7,9 @@
 #if !defined(RUDIMENTS_HAVE_SIGACTION)
 	#include <rudiments/linkedlist.h>
 #endif
+#if defined(RUDIMENTS_HAVE_SETCONSOLECTRLHANDLER)
+	#include <rudiments/process.h>
+#endif
 
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
