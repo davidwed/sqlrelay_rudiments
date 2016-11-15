@@ -1149,6 +1149,43 @@ char *charstring::findFirstOfSetOrEnd(char *haystack, const char *set) {
 	return retval;
 }
 
+const char *charstring::findLastOfSet(const char *haystack, const char *set) {
+	return (char *)(findLastOfSet((char *)(haystack),set));
+}
+
+char *charstring::findLastOfSet(char *haystack, const char *set) {
+	if (!haystack || !set) {
+		return NULL;
+	}
+	char	*retval=haystack+charstring::length(haystack);
+	do {
+		retval--;
+		if (contains(set,*retval)) {
+			return retval;
+		}
+	} while (retval>haystack);
+	return NULL;
+}
+
+const char *charstring::findLastOfSetOrEnd(const char *haystack,
+							const char *set) {
+	return (char *)(findLastOfSetOrEnd((char *)(haystack),set));
+}
+
+char *charstring::findLastOfSetOrEnd(char *haystack, const char *set) {
+	if (!haystack || !set) {
+		return NULL;
+	}
+	char	*retval=haystack+charstring::length(haystack);
+	do {
+		retval--;
+		if (contains(set,*retval)) {
+			return retval;
+		}
+	} while (retval>haystack);
+	return haystack+charstring::length(haystack);
+}
+
 size_t charstring::lengthContainingSet(const char *haystack, const char *set) {
 	#ifdef RUDIMENTS_HAVE_STRSPN
 	return (haystack && set)?strspn(haystack,set):0;

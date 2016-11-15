@@ -236,6 +236,34 @@ class RUDIMENTS_DLLSPEC charstring {
 							char *haystack,
 							const char *set);
 
+		/** Returns a pointer to the last occurence in
+		 *  "haystack" of any of the characters in "set"
+		 *  or NULL if not found. */
+		static const char	*findLastOfSet(const char *haystack,
+							const char *set);
+
+		/** Returns a pointer to the last occurence in
+		 *  "haystack" of any of the characters in "set"
+		 *  or NULL if not found. */
+		static char		*findLastOfSet(char *haystack,
+							const char *set);
+
+		/** Returns a pointer to the last occurence in
+		 *  "haystack" of any of the characters in "set"
+		 *  or a pointer to the NULL terminator at the end
+		 *  of the string if not found. */
+		static const char	*findLastOfSetOrEnd(
+							const char *haystack,
+							const char *set);
+
+		/** Returns a pointer to the last occurence in
+		 *  "haystack" of any of the characters in "set".
+		 *  or a pointer to the NULL terminator at the end
+		 *  of the string if not found. */
+		static char		*findLastOfSetOrEnd(
+							char *haystack,
+							const char *set);
+
 		/** Returns the number of characters, starting at the
 		 *  beginning of "haystack" which consists entirely of
 		 *  characters in "set". */
