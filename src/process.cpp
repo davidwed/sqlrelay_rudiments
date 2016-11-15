@@ -21,9 +21,6 @@
 #ifdef RUDIMENTS_HAVE_EXECINFO_H
 	#include <execinfo.h>
 #endif
-#ifdef RUDIMENTS_HAVE_DBGHELP_H
-	#include <dbghelp.h>
-#endif
 
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -47,6 +44,9 @@
 #endif
 #ifdef RUDIMENTS_HAVE_TLHELP32_H
 	#include <tlhelp32.h>
+#endif
+#ifdef RUDIMENTS_HAVE_DBGHELP_H
+	#include <dbghelp.h>
 #endif
 
 // for umask
@@ -1131,30 +1131,33 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 		delete[] btarray;
 	#elif defined(RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE)
 		HANDLE	process=GetCurrentProcess();
-		void	**btarray=new void *[maxframes];
-		WORD btsize=CaptureStackBackTrace(0,maxframes,btarray,NULL);
+		if (!SymInitialize(process,NULL,TRUE)) {
+			return;
+		}
+		void	**btarray=(void **)malloc(maxframes*sizeof(void *));
+		WORD btsize=CaptureStackBackTrace(0,128,btarray,NULL);
 		SYMBOL_INFO	*symbolinfo=(SYMBOL_INFO *)
 					malloc(sizeof(SYMBOL_INFO)+
-						(1023*sizeof(TCHAR)));
-		symbolinfo->MaxNameLen=1024;
+						(1024*sizeof(TCHAR)));
+		symbolinfo->MaxNameLen=1023;
 		symbolinfo->SizeOfStruct=sizeof(SYMBOL_INFO);
 		IMAGEHLP_LINE64	*line=(IMAGEHLP_LINE64 *)
 					malloc(sizeof(IMAGEHLP_LINE64));
 		line->SizeOfStruct=sizeof(IMAGEHLP_LINE64);
 		DWORD	displacement;
 		for (WORD i=0; i<btsize; i++) {
-			DWORD65	address=(DWORD64)btarray[i];
-			SymFromAddr(process,address,NULL,symbolinfo);
-			if (SymGetLineFromAddr64(process,address,
-							&displacement,line)) {
-				buffer->append("%s(%s)[0x%016x]\n",
-							line->FileName,
-							symbolinfo->Name,
-							symbolinfo->address);
+			if (SymFromAddr(process,(DWORD64)btarray[i],
+							NULL,symbolinfo)) {
+				buffer->append("???(")->
+					append(symbolinfo->Name)->
+					append(")[0x")->
+					append(symbolinfo->Address)->
+					append("]\n");
 			}
 		}
 		free(line);
 		free(symbolinfo);
+		free(btarray);
 	#endif
 }
 
@@ -1172,7 +1175,7 @@ void process::backtrace(filedescriptor *fd, uint32_t maxframes) {
 	#else
 		stringbuffer	buf;
 		backtrace(&buf,maxframes);
-		fd->write(buf.getString(),buf->getStringLength());
+		fd->write(buf.getString(),buf.getStringLength());
 	#endif
 }
 
