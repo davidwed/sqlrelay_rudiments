@@ -21,6 +21,9 @@
 #ifdef RUDIMENTS_HAVE_EXECINFO_H
 	#include <execinfo.h>
 #endif
+#ifdef RUDIMENTS_HAVE_DBGHELP_H
+	#include <dbghelp.h>
+#endif
 
 
 #ifndef __USE_XOPEN_EXTENDED
@@ -1117,7 +1120,7 @@ bool process::getRetryFailedFork() {
 }
 
 void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
-	#ifdef RUDIMENTS_HAVE_BACKTRACE
+	#if defined(RUDIMENTS_HAVE_BACKTRACE)
 		unsigned char	**btarray=new unsigned char *[maxframes];
 		size_t	btsize=::backtrace((void **)btarray,(int)maxframes);
 		char	**btstrings=backtrace_symbols((void **)btarray,btsize);
@@ -1126,6 +1129,32 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 		}
 		delete[] btstrings;
 		delete[] btarray;
+	#elif defined(RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE)
+		HANDLE	process=GetCurrentProcess();
+		void	**btarray=new void *[maxframes];
+		WORD btsize=CaptureStackBackTrace(0,maxframes,btarray,NULL);
+		SYMBOL_INFO	*symbolinfo=(SYMBOL_INFO *)
+					malloc(sizeof(SYMBOL_INFO)+
+						(1023*sizeof(TCHAR)));
+		symbolinfo->MaxNameLen=1024;
+		symbolinfo->SizeOfStruct=sizeof(SYMBOL_INFO);
+		IMAGEHLP_LINE64	*line=(IMAGEHLP_LINE64 *)
+					malloc(sizeof(IMAGEHLP_LINE64));
+		line->SizeOfStruct=sizeof(IMAGEHLP_LINE64);
+		DWORD	displacement;
+		for (WORD i=0; i<btsize; i++) {
+			DWORD65	address=(DWORD64)btarray[i];
+			SymFromAddr(process,address,NULL,symbolinfo);
+			if (SymGetLineFromAddr64(process,address,
+							&displacement,line)) {
+				buffer->append("%s(%s)[0x%016x]\n",
+							line->FileName,
+							symbolinfo->Name,
+							symbolinfo->address);
+			}
+		}
+		free(line);
+		free(symbolinfo);
 	#endif
 }
 
@@ -1140,6 +1169,10 @@ void process::backtrace(filedescriptor *fd, uint32_t maxframes) {
 		backtrace_symbols_fd((void **)btarray,btsize,
 					fd->getFileDescriptor());
 		delete[] btarray;
+	#else
+		stringbuffer	buf;
+		backtrace(&buf,maxframes);
+		fd->write(buf.getString(),buf->getStringLength());
 	#endif
 }
 
