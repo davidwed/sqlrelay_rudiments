@@ -309,6 +309,18 @@ int main(int argc, const char **argv) {
 				alphabet,"hijklmnopqrstuvwxyz")==14);
 	test("findFirstOfSet",charstring::findFirstOfSet(alphabet,"klm")==
 								(alphabet+20));
+	test("findFirstOfSetOrEnd",
+			charstring::findFirstOfSetOrEnd(alphabet,"klm")==
+								(alphabet+20));
+	test("findFirstOfSetOrEnd (end)",
+			charstring::findFirstOfSetOrEnd(alphabet,"123")==
+				(alphabet+charstring::length(alphabet)));
+	test("findLastOfSetOrEnd",
+			charstring::findLastOfSetOrEnd(alphabet,"abc")==
+								(alphabet+5));
+	test("findLastOfSetOrEnd (end)",
+			charstring::findLastOfSetOrEnd(alphabet,"123")==
+				(alphabet+charstring::length(alphabet)));
 	stdoutput.printf("\n");
 
 
