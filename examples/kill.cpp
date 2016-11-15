@@ -1,4 +1,3 @@
-#include <rudiments/signalclasses.h>
 #include <rudiments/process.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
@@ -28,7 +27,7 @@ int main(int argc, const char **argv) {
 
 	pid_t	pid=charstring::toInteger(argv[2]);
 
-	if (!signalmanager::sendSignal(pid,sig)) {
+	if (!process::sendSignal(pid,sig)) {
 		stdoutput.printf("kill failed: %s\n",error::getErrorString());
 		process::exit(1);
 	}

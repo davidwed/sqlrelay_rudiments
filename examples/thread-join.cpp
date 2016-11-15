@@ -29,11 +29,9 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	// create the threads and assign each a function to run
+	// create the threads
 	thread	t1;
 	thread	t2;
-	t1.setFunction((void *(*)(void *))count);
-	t2.setFunction((void *(*)(void *))count);
 
 	// define arguments to pass to each thread
 	struct args	a1;
@@ -46,15 +44,15 @@ int main(int argc, const char **argv) {
 	a2.id=2;
 	a2.max=200;
 
-	// run the threads
-	t1.run(&a1);
-	t2.run(&a2);
+	// spawn the threads
+	t1.spawn((void *(*)(void *))count,(void *)&a1,false);
+	t2.spawn((void *(*)(void *))count,(void *)&a2,false);
 
-	// join the threads
+	// wait for the threads to exit
 	int32_t	t1status=-1;
 	int32_t	t2status=-1;
-	t1.join(&t1status);
-	t2.join(&t2status);
+	t1.wait(&t1status);
+	t2.wait(&t2status);
 
 	// print out the thread's exit status
 	stdoutput.printf("t1 status: %d\n",t1status);

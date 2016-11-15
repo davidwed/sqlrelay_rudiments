@@ -44,9 +44,6 @@ int main(int argc, const char **argv) {
 	// initialize threads
 	struct args	a[5];
 	for (uint16_t i=0; i<5; i++) {
-
-		t[i].setFunction((void*(*)(void*))count);
-
 		a[i].th=&t[i];
 		a[i].tm=&tm;
 		a[i].id=i;
@@ -55,20 +52,20 @@ int main(int argc, const char **argv) {
 	// lock the mutex
 	tm.lock();
 
-	// run threads (each will block on the mutex)
+	// spawn threads (each will block on the mutex)
 	for (uint16_t j=0; j<5; j++) {
-		if (!t[j].run(&a[j])) {
-			stdoutput.printf(" %d: run failed\n",j);
+		if (!t[j].spawn((void*(*)(void*))count,(void *)&a[j],false)) {
+			stdoutput.printf(" %d: spawn failed\n",j);
 		}
 	}
 
 	// unlock the mutex (allows the threads to proceed)
 	tm.unlock();
 
-	// join threads
+	// wait for the threads to exit
 	for (uint16_t k=0; k<5; k++) {
 		int32_t	tstatus=-1;
-		t[k].join(&tstatus);
+		t[k].wait(&tstatus);
 		stdoutput.printf("thread %d status: %d\n",k,tstatus);
 	}
 }

@@ -1010,7 +1010,11 @@ void process::waitForChildrenToExit(int32_t signum) {
 	// be done automatically.
 }
 
-bool process::waitForChildToExit(pid_t pid) {
+bool process::wait(pid_t pid) {
+	return wait(pid,NULL);
+}
+
+bool process::wait(pid_t pid, int32_t *exitstatus) {
 #ifdef _WIN32
 	HANDLE	h=OpenProcess(SYNCHRONIZE,TRUE,pid);
 	if (!h) {
@@ -1019,12 +1023,21 @@ bool process::waitForChildToExit(pid_t pid) {
 
 	bool	retval=(WaitForSingleObject(h,INFINITE)==WAIT_OBJECT_0);
 
+	if (retval && exitstatus) {
+		DWORD	status;
+		if (GetExitCodeProcess(h,&status)) {
+			*exitstatus=status;
+		} else {
+			retval=false;
+		}
+	}
+
 	CloseHandle(h);
 
 	return retval;
 #else
 	return (getChildStateChange(pid,true,true,true,
-					NULL,NULL,NULL,NULL)==pid);
+					NULL,exitstatus,NULL,NULL)==pid);
 #endif
 }
 
@@ -1148,7 +1161,7 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 		for (WORD i=0; i<btsize; i++) {
 			if (SymFromAddr(process,(DWORD64)btarray[i],
 							NULL,symbolinfo)) {
-				buffer->append("???(")->
+				buffer->append("\?\?\?(")->
 					append(symbolinfo->Name)->
 					append(")[0x")->
 					append(symbolinfo->Address)->

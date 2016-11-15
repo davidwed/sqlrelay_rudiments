@@ -3,7 +3,7 @@ top_builddir = ..
 include ../config.mk
 
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
-LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(SSLLIBS) $(PCRELIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB)
+LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(READLINELIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
 
 PROGS0 = \
 	character-isxxx$(EXE) \
@@ -35,7 +35,6 @@ PROGS0 = \
 	file-remove$(EXE) \
 	file-open$(EXE) \
 	file-getprops$(EXE) \
-	file-setprops$(EXE) \
 	file-read$(EXE) \
 	cat$(EXE) \
 	file-readline$(EXE) \
@@ -239,9 +238,6 @@ file-open$(EXE): file-open.cpp file-open.$(OBJ)
 
 file-getprops$(EXE): file-getprops.cpp file-getprops.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ file-getprops.$(OBJ) $(LIBS)
-
-file-setprops$(EXE): file-setprops.cpp file-setprops.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ file-setprops.$(OBJ) $(LIBS)
 
 file-read$(EXE): file-read.cpp file-read.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ file-read.$(OBJ) $(LIBS)

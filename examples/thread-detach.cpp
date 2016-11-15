@@ -30,11 +30,9 @@ int main(int argc, const char **argv) {
 		process::exit(1);
 	}
 
-	// create the threads and assign each a function to run
+	// create the threads
 	thread	t1;
 	thread	t2;
-	t1.setFunction((void *(*)(void *))count);
-	t2.setFunction((void *(*)(void *))count);
 
 	// define arguments to pass to each thread
 	struct args	a1;
@@ -47,7 +45,7 @@ int main(int argc, const char **argv) {
 	a2.id=2;
 	a2.max=200;
 
-	// run the threads
-	t1.run(&a1);
-	t2.run(&a2);
+	// spawn the threads
+	t1.spawn((void *(*)(void *))count,(void *)&a1,true);
+	t2.spawn((void *(*)(void *))count,(void *)&a2,true);
 }

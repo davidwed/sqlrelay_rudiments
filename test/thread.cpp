@@ -35,7 +35,6 @@ int main(int argc, const char **argv) {
 
 	// create thread 1
 	thread	t1;
-	t1.setFunction((void *(*)(void *))count);
 
 	struct args	a1;
 	a1.th=&t1;
@@ -44,7 +43,6 @@ int main(int argc, const char **argv) {
 
 	// create thread 2
 	thread	t2;
-	t2.setFunction((void *(*)(void *))count);
 
 	struct args	a2;
 	a2.th=&t2;
@@ -53,21 +51,21 @@ int main(int argc, const char **argv) {
 
 	// run threads in attached mode
 	stdoutput.printf("attached:\n");
-	if (!t1.run(&a1)) {
+	if (!t1.spawn((void *(*)(void *))count,(void *)&a1,false)) {
 		stdoutput.printf(" 1: create failed\n");
 	}
-	if (!t2.run(&a2)) {
+	if (!t2.spawn((void *(*)(void *))count,(void *)&a2,false)) {
 		stdoutput.printf(" 2: create failed\n");
 	}
 
-	// join the threads
+	// wait for the threads to exit
 	int32_t	t1status=-1;
-	if (!t1.join(&t1status)) {
-		stdoutput.printf(" 1: join failed\n");
+	if (!t1.wait(&t1status)) {
+		stdoutput.printf(" 1: wait failed\n");
 	}
 	int32_t	t2status=-1;
-	if (!t2.join(&t2status)) {
-		stdoutput.printf(" 2: join failed\n");
+	if (!t2.wait(&t2status)) {
+		stdoutput.printf(" 2: wait failed\n");
 	}
 	stdoutput.printf("t1 status: %d\n",t1status);
 	stdoutput.printf("t2 status: %d\n",t2status);
@@ -80,10 +78,10 @@ int main(int argc, const char **argv) {
 
 	// run threads in detached mode
 	stdoutput.printf("detached:\n");
-	if (!t1.run(&a1)) {
+	if (!t1.spawn((void *(*)(void *))count,(void *)&a1,false)) {
 		stdoutput.printf(" 1: create failed\n");
 	}
-	if (!t2.run(&a2)) {
+	if (!t2.spawn((void *(*)(void *))count,(void *)&a2,false)) {
 		stdoutput.printf(" 2: create failed\n");
 	}
 

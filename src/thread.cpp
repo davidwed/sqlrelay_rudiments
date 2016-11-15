@@ -31,9 +31,7 @@ class threadprivate {
 		HANDLE		_thr;
 		size_t		_stacksize;
 		#endif
-		void		*(*_function)(void *);
-		void		*_arg;
-		bool		_needtojoin;
+		bool		_needtowait;
 		bool		_retry;
 };
 
@@ -46,14 +44,12 @@ thread::thread() {
 		pvt->_thr=INVALID_HANDLE_VALUE;
 		pvt->_stacksize=sys::getMinThreadStackSize();
 	#endif
-	pvt->_function=NULL;
-	pvt->_arg=NULL;
-	pvt->_needtojoin=false;
+	pvt->_needtowait=false;
 	pvt->_retry=true;
 }
 
 thread::~thread() {
-	join(NULL);
+	wait(NULL);
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pthread_attr_destroy(&pvt->_attr);
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
@@ -62,14 +58,6 @@ thread::~thread() {
 		}
 	#endif
 	delete pvt;
-}
-
-void thread::setFunction(void *(*function)(void *)) {
-	pvt->_function=function;
-}
-
-void thread::setArgument(void *arg) {
-	pvt->_arg=arg;
 }
 
 bool thread::setStackSize(size_t stacksize) {
@@ -108,26 +96,8 @@ bool thread::getStackSize(size_t *stacksize) {
 	#endif
 }
 
-bool thread::run(void *arg) {
-	pvt->_arg=arg;
-	return run(false);
-}
-
-bool thread::run() {
-	return run(false);
-}
-
-bool thread::runDetached(void *arg) {
-	pvt->_arg=arg;
-	return run(true);
-}
-
-bool thread::runDetached() {
-	return run(true);
-}
-
-bool thread::run(bool detached) {
-	pvt->_needtojoin=false;
+bool thread::spawn(void *(*function)(void *), void *arg, bool detached) {
+	pvt->_needtowait=false;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		pvt->_thr=0;
 		error::clearError();
@@ -137,10 +107,11 @@ bool thread::run(bool detached) {
 		}
 		int	result=0;
 		do {
-			result=pthread_create(&pvt->_thr,&pvt->_attr,
-						pvt->_function,pvt->_arg);
+			result=pthread_create(&pvt->_thr,
+						&pvt->_attr,
+						function,arg);
 			if (!result) {
-				pvt->_needtojoin=!detached;
+				pvt->_needtowait=!detached;
 				return true;
 			}
 			snooze::macrosnooze(1);
@@ -151,8 +122,8 @@ bool thread::run(bool detached) {
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		pvt->_thr=INVALID_HANDLE_VALUE;
 		pvt->_thr=CreateThread(NULL,pvt->_stacksize,
-					(LPTHREAD_START_ROUTINE)pvt->_function,
-					pvt->_arg,0,NULL);
+					(LPTHREAD_START_ROUTINE)function,
+					arg,0,NULL);
 		if (pvt->_thr==NULL || pvt->_thr==INVALID_HANDLE_VALUE) {
 			pvt->_thr=NULL;
 			return false;
@@ -163,7 +134,7 @@ bool thread::run(bool detached) {
 			pvt->_thr=NULL;
 			return false;
 		}
-		pvt->_needtojoin=!detached;
+		pvt->_needtowait=!detached;
 		return true;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -181,8 +152,8 @@ void thread::exit(int32_t *status) {
 	#endif
 }
 
-bool thread::join(int32_t *status) {
-	if (!pvt->_needtojoin) {
+bool thread::wait(int32_t *status) {
+	if (!pvt->_needtowait) {
 		return true;
 	}
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
@@ -202,7 +173,7 @@ bool thread::join(int32_t *status) {
 				*status=0;
 			}
 		}
-		pvt->_needtojoin=false;
+		pvt->_needtowait=false;
 		return true;
 	#elif defined(RUDIMENTS_HAVE_CREATETHREAD)
 		if (pvt->_thr!=INVALID_HANDLE_VALUE) {
@@ -222,7 +193,7 @@ bool thread::join(int32_t *status) {
 				*status=0;
 			}
 		}
-		pvt->_needtojoin=false;
+		pvt->_needtowait=false;
 		return true;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -231,7 +202,7 @@ bool thread::join(int32_t *status) {
 }
 
 bool thread::detach() {
-	pvt->_needtojoin=false;
+	pvt->_needtowait=false;
 	#if defined(RUDIMENTS_HAVE_PTHREAD_T)
 		error::clearError();
 		if (pvt->_thr) {
@@ -280,14 +251,14 @@ bool thread::supportsThreads() {
 	#endif
 }
 
-void thread::retryFailedRun() {
+void thread::retryFailedSpawn() {
 	pvt->_retry=true;
 }
 
-void thread::dontRetryFailedRun() {
+void thread::dontRetryFailedSpawn() {
 	pvt->_retry=false;
 }
 
-bool thread::getRetryFailedRun() {
+bool thread::getRetryFailedSpawn() {
 	return pvt->_retry;
 }

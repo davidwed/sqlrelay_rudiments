@@ -19,7 +19,7 @@
 
 <p>The <a href="../classes/html/classthread.html">thread class</a> provides a simple thread implementation.</p>
 
-<p>In this implementation, each instance of the thread class corresponds to a separate thread.  The setFunction() method associates a function with the thread.  When the run() method is called, a new thread is created, and the function is run in the new thread.  An optional argument may be passed to the function via the run() method.  This argument is usually used to pass a pointer to a class or struct, providing parameters for the thread function.</p>
+<p>In this implementation, each instance of the thread class corresponds to a separate thread.  When the spawn() method is called, a new thread is created, and the function is run in the new thread.  An argument may be passed to the function via the spawn() method.  This argument is usually used to pass a pointer to a class or struct, providing parameters for the thread function.</p>
 
 <p>In these examples, two threads are spawned.  Each runs a separate instance of a "count" function which counts from 0 to some number and prints out the numbers.  Each thread is passed in a structure containing a pointer to the thread class, a thread id and a maximum number to count to.  The threads are not synchronized in any way, so the numbers will be printed out in seemingly random blocks.</p>
 
@@ -29,7 +29,7 @@
 <a name="ordinary"></a>
 <h3>Ordinary Threads</h3>
 
-<p>Ordinarily, a thread runs until its function returns, or calls the exit() method.  Another thread (usually the main thread of the parent process) must call the join() method to completely dispose of the thread (analagous to "waiting on a child process") and get its exit status.</p> 
+<p>Ordinarily, a thread runs until its function returns, or calls the exit() method.  Another thread (usually the main thread of the parent process) must call the wait() method to completely dispose of the thread (analagous to "waiting on a child process") and get its exit status.</p> 
 
 <blockquote class="code">
 
@@ -70,11 +70,9 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">1</font>);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create the threads and assign each a function to run</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create the threads</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;t1;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;t2;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.setFunction((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.setFunction((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count);<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// define arguments to pass to each thread</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>struct</b></font>&nbsp;args&nbsp;&nbsp;&nbsp;&nbsp; a1;<br>
@@ -87,15 +85,15 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.id=<font color="#ff00ff">2</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.max=<font color="#ff00ff">200</font>;<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// run the threads</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.run(&amp;a1);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.run(&amp;a2);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// spawn the threads</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.spawn((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count,(<font color="#2e8b57"><b>void</b></font>&nbsp;*)&amp;a1,<font color="#ff00ff">false</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.spawn((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count,(<font color="#2e8b57"><b>void</b></font>&nbsp;*)&amp;a2,<font color="#ff00ff">false</font>);<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// join the threads</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// wait for the threads to exit</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>int32_t</b></font>&nbsp;t1status=-<font color="#ff00ff">1</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>int32_t</b></font>&nbsp;t2status=-<font color="#ff00ff">1</font>;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.join(&amp;t1status);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.join(&amp;t2status);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.wait(&amp;t1status);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.wait(&amp;t2status);<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// print out the thread's exit status</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stdoutput.printf(<font color="#ff00ff">&quot;t1 status:&nbsp;</font><font color="#6a5acd">%d</font><font color="#6a5acd">\n</font><font color="#ff00ff">&quot;</font>,t1status);<br>
@@ -151,11 +149,9 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process::exit(<font color="#ff00ff">1</font>);<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create the threads and assign each a function to run</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// create the threads</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;t1;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thread&nbsp;&nbsp;t2;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.setFunction((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.setFunction((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count);<br>
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// define arguments to pass to each thread</font><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#2e8b57"><b>struct</b></font>&nbsp;args&nbsp;&nbsp;&nbsp;&nbsp; a1;<br>
@@ -168,9 +164,9 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.id=<font color="#ff00ff">2</font>;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a2.max=<font color="#ff00ff">200</font>;<br>
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// run the threads</font><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.run(&amp;a1);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.run(&amp;a2);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">// spawn the threads</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t1.spawn((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count,(<font color="#2e8b57"><b>void</b></font>&nbsp;*)&amp;a1,<font color="#ff00ff">true</font>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t2.spawn((<font color="#2e8b57"><b>void</b></font>&nbsp;*(*)(<font color="#2e8b57"><b>void</b></font>&nbsp;*))count,(<font color="#2e8b57"><b>void</b></font>&nbsp;*)&amp;a2,<font color="#ff00ff">true</font>);<br>
 }<br>
 </font>
 <!-- vim: set foldmethod=manual : -->

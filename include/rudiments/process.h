@@ -275,7 +275,13 @@ class RUDIMENTS_DLLSPEC process {
 		/** This methods causes the process to wait until child
 		 *  process "pid" exits.  Returns true on success and false
 		 *  on failure. */
-		static	bool	waitForChildToExit(pid_t pid);
+		static	bool	wait(pid_t pid);
+
+		/** This methods causes the process to wait until child
+		 *  process "pid" exits.  If "exitstatus" is non-null then it
+		 *  is populated with the exit status of the child process.
+		 *  Returns true on success and false on failure. */
+		static	bool	wait(pid_t pid, int32_t *exitstatus);
 
 		/** This method causes the process to get information about
 		 *  a change in process state for the specified child process

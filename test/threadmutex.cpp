@@ -77,7 +77,6 @@ int main(int argc, const char **argv) {
 	for (uint8_t i=0; i<5; i++) {
 		a[i].th=&t[i];
 		a[i].id=i;
-		t[i].setFunction((void*(*)(void*))count);
 	}
 
 	// lock mutex
@@ -89,7 +88,7 @@ int main(int argc, const char **argv) {
 
 	// run threads
 	for (uint8_t j=0; j<5; j++) {
-		if (!t[j].run(&a[j])) {
+		if (!t[j].spawn((void*(*)(void*))count,(void *)&a[j],false)) {
 			stdoutput.printf(" %d: run failed\n",j);
 		}
 	}
@@ -101,11 +100,11 @@ int main(int argc, const char **argv) {
 		sem->signal(1);
 	#endif
 
-	// join threads
+	// wait for the threads to exit
 	for (uint8_t k=0; k<5; k++) {
 		int32_t	tstatus=-1;
-		if (!t[k].join(&tstatus)) {
-			stdoutput.printf(" %d: join failed\n",k);
+		if (!t[k].wait(&tstatus)) {
+			stdoutput.printf(" %d: wait failed\n",k);
 		}
 		stdoutput.printf("t%d status: %d\n",k,tstatus);
 	}
