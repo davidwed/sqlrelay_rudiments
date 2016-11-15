@@ -244,6 +244,12 @@
 /* Some systems have byteswap.h */
 /* #undef RUDIMENTS_HAVE_BYTESWAP_H */
 
+/* Some systems have CaptureStackBackTrace */
+#define RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE 1
+
+/* Some systems have dbghelp.h */
+#define RUDIMENTS_HAVE_DBGHELP_H 1
+
 /* Some systems have chmod */
 /* #undef RUDIMENTS_HAVE_CHMOD */
 
@@ -327,6 +333,9 @@
 
 /* Darwin style statfs */
 /* #undef RUDIMENTS_HAVE_DARWIN_STATFS */
+
+/* Some systems have dbghelp.h */
+/* #undef RUDIMENTS_HAVE_DBGHELP_H */
 
 /* Some systems have direct.h */
 #define RUDIMENTS_HAVE_DIRECT_H 1
