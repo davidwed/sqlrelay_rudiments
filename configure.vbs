@@ -148,6 +148,7 @@ headers0="resultcodes.h "+_
 	"debugprint.h "+_
 	"linkedlist.h "+_
 	"singlylinkedlist.h "+_
+	"binarytree.h "+_
 	"dictionary.h "+_
 	"dynamicarray.h "+_
 	"staticarray.h "+_
@@ -231,6 +232,11 @@ privateheaders0="config.h "+_
 	"linkedlistinlines.h "+_
 	"linkedlistnode.h "+_
 	"linkedlistutilinlines.h "+_
+	"binarytree.h "+_
+	"binarytreeincludes.h "+_
+	"binarytreeinlines.h "+_
+	"binarytreenode.h "+_
+	"binarytreeutilinlines.h "+_
 	"singlylinkedlist.h "+_
 	"singlylinkedlistincludes.h "+_
 	"singlylinkedlistinlines.h "+_
