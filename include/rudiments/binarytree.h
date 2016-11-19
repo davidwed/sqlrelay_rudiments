@@ -58,10 +58,6 @@ class binarytreenode {
 		 *  node in the tree. */
 		binarytreenode<valuetype>	*getNext();
 
-		/** Sorts and balances the child nods of this binarytreenode
- 		 *  in ascending order. */
-		void	sort();
-
 		/** Prints the value stored in the node. */
 		void	print() const;
 
