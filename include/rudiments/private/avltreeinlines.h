@@ -4,9 +4,8 @@
 //#define DEBUG_AVLTREE 1
 
 #include <rudiments/stdio.h>
-#include <rudiments/snooze.h>
 #include <rudiments/private/rudimentsinlines.h>
-#include <rudiments/private/avltreeutilinlines.h>
+#include <rudiments/private/containerutilinlines.h>
 
 #define AVLTREE_TEMPLATE template <class valuetype>
 
@@ -198,9 +197,9 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("find ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" from ");
-	_avltreeutil_print(startnode->getValue());
+	_containerutil_print(startnode->getValue());
 	stdoutput.printf(" {\n",length);
 	#endif
 
@@ -210,7 +209,7 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("  ");
-		_avltreeutil_print(current->getValue());
+		_containerutil_print(current->getValue());
 		stdoutput.printf("\n",length);
 		#endif
 
@@ -270,7 +269,7 @@ void AVLTREE_CLASS::clear() {
 		// delete the node
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("	clearing %lld: ",i);
-		_avltreeutil_print(node->getValue());
+		_containerutil_print(node->getValue());
 		stdoutput.printf("\n");
 		i++;
 		#endif
@@ -415,13 +414,13 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t AVLTREENODE_CLASS::compare(valuetype value) const {
-	return _avltreeutil_compare(this->value,value);
+	return _containerutil_compare(this->value,value);
 }
 
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t AVLTREENODE_CLASS::compare(avltreenode<valuetype> *peer) const {
-	return _avltreeutil_compare(this->value,peer->value);
+	return _containerutil_compare(this->value,peer->value);
 }
 
 AVLTREENODE_TEMPLATE
@@ -438,7 +437,7 @@ void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
 		stdoutput.printf(" ");
 	}
 	stdoutput.printf("<%s value=\"",name);
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf("\" lh=\"%lld\" rh=\"%lld\" bf=\"%lld\"",
 			leftheight,rightheight,leftheight-rightheight);
 	if (!left && !right) {
@@ -500,9 +499,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::insert(
 
 				#ifdef DEBUG_AVLTREE
 				stdoutput.printf("insert ");
-				_avltreeutil_print(node->value);
+				_containerutil_print(node->value);
 				stdoutput.printf(" to left of ");
-				_avltreeutil_print(location->value);
+				_containerutil_print(location->value);
 				stdoutput.printf(" {\n\n");
 				#endif
 
@@ -518,9 +517,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::insert(
 
 				#ifdef DEBUG_AVLTREE
 				stdoutput.printf("insert ");
-				_avltreeutil_print(node->value);
+				_containerutil_print(node->value);
 				stdoutput.printf(" to right of ");
-				_avltreeutil_print(location->value);
+				_containerutil_print(location->value);
 				stdoutput.printf(" {\n\n");
 				#endif
 
@@ -557,7 +556,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::detach() {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("detach ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" {\n\n");
 
 	avltreenode<valuetype>	*top=this;
@@ -671,9 +670,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::detach() {
 
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("swap ");
-		_avltreeutil_print(value);
+		_containerutil_print(value);
 		stdoutput.printf(" and ");
-		_avltreeutil_print(successor->value);
+		_containerutil_print(successor->value);
 		stdoutput.printf("\n\n");
 		#endif
 
@@ -799,7 +798,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::balanceUp() {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("balanceUp at ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" {\n\n");
 	#endif
 
@@ -831,7 +830,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::balance() {
 
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("imbalance at ");
-		_avltreeutil_print(value);
+		_containerutil_print(value);
 		stdoutput.printf("\n\n");
 		#endif
 
@@ -878,7 +877,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate() {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("left rotation at ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" {\n\n");
 	#endif
 
@@ -961,7 +960,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate() {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("right-left rotation at ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" {\n\n");
 	stdoutput.printf("right part {\n\n");
 	#endif
@@ -1039,7 +1038,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate() {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("right rotation at ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" {\n\n");
 	#endif
 
@@ -1122,7 +1121,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate() {
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("left-right rotation at ");
-	_avltreeutil_print(value);
+	_containerutil_print(value);
 	stdoutput.printf(" {\n\n");
 	stdoutput.printf("left part {\n\n");
 	#endif

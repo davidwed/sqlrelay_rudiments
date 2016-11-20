@@ -3,7 +3,7 @@
 
 #include <rudiments/stdio.h>
 #include <rudiments/private/rudimentsinlines.h>
-#include <rudiments/private/linkedlistutilinlines.h>
+#include <rudiments/private/containerutilinlines.h>
 
 #define DICTIONARY_TEMPLATE \
 	template <class keytype, class valuetype>
@@ -181,13 +181,13 @@ valuetype DICTIONARYNODE_CLASS::getValue() const {
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t DICTIONARYNODE_CLASS::compare(keytype testkey) const {
-	return _linkedlistutil_compare(key,testkey);
+	return _containerutil_compare(key,testkey);
 }
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARYNODE_CLASS::print() const {
-	_linkedlistutil_print(key);
+	_containerutil_print(key);
 	stdoutput.printf(":");
-	_linkedlistutil_print(value);
+	_containerutil_print(value);
 }
