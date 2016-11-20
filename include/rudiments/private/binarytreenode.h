@@ -3,10 +3,13 @@
 
 		binarytreenode<valuetype>	*insert(
 					binarytreenode<valuetype> *node);
+		binarytreenode<valuetype>	*detach();
+
 		void	adjustParentHeights(binarytreenode<valuetype> *node);
 
 		binarytreenode<valuetype>	*balanceUp();
 		binarytreenode<valuetype>	*balance();
+
 		binarytreenode<valuetype>	*leftRightRotate();
 		binarytreenode<valuetype>	*rightLeftRotate();
 		binarytreenode<valuetype>	*leftRotate();
@@ -14,6 +17,7 @@
 
 		void	sort();
 
+		void	setValue(valuetype value);
 		void	setParent(binarytreenode<valuetype> *node);
 		void	setLeftChild(binarytreenode<valuetype> *node);
 		void	setRightChild(binarytreenode<valuetype> *node);

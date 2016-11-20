@@ -19,9 +19,6 @@ class binarytreenode {
 		 *  is not deleted by this call. */
 		~binarytreenode();
 
-		/** Set the value stored in the node to "value". */
-		void		setValue(valuetype value);
-
 		/** Return the value stored in the node. */
 		valuetype	getValue() const;
 
@@ -47,6 +44,12 @@ class binarytreenode {
 		/** Returns the right child of this node in the binarytree
 		 *  or NULL if this node has no right child. */
 		binarytreenode<valuetype>	*getRightChild();
+
+		/** Returns the left height of this node in the binarytree. */
+		uint64_t	getLeftHeight();
+
+		/** Returns the right height of this node in the binarytree. */
+		uint64_t	getRightHeight();
 
 		/** Returns the previous node in the binarytree (in a
  		 *  depth-first traversal) or NULL if this node is the first
@@ -90,7 +93,8 @@ class binarytree {
 		void	insert(binarytreenode<valuetype> *node);
 
 		/** Detaches "node" from the tree. */
-		void	detach(binarytreenode<valuetype> *node);
+		binarytreenode<valuetype>
+			*detach(binarytreenode<valuetype> *node);
 
 		/** Deletes the first binarytreenode containing "value".
 		 * 
@@ -154,9 +158,6 @@ class binarytree {
 		binarytreenode<valuetype>
 			*find(binarytreenode<valuetype> *startnode,
 							valuetype value);
-
-		/** Sorts and balances the binarytree in ascending order. */
-		void	sort();
 
 		/** Deletes all binarytreenodes currently in the binarytree.
 		 *  Note however, that the data stored in each binarytreenode

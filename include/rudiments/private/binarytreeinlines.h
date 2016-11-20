@@ -4,6 +4,7 @@
 //#define DEBUG_BINARYTREE 1
 
 #include <rudiments/stdio.h>
+#include <rudiments/snooze.h>
 #include <rudiments/private/rudimentsinlines.h>
 #include <rudiments/private/binarytreeutilinlines.h>
 
@@ -39,55 +40,87 @@ void BINARYTREE_CLASS::insert(valuetype value) {
 BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void BINARYTREE_CLASS::insert(binarytreenode<valuetype> *node) {
+
+	// degenerate case
 	if (!node) {
 		return;
-	} else if (top) {
+	}
+
+	#ifdef DEBUG_BINARYTREE
+	stdoutput.printf("----------------------------------------"
+				"---------------------------------------\n");
+	#endif
+
+	if (top) {
+
+		// insert the node, optionally replacing the top of the tree
 		binarytreenode<valuetype>	*newtop=top->insert(node);
 		if (newtop) {
 			top=newtop;
 		}
+
+		// update first
 		for (first=top;
 			first->getLeftChild();
 			first=first->getLeftChild()) {}
+
+		// update last
 		for (last=top;
 			last->getRightChild();
 			last=last->getRightChild()) {}
-	} else if (!top) {
+	} else {
+
+		// if there was no top node, then this is the
+		// first node inserted into the entire tree
 		top=node;
 		first=node;
 		last=node;
 	}
+
+	// increment length
 	length++;
 }
 
 BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREE_CLASS::detach(binarytreenode<valuetype> *node) {
+binarytreenode<valuetype> *BINARYTREE_CLASS::detach(
+					binarytreenode<valuetype> *node) {
+
+	// degenerate case
 	if (!node) {
-		return;
+		return NULL;
 	}
-	if (node==first) {
+
+	#ifdef DEBUG_BINARYTREE
+	stdoutput.printf("----------------------------------------"
+				"---------------------------------------\n");
+	#endif
+
+	// update first
+	if (first==node) {
 		first=node->getNext();
 	}
-	if (node==last) {
+
+	// update last
+	if (last==node) {
 		last=node->getPrevious();
 	}
-	if (node->getLeftChild()) {
-		// FIXME: pull left node up
+
+	// was this node the top?
+	bool	nodewastop=(node==top);
+
+	// detach the node
+	binarytreenode<valuetype>	*newtop=node->detach();
+
+	// reset the top if necessary
+	if (newtop || nodewastop) {
+		top=newtop;
 	}
-	if (node->getRightChild()) {
-		// FIXME: pull right node up
-	}
-	if (node->getParent()) {
-		// FIXME: set to pulled-up node
-	}
-	if (node==top) {
-		// FIXME: set to pulled-up node
-	}
-	node->setParent(NULL);
-	node->setLeftChild(NULL);
-	node->setRightChild(NULL);
+
+	// decrement length
 	length--;
+
+	return node;
 }
 
 BINARYTREE_TEMPLATE
@@ -100,23 +133,17 @@ bool BINARYTREE_CLASS::remove(valuetype value) {
 BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool BINARYTREE_CLASS::removeAll(valuetype value) {
-	binarytreenode<valuetype>	*current=first;
-	binarytreenode<valuetype>	*next;
-	while (current) {
-		next=current->getNext();
-		if (!current->compare(value) && !remove(current)) {
-			return false;
-		}
-		current=next;
+	bool	removed=false;
+	while (remove(value)) {
+		removed=true;
 	}
-	return true;
+	return removed;
 }
 
 BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool BINARYTREE_CLASS::remove(binarytreenode<valuetype> *node) {
-	detach(node);
-	delete node;
+	delete detach(node);
 	return true;
 }
 
@@ -124,6 +151,12 @@ BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 uint64_t BINARYTREE_CLASS::getLength() const {
 	return length;
+}
+
+BINARYTREE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+binarytreenode<valuetype> *BINARYTREE_CLASS::getTop() {
+	return top;
 }
 
 BINARYTREE_TEMPLATE
@@ -155,7 +188,7 @@ binarytreenode<valuetype> *BINARYTREE_CLASS::getNext(
 BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 binarytreenode<valuetype> *BINARYTREE_CLASS::find(valuetype value) {
-	return find((binarytreenode<valuetype> *)first,value);
+	return find((binarytreenode<valuetype> *)top,value);
 }
 
 BINARYTREE_TEMPLATE
@@ -163,43 +196,95 @@ RUDIMENTS_TEMPLATE_INLINE
 binarytreenode<valuetype> *BINARYTREE_CLASS::find(
 					binarytreenode<valuetype> *startnode,
 					valuetype value) {
-	for (binarytreenode<valuetype> *current=startnode;
-			current; current=current->getNext()) {
-		if (!current->compare(value)) {
-			return current;
+
+	#ifdef DEBUG_BINARYTREE
+	stdoutput.printf("find ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" from ");
+	_binarytreeutil_print(startnode->getValue());
+	stdoutput.printf(" {\n",length);
+	#endif
+
+	// descend the tree until we find the value or run off of the bottom
+	binarytreenode<valuetype> *current=startnode;
+	while (current) {
+
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("  ");
+		_binarytreeutil_print(current->getValue());
+		stdoutput.printf("\n",length);
+		#endif
+
+		int32_t	result=current->compare(value);
+		if (result==-1) {
+			current=current->getRightChild();
+		} else if (result==0) {
+			break;
+		} else if (result==1) {
+			current=current->getLeftChild();
 		}
 	}
-	return NULL;
-}
 
-BINARYTREE_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREE_CLASS::sort() {
-
-	// detach nodes and insert them into a new tree
-	BINARYTREE_CLASS	newtree;
-	while (first) {
-		BINARYTREENODE_CLASS	*node=detach(first);
-		newtree.insert(node);
+	#ifdef DEBUG_BINARYTREE
+	if (current) {
+		stdoutput.printf("  success!\n");
+	} else {
+		stdoutput.printf("  failed\n");
 	}
+	stdoutput.printf("} find\n\n");
+	#endif
 
-	// grab the nodes and length from the new tree
-	top=newtree.top;
-	first=newtree.first;
-	last=newtree.last;
-	length=newtree.length;
-
-	// set first to NULL so clear() won't do anything
-	// when the new tree is deallocated
-	newtree.first=NULL;
+	return current;
 }
 
 BINARYTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void BINARYTREE_CLASS::clear() {
-	while (first) {
-		remove(first);
+
+	#ifdef DEBUG_BINARYTREE
+	uint64_t	i=0;
+	stdoutput.printf("clearing %d nodes {\n",length);
+	#endif
+
+	// start at the top
+	BINARYTREENODE_CLASS	*node=top;
+	while (node) {
+
+		// go right one, then go left as far as possible
+		if (node->getRightChild()) {
+			node=node->getRightChild();
+		}
+		while (node->getLeftChild()) {
+			node=node->getLeftChild();
+		}
+
+		// get the parent
+		BINARYTREENODE_CLASS	*p=node->getParent();
+		if (p) {
+			if (p->getLeftChild()==node) {
+				p->setLeftChild(NULL);
+			} else {
+				p->setRightChild(NULL);
+			}
+		}
+
+		// delete the node
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("	clearing %lld: ",i);
+		_binarytreeutil_print(node->getValue());
+		stdoutput.printf("\n");
+		i++;
+		#endif
+		delete node;
+
+		// continue with parent...
+		node=p;
 	}
+
+	#ifdef DEBUG_BINARYTREE
+	stdoutput.printf("} cleared %d nodes\n\n",i);
+	#endif
+
 	top=NULL;
 	first=NULL;
 	last=NULL;
@@ -258,6 +343,18 @@ BINARYTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getRightChild() {
 	return right;
+}
+
+BINARYTREENODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+uint64_t BINARYTREENODE_CLASS::getLeftHeight() {
+	return leftheight;
+}
+
+BINARYTREENODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+uint64_t BINARYTREENODE_CLASS::getRightHeight() {
+	return rightheight;
 }
 
 BINARYTREENODE_TEMPLATE
@@ -344,7 +441,7 @@ void BINARYTREENODE_CLASS::print(const char *name,
 	}
 	stdoutput.printf("<%s value=\"",name);
 	_binarytreeutil_print(value);
-	stdoutput.printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
+	stdoutput.printf("\" lh=\"%lld\" rh=\"%lld\" bf=\"%lld\"",
 			leftheight,rightheight,leftheight-rightheight);
 	if (!left && !right) {
 		stdoutput.printf("/>\n");
@@ -393,11 +490,6 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 		return NULL;
 	}
 
-	#ifdef DEBUG_BINARYTREE
-	stdoutput.printf("----------------------------------------"
-				"---------------------------------------\n");
-	#endif
-
 	// find a location to insert the node (should always be a leaf node)
 	binarytreenode<valuetype>	*location=this;
 	for (;;) {
@@ -409,10 +501,11 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 			} else {
 
 				#ifdef DEBUG_BINARYTREE
-				stdoutput.printf("insert %d "
-						"to left of %d {\n\n",
-						node->value,
-						location->value);
+				stdoutput.printf("insert ");
+				_binarytreeutil_print(node->value);
+				stdoutput.printf(" to left of ");
+				_binarytreeutil_print(location->value);
+				stdoutput.printf(" {\n\n");
 				#endif
 
 				location->setLeftChild(node);
@@ -426,10 +519,11 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 			} else {
 
 				#ifdef DEBUG_BINARYTREE
-				stdoutput.printf("insert %d "
-						"to right of %d {\n\n",
-						node->value,
-						location->value);
+				stdoutput.printf("insert ");
+				_binarytreeutil_print(node->value);
+				stdoutput.printf(" to right of ");
+				_binarytreeutil_print(location->value);
+				stdoutput.printf(" {\n\n");
 				#endif
 
 				location->setRightChild(node);
@@ -440,7 +534,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 
 	node->setParent(location);
 
-	// update heights
+	// update heights up the tree
 	adjustParentHeights(node);
 
 	#ifdef DEBUG_BINARYTREE
@@ -457,6 +551,222 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 	#endif
 
 	return result;
+}
+
+BINARYTREE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
+
+	#ifdef DEBUG_BINARYTREE
+	stdoutput.printf("detach ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" {\n\n");
+
+	binarytreenode<valuetype>	*top=this;
+	while (top->parent) { top=top->parent; }
+	top->print(); stdoutput.printf("\n");
+	#endif
+
+	binarytreenode<valuetype>	*newtreetop=NULL;
+
+	if ((left && !right) || (!left && right) || (!left && !right)) {
+
+		// node with one or zero children...
+
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("simple case: 1 or 0 children\n\n");
+		#endif
+
+		// decide which child the node has
+		// NOTE: If the node has no children then this will implicitly
+		// set child=NULL (which is what we want in that case) because
+		// right=NULL.
+		binarytreenode<valuetype>	*child=(left)?left:right;
+
+		if (parent) {
+
+			// disconnect this node from its children
+			left=NULL;
+			right=NULL;
+
+			// connect the parent to the child
+			// (or to NULL if the node has no children)
+			// decrement the appropriate height of parent
+			if (parent->left==this) {
+				parent->left=child;
+				parent->leftheight--;
+			} else {
+				parent->right=child;
+				parent->rightheight--;
+			}
+
+			// connect the child to the parent
+			if (child) {
+				child->parent=parent;
+			}
+
+			// update heights up the tree
+			adjustParentHeights(parent);
+
+			#ifdef DEBUG_BINARYTREE
+			binarytreenode<valuetype>	*top=this;
+			while (top->parent) { top=top->parent; }
+			top->print(); stdoutput.printf("\n");
+			#endif
+
+			// disconnect this node from its parent
+			// (but keep track of the parent so we
+			// can use it to balance up)
+			binarytreenode<valuetype>	*p=parent;
+			parent=NULL;
+
+			// balance the tree
+			newtreetop=p->balanceUp();
+
+		} else {
+
+			// disconnect this node's child from it
+			if (child) {
+				child->parent=NULL;
+			}
+
+			// disconnect this node from its children
+			left=NULL;
+			right=NULL;
+
+			// NOTE: If the node has no children, then this will
+			// implicitly (re)set newtreetop=NULL, which is what
+			// we want in that case.
+			newtreetop=child;
+
+			#ifdef DEBUG_BINARYTREE
+			binarytreenode<valuetype>	*top=this;
+			while (top->parent) { top=top->parent; }
+			top->print(); stdoutput.printf("\n");
+			#endif
+		}
+
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("} detach\n\n");
+		#endif
+
+		return newtreetop;
+
+	} else {
+
+		// node with left and right children...
+
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("less simple case: 2 children\n\n");
+		#endif
+
+		// get this node's successor...
+		//
+		// (eg. if the tree contains values 5, 7, 10, 12, 15, and 18,
+		// and this node is 10, then find the node with 12 in it)
+		//
+		// go right one, then go left as far as possible
+		binarytreenode<valuetype>	*successor=right;
+		while (successor->left) {
+			successor=successor->left;
+		}
+
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("swap ");
+		_binarytreeutil_print(value);
+		stdoutput.printf(" and ");
+		_binarytreeutil_print(successor->value);
+		stdoutput.printf("\n\n");
+		#endif
+
+
+		// if the successor was the immediate right child of this node
+		// then we need to handle a few things differently later
+		bool	successorwasimmediaterightchild=(right==successor);
+
+
+		// swap this node with the successor...
+
+		// get a copy of the successor
+		binarytreenode<valuetype>	temp(*successor);
+
+		// re-parent the successor
+		successor->parent=parent;
+		if (successor->parent) {
+			if (successor->parent->left==this) {
+				successor->parent->left=successor;
+			} else {
+				successor->parent->right=successor;
+			}
+		} else {
+			newtreetop=successor;
+		}
+
+		// replace the successor's children
+		// with those of this node
+		successor->left=left;
+		if (successor->left) {
+			successor->left->parent=successor;
+		}
+		if (successorwasimmediaterightchild) {
+			successor->right=this;
+			successor->right->parent=successor;
+		} else {
+			successor->right=right;
+			if (successor->right) {
+				successor->right->parent=successor;
+			}
+
+			// re-parent this node
+			parent=temp.parent;
+			if (parent->left==successor) {
+				parent->left=this;
+			} else {
+				parent->right=this;
+			}
+		}
+
+		// replace the successor's heights
+		// with those of this node
+		successor->leftheight=leftheight;
+		successor->rightheight=rightheight;
+
+
+		// replace this node's children
+		// with those of the successor
+		left=temp.left;
+		if (left) {
+			left->parent=this;
+		}
+		right=temp.right;
+		if (right) {
+			right->parent=this;
+		}
+
+		// replace this node's heights
+		// with those of the successor
+		leftheight=temp.leftheight;
+		rightheight=temp.rightheight;
+
+		#ifdef DEBUG_BINARYTREE
+		binarytreenode<valuetype>	*top=this;
+		while (top->parent) { top=top->parent; }
+		top->print(); stdoutput.printf("\n");
+		#endif
+
+		// Call detach on this node again.
+		// This time, the node should have 1 or 0 children.
+		binarytreenode<valuetype>	*result=detach();
+		if (result) {
+			newtreetop=result;
+		}
+
+		#ifdef DEBUG_BINARYTREE
+		stdoutput.printf("} detach\n\n");
+		#endif
+
+		return newtreetop;
+	}
 }
 
 BINARYTREE_TEMPLATE
@@ -491,7 +801,9 @@ RUDIMENTS_TEMPLATE_INLINE
 binarytreenode<valuetype> *BINARYTREENODE_CLASS::balanceUp() {
 
 	#ifdef DEBUG_BINARYTREE
-	stdoutput.printf("balanceUp at %d {\n\n",value);
+	stdoutput.printf("balanceUp at ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" {\n\n");
 	#endif
 
 	binarytreenode<valuetype>	*newtreetop=NULL;
@@ -499,7 +811,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::balanceUp() {
 		binarytreenode<valuetype>	*result=node->balance();
 		if (result) {
 			newtreetop=result;
-		};
+		}
 	}
 
 	#ifdef DEBUG_BINARYTREE
@@ -521,7 +833,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::balance() {
 		(rightheight>leftheight && rightheight-leftheight>1)) {
 
 		#ifdef DEBUG_BINARYTREE
-		stdoutput.printf("imbalance at %d\n\n",value);
+		stdoutput.printf("imbalance at ");
+		_binarytreeutil_print(value);
+		stdoutput.printf("\n\n");
 		#endif
 
 		// apply the appropriate rotation to restore balance
@@ -566,7 +880,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
  	 * needs left rotation */
 
 	#ifdef DEBUG_BINARYTREE
-	stdoutput.printf("left rotation at %d {\n\n",value);
+	stdoutput.printf("left rotation at ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" {\n\n");
 	#endif
 
 	// we may need to "re-top" the whole tree
@@ -605,7 +921,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
 		star->parent=a;
 	}
 
-	// update heights
+	// update heights up the tree
 	adjustParentHeights(a);
 
 	#ifdef DEBUG_BINARYTREE
@@ -647,7 +963,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightLeftRotate() {
 	 * needs right-left rotation */
 
 	#ifdef DEBUG_BINARYTREE
-	stdoutput.printf("right-left rotation at %d {\n\n",value);
+	stdoutput.printf("right-left rotation at ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" {\n\n");
 	stdoutput.printf("right part {\n\n");
 	#endif
 
@@ -678,7 +996,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightLeftRotate() {
 		star->parent=c;
 	}
 
-	// update heights
+	// update heights up the tree
 	adjustParentHeights(c);
 
 	#ifdef DEBUG_BINARYTREE
@@ -723,7 +1041,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
 	 * needs right rotation */
 
 	#ifdef DEBUG_BINARYTREE
-	stdoutput.printf("right rotation at %d {\n\n",value);
+	stdoutput.printf("right rotation at ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" {\n\n");
 	#endif
 
 	// we may need to "re-top" the whole tree
@@ -762,7 +1082,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
 		star->parent=c;
 	}
 
-	// update heights
+	// update heights up the tree
 	adjustParentHeights(c);
 
 	#ifdef DEBUG_BINARYTREE
@@ -804,7 +1124,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRightRotate() {
 	 * needs left-right rotation */
 
 	#ifdef DEBUG_BINARYTREE
-	stdoutput.printf("left-right rotation at %d {\n\n",value);
+	stdoutput.printf("left-right rotation at ");
+	_binarytreeutil_print(value);
+	stdoutput.printf(" {\n\n");
 	stdoutput.printf("left part {\n\n");
 	#endif
 
@@ -835,7 +1157,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRightRotate() {
 		star->parent=a;
 	}
 
-	// update heights
+	// update heights up the tree
 	adjustParentHeights(a);
 
 	#ifdef DEBUG_BINARYTREE
