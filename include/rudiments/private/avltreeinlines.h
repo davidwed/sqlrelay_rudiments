@@ -616,7 +616,9 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::detach() {
 		// (eg. if the tree contains values 5, 7, 10, 12, 15, and 18,
 		// and this node is 10, then find the node with 12 in it)
 		//
-		// go right one, then go left as far as possible
+		// following the rules from our in-order, depth-first traversal
+		// above, since we have a right child, we must go right one,
+		// then go left as far as possible
 		avltreenode<valuetype>	*successor=right;
 		while (successor->left) {
 			successor=successor->left;
@@ -910,6 +912,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::balance() {
 		// It's not impossible that we encountered and imbalance that
 		// we can't fix at this node.  It should be fixable at an
 		// ancestor.
+		// FIXME: is this actually true?
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("no rotation\n\n");
 		#endif
@@ -1065,7 +1068,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate() {
 	// Since c was moved into a location in the tree that may not have
 	// prevoiusly existed, it may have unbalanced the tree.  Re-balance,
 	// starting with c.
-	// FIXME: this may not be necessary...
+	// FIXME: is this actually necessary?
 	avltreenode<valuetype> *result=c->balanceUp();
 	if (result) {
 		newtreetop=result;
@@ -1226,7 +1229,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate() {
 	// Since a was moved into a location in the tree that may not have
 	// prevoiusly existed, it may have unbalanced the tree.  Re-balance,
 	// starting with a.
-	// FIXME: this may not be necessary...
+	// FIXME: is this actually necessary?
 	avltreenode<valuetype> *result=a->balanceUp();
 	if (result) {
 		newtreetop=result;
