@@ -283,6 +283,7 @@ void AVLTREE_CLASS::clear() {
 	stdoutput.printf("} cleared %d nodes\n\n",i);
 	#endif
 
+	// clear pointers and length
 	top=NULL;
 	first=NULL;
 	last=NULL;
@@ -358,26 +359,43 @@ uint64_t AVLTREENODE_CLASS::getRightHeight() {
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
+
+	// reverse in-order, depth-first traversal...
+
 	if (left) {
+
+		// if we have a left child then its rightmost descendent
+		// contains the next lowest value...
+
+		// go left
 		AVLTREENODE_CLASS	*node=left;
+
+		// go as far right as possible
 		while (node->right) {
 			node=node->right;
 		}
 		return node;
+
 	} else if (parent) {
+
+		// if we're the right child of our parent,
+		// then our parent contains the next lowest value
 		if (parent->right==this) {
 			return parent;
-		} else {
-			AVLTREENODE_CLASS	*node=parent;
-			while (node) {
-				if (!node->parent) {
-					break;
-				}
-				if (node->parent->right==node) {
-					return node->parent;
-				}
-				node=node->parent;
+		}
+
+		// If we're the left child of our parent, then we have to
+		// move up until we find an acestor that's the right child of
+		// its parent.  That node contains the next lowest value.
+		AVLTREENODE_CLASS	*node=parent;
+		while (node) {
+			if (!node->parent) {
+				break;
 			}
+			if (node->parent->right==node) {
+				return node->parent;
+			}
+			node=node->parent;
 		}
 	}
 	return NULL;
@@ -386,26 +404,43 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
+
+	// in-order, depth-first traversal...
+
 	if (right) {
+
+		// if we have a right child then its leftmost descendent
+		// contains the next highest value...
+
+		// go right
 		AVLTREENODE_CLASS	*node=right;
+
+		// go as far left as possible
 		while (node->left) {
 			node=node->left;
 		}
 		return node;
+
 	} else if (parent) {
+
+		// if we're the left child of our parent,
+		// then our parent contains the next highest value
 		if (parent->left==this) {
 			return parent;
-		} else {
-			AVLTREENODE_CLASS	*node=parent;
-			while (node) {
-				if (!node->parent) {
-					break;
-				}
-				if (node->parent->left==node) {
-					return node->parent;
-				}
-				node=node->parent;
+		}
+
+		// If we're the right child of our parent, then we have to
+		// move up until we find an acestor that's the left child of
+		// its parent.  That node contains the next highest value.
+		AVLTREENODE_CLASS	*node=parent;
+		while (node) {
+			if (!node->parent) {
+				break;
 			}
+			if (node->parent->left==node) {
+				return node->parent;
+			}
+			node=node->parent;
 		}
 	}
 	return NULL;
@@ -433,6 +468,7 @@ void AVLTREENODE_CLASS::print() const {
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
+	// print an xml-style representation of the node and its descendents
 	for (uint16_t i=0; i<*indentlevel; i++) {
 		stdoutput.printf(" ");
 	}
@@ -564,92 +600,10 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::detach() {
 	top->print(); stdoutput.printf("\n");
 	#endif
 
+	// we may need to "re-top" the whole tree
 	avltreenode<valuetype>	*newtreetop=NULL;
 
-	if ((left && !right) || (!left && right) || (!left && !right)) {
-
-		// node with one or zero children...
-
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("simple case: 1 or 0 children\n\n");
-		#endif
-
-		// decide which child the node has
-		// NOTE: If the node has no children then this will implicitly
-		// set child=NULL (which is what we want in that case) because
-		// right=NULL.
-		avltreenode<valuetype>	*child=(left)?left:right;
-
-		if (parent) {
-
-			// disconnect this node from its children
-			left=NULL;
-			right=NULL;
-
-			// connect the parent to the child
-			// (or to NULL if the node has no children)
-			// decrement the appropriate height of parent
-			if (parent->left==this) {
-				parent->left=child;
-				parent->leftheight--;
-			} else {
-				parent->right=child;
-				parent->rightheight--;
-			}
-
-			// connect the child to the parent
-			if (child) {
-				child->parent=parent;
-			}
-
-			// update heights up the tree
-			adjustParentHeights(parent);
-
-			#ifdef DEBUG_AVLTREE
-			avltreenode<valuetype>	*top=this;
-			while (top->parent) { top=top->parent; }
-			top->print(); stdoutput.printf("\n");
-			#endif
-
-			// disconnect this node from its parent
-			// (but keep track of the parent so we
-			// can use it to balance up)
-			avltreenode<valuetype>	*p=parent;
-			parent=NULL;
-
-			// balance the tree
-			newtreetop=p->balanceUp();
-
-		} else {
-
-			// disconnect this node's child from it
-			if (child) {
-				child->parent=NULL;
-			}
-
-			// disconnect this node from its children
-			left=NULL;
-			right=NULL;
-
-			// NOTE: If the node has no children, then this will
-			// implicitly (re)set newtreetop=NULL, which is what
-			// we want in that case.
-			newtreetop=child;
-
-			#ifdef DEBUG_AVLTREE
-			avltreenode<valuetype>	*top=this;
-			while (top->parent) { top=top->parent; }
-			top->print(); stdoutput.printf("\n");
-			#endif
-		}
-
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("} detach\n\n");
-		#endif
-
-		return newtreetop;
-
-	} else {
+	if (left && right) {
 
 		// node with left and right children...
 
@@ -751,31 +705,114 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::detach() {
 		top->print(); stdoutput.printf("\n");
 		#endif
 
-		// Call detach on this node again.
-		// This time, the node should have 1 or 0 children.
-		avltreenode<valuetype>	*result=detach();
+		// fall through to the code below because now
+		// the node should have one or zero children...
+	}
+
+	// node with one or zero children...
+
+	#ifdef DEBUG_AVLTREE
+	stdoutput.printf("simple case: 1 or 0 children\n\n");
+	#endif
+
+	// decide which child the node has
+	// NOTE: If the node has no children then this will implicitly
+	// set child=NULL (which is what we want in that case) because
+	// right=NULL.
+	avltreenode<valuetype>	*child=(left)?left:right;
+
+	if (parent) {
+
+		// disconnect this node from its children
+		left=NULL;
+		right=NULL;
+
+		// connect the parent to the child
+		// (or to NULL if the node has no children)
+		// decrement the appropriate height of parent
+		if (parent->left==this) {
+			parent->left=child;
+			parent->leftheight--;
+		} else {
+			parent->right=child;
+			parent->rightheight--;
+		}
+
+		// connect the child to the parent
+		if (child) {
+			child->parent=parent;
+		}
+
+		// update heights up the tree
+		adjustParentHeights(parent);
+
+		#ifdef DEBUG_AVLTREE
+		avltreenode<valuetype>	*top=this;
+		while (top->parent) { top=top->parent; }
+		top->print(); stdoutput.printf("\n");
+		#endif
+
+		// disconnect this node from its parent
+		// (but keep track of the parent so we
+		// can use it to balance up)
+		avltreenode<valuetype>	*p=parent;
+		parent=NULL;
+
+		// balance the tree
+		avltreenode<valuetype>	*result=p->balanceUp();
 		if (result) {
 			newtreetop=result;
 		}
 
-		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("} detach\n\n");
-		#endif
+	} else {
 
-		return newtreetop;
+		// disconnect this node's child from it
+		if (child) {
+			child->parent=NULL;
+		}
+
+		// disconnect this node from its children
+		left=NULL;
+		right=NULL;
+
+		// NOTE: If the node has no children, then this will
+		// implicitly (re)set newtreetop=NULL, which is what
+		// we want in that case.
+		newtreetop=child;
+
+		#ifdef DEBUG_AVLTREE
+		avltreenode<valuetype>	*top=this;
+		while (top->parent) { top=top->parent; }
+		top->print(); stdoutput.printf("\n");
+		#endif
 	}
+
+	#ifdef DEBUG_AVLTREE
+	stdoutput.printf("} detach\n\n");
+	#endif
+
+	return newtreetop;
 }
 
 AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
+
+	// move up the tree, starting with the parent of "node"...
 	while (node->parent) {
 
+		// calculate the new height of the parent
 		uint64_t	height=
 				((node->leftheight>node->rightheight)?
 							node->leftheight:
 							node->rightheight)+1;
 
+		// If "node" is the left child of the parent, then adjust the
+		// parent's left height.  
+		// If "node" is the right child of the parent, then adjust the
+		// parent's right height.  
+		// In either case, bail if the height is already the same as we
+		// calculated.
 		if (node->parent->left==node) {
 			if (node->parent->leftheight==height) {
 				break;
@@ -788,6 +825,7 @@ void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 			node->parent->rightheight=height;
 		}
 
+		// move up
 		node=node->parent;
 	}
 }
@@ -802,13 +840,33 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::balanceUp() {
 	stdoutput.printf(" {\n\n");
 	#endif
 
+	// we may need to "re-top" the whole tree
 	avltreenode<valuetype>	*newtreetop=NULL;
-	for (avltreenode<valuetype> *node=this; node; node=node->parent) {
+
+	// move up the tree from the current node, balancing as we go...
+
+	// start with the current node...
+	avltreenode<valuetype>	*node=this;
+
+	do {
+		// Get the current parent.  We'll need to move up to this
+		// at the end of the loop.  Since the current node could get
+		// rotated left or right and re-parented, we could end up
+		// processing its new parent unnecessarily if we just go to its
+		// parent at the end of the loop, rather than keeping track of
+		// its parent prior to any rotations and go to that.
+		avltreenode<valuetype>	*p=node->parent;
+
+		// balance the node
 		avltreenode<valuetype>	*result=node->balance();
 		if (result) {
 			newtreetop=result;
 		}
-	}
+
+		// move up
+		node=p;
+
+	} while (node);
 
 	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} balanceUp\n\n",value);
@@ -888,7 +946,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate() {
 	avltreenode<valuetype>	*a=this;
 	avltreenode<valuetype>	*b=a->right;
 	avltreenode<valuetype>	*star=b->left;
-	uint64_t			starheight=b->leftheight;
+	uint64_t		starheight=b->leftheight;
 
 	// move b
 	avltreenode<valuetype>	*p=a->parent;
@@ -975,7 +1033,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate() {
 	avltreenode<valuetype>	*c=a->right;
 	avltreenode<valuetype>	*b=c->left;
 	avltreenode<valuetype>	*star=b->right;
-	uint64_t			starheight=b->rightheight;
+	uint64_t		starheight=b->rightheight;
 
 	// move b
 	a->right=b;
@@ -1049,7 +1107,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate() {
 	avltreenode<valuetype>	*c=this;
 	avltreenode<valuetype>	*b=c->left;
 	avltreenode<valuetype>	*star=b->right;
-	uint64_t			starheight=b->rightheight;
+	uint64_t		starheight=b->rightheight;
 
 	// move b
 	avltreenode<valuetype>	*p=c->parent;
@@ -1136,7 +1194,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate() {
 	avltreenode<valuetype>	*a=c->left;
 	avltreenode<valuetype>	*b=a->right;
 	avltreenode<valuetype>	*star=b->left;
-	uint64_t			starheight=b->leftheight;
+	uint64_t		starheight=b->leftheight;
 
 	// move b
 	c->left=b;

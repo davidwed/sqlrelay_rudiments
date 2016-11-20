@@ -51,12 +51,12 @@ class avltreenode {
 		/** Returns the right height of this node in the avltree. */
 		uint64_t	getRightHeight();
 
-		/** Returns the previous node in the avltree (in a
+		/** Returns the previous node in the avltree (in an in-order,
  		 *  depth-first traversal) or NULL if this node is the first
  		 *  node in the tree. */
 		avltreenode<valuetype>	*getPrevious();
 
-		/** Returns the next node in the avltree (in a
+		/** Returns the next node in the avltree (in an in-order,
 		 *  depth-first traversal) or NULL if this node is the last
 		 *  node in the tree. */
 		avltreenode<valuetype>	*getNext();
@@ -127,34 +127,33 @@ class avltree {
 		/** Returns the top-most node in the avltree. */
 		avltreenode<valuetype>	*getTop();
 
-		/** Returns the first node in the avltree (in a depth-first
-		 *  traversal). */
+		/** Returns the first node in the avltree (in an in-order,
+		 *  depth-first traversal). */
 		avltreenode<valuetype>	*getFirst();
 
-		/** Returns the last node in the avltree (in a depth-first
-		 *  traversal). */
+		/** Returns the last node in the avltree (in an in-order,
+		 *  depth-first traversal). */
 		avltreenode<valuetype>	*getLast();
 
 		/** Returns the node prior to "node" or NULL if this node is
-		 *  the first node in the tree (in a depth-first traversal).
-		 *  "node" is presumed to be in the tree. */
+		 *  the first node in the tree (in an in-order, depth-first
+		 *  traversal).  "node" is presumed to be in the tree. */
 		avltreenode<valuetype>	*getPrevious(
 					avltreenode<valuetype> *node);
 
 		/** Returns the node after "node" or NULL if this node is the
-		 *  last node in the tree (in a depth-first traversal). "node"
-		 *  is presumed to be in the tree. */
+		 *  last node in the tree (in an in-order, depth-first
+		 *  traversal). "node" is presumed to be in the tree. */
 		avltreenode<valuetype>	*getNext(
 					avltreenode<valuetype> *node);
 
-		/** Returns a pointer to the first avltreenode
-		 *  containing "value" (in a depth-first traversal) or NULL if
-		 *  "value" was not found. */
+		/** Returns a pointer to the first avltreenode containing
+		 *  "value" or NULL if "value" was not found. */
 		avltreenode<valuetype>	*find(valuetype value);
 
-		/** Returns a pointer to the first avltreenode
-		 *  after "startnode" containing "value" (in a depth-first
-		 *  traversal) or NULL if "value" was not found. */
+		/** Returns a pointer to the first avltreenode below
+		 *  "startnode" containing "value" or NULL if "value" was not
+		 *  found. */
 		avltreenode<valuetype>
 			*find(avltreenode<valuetype> *startnode,
 							valuetype value);
@@ -164,7 +163,7 @@ class avltree {
 		 *  is not deleted by this call. */
 		void	clear();
 
-		/** Prints out a representation of the avltree. */
+		/** Prints out an xml-style representation of the avltree. */
 		void	print() const;
 
 	#include <rudiments/private/avltree.h>

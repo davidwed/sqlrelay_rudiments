@@ -231,12 +231,11 @@ privateheaders0="config.h "+_
 	"linkedlistincludes.h "+_
 	"linkedlistinlines.h "+_
 	"linkedlistnode.h "+_
-	"linkedlistutilinlines.h "+_
+	"containerutilinlines.h "+_
 	"avltree.h "+_
 	"avltreeincludes.h "+_
 	"avltreeinlines.h "+_
 	"avltreenode.h "+_
-	"avltreeutilinlines.h "+_
 	"singlylinkedlist.h "+_
 	"singlylinkedlistincludes.h "+_
 	"singlylinkedlistinlines.h "+_
