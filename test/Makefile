@@ -29,7 +29,7 @@ PROGS1= dictionary \
 	file \
 	filesystem \
 	linkedlist \
-	binarytree \
+	avltree \
 	singlylinkedlist \
 	listmetrics \
 	memorypool \
@@ -158,8 +158,8 @@ hostentry: hostentry.cpp hostentry.$(OBJ)
 linkedlist: linkedlist.cpp linkedlist.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) linkedlist.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-binarytree: binarytree.cpp binarytree.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) binarytree.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+avltree: avltree.cpp avltree.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) avltree.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 singlylinkedlist: singlylinkedlist.cpp singlylinkedlist.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) singlylinkedlist.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

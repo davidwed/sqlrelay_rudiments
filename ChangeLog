@@ -4,7 +4,7 @@
 	implemented process::backtrace() for windows
 	added missing charstring::getLastOfSet(OrEnd) methods
 	refactored thread class to match process class paradigm
-	added binarytree class
+	added avltree class
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

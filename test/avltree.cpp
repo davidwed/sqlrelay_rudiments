@@ -1,7 +1,7 @@
 // Copyright (c) 2016  David Muse
 // See the file COPYING for more information
 
-#include <rudiments/binarytree.h>
+#include <rudiments/avltree.h>
 #include <rudiments/charstring.h>
 #include <rudiments/randomnumber.h>
 #include <rudiments/snooze.h>
@@ -24,7 +24,7 @@ template<class type> void generateRandom(randomnumber *r, type *number) {
 
 // walk the tree, looking for errors in order, balance, or length
 template<class type> void walk(bool forwards,
-				binarytree<type> *t,
+				avltree<type> *t,
 				bool *ordererror,
 				bool *balanceerror,
 				bool *lengtherror) {
@@ -36,7 +36,7 @@ template<class type> void walk(bool forwards,
 	uint64_t	length=0;
 	type		prev;
 
-	binarytreenode<type> *node=(forwards)?t->getFirst():t->getLast();
+	avltreenode<type> *node=(forwards)?t->getFirst():t->getLast();
 	while (node) {
 
 		if (length &&
@@ -68,9 +68,9 @@ template<class type> void walk(bool forwards,
 
 // walk the tree, doing a find() on each value to verify
 // that it's found in the location that it's in
-template<class type> void find(binarytree<type> *t, bool *finderror) {
+template<class type> void find(avltree<type> *t, bool *finderror) {
 
-	for (binarytreenode<type> *n=t->getFirst(); n; n=n->getNext()) {
+	for (avltreenode<type> *n=t->getFirst(); n; n=n->getNext()) {
 		if (t->find(n->getValue())!=n) {
 			*finderror=true;
 			break;
@@ -82,7 +82,7 @@ template<class type> void find(binarytree<type> *t, bool *finderror) {
 
 int main(int argc, char **argv) {
 
-	header("binarytree");
+	header("avltree");
 
 	// initialize random number generator
 	randomnumber	r;
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
 
 	// integers
 	stdoutput.printf("integers: \n");
-	binarytree<int32_t>	intt;
+	avltree<int32_t>	intt;
 
 	// insert
 	for (uint16_t i=0; i<nodecount; i++) {
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 	stdoutput.printf("\n");
 
 	// remove
-	for (binarytreenode<int32_t> *node=intt.getTop();
+	for (avltreenode<int32_t> *node=intt.getTop();
 					node; node=intt.getTop()) {
 
 		// go left a random amount

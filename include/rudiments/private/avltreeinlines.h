@@ -1,52 +1,52 @@
 // Copyright (c) 2016 David Muse
 // See the COPYING file for more information
 
-//#define DEBUG_BINARYTREE 1
+//#define DEBUG_AVLTREE 1
 
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
 #include <rudiments/private/rudimentsinlines.h>
-#include <rudiments/private/binarytreeutilinlines.h>
+#include <rudiments/private/avltreeutilinlines.h>
 
-#define BINARYTREE_TEMPLATE template <class valuetype>
+#define AVLTREE_TEMPLATE template <class valuetype>
 
-#define BINARYTREE_CLASS binarytree<valuetype>
+#define AVLTREE_CLASS avltree<valuetype>
 
-#define BINARYTREENODE_TEMPLATE template <class valuetype>
+#define AVLTREENODE_TEMPLATE template <class valuetype>
 
-#define BINARYTREENODE_CLASS binarytreenode<valuetype>
+#define AVLTREENODE_CLASS avltreenode<valuetype>
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREE_CLASS::binarytree() {
+AVLTREE_CLASS::avltree() {
 	top=NULL;
 	first=NULL;
 	last=NULL;
 	length=0;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREE_CLASS::~binarytree() {
+AVLTREE_CLASS::~avltree() {
 	clear();
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREE_CLASS::insert(valuetype value) {
-	insert(new binarytreenode<valuetype>(value));
+void AVLTREE_CLASS::insert(valuetype value) {
+	insert(new avltreenode<valuetype>(value));
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREE_CLASS::insert(binarytreenode<valuetype> *node) {
+void AVLTREE_CLASS::insert(avltreenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
 		return;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("----------------------------------------"
 				"---------------------------------------\n");
 	#endif
@@ -54,7 +54,7 @@ void BINARYTREE_CLASS::insert(binarytreenode<valuetype> *node) {
 	if (top) {
 
 		// insert the node, optionally replacing the top of the tree
-		binarytreenode<valuetype>	*newtop=top->insert(node);
+		avltreenode<valuetype>	*newtop=top->insert(node);
 		if (newtop) {
 			top=newtop;
 		}
@@ -81,17 +81,16 @@ void BINARYTREE_CLASS::insert(binarytreenode<valuetype> *node) {
 	length++;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::detach(
-					binarytreenode<valuetype> *node) {
+avltreenode<valuetype> *AVLTREE_CLASS::detach(avltreenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
 		return NULL;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("----------------------------------------"
 				"---------------------------------------\n");
 	#endif
@@ -110,7 +109,7 @@ binarytreenode<valuetype> *BINARYTREE_CLASS::detach(
 	bool	nodewastop=(node==top);
 
 	// detach the node
-	binarytreenode<valuetype>	*newtop=node->detach();
+	avltreenode<valuetype>	*newtop=node->detach();
 
 	// reset the top if necessary
 	if (newtop || nodewastop) {
@@ -123,16 +122,16 @@ binarytreenode<valuetype> *BINARYTREE_CLASS::detach(
 	return node;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool BINARYTREE_CLASS::remove(valuetype value) {
-	binarytreenode<valuetype>	*current=find(value);
+bool AVLTREE_CLASS::remove(valuetype value) {
+	avltreenode<valuetype>	*current=find(value);
 	return (current)?remove(current):false;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool BINARYTREE_CLASS::removeAll(valuetype value) {
+bool AVLTREE_CLASS::removeAll(valuetype value) {
 	bool	removed=false;
 	while (remove(value)) {
 		removed=true;
@@ -140,78 +139,78 @@ bool BINARYTREE_CLASS::removeAll(valuetype value) {
 	return removed;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-bool BINARYTREE_CLASS::remove(binarytreenode<valuetype> *node) {
+bool AVLTREE_CLASS::remove(avltreenode<valuetype> *node) {
 	delete detach(node);
 	return true;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-uint64_t BINARYTREE_CLASS::getLength() const {
+uint64_t AVLTREE_CLASS::getLength() const {
 	return length;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::getTop() {
+avltreenode<valuetype> *AVLTREE_CLASS::getTop() {
 	return top;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::getFirst() {
+avltreenode<valuetype> *AVLTREE_CLASS::getFirst() {
 	return first;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::getLast() {
+avltreenode<valuetype> *AVLTREE_CLASS::getLast() {
 	return last;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::getPrevious(
-					binarytreenode<valuetype> *node) {
+avltreenode<valuetype> *AVLTREE_CLASS::getPrevious(
+					avltreenode<valuetype> *node) {
 	return (node)?node->getPrevious():NULL;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::getNext(
-					binarytreenode<valuetype> *node) {
+avltreenode<valuetype> *AVLTREE_CLASS::getNext(
+					avltreenode<valuetype> *node) {
 	return (node)?node->getNext():NULL;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::find(valuetype value) {
-	return find((binarytreenode<valuetype> *)top,value);
+avltreenode<valuetype> *AVLTREE_CLASS::find(valuetype value) {
+	return find((avltreenode<valuetype> *)top,value);
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREE_CLASS::find(
-					binarytreenode<valuetype> *startnode,
+avltreenode<valuetype> *AVLTREE_CLASS::find(
+					avltreenode<valuetype> *startnode,
 					valuetype value) {
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("find ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" from ");
-	_binarytreeutil_print(startnode->getValue());
+	_avltreeutil_print(startnode->getValue());
 	stdoutput.printf(" {\n",length);
 	#endif
 
 	// descend the tree until we find the value or run off of the bottom
-	binarytreenode<valuetype> *current=startnode;
+	avltreenode<valuetype> *current=startnode;
 	while (current) {
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("  ");
-		_binarytreeutil_print(current->getValue());
+		_avltreeutil_print(current->getValue());
 		stdoutput.printf("\n",length);
 		#endif
 
@@ -225,7 +224,7 @@ binarytreenode<valuetype> *BINARYTREE_CLASS::find(
 		}
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	if (current) {
 		stdoutput.printf("  success!\n");
 	} else {
@@ -237,17 +236,17 @@ binarytreenode<valuetype> *BINARYTREE_CLASS::find(
 	return current;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREE_CLASS::clear() {
+void AVLTREE_CLASS::clear() {
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	uint64_t	i=0;
 	stdoutput.printf("clearing %d nodes {\n",length);
 	#endif
 
 	// start at the top
-	BINARYTREENODE_CLASS	*node=top;
+	AVLTREENODE_CLASS	*node=top;
 	while (node) {
 
 		// go right one, then go left as far as possible
@@ -259,7 +258,7 @@ void BINARYTREE_CLASS::clear() {
 		}
 
 		// get the parent
-		BINARYTREENODE_CLASS	*p=node->getParent();
+		AVLTREENODE_CLASS	*p=node->getParent();
 		if (p) {
 			if (p->getLeftChild()==node) {
 				p->setLeftChild(NULL);
@@ -269,9 +268,9 @@ void BINARYTREE_CLASS::clear() {
 		}
 
 		// delete the node
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("	clearing %lld: ",i);
-		_binarytreeutil_print(node->getValue());
+		_avltreeutil_print(node->getValue());
 		stdoutput.printf("\n");
 		i++;
 		#endif
@@ -281,7 +280,7 @@ void BINARYTREE_CLASS::clear() {
 		node=p;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} cleared %d nodes\n\n",i);
 	#endif
 
@@ -291,17 +290,17 @@ void BINARYTREE_CLASS::clear() {
 	length=0;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREE_CLASS::print() const {
+void AVLTREE_CLASS::print() const {
 	if (top) {
 		top->print();
 	}
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS::binarytreenode(valuetype value) {
+AVLTREENODE_CLASS::avltreenode(valuetype value) {
 	this->value=value;
 	parent=NULL;
 	left=NULL;
@@ -310,58 +309,58 @@ BINARYTREENODE_CLASS::binarytreenode(valuetype value) {
 	rightheight=0;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS::~binarytreenode() {
+AVLTREENODE_CLASS::~avltreenode() {
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::setValue(valuetype value) {
+void AVLTREENODE_CLASS::setValue(valuetype value) {
 	this->value=value;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-valuetype BINARYTREENODE_CLASS::getValue() const {
+valuetype AVLTREENODE_CLASS::getValue() const {
 	return value;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getParent() {
+AVLTREENODE_CLASS *AVLTREENODE_CLASS::getParent() {
 	return parent;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getLeftChild() {
+AVLTREENODE_CLASS *AVLTREENODE_CLASS::getLeftChild() {
 	return left;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getRightChild() {
+AVLTREENODE_CLASS *AVLTREENODE_CLASS::getRightChild() {
 	return right;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-uint64_t BINARYTREENODE_CLASS::getLeftHeight() {
+uint64_t AVLTREENODE_CLASS::getLeftHeight() {
 	return leftheight;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-uint64_t BINARYTREENODE_CLASS::getRightHeight() {
+uint64_t AVLTREENODE_CLASS::getRightHeight() {
 	return rightheight;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getPrevious() {
+AVLTREENODE_CLASS *AVLTREENODE_CLASS::getPrevious() {
 	if (left) {
-		BINARYTREENODE_CLASS	*node=left;
+		AVLTREENODE_CLASS	*node=left;
 		while (node->right) {
 			node=node->right;
 		}
@@ -370,7 +369,7 @@ BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getPrevious() {
 		if (parent->right==this) {
 			return parent;
 		} else {
-			BINARYTREENODE_CLASS	*node=parent;
+			AVLTREENODE_CLASS	*node=parent;
 			while (node) {
 				if (!node->parent) {
 					break;
@@ -385,11 +384,11 @@ BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getPrevious() {
 	return NULL;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getNext() {
+AVLTREENODE_CLASS *AVLTREENODE_CLASS::getNext() {
 	if (right) {
-		BINARYTREENODE_CLASS	*node=right;
+		AVLTREENODE_CLASS	*node=right;
 		while (node->left) {
 			node=node->left;
 		}
@@ -398,7 +397,7 @@ BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getNext() {
 		if (parent->left==this) {
 			return parent;
 		} else {
-			BINARYTREENODE_CLASS	*node=parent;
+			AVLTREENODE_CLASS	*node=parent;
 			while (node) {
 				if (!node->parent) {
 					break;
@@ -413,34 +412,33 @@ BINARYTREENODE_CLASS *BINARYTREENODE_CLASS::getNext() {
 	return NULL;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-int32_t BINARYTREENODE_CLASS::compare(valuetype value) const {
-	return _binarytreeutil_compare(this->value,value);
+int32_t AVLTREENODE_CLASS::compare(valuetype value) const {
+	return _avltreeutil_compare(this->value,value);
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-int32_t BINARYTREENODE_CLASS::compare(binarytreenode<valuetype> *peer) const {
-	return _binarytreeutil_compare(this->value,peer->value);
+int32_t AVLTREENODE_CLASS::compare(avltreenode<valuetype> *peer) const {
+	return _avltreeutil_compare(this->value,peer->value);
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::print() const {
+void AVLTREENODE_CLASS::print() const {
 	uint16_t	indentlevel=0;
 	print("top",&indentlevel);
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::print(const char *name,
-				uint16_t *indentlevel) const {
+void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
 	for (uint16_t i=0; i<*indentlevel; i++) {
 		stdoutput.printf(" ");
 	}
 	stdoutput.printf("<%s value=\"",name);
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf("\" lh=\"%lld\" rh=\"%lld\" bf=\"%lld\"",
 			leftheight,rightheight,leftheight-rightheight);
 	if (!left && !right) {
@@ -462,28 +460,28 @@ void BINARYTREENODE_CLASS::print(const char *name,
 	}
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::setParent(BINARYTREENODE_CLASS *node) {
+void AVLTREENODE_CLASS::setParent(AVLTREENODE_CLASS *node) {
 	parent=node;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::setLeftChild(BINARYTREENODE_CLASS *node) {
+void AVLTREENODE_CLASS::setLeftChild(AVLTREENODE_CLASS *node) {
 	left=node;
 }
 
-BINARYTREENODE_TEMPLATE
+AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::setRightChild(BINARYTREENODE_CLASS *node) {
+void AVLTREENODE_CLASS::setRightChild(AVLTREENODE_CLASS *node) {
 	right=node;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
-					binarytreenode<valuetype> *node) {
+avltreenode<valuetype> *AVLTREENODE_CLASS::insert(
+					avltreenode<valuetype> *node) {
 
 	// degenerate case
 	if (!node) {
@@ -491,7 +489,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 	}
 
 	// find a location to insert the node (should always be a leaf node)
-	binarytreenode<valuetype>	*location=this;
+	avltreenode<valuetype>	*location=this;
 	for (;;) {
 
 		if (node->value<=location->value) {
@@ -500,11 +498,11 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 				location=location->left;
 			} else {
 
-				#ifdef DEBUG_BINARYTREE
+				#ifdef DEBUG_AVLTREE
 				stdoutput.printf("insert ");
-				_binarytreeutil_print(node->value);
+				_avltreeutil_print(node->value);
 				stdoutput.printf(" to left of ");
-				_binarytreeutil_print(location->value);
+				_avltreeutil_print(location->value);
 				stdoutput.printf(" {\n\n");
 				#endif
 
@@ -518,11 +516,11 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 				location=location->right;
 			} else {
 
-				#ifdef DEBUG_BINARYTREE
+				#ifdef DEBUG_AVLTREE
 				stdoutput.printf("insert ");
-				_binarytreeutil_print(node->value);
+				_avltreeutil_print(node->value);
 				stdoutput.printf(" to right of ");
-				_binarytreeutil_print(location->value);
+				_avltreeutil_print(location->value);
 				stdoutput.printf(" {\n\n");
 				#endif
 
@@ -537,43 +535,43 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::insert(
 	// update heights up the tree
 	adjustParentHeights(node);
 
-	#ifdef DEBUG_BINARYTREE
-	binarytreenode<valuetype>	*top=this;
+	#ifdef DEBUG_AVLTREE
+	avltreenode<valuetype>	*top=this;
 	while (top->parent) { top=top->parent; }
 	top->print(); stdoutput.printf("\n\n");
 	#endif
 
 	// balance the tree
-	binarytreenode<valuetype>	*result=node->balanceUp();
+	avltreenode<valuetype>	*result=node->balanceUp();
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} insert\n\n");
 	#endif
 
 	return result;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::detach() {
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("detach ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" {\n\n");
 
-	binarytreenode<valuetype>	*top=this;
+	avltreenode<valuetype>	*top=this;
 	while (top->parent) { top=top->parent; }
 	top->print(); stdoutput.printf("\n");
 	#endif
 
-	binarytreenode<valuetype>	*newtreetop=NULL;
+	avltreenode<valuetype>	*newtreetop=NULL;
 
 	if ((left && !right) || (!left && right) || (!left && !right)) {
 
 		// node with one or zero children...
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("simple case: 1 or 0 children\n\n");
 		#endif
 
@@ -581,7 +579,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 		// NOTE: If the node has no children then this will implicitly
 		// set child=NULL (which is what we want in that case) because
 		// right=NULL.
-		binarytreenode<valuetype>	*child=(left)?left:right;
+		avltreenode<valuetype>	*child=(left)?left:right;
 
 		if (parent) {
 
@@ -608,8 +606,8 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 			// update heights up the tree
 			adjustParentHeights(parent);
 
-			#ifdef DEBUG_BINARYTREE
-			binarytreenode<valuetype>	*top=this;
+			#ifdef DEBUG_AVLTREE
+			avltreenode<valuetype>	*top=this;
 			while (top->parent) { top=top->parent; }
 			top->print(); stdoutput.printf("\n");
 			#endif
@@ -617,7 +615,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 			// disconnect this node from its parent
 			// (but keep track of the parent so we
 			// can use it to balance up)
-			binarytreenode<valuetype>	*p=parent;
+			avltreenode<valuetype>	*p=parent;
 			parent=NULL;
 
 			// balance the tree
@@ -639,14 +637,14 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 			// we want in that case.
 			newtreetop=child;
 
-			#ifdef DEBUG_BINARYTREE
-			binarytreenode<valuetype>	*top=this;
+			#ifdef DEBUG_AVLTREE
+			avltreenode<valuetype>	*top=this;
 			while (top->parent) { top=top->parent; }
 			top->print(); stdoutput.printf("\n");
 			#endif
 		}
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("} detach\n\n");
 		#endif
 
@@ -656,7 +654,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 
 		// node with left and right children...
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("less simple case: 2 children\n\n");
 		#endif
 
@@ -666,16 +664,16 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 		// and this node is 10, then find the node with 12 in it)
 		//
 		// go right one, then go left as far as possible
-		binarytreenode<valuetype>	*successor=right;
+		avltreenode<valuetype>	*successor=right;
 		while (successor->left) {
 			successor=successor->left;
 		}
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("swap ");
-		_binarytreeutil_print(value);
+		_avltreeutil_print(value);
 		stdoutput.printf(" and ");
-		_binarytreeutil_print(successor->value);
+		_avltreeutil_print(successor->value);
 		stdoutput.printf("\n\n");
 		#endif
 
@@ -688,7 +686,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 		// swap this node with the successor...
 
 		// get a copy of the successor
-		binarytreenode<valuetype>	temp(*successor);
+		avltreenode<valuetype>	temp(*successor);
 
 		// re-parent the successor
 		successor->parent=parent;
@@ -748,20 +746,20 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 		leftheight=temp.leftheight;
 		rightheight=temp.rightheight;
 
-		#ifdef DEBUG_BINARYTREE
-		binarytreenode<valuetype>	*top=this;
+		#ifdef DEBUG_AVLTREE
+		avltreenode<valuetype>	*top=this;
 		while (top->parent) { top=top->parent; }
 		top->print(); stdoutput.printf("\n");
 		#endif
 
 		// Call detach on this node again.
 		// This time, the node should have 1 or 0 children.
-		binarytreenode<valuetype>	*result=detach();
+		avltreenode<valuetype>	*result=detach();
 		if (result) {
 			newtreetop=result;
 		}
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("} detach\n\n");
 		#endif
 
@@ -769,10 +767,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::detach() {
 	}
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void BINARYTREENODE_CLASS::adjustParentHeights(
-					binarytreenode<valuetype> *node) {
+void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 	while (node->parent) {
 
 		uint64_t	height=
@@ -796,34 +793,34 @@ void BINARYTREENODE_CLASS::adjustParentHeights(
 	}
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::balanceUp() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::balanceUp() {
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("balanceUp at ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" {\n\n");
 	#endif
 
-	binarytreenode<valuetype>	*newtreetop=NULL;
-	for (binarytreenode<valuetype> *node=this; node; node=node->parent) {
-		binarytreenode<valuetype>	*result=node->balance();
+	avltreenode<valuetype>	*newtreetop=NULL;
+	for (avltreenode<valuetype> *node=this; node; node=node->parent) {
+		avltreenode<valuetype>	*result=node->balance();
 		if (result) {
 			newtreetop=result;
 		}
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} balanceUp\n\n",value);
 	#endif
 
 	return newtreetop;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::balance() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::balance() {
 
 	// AVL balance...
 
@@ -832,9 +829,9 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::balance() {
 	if ((leftheight>rightheight && leftheight-rightheight>1) ||
 		(rightheight>leftheight && rightheight-leftheight>1)) {
 
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("imbalance at ");
-		_binarytreeutil_print(value);
+		_avltreeutil_print(value);
 		stdoutput.printf("\n\n");
 		#endif
 
@@ -856,16 +853,16 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::balance() {
 		// It's not impossible that we encountered and imbalance that
 		// we can't fix at this node.  It should be fixable at an
 		// ancestor.
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("no rotation\n\n");
 		#endif
 	}
 	return NULL;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate() {
 
 	/* one of these: (eg: insert order a,b,c)
  	 *
@@ -879,23 +876,23 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
  	 *                 *
  	 * needs left rotation */
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("left rotation at ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" {\n\n");
 	#endif
 
 	// we may need to "re-top" the whole tree
-	binarytreenode<valuetype>	*newtreetop=NULL;
+	avltreenode<valuetype>	*newtreetop=NULL;
 
 	// get a, b, and "star"
-	binarytreenode<valuetype>	*a=this;
-	binarytreenode<valuetype>	*b=a->right;
-	binarytreenode<valuetype>	*star=b->left;
+	avltreenode<valuetype>	*a=this;
+	avltreenode<valuetype>	*b=a->right;
+	avltreenode<valuetype>	*star=b->left;
 	uint64_t			starheight=b->leftheight;
 
 	// move b
-	binarytreenode<valuetype>	*p=a->parent;
+	avltreenode<valuetype>	*p=a->parent;
 	if (p) {
 		if (p->right==a) {
 			p->right=b;
@@ -903,7 +900,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
 			p->left=b;
 		}
 	} else {
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("(new tree top)\n\n");
 		#endif
 		newtreetop=b;
@@ -924,8 +921,8 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
 	// update heights up the tree
 	adjustParentHeights(a);
 
-	#ifdef DEBUG_BINARYTREE
-	binarytreenode<valuetype>	*top=this;
+	#ifdef DEBUG_AVLTREE
+	avltreenode<valuetype>	*top=this;
 	while (top->parent) { top=top->parent; }
 	top->print(); stdoutput.printf("\n\n");
 	#endif
@@ -933,21 +930,21 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRotate() {
 	// Since a was moved into a location in the tree that may not have
 	// prevoiusly existed, it may have unbalanced the tree.  Re-balance,
 	// starting with a.
-	binarytreenode<valuetype>	*result=a->balanceUp();
+	avltreenode<valuetype>	*result=a->balanceUp();
 	if (result) {
 		newtreetop=result;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} left\n\n");
 	#endif
 
 	return newtreetop;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightLeftRotate() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate() {
 
 	/* one of these: (eg: insert order a,c,b)
 	 *
@@ -962,23 +959,23 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightLeftRotate() {
 	 *
 	 * needs right-left rotation */
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("right-left rotation at ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" {\n\n");
 	stdoutput.printf("right part {\n\n");
 	#endif
 
 	// we may need to "re-top" the whole tree
-	binarytreenode<valuetype>	*newtreetop=NULL;
+	avltreenode<valuetype>	*newtreetop=NULL;
 
 	// do the right part of the right-left rotation...
 
 	// get a, c, b, and "star"
-	binarytreenode<valuetype>	*a=this;
-	binarytreenode<valuetype>	*c=a->right;
-	binarytreenode<valuetype>	*b=c->left;
-	binarytreenode<valuetype>	*star=b->right;
+	avltreenode<valuetype>	*a=this;
+	avltreenode<valuetype>	*c=a->right;
+	avltreenode<valuetype>	*b=c->left;
+	avltreenode<valuetype>	*star=b->right;
 	uint64_t			starheight=b->rightheight;
 
 	// move b
@@ -999,8 +996,8 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightLeftRotate() {
 	// update heights up the tree
 	adjustParentHeights(c);
 
-	#ifdef DEBUG_BINARYTREE
-	binarytreenode<valuetype>	*top=this;
+	#ifdef DEBUG_AVLTREE
+	avltreenode<valuetype>	*top=this;
 	while (top->parent) { top=top->parent; }
 	top->print(); stdoutput.printf("\n} right part\n\n");
 	#endif
@@ -1012,21 +1009,21 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightLeftRotate() {
 	// prevoiusly existed, it may have unbalanced the tree.  Re-balance,
 	// starting with c.
 	// FIXME: this may not be necessary...
-	binarytreenode<valuetype> *result=c->balanceUp();
+	avltreenode<valuetype> *result=c->balanceUp();
 	if (result) {
 		newtreetop=result;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} right-left\n\n");
 	#endif
 
 	return newtreetop;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate() {
 
 	/* one of these: (insert order c,b,a)
 	 *
@@ -1040,23 +1037,23 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
 	 *                 *
 	 * needs right rotation */
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("right rotation at ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" {\n\n");
 	#endif
 
 	// we may need to "re-top" the whole tree
-	binarytreenode<valuetype>	*newtreetop=NULL;
+	avltreenode<valuetype>	*newtreetop=NULL;
 
 	// get c, b, and "star"
-	binarytreenode<valuetype>	*c=this;
-	binarytreenode<valuetype>	*b=c->left;
-	binarytreenode<valuetype>	*star=b->right;
+	avltreenode<valuetype>	*c=this;
+	avltreenode<valuetype>	*b=c->left;
+	avltreenode<valuetype>	*star=b->right;
 	uint64_t			starheight=b->rightheight;
 
 	// move b
-	binarytreenode<valuetype>	*p=c->parent;
+	avltreenode<valuetype>	*p=c->parent;
 	if (p) {
 		if (p->right==c) {
 			p->right=b;
@@ -1064,7 +1061,7 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
 			p->left=b;
 		}
 	} else {
-		#ifdef DEBUG_BINARYTREE
+		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("(new tree top)\n\n");
 		#endif
 		newtreetop=b;
@@ -1085,8 +1082,8 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
 	// update heights up the tree
 	adjustParentHeights(c);
 
-	#ifdef DEBUG_BINARYTREE
-	binarytreenode<valuetype>	*top=this;
+	#ifdef DEBUG_AVLTREE
+	avltreenode<valuetype>	*top=this;
 	while (top->parent) { top=top->parent; }
 	top->print(); stdoutput.printf("\n\n");
 	#endif
@@ -1094,21 +1091,21 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::rightRotate() {
 	// Since c was moved into a location in the tree that may not have
 	// prevoiusly existed, it may have unbalanced the tree.  Re-balance,
 	// starting with c.
-	binarytreenode<valuetype>	*result=c->balanceUp();
+	avltreenode<valuetype>	*result=c->balanceUp();
 	if (result) {
 		newtreetop=result;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} right\n\n");
 	#endif
 
 	return newtreetop;
 }
 
-BINARYTREE_TEMPLATE
+AVLTREE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRightRotate() {
+avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate() {
 
 	/* one of these: (insert order c,a,b)
 	 *
@@ -1123,23 +1120,23 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRightRotate() {
 	 *
 	 * needs left-right rotation */
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("left-right rotation at ");
-	_binarytreeutil_print(value);
+	_avltreeutil_print(value);
 	stdoutput.printf(" {\n\n");
 	stdoutput.printf("left part {\n\n");
 	#endif
 
 	// we may need to "re-top" the whole tree
-	binarytreenode<valuetype>	*newtreetop=NULL;
+	avltreenode<valuetype>	*newtreetop=NULL;
 
 	// do the left part of the left-right rotation...
 
 	// get c, a, b, and "star"
-	binarytreenode<valuetype>	*c=this;
-	binarytreenode<valuetype>	*a=c->left;
-	binarytreenode<valuetype>	*b=a->right;
-	binarytreenode<valuetype>	*star=b->left;
+	avltreenode<valuetype>	*c=this;
+	avltreenode<valuetype>	*a=c->left;
+	avltreenode<valuetype>	*b=a->right;
+	avltreenode<valuetype>	*star=b->left;
 	uint64_t			starheight=b->leftheight;
 
 	// move b
@@ -1160,8 +1157,8 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRightRotate() {
 	// update heights up the tree
 	adjustParentHeights(a);
 
-	#ifdef DEBUG_BINARYTREE
-	binarytreenode<valuetype>	*top=this;
+	#ifdef DEBUG_AVLTREE
+	avltreenode<valuetype>	*top=this;
 	while (top->parent) { top=top->parent; }
 	top->print(); stdoutput.printf("\n} left part\n\n");
 	#endif
@@ -1173,12 +1170,12 @@ binarytreenode<valuetype> *BINARYTREENODE_CLASS::leftRightRotate() {
 	// prevoiusly existed, it may have unbalanced the tree.  Re-balance,
 	// starting with a.
 	// FIXME: this may not be necessary...
-	binarytreenode<valuetype> *result=a->balanceUp();
+	avltreenode<valuetype> *result=a->balanceUp();
 	if (result) {
 		newtreetop=result;
 	}
 
-	#ifdef DEBUG_BINARYTREE
+	#ifdef DEBUG_AVLTREE
 	stdoutput.printf("} left-right\n\n");
 	#endif
 
