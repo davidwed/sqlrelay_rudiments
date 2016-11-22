@@ -723,14 +723,14 @@ void AVLTREENODE_CLASS::detach(avltreenode<valuetype> **treetop) {
 			child->parent=parent;
 		}
 
-		// update heights up the tree
-		adjustParentHeights(parent);
-
 		// disconnect this node from its parent
 		// (but keep track of the parent so we
-		// can use it to balance up)
+		// can use it to balance)
 		avltreenode<valuetype>	*p=parent;
 		parent=NULL;
+
+		// update heights up the tree
+		adjustParentHeights(p);
 
 		// balance the tree
 		p->balance(treetop);
@@ -784,12 +784,12 @@ void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 		// calculated.
 		if (node->parent->left==node) {
 			if (node->parent->leftheight==height) {
-				break;
+				return;
 			}
 			node->parent->leftheight=height;
 		} else {
 			if (node->parent->rightheight==height) {
-				break;
+				return;
 			}
 			node->parent->rightheight=height;
 		}
@@ -1137,6 +1137,12 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate(
 
 	// update heights up the tree
 	adjustParentHeights(a);
+
+	#ifdef DEBUG_AVLTREE
+	avltreenode<valuetype>	*top=this;
+	while (top->parent) { top=top->parent; }
+	top->print(); stdoutput.printf("\n");
+	#endif
 
 	// do the right part of the left-right rotation
 	rightRotate(treetop);
