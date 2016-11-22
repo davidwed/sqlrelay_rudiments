@@ -1,18 +1,22 @@
 // Copyright (c) 2016 David Muse
 // See the COPYING file for more information
 
-		avltreenode<valuetype>	*insert(avltreenode<valuetype> *node);
-		avltreenode<valuetype>	*detach();
+		void	insert(avltreenode<valuetype> *node,
+				avltreenode<valuetype> **treetop);
+		void	detach(avltreenode<valuetype> **treetop);
 
 		void	adjustParentHeights(avltreenode<valuetype> *node);
 
-		avltreenode<valuetype>	*balanceUp();
-		avltreenode<valuetype>	*balance();
+		void	balance(avltreenode<valuetype> **treetop);
 
-		avltreenode<valuetype>	*leftRightRotate();
-		avltreenode<valuetype>	*rightLeftRotate();
-		avltreenode<valuetype>	*leftRotate();
-		avltreenode<valuetype>	*rightRotate();
+		avltreenode<valuetype> *leftRightRotate(
+					avltreenode<valuetype> **treetop);
+		avltreenode<valuetype> *rightLeftRotate(
+					avltreenode<valuetype> **treetop);
+		avltreenode<valuetype> *leftRotate(
+					avltreenode<valuetype> **treetop);
+		avltreenode<valuetype> *rightRotate(
+					avltreenode<valuetype> **treetop);
 
 		void	sort();
 
