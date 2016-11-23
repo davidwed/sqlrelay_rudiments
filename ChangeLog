@@ -5,6 +5,8 @@
 	added missing charstring::getLastOfSet(OrEnd) methods
 	refactored thread class to match process class paradigm
 	added avltree class
+	updated dictionary to use an avltree
+	update xmldom to use a dictionary for its string cache
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
