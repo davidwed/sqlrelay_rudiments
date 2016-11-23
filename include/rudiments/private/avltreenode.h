@@ -30,8 +30,8 @@
 		avltreenode<valuetype>	*parent;
 		avltreenode<valuetype>	*left;
 		avltreenode<valuetype>	*right;
-		uint64_t		leftheight;
-		uint64_t		rightheight;
+		uint8_t			leftheight;
+		uint8_t			rightheight;
 
 	private:
 		void	print(const char *name, uint16_t *indentlevel) const;

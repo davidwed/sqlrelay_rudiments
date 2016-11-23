@@ -343,13 +343,13 @@ AVLTREENODE_CLASS *AVLTREENODE_CLASS::getRightChild() {
 
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-uint64_t AVLTREENODE_CLASS::getLeftHeight() {
+uint8_t AVLTREENODE_CLASS::getLeftHeight() {
 	return leftheight;
 }
 
 AVLTREENODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-uint64_t AVLTREENODE_CLASS::getRightHeight() {
+uint8_t AVLTREENODE_CLASS::getRightHeight() {
 	return rightheight;
 }
 
@@ -471,7 +471,7 @@ void AVLTREENODE_CLASS::print(const char *name, uint16_t *indentlevel) const {
 	}
 	stdoutput.printf("<%s value=\"",name);
 	_containerutil_print(value);
-	stdoutput.printf("\" lh=\"%lld\" rh=\"%lld\" bf=\"%lld\"",
+	stdoutput.printf("\" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
 			leftheight,rightheight,leftheight-rightheight);
 	if (!left && !right) {
 		stdoutput.printf("/>\n");
@@ -779,8 +779,7 @@ void AVLTREENODE_CLASS::adjustParentHeights(avltreenode<valuetype> *node) {
 	while (node->parent) {
 
 		// calculate the new height of the parent
-		uint64_t	height=
-				((node->leftheight>node->rightheight)?
+		uint8_t	height=((node->leftheight>node->rightheight)?
 							node->leftheight:
 							node->rightheight)+1;
 
@@ -920,7 +919,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRotate(
 	avltreenode<valuetype>	*a=this;
 	avltreenode<valuetype>	*b=a->right;
 	avltreenode<valuetype>	*star=b->left;
-	uint64_t		starheight=b->leftheight;
+	uint8_t			starheight=b->leftheight;
 
 	// move b
 	avltreenode<valuetype>	*p=a->parent;
@@ -990,7 +989,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightLeftRotate(
 	avltreenode<valuetype>	*c=a->right;
 	avltreenode<valuetype>	*b=c->left;
 	avltreenode<valuetype>	*star=b->right;
-	uint64_t		starheight=b->rightheight;
+	uint8_t			starheight=b->rightheight;
 
 	// move b
 	a->right=b;
@@ -1056,7 +1055,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::rightRotate(
 	avltreenode<valuetype>	*c=this;
 	avltreenode<valuetype>	*b=c->left;
 	avltreenode<valuetype>	*star=b->right;
-	uint64_t		starheight=b->rightheight;
+	uint8_t			starheight=b->rightheight;
 
 	// move b
 	avltreenode<valuetype>	*p=c->parent;
@@ -1126,7 +1125,7 @@ avltreenode<valuetype> *AVLTREENODE_CLASS::leftRightRotate(
 	avltreenode<valuetype>	*a=c->left;
 	avltreenode<valuetype>	*b=a->right;
 	avltreenode<valuetype>	*star=b->left;
-	uint64_t		starheight=b->leftheight;
+	uint8_t			starheight=b->leftheight;
 
 	// move b
 	c->left=b;

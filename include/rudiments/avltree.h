@@ -46,10 +46,10 @@ class avltreenode {
 		avltreenode<valuetype>	*getRightChild();
 
 		/** Returns the left height of this node in the avltree. */
-		uint64_t	getLeftHeight();
+		uint8_t	getLeftHeight();
 
 		/** Returns the right height of this node in the avltree. */
-		uint64_t	getRightHeight();
+		uint8_t	getRightHeight();
 
 		/** Returns the previous node in the avltree (in an in-order,
  		 *  depth-first traversal) or NULL if this node is the first
