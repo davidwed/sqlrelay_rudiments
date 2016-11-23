@@ -20,6 +20,10 @@
 
 logdestination::~logdestination() {}
 
+int32_t logdestination::compare(logdestination *value) {
+	return _containerutil_compare((uint64_t)this,(uint64_t)value);
+}
+
 class filedestinationprivate {
 	friend class filedestination;
 	private:

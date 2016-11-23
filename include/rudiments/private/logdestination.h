@@ -4,5 +4,6 @@
 	friend class logger;
 	public:
 		virtual	~logdestination();
+		int32_t	compare(logdestination *value);
 	protected:
 		virtual void	write(const char *string)=0;

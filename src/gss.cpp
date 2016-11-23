@@ -560,6 +560,10 @@ const void *gssmechanism::getObjectId() {
 	return pvt->_oid;
 }
 
+int32_t gssmechanism::compare(gssmechanism *value) {
+	return _containerutil_compare((uint64_t)this,(uint64_t)value);
+}
+
 
 class gsscredentialsprivate {
 	friend class gsscredentials;

@@ -31,6 +31,7 @@ int32_t _containerutil_compare(unsigned char *value1, unsigned char *value2) {
 	return charstring::compare((const char *)value1,(const char *)value2);
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(char value1, char value2) {
 	if (value1<value2) {
 		return -1;
@@ -41,6 +42,7 @@ int32_t _containerutil_compare(char value1, char value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(int16_t value1, int16_t value2) {
 	if (value1<value2) {
 		return -1;
@@ -51,6 +53,7 @@ int32_t _containerutil_compare(int16_t value1, int16_t value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(int32_t value1, int32_t value2) {
 	if (value1<value2) {
 		return -1;
@@ -61,6 +64,7 @@ int32_t _containerutil_compare(int32_t value1, int32_t value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(int64_t value1, int64_t value2) {
 	if (value1<value2) {
 		return -1;
@@ -71,6 +75,7 @@ int32_t _containerutil_compare(int64_t value1, int64_t value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(unsigned char value1, unsigned char value2) {
 	if (value1<value2) {
 		return -1;
@@ -81,6 +86,7 @@ int32_t _containerutil_compare(unsigned char value1, unsigned char value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(uint16_t value1, uint16_t value2) {
 	if (value1<value2) {
 		return -1;
@@ -91,6 +97,7 @@ int32_t _containerutil_compare(uint16_t value1, uint16_t value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(uint32_t value1, uint32_t value2) {
 	if (value1<value2) {
 		return -1;
@@ -101,6 +108,7 @@ int32_t _containerutil_compare(uint32_t value1, uint32_t value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(uint64_t value1, uint64_t value2) {
 	if (value1<value2) {
 		return -1;
