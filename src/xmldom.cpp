@@ -7,6 +7,7 @@
 #include <rudiments/filesystem.h>
 #include <rudiments/sys.h>
 
+// FIXME: what needs this?
 #ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
@@ -19,8 +20,7 @@ class xmldomprivate {
 		xmldomnode		*_currentparent;
 		xmldomnode		*_currentattribute;
 		bool			_stringcacheenabled;
-		linkedlist< char * >	_strlist;
-		linkedlist< uint64_t >	_refcountlist;
+		dictionary< char *, uint64_t >	_strcache;
 
 		xmldomnode		*_top;
 		uint64_t		_topposition;
@@ -63,9 +63,10 @@ xmldom::~xmldom() {
 		delete pvt->_rootnode;
 	}
 	delete pvt->_nullnode;
-	for (linkedlistnode< char * > *node=pvt->_strlist.getFirst();
-						node; node=node->getNext()) {
-		delete[] node->getValue();
+	for (linkedlistnode< dictionarynode< char *, uint64_t> *>
+				*node=pvt->_strcache.getList()->getFirst();
+				node; node=node->getNext()) {
+		delete[] node->getValue()->getKey();
 	}
 	delete pvt;
 }
@@ -110,12 +111,12 @@ void xmldom::reset() {
 		delete pvt->_rootnode;
 		pvt->_rootnode=pvt->_nullnode;
 	}
-	for (linkedlistnode< char * > *node=pvt->_strlist.getFirst();
-						node; node=node->getNext()) {
-		delete[] node->getValue();
+	for (linkedlistnode< dictionarynode< char *, uint64_t> *>
+				*node=pvt->_strcache.getList()->getFirst();
+				node; node=node->getNext()) {
+		delete[] node->getValue()->getKey();
 	}
-	pvt->_strlist.clear();
-	pvt->_refcountlist.clear();
+	pvt->_strcache.clear();
 	pvt->_currentparent=NULL;
 	pvt->_currentattribute=NULL;
 	pvt->_top=NULL;
@@ -234,20 +235,14 @@ const char *xmldom::cacheString(const char *string) {
 	if (!string) {
 		return NULL;
 	}
-	linkedlistnode< char * > 	*strnode=pvt->_strlist.getFirst();
-	linkedlistnode< uint64_t >	*refnode=pvt->_refcountlist.getFirst();
-	while (strnode) {
-		const char	*data=strnode->getValue();
-		if (!charstring::compare(string,data)) {
-			refnode->setValue(refnode->getValue()+1);
-			return data;
-		}
-		strnode=strnode->getNext();
-		refnode=refnode->getNext();
+	dictionarynode< char *, uint64_t > 	*node=
+				pvt->_strcache.getNode((char *)string);
+	if (node) {
+		node->setValue(node->getValue()+1);
+		return node->getKey();
 	}
 	char	*copy=charstring::duplicate(string);
-	pvt->_strlist.append(copy);
-	pvt->_refcountlist.append(1);
+	pvt->_strcache.setValue(copy,1);
 	return copy;
 }
 
@@ -255,21 +250,15 @@ void xmldom::unCacheString(const char *string) {
 	if (!string) {
 		return;
 	}
-	linkedlistnode< char * > 	*strnode=pvt->_strlist.getFirst();
-	linkedlistnode< uint64_t >	*refnode=pvt->_refcountlist.getFirst();
-	while (strnode) {
-		char	*data=strnode->getValue();
-		if (!charstring::compare(string,data)) {
-			refnode->setValue(refnode->getValue()-1);
-			if (!refnode->getValue()) {
-				pvt->_refcountlist.remove(refnode);
-				pvt->_strlist.remove(strnode);
-				delete[] data;
-				return;
-			}
+	dictionarynode< char *, uint64_t > 	*node=
+				pvt->_strcache.getNode((char *)string);
+	if (node) {
+		node->setValue(node->getValue()-1);
+		if (!node->getValue()) {
+			char	*data=node->getKey();
+			pvt->_strcache.remove(node);
+			delete[] data;
 		}
-		strnode=strnode->getNext();
-		refnode=refnode->getNext();
 	}
 }
 

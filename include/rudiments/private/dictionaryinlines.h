@@ -100,6 +100,20 @@ bool DICTIONARY_CLASS::remove(keytype key) {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+bool DICTIONARY_CLASS::remove(dictionarynode<keytype,valuetype> *node) {
+	avltreenode< dictionarynode<keytype,valuetype> *>
+					*tnode=tree.find(node);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		return tree.remove(tnode);
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::clear() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
 				list.getFirst(); node; node=node->getNext()) {

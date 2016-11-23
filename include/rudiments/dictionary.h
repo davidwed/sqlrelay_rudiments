@@ -134,10 +134,9 @@ class dictionary {
 		 *  found. */
 		bool	remove(keytype key);
 
-		/** Detaches the dictionarynode associated with "key".
-		 *  Returns the node on success or NULL if "key" wasn't
-		 *  found. */
-		dictionarynode<keytype,valuetype>	*detach(keytype key);
+		/** Removes the specified dictionarynode.
+		 *  Returns true on success or false if "node" was NULL. */
+		bool	remove(dictionarynode<keytype,valuetype> *node);
 
 		/** Returns a list of the keys in the dictionary.
 		 *
@@ -147,12 +146,10 @@ class dictionary {
 		linkedlist<keytype>	*getKeys();
 
 		/** Returns the tree used internally. */
-		avltree< dictionarynode<keytype,valuetype> *>
-							*getTree();
+		avltree< dictionarynode<keytype,valuetype> *> *getTree();
 
 		/** Returns the list used internally. */
-		linkedlist< dictionarynode<keytype,valuetype> *>
-							*getList();
+		linkedlist< dictionarynode<keytype,valuetype> *> *getList();
 
 		/** Deletes all dictionarynodes currently in the dictionary. */
 		void	clear();
