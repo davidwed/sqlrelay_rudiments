@@ -14,31 +14,52 @@
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 DICTIONARY_CLASS::dictionary() {
+	trackinsertionorder=true;
 }
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 DICTIONARY_CLASS::~dictionary() {
-	dict.clear();
+	clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+bool DICTIONARY_CLASS::setTrackInsertionOrder(bool trackinsertionorder) {
+	if (!tree.getLength()) {
+		this->trackinsertionorder=trackinsertionorder;
+		return true;
+	}
+	return false;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+bool DICTIONARY_CLASS::getTrackInsertionOrder() {
+	return trackinsertionorder;
 }
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
-	if (node) {
-		node->getValue()->setValue(value);
+	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
+	if (dnode) {
+		dnode->setValue(value);
 	} else {
-		dict.append(new dictionarynode<keytype,valuetype>(key,value));
+		dnode=new dictionarynode<keytype,valuetype>(key,value);
+		tree.insert(dnode);
+		if (trackinsertionorder) {
+			list.append(dnode);
+		}
 	}
 }
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
-	if (node) {
-		*value=node->getValue()->getValue();
+	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
+	if (dnode) {
+		*value=dnode->getValue();
 		return true;
 	}
 	return false;
@@ -47,9 +68,9 @@ bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 valuetype DICTIONARY_CLASS::getValue(keytype key) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
-	if (node) {
-		return node->getValue()->getValue();
+	valuetype	value;
+	if (getValue(key,&value)) {
+		return value;
 	}
 	return (valuetype)0;
 }
@@ -57,9 +78,9 @@ valuetype DICTIONARY_CLASS::getValue(keytype key) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::getNode(keytype key) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
-	if (node) {
-		return node->getValue();
+	avltreenode< dictionarynode<keytype,valuetype> *> *tnode=find(key);
+	if (tnode) {
+		return tnode->getValue();
 	}
 	return NULL;
 }
@@ -67,45 +88,33 @@ dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::getNode(keytype key) {
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 bool DICTIONARY_CLASS::remove(keytype key) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
-	if (node) {
-		return dict.remove(node);
+	avltreenode< dictionarynode<keytype,valuetype> *> *tnode=find(key);
+	if (tnode) {
+		if (trackinsertionorder) {
+			list.remove(tnode->getValue());
+		}
+		return tree.remove(tnode);
 	}
 	return false;
 }
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-dictionarynode<keytype,valuetype> *DICTIONARY_CLASS::detach(keytype key) {
-	linkedlistnode< dictionarynode<keytype,valuetype> *> *node=find(key);
-	if (node) {
-		dict.detach(node);
-		dictionarynode<keytype,valuetype> *contents=node->getValue();
-		delete node;
-		return contents;
-	}
-	return NULL;
-}
-
-DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
-linkedlistnode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
-	find(keytype key) {
-	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-			dict.getFirst(); node; node=node->getNext()) {
-		if (!node->getValue()->compare(key)) {
-			return node;
-		}
-	}
-	return NULL;
-}
-
-DICTIONARY_TEMPLATE
-RUDIMENTS_TEMPLATE_INLINE
-linkedlist< keytype > *DICTIONARY_CLASS::getKeys() {
-	linkedlist< keytype >	*keys=new linkedlist< keytype >();
+void DICTIONARY_CLASS::clear() {
 	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
-			dict.getFirst(); node; node=node->getNext()) {
+				list.getFirst(); node; node=node->getNext()) {
+		delete node->getValue();
+	}
+	tree.clear();
+	list.clear();
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+linkedlist<keytype> *DICTIONARY_CLASS::getKeys() {
+	linkedlist<keytype>	*keys=new linkedlist<keytype>();
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *>
+		*node=getList()->getFirst(); node; node=node->getNext()) {
 		keys->append(node->getValue()->getKey());
 	}
 	return keys;
@@ -113,28 +122,39 @@ linkedlist< keytype > *DICTIONARY_CLASS::getKeys() {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-linkedlist< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getList() {
-	return &dict;
+avltree< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getTree() {
+	return &tree;
 }
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
-void DICTIONARY_CLASS::clear() {
-	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-			dict.getFirst(); node; node=node->getNext()) {
-		delete node->getValue();
+linkedlist< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::getList() {
+	if (!trackinsertionorder) {
+		list.clear();
+		for (avltreenode< dictionarynode< keytype, valuetype > *>
+			*node=tree.getFirst(); node; node=node->getNext()) {
+			list.append(node->getValue());
+		}
 	}
-	dict.clear();
+	return &list;
 }
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARY_CLASS::print() {
-	for (linkedlistnode< dictionarynode<keytype,valuetype> *> *node=
-			dict.getFirst(); node; node=node->getNext()) {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *> *node=
+				list.getFirst(); node; node=node->getNext()) {
 		node->getValue()->print();
 		stdoutput.printf("\n");
 	}
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+avltreenode< dictionarynode<keytype,valuetype> *> *DICTIONARY_CLASS::
+							find(keytype key) {
+	dictionarynode<keytype,valuetype>	fnode(key,(valuetype)0);
+	return tree.find(&fnode);
 }
 
 #define DICTIONARYNODE_TEMPLATE \
@@ -182,6 +202,13 @@ DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t DICTIONARYNODE_CLASS::compare(keytype testkey) const {
 	return _containerutil_compare(key,testkey);
+}
+
+DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+int32_t DICTIONARYNODE_CLASS::compare(
+		dictionarynode<keytype,valuetype> *testnode) const {
+	return _containerutil_compare(key,testnode->key);
 }
 
 DICTIONARYNODE_TEMPLATE

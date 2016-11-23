@@ -20,15 +20,108 @@ int32_t _containerutil_compare(const char *value1, const char *value2) {
 	return charstring::compare(value1,value2);
 }
 
-template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
-int32_t _containerutil_compare(valuetype value1, valuetype value2) {
+int32_t _containerutil_compare(const unsigned char *value1,
+				const unsigned char *value2) {
+	return charstring::compare((const char *)value1,(const char *)value2);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _containerutil_compare(unsigned char *value1, unsigned char *value2) {
+	return charstring::compare((const char *)value1,(const char *)value2);
+}
+
+int32_t _containerutil_compare(char value1, char value2) {
 	if (value1<value2) {
 		return -1;
 	} else if (value1==value2) {
 		return 0;
 	} else {
 		return 1;
+	}
+}
+
+int32_t _containerutil_compare(int16_t value1, int16_t value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int32_t _containerutil_compare(int32_t value1, int32_t value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int32_t _containerutil_compare(int64_t value1, int64_t value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int32_t _containerutil_compare(unsigned char value1, unsigned char value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int32_t _containerutil_compare(uint16_t value1, uint16_t value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int32_t _containerutil_compare(uint32_t value1, uint32_t value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int32_t _containerutil_compare(uint64_t value1, uint64_t value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+template <class valuetype>
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _containerutil_compare(valuetype value1, valuetype value2) {
+	if (!value1 && value2) {
+		return 1;
+	} else if (!value1 && !value2) {
+		return 0;
+	} else if (value1 && !value2) {
+		return -1;
+	} else {
+		return value1->compare(value2);
 	}
 }
 
@@ -113,7 +206,11 @@ void _containerutil_print(double value) {
 template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
 void _containerutil_print(valuetype value) {
-	stdoutput.printf("%p",value);
+	if (value) {
+		value->print();
+	} else {
+		stdoutput.printf("(null)");
+	}
 }
 
 #endif

@@ -37,6 +37,12 @@ class dictionarynode {
 		 *  less than, equal to or greater than "testkey". */
 		int32_t	compare(keytype testkey) const;
 
+		/** Returns a negative number,0 or a positive number depending
+		 *  on whether the key stored in the node is respectively
+		 *  less than, equal to or greater than "testkey". */
+		int32_t	compare(
+			dictionarynode<keytype,valuetype> *testnode) const;
+
 		/** Prints a representation of the key and
 		 *  value stored in the node. */
 		void	print() const;
@@ -59,11 +65,49 @@ class dictionary {
 		/** Creates an empty instance of the dictionary class. */
 		dictionary();
 
+		/** Creates an empty instance of the dictionary class.
+		 *  
+		 *  If "trackinsertionorder" is true then the order of key
+		 *  insertion is tracked and getKeys() and getList() below
+		 *  return a list of key-value pairs in the order that they
+		 *  were inserted.
+		 *  
+		 *  If "trackinsertionorder" is false then the order of key
+		 *  insertion is not tracked and getList() and getList()
+		 *  below return alist of key-value pairs in ascending order. */
+		dictionary(bool trackinsertionorder);
+
 		/** Deletes this instance of the dictionary class and all
 		 *  of its dictionarynodes.  Note however, that neither the
 		 *  key nor value stored in each dictionarynode are deleted
 		 *  by this call. */
 		virtual ~dictionary();
+
+		/** Sets whether tracking of the order of key insertion is
+		 *  enabled or not.
+		 * 
+		 *  If "trackinsertionorder" is true then the order of key
+		 *  insertion is tracked and getKeys() and getList() below
+		 *  return a list of key-value pairs in the order that they
+		 *  were inserted.
+		 *  
+		 *  If "trackinsertionorder" is false then the order of key
+		 *  insertion is not tracked and getList() and getList()
+		 *  below return alist of key-value pairs in ascending order.
+		 *
+		 *  Defaults to "true".
+		 *
+		 *  Note, this can only be changed when there are no nodes
+		 *  in the dictionary.  Eg. before the first call to setValue()
+		 *  or after a call to clear().
+		 *
+		 *  Returns true if the call succeeded and false if it failed
+		 *  (eg. because the dictionary contained nodes). */
+		bool	setTrackInsertionOrder(bool trackinsertionorder);
+
+		/** Returns "true" if insertion order tracking is enabled and
+		 *  false otherwise. */
+		bool	getTrackInsertionOrder();
 
 		/** Sets the value associated with "key" to "value".
 		 *  If "key" already exists, the value currently
@@ -77,7 +121,7 @@ class dictionary {
 
 		/** Returns the node associated with "key" or NULL
 		 *  if "key" wasn't found. */
-		dictionarynode<keytype,valuetype> *getNode(keytype key);
+		dictionarynode<keytype,valuetype>	*getNode(keytype key);
 
 		/** Returns the value associated with "key" or NULL
 		 *  if "key" wasn't found.  Note that there is no
@@ -93,17 +137,22 @@ class dictionary {
 		/** Detaches the dictionarynode associated with "key".
 		 *  Returns the node on success or NULL if "key" wasn't
 		 *  found. */
-		dictionarynode<keytype,valuetype> *detach(keytype key);
+		dictionarynode<keytype,valuetype>	*detach(keytype key);
 
 		/** Returns a list of the keys in the dictionary.
 		 *
-		 *  Note that the linkedlist returned is allocated internally
-		 *  and returned.  The calling program must delete the
-		 *  linkedlist. */
-		linkedlist< keytype > *getKeys();
+ 		 *  Note that the linkedlist returned is allocated internally
+ 		 *  and returned.  The calling program must delete the
+ 		 *  linkedlist. */
+		linkedlist<keytype>	*getKeys();
+
+		/** Returns the tree used internally. */
+		avltree< dictionarynode<keytype,valuetype> *>
+							*getTree();
 
 		/** Returns the list used internally. */
-		linkedlist< dictionarynode<keytype,valuetype> *> *getList();
+		linkedlist< dictionarynode<keytype,valuetype> *>
+							*getList();
 
 		/** Deletes all dictionarynodes currently in the dictionary. */
 		void	clear();

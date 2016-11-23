@@ -9,7 +9,7 @@
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 
-#define ITEMS 1024*4
+#define ITEMS 1024*100
 #define ITERS 80
 
 int main(int argc, char **argv) {
@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
 	std::map<uint64_t,uint64_t>	d;
 #elif defined(USE_DICTIONARY)
 	dictionary<uint64_t,uint64_t>	d;
+	d.setTrackInsertionOrder(false);
 #endif
 	datetime	start;
 	datetime	finish;

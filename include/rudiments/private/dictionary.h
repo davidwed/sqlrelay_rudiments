@@ -2,6 +2,10 @@
 // See the COPYING file for more information
 
 	protected:
-		linkedlistnode< dictionarynode<keytype,valuetype> *>
+		avltreenode< dictionarynode<keytype,valuetype> *>
 							*find(keytype key);
-		linkedlist< dictionarynode<keytype,valuetype> *>	dict;
+
+		avltree< dictionarynode<keytype,valuetype> *>		tree;
+		linkedlist< dictionarynode<keytype,valuetype> *>	list;
+
+		bool	trackinsertionorder;

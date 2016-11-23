@@ -188,7 +188,11 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 	stdoutput.printf("find ");
 	_containerutil_print(value);
 	stdoutput.printf(" from ");
-	_containerutil_print(startnode->getValue());
+	if (startnode) {
+		_containerutil_print(startnode->getValue());
+	} else {
+		_containerutil_print("(null)");
+	}
 	stdoutput.printf(" {\n",length);
 	#endif
 
@@ -203,11 +207,11 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 		#endif
 
 		int32_t	result=current->compare(value);
-		if (result==-1) {
+		if (result<0) {
 			current=current->getRightChild();
 		} else if (result==0) {
 			break;
-		} else if (result==1) {
+		} else if (result>0) {
 			current=current->getLeftChild();
 		}
 	}
@@ -257,9 +261,12 @@ void AVLTREE_CLASS::clear() {
 
 		// delete the node
 		#ifdef DEBUG_AVLTREE
-		stdoutput.printf("	clearing %lld: ",i);
-		_containerutil_print(node->getValue());
-		stdoutput.printf("\n");
+		stdoutput.printf("	clearing %lld\n",i);
+		// It's dangerous to try to print the value of the node here.
+		// If the value is a pointer to something, it may have been
+		// deleted already.  In fact, it's really common to run through
+		// the tree, deleting values, before finally calling clear()
+		// on the tree itself.
 		i++;
 		#endif
 		delete node;
