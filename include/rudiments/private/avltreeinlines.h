@@ -193,20 +193,21 @@ avltreenode<valuetype> *AVLTREE_CLASS::find(
 	} else {
 		_containerutil_print("(null)");
 	}
-	stdoutput.printf(" {\n",length);
+	stdoutput.printf(" {\n");
 	#endif
 
 	// descend the tree until we find the value or run off of the bottom
 	avltreenode<valuetype> *current=startnode;
 	while (current) {
 
+		int32_t	result=current->compare(value);
+
 		#ifdef DEBUG_AVLTREE
 		stdoutput.printf("  ");
 		_containerutil_print(current->getValue());
-		stdoutput.printf("\n",length);
+		stdoutput.printf(" - %d\n",result);
 		#endif
 
-		int32_t	result=current->compare(value);
 		if (result<0) {
 			current=current->getRightChild();
 		} else if (result==0) {
@@ -523,7 +524,7 @@ void AVLTREENODE_CLASS::insert(avltreenode<valuetype> *node,
 	avltreenode<valuetype>	*location=this;
 	for (;;) {
 
-		if (node->value<=location->value) {
+		if (node->compare(location->value)<=0) {
 
 			if (location->left) {
 				location=location->left;
@@ -541,7 +542,7 @@ void AVLTREENODE_CLASS::insert(avltreenode<valuetype> *node,
 				break;
 			}
 
-		} else if (node->value>location->value) {
+		} else if (node->compare(location->value)>0) {
 
 			if (location->right) {
 				location=location->right;

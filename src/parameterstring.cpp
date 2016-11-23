@@ -32,7 +32,7 @@ void parameterstring::setDelimiter(char delim) {
 
 bool parameterstring::parse(const char *paramstring) {
 
-	pvt->_nvp.getList()->clear();
+	pvt->_nvp.clear();
 
 	int32_t	paircount=countPairs(paramstring);
 
