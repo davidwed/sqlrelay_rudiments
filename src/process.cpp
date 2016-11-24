@@ -8,6 +8,7 @@
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
 #include <rudiments/file.h>
+#include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
@@ -1198,7 +1199,8 @@ void process::backtrace(filedescriptor *fd) {
 
 void process::backtrace(const char *filename, uint32_t maxframes) {
 	file	f;
-	if (f.open(filename,O_WRONLY|O_APPEND|O_CREAT)) {
+	if (f.open(filename,O_WRONLY|O_APPEND|O_CREAT,
+			permissions::evalPermString("rw-------"))) {
 		backtrace(&f,maxframes);
 	}
 }
