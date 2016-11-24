@@ -119,6 +119,28 @@ int32_t _containerutil_compare(uint64_t value1, uint64_t value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _containerutil_compare(float value1, float value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _containerutil_compare(double value1, double value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
 template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(valuetype value1, valuetype value2) {
