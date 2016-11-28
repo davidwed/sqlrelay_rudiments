@@ -1197,14 +1197,15 @@ void process::backtrace(filedescriptor *fd) {
 	backtrace(fd,128);
 }
 
-void process::backtrace(const char *filename, uint32_t maxframes) {
-	file	f;
-	if (f.open(filename,O_WRONLY|O_APPEND|O_CREAT,
-			permissions::evalPermString("rw-------"))) {
-		backtrace(&f,maxframes);
-	}
+void process::backtrace(const char *filename) {
+	backtrace(filename,permissions::evalPermString("rw-------"),128);
 }
 
-void process::backtrace(const char *filename) {
-	backtrace(filename,128);
+void process::backtrace(const char *filename,
+				mode_t perms,
+				uint32_t maxframes) {
+	file	f;
+	if (f.open(filename,O_WRONLY|O_APPEND|O_CREAT,perms)) {
+		backtrace(&f,maxframes);
+	}
 }

@@ -394,20 +394,24 @@ class RUDIMENTS_DLLSPEC process {
 
 		/** Appends the backtrace for the current thread to "filename".
 		 *  
-		 *  "maxframes" indicates the maximum number of stack frames
-		 *  to include in the backtrace.
-		 *
-		 *  (Not supported on all platforms.) */
-		static void	backtrace(const char *filename,
-						uint32_t maxframes);
-
-		/** Appends the backtrace for the current thread to "filename".
-		 *  
 		 *  A maximum of 128 stack frames will be included in the
 		 *  backtrace.
 		 *  
 		 *  (Not supported on all platforms.) */
 		static void	backtrace(const char *filename);
+
+		/** Appends the backtrace for the current thread to "filename".
+		 *  
+		 *  If "filename" doesn't already exist then it will be created
+		 *  with "perms" permissions.
+		 *
+		 *  "maxframes" indicates the maximum number of stack frames
+		 *  to include in the backtrace.
+		 *
+		 *  (Not supported on all platforms.) */
+		static void	backtrace(const char *filename,
+						mode_t perms,
+						uint32_t maxframes);
 
 	#include <rudiments/private/process.h>
 };
