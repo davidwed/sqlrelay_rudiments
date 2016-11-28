@@ -152,6 +152,17 @@ int32_t _containerutil_compare(long double value1, long double value2) {
 	}
 }
 
+RUDIMENTS_TEMPLATE_INLINE
+int32_t _containerutil_compare(void *value1, void *value2) {
+	if (value1<value2) {
+		return -1;
+	} else if (value1==value2) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
 template <class valuetype>
 RUDIMENTS_TEMPLATE_INLINE
 int32_t _containerutil_compare(valuetype value1, valuetype value2) {
@@ -247,6 +258,11 @@ void _containerutil_print(double value) {
 RUDIMENTS_TEMPLATE_INLINE
 void _containerutil_print(long double value) {
 	stdoutput.printf("%Lf",value);
+}
+
+RUDIMENTS_TEMPLATE_INLINE
+void _containerutil_print(void *value) {
+	stdoutput.printf("%08x",value);
 }
 
 template <class valuetype>

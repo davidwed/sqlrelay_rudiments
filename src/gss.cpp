@@ -561,7 +561,7 @@ const void *gssmechanism::getObjectId() {
 }
 
 int32_t gssmechanism::compare(gssmechanism *value) {
-	return _containerutil_compare((uint64_t)this,(uint64_t)value);
+	return _containerutil_compare((void *)this,(void *)value);
 }
 
 
