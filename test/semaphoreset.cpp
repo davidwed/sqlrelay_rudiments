@@ -104,9 +104,8 @@ int main(int argc, const char **argv) {
 
 		
 		// test timeout
+		stdoutput.write("timeout...\n");
 		if (sem.supportsTimedSemaphoreOperations()) {
-
-			stdoutput.write("timeout...\n");
 
 			datetime	dt;
 			dt.getSystemDateAndTime();
@@ -116,8 +115,10 @@ int main(int argc, const char **argv) {
 
 			dt.getSystemDateAndTime();
 			test("time",dt.getEpoch()-epoch>=1);
-			stdoutput.write("\n");
+		} else {
+			stdoutput.write("	not supported\n");
 		}
+		stdoutput.write("\n");
 
 
 		// clean up key file

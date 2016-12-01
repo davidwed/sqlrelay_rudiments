@@ -61,6 +61,7 @@ class semaphoresetprivate {
 			char	**_semnames;
 			HMODULE	_lib;
 		#endif
+		bool	_supportstimedops;
 };
 
 semaphoreset::semaphoreset() {
@@ -80,6 +81,18 @@ semaphoreset::semaphoreset() {
 		pvt->_sems=NULL;
 		pvt->_semnames=NULL;
 		pvt->_lib=NULL;
+	#endif
+	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP)
+		int32_t	result;
+		error::clearError();
+		do {
+			result=semtimedop(-1,NULL,0,NULL);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		pvt->_supportstimedops=(error::getErrorNumber()!=ENOSYS);
+	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+		pvt->_supportstimedops=true;
+	#else
+		pvt->_supportstimedops=false;
 	#endif
 }
 
@@ -691,12 +704,7 @@ bool semaphoreset::semTimedOp(struct sembuf *sops,
 }
 
 bool semaphoreset::supportsTimedSemaphoreOperations() {
-	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP) || \
-		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
-		return true;
-	#else
-		return false;
-	#endif
+	return pvt->_supportstimedops;
 }
 
 bool semaphoreset::supportsUndoSemaphoreOperations() {
