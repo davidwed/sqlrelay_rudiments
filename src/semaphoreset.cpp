@@ -83,6 +83,14 @@ semaphoreset::semaphoreset() {
 		pvt->_lib=NULL;
 	#endif
 	#if defined(RUDIMENTS_HAVE_SEMTIMEDOP)
+		// We can't implicitly trust RUDIMENTS_HAVE_SEMTIMEDOP because
+		// some platforms (eg. older sparc linux) implement semtimedop
+		// to just set ENOSYS and return -1.  Fortunately, these
+		// platforms do this even if you pass it garbage parameters,
+		// and other platforms set some other error and return -1 when
+		// you pass it garbage parameters.  So, we can do an inexpensive
+		// and non-invasive test here to see if we have a working
+		// semtimedop() or not.
 		int32_t	result;
 		error::clearError();
 		do {

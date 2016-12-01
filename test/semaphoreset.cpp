@@ -80,6 +80,9 @@ int main(int argc, const char **argv) {
 		stringbuffer	cmd;
 		char	*pwd=directory::getCurrentWorkingDirectory();
 		cmd.append(pwd)->append("/semaphoreset");
+		#ifdef _WIN32
+			cmd.append(".exe");
+		#endif
 		delete[] pwd;
 		const char	*args1[]={"semaphoreset","child",NULL};
 		process::spawn(cmd.getString(),args1,true);
