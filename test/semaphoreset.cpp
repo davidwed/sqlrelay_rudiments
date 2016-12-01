@@ -9,10 +9,11 @@
 #include <rudiments/directory.h>
 #include <rudiments/process.h>
 #include <rudiments/snooze.h>
+#include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-void alternate(semaphoreset *sem, file *semout, bool first) {
+void sync(semaphoreset *sem, file *semout, bool first) {
 
 	for (uint16_t i=0; i<10; i++) {
 		if (first) {
@@ -63,6 +64,9 @@ int main(int argc, const char **argv) {
 				permissions::evalPermString("rw-------"),
 				2,vals));
 
+
+		// test synchronization
+
 		// create the output file
 		file::remove("semout");
 		file	semout;
@@ -70,7 +74,7 @@ int main(int argc, const char **argv) {
 				permissions::evalPermString("rw-r--r--")));
 		stdoutput.write("\n");
 
-		stdoutput.write("alternation...\n");
+		stdoutput.write("synchronization...\n");
 
 		// spawn the second process (to write 2, 4)
 		stringbuffer	cmd;
@@ -82,21 +86,41 @@ int main(int argc, const char **argv) {
 
 		snooze::macrosnooze(1);
 
-		// alternate
-		alternate(&sem,&semout,true);
+		// synchronization
+		sync(&sem,&semout,true);
 
 		snooze::macrosnooze(1);
 
-		// verify alternation
+		// verify synchronization
 		char	*contents=semout.getContents();
 		test("output",!charstring::compare(contents,
 				"1234123412341234123412341234123412341234"));
 		delete[] contents;
 		stdoutput.write("\n");
 
-		// clean up
+		// clean up output file
 		semout.close();
 		file::remove("semout");
+
+		
+		// test timeout
+		if (sem.supportsTimedSemaphoreOperations()) {
+
+			stdoutput.write("timeout...\n");
+
+			datetime	dt;
+			dt.getSystemDateAndTime();
+			time_t	epoch=dt.getEpoch();
+
+			test("wait(0)",!sem.wait(0,2,0));
+
+			dt.getSystemDateAndTime();
+			test("time",dt.getEpoch()-epoch>=1);
+			stdoutput.write("\n");
+		}
+
+
+		// clean up key file
 		file::remove("semkey");
 
 	} else {
@@ -110,8 +134,8 @@ int main(int argc, const char **argv) {
 		test("output file",semout.open("semout",O_WRONLY));
 		stdoutput.write("\n");
 
-		// alternate
-		alternate(&sem,&semout,false);
+		// synchronization
+		sync(&sem,&semout,false);
 
 		// clean up
 		semout.close();

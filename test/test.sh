@@ -48,8 +48,7 @@
 #./randomnumber
 #./reboot
 #./regularexpression
-#./semaphoreset1
-#./semaphoreset2
+./semaphoreset
 #./serialport
 #./serialportprofile
 #./server
