@@ -76,8 +76,8 @@ int main(int argc, const char **argv) {
 
 
         stdoutput.printf("optional whitespace match\n");
-	mtc="^\\s*((create|CREATE|drop|DROP)\\s+)|"
-			"((begin|BEGIN|rollback|ROLLBACK)\\s*)";
+	mtc="^[ 	\r\n]*((create|CREATE|drop|DROP)[ 	\r\n]+)|"
+			"((begin|BEGIN|rollback|ROLLBACK)[ 	\r\n]*)";
 	test("compile",re.compile(mtc));
 	test("study",re.study());
         str="create table";
