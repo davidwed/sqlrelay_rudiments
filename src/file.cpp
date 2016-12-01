@@ -360,25 +360,35 @@ char *file::getContents() {
 	if (fd()==-1) {
 		return NULL;
 	}
+	getCurrentProperties();
+	off64_t	curpos=getCurrentPosition();
+	setPositionRelativeToBeginning(0);
+	char	*contents=NULL;
 	if (pvt->_st.st_size) {
 		off64_t	size=pvt->_st.st_size;
-		char	*contents=new char[size+1];
+		contents=new char[size+1];
 		contents[size]='\0';
-		return (size==0 || read(contents,size)==size)?contents:NULL;
+		if (size && read(contents,size)!=size) {
+			delete[] contents;
+			contents=NULL;
+		}
 	} else {
-		stringbuffer	contents;
+		stringbuffer	cts;
 		// FIXME: this is fine for url's but for actual files that
 		// we don't know the size of, we ought to use a more
 		// intelligent size.
 		char		buffer[16*1024];
 		for (;;) {
 			ssize_t	s=read(buffer,sizeof(buffer));
-			contents.append(buffer,s);
+			cts.append(buffer,s);
 			if (s<(ssize_t)sizeof(buffer)) {
-				return contents.detachString();
+				contents=cts.detachString();
+				break;
 			}
 		}
 	}
+	setPositionRelativeToBeginning(curpos);
+	return contents;
 }
 
 char *file::getContents(const char *name) {

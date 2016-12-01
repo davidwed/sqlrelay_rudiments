@@ -7,6 +7,8 @@
 	added avltree class
 	updated dictionary to use an avltree
 	update xmldom to use a dictionary for its string cache
+	file::getContents(fd) gets the entire file contents now, even if the
+		current position in the file isn't the beginning
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
