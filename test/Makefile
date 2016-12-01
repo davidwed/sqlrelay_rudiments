@@ -96,7 +96,7 @@ PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 .cpp.obj:
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
-all: $(PROGS) server.pem
+all: $(PROGS) $(SERVERPEM)
 
 clean:
 	$(LTCLEAN) $(RM) $(PROGS0)

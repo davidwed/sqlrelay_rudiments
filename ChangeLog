@@ -9,6 +9,11 @@
 	update xmldom to use a dictionary for its string cache
 	file::getContents(fd) gets the entire file contents now, even if the
 		current position in the file isn't the beginning
+	fixed detection of whether timed semaphore ops are supported on
+		platforms that just implement semtimedop() to return -1 and set
+		ENOSYS
+	fake certs aren't generated now (in tests) on Windows, if ssl is
+		disabled, or if openssl isn't found
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

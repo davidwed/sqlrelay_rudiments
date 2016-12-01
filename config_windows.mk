@@ -58,6 +58,9 @@ RMTREE = cscript /nologo @top_builddir@\rmtree.vbs
 # ssl library
 SSLLIBS = @SSLLIBS@
 
+# test cert target
+SERVERPEM = @SERVERPEM@
+
 # GSS library
 GSSLIBS = @GSSLIBS@
 

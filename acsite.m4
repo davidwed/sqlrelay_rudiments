@@ -915,6 +915,8 @@ dnl sets the substitution variable SSLLIBS
 AC_DEFUN([FW_CHECK_SSL],
 [
 
+SERVERPEM=""
+
 if ( test "$ENABLE_RUDIMENTS_SSL" = "yes" )
 then
 
@@ -958,6 +960,8 @@ then
 		then
 			AC_DEFINE(RUDIMENTS_HAS_SSL,1,Rudiments supports SSL)
 			AC_MSG_RESULT(yes)
+
+			SERVERPEM="server.pem"
 
 			AC_MSG_CHECKING(whether SSL_read/write can use a void * parameter)
 			FW_TRY_LINK([#include <openssl/ssl.h>],[void *buf=0; SSL_read(NULL,buf,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[SSL_VOID_PTR="yes"],[])
@@ -1008,6 +1012,7 @@ fi
 
 AC_SUBST(SSLINCLUDES)
 AC_SUBST(SSLLIBS)
+AC_SUBST(SERVERPEM)
 ])
 
 

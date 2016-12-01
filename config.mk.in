@@ -63,6 +63,9 @@ RMTREE = rm -rf
 # ssl library
 SSLLIBS = @SSLLIBS@
 
+# test cert target
+SERVERPEM = @SERVERPEM@
+
 # GSS library
 GSSLIBS = @GSSLIBS@
 

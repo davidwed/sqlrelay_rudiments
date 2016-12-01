@@ -667,6 +667,7 @@ PCRELIBS
 PCREINCLUDES
 GSSLIBS
 GSSINCLUDES
+SERVERPEM
 SSLLIBS
 SSLINCLUDES
 PTHREADLIB
@@ -19359,6 +19360,8 @@ echo
 echo "***** TLS/SSL ****************"
 
 
+SERVERPEM=""
+
 if ( test "$ENABLE_RUDIMENTS_SSL" = "yes" )
 then
 
@@ -19888,6 +19891,8 @@ $as_echo "#define RUDIMENTS_HAS_SSL 1" >>confdefs.h
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
+			SERVERPEM="server.pem"
+
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether SSL_read/write can use a void * parameter" >&5
 $as_echo_n "checking whether SSL_read/write can use a void * parameter... " >&6; }
 
@@ -20258,6 +20263,7 @@ else
 	echo "disabled"
 
 fi
+
 
 
 
