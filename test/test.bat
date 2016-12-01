@@ -88,6 +88,7 @@ rem randomnumber.exe
 rem reboot.exe
 rem regularexpression.exe
 semaphoreset.exe
+if %errorlevel% neq 0 exit /b
 rem serialport.exe
 rem serialportprofile.exe
 rem server.exe
