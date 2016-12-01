@@ -31,9 +31,10 @@ int main(int argc, const char **argv) {
 #ifdef _WIN32
 	test("group id",grent.getGroupId()==0);
 	test("members",grent.getMembers() && grent.getMembers()[0]);
-	test("sid",!charstring::compare(grent.getSidString(),"S-1-5-21-",9) &&
-			!charstring::compare(grent.getSidString()+
-				charstring::length(grent.getSidString()-4),"-513"));
+	test("sid",
+		!charstring::compare(grent.getSidString(),"S-1-5-21-",9) &&
+		!charstring::compare(grent.getSidString()+
+			charstring::length(grent.getSidString())-4,"-513"));
 #else
 	test("group id",grent.getGroupId()==1);
 	test("members",!grent.getMembers());
@@ -48,9 +49,10 @@ int main(int argc, const char **argv) {
 #ifdef _WIN32
 	test("group id",grent.getGroupId()==0);
 	test("members",grent.getMembers() && grent.getMembers()[0]);
-	test("sid",!charstring::compare(grent.getSidString(),"S-1-5-21-",9) &&
-			!charstring::compare(grent.getSidString()+
-				charstring::length(grent.getSidString()-4),"-513"));
+	test("sid",
+		!charstring::compare(grent.getSidString(),"S-1-5-21-",9) &&
+		!charstring::compare(grent.getSidString()+
+			charstring::length(grent.getSidString())-4,"-513"));
 #else
 	test("group id",grent.getGroupId()==1);
 	test("members",!grent.getMembers());
