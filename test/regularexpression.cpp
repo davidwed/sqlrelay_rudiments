@@ -3,8 +3,9 @@
 
 #include <rudiments/regularexpression.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
-void printMatches(regularexpression *re) {
+/*void printMatches(regularexpression *re) {
 	for (int32_t i=0; i<re->getSubstringCount(); i++) {
 		stdoutput.printf("match %d start: \"%s\"\n",
 					i,re->getSubstringStart(i));
@@ -12,176 +13,101 @@ void printMatches(regularexpression *re) {
 					i,re->getSubstringEnd(i));
 	}
 	stdoutput.printf("%d matches\n\n",re->getSubstringCount());
-}
+}*/
 
 int main(int argc, const char **argv) {
 
-        // A quick match...
-        const char	*str="Hello!";
+	header("regularexpression");
+
         const char	*mtc="Dave";
-        if (regularexpression::match(str,mtc)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
+        const char	*str=NULL;
 
-	str="Hello Dave!";
-        if (regularexpression::match(str,mtc)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
+        stdoutput.printf("static match %s\n",mtc);
+        str="Hello";
+        test(str,!regularexpression::match(str,mtc));
+        str="Hello Dave";
+        test(str,regularexpression::match(str,mtc));
+        str="Hello Dave Goodbye";
+        test(str,regularexpression::match(str,mtc));
+        str="Dave Goodbye";
+        test(str,regularexpression::match(str,mtc));
+        stdoutput.printf("\n");
 
-        // If you need to match over and over...
+
+        stdoutput.printf("instance match %s\n",mtc);
         regularexpression       re;
-	re.compile(mtc);
-        str="Hello!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
+	test("compile",re.compile(mtc));
+        str="Hello";
+        test(str,!re.match(str));
+	//printMatches(&re);
+	test("match count",!re.getSubstringCount());
+	test("match start",!re.getSubstringStart(0));
+	test("match end",!re.getSubstringEnd(0));
 
-	str="Hello Dave!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
 
-	re.study();
-	str="Goodbye!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
+        str="Hello Dave";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==1);
+	test("match start",re.getSubstringStart(0)==(str+6));
+	test("match end",re.getSubstringEnd(0)==(str+10));
 
-	str="Goodbye Dave!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
+	test("study",re.study());
+        str="Hello Dave Goodbye";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==1);
+	test("match start",re.getSubstringStart(0)==(str+6));
+	test("match end",re.getSubstringEnd(0)==(str+10));
 
-	re.study();
-	str="He is a jerk!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
+        str="Dave Goodbye";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==1);
+	test("match start",re.getSubstringStart(0)==str);
+	test("match end",re.getSubstringEnd(0)==(str+4));
 
-	str="Dave is a jerk!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
+        str="Dave Dave Dave";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==1);
+	test("match start",re.getSubstringStart(0)==str);
+	test("match end",re.getSubstringEnd(0)==(str+4));
+        stdoutput.printf("\n");
 
-        str="He writes cool software!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-	}
-	printMatches(&re);
 
-        str="Dave writes cool software!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
-	printMatches(&re);
+        stdoutput.printf("word match\n");
+	test("compile",re.compile("(\\w+) (\\w+)"));
+        str="hello world";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==3);
+	test("match 0 start",re.getSubstringStart(0)==str);
+	test("match 0 end",re.getSubstringEnd(0)==(str+11));
+	test("match 1 start",re.getSubstringStart(1)==str);
+	test("match 1 end",re.getSubstringEnd(1)==(str+5));
+	test("match 2 start",re.getSubstringStart(2)==(str+6));
+	test("match 2 end",re.getSubstringEnd(2)==(str+11));
+        str="hello world hello world";
+        test(str,re.match(str));
+	//printMatches(&re);
+	test("match count",re.getSubstringCount()==3);
+	test("match 0 start",re.getSubstringStart(0)==str);
+	test("match 0 end",re.getSubstringEnd(0)==(str+11));
+	test("match 1 start",re.getSubstringStart(1)==str);
+	test("match 1 end",re.getSubstringEnd(1)==(str+5));
+	test("match 2 start",re.getSubstringStart(2)==(str+6));
+	test("match 2 end",re.getSubstringEnd(2)==(str+11));
+        stdoutput.printf("\n");
 
-	str="See ya later Dave!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
-	printMatches(&re);
 
-	str="See ya later!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
-	printMatches(&re);
-
-	str="Dave, Dave, Dave!";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
-	printMatches(&re);
-
-	mtc="(\\w+) (\\w+)";
-	re.compile(mtc);
-	str="hello world";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
-	printMatches(&re);
-
-	mtc="(\\w+) (\\w+)";
-	re.compile(mtc);
-	str="hello world hello world";
-        if (re.match(str)) {
-                stdoutput.printf(
-			"The string \"%s\" contains \"%s\"\n",str,mtc);
-        } else {
-                stdoutput.printf(
-			"The string \"%s\" doesn't contain \"%s\"\n",str,mtc);
-        }
-	printMatches(&re);
-
-	// NULL pattern
-	re.compile(NULL);
-	re.study();
-        if (re.match(NULL)) {
-                stdoutput.printf("The string NULL contains NULL\n");
-	} else {
-                stdoutput.printf("The string NULL does not contain NULL\n");
-	}
-	printMatches(&re);
+        stdoutput.printf("NULLs\n");
+	test("compile",re.compile(NULL));
+	test("study",re.study());
+        test("match",re.match(NULL));
+	//printMatches(&re);
+	test("match count",!re.getSubstringCount());
+	test("match start",!re.getSubstringStart(0));
+	test("match end",!re.getSubstringEnd(0));
+        stdoutput.printf("\n");
 }

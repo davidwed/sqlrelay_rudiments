@@ -47,7 +47,7 @@
 ./protocolentry
 #./randomnumber
 #./reboot
-#./regularexpression
+./regularexpression
 ./semaphoreset
 #./serialport
 #./serialportprofile
