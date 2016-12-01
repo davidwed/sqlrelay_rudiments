@@ -19,8 +19,7 @@ PROGS0 = server \
 	permissions \
 	protocolentry \
 	regularexpression \
-	semaphoreset1 \
-	semaphoreset2 \
+	semaphoreset \
 	charstring \
 	datetime
 
@@ -197,11 +196,8 @@ protocolentry: protocolentry.cpp protocolentry.$(OBJ)
 regularexpression: regularexpression.cpp regularexpression.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) regularexpression.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-semaphoreset1: semaphoreset1.cpp semaphoreset1.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) semaphoreset1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-semaphoreset2: semaphoreset2.cpp semaphoreset2.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) semaphoreset2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+semaphoreset: semaphoreset.cpp semaphoreset.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) semaphoreset.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 sharedmemory1: sharedmemory1.cpp sharedmemory1.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sharedmemory1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
