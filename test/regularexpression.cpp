@@ -44,7 +44,6 @@ int main(int argc, const char **argv) {
 	test("match start",!re.getSubstringStart(0));
 	test("match end",!re.getSubstringEnd(0));
 
-
         str="Hello Dave";
         test(str,re.match(str));
 	//printMatches(&re);
@@ -76,7 +75,43 @@ int main(int argc, const char **argv) {
         stdoutput.printf("\n");
 
 
-        stdoutput.printf("word match\n");
+        stdoutput.printf("optional whitespace match\n");
+	mtc="^\\s*((create|CREATE|drop|DROP)\\s+)|"
+			"((begin|BEGIN|rollback|ROLLBACK)\\s*)";
+	test("compile",re.compile(mtc));
+	test("study",re.study());
+        str="create table";
+        test(str,re.match(str));
+        str=" create  table";
+        test(str,re.match(str));
+        str="\n create  table";
+        test(str,re.match(str));
+        str="\n	 create\n	 table";
+        test(str,re.match(str));
+        str="drop table";
+        test(str,re.match(str));
+        str=" drop  table";
+        test(str,re.match(str));
+        str="\n drop  table";
+        test(str,re.match(str));
+        str="\n	 drop\n	 table";
+        test(str,re.match(str));
+        str="begin";
+        test(str,re.match(str));
+        str="begin ";
+        test(str,re.match(str));
+        str=" begin ";
+        test(str,re.match(str));
+        str="rollback";
+        test(str,re.match(str));
+        str="rollback ";
+        test(str,re.match(str));
+        str=" rollback ";
+        test(str,re.match(str));
+        stdoutput.printf("\n");
+
+
+        stdoutput.printf("wildcard word match\n");
 	test("compile",re.compile("(\\w+) (\\w+)"));
         str="hello world";
         test(str,re.match(str));
