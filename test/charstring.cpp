@@ -534,6 +534,52 @@ int main(int argc, const char **argv) {
 		!charstring::compare(teststr,
 			"-000000000000000000000000000000000032767"));
 	delete[] teststr;
+	stdoutput.printf("\n");
+	
+
+	// empty/null/yes/no
+	stdoutput.printf("empty/null/yes/no...\n");
+	test("NULL",charstring::isNullOrEmpty((const char *)NULL));
+	test("empty",charstring::isNullOrEmpty(""));
+	test("not null",!charstring::isNullOrEmpty("not null"));
+	test("not empty",!charstring::isNullOrEmpty("not empty"));
+	test("yes",charstring::isYes("yes"));
+	test("Yes",charstring::isYes("Yes"));
+	test("YES",charstring::isYes("YES"));
+	test("yes,",charstring::isYes("yes,"));
+	test("yes ",charstring::isYes("yes "));
+	test("yesterday",!charstring::isYes("yesterday"));
+	test("Y",charstring::isYes("Y"));
+	test("y",charstring::isYes("y"));
+	test("yo",!charstring::isYes("yo"));
+	test("true",charstring::isYes("true"));
+	test("True",charstring::isYes("True"));
+	test("TRUE",charstring::isYes("TRUE"));
+	test("truest",!charstring::isYes("truest"));
+	test("T",charstring::isYes("T"));
+	test("t",charstring::isYes("t"));
+	test("1",charstring::isYes("1"));
+	test("123",!charstring::isYes("123"));
+	test("NULL",!charstring::isYes(NULL));
+	test("empty",!charstring::isYes(""));
+	test("no",charstring::isNo("no"));
+	test("No",charstring::isNo("No"));
+	test("NO",charstring::isNo("NO"));
+	test("nothing",!charstring::isNo("nothing"));
+	test("N",charstring::isNo("N"));
+	test("n",charstring::isNo("n"));
+	test("ne",!charstring::isNo("ne"));
+	test("false",charstring::isNo("false"));
+	test("False",charstring::isNo("False"));
+	test("FALSE",charstring::isNo("FALSE"));
+	test("falsest",!charstring::isNo("falsest"));
+	test("F",charstring::isNo("F"));
+	test("f",charstring::isNo("f"));
+	test("0",charstring::isNo("0"));
+	test("012",!charstring::isNo("012"));
+	test("NULL",!charstring::isNo(NULL));
+	test("empty",!charstring::isNo(""));
+	stdoutput.printf("\n");
 
 
 	// hosttonet/nettohost (why are these here?)

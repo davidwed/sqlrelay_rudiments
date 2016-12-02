@@ -33,8 +33,7 @@ PROGS1= dictionary \
 	listmetrics \
 	memorypool \
 	randomnumber \
-	sharedmemory1 \
-	sharedmemory2 \
+	sharedmemory \
 	signal \
 	kill \
 	stringbuffer \
@@ -199,11 +198,8 @@ regularexpression: regularexpression.cpp regularexpression.$(OBJ)
 semaphoreset: semaphoreset.cpp semaphoreset.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) semaphoreset.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-sharedmemory1: sharedmemory1.cpp sharedmemory1.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sharedmemory1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-sharedmemory2: sharedmemory2.cpp sharedmemory2.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sharedmemory2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+sharedmemory: sharedmemory.cpp sharedmemory.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sharedmemory.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 charstring: charstring.cpp charstring.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) charstring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

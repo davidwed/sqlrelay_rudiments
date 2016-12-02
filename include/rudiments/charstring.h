@@ -28,6 +28,23 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Returns true if "string" is NULL or the empty string. */
 		static	bool	isNullOrEmpty(const unsigned char *string);
 
+		/** Returns true if "string" starts with the standalone "word":
+		 *  "Yes" (case-insensitive), "True" (case-insensitive), 
+		 *  "Y" (case-insensitive), "T" (case-insensitive), or
+		 *  "1" and false otherwise.
+		 *
+		 *  (Eg. returns true for "Yes,", "True ", and "1 2 3" but
+		 *  returns false for "Yesterday", "Truest", and "123") */
+		static	bool	isYes(const char *string);
+
+		/** Returns true if "string" starts with the standalone word:
+		 *  "No" (case-insensitive), "False" (case-insensitive), or
+		 *  "0" and false otherwise.
+		 *
+		 *  (Eg. returns true for "No,", "False ", and "0 1 2" but
+		 *  returns false for "Nothing", "Falsest", and "012") */
+		static	bool	isNo(const char *string);
+
 		/** Sets "size" bytes of "str" to NULL. */
 		static	void	zero(char *str, size_t size);
 

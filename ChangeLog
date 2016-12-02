@@ -14,6 +14,7 @@
 		ENOSYS
 	fake certs aren't generated now (in tests) on Windows, if ssl is
 		disabled, or if openssl isn't found
+	added charstring::isYes/isNo
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

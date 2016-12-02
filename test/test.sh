@@ -53,8 +53,7 @@
 #./serialportprofile
 #./server
 ./serviceentry
-#./sharedmemory1
-#./sharedmemory2
+./sharedmemory
 #./shutdown
 #./signal
 #./singlylinkedlist

@@ -100,8 +100,9 @@ rem server.exe
 serviceentry.exe
 if %errorlevel% neq 0 exit /b
 
-rem sharedmemory1.exe
-rem sharedmemory2.exe
+sharedmemory.exe
+if %errorlevel% neq 0 exit /b
+
 rem shutdown.exe
 rem signal.exe
 rem singlylinkedlist.exe

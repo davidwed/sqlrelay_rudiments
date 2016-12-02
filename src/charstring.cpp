@@ -863,6 +863,44 @@ bool charstring::isNullOrEmpty(const unsigned char *string) {
 	return !(string && string[0]);
 }
 
+bool charstring::isYes(const char *string) {
+	char	next;
+	if (!string) {
+		return false;
+	} else if (!charstring::compareIgnoringCase(string,"yes",3)) {
+		next=string[3];
+	} else if (!charstring::compareIgnoringCase(string,"true",4)) {
+		next=string[4];
+	} else if (string[0]=='y' || string[0]=='Y' ||
+			string[0]=='t' || string[0]=='T' ||
+			string[0]=='1') {
+		next=string[1];
+	} else {
+		return false;
+	}
+	return (!next || (!character::isAlphanumeric(next) && 
+				!character::isAlphabeticalExtended(next)));
+}
+
+bool charstring::isNo(const char *string) {
+	char	next;
+	if (!string) {
+		return false;
+	} else if (!charstring::compareIgnoringCase(string,"no",2)) {
+		next=string[2];
+	} else if (!charstring::compareIgnoringCase(string,"false",5)) {
+		next=string[5];
+	} else if (string[0]=='n' || string[0]=='N' ||
+			string[0]=='f' || string[0]=='F' ||
+			string[0]=='0') {
+		next=string[1];
+	} else {
+		return false;
+	}
+	return (!next || (!character::isAlphanumeric(next) && 
+				!character::isAlphabeticalExtended(next)));
+}
+
 void charstring::zero(char *str, size_t size) {
 	bytestring::set(str,0,size);
 }
