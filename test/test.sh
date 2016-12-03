@@ -18,7 +18,6 @@
 ./groupentry
 #./gssclient
 #./gssserver
-#./halt
 #./handoff1
 #./handoff2
 #./handoffclient
@@ -45,13 +44,11 @@
 #./process
 ./protocolentry
 ./randomnumber
-#./reboot
 ./regularexpression
 ./semaphoreset
 #./server
 ./serviceentry
 ./sharedmemory
-#./shutdown
 #./signal
 ./singlylinkedlist
 #./snooze

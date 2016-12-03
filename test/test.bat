@@ -45,7 +45,6 @@ if %errorlevel% neq 0 exit /b
 
 rem gssclient.exe
 rem gssserver.exe
-rem halt.exe
 rem handoff1.exe
 rem handoff2.exe
 rem handoffclient.exe
@@ -91,8 +90,6 @@ if %errorlevel% neq 0 exit /b
 randomnumber.exe
 if %errorlevel% neq 0 exit /b
 
-rem reboot.exe
-
 regularexpression.exe
 if %errorlevel% neq 0 exit /b
 
@@ -107,7 +104,6 @@ if %errorlevel% neq 0 exit /b
 sharedmemory.exe
 if %errorlevel% neq 0 exit /b
 
-rem shutdown.exe
 rem signal.exe
 
 singlylinkedlist.exe
