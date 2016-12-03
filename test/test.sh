@@ -49,8 +49,6 @@
 #./reboot
 ./regularexpression
 ./semaphoreset
-#./serialport
-#./serialportprofile
 #./server
 ./serviceentry
 ./sharedmemory

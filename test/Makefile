@@ -38,7 +38,6 @@ PROGS1= dictionary \
 	kill \
 	stringbuffer \
 	bytebuffer \
-	serialport \
 	crypt
 
 PROGS2= dynamicarray \
@@ -49,7 +48,6 @@ PROGS2= dynamicarray \
 	thread \
 	threadmutex \
 	process \
-	serialportprofile \
 	snooze \
 	memorymap \
 	character \
@@ -258,9 +256,6 @@ inetclntbench: inetclntbench.cpp inetclntbench.$(OBJ)
 inetsvrbench: inetsvrbench.cpp inetsvrbench.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsvrbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-serialport: serialport.cpp serialport.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) serialport.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
 crypt: crypt.cpp crypt.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) crypt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
@@ -287,9 +282,6 @@ threadmutex: threadmutex.cpp threadmutex.$(OBJ)
 
 process: process.cpp process.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) process.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-serialportprofile: serialportprofile.cpp serialportprofile.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) serialportprofile.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 snooze: snooze.cpp snooze.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) snooze.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
