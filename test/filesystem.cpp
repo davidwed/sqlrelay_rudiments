@@ -153,7 +153,7 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("from NULL...\n");
 			fs2.initialize((const char *)NULL);
 		}
-		//print(&fs2);
+		print(&fs2);
 
 		test("type",
 			fs1.getType()==fs2.getType());
