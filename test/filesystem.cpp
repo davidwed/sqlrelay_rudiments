@@ -115,17 +115,24 @@ int main(int argc, const char **argv) {
 	test("optimum transfer block size",fs1.getOptimumTransferBlockSize());
 	test("total blocks",fs1.getTotalBlocks());
 	test("free blocks",fs1.getFreeBlocks());
-	test("total file nodes",fs1.getTotalFileNodes());
-	test("free file nodes",fs1.getFreeFileNodes());
+
+	// Windows doesn't really have "nodes"
+	#ifdef _WIN32
+		test("total file nodes",fs1.getTotalFileNodes());
+		test("free file nodes",fs1.getFreeFileNodes());
+	#endif
+
 	test("file system id",fs1.getFileSystemId());
 	test("maximum file name length",fs1.getMaximumFileNameLength());
 	char	*username=userentry::getName(fs1.getOwner());
 	test("owner",!charstring::isNullOrEmpty(username));
 	delete[] username;
 	test("type name",fs1.getTypeName());
+
 	// believe it or not, these aren't known on most systems...
 	//test("mount point",fs1.getMountPoint());
 	//test("device name",fs1.getDeviceName());
+
 	stdoutput.printf("\n");
 
 	for (uint16_t i=0; i<2; i++) {

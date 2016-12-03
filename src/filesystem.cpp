@@ -669,7 +669,7 @@ const char *filesystem::getFilesystemSpecificString() const {
 	return (const char *)pvt->_st.f_fstr;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return (pvt->_st.f_volumename[0])?
-			(const char *)pvt->_st.f_volumename:NULL
+			(const char *)pvt->_st.f_volumename:NULL;
 #else
 	return NULL;
 #endif
