@@ -6,9 +6,6 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-const uint32_t	stresscycles=1024*50;
-const uint32_t	stresssize=4096;
-
 int main(int argc, const char **argv) {
 
 	header("memorypool");
