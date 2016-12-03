@@ -14,7 +14,8 @@ PROGS = dictionary \
 	singlylinkedlist \
 	stringbuffer \
 	string \
-	vector
+	vector \
+	memorypool
 
 .SUFFIXES: .lo .obj
 
@@ -59,3 +60,6 @@ string: string.cpp string.$(OBJ)
 
 vector: vector.cpp vector.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) vector.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+memorypool: memorypool.cpp memorypool.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) memorypool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
