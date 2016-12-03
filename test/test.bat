@@ -40,7 +40,8 @@ if %errorlevel% neq 0 exit /b
 file.exe
 if %errorlevel% neq 0 exit /b
 
-rem filesystem.exe
+filesystem.exe
+if %errorlevel% neq 0 exit /b
 
 groupentry.exe
 if %errorlevel% neq 0 exit /b

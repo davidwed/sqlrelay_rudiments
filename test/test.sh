@@ -14,7 +14,7 @@
 ./environment
 ./error
 ./file
-#./filesystem
+./filesystem
 ./groupentry
 #./gssclient
 #./gssserver

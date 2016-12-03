@@ -779,7 +779,7 @@ const char *filesystem::getTypeName() const {
 	}
 	return NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	return (const char *)pvt->_st.f_typename;
+	return (pvt->_st.f_typename[0])?(const char *)pvt->_st.f_typename:NULL;
 #else
 	return NULL;
 #endif
