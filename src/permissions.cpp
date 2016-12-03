@@ -7,6 +7,7 @@
 #include <rudiments/file.h>
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/stdio.h>
 #include <rudiments/process.h>
 #ifdef RUDIMENTS_HAVE_SETENTRIESINACL
 	#include <rudiments/bytestring.h>
@@ -88,8 +89,15 @@
 	#define	_ALL	GENERIC_ALL
 	#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
 	#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER| \
-				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
+				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR| \
+				SYNCHRONIZE)
 	#define _EXEC	(GENERIC_EXECUTE|_WP)
+
+	// We need _WRITEWITHOUTSYNCHRONIZE because sometimes (always?)
+	// the SYNCHRONIZE permission is granted implicitly.  So, when testing
+	// to see if a file has write permissions, we want to ignore the
+	// SYNCHRONIZE permission to avoid false positives.
+	#define _WRITEWITHOUTSYNCHRONIZE	(_WRITE&~SYNCHRONIZE)
 #endif
 
 
@@ -429,8 +437,6 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 				} else if (pos==1) {
 					// write permissions
 					perms|=_WRITE;
-					// synchronize permissions
-					perms|=SYNCHRONIZE;
 				} else {
 					// read permissions
 					perms|=_READ;
@@ -543,7 +549,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 					if (mask&_READ) {
 						perms|=ownerRead();
 					}
-					if (mask&_WRITE) {
+					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
 						perms|=ownerWrite();
 					}
 					if (mask&_EXEC) {
@@ -562,7 +568,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 					if (mask&_READ) {
 						perms&=~ownerRead();
 					}
-					if (mask&_WRITE) {
+					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
 						perms&=~ownerWrite();
 					}
 					if (mask&_EXEC) {
@@ -584,7 +590,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 					if (mask&_READ) {
 						perms|=groupRead();
 					}
-					if (mask&_WRITE) {
+					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
 						perms|=groupWrite();
 					}
 					if (mask&_EXEC) {
@@ -603,7 +609,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 					if (mask&_READ) {
 						perms&=~groupRead();
 					}
-					if (mask&_WRITE) {
+					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
 						perms&=~groupWrite();
 					}
 					if (mask&_EXEC) {
@@ -625,7 +631,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 					if (mask&_READ) {
 						perms|=othersRead();
 					}
-					if (mask&_WRITE) {
+					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
 						perms|=othersWrite();
 					}
 					if (mask&_EXEC) {
@@ -644,7 +650,7 @@ mode_t permissions::daclToPermOctal(void *dacl) {
 					if (mask&_READ) {
 						perms&=~othersRead();
 					}
-					if (mask&_WRITE) {
+					if (mask&(_WRITEWITHOUTSYNCHRONIZE)) {
 						perms&=~othersWrite();
 					}
 					if (mask&_EXEC) {
