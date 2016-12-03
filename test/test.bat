@@ -65,7 +65,6 @@ rem listener.exe
 rem lock1.exe
 rem lock2.exe
 rem logger.exe
-rem math.exe
 
 memorymap.exe
 if %errorlevel% neq 0 exit /b

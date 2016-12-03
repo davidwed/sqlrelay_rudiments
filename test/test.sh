@@ -32,7 +32,6 @@
 #./lock1
 #./lock2
 #./logger
-#./math
 ./memorymap
 ./memorypool
 #./nonhandoff1
