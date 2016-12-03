@@ -103,10 +103,8 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
 		// calculate max mapping size and offset
-		DWORD	maxsizehigh=(((uint64_t)len)>>32);
-		DWORD	maxsizelow=(((uint64_t)len)&0x0000FFFF);
-		DWORD	offsethigh=(offset>>32);
-		DWORD	offsetlow=(offset&0x0000FFFF);
+		DWORD	offsethigh=(((uint64_t)offset)>>32);
+		DWORD	offsetlow=(((uint64_t)offset)&0x00000000FFFFFFFF);
 
 		// determine map and view protection
 		DWORD	mapprot=0;
@@ -148,7 +146,7 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t len,
 		pvt->_map=CreateFileMapping((HANDLE)filedescriptor::
 						getHandleFromFileDescriptor(fd),
 						NULL,mapprot,
-						maxsizehigh,maxsizelow,
+						0,0,
 						NULL);
 		if (!pvt->_map) {
 			return false;

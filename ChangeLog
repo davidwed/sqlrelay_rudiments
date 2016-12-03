@@ -15,6 +15,9 @@
 	fake certs aren't generated now (in tests) on Windows, if ssl is
 		disabled, or if openssl isn't found
 	added charstring::isYes/isNo
+	fixed high/low-bits calculation bugs in memorymap and sharedmemory
+		for Windows
+	fixed a maxsize bug in memorymap for Windows
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
