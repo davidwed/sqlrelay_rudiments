@@ -18,10 +18,6 @@ int main(int argc, const char **argv) {
 	test("create with perms",
 			fd.open("permissions.txt",O_RDWR|O_CREAT,
                                 permissions::evalPermString("rw-r--r--")));
-	fd.getCurrentProperties();
-	test("get perms",!charstring::compare(
-				permissions::evalPermOctal(fd.getPermissions()),
-				"rw-r--r--"));
         test("change perms",
 		permissions::setFilePermissions(fd.getFileDescriptor(),
                                 permissions::evalPermString("rw-rw-r--")));

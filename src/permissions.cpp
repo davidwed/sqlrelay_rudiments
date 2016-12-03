@@ -7,7 +7,6 @@
 #include <rudiments/file.h>
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
-#include <rudiments/stdio.h>
 #include <rudiments/process.h>
 #ifdef RUDIMENTS_HAVE_SETENTRIESINACL
 	#include <rudiments/bytestring.h>
@@ -89,8 +88,7 @@
 	#define	_ALL	GENERIC_ALL
 	#define _READ	(READ_CONTROL|GENERIC_READ|_CC|_SW|_LO)
 	#define _WRITE	(DELETE|WRITE_DAC|WRITE_OWNER| \
-				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR| \
-				SYNCHRONIZE)
+				GENERIC_WRITE|_DC|_LC|_RP|_DT|_CR)
 	#define _EXEC	(GENERIC_EXECUTE|_WP)
 #endif
 
@@ -431,6 +429,8 @@ void *permissions::permOctalToDacl(mode_t permoctal, bool directory) {
 				} else if (pos==1) {
 					// write permissions
 					perms|=_WRITE;
+					// synchronize permissions
+					perms|=SYNCHRONIZE;
 				} else {
 					// read permissions
 					perms|=_READ;
