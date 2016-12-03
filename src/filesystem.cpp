@@ -668,7 +668,8 @@ const char *filesystem::getFilesystemSpecificString() const {
 #ifdef RUDIMENTS_HAVE_STATVFS
 	return (const char *)pvt->_st.f_fstr;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	return (const char *)pvt->_st.f_volumename;
+	return (pvt->_st.f_volumename[0])?
+			(const char *)pvt->_st.f_volumename:NULL
 #else
 	return NULL;
 #endif
@@ -779,7 +780,8 @@ const char *filesystem::getTypeName() const {
 	}
 	return NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	return (pvt->_st.f_typename[0])?(const char *)pvt->_st.f_typename:NULL;
+	return (pvt->_st.f_typename[0])?
+			(const char *)pvt->_st.f_typename:NULL;
 #else
 	return NULL;
 #endif
