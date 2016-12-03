@@ -106,7 +106,7 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("\n");
 	}
 
-	stdoutput.printf("from file name...");
+	stdoutput.printf("from file name...\n");
 	filesystem	fs1;
 	fs1.initialize(filename);
 	print(&fs1);
@@ -117,7 +117,7 @@ int main(int argc, const char **argv) {
 	test("free blocks",fs1.getFreeBlocks());
 
 	// Windows doesn't really have "nodes"
-	#ifdef _WIN32
+	#ifndef _WIN32
 		test("total file nodes",fs1.getTotalFileNodes());
 		test("free file nodes",fs1.getFreeFileNodes());
 	#endif
