@@ -13,7 +13,7 @@
 ./dynamiclib
 ./environment
 ./error
-#./file
+./file
 #./filesystem
 ./groupentry
 #./gssclient
@@ -39,7 +39,7 @@
 #./oneshotclnt
 #./oneshotsvr
 ./parameterstring
-#./permissions
+./permissions
 #./process
 ./protocolentry
 ./randomnumber

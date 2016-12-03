@@ -3,47 +3,59 @@
 
 #include <rudiments/permissions.h>
 #include <rudiments/file.h>
-#include <stdlib.h>
-
-#ifdef _WIN32
-	const char	*ls="cacls tempfile";
-#else
-	const char	*ls="ls -l tempfile";
-#endif
+#include <rudiments/charstring.h>
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
 
+	header("permissions");
 
-        // Create a file with rw-r--r-- permissions
+        file::remove("permissions.txt");
+
+
+	stdoutput.printf("perm strings...\n");
         file	fd;
-	fd.open("tempfile",O_RDWR|O_CREAT,
-                                permissions::evalPermString("rw-r--r--"));
-	system(ls);
-
-
-        // change the permissions to rw-rw-r--
-        permissions::setFilePermissions(fd.getFileDescriptor(),
-                                permissions::evalPermString("rw-rw-r--"));
-	system(ls);
-
-
-        // close and delete the file
+	test("create with perms",
+			fd.open("permissions.txt",O_RDWR|O_CREAT,
+                                permissions::evalPermString("rw-r--r--")));
+	fd.getCurrentProperties();
+	test("get perms",!charstring::compare(
+				permissions::evalPermOctal(fd.getPermissions()),
+				"rw-r--r--"));
+        test("change perms",
+		permissions::setFilePermissions(fd.getFileDescriptor(),
+                                permissions::evalPermString("rw-rw-r--")));
+	fd.getCurrentProperties();
+	test("get perms",!charstring::compare(
+				permissions::evalPermOctal(fd.getPermissions()),
+				"rw-rw-r--"));
         fd.close();
-        file::remove("tempfile");
+        file::remove("permissions.txt");
+	stdoutput.printf("\n");
 
 
-        // do the same as above using different methods
-        fd.open("tempfile",O_RDWR|O_CREAT,
-                                permissions::ownerReadWrite()|
-                                permissions::groupRead()|
-                                permissions::othersRead());
-	system(ls);
-
-        permissions::setFilePermissions(fd.getFileDescriptor(),
-                                permissions::ownerReadWrite()|
-                                permissions::groupReadWrite()|
-                                permissions::othersRead());
-	system(ls);
+	stdoutput.printf("perm octals...\n");
+        test("create with perms",
+			fd.open("permissions.txt",O_RDWR|O_CREAT,
+                                	permissions::ownerReadWrite()|
+                                	permissions::groupRead()|
+                                	permissions::othersRead()));
+	fd.getCurrentProperties();
+        test("get perms",(fd.getPermissions()&0x0fff)==
+                                	(permissions::ownerReadWrite()|
+                                	permissions::groupRead()|
+                                	permissions::othersRead()));
+        test("change perms",
+        	permissions::setFilePermissions(fd.getFileDescriptor(),
+                                	permissions::ownerReadWrite()|
+                                	permissions::groupReadWrite()|
+                                	permissions::othersRead()));
+	fd.getCurrentProperties();
+        test("get perms",(fd.getPermissions()&0x0fff)==
+                                	(permissions::ownerReadWrite()|
+                                	permissions::groupReadWrite()|
+                                	permissions::othersRead()));
         fd.close();
-        file::remove("tempfile");
+        file::remove("permissions.txt");
+	stdoutput.printf("\n");
 }

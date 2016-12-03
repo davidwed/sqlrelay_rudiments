@@ -37,7 +37,9 @@ if %errorlevel% neq 0 exit /b
 error.exe
 if %errorlevel% neq 0 exit /b
 
-rem file.exe
+file.exe
+if %errorlevel% neq 0 exit /b
+
 rem filesystem.exe
 
 groupentry.exe
@@ -80,7 +82,9 @@ rem oneshotsvr.exe
 parameterstring.exe
 if %errorlevel% neq 0 exit /b
 
-rem permissions.exe
+permissions.exe
+if %errorlevel% neq 0 exit /b
+
 rem process.exe
 
 protocolentry.exe
