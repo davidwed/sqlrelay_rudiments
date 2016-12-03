@@ -192,7 +192,8 @@ int main(int argc, const char **argv) {
 		test("async writes",
 			fs1.getAsyncWrites()==fs2.getAsyncWrites());
 		test("type name",
-			fs1.getTypeName()==fs2.getTypeName());
+			!charstring::compare(fs1.getTypeName(),
+						fs2.getTypeName()));
 		test("mount point",
 			!charstring::compare(fs1.getMountPoint(),
 						fs2.getMountPoint()));
