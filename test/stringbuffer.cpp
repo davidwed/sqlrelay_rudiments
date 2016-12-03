@@ -3,177 +3,130 @@
 
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
+
+uint32_t	iterations=5;
+uint32_t	members=1024;
+
+char	alphabet[]="abdefghijklmnopqrstuvwxyz";
 
 int main(int argc, const char **argv) {
 
+	header("stringbuffer");
+
+
 	// create a new string buffer
-	stringbuffer	*str=new stringbuffer();
+	stringbuffer	*strb=new stringbuffer();
+	char		str[800000];
+	char		buf[64];
 
-	// append a NULL to the buffer
-	str->append((char *)NULL);
+	// append...
+	stdoutput.printf("append...\n");
+	for (uint16_t i=0; i<iterations; i++) {
 
-	// append an empty string to the buffer
-	str->append((char *)"");
+		strb->clear();
+		bytestring::zero(str,sizeof(str));
 
-	// append "hello there world" to the buffer in 3 parts
-	str->append("hello ")->append("there ")->append("world ");
+		for (uint16_t j=0; j<members; j++) {
 
-	// display the length and contents of the buffer
-	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
-	stdoutput.printf("string: %s\n",str->getString());
+			// NULL
+			strb->append((const char *)NULL);
 
+			// empty string
+			strb->append("");
 
-	// append some long integers to the buffer
-	str->append((int32_t)1)->append(" ");
-	str->append((int32_t)2)->append(" ");
-	str->append((int32_t)3)->append(" ");
-	str->append((int32_t)4)->append(" ");
-	str->append((int32_t)5)->append(" ");
+			// strings
+			for (uint16_t k=1; k<=25; k++) {
+				strb->append(alphabet,k);
+				charstring::append(str,alphabet,k);
+			}
 
-	// display the length and contents of the buffer
-	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
-	stdoutput.printf("string: %s\n",str->getString());
+			// integers
+			for (uint64_t k=1; k<10000; k*=10) {
+				strb->append((uint16_t)k);
+				charstring::printf(buf,sizeof(buf),
+							"%hd",(uint16_t)k);
+				charstring::append(str,buf);
+			}
+			for (uint64_t k=1; k<1000000000; k*=10) {
+				strb->append((uint32_t)k);
+				charstring::printf(buf,sizeof(buf),
+							"%ld",(uint32_t)k);
+				charstring::append(str,buf);
+			}
+			for (uint64_t k=1; k<1000000000000000000; k*=10) {
+				strb->append((uint64_t)k);
+				charstring::printf(buf,sizeof(buf),
+							"%lld",(uint64_t)k);
+				charstring::append(str,buf);
+			}
 
-	str->append(" ");
+			// float
+			float	mult=10;
+			for (uint16_t k=1; k<5; k++) {
+				float	l=k+((float)k/mult);
+				mult*=10;
+				strb->append(l,k+1,l);
+				charstring::printf(buf,sizeof(buf),
+							"%*.*f",k+1,k,l);
+				charstring::append(str,buf);
+			}
 
-
-	// append some floating point numbers to the buffer
-	str->append(1.1,1,1)->append(" ");
-	str->append(2.02,2,2)->append(" ");
-	str->append(3.003,3,3)->append(" ");
-	str->append(4.0004,4,4)->append(" ");
-	str->append(5.00005,5,5)->append(" ");
-
-	// display the length and contents of the buffer
-	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
-	stdoutput.printf("string: %s\n",str->getString());
-
-
-	// append some double floating point numbers to the buffer
-	str->append((double)1.1,1,1)->append(" ");
-	str->append((double)2.02,2,2)->append(" ");
-	str->append((double)3.003,3,3)->append(" ");
-	str->append((double)4.0004,4,4)->append(" ");
-	str->append((double)5.00005,5,5)->append(" ");
-
-	// display the length and contents of the buffer
-	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
-	stdoutput.printf("string: %s\n",str->getString());
-
-
-	// clear the buffer
-	str->clear();
-
-
-	// append 1024 *'s to the buffer and display it's length and contents
-	unsigned int	i;
-	for (i=0; i<1024; i++) {
-		str->append('*');
-	}
-	stdoutput.printf("length: %lld\n",(uint64_t)str->getStringLength());
-	stdoutput.printf("string: %s\n",str->getString());
-
-	// delete the buffer
-	delete str;
-
-
-
-
-	// create another buffer
-	stringbuffer	*sb=new stringbuffer(128,32);
-
-	// append some string sequences to the buffer and display the contents
-	// of the buffer byte by byte
-	sb->append("12345");
-	sb->append("12345");
-	sb->append("12345");
-	sb->append("12345");
-	sb->append("12345");
-	for (i=0; i<sb->getStringLength(); i++) {
-		stdoutput.printf("%c",sb->getString()[i]);
-	}
-	stdoutput.printf("\n");
-
-
-	// write 66666 to the buffer at position 0 and display it's contents
-	// byte by byte (the first 5 bytes should be overwritten)
-	sb->setPosition(0);
-	sb->write("66666");
-	for (i=0; i<sb->getStringLength(); i++) {
-		stdoutput.printf("%c",sb->getString()[i]);
-	}
-	stdoutput.printf("\n");
-
-
-	// write 66666 to the buffer at position 30 and display it's contents
-	// byte by byte, displaying nonprintable characters as .'s
-	// (there should be a gap in the buffer now containing random data)
-	sb->setPosition(30);
-	sb->write("66666");
-	for (i=0; i<35; i++) {
-		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
-			stdoutput.printf("%c",sb->getString()[i]);
-		} else {
-			stdoutput.printf(".");
+			// double
+			mult=10;
+			for (uint16_t k=1; k<5; k++) {
+				double	l=k+((double)k/mult);
+				mult*=10;
+				strb->append(l,k+1,k);
+				charstring::printf(buf,sizeof(buf),
+							"%*.*f",k+1,k,l);
+				charstring::append(str,buf);
+			}
 		}
+
+		test("length",charstring::length(str)==strb->getStringLength());
+		test("contents",!charstring::compare(str,strb->getString()));
 	}
 	stdoutput.printf("\n");
 
 
-	// set the current position to 50
-	sb->setPosition(50);
-
-	// Append 12345 to the buffer and display it's contents byte by byte,
-	// displaying nonprintable characters as .'s
-	// Since we used append() instead of write(), the data should not be
-	// written at position 50, but rather just at the current end of
-	// the buffer.
-	sb->append("12345");
-	for (i=0; i<40; i++) {
-		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
-			stdoutput.printf("%c",sb->getString()[i]);
-		} else {
-			stdoutput.printf(".");
+	// setPosition and write...
+	stdoutput.printf("write...\n");
+	for (uint16_t i=0; i<iterations; i++) {
+		for (uint16_t j=0; j<10000; j++) {
+			strb->setPosition(j*(30+i));
+			strb->write("66666");
+			charstring::copy(str+(j*(30+i)),"66666",5);
 		}
+		test("contents",!charstring::compare(str,strb->getString()));
 	}
+	delete strb;
 	stdoutput.printf("\n");
 
-	// Write 12345 to the buffer at the current position and display it's
-	// contents byte by byte, displaying nonprintable characters as .'s
-	// The current position should just be the end of the buffer, since
-	// we just appended.  So calling write() here is equivalent to calling
-	// append.
-	sb->write("12345");
-	for (i=0; i<45; i++) {
-		if (sb->getString()[i]>=' ' && sb->getString()[i]<='~') {
-			stdoutput.printf("%c",sb->getString()[i]);
-		} else {
-			stdoutput.printf(".");
+
+	// initial contents...
+	/*stdoutput.printf("initial contents...\n");
+	for (uint16_t i=0; i<iterations; i++) {
+
+		bytestring::zero(str,sizeof(str));
+
+		char	*data=new char[128*i];
+		bytestring::zero(data,128*i);
+		for (uint16_t j=0; j<128*i/16; j++) {
+			charstring::append(data,"0123456789abcdef");
+			charstring::append(str,"0123456789abcdef");
 		}
+
+		strb=new stringbuffer(data,charstring::length(data),32);
+		for (uint16_t j=0; j<=i*100; j++) {
+			strb->append("0123456789abcdef");
+			charstring::append(str,"0123456789abcdef");
+		}
+
+		test("contents",!charstring::compare(strb->getString(),str));
+		delete strb;
 	}
-	stdoutput.printf("\n");
-
-
-	// clear the buffer
-	sb->clear();
-
-	// append 1024 0's to the buffer and display it's length and contents
-	for (i=0; i<1024; i++) {
-		sb->append("0");
-	}
-	stdoutput.printf("length: %lld\n",(uint64_t)sb->getStringLength());
-	stdoutput.printf("string: %s\n",sb->getString());
-
-	delete sb;
-
-
-	// create another buffer
-	char	*data=new char[128];
-	charstring::copy(data,"1234567890");
-	sb=new stringbuffer(data,sizeof(data),32);
-	stdoutput.printf("%s\n",sb->getString());
-	sb->append("1234567890");
-	stdoutput.printf("%s\n",sb->getString());
-	delete sb;
+	stdoutput.printf("\n");*/
 }

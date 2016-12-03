@@ -112,10 +112,16 @@ if %errorlevel% neq 0 exit /b
 
 rem shutdown.exe
 rem signal.exe
-rem singlylinkedlist.exe
+
+singlylinkedlist.exe
+if %errorlevel% neq 0 exit /b
+
 rem snooze.exe
 rem staticarray.exe
-rem stringbuffer.exe
+
+stringbuffer.exe
+if %errorlevel% neq 0 exit /b
+
 rem sys.exe
 rem text.exe
 rem thread.exe

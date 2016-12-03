@@ -56,10 +56,10 @@
 ./sharedmemory
 #./shutdown
 #./signal
-#./singlylinkedlist
+./singlylinkedlist
 #./snooze
 #./staticarray
-#./stringbuffer
+./stringbuffer
 #./sys
 #./text
 #./thread
