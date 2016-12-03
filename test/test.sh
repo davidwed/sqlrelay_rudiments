@@ -45,7 +45,7 @@
 #./permissions
 #./process
 ./protocolentry
-#./randomnumber
+./randomnumber
 #./reboot
 ./regularexpression
 ./semaphoreset
@@ -67,7 +67,7 @@
 #./tlsclient
 #./tlsserver
 #./unixsocketclient
-#./url
+./url
 ./userentry
 #./xmld
 #./xmlentities

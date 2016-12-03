@@ -15,7 +15,8 @@ PROGS = dictionary \
 	stringbuffer \
 	string \
 	vector \
-	memorypool
+	memorypool \
+	randomnumber
 
 .SUFFIXES: .lo .obj
 
@@ -63,3 +64,6 @@ vector: vector.cpp vector.$(OBJ)
 
 memorypool: memorypool.cpp memorypool.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) memorypool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+randomnumber: randomnumber.cpp randomnumber.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) randomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

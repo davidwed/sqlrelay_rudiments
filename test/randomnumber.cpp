@@ -4,73 +4,74 @@
 #include <rudiments/randomnumber.h>
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
+
+const uint16_t	setcount=10;
+const uint16_t	numbercount=1000;
+const int32_t	lowerrange=-65536;
+const int32_t	upperrange=65536;
+
+void testRange(const char *title, int32_t *numbers, uint16_t count,
+						int32_t bottom, int32_t top) {
+	bool	success=true;
+	for (uint16_t i=0; i<count && success; i++) {
+		if (numbers[i]<bottom && numbers[i]>top) {
+			success=false;
+		}
+	}
+	test(title,success);
+}
 
 int main(int argc, const char **argv) {
 
-        int	seed=randomnumber::getSeed();
-        stdoutput.printf("Seed: %d\n\n",seed);
+	header("randomnumber");
 
-        stdoutput.printf("Random numbers between 0 and %lld:\n",
-				(uint64_t)randomnumber::getRandMax());
-        stdoutput.printf("%lld (next might be the same as this)\n",
-				(uint64_t)randomnumber::generateNumber(seed));
+	// get the seed
+        uint32_t	seed=randomnumber::getSeed();
+        stdoutput.printf("	Seed: %d\n\n",seed);
+
 	randomnumber	r;
-	r.setSeed(seed);
-	for (uint16_t i=0; i<5; i++) {
-		uint32_t	number=0;
-        	r.generateNumber(&number);
-        	stdoutput.printf("%lld\n",(uint64_t)number);
-	}
-        stdoutput.printf("\n");
+	int32_t	*numbers=new int32_t[numbercount];
 
-	int32_t	lower[]={100,-1000,-100};
-	int32_t	upper[]={1000,-100,100};
+	for (uint16_t i=0; i<setcount; i++) {
 
-	for (uint16_t j=0; j<3; j++) {
-		int32_t	bottom=lower[j];
-		int32_t	top=upper[j];
-        	stdoutput.printf("Random numbers between %d and %d:\n",
-								bottom,top);
-        	stdoutput.printf(" % 4d",
-			randomnumber::generateScaledNumber(seed,bottom,top));
-        	uint32_t	basenumber=
-			randomnumber::generateNumber(seed+1);
-        	int32_t	scalednumber=
-			randomnumber::scaleNumber(basenumber,bottom,top);
-        	stdoutput.printf(" % 4d\n",scalednumber);
-		randomnumber	r;
+		// generate range
+		seed=randomnumber::generateNumber(seed);
+		int32_t	bottom=randomnumber::scaleNumber(
+						seed,lowerrange,upperrange);
+		seed=randomnumber::generateNumber(seed);
+		int32_t	top=randomnumber::scaleNumber(
+						seed,lowerrange,upperrange);
+		if (bottom>top) {
+			int32_t	temp=top;
+			top=bottom;
+			bottom=temp;
+		}
+
+        	stdoutput.printf("	%d numbers between %d and %d:\n",
+							numbercount,bottom,top);
+
+		// static methods
+		for (uint16_t j=0; j<numbercount; j++) {
+			numbers[j]=randomnumber::generateScaledNumber(
+							seed,bottom,top);
+			seed=numbers[j];
+		}
+		testRange("static methods - in range",
+					numbers,numbercount,bottom,top);
+
+		// instance methods
 		r.setSeed(seed);
-		for (uint16_t k=0; k<100; k++) {
-			int32_t	number=0;
-        		r.generateScaledNumber(bottom,top,&number);
-        		stdoutput.printf(" % 4d",number);
-			if (!((k+1)%10)) {
-        			stdoutput.printf("\n");
+		bool	success=true;
+		for (uint16_t j=0; j<numbercount && success; j++) {
+			numbers[j]=0;
+        		if (!r.generateScaledNumber(bottom,top,&(numbers[j]))) {
+				success=false;
 			}
 		}
-        	stdoutput.printf("\n");
+		test("instance methods - success",success);
+		testRange("instance methods - in range",
+					numbers,numbercount,bottom,top);
+		stdoutput.printf("\n");
 	}
-
-        stdoutput.printf("Generating full range of numbers (max=%lld)...\n",
-					(uint64_t)randomnumber::getRandMax());
-	datetime	start;
-	start.getSystemDateAndTime();
-	r.setSeed(0);
-	for (int64_t l=0; l<randomnumber::getRandMax(); l++) {
-		uint32_t	result;
-		if (!r.generateNumber(&result)) {
-        		stdoutput.printf("generateNumber failed: %lld\n",l);
-			break;
-		} else {
-			if (l<10) {
-        			stdoutput.printf("%lld: ",l);
-        			stdoutput.printf("%ld\n",result);
-			} else if (l==10) {
-        			stdoutput.printf("...\n");
-			}
-		}
-	}
-	datetime	end;
-	end.getSystemDateAndTime();
-	stdoutput.printf("%d seconds\n",end.getEpoch()-start.getEpoch());
 }

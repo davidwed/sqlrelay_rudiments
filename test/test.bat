@@ -89,7 +89,9 @@ rem process.exe
 protocolentry.exe
 if %errorlevel% neq 0 exit /b
 
-rem randomnumber.exe
+randomnumber.exe
+if %errorlevel% neq 0 exit /b
+
 rem reboot.exe
 
 regularexpression.exe
