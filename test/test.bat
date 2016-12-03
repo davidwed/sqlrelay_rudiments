@@ -82,8 +82,8 @@ rem oneshotsvr.exe
 parameterstring.exe
 if %errorlevel% neq 0 exit /b
 
-permissions.exe
-if %errorlevel% neq 0 exit /b
+rem permissions.exe
+rem if %errorlevel% neq 0 exit /b
 
 rem process.exe
 
