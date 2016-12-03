@@ -478,6 +478,16 @@ int64_t filesystem::getAvailableBlocks() const {
 #endif
 }
 
+int64_t filesystem::getReservedBlocks() const {
+#if defined(RUDIMENTS_HAVE_STATVFS) || \
+	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
+	return pvt->_st.f_bresvd;
+#else
+	return 0;
+#endif
+}
+
 int64_t filesystem::getTotalFileNodes() const {
 #if defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS) || \
@@ -516,14 +526,42 @@ int64_t filesystem::getAvailableFileNodes() const {
 #if defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
-	return pvt->_st.f_ffree;
+	return pvt->_st.f_favail;
+#else
+	return 0;
+#endif
+}
+
+int64_t filesystem::getReservedFileNodes() const {
+#if defined(RUDIMENTS_HAVE_STATVFS) || \
+	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
+	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
+	return pvt->_st.f_fresvd;
 #else
 	return 0;
 #endif
 }
 
 int64_t filesystem::getFileSystemId() const {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
+#if defined(RUDIMENTS_HAVE_LINUX_STATFS)
+	// fsid_t is an opaque struct, but it typically contains an array of
+	// some number of bytes which are collectively set to some unique value.
+	// Attempt to handle various possibilities...
+	if (sizeof(fsid_t)==sizeof(uint16_t)) {
+		uint16_t	temp;
+		bytestring::copy(&temp,&pvt->_st.f_fsid,sizeof(uint16_t));
+		return (int64_t)temp;
+	} else if (sizeof(fsid_t)==sizeof(uint32_t)) {
+		uint32_t	temp;
+		bytestring::copy(&temp,&pvt->_st.f_fsid,sizeof(uint32_t));
+		return (int64_t)temp;
+	} else {
+		uint64_t	temp;
+		bytestring::copy(&temp,&pvt->_st.f_fsid,sizeof(uint64_t));
+		return (int64_t)temp;
+	}
+	return 0;
+#elif defined(RUDIMENTS_HAVE_STATVFS) || \
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS) || \
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \

@@ -64,6 +64,10 @@ class RUDIMENTS_DLLSPEC filesystem {
 		 *  accounts on the filesystem. */
 		int64_t		getAvailableBlocks() const;
 
+		/** Returns the number of blocks reserved for superuser
+		 *  accounts on the filesystem. */
+		int64_t		getReservedBlocks() const;
+
 		/** Returns the number of file nodes on the filesystem. */
 		int64_t		getTotalFileNodes() const;
 
@@ -73,6 +77,10 @@ class RUDIMENTS_DLLSPEC filesystem {
 		/** Returns the number of file nodes available to 
 		 *  non-superuser accounts. */
 		int64_t		getAvailableFileNodes() const;
+
+		/** Returns the number of file nodes reserved for 
+		 *  superuser accounts. */
+		int64_t		getReservedFileNodes() const;
 
 		/** Returns the file system id. */
 		int64_t		getFileSystemId() const;
