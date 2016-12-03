@@ -55,7 +55,6 @@ if %errorlevel% neq 0 exit /b
 rem inetclntbench.exe
 rem inetsocketclient.exe
 rem inetsvrbench.exe
-rem kill.exe
 
 linkedlist.exe
 if %errorlevel% neq 0 exit /b
