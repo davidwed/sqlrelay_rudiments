@@ -124,9 +124,14 @@ int main(int argc, const char **argv) {
 
 	test("file system id",fs1.getFileSystemId());
 	test("maximum file name length",fs1.getMaximumFileNameLength());
-	char	*username=userentry::getName(fs1.getOwner());
-	test("owner",!charstring::isNullOrEmpty(username));
-	delete[] username;
+
+	// Windows doesn't have filesystem owners
+	#ifndef _WIN32
+		char	*username=userentry::getName(fs1.getOwner());
+		test("owner",!charstring::isNullOrEmpty(username));
+		delete[] username;
+	#endif
+
 	test("type name",fs1.getTypeName());
 
 	// believe it or not, these aren't known on most systems...
