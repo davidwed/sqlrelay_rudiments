@@ -44,7 +44,6 @@ PROGS2= dynamicarray \
 	staticarray \
 	dynamiclib \
 	error \
-	math \
 	thread \
 	threadmutex \
 	process \
@@ -270,9 +269,6 @@ dynamiclib: dynamiclib.cpp dynamiclib.$(OBJ)
 
 error: error.cpp error.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) error.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-math: math.cpp math.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) math.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 thread: thread.cpp thread.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) thread.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

@@ -34,9 +34,10 @@ void testclass::setValue(uint32_t value) {
 
 #define COUNT 4096
 
+
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("staticarray:\n");
+	header("staticarray");
 
 	// Create a staticarray
 	staticarray<struct test,COUNT>	sa1;
@@ -149,6 +150,7 @@ int main(int argc, const char **argv) {
 
 	// set/check values
 	stdoutput.printf("get values...\n");
+	count=COUNT;
 	success=true;
 	for (i=0; i<count; i++) {
 		success=(sa2[i].getValue()==1);
@@ -184,6 +186,7 @@ int main(int argc, const char **argv) {
 
 	// set/check values
 	stdoutput.printf("get values...\n");
+	count=COUNT;
 	success=true;
 	for (i=0; i<count; i++) {
 		sa3[i]=new testclass();
@@ -217,13 +220,14 @@ int main(int argc, const char **argv) {
 
 
 	// create
-	staticarray< staticarray< uint32_t,COUNT >,COUNT >	sa4;
+	staticarray< staticarray< uint32_t, COUNT > ,COUNT>	sa4;
 	stdoutput.printf("create nested...\n");
 	test("create, getLength()",sa4.getLength()==COUNT);
 	stdoutput.printf("\n");
 
 	// set/check values
 	stdoutput.printf("get values...\n");
+	count=COUNT;
 	success=true;
 	for (i=0; i<count; i++) {
 		for (uint32_t j=0; j<count; j++) {

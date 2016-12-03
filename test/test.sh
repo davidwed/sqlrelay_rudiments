@@ -51,7 +51,7 @@
 #./signal
 ./singlylinkedlist
 #./snooze
-#./staticarray
+./staticarray
 ./stringbuffer
 #./sys
 #./text

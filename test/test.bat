@@ -109,7 +109,9 @@ singlylinkedlist.exe
 if %errorlevel% neq 0 exit /b
 
 rem snooze.exe
-rem staticarray.exe
+
+staticarray.exe
+if %errorlevel% neq 0 exit /b
 
 stringbuffer.exe
 if %errorlevel% neq 0 exit /b
