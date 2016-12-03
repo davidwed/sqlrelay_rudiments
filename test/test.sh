@@ -33,8 +33,8 @@
 #./lock2
 #./logger
 #./math
-#./memorymap
-#./memorypool
+./memorymap
+./memorypool
 #./nonhandoff1
 #./nonhandoff2
 #./nonhandoffclient

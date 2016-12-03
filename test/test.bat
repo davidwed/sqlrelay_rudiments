@@ -66,8 +66,13 @@ rem lock1.exe
 rem lock2.exe
 rem logger.exe
 rem math.exe
-rem memorymap.exe
-rem memorypool.exe
+
+memorymap.exe
+if %errorlevel% neq 0 exit /b
+
+memorypool.exe
+if %errorlevel% neq 0 exit /b
+
 rem nonhandoff1.exe
 rem nonhandoff2.exe
 rem nonhandoffclient.exe
