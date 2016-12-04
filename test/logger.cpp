@@ -86,7 +86,7 @@ int main(int argc, const char **argv) {
 	test("header pid",
 		// (date string may or may not include the timezone)
 		charstring::toInteger(header+33)==process::getProcessId() ||
-		charstring::toInteger(header+29)==process::getProcessId());
+		charstring::toInteger(header+30)==process::getProcessId());
 
 
 	// write various log messages (even though no destinations exist)
