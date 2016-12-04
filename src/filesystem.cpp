@@ -110,7 +110,7 @@ filesystem::~filesystem() {
 	delete pvt;
 }
 
-bool filesystem::initialize(const char *path) {
+bool filesystem::open(const char *path) {
 	close();
 	if (charstring::isNullOrEmpty(path)) {
 		path=directory::getCurrentWorkingDirectory();
@@ -141,7 +141,7 @@ bool filesystem::initialize(const char *path) {
 	#endif
 }
 
-bool filesystem::initialize(int32_t fd) {
+bool filesystem::open(int32_t fd) {
 	close();
 	#ifndef RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE
 		pvt->_fd=fd;
@@ -149,7 +149,7 @@ bool filesystem::initialize(int32_t fd) {
 	#else
 		// This is complex on Windows.
 		// We have to determine the file name that the file descriptor
-		// refers to and call the other version of initialize().  On
+		// refers to and call the other version of open().  On
 		// Vista and newer we can use GetFinalPathNameByHandle(), but
 		// on older versions we have to memory-map the file, get the
 		// file name from the map and convert the volume name to a
@@ -263,8 +263,8 @@ bool filesystem::initialize(int32_t fd) {
 			*(ptr+1)=':';
 		}
 		
-		// initialize using file name
-		return (volume[0])?initialize(ptr):false;
+		// open using file name
+		return (volume[0])?open(ptr):false;
 	#endif
 }
 

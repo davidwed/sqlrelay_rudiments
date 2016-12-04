@@ -127,7 +127,7 @@ bool xmlsax::parseLocalFile(const char *filename) {
 		// Get the optimum transfer size for the filesystem
 		// the file is found on, if possible.
 		filesystem	fs;
-		if (fs.initialize(filename)) {
+		if (fs.open(filename)) {
 			pvt->_optblocksize=fs.getOptimumTransferBlockSize();
 			if (!pvt->_optblocksize) {
 				pvt->_optblocksize=1024;

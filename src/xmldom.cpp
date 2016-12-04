@@ -130,7 +130,7 @@ bool xmldom::stringCacheEnabled() {
 bool xmldom::writeFile(const char *filename, mode_t perms) const {
 	filesystem	fs;
 	off64_t	optblocksize;
-	if (fs.initialize(filename)) {
+	if (fs.open(filename)) {
 		optblocksize=fs.getOptimumTransferBlockSize();
 	} else {
 		optblocksize=sys::getPageSize();

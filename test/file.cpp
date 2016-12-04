@@ -42,7 +42,7 @@ int main(int argc, const char **argv) {
 	test("size",fl.getSize()==5);
 
 	filesystem	fs;
-	fs.initialize(fl.getFileDescriptor());
+	fs.open(fl.getFileDescriptor());
 	test("block size",fl.getBlockSize()==fs.getBlockSize());
 	test("blocks",fl.getBlockCount()!=0);
 

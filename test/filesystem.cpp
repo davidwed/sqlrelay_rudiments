@@ -74,7 +74,7 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("uninitialized...\n");
 		} else if (i==1) {
 			stdoutput.printf("negative file descriptor...\n");
-			fs.initialize(-1);
+			fs.open(-1);
 		}
 
 		//print(&fs);
@@ -108,7 +108,7 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("from file name...\n");
 	filesystem	fs1;
-	fs1.initialize(filename);
+	fs1.open(filename);
 	//print(&fs1);
 	test("type",fs1.getType());
 	test("block size",fs1.getBlockSize());
@@ -148,10 +148,10 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("from file descriptor...\n");
 			file	f;
 			f.open(filename,O_RDONLY);
-			fs2.initialize(f.getFileDescriptor());
+			fs2.open(f.getFileDescriptor());
 		} else {
 			stdoutput.printf("from NULL...\n");
-			fs2.initialize((const char *)NULL);
+			fs2.open((const char *)NULL);
 		}
 		//print(&fs2);
 
@@ -208,6 +208,37 @@ int main(int argc, const char **argv) {
 			!charstring::compare(
 				fs1.getFilesystemSpecificString(),
 				fs2.getFilesystemSpecificString()));
+		stdoutput.printf("\n");
+
+
+		stdoutput.printf("closed:\n");
+		fs.close();
+		//print(&fs);
+
+		test("type",!fs.getType());
+		test("block size",!fs.getBlockSize());
+		test("optimum transfer block size",
+				!fs.getOptimumTransferBlockSize());
+		test("total blocks",!fs.getTotalBlocks());
+		test("free blocks",!fs.getFreeBlocks());
+		test("available blocks",!fs.getAvailableBlocks());
+		test("reserved blocks",!fs.getReservedBlocks());
+		test("total file nodes",!fs.getTotalFileNodes());
+		test("free file nodes",!fs.getFreeFileNodes());
+		test("available file nodes",!fs.getAvailableFileNodes());
+		test("resreved file nodes",!fs.getReservedFileNodes());
+		test("file system id",!fs.getFileSystemId());
+		test("maximum file name length",!fs.getMaximumFileNameLength());
+		test("owner",!fs.getOwner());
+		test("sync writes",!fs.getSyncWrites());
+		test("async writes",!fs.getAsyncWrites());
+		test("type name",!fs.getTypeName());
+		test("mount point",!fs.getMountPoint());
+		test("sync reads",!fs.getSyncReads());
+		test("async reads",!fs.getAsyncReads());
+		test("device name",!fs.getDeviceName());
+		test("filesystem specific string",
+				!fs.getFilesystemSpecificString());
 		stdoutput.printf("\n");
 	}
 }

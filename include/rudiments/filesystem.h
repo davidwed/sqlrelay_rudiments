@@ -31,18 +31,26 @@ class RUDIMENTS_DLLSPEC filesystem {
 		/** Deletes this instance of the filesystem class. */
 		virtual		~filesystem();
 
-		/** Initializes the instance to use the filesystem containing
-		 *  "path".  If "path" is NULL or an empty string then it the
-		 *  instance is initialized using the current working directoy.
+		/** Opens the filesystem containing file or directory "path".
+		 *  If "path" is NULL or an empty string then it the instance
+		 *  is initialized using the current working directoy.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	initialize(const char *path);
+		bool	open(const char *path);
 
 		/** Initializes the instance to use already open file
 		 *  descriptor "fd".
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	initialize(int32_t fd);
+		bool	open(int32_t fd);
+
+		/** Closes the currently open filesystem. */
+		bool	close();
+
+		/** Refreshes the current filesystem properties as returned
+		 *  by the various methods of this class.
+		 *  Returns true on success and false on failure. */
+		bool	getCurrentProperties();
 
 		/** Returns a number representing the filesystem type. */
 		int64_t		getType() const;
@@ -119,11 +127,6 @@ class RUDIMENTS_DLLSPEC filesystem {
 
 		/** Returns the filesystem-specific string. */
 		const char	*getFilesystemSpecificString() const;
-
-		/** Refreshes the current filesystem properties as returned
-		 *  by the various methods of this class.
-		 *  Returns true on success and false on failure. */
-		bool	getCurrentProperties();
 
 		/** Returns a pointer to the filesystem stats structure
 		 *  used internally.  (This is VERY system-specific and could
