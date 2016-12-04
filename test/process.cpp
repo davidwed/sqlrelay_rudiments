@@ -4,6 +4,7 @@
 #include <rudiments/process.h>
 #include <rudiments/permissions.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/directory.h>
 #include <rudiments/file.h>
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
