@@ -30,7 +30,7 @@
 ./semaphoreset
 ./serviceentry
 ./sharedmemory
-#./signal
+./signal
 ./singlylinkedlist
 ./snooze
 ./staticarray

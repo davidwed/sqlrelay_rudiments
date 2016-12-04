@@ -2,67 +2,117 @@
 // See the file COPYING for more information
 
 #include <rudiments/signalclasses.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/charstring.h>
+#include <rudiments/directory.h>
+#include <rudiments/process.h>
+#include <rudiments/snooze.h>
 #include <rudiments/stdio.h>
+#include "test.cpp"
 
 bool	gotsigterm=false;
-
-#ifdef SIGFPE
-void handleSigfpe(int32_t sig) {
-	stdoutput.printf("Got a SIGFPE!\n");
-}
-#endif
-
 void handleSigterm(int32_t sig) {
-	stdoutput.printf("Got a SIGTERM!\n");
 	gotsigterm=true;
 }
 
+#ifdef SIGFPE
+bool	gotsigfpe=false;
+void handleSigfpe(int32_t sig) {
+	gotsigfpe=true;
+}
+#endif
+
 #ifdef SIGALRM
-void handleAlarm(int32_t sig) {
-	stdoutput.printf("alarm!\n");
+bool	gotsigalrm=false;
+void handleSigalrm(int32_t sig) {
+	gotsigalrm=true;
 }
 #endif
 
 int main(int argc, const char **argv) {
 
-	// this program will ignore all signals except
-	// SIGFPE, SIGTERM and SIGALRM
-	signalset	ignoreset;
-	ignoreset.addAllSignals();
-	#ifdef SIGFPE
-	ignoreset.removeSignal(SIGFPE);
-	#endif
-	ignoreset.removeSignal(SIGTERM);
-	#ifdef SIGALRM
-	ignoreset.removeSignal(SIGALRM);
-	#endif
-	signalmanager::ignoreSignals(&ignoreset);
+	if (argc==1) {
 
-	// when it gets a SIGFPE, it will run the handleSigfpe() function
-	#ifdef SIGFPE
-	signalhandler	fpehandler;
-	fpehandler.setHandler(handleSigfpe);
-	fpehandler.handleSignal(SIGFPE);
-	#endif
+		header("signal");
 
-	// when it gets a SIGTERM, it will run the handleSigterm() function
-	signalhandler	termhandler;
-	termhandler.setHandler(handleSigterm);
-	termhandler.handleSignal(SIGTERM);
+		// spawn a child to signal this process
+		stringbuffer	cmd;
+		char	*pwd=directory::getCurrentWorkingDirectory();
+		cmd.append(pwd)->append("/signal");
+		#ifdef _WIN32
+			cmd.append(".exe");
+		#endif
+		delete[] pwd;
+		char	*pidstr=charstring::parseNumber(
+						process::getProcessId());
+		const char	*args1[]={"signal",pidstr,NULL};
+		process::spawn(cmd.getString(),args1,true);
+		delete[] pidstr;
 
-	// handle alarm
-	#ifdef SIGALRM
-	signalhandler	alarmhandler;
-	alarmhandler.setHandler(handleAlarm);
-	alarmhandler.handleSignal(SIGALRM);
-	#endif
 
-	// Loop forever, each time waiting for a signal not in the ignoreset
-	// to be sent. Since SIGFPE is the only signal not in the ignoreset,
-	// waitForSignals will fall through only when SIGFPE is received.
-	signalmanager::alarm(2);
-	while (!gotsigterm) {
+		// this program will ignore all signals except
+		// SIGTERM, SIGFPE, and SIGALRM
+		signalset	ignoreset;
+		ignoreset.addAllSignals();
+		ignoreset.removeSignal(SIGTERM);
+		#ifdef SIGFPE
+		ignoreset.removeSignal(SIGFPE);
+		#endif
+		#ifdef SIGALRM
+		ignoreset.removeSignal(SIGALRM);
+		#endif
+		signalmanager::ignoreSignals(&ignoreset);
+
+		// when it gets a SIGFPE,
+		// it will run the handleSigfpe() function
+		#ifdef SIGFPE
+		signalhandler	fpehandler;
+		fpehandler.setHandler(handleSigfpe);
+		fpehandler.handleSignal(SIGFPE);
+		#endif
+
+		// when it gets a SIGTERM,
+		// it will run the handleSigterm() function
+		signalhandler	termhandler;
+		termhandler.setHandler(handleSigterm);
+		termhandler.handleSignal(SIGTERM);
+
+		// when it gets a SIGALRM,
+		// it will run the handleSigalrm() function
+		#ifdef SIGALRM
+		signalhandler	alarmhandler;
+		alarmhandler.setHandler(handleSigalrm);
+		alarmhandler.handleSignal(SIGALRM);
+		#endif
+
+		// set an alarm
+		signalmanager::alarm(3);
+
+		// wait for signals, bail when all have been received
 		signalmanager::waitForSignals(&ignoreset);
-		signalmanager::alarm(2);
+		test("SIGTERM",gotsigterm);
+		#ifdef SIGFPE
+		signalmanager::waitForSignals(&ignoreset);
+		test("SIGFPE",gotsigfpe);
+		#endif
+		#ifdef SIGALRM
+		signalmanager::waitForSignals(&ignoreset);
+		test("SIGALRM",gotsigalrm);
+		#endif
+
+	} else {
+
+		// get the parent pid from the command line
+		pid_t	pid=charstring::toInteger(argv[1]);
+
+		// send it a SIGTERM
+		snooze::macrosnooze(1);
+		process::sendSignal(pid,SIGTERM);
+
+		// send it a SIGFPE
+		#ifdef SIGFPE
+		snooze::macrosnooze(1);
+		process::sendSignal(pid,SIGFPE);
+		#endif
 	}
 }
