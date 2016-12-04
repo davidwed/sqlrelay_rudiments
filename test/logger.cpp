@@ -79,7 +79,10 @@ int main(int argc, const char **argv) {
 	test("header year",charstring::toInteger(header+6)==dt.getYear());
 	test("header hour",charstring::toInteger(header+11)==dt.getHour());
 	test("header minute",charstring::toInteger(header+14)==dt.getMinutes());
-	test("header program",!charstring::compare(header+24,"logtest ",8));
+	test("header program",
+		// date string may or may not include the timezone
+		!charstring::compare(header+24,"logtest ",8) ||
+		!charstring::compare(header+21,"logtest ",8));
 	test("header pid",charstring::toInteger(header+33)==
 					process::getProcessId());
 
