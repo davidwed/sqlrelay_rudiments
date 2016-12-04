@@ -76,7 +76,7 @@ void shutDown(int32_t sig) {
 int main(int argc, const char **argv) {
 
 	if (argc<2) {
-		stdoutput.printf("usage: inetsvrbench [buffer size]\n");
+		stdoutput.printf("usage: inetsocketserver [buffer size]\n");
 		process::exit(1);
 	}
 

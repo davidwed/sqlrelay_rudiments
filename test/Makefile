@@ -67,8 +67,6 @@ PROGS3= handoff1 \
 	xmls \
 	xmld \
 	xmlentities \
-	inetclntbench \
-	inetsvrbench \
 	nullserver \
 	logger \
 	sys \
@@ -248,12 +246,6 @@ xmld: xmld.cpp xmld.$(OBJ)
 
 xmlentities: xmlentities.cpp xmlentities.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmlentities.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-inetclntbench: inetclntbench.cpp inetclntbench.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetclntbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-inetsvrbench: inetsvrbench.cpp inetsvrbench.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsvrbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 crypt: crypt.cpp crypt.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) crypt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

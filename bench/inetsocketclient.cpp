@@ -10,7 +10,7 @@
 int main(int argc, const char **argv) {
 
 	if (argc<3) {
-		stdoutput.printf("usage: inetclntbench [buffer size] [bytesperiteration] [iterations]\n");
+		stdoutput.printf("usage: inetsocketclient [buffer size] [bytesperiteration] [iterations]\n");
 		process::exit(0);
 	}
 

@@ -22,9 +22,7 @@
 #./handoff2
 #./handoffclient
 ./hostentry
-#./inetclntbench
 #./inetsocketclient
-#./inetsvrbench
 ./linkedlist
 #./listener
 #./lock1
@@ -40,7 +38,7 @@
 #./oneshotsvr
 ./parameterstring
 ./permissions
-#./process
+./process
 ./protocolentry
 ./randomnumber
 ./regularexpression

@@ -55,9 +55,7 @@ rem handoffclient.exe
 hostentry.exe
 if %errorlevel% neq 0 exit /b
 
-rem inetclntbench.exe
 rem inetsocketclient.exe
-rem inetsvrbench.exe
 
 linkedlist.exe
 if %errorlevel% neq 0 exit /b
@@ -86,7 +84,8 @@ if %errorlevel% neq 0 exit /b
 permissions.exe
 if %errorlevel% neq 0 exit /b
 
-rem process.exe
+process.exe
+if %errorlevel% neq 0 exit /b
 
 protocolentry.exe
 if %errorlevel% neq 0 exit /b

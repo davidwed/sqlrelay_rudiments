@@ -16,7 +16,9 @@ PROGS = dictionary \
 	string \
 	vector \
 	memorypool \
-	randomnumber
+	randomnumber \
+	inetsocketclient \
+	inetsocketserver
 
 .SUFFIXES: .lo .obj
 
@@ -67,3 +69,9 @@ memorypool: memorypool.cpp memorypool.$(OBJ)
 
 randomnumber: randomnumber.cpp randomnumber.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) randomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+inetsocketclient: inetsocketclient.cpp inetsocketclient.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+inetsocketserver: inetsocketserver.cpp inetsocketserver.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
