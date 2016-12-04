@@ -64,7 +64,6 @@ PROGS3= handoff1 \
 	nonhandoff1 \
 	nonhandoff2 \
 	nonhandoffclient \
-	xmls \
 	xmldom \
 	xmlentities \
 	nullserver \
@@ -237,9 +236,6 @@ nonhandoffclient: nonhandoffclient.cpp nonhandoffclient.$(OBJ)
 
 bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytebuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-xmls: xmls.cpp xmls.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmls.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 xmldom: xmldom.cpp xmldom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmldom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
