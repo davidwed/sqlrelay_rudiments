@@ -130,6 +130,7 @@ const char	*myxmlsax::getString() {
 	return str.getString();
 }
 
+#include "xml.h"
 
 int main(int argc, const char **argv) {
 
@@ -137,24 +138,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("=====================================================\n");
 
 	// parse string...
-	x.parseString("\n\
-<?xml version=\"1.0\" ?>\n\
-<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n\
-<test>start test text\n\
-	<tag1 name11='&amp;&lt;&gt;&apos;&quot;' name12='&amp&lt&gt&apos&quot' name13='&&&&&' / > end tag1 text\n\
-	<tag2 name21=\"value21\" name22=\"value22\"> start tag2 text\n\
-		<tag3 name31=\"value31\" name32=\"value32\"> start tag3 text\n\
-			<tag4 name42=\"value41\" name42=\"value42\" /> end tag4 end text\n\
-		</tag3> end tag3 text\n\
-<!-- test comment -->\n\
-<?target test=\"test1\"?>\n\
-	</tag2> end tag2 text\n\
-&amp;&lt;&gt;&apos;&quot;\n\
-&amp&lt&gt&apos&quot\n\
-&&&&&\n\
-<![CDATA[ test [ test [ test [test]]]]]>\n\
-</test>\n\
-");
+	x.parseString(xmls);
 	stdoutput.printf("%s\n",x.getString());
 	stdoutput.printf("=====================================================\n");
 

@@ -60,6 +60,6 @@
 #./unixsocketclient
 ./url
 ./userentry
-#./xmld
+./xmldom
 #./xmlentities
 #./xmls
