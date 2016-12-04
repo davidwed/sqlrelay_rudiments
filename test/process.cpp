@@ -3,18 +3,11 @@
 
 #include <rudiments/process.h>
 #include <rudiments/permissions.h>
+#include <rudiments/stringbuffer.h>
 #include <rudiments/file.h>
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
 #include "test.cpp"
-
-#ifdef _WIN32
-	const char	*cmd="ls.bat";
-	const char	*args[]={"ls","..\\",NULL};
-#else
-	const char	*cmd="/bin/ls";
-	const char	*args[]={"ls","../",NULL};
-#endif
 
 int main(int argc, const char **argv) {
 
@@ -46,15 +39,28 @@ int main(int argc, const char **argv) {
 	test("uid/euid",uid==euid);
 	test("gid/egid",gid==egid);
 #endif
+
+
+	stringbuffer	cmd;
+#ifdef _WIN32
+	cmd.append(directory::getCurrentWorkingDirectory())->
+					append("\\")->append("ls.bat");
+	const char	*args[]={"ls","..\\",NULL};
+#else
+	cmd.append("/bin/ls");
+	const char	*args[]={"ls","../",NULL};
+#endif
+
+
 	test("create pidfile",process::createPidFile("pidfile",
 				permissions::evalPermString("rw-r--r--")));
 	test("check pidfile",process::checkForPidFile("pidfile"));
 	file::remove("pidfile");
 	stdoutput.printf("\n");
 
-	test("spawn",process::spawn(cmd,args,false)>1);
+	test("spawn",process::spawn(cmd.getString(),args,false)>1);
 	snooze::macrosnooze(1);
 	stdoutput.printf("\n");
 
-	process::exec(cmd,args);
+	process::exec(cmd.getString(),args);
 }
