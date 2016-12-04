@@ -80,11 +80,14 @@ int main(int argc, const char **argv) {
 	test("header hour",charstring::toInteger(header+11)==dt.getHour());
 	test("header minute",charstring::toInteger(header+14)==dt.getMinutes());
 	test("header program",
-		// date string may or may not include the timezone
+		// (date string may or may not include the timezone)
 		!charstring::compare(header+24,"logtest ",8) ||
 		!charstring::compare(header+21,"logtest ",8));
-	test("header pid",charstring::toInteger(header+33)==
-					process::getProcessId());
+	test("header pid",
+		// (date string may or may not include the timezone)
+		charstring::toInteger(header+33)==process::getProcessId() ||
+		charstring::toInteger(header+29)==process::getProcessId());
+
 
 	// write various log messages (even though no destinations exist)
 	lg.write(header,0,"test");
