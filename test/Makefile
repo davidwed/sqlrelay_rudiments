@@ -54,9 +54,7 @@ PROGS2= dynamicarray \
 	tlsserver \
 	tlsclient \
 	oneshotsvr \
-	oneshotclnt \
-	lock1 \
-	lock2
+	oneshotclnt
 
 PROGS3= handoff1 \
 	handoff2 \
@@ -157,12 +155,6 @@ singlylinkedlist: singlylinkedlist.cpp singlylinkedlist.$(OBJ)
 
 listmetrics: listmetrics.cpp listmetrics.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) listmetrics.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-lock1: lock1.cpp lock1.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) lock1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-lock2: lock2.cpp lock2.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) lock2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 memorypool: memorypool.cpp memorypool.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) memorypool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
