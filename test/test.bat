@@ -133,6 +133,8 @@ rem url.exe
 userentry.exe
 if %errorlevel% neq 0 exit /b
 
-rem xmldom.exe
+xmldom.exe
+if %errorlevel% neq 0 exit /b
+
 rem xmlentities.exe
 rem xmls.exe
