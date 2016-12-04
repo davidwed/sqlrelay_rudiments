@@ -61,7 +61,9 @@ linkedlist.exe
 if %errorlevel% neq 0 exit /b
 
 rem listener.exe
-rem logger.exe
+
+logger.exe
+if %errorlevel% neq 0 exit /b
 
 memorymap.exe
 if %errorlevel% neq 0 exit /b

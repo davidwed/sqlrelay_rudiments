@@ -18,7 +18,7 @@
 ./groupentry
 ./hostentry
 ./linkedlist
-#./logger
+./logger
 ./memorymap
 ./memorypool
 ./parameterstring
@@ -42,6 +42,8 @@
 #./url
 ./userentry
 ./xmldom
+
+
 
 #./gssclient
 #./gssserver
