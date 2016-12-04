@@ -95,6 +95,8 @@ int main(int argc, const char **argv) {
 	test("parse file",x.parseFile("oddspacing.xml"));
 	file::remove("oddspacing.xml");
 
+	stdoutput.printf("\n");
+
 
 	file::remove("normal.xml");
 	delete[] normaldotxml;
