@@ -48,7 +48,7 @@
 ./sharedmemory
 #./signal
 ./singlylinkedlist
-#./snooze
+./snooze
 ./staticarray
 ./stringbuffer
 #./sys

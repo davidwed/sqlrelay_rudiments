@@ -112,7 +112,8 @@ rem signal.exe
 singlylinkedlist.exe
 if %errorlevel% neq 0 exit /b
 
-rem snooze.exe
+snooze.exe
+if %errorlevel% neq 0 exit /b
 
 staticarray.exe
 if %errorlevel% neq 0 exit /b
