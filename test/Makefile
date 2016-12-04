@@ -97,7 +97,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile test.xml *.pem *.pfx
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml
 	cd certificates $(AND) $(MAKE) clean
 
 server: server.cpp server.$(OBJ) 

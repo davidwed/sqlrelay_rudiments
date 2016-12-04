@@ -58,7 +58,7 @@
 #./tlsclient
 #./tlsserver
 #./unixsocketclient
-./url
+#./url
 ./userentry
 ./xmldom
 #./xmlentities

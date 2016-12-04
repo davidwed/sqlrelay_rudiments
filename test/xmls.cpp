@@ -138,10 +138,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("=====================================================\n");
 
 	// parse string...
-	x.parseString(xmls);
+	x.parseString(normal);
 	stdoutput.printf("%s\n",x.getString());
 	stdoutput.printf("=====================================================\n");
-
+/*
 	// parse local file...
 	if (!x.parseFile("xmls.xml")) {
 		stdoutput.printf("failed to parse local xmls.xml\n");
@@ -165,5 +165,5 @@ int main(int argc, const char **argv) {
 		x.parseString("<xml><tag attribute=\"/></xml>\n")==false,
 		x.parseString("<xml><tag attribute=\"></tag></xml>\n")==false,
 		x.parseString("<xml><tag1 attribute=\"\"></tag2></xml>\n")==false);
-
+*/
 }
