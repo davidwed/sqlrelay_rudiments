@@ -12,12 +12,14 @@
 
 bool	gotsigterm=false;
 void handleSigterm(int32_t sig) {
+	//stdoutput.printf("got sigterm\n");
 	gotsigterm=true;
 }
 
 #ifdef SIGFPE
 bool	gotsigfpe=false;
 void handleSigfpe(int32_t sig) {
+	//stdoutput.printf("got sigfpe\n");
 	gotsigfpe=true;
 }
 #endif
@@ -25,6 +27,7 @@ void handleSigfpe(int32_t sig) {
 #ifdef SIGALRM
 bool	gotsigalrm=false;
 void handleSigalrm(int32_t sig) {
+	//stdoutput.printf("got sigalrm\n");
 	gotsigalrm=true;
 }
 #endif
@@ -88,8 +91,10 @@ int main(int argc, const char **argv) {
 		// set an alarm
 		signalmanager::alarm(3);
 
-		// wait for signals, bail when all have been received
-		signalmanager::waitForSignals(&ignoreset);
+		// wait for signals
+		if (!signalmanager::waitForSignals(&ignoreset)) {
+			snooze::macrosnooze(5);
+		}
 		test("SIGTERM",gotsigterm);
 		#ifdef SIGFPE
 		signalmanager::waitForSignals(&ignoreset);

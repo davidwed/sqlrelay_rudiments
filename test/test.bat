@@ -107,8 +107,8 @@ if %errorlevel% neq 0 exit /b
 sharedmemory.exe
 if %errorlevel% neq 0 exit /b
 
-signal.exe
-if %errorlevel% neq 0 exit /b
+rem signal.exe
+rem if %errorlevel% neq 0 exit /b
 
 singlylinkedlist.exe
 if %errorlevel% neq 0 exit /b
