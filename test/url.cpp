@@ -34,4 +34,6 @@ int main(int argc, const char **argv) {
 		ptr+=s;
 	}
 	test("close",u.close());
+
+	stdoutput.printf("\n");
 }
