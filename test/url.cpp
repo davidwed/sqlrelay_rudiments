@@ -2,75 +2,36 @@
 // See the file COPYING for more information
 
 #include <rudiments/url.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
-
-// test urls...
-const char * urls[]={
-	"http://localhost/~dmuse/src/rudiments/test/url.cpp",
-	"scp://[/home/dmuse/userpwd]@localhost/home/dmuse/src/rudiments/test/url.cpp",
-	"http://www.google.com",
-	NULL
-};
-
-url	u;
-
-bool printUrl(const char *url) {
-
-#if 0
-	char	*contents=url::getContents(url);
-	stdoutput.write(contents);
-	return true;
-
-#else
-	// open the url
-	if (u.open(url,O_RDONLY)) {
-
-#if 0
-		char	*contents=u.getContents();
-		stdoutput.write(contents);
-		return true;
-#else
-		// get and print it in 1024 byte chunks...
-		char	buffer[1024];
-		for (;;) {
-			ssize_t	s=u.read(buffer,sizeof(buffer));
-			stdoutput.write(buffer,s);
-			if (s<(ssize_t)sizeof(buffer)) {
-				stdoutput.write('\n');
-				break;
-			}
-		}
-#endif
-
-		return true;
-	}
-	return false;
-#endif
-}
+#include "test.cpp"
 
 int main(int argc, const char **argv) {
 
-	if (argc==2) {
+	header("url");
 
-		printUrl(argv[1]);
-		
-	} else {
+	char	*testcontents=file::getContents("knowncontent.html");
 
-		for (const char * const *url=urls; *url; url++) {
+	const char	*urlname=
+			"http://rudiments.sourceforge.net/knowncontent.html";
 
-			// print out the url
-			stdoutput.printf("%s\n\n",*url);
+	url	u;
+	test("open",u.open(urlname,O_RDONLY));
+	char	*contents=u.getContents();
+	test("get contents",!charstring::compare(testcontents,contents));
+	delete[] contents;
+	test("close",u.close());
 
-			if (!printUrl(*url)) {
-				stdoutput.printf("failed to open");
-			}
-
-			// banner
-			stdoutput.printf("\n");
-			for (uint16_t i=0; i<80; i++) {
-				stdoutput.printf("=");
-			}
-			stdoutput.printf("\n");
+	test("open",u.open(urlname,O_RDONLY));
+	const char	*ptr=testcontents;
+	char	buffer[1024];
+	for (;;) {
+		ssize_t	s=u.read(buffer,sizeof(buffer));
+		test("chunk",!charstring::compare(ptr,buffer,s));
+		if (s<(ssize_t)sizeof(buffer)) {
+			break;
 		}
+		ptr+=s;
 	}
+	test("close",u.close());
 }

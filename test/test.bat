@@ -129,7 +129,9 @@ rem threadmutex.exe
 rem tlsclient.exe
 rem tlsserver.exe
 rem unixsocketclient.exe
-rem url.exe
+
+url.exe
+if %errorlevel% neq 0 exit /b
 
 userentry.exe
 if %errorlevel% neq 0 exit /b

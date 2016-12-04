@@ -39,7 +39,7 @@
 #./text
 #./thread
 #./threadmutex
-#./url
+./url
 ./userentry
 ./xmldom
 
