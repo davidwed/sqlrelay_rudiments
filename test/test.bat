@@ -135,5 +135,3 @@ if %errorlevel% neq 0 exit /b
 
 xmldom.exe
 if %errorlevel% neq 0 exit /b
-
-rem xmlentities.exe

@@ -88,12 +88,12 @@ const char ns[]=
 "</testns:test>\n";
 
 
-const char escapes[]=
+const char entities[]=
 "<?xml version=\"1.0\"?>\n"
 //"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
-"	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;\" name2=\"&amp&lt&gt&apos&quot\" name3=\"&&&&&\"/>"
-"	&amp;&lt;&gt;&apos;&quot;\n"
+"	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;&#200;\" name2=\"&amp&lt&gt&apos&quot\" name3=\"&&&&&\"/>"
+"	&amp;&lt;&gt;&apos;&quot;&#200;\n"
 "	&amp&lt&gt&apos&quot\n"
 "	&&&&&\n"
 "</test>\n";

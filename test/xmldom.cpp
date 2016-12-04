@@ -36,16 +36,16 @@ int main(int argc, const char **argv) {
 	file::remove("ns.xml");
 
 
-	stdoutput.printf("escapes...\n");
-	test("parse string",x.parseString(escapes));
-	file::remove("escapes.xml");
-	test("write file",x.writeFile("escapes.xml",
+	stdoutput.printf("entities...\n");
+	test("parse string",x.parseString(entities));
+	file::remove("entities.xml");
+	test("write file",x.writeFile("entities.xml",
 				permissions::evalPermString("rw-r--r--")));
-	char	*escapesdotxml=file::getContents("escapes.xml");
-	//test("file contents",!charstring::compare(escapes,escapesdotxml));
-	delete[] escapesdotxml;
-	test("parse file",x.parseFile("escapes.xml"));
-	file::remove("escapes.xml");
+	char	*entitiesdotxml=file::getContents("entities.xml");
+	//test("file contents",!charstring::compare(entities,entitiesdotxml));
+	delete[] entitiesdotxml;
+	test("parse file",x.parseFile("entities.xml"));
+	file::remove("entities.xml");
 
 
 	stdoutput.printf("cdata...\n");

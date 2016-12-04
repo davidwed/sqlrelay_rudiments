@@ -65,7 +65,6 @@ PROGS3= handoff1 \
 	nonhandoff2 \
 	nonhandoffclient \
 	xmldom \
-	xmlentities \
 	nullserver \
 	logger \
 	sys \
@@ -239,9 +238,6 @@ bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 
 xmldom: xmldom.cpp xmldom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmldom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-xmlentities: xmlentities.cpp xmlentities.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmlentities.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 crypt: crypt.cpp crypt.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) crypt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
