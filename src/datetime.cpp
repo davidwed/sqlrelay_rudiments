@@ -779,7 +779,7 @@ void datetime::processTZ(void *tms) {
 		}
 	#elif defined(RUDIMENTS_HAS_TIMEZONE)
 		pvt->_gmtoff=-timezone;
-		#if defined(RUDIMENTS_HAS_UNIXWARE)
+		#if defined(RUDIMENTS_HAVE_UNIXWARE)
 			// apparently timezone doesn't take
 			// DST into account on UnixWare
 			if (pvt->_isdst) {
