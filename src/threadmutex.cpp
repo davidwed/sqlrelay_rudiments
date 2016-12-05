@@ -107,11 +107,11 @@ threadmutex::~threadmutex() {
 }
 
 bool threadmutex::lock() {
-	return WaitForSingleObject(pvt->_mut,INFINITE)!=0;
+	return WaitForSingleObject(pvt->_mut,INFINITE)==WAIT_OBJECT_0;
 }
 
 bool threadmutex::tryLock() {
-	return WaitForSingleObject(pvt->_mut,0)!=0;
+	return WaitForSingleObject(pvt->_mut,0)==WAIT_OBJECT_0;
 }
 
 bool threadmutex::unlock() {

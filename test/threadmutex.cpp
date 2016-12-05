@@ -33,7 +33,7 @@ int main(int argc, const char **argv) {
 		// initialize threads
 		thread		t[5];
 		struct args	a[5];
-		for (uint8_t i=0; i<5; i++) {
+		for (uint16_t i=0; i<5; i++) {
 			a[i].th=&t[i];
 			a[i].id=i;
 		}
@@ -42,7 +42,7 @@ int main(int argc, const char **argv) {
 		test("initial lock",tm.lock());
 
 		// run threads
-		for (uint8_t j=0; j<5; j++) {
+		for (uint16_t j=0; j<5; j++) {
 			stringbuffer	title;
 			title.append("spawn ")->append(j);
 			test(title.getString(),
@@ -54,7 +54,7 @@ int main(int argc, const char **argv) {
 		test("final unlock",tm.unlock());
 
 		// wait for the threads to exit
-		for (uint8_t k=0; k<5; k++) {
+		for (uint16_t k=0; k<5; k++) {
 
 			int32_t	tstatus=-1;
 
