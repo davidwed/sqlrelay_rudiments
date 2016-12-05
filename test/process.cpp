@@ -35,8 +35,8 @@ int main(int argc, const char **argv) {
 	test("pid",pid>1);
 	test("ppid",ppid>1);
 #ifndef _WIN32
-	test("pgid",pgid==pid);
-	test("sid",sid==ppid);
+	test("pgid",pgid>1);
+	test("sid",sid>1);
 	test("uid/euid",uid==euid);
 	test("gid/egid",gid==egid);
 #endif

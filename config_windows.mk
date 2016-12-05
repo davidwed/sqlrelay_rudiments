@@ -14,6 +14,9 @@ licensedir = $(datadir)\licenses\rudiments
 # command separator
 AND = &
 
+# "this directory" prefix
+THISDIR = ./
+
 # shell
 SHELL =
 

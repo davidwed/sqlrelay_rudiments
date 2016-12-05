@@ -32,7 +32,7 @@ void handoff1() {
 	// open an inet socket
 	inetsocketserver	serversock;
 	test("handoff1 - inet socket",
-			serversock.listen(NULL,8000,15));
+			serversock.listen(NULL,8001,15));
 
 	// add the sockets to a listener
 	listener	pool;
@@ -119,7 +119,7 @@ void handoffclient() {
 	// connect to handoff1
 	inetsocketclient	clnt;
 	test("handoffclient - connect",
-		clnt.connect("127.0.0.1",8000,-1,-1,0,1)==RESULT_SUCCESS);
+		clnt.connect("127.0.0.1",8001,-1,-1,0,1)==RESULT_SUCCESS);
 
 	// read hello
 	char	buffer[6];
