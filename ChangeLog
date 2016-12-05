@@ -25,6 +25,7 @@
 	fixed timezone offset during DST on UnixWare
 	filesystem class returns NULL consistently for methods that return
 		const char * but that aren't implemented by the OS
+	sys::getSuggested* return 1024 if they are unsupported by the OS now
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
