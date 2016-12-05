@@ -1347,6 +1347,9 @@
 /* Some systems have unistd.h */
 #undef RUDIMENTS_HAVE_UNISTD_H
 
+/* Platform is UnixWare */
+#undef RUDIMENTS_HAVE_UNIXWARE
+
 /* Some systems have unlink */
 #undef RUDIMENTS_HAVE_UNLINK
 

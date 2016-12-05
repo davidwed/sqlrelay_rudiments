@@ -613,6 +613,7 @@ AC_DEFUN([FW_CHECK_SCO_OSR],
 [
 RUDIMENTS_HAVE_SCO=""
 CRTLIB=""
+
 AC_MSG_CHECKING(for SCO OSR < 6.0.0)
 if ( test "`uname -s`" = "SCO_SV" )
 then
@@ -638,6 +639,7 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
+
 AC_MSG_CHECKING(for SCO OSR = 6.0.0)
 if ( test "`uname -s`" = "SCO_SV" )
 then
@@ -652,6 +654,18 @@ then
 else
 	AC_MSG_RESULT(no)
 fi
+
+AC_MSG_CHECKING(for SCO UnixWare)
+if ( test "`uname -s`" = "UnixWare" )
+then
+	RUDIMENTS_HAVE_SCO="yes"
+	RUDIMENTS_HAVE_UNIXWARE="yes"
+  	AC_DEFINE(RUDIMENTS_HAVE_UNIXWARE,1,Platform is UnixWare)
+	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
+fi
+
 AC_SUBST(CRTLIB)
 ])
 
