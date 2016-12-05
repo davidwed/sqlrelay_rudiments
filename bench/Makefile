@@ -32,7 +32,7 @@ all: $(PROGS)
 
 clean:
 	$(LTCLEAN) $(RM) $(PROGS)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj *.ii
 
 dictionary: dictionary.cpp dictionary.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dictionary.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
