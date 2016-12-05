@@ -430,14 +430,14 @@ int main(int argc, const char **argv) {
 	char		*teststr=charstring::parseNumber(testuint64);
 	test("parseNumber ULONG_MAX",
 		!charstring::compare(teststr,
-			(testuint64==4294967295)
+			(testuint64==4294967295UL)
 				?"4294967295"
 				:"18446744073709551615"));
 	delete[] teststr;
 	teststr=charstring::parseNumber(testuint64,40);
 	test("parseNumber ULONG_MAX",
 		!charstring::compare(teststr,
-			(testuint64==4294967295)
+			(testuint64==4294967295UL)
 				?"0000000000000000000000000000004294967295"
 				:"0000000000000000000018446744073709551615"));
 	delete[] teststr;
