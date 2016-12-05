@@ -940,7 +940,8 @@ int64_t sys::getMaxTimersPerProcess() {
 
 int64_t sys::getSuggestedGroupEntryBufferSize() {
 	#if defined(_SC_GETGR_R_SIZE_MAX)
-		return sysConf(_SC_GETGR_R_SIZE_MAX);
+		int64_t	size=sysConf(_SC_GETGR_R_SIZE_MAX);
+		return (size>0)?size:1024;
 	#else
 		return 1024;
 	#endif
@@ -948,7 +949,8 @@ int64_t sys::getSuggestedGroupEntryBufferSize() {
 
 int64_t sys::getSuggestedPasswordEntryBufferSize() {
 	#if defined(_SC_GETPW_R_SIZE_MAX)
-		return sysConf(_SC_GETPW_R_SIZE_MAX);
+		int64_t	size=sysConf(_SC_GETPW_R_SIZE_MAX);
+		return (size>0)?size:1024;
 	#else
 		return 1024;
 	#endif
