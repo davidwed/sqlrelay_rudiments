@@ -17,7 +17,7 @@ struct args {
 
 stringbuffer	output;
 threadmutex	tm;
-uint16_t	which=1;
+uint16_t	next=1;
 
 void sync(void *args) {
 
@@ -27,63 +27,62 @@ void sync(void *args) {
 	// and 3 and thread 1 writes 2 and 4.  This is actually difficult to
 	// implement with mutexes.  The implementation below uses a "spin-lock"
 	// strategy.  Each thread grabs the mutex and checks to see if it's ok
-	// to go.  If not then it unlocks and waits a random amount of time
-	// before checking again.  Hopefully by then, the other thread will
-	// have progressed to the point of allowing the first thread to go.
-	// Primitive, but it works.
+	// to go.  If not then it unlocks and waits a random number of
+	// microseconds before checking again.  Hopefully by then, the other
+	// thread will have progressed to the point of allowing the first
+	// thread to go.  Actually, the wait is done before grabbing the mutex,
+	// but it's basically the same thing.  Primitive, but it works.
 
 	randomnumber	r;
 	r.setSeed(randomnumber::getSeed());
 
+	int32_t	ms;
+
 	for (uint16_t i=0; i<10; i++) {
 		if (a->id==0) {
 			do {
-				int32_t	ms;
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
 				tm.lock();
-				if (which==1) {
+				if (next==1) {
 					output.append(1);
-					which=2;
+					next=2;
 				}
 				tm.unlock();
-			} while (which!=2);
+			} while (next!=2);
 
 			do {
-				int32_t	ms;
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
 				tm.lock();
-				if (which==3) {
+				if (next==3) {
 					output.append(3);
-					which=4;
+					next=4;
 				}
 				tm.unlock();
-			} while (which!=4);
+			} while (next!=4);
 		} else {
 			do {
-				int32_t	ms;
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
 				tm.lock();
-				if (which==2) {
+				if (next==2) {
 					output.append(2);
-					which=3;
+					next=3;
 				}
 				tm.unlock();
-			} while (which!=3);
+			} while (next!=3);
 
 			do {
-				int32_t	ms;
 				r.generateScaledNumber(0,100,&ms);
 				snooze::microsnooze(0,ms);
 				tm.lock();
-				if (which==4) {
+				if (next==4) {
 					output.append(4);
-					which=1;
+					next=1;
 				}
 				tm.unlock();
-			} while (which!=1);
+			} while (next!=1);
 		}
 	}
 	a->th->exit(&(a->id));
