@@ -89,10 +89,9 @@ void inetclient() {
 	test("inet client - write \"inet\"",clnt.write("inet",4)==4);
 
 	// read 8 bytes from the server and display them
-	char	buffer[8];
-	int	sizeread=clnt.read(buffer,8);
-	test("inet client - read length",sizeread==8);
-	buffer[sizeread]='\0';
+	char	buffer[9];
+	test("inet client - read length",clnt.read(buffer,8)==8);
+	buffer[8]='\0';
 	test("inet client - read \"listener\"",
 			!charstring::compare(buffer,"listener"));
 
@@ -113,10 +112,9 @@ void unixclient() {
 	test("unix client - write \"unix\"",clnt.write("unix",4)==4);
 
 	// read 8 bytes from the server and display them
-	char	buffer[8];
-	int	sizeread=clnt.read(buffer,8);
-	test("unix client - read length",sizeread==8);
-	buffer[sizeread]='\0';
+	char	buffer[9];
+	test("unix client - read length",clnt.read(buffer,8)==8);
+	buffer[8]='\0';
 	test("unix client - read \"listener\"",
 			!charstring::compare(buffer,"listener"));
 

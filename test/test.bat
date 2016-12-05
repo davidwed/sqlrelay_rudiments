@@ -46,6 +46,9 @@ if %errorlevel% neq 0 exit /b
 groupentry.exe
 if %errorlevel% neq 0 exit /b
 
+handoff.exe
+if %errorlevel% neq 0 exit /b
+
 hostentry.exe
 if %errorlevel% neq 0 exit /b
 
@@ -128,7 +131,3 @@ rem gssclient.exe
 rem gssserver.exe
 rem tlsclient.exe
 rem tlsserver.exe
-
-rem handoff1.exe
-rem handoff2.exe
-rem handoffclient.exe

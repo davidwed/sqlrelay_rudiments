@@ -16,6 +16,7 @@
 ./file
 ./filesystem
 ./groupentry
+./handoff
 ./hostentry
 ./linkedlist
 ./listener
@@ -47,7 +48,3 @@
 #./gssserver
 #./tlsclient
 #./tlsserver
-
-#./handoff1
-#./handoff2
-#./handoffclient

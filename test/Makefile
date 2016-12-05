@@ -52,9 +52,6 @@ PROGS2= dynamicarray \
 	tlsclient
 
 PROGS3= handoff \
-	handoff1 \
-	handoff2 \
-	handoffclient \
 	xmldom \
 	logger \
 	sys \
@@ -183,15 +180,6 @@ stringbuffer: stringbuffer.cpp stringbuffer.$(OBJ)
 
 handoff: handoff.cpp handoff.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-handoff1: handoff1.cpp handoff1.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-handoff2: handoff2.cpp handoff2.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-handoffclient: handoffclient.cpp handoffclient.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoffclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytebuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
