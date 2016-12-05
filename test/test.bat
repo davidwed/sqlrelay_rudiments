@@ -122,7 +122,9 @@ if %errorlevel% neq 0 exit /b
 stringbuffer.exe
 if %errorlevel% neq 0 exit /b
 
-rem sys.exe
+sys.exe
+if %errorlevel% neq 0 exit /b
+
 rem text.exe
 rem thread.exe
 rem threadmutex.exe

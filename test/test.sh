@@ -35,7 +35,7 @@
 ./snooze
 ./staticarray
 ./stringbuffer
-#./sys
+./sys
 #./text
 #./thread
 #./threadmutex
