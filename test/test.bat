@@ -74,9 +74,6 @@ if %errorlevel% neq 0 exit /b
 rem nonhandoff1.exe
 rem nonhandoff2.exe
 rem nonhandoffclient.exe
-rem nullserver.exe
-rem oneshotclnt.exe
-rem oneshotsvr.exe
 
 parameterstring.exe
 if %errorlevel% neq 0 exit /b

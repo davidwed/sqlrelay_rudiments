@@ -55,11 +55,6 @@
 #./server
 #./listener
 
-#./nullserver
-
-#./oneshotclnt
-#./oneshotsvr
-
 #./handoff1
 #./handoff2
 #./handoffclient

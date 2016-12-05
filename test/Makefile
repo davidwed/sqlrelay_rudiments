@@ -52,9 +52,7 @@ PROGS2= dynamicarray \
 	character \
 	bytestring \
 	tlsserver \
-	tlsclient \
-	oneshotsvr \
-	oneshotclnt
+	tlsclient
 
 PROGS3= handoff1 \
 	handoff2 \
@@ -63,7 +61,6 @@ PROGS3= handoff1 \
 	nonhandoff2 \
 	nonhandoffclient \
 	xmldom \
-	nullserver \
 	logger \
 	sys \
 	reboot \
@@ -98,9 +95,6 @@ clean:
 
 server: server.cpp server.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) server.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-nullserver: nullserver.cpp nullserver.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) nullserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tlsserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
@@ -158,12 +152,6 @@ listmetrics: listmetrics.cpp listmetrics.$(OBJ)
 
 memorypool: memorypool.cpp memorypool.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) memorypool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-oneshotclnt: oneshotclnt.cpp oneshotclnt.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) oneshotclnt.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-oneshotsvr: oneshotsvr.cpp oneshotsvr.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) oneshotsvr.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 userentry: userentry.cpp userentry.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) userentry.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
