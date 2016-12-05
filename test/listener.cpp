@@ -42,7 +42,7 @@ void listen() {
 				pool.getReadReadyList()->getLength()==1);
 
 		// figure out which socket the client connected to
-		filedescriptor	*clientsock;
+		filedescriptor	*clientsock=NULL;
 		if (fd==&inetsock) {
 			clientsock=inetsock.accept();
 		} else if (fd==&unixsock) {

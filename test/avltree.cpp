@@ -17,7 +17,7 @@ const uint16_t	nodecount=4096;
 // generates a random number
 template<class type> void generateRandom(randomnumber *r, type *number) {
 	int32_t	num=0;
-	r->generateScaledNumber(10000,99999,&num);
+	r->generateScaledNumber(randomlow,randomhigh,&num);
 	*number=(type)num;
 }
 
