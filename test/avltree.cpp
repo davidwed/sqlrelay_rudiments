@@ -15,7 +15,9 @@ const uint16_t	nodecount=4096;
 
 
 // generates a random number
-template<class type> void generateRandom(randomnumber *r, type *number) {
+template<class type>
+RUDIMENTS_TEMPLATE_INLINE
+void generateRandom(randomnumber *r, type *number) {
 	int32_t	num=0;
 	r->generateScaledNumber(randomlow,randomhigh,&num);
 	*number=(type)num;
@@ -23,8 +25,9 @@ template<class type> void generateRandom(randomnumber *r, type *number) {
 
 
 // walk the tree, looking for errors in order, balance, or length
-template<class type> void walk(bool forwards,
-				avltree<type> *t,
+template<class type>
+RUDIMENTS_TEMPLATE_INLINE
+void walk(bool forwards, avltree<type> *t,
 				bool *ordererror,
 				bool *balanceerror,
 				bool *lengtherror) {
@@ -68,7 +71,9 @@ template<class type> void walk(bool forwards,
 
 // walk the tree, doing a find() on each value to verify
 // that it's found in the location that it's in
-template<class type> void find(avltree<type> *t, bool *finderror) {
+template<class type>
+RUDIMENTS_TEMPLATE_INLINE
+void find(avltree<type> *t, bool *finderror) {
 
 	for (avltreenode<type> *n=t->getFirst(); n; n=n->getNext()) {
 		if (t->find(n->getValue())!=n) {
