@@ -71,8 +71,10 @@ void handoff1() {
 
 	// clean up
 	serversock.close();
+#ifndef _WIN32
 	// FIXME: crashes on windows
-	//handoffsock.close();
+	handoffsock.close();
+#endif
 	file::remove("handoff.sck");
 }
 
