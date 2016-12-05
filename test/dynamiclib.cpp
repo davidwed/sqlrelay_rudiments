@@ -27,11 +27,13 @@ int main(int argc, const char **argv) {
 				if (!file) {
 					break;
 				}
-				if (!charstring::compare(file,"libc-",5) &&
+				if ((!charstring::compare(file,"libc-",5) &&
 					!charstring::compare(
 						charstring::findLast(
 								file,".so"),
-						".so")) {
+						".so")) ||
+					!charstring::compare(
+						file,"libc.so.",8)) {
 					f=file;
 					break;
 				}
