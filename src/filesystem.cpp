@@ -623,9 +623,11 @@ const char *filesystem::getMountPoint() const {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	return (const char *)pvt->_st.f_mntonname;
+	return (pvt->_st.f_mntonname[0])?
+			(const char *)pvt->_st.f_mntonname:NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	return (const char *)pvt->_volume;
+	return (pvt->_volume[0])?
+			(const char *)pvt->_volume:NULL;
 #else
 	return NULL;
 #endif
@@ -654,7 +656,8 @@ const char *filesystem::getDeviceName() const {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	return (const char *)pvt->_st.f_mntfromname;
+	return (pvt->_st.f_mntfromname[0])?
+			(const char *)pvt->_st.f_mntfromname:NULL;
 #else
 	return NULL;
 #endif
@@ -662,7 +665,8 @@ const char *filesystem::getDeviceName() const {
 
 const char *filesystem::getFilesystemSpecificString() const {
 #ifdef RUDIMENTS_HAVE_STATVFS
-	return (const char *)pvt->_st.f_fstr;
+	return (pvt->_st.f_fstr[0])?
+			(const char *)pvt->_st.f_fstr:NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return (pvt->_st.f_volumename[0])?
 			(const char *)pvt->_st.f_volumename:NULL;
@@ -681,9 +685,11 @@ const char *filesystem::getTypeName() const {
 	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
 	defined(RUDIMENTS_HAVE_OPENBSD_STATFS) || \
 	defined(RUDIMENTS_HAVE_DARWIN_STATFS)
-	return (const char *)pvt->_st.f_fstypename;
+	return (pvt->_st.f_fstypename[0])?
+			(const char *)pvt->_st.f_fstypename:NULL;
 #elif defined(RUDIMENTS_HAVE_STATVFS)
-	return (const char *)pvt->_st.f_basetype;
+	return (pvt->_st.f_basetype[0])?
+			(const char *)pvt->_st.f_basetype:NULL;
 #elif defined(RUDIMENTS_HAVE_LINUX_STATFS) || \
 	defined(RUDIMENTS_HAVE_LINUX_LIBC4_STATFS)
 	switch (pvt->_st.f_type) {

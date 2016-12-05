@@ -22,6 +22,9 @@
 		open/close/getCurrentProperties
 	added O_BINARY to various open()'s in file class
 	fixed threadmutex::wait() return value on Windows
+	fixed timezone offset during DST on UnixWare
+	filesystem class returns NULL consistently for methods that return
+		const char * but that aren't implemented by the OS
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
