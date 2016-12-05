@@ -36,7 +36,6 @@
 ./staticarray
 ./stringbuffer
 ./sys
-#./text
 #./thread
 #./threadmutex
 ./url
