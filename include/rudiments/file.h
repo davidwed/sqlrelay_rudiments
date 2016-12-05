@@ -136,17 +136,19 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Returns the position (relative to the beginning of the file)
 		 *  at which the next read or write will occur, or -1 on
 		 *  failure. */
-		off64_t	getCurrentPosition() const;
+		virtual	off64_t	getCurrentPosition() const;
 
 		/** Sets the position (relative to the beginning of the file)
 		 *  at which the next read or write will occur to "offset".
 		 *  Returns that position on success or -1 on failure. */
-		off64_t	setPositionRelativeToBeginning(off64_t offset) const;
+		virtual	off64_t	setPositionRelativeToBeginning(
+						off64_t offset) const;
 
 		/** Advances the position at which the next read or write will
  		 *  occur by "offset" bytes.  Returns that position on success
  		 *  or -1 on failure. */
-		off64_t	setPositionRelativeToCurrent(off64_t offset) const;
+		virtual	off64_t	setPositionRelativeToCurrent(
+						off64_t offset) const;
 
 		/** Sets the position at which the next read or write will
 		 *  occur to the end of the file plus "offset" bytes.
@@ -155,7 +157,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  be accomplished by using a positive "offset" and then
 		 *  writing data at that position.  Returns the position on
 		 *  succes or -1 on failure. */
-		off64_t	setPositionRelativeToEnd(off64_t offset) const;
+		virtual	off64_t	setPositionRelativeToEnd(off64_t offset) const;
 
 		/** Attempts to lock the entire file using the specified lock
 		 *  "type" (F_RDLCK or F_WRLCK).  Returns true if the lock can
@@ -729,7 +731,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  getSize(), getPermissions(), etc.
 		 *  
 		 *  Returns true on success and false on failure. */
-		bool	getCurrentProperties();
+		virtual bool	getCurrentProperties();
 
 		/** Returns the permissions settings for the file. */
 		mode_t		getPermissions() const;

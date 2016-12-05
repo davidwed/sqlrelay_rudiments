@@ -4,6 +4,7 @@
 #include <rudiments/url.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
+#include <rudiments/permissions.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
@@ -16,8 +17,15 @@ int main(int argc, const char **argv) {
 			"http://rudiments.sourceforge.net/knowncontent.html";
 
 	url	u;
-	test("open",u.open(urlname,O_RDONLY));
+	test("open",u.open(urlname,O_RDONLY|O_BINARY));
 	char	*contents=u.getContents();
+file f;
+f.create("testcontents.html",permissions::evalPermString("rw-r--r--"));
+f.write(testcontents);
+f.close();
+f.create("contents.html",permissions::evalPermString("rw-r--r--"));
+f.write(contents);
+f.close();
 	test("get contents",!charstring::compare(testcontents,contents));
 	delete[] contents;
 	test("close",u.close());

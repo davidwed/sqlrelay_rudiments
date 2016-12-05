@@ -791,6 +791,7 @@ bool file::accessible(const char *filename, int32_t mode) {
 }
 
 bool file::getCurrentProperties() {
+stdoutput.printf("here\n");
 	int32_t	result;
 	error::clearError();
 	do {

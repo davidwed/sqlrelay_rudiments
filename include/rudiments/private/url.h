@@ -4,6 +4,13 @@
 		url(const url &u);
 		url	&operator=(const url &u);
 
+		bool	getCurrentProperties();
+
+		off64_t	getCurrentPosition() const;
+		off64_t	setPositionRelativeToBeginning(off64_t offset) const;
+		off64_t	setPositionRelativeToCurrent(off64_t offset) const;
+		off64_t	setPositionRelativeToEnd(off64_t offset) const;
+
 		char	*getContents();
 		ssize_t	getContents(unsigned char *buffer,size_t buffersize);
 

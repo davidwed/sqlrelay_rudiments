@@ -23,7 +23,7 @@
 #endif
 
 //#define DEBUG_CURL 1
-//#define DEBUG_HTTP 1
+#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>
@@ -901,6 +901,26 @@ void url::shutDownUrl() {
 		curl_global_cleanup();
 	}
 	#endif
+}
+
+bool url::getCurrentProperties() {
+	return false;
+}
+
+off64_t url::getCurrentPosition() const {
+	return -1;
+}
+
+off64_t url::setPositionRelativeToBeginning(off64_t offset) const {
+	return -1;
+}
+
+off64_t url::setPositionRelativeToCurrent(off64_t offset) const {
+	return -1;
+}
+
+off64_t url::setPositionRelativeToEnd(off64_t offset) const {
+	return -1;
 }
 
 char *url::getContents() {
