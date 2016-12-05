@@ -2,8 +2,11 @@
 // See the file COPYING for more information
 
 #include <rudiments/thread.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 #include <rudiments/snooze.h>
+#include "test.cpp"
 
 struct args {
 	thread		*th;
@@ -11,81 +14,107 @@ struct args {
 	bool		detach;
 };
 
+stringbuffer	threadcount[4];
+stringbuffer	testcount;
+
 void count(void *args) {
 	struct args	*a=(struct args *)args;
 	if (a->detach) {
-		stdoutput.printf("  %d: detaching\n",a->id);
-		if (!a->th->detach()) {
-			stdoutput.printf("  %d: detach failed\n",a->id);
-		}
+		stringbuffer	title;
+		title.append("detach ")->append(a->id);
+		test(title.getString(),a->th->detach());
 	}
 	for (uint16_t c=0; c<100; c++) {
-		stdoutput.printf("  %d: %d\n",a->id,c);
+		threadcount[a->id].append(c);
 	}
 	if (!a->detach) {
-		stdoutput.printf("  %d: exiting\n",a->id);
 		a->th->exit(&(a->id));
 	}
 }
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("threads are%ssupported\n",
-			(thread::supportsThreads())?" ":" not ");
+	header("threads");
 
-	// create thread 1
-	thread	t1;
+	if (thread::supportsThreads()) {
 
-	struct args	a1;
-	a1.th=&t1;
-	a1.id=1;
-	a1.detach=false;
+		// create control
+		for (uint16_t c=0; c<100; c++) {
+			testcount.append(c);
+		}
 
-	// create thread 2
-	thread	t2;
+		// create thread 0
+		thread	t0;
 
-	struct args	a2;
-	a2.th=&t2;
-	a2.id=2;
-	a2.detach=false;
+		struct args	a0;
+		a0.th=&t0;
+		a0.id=0;
+		a0.detach=false;
 
-	// run threads in attached mode
-	stdoutput.printf("attached:\n");
-	if (!t1.spawn((void *(*)(void *))count,(void *)&a1,false)) {
-		stdoutput.printf(" 1: create failed\n");
+		// create thread 1
+		thread	t1;
+
+		struct args	a1;
+		a1.th=&t1;
+		a1.id=1;
+		a1.detach=false;
+
+
+		stdoutput.printf("attached...\n");
+
+		// run threads in attached mode
+		test("spawn 0",
+			t0.spawn((void *(*)(void *))count,(void *)&a0,false));
+		test("spawn 1",
+			t1.spawn((void *(*)(void *))count,(void *)&a1,false));
+
+		// wait for the threads to exit
+		int32_t	t0status=-1;
+		test("wait 0",t0.wait(&t0status));
+		test("status 0",t0status==0);
+		int32_t	t1status=-1;
+		test("wait 1",t1.wait(&t1status));
+		test("status 1",t1status==1);
+
+		// test results
+		test("thread count 0",
+			!charstring::compare(threadcount[0].getString(),
+							testcount.getString()));
+		test("thread count 1",
+			!charstring::compare(threadcount[1].getString(),
+							testcount.getString()));
+		stdoutput.printf("\n");
+
+
+		stdoutput.printf("detached...\n");
+
+		// reset id's and detach mode
+		a0.id=2;
+		a0.detach=true;
+		a1.id=3;
+		a1.detach=true;
+
+		// run threads in detached mode
+		test("spawn detached 2",
+			t0.spawn((void *(*)(void *))count,(void *)&a0,false));
+		test("spawn detached 3",
+			t1.spawn((void *(*)(void *))count,(void *)&a1,false));
+
+		// we'll have to wait a bit
+		snooze::macrosnooze(1);
+
+		// test results
+		test("thread count 2",
+			!charstring::compare(threadcount[2].getString(),
+							testcount.getString()));
+		test("thread count 3",
+			!charstring::compare(threadcount[3].getString(),
+							testcount.getString()));
+
+		stdoutput.printf("\n");
+
+	} else {
+
+		stdoutput.printf("threads not supported\n\n");
 	}
-	if (!t2.spawn((void *(*)(void *))count,(void *)&a2,false)) {
-		stdoutput.printf(" 2: create failed\n");
-	}
-
-	// wait for the threads to exit
-	int32_t	t1status=-1;
-	if (!t1.wait(&t1status)) {
-		stdoutput.printf(" 1: wait failed\n");
-	}
-	int32_t	t2status=-1;
-	if (!t2.wait(&t2status)) {
-		stdoutput.printf(" 2: wait failed\n");
-	}
-	stdoutput.printf("t1 status: %d\n",t1status);
-	stdoutput.printf("t2 status: %d\n",t2status);
-
-	// reset id's and detach mode
-	a1.id=3;
-	a1.detach=true;
-	a2.id=4;
-	a2.detach=true;
-
-	// run threads in detached mode
-	stdoutput.printf("detached:\n");
-	if (!t1.spawn((void *(*)(void *))count,(void *)&a1,false)) {
-		stdoutput.printf(" 1: create failed\n");
-	}
-	if (!t2.spawn((void *(*)(void *))count,(void *)&a2,false)) {
-		stdoutput.printf(" 2: create failed\n");
-	}
-
-	// we'll have to wait a second
-	snooze::macrosnooze(1);
-	stdoutput.printf("done\n");
 }

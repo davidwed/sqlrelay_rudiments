@@ -122,7 +122,9 @@ if %errorlevel% neq 0 exit /b
 sys.exe
 if %errorlevel% neq 0 exit /b
 
-rem thread.exe
+thread.exe
+if %errorlevel% neq 0 exit /b
+
 rem threadmutex.exe
 rem tlsclient.exe
 rem tlsserver.exe

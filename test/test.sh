@@ -36,7 +36,7 @@
 ./staticarray
 ./stringbuffer
 ./sys
-#./thread
+./thread
 #./threadmutex
 ./url
 ./userentry
