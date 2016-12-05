@@ -162,7 +162,7 @@ file::~file() {
 }
 
 bool file::create(const char *name, mode_t perms) {
-	return open(name,O_CREAT|O_TRUNC|O_RDWR,perms);
+	return open(name,O_CREAT|O_TRUNC|O_RDWR|O_BINARY,perms);
 }
 
 bool file::createFile(const char *name, mode_t perms) {
@@ -393,7 +393,7 @@ char *file::getContents() {
 
 char *file::getContents(const char *name) {
 	file	fl;
-	fl.open(name,O_RDONLY);
+	fl.open(name,O_RDONLY|O_BINARY);
 	char	*contents=fl.getContents();
 	fl.close();
 	return contents;
@@ -406,7 +406,7 @@ ssize_t file::getContents(unsigned char *buffer, size_t buffersize) {
 ssize_t file::getContents(const char *name, unsigned char *buffer,
 						size_t buffersize) {
 	file	fl;
-	fl.open(name,O_RDONLY);
+	fl.open(name,O_RDONLY|O_BINARY);
 	ssize_t	bytes=fl.getContents(buffer,buffersize);
 	fl.close();
 	return bytes;
