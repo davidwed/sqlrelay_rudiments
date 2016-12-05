@@ -35,7 +35,7 @@ void sync(void *args) {
 					which=2;
 				} else {
 					int32_t	ms;
-					r.generateScaledNumber(100,1000,&ms);
+					r.generateScaledNumber(0,100,&ms);
 					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
@@ -48,7 +48,7 @@ void sync(void *args) {
 					which=4;
 				} else {
 					int32_t	ms;
-					r.generateScaledNumber(100,1000,&ms);
+					r.generateScaledNumber(0,100,&ms);
 					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
@@ -61,7 +61,7 @@ void sync(void *args) {
 					which=3;
 				} else {
 					int32_t	ms;
-					r.generateScaledNumber(100,1000,&ms);
+					r.generateScaledNumber(0,100,&ms);
 					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
@@ -74,7 +74,7 @@ void sync(void *args) {
 					which=1;
 				} else {
 					int32_t	ms;
-					r.generateScaledNumber(100,1000,&ms);
+					r.generateScaledNumber(0,100,&ms);
 					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
