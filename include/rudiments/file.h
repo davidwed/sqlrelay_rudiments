@@ -60,7 +60,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  Many platforms support additional, platform-specific flags.
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	open(const char *name, int32_t flags);
+		virtual bool	open(const char *name, int32_t flags);
 
 		/** Opens the file "name" using "flags".
 		 *
@@ -90,7 +90,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  exist, then it will be created with permissions "perms".
 		 *
 		 *  Returns true on success and false on failure. */
-		bool	open(const char *name, int32_t flags, mode_t perms);
+		virtual bool	open(const char *name,
+						int32_t flags,
+						mode_t perms);
 
 		/** Creates the file "name" with permissions "perms".  If the
 		 *  file already exists, it will be truncated.  Returns true on
@@ -98,7 +100,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  Equivalent to calling:
 		 *  open(name,O_CREAT|O_WRONLY|O_TRUNC|O_BINARY,perms) */
-		bool	create(const char *name, mode_t perms);
+		virtual bool	create(const char *name, mode_t perms);
 
 
 		/** Allocates a string large enough to accommodate the
