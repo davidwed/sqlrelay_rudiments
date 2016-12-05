@@ -22,20 +22,20 @@ void sync(semaphoreset *sem, file *semout, bool first) {
 			test("write 1",semout->write("1")==1);
 			test("signal(0) (1)",sem->signal(0));
 
-			test("wait(1) (2)",sem->wait(1));
+			test("wait(1) (3)",sem->wait(1));
 			semout->setPositionRelativeToEnd(0);
 			test("write 3",semout->write("3")==1);
-			test("signal(0) (2)",sem->signal(0));
+			test("signal(0) (3)",sem->signal(0));
 		} else {
-			test("wait(0) (1)",sem->wait(0));
-			semout->setPositionRelativeToEnd(0);
-			test("write 2",semout->write("2")==1);
-			test("signal(1) (1)",sem->signal(1));
-
 			test("wait(0) (2)",sem->wait(0));
 			semout->setPositionRelativeToEnd(0);
-			test("write 4",semout->write("4")==1);
+			test("write 2",semout->write("2")==1);
 			test("signal(1) (2)",sem->signal(1));
+
+			test("wait(0) (4)",sem->wait(0));
+			semout->setPositionRelativeToEnd(0);
+			test("write 4",semout->write("4")==1);
+			test("signal(1) (4)",sem->signal(1));
 		}
 	}
 }
