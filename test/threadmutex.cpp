@@ -23,59 +23,64 @@ void sync(void *args) {
 
 	struct args	*a=(struct args *)args;
 
+	// We want strict alternation of the threads, where thread 0 writes 1
+	// and 3 and thread 1 writes 2 and 4.  This is actually difficult to
+	// implement with mutexes.  The implementation below uses a "spin-lock"
+	// strategy.  Each thread grabs the mutex and checks to see if it's ok
+	// to go.  If not then it unlocks and waits a random amount of time
+	// before checking again.  Hopefully by then, the other thread will
+	// have progressed to the point of allowing the first thread to go.
+	// Primitive, but it works.
+
 	randomnumber	r;
 	r.setSeed(randomnumber::getSeed());
 
 	for (uint16_t i=0; i<10; i++) {
 		if (a->id==0) {
 			do {
+				int32_t	ms;
+				r.generateScaledNumber(0,100,&ms);
+				snooze::microsnooze(0,ms);
 				tm.lock();
 				if (which==1) {
 					output.append(1);
 					which=2;
-				} else {
-					int32_t	ms;
-					r.generateScaledNumber(0,100,&ms);
-					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
 			} while (which!=2);
 
 			do {
+				int32_t	ms;
+				r.generateScaledNumber(0,100,&ms);
+				snooze::microsnooze(0,ms);
 				tm.lock();
 				if (which==3) {
 					output.append(3);
 					which=4;
-				} else {
-					int32_t	ms;
-					r.generateScaledNumber(0,100,&ms);
-					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
 			} while (which!=4);
 		} else {
 			do {
+				int32_t	ms;
+				r.generateScaledNumber(0,100,&ms);
+				snooze::microsnooze(0,ms);
 				tm.lock();
 				if (which==2) {
 					output.append(2);
 					which=3;
-				} else {
-					int32_t	ms;
-					r.generateScaledNumber(0,100,&ms);
-					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
 			} while (which!=3);
 
 			do {
+				int32_t	ms;
+				r.generateScaledNumber(0,100,&ms);
+				snooze::microsnooze(0,ms);
 				tm.lock();
 				if (which==4) {
 					output.append(4);
 					which=1;
-				} else {
-					int32_t	ms;
-					r.generateScaledNumber(0,100,&ms);
-					snooze::microsnooze(0,ms);
 				}
 				tm.unlock();
 			} while (which!=1);
