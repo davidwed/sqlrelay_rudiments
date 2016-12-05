@@ -22,12 +22,13 @@ int main(int argc, const char **argv) {
 				));
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
+
+	const char	*success[]={
+		"Success",
+		"No error",
+		"No error: 0",
+		NULL
+	};
 	test("clearError()/getErrorString()",
-		!charstring::compare(error::getErrorString(),
-				#ifdef _WIN32
-					"No error"
-				#else
-					"Success"
-				#endif
-				));
+		charstring::inSet(error::getErrorString(),success));
 }
