@@ -23,7 +23,7 @@
 #endif
 
 //#define DEBUG_CURL 1
-#define DEBUG_HTTP 1
+//#define DEBUG_HTTP 1
 
 #ifdef RUDIMENTS_HAS_LIBCURL
 	#include <curl/curl.h>

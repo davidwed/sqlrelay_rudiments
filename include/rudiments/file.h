@@ -97,7 +97,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  success and false on failure.
 		 *
 		 *  Equivalent to calling:
-		 *  open(name,O_CREAT|O_WRONLY|O_TRUNC,perms) */
+		 *  open(name,O_CREAT|O_WRONLY|O_TRUNC|O_BINARY,perms) */
 		bool	create(const char *name, mode_t perms);
 
 
@@ -106,6 +106,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  contents of the file into the string and returns the
 		 *  string.  The string must be freed by the calling
 		 *  program.
+		 *
+		 *  Note: The contents returned by this method are as-is.
+		 *  No end-of-line translation is performed.
 		 * 
 		 *  If the file contains no data, then a string of length
 		 *  zero is returned.  If an error occurs then a NULL
@@ -116,6 +119,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  "buffer" of length "buffersize".  If the file is
 		 *  larger than "buffersize" then only "buffersize" bytes
 		 *  of the file will be read into "buffer".
+		 *
+		 *  Note: The contents returned by this method are as-is.
+		 *  No end-of-line translation is performed.
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */
@@ -914,8 +920,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Allocates a string large enough to accommodate the
 		 *  contents of the file "name" , reads the contents of
 		 *  the file into the string, terminates it with a NULL
-		 *  and returns the string.
-		 *  The string must be freed by the calling program.
+		 *  and returns the string.  The string must be freed by
+		 *  the calling program.
+		 *
+		 *  Note: The contents returned by this method are as-is.
+		 *  No end-of-line translation is performed.
 		 * 
 		 *  If the file contains no data, then a string of length
 		 *  zero is returned.  If an error occurs then a NULL
@@ -926,6 +935,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  "buffer" of length "buffersize".  If the file is
 		 *  larger than "buffersize" then only "buffersize" bytes
 		 *  of the file will be read into "buffer".
+		 *
+		 *  Note: The contents returned by this method are as-is.
+		 *  No end-of-line translation is performed.
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
 		 *  -1 on error. */

@@ -19,13 +19,6 @@ int main(int argc, const char **argv) {
 	url	u;
 	test("open",u.open(urlname,O_RDONLY|O_BINARY));
 	char	*contents=u.getContents();
-file f;
-f.create("testcontents.html",permissions::evalPermString("rw-r--r--"));
-f.write(testcontents);
-f.close();
-f.create("contents.html",permissions::evalPermString("rw-r--r--"));
-f.write(contents);
-f.close();
 	test("get contents",!charstring::compare(testcontents,contents));
 	delete[] contents;
 	test("close",u.close());
