@@ -1147,6 +1147,9 @@
 /* statvfs */
 /* #undef RUDIMENTS_HAVE_STATVFS */
 
+/* statvfs has f_b/fresvd */
+/* #undef RUDIMENTS_HAVE_STATVFS_RESVD */
+
 /* Some systems have stdarg.h */
 #define RUDIMENTS_HAVE_STDARG_H 1
 

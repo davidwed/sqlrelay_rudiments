@@ -1113,6 +1113,9 @@
 /* statvfs */
 #undef RUDIMENTS_HAVE_STATVFS
 
+/* statvfs has f_b/fresvd */
+#undef RUDIMENTS_HAVE_STATVFS_RESVD
+
 /* Some systems have stdarg.h */
 #undef RUDIMENTS_HAVE_STDARG_H
 

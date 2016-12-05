@@ -2110,6 +2110,21 @@ statvfs("/",&sfs);]
 ,AC_DEFINE(RUDIMENTS_HAVE_STATVFS,1,statvfs) AC_DEFINE(RUDIMENTS_HAVE_SOME_KIND_OF_STATVFS,1,some type of statvfs) STATFS_STYLE="statvfs")
 fi
 
+dnl some statvfs implementations have f_fresvd/f_bresvd
+if ( test "$STATFS_STYLE" = "statvfs" )
+then
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#include <sys/statvfs.h>],
+[/* statvfs style */
+struct statvfs sfs;
+sfs.f_bresvd=0;
+sfs.f_fresvd=0;
+statvfs("/",&sfs);]
+,AC_DEFINE(RUDIMENTS_HAVE_STATVFS_RESVD,1,statvfs has f_b/fresvd))
+fi
+
 dnl Minix and Haiku have statvfs too, but with fewer members
 if ( test "$STATFS_STYLE" = "unknown" )
 then
