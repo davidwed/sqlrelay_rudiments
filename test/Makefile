@@ -5,10 +5,7 @@ include ../config.mk
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
 LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(READLINELIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
 
-PROGS0 = server \
-	listener \
-	inetsocketclient \
-	unixsocketclient \
+PROGS0 = listener \
 	directory \
 	groupentry \
 	commandline \
@@ -54,7 +51,8 @@ PROGS2= dynamicarray \
 	tlsserver \
 	tlsclient
 
-PROGS3= handoff1 \
+PROGS3= handoff \
+	handoff1 \
 	handoff2 \
 	handoffclient \
 	xmldom \
@@ -90,23 +88,14 @@ clean:
 	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml
 	cd certificates $(AND) $(MAKE) clean
 
-server: server.cpp server.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) server.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tlsserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 listener: listener.cpp listener.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) listener.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-inetsocketclient: inetsocketclient.cpp inetsocketclient.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
 tlsclient: tlsclient.cpp tlsclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tlsclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-unixsocketclient: unixsocketclient.cpp unixsocketclient.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) unixsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 directory: directory.cpp directory.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) directory.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
@@ -191,6 +180,9 @@ kill: kill.cpp kill.$(OBJ)
 
 stringbuffer: stringbuffer.cpp stringbuffer.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) stringbuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+handoff: handoff.cpp handoff.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 handoff1: handoff1.cpp handoff1.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoff1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

@@ -52,6 +52,9 @@ if %errorlevel% neq 0 exit /b
 linkedlist.exe
 if %errorlevel% neq 0 exit /b
 
+listener.exe
+if %errorlevel% neq 0 exit /b
+
 logger.exe
 if %errorlevel% neq 0 exit /b
 
@@ -125,11 +128,6 @@ rem gssclient.exe
 rem gssserver.exe
 rem tlsclient.exe
 rem tlsserver.exe
-
-rem inetsocketclient.exe
-rem unixsocketclient.exe
-rem server.exe
-rem listener.exe
 
 rem handoff1.exe
 rem handoff2.exe

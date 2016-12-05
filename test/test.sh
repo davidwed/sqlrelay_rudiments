@@ -18,6 +18,7 @@
 ./groupentry
 ./hostentry
 ./linkedlist
+./listener
 ./logger
 ./memorymap
 ./memorypool
@@ -42,17 +43,10 @@
 ./userentry
 ./xmldom
 
-
-
 #./gssclient
 #./gssserver
 #./tlsclient
 #./tlsserver
-
-#./inetsocketclient
-#./unixsocketclient
-#./server
-#./listener
 
 #./handoff1
 #./handoff2
