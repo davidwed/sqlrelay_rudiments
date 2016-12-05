@@ -4,7 +4,10 @@
 #include <rudiments/threadmutex.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
+#include <rudiments/randomnumber.h>
+#include <rudiments/snooze.h>
 #include <rudiments/stdio.h>
+#include <rudiments/error.h>
 #include "test.cpp"
 
 struct args {
@@ -13,31 +16,69 @@ struct args {
 };
 
 stringbuffer	output;
-
-threadmutex	tm0;
-threadmutex	tm1;
+threadmutex	tm;
+uint16_t	which=1;
 
 void sync(void *args) {
 
 	struct args	*a=(struct args *)args;
 
+	randomnumber	r;
+	r.setSeed(randomnumber::getSeed());
+
 	for (uint16_t i=0; i<10; i++) {
 		if (a->id==0) {
-			test("lock(1) (1)",tm1.lock());
-			output.append(1);
-			test("unlock(0) (1)",tm0.unlock());
+			do {
+				tm.lock();
+				if (which==1) {
+					output.append(1);
+					which=2;
+				} else {
+					int32_t	ms;
+					r.generateScaledNumber(100,1000,&ms);
+					snooze::microsnooze(0,ms);
+				}
+				tm.unlock();
+			} while (which!=2);
 
-			test("lock(1) (3)",tm1.lock());
-			output.append(3);
-			test("unlock(0) (3)",tm0.unlock());
+			do {
+				tm.lock();
+				if (which==3) {
+					output.append(3);
+					which=4;
+				} else {
+					int32_t	ms;
+					r.generateScaledNumber(100,1000,&ms);
+					snooze::microsnooze(0,ms);
+				}
+				tm.unlock();
+			} while (which!=4);
 		} else {
-			test("lock(0) (3)",tm0.lock());
-			output.append(2);
-			test("unlock(1) (3)",tm1.unlock());
+			do {
+				tm.lock();
+				if (which==2) {
+					output.append(2);
+					which=3;
+				} else {
+					int32_t	ms;
+					r.generateScaledNumber(100,1000,&ms);
+					snooze::microsnooze(0,ms);
+				}
+				tm.unlock();
+			} while (which!=3);
 
-			test("lock(0) (4)",tm0.lock());
-			output.append(4);
-			test("unlock(1) (4)",tm1.unlock());
+			do {
+				tm.lock();
+				if (which==4) {
+					output.append(4);
+					which=1;
+				} else {
+					int32_t	ms;
+					r.generateScaledNumber(100,1000,&ms);
+					snooze::microsnooze(0,ms);
+				}
+				tm.unlock();
+			} while (which!=1);
 		}
 	}
 	a->th->exit(&(a->id));
@@ -57,9 +98,6 @@ int main(int argc, const char **argv) {
 			a[i].id=i;
 		}
 
-		// lock mutex
-		test("initial lock",tm0.lock());
-
 		// run threads
 		for (uint16_t j=0; j<2; j++) {
 			stringbuffer	title;
@@ -68,9 +106,6 @@ int main(int argc, const char **argv) {
 				t[j].spawn((void*(*)(void*))sync,
 						(void *)&a[j],false));
 		}
-
-		// unlock mutex
-		//test("final unlock",tm.unlock());
 
 		// wait for the threads to exit
 		for (uint16_t k=0; k<2; k++) {
@@ -86,9 +121,9 @@ int main(int argc, const char **argv) {
 			test(title.getString(),tstatus==k);
 		}
 
-stdoutput.printf("%s\n",output.getString());
 		// check output
-		test("output",!charstring::compare(output.getString(),"43210"));
+		test("output",!charstring::compare(output.getString(),
+				"1234123412341234123412341234123412341234"));
 
 		stdoutput.printf("\n");
 
