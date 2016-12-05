@@ -479,9 +479,7 @@ int64_t filesystem::getAvailableBlocks() const {
 }
 
 int64_t filesystem::getReservedBlocks() const {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
+#if defined(RUDIMENTS_HAVE_STATVFS_RESVD)
 	return pvt->_st.f_bresvd;
 #else
 	return 0;
@@ -533,9 +531,7 @@ int64_t filesystem::getAvailableFileNodes() const {
 }
 
 int64_t filesystem::getReservedFileNodes() const {
-#if defined(RUDIMENTS_HAVE_STATVFS) || \
-	defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
-	defined(RUDIMENTS_HAVE_MINIX_HAIKU_STATVFS)
+#if defined(RUDIMENTS_HAVE_STATVFS_RESVD)
 	return pvt->_st.f_fresvd;
 #else
 	return 0;
