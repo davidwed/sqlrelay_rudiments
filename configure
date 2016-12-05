@@ -630,7 +630,6 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=/usr/local/firstworks
-ac_unique_file="test/xmls.cpp"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 EXTRACPPFLAGS
@@ -34466,7 +34465,6 @@ fi
 echo
 echo "***** Output Files ***********"
 ac_config_headers="$ac_config_headers include/rudiments/private/config.h"
-
 
 ac_config_files="$ac_config_files config.mk src/Makefile include/Makefile bin/rudiments-config rudiments.pc"
 

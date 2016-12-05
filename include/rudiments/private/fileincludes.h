@@ -48,3 +48,9 @@
 #ifndef F_UNLCK
 	#define F_UNLCK	2
 #endif
+
+// most platforms don't define O_BINARY but it's
+// helpful to have it for portability
+#ifndef O_BINARY
+	#define O_BINARY 0
+#endif
