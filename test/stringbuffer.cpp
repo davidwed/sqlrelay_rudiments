@@ -56,12 +56,14 @@ int main(int argc, const char **argv) {
 							"%ld",(uint32_t)k);
 				charstring::append(str,buf);
 			}
+			#ifdef RUDIMENTS_HAVE_LONG_LONG
 			for (uint64_t k=1; k<1000000000000000000; k*=10) {
 				strb->append((uint64_t)k);
 				charstring::printf(buf,sizeof(buf),
 							"%lld",(uint64_t)k);
 				charstring::append(str,buf);
 			}
+			#endif
 
 			// float
 			float	mult=10;
