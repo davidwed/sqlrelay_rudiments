@@ -8,6 +8,7 @@
 
 int main(int argc, const char **argv) {
 
+#ifndef _WIN32
 	header("crypt");
 
 	const char	*salts[]={
@@ -53,4 +54,5 @@ int main(int argc, const char **argv) {
 		}
 		i++;
 	}
+#endif
 }

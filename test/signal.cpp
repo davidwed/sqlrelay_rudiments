@@ -34,6 +34,8 @@ void handleSigalrm(int32_t sig) {
 
 int main(int argc, const char **argv) {
 
+// FIXME: this really should work on windows...
+#ifndef _WIN32
 	if (argc==1) {
 
 		header("signal");
@@ -120,4 +122,5 @@ int main(int argc, const char **argv) {
 		process::sendSignal(pid,SIGFPE);
 		#endif
 	}
+#endif
 }
