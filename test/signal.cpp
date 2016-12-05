@@ -47,7 +47,7 @@ int main(int argc, const char **argv) {
 		#endif
 		delete[] pwd;
 		char	*pidstr=charstring::parseNumber(
-						process::getProcessId());
+					(uint64_t)process::getProcessId());
 		const char	*args1[]={"signal",pidstr,NULL};
 		process::spawn(cmd.getString(),args1,true);
 		delete[] pidstr;

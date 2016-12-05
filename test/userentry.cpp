@@ -121,7 +121,7 @@ int main(int argc, const char **argv) {
 	test("sid",uent.getSidString() &&
 			charstring::compare(uent.getSidString(),"-1"));
 #else
-	uidstr=charstring::parseNumber(uent.getUserId());
+	uidstr=charstring::parseNumber((uint64_t)uent.getUserId());
 	test("sid",uent.getSidString() &&
 			!charstring::compare(uidstr,uent.getSidString()));
 	delete[] uidstr;
