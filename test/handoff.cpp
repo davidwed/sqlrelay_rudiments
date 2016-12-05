@@ -67,11 +67,12 @@ void handoff1() {
 	test("handoff1 - pass socket",
 		handoffclientsock->passSocket(clientsock->getFileDescriptor()));
 
-	snooze::macrosnooze(1);
+	snooze::macrosnooze(2);
 
 	// clean up
 	serversock.close();
-	handoffsock.close();
+	// FIXME: crashes on windows
+	//handoffsock.close();
 	file::remove("handoff.sck");
 }
 
@@ -107,7 +108,7 @@ void handoff2() {
 	// send the client a hello
 	inetsocketclient	clientsock;
 	clientsock.setFileDescriptor(sock);
-	test("handoff2 - write to socket",clientsock.write("hello")==5);
+	test("handoff2 - write to socket",clientsock.write("hello",5)==5);
 	test("handoff2 - close",clientsock.close());
 }
 
@@ -119,7 +120,7 @@ void handoffclient() {
 		clnt.connect("127.0.0.1",8000,-1,-1,0,1)==RESULT_SUCCESS);
 
 	// read hello
-	char	buffer[11];
+	char	buffer[6];
 	test("handoffclient - read",clnt.read(buffer,5)==5);
 	buffer[5]='\0';
 	test("handoffclient - contents",!charstring::compare(buffer,"hello"));
