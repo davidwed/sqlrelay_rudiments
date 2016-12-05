@@ -57,6 +57,3 @@
 #./handoff1
 #./handoff2
 #./handoffclient
-#./nonhandoff1
-#./nonhandoff2
-#./nonhandoffclient

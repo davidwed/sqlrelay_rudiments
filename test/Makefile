@@ -57,9 +57,6 @@ PROGS2= dynamicarray \
 PROGS3= handoff1 \
 	handoff2 \
 	handoffclient \
-	nonhandoff1 \
-	nonhandoff2 \
-	nonhandoffclient \
 	xmldom \
 	logger \
 	sys \
@@ -203,15 +200,6 @@ handoff2: handoff2.cpp handoff2.$(OBJ)
 
 handoffclient: handoffclient.cpp handoffclient.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) handoffclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-nonhandoff1: nonhandoff1.cpp nonhandoff1.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) nonhandoff1.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-nonhandoff2: nonhandoff2.cpp nonhandoff2.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) nonhandoff2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-
-nonhandoffclient: nonhandoffclient.cpp nonhandoffclient.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) nonhandoffclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytebuffer.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

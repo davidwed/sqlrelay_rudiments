@@ -134,6 +134,3 @@ rem listener.exe
 rem handoff1.exe
 rem handoff2.exe
 rem handoffclient.exe
-rem nonhandoff1.exe
-rem nonhandoff2.exe
-rem nonhandoffclient.exe
