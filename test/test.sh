@@ -37,7 +37,7 @@
 ./stringbuffer
 ./sys
 ./thread
-#./threadmutex
+./threadmutex
 ./url
 ./userentry
 ./xmldom

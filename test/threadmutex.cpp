@@ -2,118 +2,78 @@
 // See the file COPYING for more information
 #include <rudiments/thread.h>
 #include <rudiments/threadmutex.h>
-#include <rudiments/semaphoreset.h>
-#include <rudiments/file.h>
-#include <rudiments/permissions.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
-#include <rudiments/snooze.h>
-#include <rudiments/process.h>
-
-#define	USE_THREADMUTEX 1
-//#define	USE_SEMAPHORESET 1
+#include "test.cpp"
 
 struct args {
 	thread		*th;
 	int32_t		id;
 };
 
-#if defined(USE_THREADMUTEX)
-	threadmutex	tm;
-#elif defined(USE_SEMAPHORESET)
-	semaphoreset	*sem;
-	key_t		key;
-#endif
+stringbuffer	output;
+
+threadmutex	tm;
 
 void count(void *args) {
-
 	struct args	*a=(struct args *)args;
-
-	// acquire lock
-	#if defined(USE_THREADMUTEX)
-		tm.lock();
-	#elif defined(USE_SEMAPHORESET)
-		sem->wait(0);
-	#endif
-
-	// count to 50
-	stdoutput.printf("  %d: ",a->id);
-	for (uint16_t c=0; c<50; c++) {
-		stdoutput.printf("%d",c%10);
-	}
-	stdoutput.printf("\n");
-
-	// release lock
-	#if defined(USE_THREADMUTEX)
-		tm.unlock();
-	#elif defined(USE_SEMAPHORESET)
-		sem->signal(0);
-	#endif
-
-	// exit
-	stdoutput.printf("  %d: exiting\n",a->id);
+	tm.lock();
+	output.append(a->id);
+	tm.unlock();
 	a->th->exit(&(a->id));
 }
 
 int main(int argc, const char **argv) {
 
-	stdoutput.printf("threads are%ssupported\n",
-			(thread::supportsThreads())?" ":" not ");
+	header("threadmutex");
 
-	// initialize mutex
-	#if defined(USE_SEMAPHORESET)
-		sem=new semaphoreset;
-		const int32_t	vals[]={1};
-		if (!sem->create(file::generateKey("threadmutex",0),
-			permissions::evalPermString("rw-r--r--"),1,vals)) {
-			stdoutput.printf("failed to create semaphore\n");
-			delete sem;
-			process::exit(1);
+	if (thread::supportsThreads()) {
+
+		// initialize threads
+		thread		t[5];
+		struct args	a[5];
+		for (uint8_t i=0; i<5; i++) {
+			a[i].th=&t[i];
+			a[i].id=i;
 		}
-	#endif
 
-	// initialize threads
-	thread		t[5];
-	struct args	a[5];
-	for (uint8_t i=0; i<5; i++) {
-		a[i].th=&t[i];
-		a[i].id=i;
-	}
+		// lock mutex
+		test("initial lock",tm.lock());
 
-	// lock mutex
-	#if defined(USE_THREADMUTEX)
-		tm.lock();
-	#elif defined(USE_SEMAPHORESET)
-		sem->wait(1);
-	#endif
-
-	// run threads
-	for (uint8_t j=0; j<5; j++) {
-		if (!t[j].spawn((void*(*)(void*))count,(void *)&a[j],false)) {
-			stdoutput.printf(" %d: run failed\n",j);
+		// run threads
+		for (uint8_t j=0; j<5; j++) {
+			stringbuffer	title;
+			title.append("spawn ")->append(j);
+			test(title.getString(),
+				t[j].spawn((void*(*)(void*))count,
+						(void *)&a[j],false));
 		}
-	}
 
-	// unlock mutex
-	#if defined(USE_THREADMUTEX)
-		tm.unlock();
-	#elif defined(USE_SEMAPHORESET)
-		sem->signal(1);
-	#endif
+		// unlock mutex
+		test("final unlock",tm.unlock());
 
-	// wait for the threads to exit
-	for (uint8_t k=0; k<5; k++) {
-		int32_t	tstatus=-1;
-		if (!t[k].wait(&tstatus)) {
-			stdoutput.printf(" %d: wait failed\n",k);
+		// wait for the threads to exit
+		for (uint8_t k=0; k<5; k++) {
+
+			int32_t	tstatus=-1;
+
+			stringbuffer	title;
+			title.append("wait ")->append(k);
+			test(title.getString(),t[k].wait(&tstatus));
+
+			title.clear();
+			title.append("status ")->append(k);
+			test(title.getString(),tstatus==k);
 		}
-		stdoutput.printf("t%d status: %d\n",k,tstatus);
+
+		// check output
+		test("output",!charstring::compare(output.getString(),"43210"));
+
+		stdoutput.printf("\n");
+
+	} else {
+
+		stdoutput.printf("threads not supported\n\n");
 	}
-
-	stdoutput.printf("done\n");
-
-	// clean up
-	#if defined(USE_SEMAPHORESET)
-		delete sem;
-	#endif
-	process::exit(0);
 }

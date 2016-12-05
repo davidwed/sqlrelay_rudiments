@@ -46,21 +46,11 @@ if %errorlevel% neq 0 exit /b
 groupentry.exe
 if %errorlevel% neq 0 exit /b
 
-rem gssclient.exe
-rem gssserver.exe
-rem handoff1.exe
-rem handoff2.exe
-rem handoffclient.exe
-
 hostentry.exe
 if %errorlevel% neq 0 exit /b
 
-rem inetsocketclient.exe
-
 linkedlist.exe
 if %errorlevel% neq 0 exit /b
-
-rem listener.exe
 
 logger.exe
 if %errorlevel% neq 0 exit /b
@@ -70,10 +60,6 @@ if %errorlevel% neq 0 exit /b
 
 memorypool.exe
 if %errorlevel% neq 0 exit /b
-
-rem nonhandoff1.exe
-rem nonhandoff2.exe
-rem nonhandoffclient.exe
 
 parameterstring.exe
 if %errorlevel% neq 0 exit /b
@@ -95,8 +81,6 @@ if %errorlevel% neq 0 exit /b
 
 semaphoreset.exe
 if %errorlevel% neq 0 exit /b
-
-rem server.exe
 
 serviceentry.exe
 if %errorlevel% neq 0 exit /b
@@ -125,10 +109,8 @@ if %errorlevel% neq 0 exit /b
 thread.exe
 if %errorlevel% neq 0 exit /b
 
-rem threadmutex.exe
-rem tlsclient.exe
-rem tlsserver.exe
-rem unixsocketclient.exe
+threadmutex.exe
+if %errorlevel% neq 0 exit /b
 
 url.exe
 if %errorlevel% neq 0 exit /b
@@ -138,3 +120,20 @@ if %errorlevel% neq 0 exit /b
 
 xmldom.exe
 if %errorlevel% neq 0 exit /b
+
+rem gssclient.exe
+rem gssserver.exe
+rem tlsclient.exe
+rem tlsserver.exe
+
+rem inetsocketclient.exe
+rem unixsocketclient.exe
+rem server.exe
+rem listener.exe
+
+rem handoff1.exe
+rem handoff2.exe
+rem handoffclient.exe
+rem nonhandoff1.exe
+rem nonhandoff2.exe
+rem nonhandoffclient.exe
