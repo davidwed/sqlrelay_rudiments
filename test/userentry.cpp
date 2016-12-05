@@ -42,8 +42,10 @@ int main(int argc, const char **argv) {
 #ifndef _WIN32
 	test("password",uent.getPassword());
 #endif
-	test("user id",(int64_t)uent.getUserId()>-1);
-	test("primary group id",(int64_t)uent.getPrimaryGroupId()>-1);
+	test("user id",(int64_t)uent.getUserId()>0 &&
+				(int64_t)uent.getUserId()<4294967296);
+	test("primary group id",(int64_t)uent.getPrimaryGroupId()>0 &&
+				(int64_t)uent.getPrimaryGroupId()<4294967296);
 	test("real name",uent.getRealName());
 	test("home dir",uent.getHomeDirectory());
 #ifdef _WIN32
