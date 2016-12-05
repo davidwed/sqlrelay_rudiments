@@ -6,6 +6,7 @@
 #include <rudiments/unixsocketserver.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/unixsocketclient.h>
+#include <rudiments/file.h>
 #include <rudiments/directory.h>
 #include <rudiments/permissions.h>
 #include <rudiments/process.h>
@@ -20,9 +21,9 @@ void listen() {
 	inetsocketserver	inetsock;
 	test("listener - inet socket",inetsock.listen(NULL,8000,15));
 
-	// listen on unix socket "lsnr.sck"
+	// listen on unix socket "listener.sck"
 	unixsocketserver	unixsock;
-	test("listener - unix socket",unixsock.listen("lsnr.sck",0000,15));
+	test("listener - unix socket",unixsock.listen("listener.sck",0000,15));
 
 	// create a listener and add the 2 sockets to it
 	listener	pool;
@@ -73,6 +74,11 @@ void listen() {
 
 	snooze::macrosnooze(1);
 
+	// clean up
+	inetsock.close();
+	unixsock.close();
+	file::remove("listener.sck");
+
 	stdoutput.printf("\n");
 }
 
@@ -106,7 +112,7 @@ void unixclient() {
 
 	// connect to the server
 	test("unix client - connect",
-			clnt.connect("lsnr.sck",-1,-1,1,1)>=0);
+			clnt.connect("listener.sck",-1,-1,1,1)>=0);
 
 	// write "hello" to the server
 	test("unix client - write \"unix\"",clnt.write("unix",4)==4);

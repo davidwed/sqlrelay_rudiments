@@ -66,6 +66,13 @@ void handoff1() {
 	// pass handoffclient to handoff2
 	test("handoff1 - pass socket",
 		handoffclientsock->passSocket(clientsock->getFileDescriptor()));
+
+	snooze::macrosnooze(1);
+
+	// clean up
+	serversock.close();
+	handoffsock.close();
+	file::remove("handoff.sck");
 }
 
 void handoff2() {
