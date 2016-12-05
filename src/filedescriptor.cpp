@@ -136,6 +136,14 @@
 	#endif
 #endif
 
+#ifndef __LITTLE_ENDIAN
+	#if defined(LITTLE_ENDIAN)
+		#define __LITTLE_ENDIAN LITTLE_ENDIAN
+	#elif defined(_LITTLE_ENDIAN)
+		#define __LITTLE_ENDIAN _LITTLE_ENDIAN
+	#endif
+#endif
+
 // for FD_SET (macro that uses memset) on solaris
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>

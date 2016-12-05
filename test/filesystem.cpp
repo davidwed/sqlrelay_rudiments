@@ -122,8 +122,11 @@ int main(int argc, const char **argv) {
 		test("free file nodes",fs1.getFreeFileNodes());
 	#endif
 
-	test("file system id",fs1.getFileSystemId());
-	test("maximum file name length",fs1.getMaximumFileNameLength());
+	// not known on many systems...
+	//test("file system id",fs1.getFileSystemId());
+
+	// some systems return 0 for this
+	//test("maximum file name length",fs1.getMaximumFileNameLength());
 
 	// Windows doesn't have filesystem owners
 	#ifndef _WIN32

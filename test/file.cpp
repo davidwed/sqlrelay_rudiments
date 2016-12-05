@@ -5,7 +5,6 @@
 #include <rudiments/userentry.h>
 #include <rudiments/file.h>
 #include <rudiments/directory.h>
-#include <rudiments/filesystem.h>
 #include <rudiments/permissions.h>
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
@@ -46,9 +45,7 @@ int main(int argc, const char **argv) {
 
 		test("size",fl.getSize()==5);
 
-		filesystem	fs;
-		fs.open(fl.getFileDescriptor());
-		test("block size",fl.getBlockSize()==fs.getBlockSize());
+		test("block size",fl.getBlockSize()>0);
 		test("blocks",fl.getBlockCount()!=0);
 
 		test("is a socket",!fl.isSocket());
