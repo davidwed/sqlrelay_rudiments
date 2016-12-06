@@ -109,20 +109,20 @@ int main(int argc, const char **argv) {
 
 
 	// initial contents...
-	/*stdoutput.printf("initial contents...\n");
+	stdoutput.printf("initial contents...\n");
 	for (uint16_t i=0; i<iterations; i++) {
 
 		bytestring::zero(str,sizeof(str));
 
-		char	*data=new char[128*i];
-		bytestring::zero(data,128*i);
-		for (uint16_t j=0; j<128*i/16; j++) {
+		char	*data=new char[1024*(i+1)+1];
+		bytestring::zero(data,1024*(i+1)+1);
+		for (uint16_t j=0; j<1024*(i+1)/16; j++) {
 			charstring::append(data,"0123456789abcdef");
 			charstring::append(str,"0123456789abcdef");
 		}
 
 		strb=new stringbuffer(data,charstring::length(data),32);
-		for (uint16_t j=0; j<=i*100; j++) {
+		for (uint16_t j=0; j<=(i+1)*100; j++) {
 			strb->append("0123456789abcdef");
 			charstring::append(str,"0123456789abcdef");
 		}
@@ -130,5 +130,5 @@ int main(int argc, const char **argv) {
 		test("contents",!charstring::compare(strb->getString(),str));
 		delete strb;
 	}
-	stdoutput.printf("\n");*/
+	stdoutput.printf("\n");
 }
