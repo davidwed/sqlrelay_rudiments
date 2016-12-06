@@ -70,9 +70,9 @@ int main(int argc, const char **argv) {
 	test("sid",!grent.getSidString());
 	stdoutput.printf("\n");
 
-	// invalid group id  (use -2, -1 is actually valid on some systems)
-	stdoutput.printf("-2:\n");
-	test("initialize",!grent.initialize(-2));
+	// invalid group id
+	stdoutput.printf("-1:\n");
+	test("initialize",!grent.initialize(-1));
 	test("name",!grent.getName());
 	test("group id",grent.getGroupId()==(gid_t)-1);
 	test("members",!grent.getMembers());

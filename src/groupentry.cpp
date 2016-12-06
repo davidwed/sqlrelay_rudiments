@@ -301,10 +301,7 @@ void groupentry::setMutex(threadmutex *mtx) {
 }
 
 bool groupentry::initialize(const char *groupname) {
-	// If groupname is NULL then the id will be used instead, and we want
-	// it to be invalid.  So, use -2 because -1 is actually interpreted as
-	// root on some platforms (eg. UnixWare).
-	return initialize(groupname,(gid_t)-2);
+	return initialize(groupname,(gid_t)-1);
 }
 
 bool groupentry::initialize(gid_t groupid) {
@@ -314,7 +311,7 @@ bool groupentry::initialize(gid_t groupid) {
 bool groupentry::initialize(const char *groupname, gid_t groupid) {
 #ifndef RUDIMENTS_HAVE_NETGROUPGETINFO
 
-	// init buffers
+	// (re)init buffers
 	delete[] pvt->_sidstr;
 	pvt->_sidstr=NULL;
 	pvt->_sid=NULL;
@@ -326,6 +323,22 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 			delete[] pvt->_buffer;
 			pvt->_buffer=NULL;
 		}
+	#else
+		pvt->_grp=NULL;
+	#endif
+
+	// catch invalid name/id here...
+	// We have to do this rather than just letting one of the functions
+	// below fail because on some systems (SCO OSR) the actually interpret
+	// any negative group id as root and on others (SCO UnixWare) they
+	// interpret -1 as root.  Ideally we'd check for any negative number,
+	// but on most systems, gid is unsigned.  What a mess.
+	if (charstring::isNullOrEmpty(groupname) && groupid==(gid_t)-1) {
+		return false;
+	}
+
+	#if defined(RUDIMENTS_HAVE_GETGRNAM_R) && \
+		defined(RUDIMENTS_HAVE_GETGRGID_R)
 		// getgrnam_r and getgrgid_t are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
 		// require that you pass them a pre-allocated buffer.  If the
@@ -370,7 +383,6 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 		}
 		return false;
 	#else
-		pvt->_grp=NULL;
 		return (!(gemutex && !gemutex->lock()) &&
 			((pvt->_grp=((groupname)
 				?getgrnam(groupname)
@@ -380,7 +392,7 @@ bool groupentry::initialize(const char *groupname, gid_t groupid) {
 
 #else
 
-	// clear old buffers
+	// (re)init buffers
 	delete[] pvt->_name;
 	pvt->_name=NULL;
 	for (DWORD i=0; i<pvt->_membercount; i++) {

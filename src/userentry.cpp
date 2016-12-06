@@ -475,9 +475,20 @@ bool userentry::initialize(const char *username, uid_t userid) {
 		pvt->_sp=NULL;
 	#endif
 
+	// catch invalid name/id here...
+	// We have to do this rather than just letting one of the functions
+	// below fail because on some systems (SCO OSR) the actually interpret
+	// any negative user id as root and on others (SCO UnixWare) they
+	// interpret -1 as root.  Ideally we'd check for any negative number,
+	// but on most systems, uid is unsigned.  What a mess.
+	if (charstring::isNullOrEmpty(username) && userid==(uid_t)-1) {
+		return false;
+	}
+
 	// get password info
 	#if defined(RUDIMENTS_HAVE_GETPWNAM_R) && \
 		defined(RUDIMENTS_HAVE_GETPWUID_R)
+
 		// getpwnam_r and getpwuid_r are goofy.
 		// They will retrieve an arbitrarily large amount of data, but
 		// require that you pass them a pre-allocated buffer.  If the
