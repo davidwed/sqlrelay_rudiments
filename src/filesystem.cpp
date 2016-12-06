@@ -392,7 +392,8 @@ int64_t filesystem::getType() const {
 	const char	*fstypename=NULL;
 #if defined(RUDIMENTS_HAVE_STATVFS)
 	fstypename=(const char *)pvt->_st.f_basetype;
-#elif defined(RUDIMENTS_HAVE_NETBSD_STATVFS)
+#elif defined(RUDIMENTS_HAVE_NETBSD_STATVFS) || \
+	defined(RUDIMENTS_HAVE_OPENBSD_STATFS)
 	fstypename=(const char *)pvt->_st.f_fstypename;
 #endif
 	if (!charstring::compareIgnoringCase(
