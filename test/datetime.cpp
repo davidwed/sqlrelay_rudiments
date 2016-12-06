@@ -47,6 +47,7 @@ int main(int argc, const char **argv) {
 	test("daylight savings time",!dt.isDaylightSavingsTime());
 	test("time zone",
 		!charstring::compare(dt.getTimeZoneString(),"EST"));
+stdoutput.printf("%d\n",dt.getTimeZoneOffset());
 	test("offset from GMT",dt.getTimeZoneOffset()==-18000);
 	test("seconds since 1970",dt.getEpoch()==nondstsecsinceepoch);
 	test("date string",

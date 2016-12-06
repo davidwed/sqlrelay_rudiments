@@ -184,6 +184,9 @@ bool environment::remove(const char *variable) {
 #else
 	// I know this isn't the same as calling unsetenv, but as far as I
 	// know, it's all that can be done.
+	if (!getValue(variable)) {
+		return true;
+	}
 	return setValue(variable,"");
 #endif
 }
