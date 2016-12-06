@@ -27,6 +27,7 @@ int main(int argc, const char **argv) {
 		"Success",
 		"No error",
 		"No error: 0",
+		"Error 0",
 		NULL
 	};
 	test("clearError()/getErrorString()",
