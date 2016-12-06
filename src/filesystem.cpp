@@ -500,7 +500,9 @@ int64_t filesystem::getType() const {
 				pvt->_st.f_basetype,"udf")) {
 		return 0x15013346;
 	} else if (!charstring::compareIgnoringCase(
-				pvt->_st.f_basetype,"ufs")) {
+				pvt->_st.f_basetype,"ufs") ||
+			!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ffs")) {
 		return 0x00011954;
 	} else if (!charstring::compareIgnoringCase(
 				pvt->_st.f_basetype,"usbdevfs")) {
