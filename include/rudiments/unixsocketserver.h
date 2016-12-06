@@ -92,6 +92,11 @@ class RUDIMENTS_DLLSPEC unixsocketserver : public socketserver, private unixsock
 		 *  Returns an inetsocket on success and NULL on failure. */
 		filedescriptor	*accept();
 
+
+		/** Closes the socket.
+		 *  Returns true on success and false on failure. */
+		bool	close();
+
 	#include <rudiments/private/unixsocketserver.h>
 };
 

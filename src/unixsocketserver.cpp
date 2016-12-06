@@ -65,7 +65,7 @@ unixsocketserver::~unixsocketserver() {
 		// the delete below, so don't close anything here, just set the
 		// filedescriptor to -1 so the filedescriptor destructor
 		// doesn't try to close anything when it runs.
-		filedescriptor::setFileDescriptor(-1);
+		fd(-1);
 	#else
 		close();
 	#endif
@@ -224,4 +224,12 @@ filedescriptor *unixsocketserver::accept() {
 
 	return returnsock;
 #endif
+}
+
+bool unixsocketserver::close() {
+	#if defined(_WIN32) || defined(__VMS)
+		pvt->_iss.close();
+		fd(-1);
+	#endif
+	return filedescriptor::close();
 }
