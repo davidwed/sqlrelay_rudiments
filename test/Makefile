@@ -121,10 +121,6 @@ tests: all
 	$(THISDIR)url$(EXE)
 	$(THISDIR)userentry$(EXE)
 	$(THISDIR)xmldom$(EXE)
-	#$(THISDIR)gssclient$(EXE)
-	#$(THISDIR)gssserver$(EXE)
-	#$(THISDIR)tlsclient$(EXE)
-	#$(THISDIR)tlsserver$(EXE)
 	
 clean:
 	$(LTCLEAN) $(RM) $(PROGS0)

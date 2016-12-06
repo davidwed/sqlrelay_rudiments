@@ -3,56 +3,69 @@
 
 #include <rudiments/crypt.h>
 #include <rudiments/charstring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
 
-#ifndef _WIN32
 	header("crypt");
 
-	const char	*salts[]={
-		"FW",
-		"fw",
-		NULL
-	};
+	char	*osname=sys::getOperatingSystemName();
+	if (charstring::compare(osname,"Windows") &&
+		charstring::compare(osname,"OpenBSD")) {
 
-	const char	*unencrypted[]={
-		"rudiments",
-		"RUDIMENTS",
-		"firstworks",
-		"FIRSTWORKS",
-		NULL
-	};
+		const char	*salts[]={
+			"$2b$FW",
+			"$2b$fw",
+			NULL
+		};
 
-	const char	*encrypted[][4]={
-		{
-		"FWR60yTxIvBZo",
-		"FWlt9zHgfs4j2",
-		"FW8vxm0D2fdZQ",
-		"FWBVR0cwLQHEw",
-		},
-		{
-		"fwdzejOvuN/mc",
-		"fwNiqldtGLMeI",
-		"fwaWWmdtSjxcA",
-		"fwDHL5QynIMNg",
+		const char	*unencrypted[]={
+			"rudiments",
+			"RUDIMENTS",
+			"firstworks",
+			"FIRSTWORKS",
+			NULL
+		};
+
+		const char	*encrypted[][4]={
+			{
+			"FWR60yTxIvBZo",
+			"FWlt9zHgfs4j2",
+			"FW8vxm0D2fdZQ",
+			"FWBVR0cwLQHEw",
+			},
+			{
+			"fwdzejOvuN/mc",
+			"fwNiqldtGLMeI",
+			"fwaWWmdtSjxcA",
+			"fwDHL5QynIMNg",
+			}
+		};
+
+		uint16_t	i=0;
+		for (const char * const *salt=salts; *salt; salt++) {
+
+			stdoutput.printf("salt=%s\n",*salt);
+
+			uint16_t	j=0;
+			for (const char * const *str=unencrypted; *str; str++) {
+				char	*enc=crypt::encrypt(*str,*salt);
+				test("",!charstring::compare(enc,
+							encrypted[i][j]));
+				delete[] enc;
+				j++;
+			}
+			i++;
 		}
-	};
 
-	uint16_t	i=0;
-	for (const char * const *salt=salts; *salt; salt++) {
+	} else {
 
-		stdoutput.printf("salt=%s\n",*salt);
-
-		uint16_t	j=0;
-		for (const char * const *str=unencrypted; *str; str++) {
-			char	*enc=crypt::encrypt(*str,*salt);
-			test("",!charstring::compare(enc,encrypted[i][j]));
-			delete[] enc;
-			j++;
-		}
-		i++;
+		stdoutput.printf("not supported\n");
 	}
-#endif
+
+	stdoutput.printf("\n");
+
+	delete[] osname;
 }
