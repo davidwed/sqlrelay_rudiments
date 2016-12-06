@@ -385,97 +385,97 @@ int64_t filesystem::getType() const {
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_type;
 #elif defined(RUDIMENTS_HAVE_STATVFS)
-	if (!charstring::compare(pvt->_st.f_basetype[0],"adfs")) {
+	if (!charstring::compare(pvt->_st.f_basetype,"adfs")) {
 		return 0xADF5:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"affs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"affs")) {
 		return 0xADFF:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"befs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"befs")) {
 		return 0x42465331:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"bfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"bfs")) {
 		return 0x1BADFACE:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"cifs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"cifs")) {
 		return 0xFF534D42:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"codafs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"codafs")) {
 		return 0x73757245:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"coherent")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"coherent")) {
 		return 0x012FF7B7:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"cramfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"cramfs")) {
 		return 0x28cd3d45:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"devfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"devfs")) {
 		return 0x1373:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"efs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"efs")) {
 		return 0x00414A53:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ext")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"ext")) {
 		return 0x137D:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ext2 (old)")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"ext2 (old)")) {
 		return 0xEF51:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ext2")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"ext2")) {
 		return 0xEF53:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"hfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"hfs")) {
 		return 0x4244:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"hpfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"hpfs")) {
 		return 0xF995E849:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"hugetlbfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"hugetlbfs")) {
 		return 0x958458f6:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"isofs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"isofs")) {
 		return 0x9660:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"jffs2")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"jffs2")) {
 		return 0x72b6:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"jfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"jfs")) {
 		return 0x3153464a:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix (original)")) {
 		return 0x137F:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix (30 char)")) {
 		return 0x138F:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix2 (original)")) {
 		return 0x2468:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix2 (30 char)")) {
 		return 0x2478:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"msdos")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"msdos")) {
 		return 0x4d44:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ncp")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"ncp")) {
 		return 0x564c:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"nfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"nfs")) {
 		return 0x6969:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ntfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"ntfs")) {
 		return 0x5346544e:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"openprom")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"openprom")) {
 		return 0x9fa1:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"proc")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"proc")) {
 		return 0x9fa0:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"qnx4")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"qnx4")) {
 		return 0x002f:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"reiserfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"reiserfs")) {
 		return 0x52654973:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"romfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"romfs")) {
 		return 0x7275:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"smb")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"smb")) {
 		return 0x517B:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"sysv2")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"sysv2")) {
 		return 0x012FF7B6:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"sysv4")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"sysv4")) {
 		return 0x012FF7B5:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"tmpfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"tmpfs")) {
 		return 0x01021994:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"udf")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"udf")) {
 		return 0x15013346:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ufs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"ufs")) {
 		return 0x00011954:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"usbdevfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"usbdevfs")) {
 		return 0x9fa2:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"vxfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"vxfs")) {
 		return 0xa501FCF5:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"xenix")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"xenix")) {
 		return 0x012FF7B4:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"xfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"xfs")) {
 		return 0x58465342:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"xiafs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"xiafs")) {
 		return 0x012FD16D:
-	} else if (!charstring::compare(pvt->_st.f_basetype[0],"zfs")) {
+	} else if (!charstring::compare(pvt->_st.f_basetype,"zfs")) {
 		return 0x00BAB10C:
 	}
 	return 0;
