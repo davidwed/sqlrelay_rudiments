@@ -386,97 +386,97 @@ int64_t filesystem::getType() const {
 	return pvt->_st.f_type;
 #elif defined(RUDIMENTS_HAVE_STATVFS)
 	if (!charstring::compare(pvt->_st.f_basetype,"adfs")) {
-		return 0xADF5:
+		return 0xADF5;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"affs")) {
-		return 0xADFF:
+		return 0xADFF;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"befs")) {
-		return 0x42465331:
+		return 0x42465331;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"bfs")) {
-		return 0x1BADFACE:
+		return 0x1BADFACE;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"cifs")) {
-		return 0xFF534D42:
+		return 0xFF534D42;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"codafs")) {
-		return 0x73757245:
+		return 0x73757245;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"coherent")) {
-		return 0x012FF7B7:
+		return 0x012FF7B7;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"cramfs")) {
-		return 0x28cd3d45:
+		return 0x28cd3d45;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"devfs")) {
-		return 0x1373:
+		return 0x1373;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"efs")) {
-		return 0x00414A53:
+		return 0x00414A53;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"ext")) {
-		return 0x137D:
+		return 0x137D;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"ext2 (old)")) {
-		return 0xEF51:
+		return 0xEF51;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"ext2")) {
-		return 0xEF53:
+		return 0xEF53;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"hfs")) {
-		return 0x4244:
+		return 0x4244;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"hpfs")) {
-		return 0xF995E849:
+		return 0xF995E849;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"hugetlbfs")) {
-		return 0x958458f6:
+		return 0x958458f6;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"isofs")) {
-		return 0x9660:
+		return 0x9660;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"jffs2")) {
-		return 0x72b6:
+		return 0x72b6;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"jfs")) {
-		return 0x3153464a:
+		return 0x3153464a;
 	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix (original)")) {
-		return 0x137F:
+		return 0x137F;
 	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix (30 char)")) {
-		return 0x138F:
+		return 0x138F;
 	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix2 (original)")) {
-		return 0x2468:
+		return 0x2468;
 	} else if (!charstring::compare(pvt->_st.f_basetype,
 						"minix2 (30 char)")) {
-		return 0x2478:
+		return 0x2478;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"msdos")) {
-		return 0x4d44:
+		return 0x4d44;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"ncp")) {
-		return 0x564c:
+		return 0x564c;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"nfs")) {
-		return 0x6969:
+		return 0x6969;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"ntfs")) {
-		return 0x5346544e:
+		return 0x5346544e;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"openprom")) {
-		return 0x9fa1:
+		return 0x9fa1;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"proc")) {
-		return 0x9fa0:
+		return 0x9fa0;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"qnx4")) {
-		return 0x002f:
+		return 0x002f;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"reiserfs")) {
-		return 0x52654973:
+		return 0x52654973;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"romfs")) {
-		return 0x7275:
+		return 0x7275;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"smb")) {
-		return 0x517B:
+		return 0x517B;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"sysv2")) {
-		return 0x012FF7B6:
+		return 0x012FF7B6;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"sysv4")) {
-		return 0x012FF7B5:
+		return 0x012FF7B5;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"tmpfs")) {
-		return 0x01021994:
+		return 0x01021994;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"udf")) {
-		return 0x15013346:
+		return 0x15013346;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"ufs")) {
-		return 0x00011954:
+		return 0x00011954;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"usbdevfs")) {
-		return 0x9fa2:
+		return 0x9fa2;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"vxfs")) {
-		return 0xa501FCF5:
+		return 0xa501FCF5;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"xenix")) {
-		return 0x012FF7B4:
+		return 0x012FF7B4;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"xfs")) {
-		return 0x58465342:
+		return 0x58465342;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"xiafs")) {
-		return 0x012FD16D:
+		return 0x012FD16D;
 	} else if (!charstring::compare(pvt->_st.f_basetype,"zfs")) {
-		return 0x00BAB10C:
+		return 0x00BAB10C;
 	}
 	return 0;
 #else
