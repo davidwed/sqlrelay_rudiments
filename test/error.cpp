@@ -23,11 +23,13 @@ int main(int argc, const char **argv) {
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
 
+	//stdoutput.printf("%s\n",error::getErrorString());
 	const char	*success[]={
 		"Success",
 		"No error",
 		"No error: 0",
 		"Error 0",
+		"Unknown error",
 		NULL
 	};
 	test("clearError()/getErrorString()",

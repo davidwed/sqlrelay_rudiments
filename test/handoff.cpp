@@ -131,6 +131,11 @@ void handoffclient() {
 
 int main(int argc, const char **argv) {
 
+	// FIXME: this really ought to work on SCO OSR5
+	#ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
+		return 1;
+	#endif
+
 	if (argc==1) {
 
 		header("handoff");

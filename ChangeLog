@@ -29,6 +29,7 @@
 	sys::getSuggested* return 1024 if they are unsupported by the OS now
 	added dlerror() calls before dlopen/dlsym/dlclose to clear stale errors
 	added fs type-name to fs type-id mapping for systems with statvfs
+	added type-name and type-id for SCO htfs
 	if unsetenv doesn't exist, then environment::remove() checks to see 
 		if the variable exists at all before setting it to an
 		empty string now, to avoid creating it unnecessarily
