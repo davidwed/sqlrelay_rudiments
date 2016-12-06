@@ -16257,6 +16257,7 @@ esac
 
 
 RUDIMENTS_HAVE_SCO=""
+RUDIMENTS_HAVE_SCO_ORS5=""
 CRTLIB=""
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 6.0.0" >&5
@@ -16264,6 +16265,7 @@ $as_echo_n "checking for SCO OSR < 6.0.0... " >&6; }
 if ( test "`uname -s`" = "SCO_SV" )
 then
 	RUDIMENTS_HAVE_SCO="yes"
+	RUDIMENTS_HAVE_SCO_ORS5="yes"
 
 
 $as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
@@ -22916,7 +22918,9 @@ rm -f conftest*
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tm_tzadj" >&5
 $as_echo_n "checking for tm_tzadj... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+if ( test -z "$RUDIMENTS_HAVE_SCO_OSR5" )
+then
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <time.h>
 _ACEOF
@@ -22932,6 +22936,10 @@ $as_echo "no" >&6; }
 fi
 rm -f conftest*
 
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking disabled (broken on SCO OSR5)" >&5
+$as_echo_n "checking disabled (broken on SCO OSR5)... " >&6; }
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for real-time-clock RTC_RD_TIME support" >&5
 $as_echo_n "checking for real-time-clock RTC_RD_TIME support... " >&6; }
