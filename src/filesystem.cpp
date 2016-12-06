@@ -385,97 +385,140 @@ int64_t filesystem::getType() const {
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_type;
 #elif defined(RUDIMENTS_HAVE_STATVFS)
-	if (!charstring::compare(pvt->_st.f_basetype,"adfs")) {
+	if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"adfs")) {
 		return 0xADF5;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"affs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"affs")) {
 		return 0xADFF;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"befs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"befs")) {
 		return 0x42465331;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"bfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"bfs")) {
 		return 0x1BADFACE;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"cifs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"cifs")) {
 		return 0xFF534D42;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"codafs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"codafs")) {
 		return 0x73757245;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"coherent")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"coherent")) {
 		return 0x012FF7B7;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"cramfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"cramfs")) {
 		return 0x28cd3d45;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"devfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"devfs")) {
 		return 0x1373;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"efs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"efs")) {
 		return 0x00414A53;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"ext")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ext")) {
 		return 0x137D;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"ext2 (old)")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ext2 (old)")) {
 		return 0xEF51;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"ext2")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ext2")) {
 		return 0xEF53;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"hfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"hfs")) {
 		return 0x4244;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"hpfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"hpfs")) {
 		return 0xF995E849;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"hugetlbfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"htfs")) {
+		return 0xA060492A;
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"hugetlbfs")) {
 		return 0x958458f6;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"isofs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"isofs")) {
 		return 0x9660;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"jffs2")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"jffs2")) {
 		return 0x72b6;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"jfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"jfs")) {
 		return 0x3153464a;
-	} else if (!charstring::compare(pvt->_st.f_basetype,
-						"minix (original)")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"minix (original)")) {
 		return 0x137F;
-	} else if (!charstring::compare(pvt->_st.f_basetype,
-						"minix (30 char)")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"minix (30 char)")) {
 		return 0x138F;
-	} else if (!charstring::compare(pvt->_st.f_basetype,
-						"minix2 (original)")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"minix2 (original)")) {
 		return 0x2468;
-	} else if (!charstring::compare(pvt->_st.f_basetype,
-						"minix2 (30 char)")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"minix2 (30 char)")) {
 		return 0x2478;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"msdos")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"msdos")) {
 		return 0x4d44;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"ncp")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ncp")) {
 		return 0x564c;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"nfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"nfs")) {
 		return 0x6969;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"ntfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ntfs")) {
 		return 0x5346544e;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"openprom")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"openprom")) {
 		return 0x9fa1;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"proc")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"proc")) {
 		return 0x9fa0;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"qnx4")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"qnx4")) {
 		return 0x002f;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"reiserfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"reiserfs")) {
 		return 0x52654973;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"romfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"romfs")) {
 		return 0x7275;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"smb")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"smb")) {
 		return 0x517B;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"sysv2")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"sysv2")) {
 		return 0x012FF7B6;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"sysv4")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"sysv4")) {
 		return 0x012FF7B5;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"tmpfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"tmpfs")) {
 		return 0x01021994;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"udf")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"udf")) {
 		return 0x15013346;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"ufs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"ufs")) {
 		return 0x00011954;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"usbdevfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"usbdevfs")) {
 		return 0x9fa2;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"vxfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"vxfs")) {
 		return 0xa501FCF5;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"xenix")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"xenix")) {
 		return 0x012FF7B4;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"xfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"xfs")) {
 		return 0x58465342;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"xiafs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"xiafs")) {
 		return 0x012FD16D;
-	} else if (!charstring::compare(pvt->_st.f_basetype,"zfs")) {
+	} else if (!charstring::compareIgnoringCase(
+				pvt->_st.f_basetype,"zfs")) {
 		return 0x00BAB10C;
 	}
 	return 0;
@@ -818,6 +861,8 @@ const char *filesystem::getTypeName() const {
 			return "hfs";
 		case 0xF995E849:
 			return "hpfs";
+		case 0xA060492A:
+			return "htfs";
 		case 0x958458f6:
 			return "hugetlbfs";
 		case 0x9660:
