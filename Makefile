@@ -38,7 +38,7 @@ distclean: clean
 	$(RMTREE) autom4te.cache
 
 tests:
-	cd test $(AND) $(MAKE) all tests
+	cd test $(AND) $(MAKE) tests
 
 tests-clean:
 	cd test $(AND) $(MAKE) clean
