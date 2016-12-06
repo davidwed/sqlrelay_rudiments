@@ -831,6 +831,16 @@ void xmldomnode::append(stringbuffer *strb,
 	}
 }
 
+void xmldomnode::append(stringbuffer *strb,
+				filedescriptor *fd,
+				uint16_t ch) const {
+	if (strb) {
+		strb->append(ch);
+	} else if (fd) {
+		fd->write(ch);
+	}
+}
+
 void xmldomnode::safeAppend(stringbuffer *strb,
 				filedescriptor *fd,
 				const char *str) const {

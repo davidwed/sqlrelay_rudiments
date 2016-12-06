@@ -150,6 +150,9 @@
 		void		append(stringbuffer *strb,
 						filedescriptor *fd,
 						char ch) const;
+		void		append(stringbuffer *strb,
+						filedescriptor *fd,
+						uint16_t ch) const;
 		void		safeAppend(stringbuffer *strb,
 						filedescriptor *fd,
 						const char *str) const;

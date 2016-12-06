@@ -100,10 +100,20 @@ const char entities[]=
 "<?xml version=\"1.0\"?>\n"
 //"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
-"	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;&#200;\" name2=\"&amp&lt&gt&apos&quot\" name3=\"&&&&&\"/>"
+"	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;&#200;\" name2=\"&amp&lt&gt&apos&quot\" name3=\"&&&&&\"/>\n"
 "	&amp;&lt;&gt;&apos;&quot;&#200;\n"
 "	&amp&lt&gt&apos&quot\n"
 "	&&&&&\n"
+"</test>\n";
+
+const char entitiesresult[]=
+"<?xml version=\"1.0\"?>\n"
+//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
+"<test>\n"
+"	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;&#200;\" name2=\"&amp;amp&amp;lt&amp;gt&amp;apos&amp;quot\" name3=\"&amp;&amp;&amp;&amp;&amp;\"/>\n"
+"	&amp;&lt;&gt;&apos;&quot;&#200;\n"
+"	&amp;amp&amp;lt&amp;gt&amp;apos&amp;quot\n"
+"	&amp;&amp;&amp;&amp;&amp;\n"
 "</test>\n";
 
 
@@ -250,7 +260,8 @@ int main(int argc, const char **argv) {
 	test("write file",x.writeFile("entities.xml",
 				permissions::evalPermString("rw-r--r--")));
 	char	*entitiesdotxml=file::getContents("entities.xml");
-	//test("file contents",!charstring::compare(entities,entitiesdotxml));
+	test("file contents",!charstring::compare(
+				entitiesresult,entitiesdotxml));
 	delete[] entitiesdotxml;
 	test("parse file",x.parseFile("entities.xml"));
 	file::remove("entities.xml");
