@@ -8,7 +8,6 @@
 
 const char normal[]=
 "<?xml version=\"1.0\"?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
 "	<!-- comment before test1 -->\n"
 "	text before test1\n"
@@ -53,7 +52,6 @@ const char normal[]=
 
 const char ns[]=
 "<?xml version=\"1.0\"?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<testns:test>\n"
 "	<!-- comment before test1 -->\n"
 "	text before test1\n"
@@ -98,7 +96,6 @@ const char ns[]=
 
 const char entities[]=
 "<?xml version=\"1.0\"?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
 "	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;&#200;\" name2=\"&amp&lt&gt&apos&quot\" name3=\"&&&&&\"/>\n"
 "	&amp;&lt;&gt;&apos;&quot;&#200;\n"
@@ -108,7 +105,6 @@ const char entities[]=
 
 const char entitiesresult[]=
 "<?xml version=\"1.0\"?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
 "	<test1 name1=\"&amp;&lt;&gt;&apos;&quot;&#200;\" name2=\"&amp;amp&amp;lt&amp;gt&amp;apos&amp;quot\" name3=\"&amp;&amp;&amp;&amp;&amp;\"/>\n"
 "	&amp;&lt;&gt;&apos;&quot;&#200;\n"
@@ -119,7 +115,6 @@ const char entitiesresult[]=
 
 const char cdata[]=
 "<?xml version=\"1.0\"?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
 "	<![CDATA[ test [ test [ test [test]]]]]>\n"
 "	<![CDATA[ test [ test [ test [test]]]]]>\n"
@@ -129,7 +124,6 @@ const char cdata[]=
 
 const char target[]=
 "<?xml version=\"1.0\"?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test>\n"
 "	<?target test1=\"test1\"?>\n"
 "	<?target test2=\"test2\"?>\n"
@@ -139,7 +133,6 @@ const char target[]=
 
 const char singlequotes[]=
 "<?xml version='1.0'?>\n"
-//"<!DOCTYPE test SYSTEM 'test.dtd' [ test [test [test [test]]]]>\n"
 "<test>\n"
 "	<!-- comment before test1 -->\n"
 "	text before test1\n"
@@ -184,7 +177,6 @@ const char singlequotes[]=
 
 const char oddspacing[]=
 "<?xml version=\"1.0\" ?>\n"
-//"<!DOCTYPE test SYSTEM \"test.dtd\" [ test [test [test [test]]]]>\n"
 "<test >\n"
 "	<!-- comment before test1 -->\n"
 "	text before test1\n"
@@ -273,7 +265,7 @@ int main(int argc, const char **argv) {
 	test("write file",x.writeFile("cdata.xml",
 				permissions::evalPermString("rw-r--r--")));
 	char	*cdatadotxml=file::getContents("cdata.xml");
-	//test("file contents",!charstring::compare(cdata,cdatadotxml));
+	test("file contents",!charstring::compare(cdata,cdatadotxml));
 	delete[] cdatadotxml;
 	test("parse file",x.parseFile("cdata.xml"));
 	file::remove("cdata.xml");
