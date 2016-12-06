@@ -167,22 +167,8 @@ int main(int argc, const char **argv) {
 			fs2.getOptimumTransferBlockSize());
 		test("total blocks",
 			fs1.getTotalBlocks()==fs2.getTotalBlocks());
-		test("free blocks",
-			fs1.getFreeBlocks()==fs2.getFreeBlocks());
-		test("available blocks",
-			fs1.getAvailableBlocks()==fs2.getAvailableBlocks());
-		test("reserved blocks",
-			fs1.getReservedBlocks()==fs2.getReservedBlocks());
 		test("total file nodes",
 			fs1.getTotalFileNodes()==fs2.getTotalFileNodes());
-		test("free file nodes",
-			fs1.getFreeFileNodes()==fs2.getFreeFileNodes());
-		test("available file nodes",
-			fs1.getAvailableFileNodes()==
-			fs2.getAvailableFileNodes());
-		test("reserved file nodes",
-			fs1.getReservedFileNodes()==
-			fs2.getReservedFileNodes());
 		test("file system id",
 			fs1.getFileSystemId()==fs2.getFileSystemId());
 		test("maximum file name length",
@@ -190,20 +176,12 @@ int main(int argc, const char **argv) {
 			fs2.getMaximumFileNameLength());
 		test("owner",
 			fs1.getOwner()==fs2.getOwner());
-		test("sync writes",
-			fs1.getSyncWrites()==fs2.getSyncWrites());
-		test("async writes",
-			fs1.getAsyncWrites()==fs2.getAsyncWrites());
 		test("type name",
 			!charstring::compare(fs1.getTypeName(),
 						fs2.getTypeName()));
 		test("mount point",
 			!charstring::compare(fs1.getMountPoint(),
 						fs2.getMountPoint()));
-		test("sync reads",
-			fs1.getSyncReads()==fs2.getSyncReads());
-		test("async reads",
-			fs1.getAsyncReads()==fs2.getAsyncReads());
 		test("device name",
 			!charstring::compare(fs1.getDeviceName(),
 						fs2.getDeviceName()));
