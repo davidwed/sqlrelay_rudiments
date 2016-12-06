@@ -83,7 +83,7 @@ tests: all
 	$(THISDIR)character$(EXE)
 	$(THISDIR)charstring$(EXE)
 	$(THISDIR)commandline$(EXE)
-	#$(THISDIR)crypt$(EXE)
+	$(THISDIR)crypt$(EXE)
 	$(THISDIR)datetime$(EXE)
 	$(THISDIR)dictionary$(EXE)
 	$(THISDIR)directory$(EXE)
