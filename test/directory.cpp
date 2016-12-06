@@ -60,10 +60,11 @@ int main(int argc, const char **argv) {
 	test("..",!charstring::compare(name,".."));
 	delete[] name;
 	name=d.read();
-	test("testfile1",!charstring::compare(name,"testfile1"));
+	const char *filenames[]={"testfile1","testfile2",NULL};
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	name=d.read();
-	test("testfile2",!charstring::compare(name,"testfile2"));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 
 	d.rewind();
@@ -74,10 +75,10 @@ int main(int argc, const char **argv) {
 	test("..",!charstring::compare(name,".."));
 	delete[] name;
 	name=d.read();
-	test("testfile1",!charstring::compare(name,"testfile1"));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	name=d.read();
-	test("testfile2",!charstring::compare(name,"testfile2"));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 
 	d.rewind();
@@ -87,7 +88,7 @@ int main(int argc, const char **argv) {
 	test("(skip)",d.skip());
 	test("(skip)",d.skip());
 	name=d.read();
-	test("testfile2",!charstring::compare(name,"testfile2"));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 
 	d.close();
@@ -106,10 +107,10 @@ int main(int argc, const char **argv) {
 	test("..",!charstring::compare(name,".."));
 	delete[] name;
 	name=d.getChildName(i++);
-	test("testfile1",!charstring::compare(name,"testfile1"));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	name=d.getChildName(i++);
-	test("testfile2",!charstring::compare(name,"testfile2"));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	d.close();
 	stdoutput.printf("\n");
@@ -183,4 +184,6 @@ int main(int argc, const char **argv) {
 	delete[] cwd;
 
 	// chroot?
+
+	stdoutput.printf("\n");
 }

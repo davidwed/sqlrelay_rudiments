@@ -37,7 +37,8 @@ int main(int argc, const char **argv) {
 			charstring::length(grent.getSidString())-4,"-513"));
 #else
 	test("group id",grent.getGroupId()<10);
-	test("members",!grent.getMembers());
+	// the bin group has members on some systems
+	//test("members",!grent.getMembers());
 	test("sid",charstring::toInteger(grent.getSidString())<10);
 #endif
 	stdoutput.printf("\n");
@@ -55,7 +56,8 @@ int main(int argc, const char **argv) {
 			charstring::length(grent.getSidString())-4,"-513"));
 #else
 	test("group id",grent.getGroupId()<10);
-	test("members",!grent.getMembers());
+	// the bin group has members on some systems
+	//test("members",!grent.getMembers());
 	test("sid",charstring::toInteger(grent.getSidString())<10);
 #endif
 	stdoutput.printf("\n");
