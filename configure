@@ -22937,8 +22937,8 @@ fi
 rm -f conftest*
 
 else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking disabled (broken on SCO OSR5)" >&5
-$as_echo_n "checking disabled (broken on SCO OSR5)... " >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled (broken on SCO OSR5)" >&5
+$as_echo "disabled (broken on SCO OSR5)" >&6; }
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for real-time-clock RTC_RD_TIME support" >&5
