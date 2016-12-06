@@ -301,7 +301,10 @@ void groupentry::setMutex(threadmutex *mtx) {
 }
 
 bool groupentry::initialize(const char *groupname) {
-	return initialize(groupname,(gid_t)-1);
+	// If groupname is NULL then the id will be used instead, and we want
+	// it to be invalid.  So, use -2 because -1 is actually interpreted as
+	// root on some platforms (eg. UnixWare).
+	return initialize(groupname,(gid_t)-2);
 }
 
 bool groupentry::initialize(gid_t groupid) {
