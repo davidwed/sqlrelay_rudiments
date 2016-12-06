@@ -4,7 +4,6 @@
 #include <rudiments/crypt.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_CRYPT_R) && !defined(__USE_GNU)
@@ -35,12 +34,9 @@ char *crypt::encrypt(const char *password, const char *salt) {
 		if (_cryptmutex && !_cryptmutex->lock()) {
 			return NULL;
 		}
-stdoutput.printf("pwd: %s\n",password);
 		char	*encryptedpassword=::crypt(password,(salt)?salt:"");
-stdoutput.printf("enc: %s\n",encryptedpassword);
 		char	*retval=(encryptedpassword)?
 				charstring::duplicate(encryptedpassword):NULL;
-stdoutput.printf("retval: %s\n",retval);
 		if (_cryptmutex) {
 			_cryptmutex->unlock();
 		}

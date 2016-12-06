@@ -16,8 +16,8 @@ int main(int argc, const char **argv) {
 		charstring::compare(osname,"OpenBSD")) {
 
 		const char	*salts[]={
-			"$2b$FW",
-			"$2b$fw",
+			"FW",
+			"fw",
 			NULL
 		};
 

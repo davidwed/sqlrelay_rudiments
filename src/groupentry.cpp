@@ -8,6 +8,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
+#include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
 #if defined(RUDIMENTS_HAVE_NETGROUPGETINFO)
