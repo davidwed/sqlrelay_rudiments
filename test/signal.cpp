@@ -34,7 +34,8 @@ void handleSigalrm(int32_t sig) {
 
 int main(int argc, const char **argv) {
 
-// FIXME: this really should work on windows...
+// FIXME: it's not clear why this doesn't work on windows,
+// signals generally do work...
 #ifndef _WIN32
 	if (argc==1) {
 
