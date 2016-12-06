@@ -50,6 +50,7 @@ bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {
 		#endif
 		error::clearError();
 		do {
+			dlerror();
 			pvt->_handle=dlopen(library,flag);
 		} while (!pvt->_handle && error::getErrorNumber()==EINTR);
 		return (pvt->_handle!=NULL);
@@ -72,6 +73,7 @@ bool dynamiclib::close() {
 		int32_t	result;
 		error::clearError();
 		do {
+			dlerror();
 			result=dlclose(pvt->_handle);
 		} while (result!=0 && error::getErrorNumber()==EINTR);
 		retval=!result;
@@ -89,6 +91,7 @@ void *dynamiclib::getSymbol(const char *symbol) const {
 		void	*symhandle;
 		error::clearError();
 		do {
+			dlerror();
 			// What's this char * cast all about?
 			// Really old versions of dlsym (linux libc5) define
 			// dlsym with char * argument rather than const char *.

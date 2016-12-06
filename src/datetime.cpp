@@ -779,13 +779,10 @@ void datetime::processTZ(void *tms) {
 		}
 	#elif defined(RUDIMENTS_HAS_TIMEZONE)
 		pvt->_gmtoff=-timezone;
-		#if defined(RUDIMENTS_HAVE_UNIXWARE)
-			// apparently timezone doesn't take
-			// DST into account on UnixWare
-			if (pvt->_isdst) {
-				pvt->_gmtoff+=3600;
-			}
-		#endif
+		// apparently timezone doesn't takeDST into account
+		if (pvt->_isdst) {
+			pvt->_gmtoff+=3600;
+		}
 	#elif defined(RUDIMENTS_HAS__TIMEZONE)
 		pvt->_gmtoff=-_timezone;
 	#else

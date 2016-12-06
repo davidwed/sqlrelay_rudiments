@@ -77,7 +77,7 @@ PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 
 all: $(PROGS) $(SERVERPEM)
 
-tests:
+tests: all
 	$(THISDIR)bytebuffer$(EXE)
 	$(THISDIR)bytestring$(EXE)
 	$(THISDIR)character$(EXE)

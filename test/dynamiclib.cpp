@@ -60,7 +60,7 @@ int main(int argc, const char **argv) {
 
 	// open invalid file
 	test("open: invalid file",!d.open("badfile",false,false));
-	test("getError: invalid file",d.getError());
+	test("getError: invalid file",d.getError()!=NULL);
 
 	delete[] f;
 }
