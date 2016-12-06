@@ -16257,7 +16257,7 @@ esac
 
 
 RUDIMENTS_HAVE_SCO=""
-RUDIMENTS_HAVE_SCO_ORS5=""
+RUDIMENTS_HAVE_SCO_OSR5=""
 CRTLIB=""
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SCO OSR < 6.0.0" >&5
@@ -16265,7 +16265,7 @@ $as_echo_n "checking for SCO OSR < 6.0.0... " >&6; }
 if ( test "`uname -s`" = "SCO_SV" )
 then
 	RUDIMENTS_HAVE_SCO="yes"
-	RUDIMENTS_HAVE_SCO_ORS5="yes"
+	RUDIMENTS_HAVE_SCO_OSR5="yes"
 
 
 $as_echo "#define RUDIMENTS_HAVE_SCO_AVENRUN 1" >>confdefs.h
