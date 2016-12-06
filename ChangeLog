@@ -35,6 +35,7 @@
 		empty string now, to avoid creating it unnecessarily
 	xmldomnode writes out numeric entites like &#200; correctly now
 	fixed groupentry::initialize(NULL) on UnixWare
+	implemented missing unixsocketserver::close()
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
