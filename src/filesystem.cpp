@@ -384,6 +384,101 @@ int64_t filesystem::getType() const {
 	defined(RUDIMENTS_HAVE_CYGWIN_STATFS) || \
 	defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
 	return pvt->_st.f_type;
+#elif defined(RUDIMENTS_HAVE_STATVFS)
+	if (!charstring::compare(pvt->_st.f_basetype[0],"adfs") {
+		return 0xADF5:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"affs") {
+		return 0xADFF:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"befs") {
+		return 0x42465331:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"bfs") {
+		return 0x1BADFACE:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"cifs") {
+		return 0xFF534D42:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"codafs") {
+		return 0x73757245:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"coherent") {
+		return 0x012FF7B7:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"cramfs") {
+		return 0x28cd3d45:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"devfs") {
+		return 0x1373:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"efs") {
+		return 0x00414A53:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ext") {
+		return 0x137D:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ext2 (old)") {
+		return 0xEF51:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ext2") {
+		return 0xEF53:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"hfs") {
+		return 0x4244:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"hpfs") {
+		return 0xF995E849:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"hugetlbfs") {
+		return 0x958458f6:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"isofs") {
+		return 0x9660:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"jffs2") {
+		return 0x72b6:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"jfs") {
+		return 0x3153464a:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+						"minix (original)") {
+		return 0x137F:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+						"minix (30 char)") {
+		return 0x138F:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+						"minix2 (original)") {
+		return 0x2468:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],
+						"minix2 (30 char)") {
+		return 0x2478:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"msdos") {
+		return 0x4d44:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ncp") {
+		return 0x564c:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"nfs") {
+		return 0x6969:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ntfs") {
+		return 0x5346544e:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"openprom") {
+		return 0x9fa1:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"proc") {
+		return 0x9fa0:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"qnx4") {
+		return 0x002f:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"reiserfs") {
+		return 0x52654973:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"romfs") {
+		return 0x7275:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"smb") {
+		return 0x517B:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"sysv2") {
+		return 0x012FF7B6:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"sysv4") {
+		return 0x012FF7B5:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"tmpfs") {
+		return 0x01021994:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"udf") {
+		return 0x15013346:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"ufs") {
+		return 0x00011954:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"usbdevfs") {
+		return 0x9fa2:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"vxfs") {
+		return 0xa501FCF5:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"xenix") {
+		return 0x012FF7B4:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"xfs") {
+		return 0x58465342:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"xiafs") {
+		return 0x012FD16D:
+	} else if (!charstring::compare(pvt->_st.f_basetype[0],"zfs") {
+		return 0x00BAB10C:
+	}
+	return 0;
 #else
 	return 0;
 #endif
@@ -779,6 +874,8 @@ const char *filesystem::getTypeName() const {
 			return "xfs";
 		case 0x012FD16D:
 			return "xiafs";
+		case 0x00BAB10C:
+			return "zfs";
 	}
 	return NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)

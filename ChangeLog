@@ -22,11 +22,13 @@
 		open/close/getCurrentProperties
 	added O_BINARY to various open()'s in file class
 	fixed threadmutex::wait() return value on Windows
-	fixed timezone offset during DST on UnixWare
+	fixed timezone offset during DST for systems with the "timezone"
+		external variable
 	filesystem class returns NULL consistently for methods that return
 		const char * but that aren't implemented by the OS
 	sys::getSuggested* return 1024 if they are unsupported by the OS now
 	added dlerror() calls before dlopen/dlsym/dlclose to clear stale errors
+	added fs type-name to fs type-id mapping for systems with statvfs
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

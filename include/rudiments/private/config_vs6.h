@@ -39,9 +39,6 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 /* #undef HAVE_UNISTD_H */
 
-/* Platform is UnixWare */
-/* #undef RUDIMENTS_HAVE_UNIXWARE */
-
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 #define LT_OBJDIR ".libs/"
@@ -1392,9 +1389,6 @@
 
 /* Some systems have unistd.h */
 /* #undef RUDIMENTS_HAVE_UNISTD_H */
-
-/* Platform is UnixWare */
-/* #undef RUDIMENTS_HAVE_UNIXWARE */
 
 /* Some systems have unlink */
 #define RUDIMENTS_HAVE_UNLINK 1

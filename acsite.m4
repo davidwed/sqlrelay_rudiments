@@ -655,17 +655,6 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-AC_MSG_CHECKING(for SCO UnixWare)
-if ( test "`uname -s`" = "UnixWare" )
-then
-	RUDIMENTS_HAVE_SCO="yes"
-	RUDIMENTS_HAVE_UNIXWARE="yes"
-  	AC_DEFINE(RUDIMENTS_HAVE_UNIXWARE,1,Platform is UnixWare)
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-
 AC_SUBST(CRTLIB)
 ])
 
