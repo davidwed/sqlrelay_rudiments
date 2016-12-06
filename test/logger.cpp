@@ -69,7 +69,7 @@ int main(int argc, const char **argv) {
 	datetime	dt;
 	dt.getSystemDateAndTime();
 	if (dt.getSeconds()>=58) {
-		snooze::macrosnooze(3);
+		snooze::macrosnooze(5);
 	}
 
 	// create and verify the header

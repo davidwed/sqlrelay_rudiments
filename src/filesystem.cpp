@@ -626,8 +626,8 @@ const char *filesystem::getMountPoint() const {
 	return (pvt->_st.f_mntonname[0])?
 			(const char *)pvt->_st.f_mntonname:NULL;
 #elif defined(RUDIMENTS_HAVE_WINDOWS_GETDISKFREESPACE)
-	return (pvt->_volume[0])?
-			(const char *)pvt->_volume:NULL;
+	return (!charstring::isNullOrEmpty(pvt->_volume))?
+				(const char *)pvt->_volume:NULL;
 #else
 	return NULL;
 #endif
