@@ -218,10 +218,10 @@ void logger::write(const char *logentry) {
 
 
 
-int32_t _containerutil_compare(logdestination *value1, logdestination *value2) {
+/*int32_t _containerutil_compare(logdestination *value1, logdestination *value2) {
 	return _containerutil_compare((void *)value1,(void *)value2);
 }
 
 void _containerutul_print(logdestination *value) {
 	_containerutil_print((void *)value);
-}
+}*/
