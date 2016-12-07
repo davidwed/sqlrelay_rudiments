@@ -33,7 +33,7 @@ int main(int argc, const char **argv) {
 		// attach to the next block
 		test("attach",mm.attach(fd.getFileDescriptor(),
 						i*allocgran,allocgran,
-						PROT_READ,MAP_SHARED));
+						PROT_READ,MAP_PRIVATE));
 
 		// get a pointer to the block
 		const char	*ptr=(const char *)mm.getData();

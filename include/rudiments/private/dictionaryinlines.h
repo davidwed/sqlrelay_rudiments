@@ -232,3 +232,17 @@ void DICTIONARYNODE_CLASS::print() const {
 	stdoutput.printf(":");
 	_containerutil_print(value);
 }
+
+
+
+DICTIONARYNODE_TEMPLATE
+int32_t _containerutil_compare(
+			dictionarynode<keytype,valuetype> *value1,
+			dictionarynode<keytype,valuetype> *value2) {
+	return _containerutil_compare(value1->getKey(),value2->getKey());
+}
+
+DICTIONARYNODE_TEMPLATE
+void _containerutil_compare(dictionarynode<keytype,valuetype> *value) {
+	_containerutil_print(value);
+}

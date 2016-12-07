@@ -10,6 +10,9 @@ int main(int argc, const char **argv) {
 
 	header("dynamiclib");
 
+// not supported by linux libc
+#ifndef RUDIMENTS_HAVE_G_CONFIG_H
+
 #ifdef _WIN32
 	char	*f=charstring::duplicate("C:\\Windows\\System32\\msvcrt.dll");
 #else
@@ -63,4 +66,7 @@ int main(int argc, const char **argv) {
 	test("getError: invalid file",d.getError()!=NULL);
 
 	delete[] f;
+#endif
+
+	stdoutput.printf("\n");
 }

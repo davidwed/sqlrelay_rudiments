@@ -12,6 +12,7 @@
 #include <rudiments/error.h>
 #include <rudiments/process.h>
 #include <rudiments/snooze.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
@@ -131,14 +132,29 @@ void handoffclient() {
 
 int main(int argc, const char **argv) {
 
-	// FIXME: this really ought to work on SCO OSR5
-	#ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
-		return 1;
-	#endif
-
 	if (argc==1) {
 
 		header("handoff");
+
+        	// not supported on Cygwin and Linux < 2.2
+        	char    *os=sys::getOperatingSystemName();
+        	char    *rel=sys::getOperatingSystemRelease();
+        	double  ver=charstring::toFloat(rel);
+        	bool	notsupported=
+				(!charstring::compare(os,"CYGWIN",6) ||
+               			(!charstring::compare(os,"Linux",5) &&
+				ver<2.2));
+		// FIXME: this really ought to work on SCO OSR5
+		#ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
+			notsupported=true;
+		#endif
+		delete[] os;
+		delete[] rel;
+		if (notsupported) {
+			stdoutput.printf("not supported\n\n");
+			return 0;
+		}
+
 
 		// spawn the handoff servers
 		stringbuffer	cmd;

@@ -312,4 +312,5 @@ int main(int argc, const char **argv) {
 	intstrdict.clear();
 	test("clear: getKeys()->getLength",
 		intstrdict.getKeys()->getLength()==0);
+	stdoutput.printf("\n");
 }
