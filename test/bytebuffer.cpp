@@ -280,7 +280,7 @@ int main(int argc, const char **argv) {
 	// large writes
 	bb.clear();
 	uint16_t	count=10;
-	uint64_t	size=1024*1024*10;
+	uint64_t	size=1024*100*10;
 	unsigned char	*data=(unsigned char *)"1234567890";
 	stdoutput.printf("%hd, %lld byte writes\n",count,size);
 	for (uint16_t l=0; l<count; l++) {
