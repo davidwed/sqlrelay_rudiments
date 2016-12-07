@@ -229,18 +229,18 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("get values...\n");
 	count=COUNT;
 	success=true;
-	for (i=0; i<count; i++) {
+	for (i=0; i<10; i++) {
 		for (uint32_t j=0; j<count; j++) {
 			sa4[i][j]=i*count+j;
 		}
 	}
-	for (i=0; success && i<count; i++) {
+	for (i=0; success && i<10; i++) {
 		for (uint32_t j=0; success && j<count; j++) {
 			success=(sa4[i][j]==i*count+j);
 		}
 	}
 	test("get values, forwards",success);
-	for (i=count; success && i>0; i--) {
+	for (i=10; success && i>0; i--) {
 		for (uint32_t j=count; success && j>0; j--) {
 			success=(sa4[i-1][j-1]==(i-1)*count+(j-1));
 		}
