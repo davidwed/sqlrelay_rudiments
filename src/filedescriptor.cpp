@@ -2499,5 +2499,5 @@ int32_t filedescriptor::compare(filedescriptor *value) {
 }
 
 void filedescriptor::print() {
-	return _containerutil_print((void *)this);
+	_containerutil_print((void *)this);
 }
