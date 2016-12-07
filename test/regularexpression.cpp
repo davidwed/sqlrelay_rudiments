@@ -119,7 +119,7 @@ int main(int argc, const char **argv) {
 
 	// unixware's regex can't handle this, apparently
 	if (charstring::compare(osname,"UnixWare") &&
-		!(!charstring::compare(osname,"SunOS") && osver<5.6)) {
+		!(!charstring::compare(osname,"SunOS") && osver<5.7)) {
 
         	stdoutput.printf("wildcard word match\n");
 		test("compile",re.compile("(\\w+) (\\w+)"));
