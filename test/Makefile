@@ -76,7 +76,7 @@ PROGS = $(PROGS0) $(PROGS1) $(PROGS2) $(PROGS3)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(COMPILE) $<
 
 all: $(PROGS)
-	#$(SERVERPEM)
+	$(SERVERPEM)
 
 tests: all
 	$(THISDIR)bytebuffer$(EXE)
