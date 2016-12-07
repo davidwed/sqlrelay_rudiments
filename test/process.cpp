@@ -17,13 +17,13 @@ int main(int argc, const char **argv) {
 	pid_t	pid=process::getProcessId();
 	pid_t	ppid=process::getParentProcessId();
 	pid_t	pgid=process::getProcessGroupId();
-	pid_t	sid=process::getSessionId();
 	uid_t	uid=process::getUserId();
 	uid_t	euid=process::getEffectiveUserId();
 	gid_t	gid=process::getGroupId();
 	gid_t	egid=process::getEffectiveGroupId();
 
-	/*stdoutput.printf("pid: %d\n",pid);
+	/*pid_t	sid=process::getSessionId();
+	stdoutput.printf("pid: %d\n",pid);
 	stdoutput.printf("ppid: %d\n",ppid);
 	stdoutput.printf("pgid: %d\n",pgid);
 	stdoutput.printf("sid: %d\n",sid);
