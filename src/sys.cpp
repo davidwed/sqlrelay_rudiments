@@ -10,6 +10,12 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
 
+#ifndef RUDIMENTS_HAVE_GETHOSTNAME
+	#include <rudiments/linkedlist.h>
+	#include <rudiments/directory.h>
+	#include <rudiments/file.h>
+#endif
+
 #include <rudiments/private/winsock.h>
 
 #ifdef RUDIMENTS_HAVE_SYS_TYPES_H
@@ -239,9 +245,53 @@ char *sys::getHostName() {
 
 		// for any other error, return null
 		return NULL;
+
 	#else
-		RUDIMENTS_SET_ENOSYS
-		return NULL;
+
+		// open /etc
+		directory	d;
+		if (!d.open("/etc")) {
+			return NULL;
+		}
+
+		// get various file names into a list
+		linkedlist< char * >	nodenames;
+		for (;;) {
+			char	*f=d.read();
+			if (!charstring::compare(f,"hostname") ||
+				!charstring::compare(f,"nodename") ||
+				!charstring::compare(f,"nodename.")) {
+				nodenames.append(f);
+			} else if (!f) {
+				break;
+			} else {
+				delete[] f;
+			}
+		}
+
+		// bail if there weren't any
+		if (!nodenames.getLength()) {
+			return NULL;
+		}
+
+		// sort the list...
+		// fortunately we care about hostname, nodename, then nodename.*
+		// in that order, which also happens to be alphabetical order
+		nodenames.heapSort();
+
+		// get the contents of the first file
+		stringbuffer	fname;
+		fname.append("/etc/")->append(nodenames.getFirst()->getValue());
+		char	*hostname=file::getContents(fname.getString());
+
+		// clean up the list
+		for (linkedlistnode< char *> *n=nodenames.getFirst();
+							n; n=n->getNext()) {
+			delete[] n->getValue();
+		}
+
+		// return the hostname
+		return (!charstring::isNullOrEmpty(hostname))?hostname:NULL;
 	#endif
 }
 
