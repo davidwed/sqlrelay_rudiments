@@ -560,10 +560,6 @@ const void *gssmechanism::getObjectId() {
 	return pvt->_oid;
 }
 
-int32_t gssmechanism::compare(gssmechanism *value) {
-	return _containerutil_compare((void *)this,(void *)value);
-}
-
 
 class gsscredentialsprivate {
 	friend class gsscredentials;
@@ -3941,4 +3937,14 @@ void gsscontext::setStatus(uint32_t status, int32_t type) {
 			delete[] errstr;
 		}
 	#endif
+}
+
+
+
+int32_t _containerutil_compare(gssmechanism *value1, gssmechanism *value2) {
+	_containerutil_compare((void *)value1,(void *)value2);
+}
+
+void _containerutil_print(gssmechanism *value) {
+	_containerutil_print((void *)value);
 }

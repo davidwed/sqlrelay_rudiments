@@ -20,10 +20,6 @@
 
 logdestination::~logdestination() {}
 
-int32_t logdestination::compare(logdestination *value) {
-	return _containerutil_compare((void *)this,(void *)value);
-}
-
 class filedestinationprivate {
 	friend class filedestination;
 	private:
@@ -218,4 +214,14 @@ void logger::write(const char *logentry) {
 		current->getValue()->write(logentry);
 		current=current->getNext();
 	}
+}
+
+
+
+int32_t _containerutil_compare(logdestination *value1, logdestination *value2) {
+	return _containerutil_compare((void *)value1,(void *)value2);
+}
+
+void _containerutul_print(logdestination *value) {
+	_containerutil_print((void *)value);
 }

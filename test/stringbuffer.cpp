@@ -70,7 +70,7 @@ int main(int argc, const char **argv) {
 			for (uint16_t k=1; k<5; k++) {
 				float	l=k+((float)k/mult);
 				mult*=10;
-				strb->append(l,k+1,l);
+				strb->append(l,k+1,(uint16_t)l);
 				charstring::printf(buf,sizeof(buf),
 							"%*.*f",k+1,k,l);
 				charstring::append(str,buf);

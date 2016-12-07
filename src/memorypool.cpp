@@ -180,3 +180,14 @@ void memorypool::print() {
 		segmentindex++;
 	}
 }
+
+
+
+int32_t	 _containerutil_compare(memorypoolnode *value1,
+					memorypoolnode *value2) {
+	return _containerutil_compare((void *)value1,(void *)value2);
+}
+
+void _containerutil_print(memorypoolnode *value) {
+	_containerutil_print((void *)value);
+}

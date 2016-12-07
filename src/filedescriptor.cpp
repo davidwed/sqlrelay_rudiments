@@ -2494,10 +2494,12 @@ void *filedescriptor::getHandleFromFileDescriptor(int32_t fd) {
 	#endif
 }
 
-int32_t filedescriptor::compare(filedescriptor *value) {
-	return _containerutil_compare((void *)this,(void *)value);
+
+
+int32_t _containerutil_compare(filedescriptor *value1, filedescriptor *value2) {
+	return _containerutil_compare((void *)value1,(void *)value2);
 }
 
-void filedescriptor::print() {
-	_containerutil_print((void *)this);
+void _containerutil_print(filedescriptor *value) {
+	_containerutil_print((void *)value);
 }

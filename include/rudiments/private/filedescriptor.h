@@ -44,6 +44,3 @@
 	public:
 		filedescriptor(int32_t fd);
 		static void	*getHandleFromFileDescriptor(int32_t fd);
-
-		int32_t	compare(filedescriptor *value);
-		void	print();

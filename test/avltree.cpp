@@ -217,7 +217,7 @@ int main(int argc, char **argv) {
 		double	number=(double)integerpartint;
 		double	decimalpart=(double)decimalpartint;
 		uint16_t	exp=charstring::integerLength(decimalpartint);
-		for (uint16_t i=0; i<exp; i++) {
+		for (uint16_t j=0; j<exp; j++) {
 			decimalpart=decimalpart/10;
 		}
 		number=number+decimalpart;

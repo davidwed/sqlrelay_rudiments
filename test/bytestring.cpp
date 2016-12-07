@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 	delete[] dup;
 	dup=(unsigned char *)bytestring::duplicate(
 					(const void *)"3456789012",10);
-	test("duplicate(()), compare()",
+	test("duplicate(), compare()",
 			!bytestring::compare(dup,"3456789012",10));
 	delete[] dup;
 	stdoutput.printf("\n");

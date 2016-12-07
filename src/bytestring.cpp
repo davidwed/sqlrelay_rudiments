@@ -11,6 +11,9 @@
 #ifdef RUDIMENTS_HAVE_UNISTD_H
 	#include <unistd.h>
 #endif
+#ifdef RUDIMENTS_HAVE_G_CONFIG_H
+	#include <_G_config.h>
+#endif
 
 #ifdef RUDIMENTS_MUST_DEFINE_SWAB
 extern "C" void swab(const void *from, void *to, ssize_t n);
@@ -114,7 +117,11 @@ const void *bytestring::findLast(const void *haystack,
 
 const void *bytestring::findFirst(const void *haystack, size_t haystacksize,
 					const void *needle, size_t needlesize) {
-	#ifdef RUDIMENTS_HAVE_MEMMEM
+
+	// Linux libc has memmem() but the calling order is backwards, and
+	// also it just doesn't work!  So prefer our implementation to it...
+
+	#if defined(RUDIMENTS_HAVE_MEMMEM) && !defined(_LINUX_C_LIB_VERSION)
 		return (haystack && needle)?
 			memmem(haystack,haystacksize,needle,needlesize):NULL;
 	#else

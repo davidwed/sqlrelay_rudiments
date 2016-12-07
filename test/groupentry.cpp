@@ -72,7 +72,7 @@ int main(int argc, const char **argv) {
 
 	// invalid group id
 	stdoutput.printf("-1:\n");
-	test("initialize",!grent.initialize(-1));
+	test("initialize",!grent.initialize((gid_t)-1));
 	test("name",!grent.getName());
 	test("group id",grent.getGroupId()==(gid_t)-1);
 	test("members",!grent.getMembers());

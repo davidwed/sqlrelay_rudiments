@@ -1326,3 +1326,18 @@ void codetree::writeStartEnd(stringbuffer *output, const char *string) {
 	// restore indent level
 	pvt->_depth=startdepth;
 }
+
+
+int32_t	_containerutil_compare(break_t *value1, break_t *value2) {
+	return _containerutil_compare((void *)value1,(void *)value2);
+}
+void _containerutil_print(break_t *value) {
+	_containerutil_print((void *)value);
+}
+int32_t	_containerutil_compare(linkedlist< break_t * > *value1,
+				linkedlist< break_t *> * value2) {
+	return _containerutil_compare((void *)value1,(void *)value2);
+}
+void _containerutil_print(linkedlist< break_t *> *value) {
+	_containerutil_print((void *)value);
+}
