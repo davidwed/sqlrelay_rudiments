@@ -664,6 +664,9 @@
 /* Some systems have grp.h */
 /* #undef RUDIMENTS_HAVE_GRP_H */
 
+/* Some systems have _G_config.h */
+#undef RUDIMENTS_HAVE_G_CONFIG_H
+
 /* Some systems have HANDLE_FLAG_INHERIT */
 #define RUDIMENTS_HAVE_HANDLE_FLAG_INHERIT 1
 
