@@ -109,7 +109,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("from file name...\n");
 	filesystem	fs1;
 	fs1.open(filename);
-	print(&fs1);
+	//print(&fs1);
 	test("type",fs1.getType());
 	test("block size",fs1.getBlockSize());
 	test("optimum transfer block size",fs1.getOptimumTransferBlockSize());
