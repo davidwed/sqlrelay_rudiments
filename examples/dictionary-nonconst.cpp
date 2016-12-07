@@ -24,10 +24,10 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 	// remove a value
-	dictionarynode<char *,char *>	*n=nvp.detach((char *)"color");
+	dictionarynode<char *,char *>	*n=nvp.getNode((char *)"color");
 	delete[] n->getKey();
 	delete[] n->getValue();
-	delete n;
+	nvp.remove(n);
 
 	// print the dictionary
 	stdoutput.write("Current contents:\n");
@@ -35,14 +35,12 @@ int main(int argc, const char **argv) {
 	stdoutput.write('\n');
 
 	// clear the dictionary
-	linkedlist<char *>	*keys=nvp.getKeys();
-	for (linkedlistnode<char *> *kn=keys->getFirst();
-						kn; kn=kn->getNext()) {
-		dictionarynode<char *,char *>	*n=nvp.detach(kn->getValue());
-		delete[] n->getKey();
-		delete[] n->getValue();
-		delete n;
+	linkedlist< dictionarynode< char *, char * > *> *list=nvp.getList();
+	for (linkedlistnode< dictionarynode< char *, char *> *> *ln=
+						list->getFirst();
+						ln; ln=ln->getNext()) {
+		delete[] ln->getValue()->getKey();
+		delete[] ln->getValue()->getValue();
 	}
-	delete keys;
 	nvp.clear();
 }

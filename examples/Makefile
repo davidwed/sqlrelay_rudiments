@@ -54,7 +54,7 @@ PROGS0 = \
 	hostentry-hostname$(EXE) \
 	hostentry-address$(EXE) \
 	inetsocketclient$(EXE) \
-	inetsocketserver$(EXE) \
+	inetsocketserver$(EXE)
 
 PROGS1 = \
 	linkedlist-values$(EXE) \
@@ -100,7 +100,7 @@ PROGS1 = \
 	regularexpression-compile$(EXE) \
 	regularexpression-multiple$(EXE) \
 	serialport$(EXE) \
-	serialportprofile$(EXE) \
+	serialportprofile$(EXE)
 
 PROGS2 = \
 	serviceentry-name$(EXE) \
@@ -129,7 +129,12 @@ PROGS2 = \
 	xmldom$(EXE) \
 	xmlsax$(EXE) \
 	codetree$(EXE) \
-	compiler$(EXE)
+	compiler$(EXE) \
+	avltree$(EXE) \
+	hash$(EXE) \
+	gss$(EXE) \
+	tls$(EXE)
+	
 
 PROGS = $(PROGS0) $(PROGS1) $(PROGS2)
 
@@ -511,3 +516,15 @@ codetree$(EXE): codetree.cpp codetree.$(OBJ)
 
 compiler$(EXE): compiler.cpp compiler.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ compiler.$(OBJ) $(LIBS)
+
+avltree$(EXE): avltree.cpp avltree.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ avltree.$(OBJ) $(LIBS)
+
+hash$(EXE): hash.cpp hash.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ hash.$(OBJ) $(LIBS)
+
+gss$(EXE): gss.cpp gss.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ gss.$(OBJ) $(LIBS)
+
+tls$(EXE): tls.cpp tls.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ tls.$(OBJ) $(LIBS)
