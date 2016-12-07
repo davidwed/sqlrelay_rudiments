@@ -114,9 +114,12 @@ int main(int argc, const char **argv) {
 
 
 	char	*osname=sys::getOperatingSystemName();
+	char	*osrel=sys::getOperatingSystemRelease();
+	float	osver=charstring::toFloat(osrel);
 
 	// unixware's regex can't handle this, apparently
-	if (charstring::compare(osname,"UnixWare")) {
+	if (charstring::compare(osname,"UnixWare") &&
+		!(!charstring::compare(osname,"SunOS") && osver<5.6)) {
 
         	stdoutput.printf("wildcard word match\n");
 		test("compile",re.compile("(\\w+) (\\w+)"));
@@ -143,6 +146,7 @@ int main(int argc, const char **argv) {
         	stdoutput.printf("\n");
 	}
 	delete[] osname;
+	delete[] osrel;
 
 
         stdoutput.printf("NULLs\n");
