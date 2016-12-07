@@ -3942,7 +3942,7 @@ void gsscontext::setStatus(uint32_t status, int32_t type) {
 
 
 int32_t _containerutil_compare(gssmechanism *value1, gssmechanism *value2) {
-	_containerutil_compare((void *)value1,(void *)value2);
+	return _containerutil_compare((void *)value1,(void *)value2);
 }
 
 void _containerutil_print(gssmechanism *value) {
