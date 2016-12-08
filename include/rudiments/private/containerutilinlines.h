@@ -163,20 +163,6 @@ int32_t _containerutil_compare(void *value1, void *value2) {
 	}
 }
 
-/*template <class valuetype>
-RUDIMENTS_TEMPLATE_INLINE
-int32_t _containerutil_compare(valuetype value1, valuetype value2) {
-	if (!value1 && value2) {
-		return 1;
-	} else if (!value1 && !value2) {
-		return 0;
-	} else if (value1 && !value2) {
-		return -1;
-	} else {
-		return value1->compare(value2);
-	}
-}*/
-
 RUDIMENTS_TEMPLATE_INLINE
 void _containerutil_print(const char *value) {
 	stdoutput.printf("%s",value);
@@ -264,15 +250,5 @@ RUDIMENTS_TEMPLATE_INLINE
 void _containerutil_print(void *value) {
 	stdoutput.printf("%08x",value);
 }
-
-/*template <class valuetype>
-RUDIMENTS_TEMPLATE_INLINE
-void _containerutil_print(valuetype value) {
-	if (value) {
-		value->print();
-	} else {
-		stdoutput.printf("(null)");
-	}
-}*/
 
 #endif

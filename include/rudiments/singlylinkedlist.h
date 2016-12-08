@@ -18,7 +18,7 @@ class singlylinkedlistnode {
 		/** Deletes this instance of the singlylinkedlistnode class.
 		 *  Note however, that the value stored in the
 		 *  singlylinkedlistnode is not deleted by this call. */
-		virtual	~singlylinkedlistnode();
+		~singlylinkedlistnode();
 
 		/** Set the value stored in the node to "value". */
 		void		setValue(valuetype value);
@@ -70,7 +70,7 @@ class singlylinkedlist {
 		 *  of its singlylinkedlistnodes.  Note however, that the data
 		 *  stored in each singlylinkedlistnode is not deleted by this
 		 *  call. */
-		virtual	~singlylinkedlist();
+		~singlylinkedlist();
 
 		/** Creates a new singlylinkedlistnode containing "value" and
 		 *  prepends it to the singlylinkedlist. */
