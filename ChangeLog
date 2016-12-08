@@ -36,6 +36,10 @@
 	xmldomnode writes out numeric entites like &#200; correctly now
 	fixed groupentry::initialize(NULL) on UnixWare
 	implemented missing unixsocketserver::close()
+	fixed filesystem::open(fd) for Windows 8+
+	fixed file::changeOwner() for Windows 8+
+	initialized timeremaining in snooze::nanosnooze for systems that
+		don't set it at all if the full sleep occurred (eg. arm64 linux)
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
