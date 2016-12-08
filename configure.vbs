@@ -9,6 +9,7 @@ for i=0 to WScript.Arguments.Count-1
 	if arg="--enable-small-code" then
 		OPTCPPFLAGS="/O1"
 	elseif arg="--enable-debug" then
+		OPTCPPFLAGS=""
 		DEBUGCPPFLAGS="/Zi /MDd /D _DEBUG"
 		DEBUGLDFLAGS="/debug"
 	end if

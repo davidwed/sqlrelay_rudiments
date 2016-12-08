@@ -1155,19 +1155,6 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 		if (!ue.initialize(uid) || !ge.initialize(gid)) {
 			return false;
 		}
-		// FIXME: do these need to be freed?
-		PSID	usid=(PSID)bytestring::duplicate(ue.getSid(),
-							ue.getSidSize());
-		PSID	gsid=(PSID)bytestring::duplicate(ge.getSid(),
-							ge.getSidSize());
-
-		// build trustees
-		TRUSTEE ut;
-		bytestring::zero(&ut,sizeof(ut));
-		BuildTrusteeWithSid(&ut,usid);
-		TRUSTEE gt;
-		bytestring::zero(&gt,sizeof(gt));
-		BuildTrusteeWithSid(&gt,gsid);
 
 		// adjust my privileges so I can set the owner
 		HANDLE	th=NULL;
@@ -1199,10 +1186,46 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 			}
 		}
 
-		// build security descriptor
+		// set the owner/group
+		if (SetSecurityInfo(fh,
+				SE_FILE_OBJECT,
+				OWNER_SECURITY_INFORMATION|
+				GROUP_SECURITY_INFORMATION,
+				(PSID)ue.getSid(),
+				(PSID)ge.getSid(),
+				NULL,NULL)!=ERROR_SUCCESS) {
+			CloseHandle(th);
+			return false;
+		}
+
+		// Below is the original way I implemented this.
+		// BuildSecurityDescriptor crashes on Windows 8 though.
+		// There are other issues too.  Files are kernel objects, so I
+		// should probably use Get/SetKernelObjectSecurity instead of
+		// Get/SetUserObjectSecurity.  Though the docs also say to use
+		// SetSecurityInfo instead of SetKernelObjectSecurity for
+		// filesystem objects, which is what I changed it to.
+#if 0
+		// FIXME: do these need to be freed?
+		PSID	usid=(PSID)bytestring::duplicate(ue.getSid(),
+							ue.getSidSize());
+		PSID	gsid=(PSID)bytestring::duplicate(ge.getSid(),
+							ge.getSidSize());
+
+		// build trustees
+		TRUSTEE ut;
+		bytestring::zero(&ut,sizeof(ut));
+		BuildTrusteeWithSid(&ut,usid);
+		TRUSTEE gt;
+		bytestring::zero(&gt,sizeof(gt));
+		BuildTrusteeWithSid(&gt,gsid);
+
+		// get the existing owner/group security info for the file
+		// into a security descriptor
 		DWORD	sdsize=0;
 		SECURITY_INFORMATION	sinfo=
-			OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION;
+				OWNER_SECURITY_INFORMATION|
+				GROUP_SECURITY_INFORMATION;
 		GetUserObjectSecurity(fh,&sinfo,NULL,0,&sdsize);
 		PSECURITY_DESCRIPTOR	sdesc=
 			(PSECURITY_DESCRIPTOR)LocalAlloc(LPTR,sdsize);
@@ -1216,9 +1239,13 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 			CloseHandle(th);
 			return false;
 		}
+
+		// build a new security descriptor, starting with the existing
+		// security descriptor, but updating the user/group info
 		PSECURITY_DESCRIPTOR	newsdesc=NULL;
 		DWORD	result=BuildSecurityDescriptor(
-						&ut,&gt,0,NULL,0,NULL,
+						&ut,&gt,
+						0,NULL,0,NULL,
 						sdesc,&sdsize,&newsdesc);
 		if (result!=ERROR_SUCCESS) {
 			LocalFree(sdesc);
@@ -1227,7 +1254,7 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 			return false;
 		}
 
-		// set permissions
+		// apply the new security descriptor to the file
 		if (!SetUserObjectSecurity(fh,&sinfo,newsdesc)) {
 			LocalFree(sdesc);
 			LocalFree(newsdesc);
@@ -1235,8 +1262,10 @@ bool file::changeOwner(uid_t uid, gid_t gid) const {
 			return false;
 		}
 		
+		// clean up
 		LocalFree(sdesc);
 		LocalFree(newsdesc);
+#endif
 		CloseHandle(th);
 		return true;
 	#else
