@@ -46,33 +46,18 @@ int main(int argc, const char **argv) {
 	f.close();
 	stdoutput.printf("\n");
 
+	const char *filenames[]={".","..","testfile1","testfile2",NULL};
 
 	// contents
 	stdoutput.printf("contents...\n");
 	directory	d;
 	test("open",d.open("testdir"));
 	d.rewind();
-	char	*name;
-	name=d.read();
-	test(".",!charstring::compare(name,"."));
-	delete[] name;
-	name=d.read();
-	test("..",!charstring::compare(name,".."));
-	delete[] name;
-	name=d.read();
-	const char *filenames[]={"testfile1","testfile2",NULL};
+	char	*name=d.read();
 	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	name=d.read();
 	test("testfile",charstring::inSet(name,filenames));
-	delete[] name;
-
-	d.rewind();
-	name=d.read();
-	test(".",!charstring::compare(name,"."));
-	delete[] name;
-	name=d.read();
-	test("..",!charstring::compare(name,".."));
 	delete[] name;
 	name=d.read();
 	test("testfile",charstring::inSet(name,filenames));
@@ -83,10 +68,14 @@ int main(int argc, const char **argv) {
 
 	d.rewind();
 	name=d.read();
-	test(".",!charstring::compare(name,"."));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
-	test("(skip)",d.skip());
-	test("(skip)",d.skip());
+	name=d.read();
+	test("testfile",charstring::inSet(name,filenames));
+	delete[] name;
+	name=d.read();
+	test("testfile",charstring::inSet(name,filenames));
+	delete[] name;
 	name=d.read();
 	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
@@ -101,10 +90,10 @@ int main(int argc, const char **argv) {
 	test("count",d.getChildCount()==4);
 	uint64_t	i=0;
 	name=d.getChildName(i++);
-	test(".",!charstring::compare(name,"."));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	name=d.getChildName(i++);
-	test("..",!charstring::compare(name,".."));
+	test("testfile",charstring::inSet(name,filenames));
 	delete[] name;
 	name=d.getChildName(i++);
 	test("testfile",charstring::inSet(name,filenames));
