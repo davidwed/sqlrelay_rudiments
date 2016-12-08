@@ -21,6 +21,10 @@ int main(int argc, const char **argv) {
 			"-two",
 			"--three=3",
 			"--four",
+			"--five=5",
+			"-f","five",
+			"--six",
+			"-s",
 			NULL
 		};
 
@@ -41,22 +45,36 @@ int main(int argc, const char **argv) {
 
 	// found
 	stdoutput.printf("found...\n");
-	test("found(), -(value)",cmdline.found("one"));
-	test("found(), -(no value)",cmdline.found("two"));
-	test("found(), --(value)",cmdline.found("three"));
-	test("found(), --(no value)",cmdline.found("four"));
+	test("found(), -one",cmdline.found("one"));
+	test("found(), -two",cmdline.found("two"));
+	test("found(), --three",cmdline.found("three"));
+	test("found(), --four",cmdline.found("four"));
+	test("found(), --five",cmdline.found("five"));
+	test("found(), -f",cmdline.found("f"));
+	test("found(), --five/-f",cmdline.found("five","f"));
+	test("found(), --six",cmdline.found("six"));
+	test("found(), -s",cmdline.found("s"));
+	test("found(), --six/-s",cmdline.found("six","s"));
+	test("found(), --SIX/-s",cmdline.found("SIX","s"));
+	test("found(), --six/-S",cmdline.found("six","S"));
 	stdoutput.printf("\n");
 
 	// getValue
 	stdoutput.printf("getValue...\n");
-	test("getValue(), -(value)",
+	test("getValue(), -one",
 		!charstring::compare(cmdline.getValue("one"),"1"));
-	test("getValue(), -(no value)",
+	test("getValue(), -two",
 		!charstring::compare(cmdline.getValue("two"),""));
-	test("getValue(), --(value)",
+	test("getValue(), --three",
 		!charstring::compare(cmdline.getValue("three"),"3"));
-	test("getValue(), --(no value)",
+	test("getValue(), --four",
 		!charstring::compare(cmdline.getValue("four"),""));
+	test("getValue(), --five",
+		!charstring::compare(cmdline.getValue("five"),"5"));
+	test("getValue(), -f",
+		!charstring::compare(cmdline.getValue("f"),"five"));
+	test("getValue(), --five/-f",
+		!charstring::compare(cmdline.getValue("five"),"5"));
 	stdoutput.printf("\n");
 
 	process::exit(0);

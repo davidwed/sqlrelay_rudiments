@@ -26,10 +26,43 @@ class RUDIMENTS_DLLSPEC commandline {
 		 *  on the command line and returns value. */
 		const char	*getValue(const char *arg) const;
 
+		/** Looks for the argument or an abbreviated version of it on
+		 *  the command line and returns the value.
+		 *
+		 *  For example, if "arg" is "name" and "abbr" is "n" then it
+		 *  looks for either:
+		 *
+		 * 	-name value
+		 *  or
+		 * 	--name=value
+		 *  or
+		 *  	-n value
+		 *  or
+		 *  	--n==value
+		 *
+		 *  on the command line and returns value.
+		 *
+		 *  If both "arg" and "abbr" are found then the value for
+		 *  "arg" is returned. */
+		const char	*getValue(const char *arg,
+						const char *abbr) const;
+
 		/** Returns true if "-arg", "--arg" or "--arg=value" was found
-		 *  on the command line and false if it was not found.  This is
-		 *  useful for processing command line switches. */
+		 *  on the command line and false if it was not found.
+		 *
+		 *  This is useful for processing command line switches. */
 		bool	found(const char *arg) const;
+
+		/** Returns true if the argument or an abbreviated version of
+		 *  it was found on the command line and false if neither were
+		 *  found.
+		 *
+		 *  For example, if "arg" is "recursive" and "abbr" is "r" then
+		 *  it returns true if "-recursive", "--recursive", "-r", or
+		 *  "--r" was found on the command line.
+		 *
+		 *  This is useful for processing command line switches. */
+		bool	found(const char *arg, const char *abbr) const;
 
 	#include <rudiments/private/commandline.h>
 

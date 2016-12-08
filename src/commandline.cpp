@@ -73,6 +73,14 @@ const char *commandline::getValue(const char *arg) const {
 	return "";
 }
 
+const char *commandline::getValue(const char *arg, const char *abbr) const {
+	const char	*value=getValue(arg);
+	if (charstring::isNullOrEmpty(value)) {
+		value=getValue(abbr);
+	}
+	return value;
+}
+
 bool commandline::found(const char *arg) const {
 
 	if (!charstring::isNullOrEmpty(arg)) {
@@ -114,4 +122,8 @@ bool commandline::found(const char *arg) const {
 		}
 	}
 	return false;
+}
+
+bool commandline::found(const char *arg, const char *abbr) const {
+	return (found(arg) || found(abbr));
 }
