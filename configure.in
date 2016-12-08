@@ -721,6 +721,13 @@ then
 	#endif
 	#include <lm.h>],
 	[],AC_DEFINE(RUDIMENTS_HAVE_LM_H, 1, Some systems have lm.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+	AC_MSG_CHECKING(for psapi.h)
+	AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_WINDOWS_H
+		#include <windows.h>
+	#endif
+	#include <psapi.h>],
+	[],AC_DEFINE(RUDIMENTS_HAVE_PSAPI_H, 1, Some systems have psapi.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 fi
 
 AC_MSG_CHECKING(for io.h)

@@ -109,7 +109,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("from file name...\n");
 	filesystem	fs1;
 	fs1.open(filename);
-	//print(&fs1);
+	print(&fs1);
 	test("type",fs1.getType());
 	test("block size",fs1.getBlockSize());
 	test("optimum transfer block size",fs1.getOptimumTransferBlockSize());
@@ -156,7 +156,7 @@ int main(int argc, const char **argv) {
 			stdoutput.printf("from NULL...\n");
 			fs2.open((const char *)NULL);
 		}
-		//print(&fs2);
+		print(&fs2);
 
 		test("type",
 			fs1.getType()==fs2.getType());

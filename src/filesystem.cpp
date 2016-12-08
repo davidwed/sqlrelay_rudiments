@@ -188,6 +188,9 @@ bool filesystem::open(int32_t fd) {
 		}
 
 		// get file name
+		// NOTE: If GetMappedFileName is dynamically loaded on
+		// Windows 8 or higher then it corrupts the stack when it is
+		// used.  It works fine on Windows 7 and lower though.
 		char	filename[MAX_PATH+1];
 		if (!GetMappedFileName(GetCurrentProcess(),
 					fv,filename,MAX_PATH)) {
@@ -213,7 +216,7 @@ bool filesystem::open(int32_t fd) {
 		char	mapping[MAX_PATH+1];
 
 		// for each volume...
-		for (char driveletter='A'; driveletter<='Z'; driveletter++) {
+		for (char driveletter='c'; driveletter<='z'; driveletter++) {
 
 			// ignore volumes that don't exist
 			DWORD	exists=volumes&0x0001;

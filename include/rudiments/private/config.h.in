@@ -924,6 +924,9 @@
 /* Some systems have prototypes.h */
 #undef RUDIMENTS_HAVE_PROTOTYPES_H
 
+/* Some systems have psapi.h */
+#undef RUDIMENTS_HAVE_PSAPI_H
+
 /* Some systems have pselect */
 #undef RUDIMENTS_HAVE_PSELECT
 
