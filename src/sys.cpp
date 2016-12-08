@@ -1068,7 +1068,7 @@ int64_t sys::getCpuSetSize() {
 	#elif defined(_WIN32)
 
 		// 64 for 64-bit Windows 7/Server 2008 R2,
-		// 0 for other platforms...
+		// 1 for other platforms...
 
         	#if _WIN32_WINNT>=0x0601
 			SYSTEM_INFO	sysinfo;
@@ -1076,9 +1076,9 @@ int64_t sys::getCpuSetSize() {
 			return (sysinfo.wProcessorArchitecture==
 					PROCESSOR_ARCHITECTURE_AMD64 ||
 				sysinfo.wProcessorArchitecture==
-					PROCESSOR_ARCHITECTURE_IA64)?64:0;
+					PROCESSOR_ARCHITECTURE_IA64)?64:1;
 		#else
-			return 0;
+			return 1;
 		#endif
 	#else
 		RUDIMENTS_SET_ENOSYS
