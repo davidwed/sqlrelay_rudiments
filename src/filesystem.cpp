@@ -40,6 +40,9 @@
 	#ifdef RUDIMENTS_HAVE_WINDOWS_H
 		#include <windows.h>
 	#endif
+	#ifdef RUDIMENTS_HAVE_PSAPI_H
+		#include <psapi.h>
+	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_PARAM_H
 		#include <sys/param.h>
 	#endif
@@ -148,12 +151,14 @@ bool filesystem::open(int32_t fd) {
 		return getCurrentProperties();
 	#else
 		// This is complex on Windows.
+
 		// We have to determine the file name that the file descriptor
-		// refers to and call the other version of open().  On
-		// Vista and newer we can use GetFinalPathNameByHandle(), but
-		// on older versions we have to memory-map the file, get the
-		// file name from the map and convert the volume name to a
-		// dos-style drive letter.  We'll just go ahead and do that.
+		// refers to and call the other version of open().
+
+		// On Vista and newer we can use GetFinalPathNameByHandle(),
+		// but on older versions we have to memory-map the file, get
+		// the file name from the map and convert the volume name to a
+		// dos-style drive letter, so we'll just do that.
 
 		// get the file handle
 		HANDLE	fh=(HANDLE)filedescriptor::
@@ -182,21 +187,9 @@ bool filesystem::open(int32_t fd) {
 			return false;
 		}
 
-		// get GetMappedFileName function
-		HMODULE	kernel32=GetModuleHandle("Kernel32");
-		if (!kernel32) {
-			return false;
-		}
-		DWORD (*getmappedfilename)(HANDLE, LPVOID, LPTSTR, DWORD)=
-			(DWORD (*)(HANDLE, LPVOID, LPTSTR, DWORD))
-			GetProcAddress(kernel32,"K32GetMappedFileNameA");
-		if (!getmappedfilename) {
-			return false;
-		}
-
 		// get file name
 		char	filename[MAX_PATH+1];
-		if (!getmappedfilename(GetCurrentProcess(),
+		if (!GetMappedFileName(GetCurrentProcess(),
 					fv,filename,MAX_PATH)) {
 			UnmapViewOfFile(fv);
 			CloseHandle(fm);
@@ -217,7 +210,7 @@ bool filesystem::open(int32_t fd) {
 		volume[0]='\0';
 
 		// set up a buffer for the drive mapping
-		char	mapping[MAX_PATH];
+		char	mapping[MAX_PATH+1];
 
 		// for each volume...
 		for (char driveletter='A'; driveletter<='Z'; driveletter++) {
@@ -233,7 +226,14 @@ bool filesystem::open(int32_t fd) {
 			volume[0]=driveletter;
 
 			// get the drive mapping
-			if (!QueryDosDevice(volume,mapping,sizeof(mapping))) {
+			// FIXME: If the volume is mapped to more than 1
+			// location then this could return 0 with
+			// ERROR_INSUFFICIENT_BUFFER if mapping[] is too small
+			// to store the list of locations.  In that case we
+			// should loop back, resize mapping[] and try again.
+			DWORD	result=QueryDosDevice(volume,mapping,
+							MAX_PATH/sizeof(TCHAR));
+			if (!result) {
 				UnmapViewOfFile(fv);
 				CloseHandle(fm);
 				return false;
@@ -241,6 +241,9 @@ bool filesystem::open(int32_t fd) {
 
 			// if the drive mapping for this volume matches
 			// then we're done
+			// FIXME: If the volume is mapped to more than 1
+			// location then we need to test the filename against
+			// each of the mappings.
 			if (!charstring::compare(filename,mapping,
 						charstring::length(mapping))) {
 				break;

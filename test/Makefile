@@ -93,7 +93,6 @@ tests: all
 	$(THISDIR)environment$(EXE)
 	$(THISDIR)error$(EXE)
 	$(THISDIR)file$(EXE)
-	$(THISDIR)filesystem$(EXE)
 	$(THISDIR)groupentry$(EXE)
 	$(THISDIR)handoff$(EXE)
 	$(THISDIR)hostentry$(EXE)

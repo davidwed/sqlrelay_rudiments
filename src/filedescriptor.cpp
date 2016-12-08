@@ -2464,7 +2464,6 @@ void filedescriptor::printBits(const unsigned char *bits, uint64_t size) {
 	}
 }
 
-// FIXME: add a specific test for _set_invalid_parameter_handler
 #if defined(_WIN32) && defined(RUDIMENTS_HAVE_LONG_LONG)
 static void invalidParameterHandler(const wchar_t *expression,
 					const wchar_t *function,
@@ -2477,8 +2476,10 @@ static void invalidParameterHandler(const wchar_t *expression,
 
 void *filedescriptor::getHandleFromFileDescriptor(int32_t fd) {
 	#if defined(_WIN32)
-		// FIXME: add a specific test for _set_invalid_parameter_handler
 		#if defined(RUDIMENTS_HAVE_LONG_LONG)
+		if (fd<0) {
+			return INVALID_HANDLE_VALUE;
+		}
 		_invalid_parameter_handler	oldiph=
 			_set_invalid_parameter_handler(invalidParameterHandler);
 		intptr_t	handle=_get_osfhandle(fd);
