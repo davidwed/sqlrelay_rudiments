@@ -91,6 +91,8 @@ bool snooze::nanosnooze(uint32_t seconds, uint32_t nanoseconds,
 	timetosnooze.tv_nsec=nanoseconds;
 
 	timespec	timeremaining;
+	timeremaining.tv_sec=0;
+	timeremaining.tv_nsec=0;
 
 	bool	retval=false;
 	#if defined(RUDIMENTS_HAVE_NANOSLEEP) || \
