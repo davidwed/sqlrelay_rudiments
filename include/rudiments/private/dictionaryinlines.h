@@ -3,7 +3,7 @@
 
 #include <rudiments/stdio.h>
 #include <rudiments/private/rudimentsinlines.h>
-#include <rudiments/private/containerutilinlines.h>
+#include <rudiments/private/nodeinlines.h>
 
 #define DICTIONARY_TEMPLATE \
 	template <class keytype, class valuetype>
@@ -215,34 +215,34 @@ valuetype DICTIONARYNODE_CLASS::getValue() const {
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t DICTIONARYNODE_CLASS::compare(keytype testkey) const {
-	return _containerutil_compare(key,testkey);
+	return node_compare(key,testkey);
 }
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t DICTIONARYNODE_CLASS::compare(
 		dictionarynode<keytype,valuetype> *testnode) const {
-	return _containerutil_compare(key,testnode->key);
+	return node_compare(key,testnode->key);
 }
 
 DICTIONARYNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void DICTIONARYNODE_CLASS::print() const {
-	_containerutil_print(key);
+	node_print(key);
 	stdoutput.printf(":");
-	_containerutil_print(value);
+	node_print(value);
 }
 
 
 
 DICTIONARYNODE_TEMPLATE
-int32_t _containerutil_compare(
+int32_t node_compare(
 			dictionarynode<keytype,valuetype> *value1,
 			dictionarynode<keytype,valuetype> *value2) {
-	return _containerutil_compare(value1->getKey(),value2->getKey());
+	return node_compare(value1->getKey(),value2->getKey());
 }
 
 DICTIONARYNODE_TEMPLATE
-void _containerutil_compare(dictionarynode<keytype,valuetype> *value) {
-	_containerutil_print(value);
+void node_compare(dictionarynode<keytype,valuetype> *value) {
+	node_print(value);
 }

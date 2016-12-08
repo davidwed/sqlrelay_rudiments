@@ -3,7 +3,7 @@
 
 #include <rudiments/stdio.h>
 #include <rudiments/private/rudimentsinlines.h>
-#include <rudiments/private/containerutilinlines.h>
+#include <rudiments/private/nodeinlines.h>
 
 #define SINGLYLINKEDLIST_TEMPLATE template <class valuetype>
 
@@ -600,20 +600,20 @@ SINGLYLINKEDLISTNODE_CLASS *SINGLYLINKEDLISTNODE_CLASS::getNext() {
 SINGLYLINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t SINGLYLINKEDLISTNODE_CLASS::compare(valuetype value) const {
-	return _containerutil_compare(this->value,value);
+	return node_compare(this->value,value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t SINGLYLINKEDLISTNODE_CLASS::compare(
 				singlylinkedlistnode<valuetype> *peer) const {
-	return _containerutil_compare(this->value,peer->value);
+	return node_compare(this->value,peer->value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void SINGLYLINKEDLISTNODE_CLASS::print() const {
-	_containerutil_print(value);
+	node_print(value);
 }
 
 SINGLYLINKEDLISTNODE_TEMPLATE

@@ -232,7 +232,7 @@ privateheaders0="config.h "+_
 	"linkedlistincludes.h "+_
 	"linkedlistinlines.h "+_
 	"linkedlistnode.h "+_
-	"containerutilinlines.h "+_
+	"nodeinlines.h "+_
 	"avltree.h "+_
 	"avltreeincludes.h "+_
 	"avltreeinlines.h "+_

@@ -3,7 +3,7 @@
 
 #include <rudiments/stdio.h>
 #include <rudiments/private/rudimentsinlines.h>
-#include <rudiments/private/containerutilinlines.h>
+#include <rudiments/private/nodeinlines.h>
 
 #define LINKEDLIST_TEMPLATE template <class valuetype>
 
@@ -593,19 +593,19 @@ LINKEDLISTNODE_CLASS *LINKEDLISTNODE_CLASS::getNext() {
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t LINKEDLISTNODE_CLASS::compare(valuetype value) const {
-	return _containerutil_compare(this->value,value);
+	return node_compare(this->value,value);
 }
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 int32_t LINKEDLISTNODE_CLASS::compare(linkedlistnode<valuetype> *peer) const {
-	return _containerutil_compare(this->value,peer->value);
+	return node_compare(this->value,peer->value);
 }
 
 LINKEDLISTNODE_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
 void LINKEDLISTNODE_CLASS::print() const {
-	_containerutil_print(value);
+	node_print(value);
 }
 
 LINKEDLISTNODE_TEMPLATE
