@@ -32,7 +32,7 @@ class RUDIMENTS_DLLSPEC gss {
 
 		/** Returns true if rudiments was built with GSS support and
 		 *  false otherwise. */
-		static	bool	supportsGSS();
+		static	bool	supported();
 
 	#include <rudiments/private/gss.h>
 };

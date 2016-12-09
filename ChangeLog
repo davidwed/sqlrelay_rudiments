@@ -42,6 +42,8 @@
 		don't set it at all if the full sleep occurred (eg. arm64 linux)
 	renamed linkedlistutil_* to node_*
 	added commandline::getValue/found that take arg and abbr parameters
+	added supported() methods to sharedmemory/semaphoreset classes
+	renamed supportsXXX() methods to supported()
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

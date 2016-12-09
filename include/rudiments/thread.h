@@ -54,10 +54,6 @@ class RUDIMENTS_DLLSPEC thread {
 		/** Sends signal "signum" to the thread. */
 		bool	raiseSignal(int32_t signum);
 
-		/** Returns true if the platform supports threads and rudiments
-		 *  was built with thread support and false otherwise. */
-		static bool	supportsThreads();
-
 		/** Causes spawn() calls to be automatically retried if they
 		 *  fail because of insufficient system resources.  This
 		 *  is the default behavior.  Otherwise, if a spawn() fails,
@@ -74,6 +70,10 @@ class RUDIMENTS_DLLSPEC thread {
 		/** Returns true if failed spawn() calls will be retried and
 		 *  false otherwise. */
 		bool	getRetryFailedSpawn();
+
+		/** Returns true if the platform supports threads and rudiments
+		 *  was built with thread support and false otherwise. */
+		static bool	supported();
 
 	#include <rudiments/private/thread.h>
 };

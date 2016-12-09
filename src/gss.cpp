@@ -160,16 +160,6 @@ void gss::clear() {
 	}
 }
 
-bool gss::supportsGSS() {
-	#if defined(RUDIMENTS_HAS_GSS)
-		return true;
-	#elif defined(RUDIMENTS_HAS_SSPI)
-		return true;
-	#else
-		return false;
-	#endif
-}
-
 const char *gss::getSspiStatusString(uint32_t status) {
 	#if defined(RUDIMENTS_HAS_SSPI)
 		switch (status) {
@@ -430,6 +420,16 @@ const char *gss::getSspiStatusString(uint32_t status) {
 		}
 	#else
 		return NULL;
+	#endif
+}
+
+bool gss::supported() {
+	#if defined(RUDIMENTS_HAS_GSS)
+		return true;
+	#elif defined(RUDIMENTS_HAS_SSPI)
+		return true;
+	#else
+		return false;
 	#endif
 }
 

@@ -730,3 +730,12 @@ void semaphoreset::retryInterruptedOperations() {
 void semaphoreset::dontRetryInterruptedOperations() {
 	pvt->_retryinterruptedoperations=false;
 }
+
+bool semaphoreset::supported() {
+	#if defined(RUDIMENTS_HAVE_SEMGET) || \
+		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+		return true;
+	#else
+		return false;
+	#endif
+}

@@ -415,3 +415,12 @@ bool sharedmemory::setGroupName(const char *groupname) {
 	gid_t	groupid=groupentry::getGroupId(groupname);
 	return (groupid!=(gid_t)-1 && setGroupId(groupid));
 }
+
+bool sharedmemory::supported() {
+	#if defined(RUDIMENTS_HAVE_SHMGET) || \
+		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+		return true;
+	#else
+		return false;
+	#endif
+}

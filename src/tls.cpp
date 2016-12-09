@@ -35,7 +35,7 @@
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
 
-bool tls::supportsTLS() {
+bool tls::supported() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		return true;
 	#elif defined(RUDIMENTS_HAS_SSPI)

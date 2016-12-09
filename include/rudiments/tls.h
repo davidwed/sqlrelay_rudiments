@@ -10,7 +10,7 @@ class RUDIMENTS_DLLSPEC tls {
 	public:
 		/** Returns true if rudiments was built with TLS/SSL support
 		 *  and false otherwise. */
-		static	bool	supportsTLS();
+		static	bool	supported();
 
 	#include <rudiments/private/tls.h>
 };

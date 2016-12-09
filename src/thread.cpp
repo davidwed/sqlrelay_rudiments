@@ -242,15 +242,6 @@ bool thread::raiseSignal(int32_t signum) {
 	#endif
 }
 
-bool thread::supportsThreads() {
-	#if defined(RUDIMENTS_HAVE_PTHREAD_T) || \
-		defined(RUDIMENTS_HAVE_CREATETHREAD)
-		return true;
-	#else
-		return false;
-	#endif
-}
-
 void thread::retryFailedSpawn() {
 	pvt->_retry=true;
 }
@@ -261,4 +252,13 @@ void thread::dontRetryFailedSpawn() {
 
 bool thread::getRetryFailedSpawn() {
 	return pvt->_retry;
+}
+
+bool thread::supported() {
+	#if defined(RUDIMENTS_HAVE_PTHREAD_T) || \
+		defined(RUDIMENTS_HAVE_CREATETHREAD)
+		return true;
+	#else
+		return false;
+	#endif
 }

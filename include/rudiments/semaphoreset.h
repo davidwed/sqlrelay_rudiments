@@ -239,8 +239,11 @@ class RUDIMENTS_DLLSPEC semaphoreset {
 		 *  automatically. */
 		void	dontRetryInterruptedOperations();
 
-	#include <rudiments/private/semaphoreset.h>
+		/** Returns true if the platform supports semaphores and
+		 *  false otherwise. */
+		static bool	supported();
 
+	#include <rudiments/private/semaphoreset.h>
 };
 
 #endif

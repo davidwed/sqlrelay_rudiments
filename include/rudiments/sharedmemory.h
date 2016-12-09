@@ -130,8 +130,11 @@ class RUDIMENTS_DLLSPEC sharedmemory {
 		 *  shared memory segment. */
 		mode_t	getPermissions();
 
-	#include <rudiments/private/sharedmemory.h>
+		/** Returns true if the platform supports shared memory and
+		 *  false otherwise. */
+		static bool	supported();
 
+	#include <rudiments/private/sharedmemory.h>
 };
 
 #endif
