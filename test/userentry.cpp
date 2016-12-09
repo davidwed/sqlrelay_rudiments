@@ -15,7 +15,6 @@ int main(int argc, const char **argv) {
 	if (!charstring::compare(osname,"Haiku")) {
 		username="user";
 	}
-	delete[] osname;
 
 
 	header("userentry");
@@ -52,10 +51,16 @@ int main(int argc, const char **argv) {
 	test("name",!charstring::compare(uent.getName(),username));
 #ifndef _WIN32
 	test("password",uent.getPassword());
-	test("user id",(int64_t)uent.getUserId()>0 &&
+	if (!charstring::compare(osname,"Haiku")) {
+		test("user id",(int64_t)uent.getUserId()==0);
+		test("primary group id",(int64_t)uent.getPrimaryGroupId()==0);
+	} else {
+		test("user id",(int64_t)uent.getUserId()>0 &&
 				(int64_t)uent.getUserId()<65536);
-	test("primary group id",(int64_t)uent.getPrimaryGroupId()>0 &&
+		test("primary group id",
+				(int64_t)uent.getPrimaryGroupId()>0 &&
 				(int64_t)uent.getPrimaryGroupId()<65536);
+	}
 #endif
 	test("real name",uent.getRealName());
 	test("home dir",uent.getHomeDirectory());
@@ -101,10 +106,16 @@ int main(int argc, const char **argv) {
 	test("name",!charstring::compare(uent.getName(),username));
 #ifndef _WIN32
 	test("password",uent.getPassword());
-	test("user id",(int64_t)uent.getUserId()>0 &&
+	if (!charstring::compare(osname,"Haiku")) {
+		test("user id",(int64_t)uent.getUserId()==0);
+		test("primary group id",(int64_t)uent.getPrimaryGroupId()==0);
+	} else {
+		test("user id",(int64_t)uent.getUserId()>0 &&
 				(int64_t)uent.getUserId()<65536);
-	test("primary group id",(int64_t)uent.getPrimaryGroupId()>0 &&
+		test("primary group id",
+				(int64_t)uent.getPrimaryGroupId()>0 &&
 				(int64_t)uent.getPrimaryGroupId()<65536);
+	}
 #endif
 	test("real name",uent.getRealName());
 	test("home dir",uent.getHomeDirectory());
@@ -220,4 +231,6 @@ int main(int argc, const char **argv) {
 	test("flag",uent.getFlag()==-1);
 	test("sid",!uent.getSidString());
 	stdoutput.printf("\n");
+
+	delete[] osname;
 }
