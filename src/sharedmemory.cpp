@@ -6,7 +6,6 @@
 #include <rudiments/groupentry.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/error.h>
-#include <rudiments/stdio.h>
 #ifdef RUDIMENTS_HAVE_CREATE_FILE_MAPPING
 	#include <rudiments/charstring.h>
 #endif
@@ -233,8 +232,6 @@ bool sharedmemory::create(key_t key, size_t size, mode_t permissions) {
 						shmname);
 		delete[] shmname;
 		if (!pvt->_map) {
-			stdoutput.printf("failed: %s\n",
-						error::getNativeErrorString());
 			return false;
 		}
 
@@ -417,8 +414,11 @@ bool sharedmemory::setGroupName(const char *groupname) {
 }
 
 bool sharedmemory::supported() {
-	#if defined(RUDIMENTS_HAVE_SHMGET) || \
-		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+	#if defined(RUDIMENTS_HAVE_SHMGET)
+		error::clearError();
+		shmget(0,0,0);
+		return (error::getErrorNumber()!=ENOTSUP);
+	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		return true;
 	#else
 		return false;

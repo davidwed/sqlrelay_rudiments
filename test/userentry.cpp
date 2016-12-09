@@ -4,10 +4,21 @@
 #include <rudiments/userentry.h>
 #include <rudiments/charstring.h>
 #include <rudiments/process.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
+
+	char	*osname=sys::getOperatingSystemName();
+	const char	*username="bin";
+	if (!charstring::compare(osname,"Haiku")) {
+		username="user";
+	}
+	delete[] osname;
+
+
+	header("userentry");
 
 	// uninitialized
 	userentry	uent;
@@ -35,10 +46,10 @@ int main(int argc, const char **argv) {
 	test("sid",!uent.getSidString());
 	stdoutput.printf("\n");
 
-	// get the user entry for "dmuse"
-	stdoutput.printf("username: dmuse...\n");
-	uent.initialize("dmuse");
-	test("name",!charstring::compare(uent.getName(),"dmuse"));
+	// get the user entry for "bin"
+	stdoutput.printf("username: %s...\n",username);
+	uent.initialize(username);
+	test("name",!charstring::compare(uent.getName(),username));
 #ifndef _WIN32
 	test("password",uent.getPassword());
 	test("user id",(int64_t)uent.getUserId()>0 &&
@@ -87,7 +98,7 @@ int main(int argc, const char **argv) {
 	uid_t	id=uent.getUserId();
 	stdoutput.printf("userid: %d...\n",id);
 	uent.initialize(id);
-	test("name",!charstring::compare(uent.getName(),"dmuse"));
+	test("name",!charstring::compare(uent.getName(),username));
 #ifndef _WIN32
 	test("password",uent.getPassword());
 	test("user id",(int64_t)uent.getUserId()>0 &&

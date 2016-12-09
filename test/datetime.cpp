@@ -46,16 +46,26 @@ int main(int argc, const char **argv) {
 	test("day of year",dt.getDayOfYear()==39);
 	test("year",dt.getYear()==2016);
 	test("daylight savings time",!dt.isDaylightSavingsTime());
+
+	// some platforms (haiku) convert EST to EST5EDT,
+	// so we have to allow that
 	test("time zone",
-		!charstring::compare(dt.getTimeZoneString(),"EST"));
-stdoutput.printf("%d\n",dt.getTimeZoneOffset());
+		!charstring::compare(dt.getTimeZoneString(),"EST") ||
+		!charstring::compare(dt.getTimeZoneString(),"EST5EDT"));
+
 	test("offset from GMT",dt.getTimeZoneOffset()==-18000);
 	test("seconds since 1970",dt.getEpoch()==nondstsecsinceepoch);
+
+	// some platforms (haiku) convert EST to EST5EDT, so we'll truncate
+	// the 5EDT part during these comparisons
 	test("date string",
-		!charstring::compare(dt.getString(),nondstdatestring));
+		!charstring::compare(dt.getString(),nondstdatestring,
+					charstring::length(nondstdatestring)));
 	test("date string (with usec)",
 		!charstring::compare(dt.getString(true),
-					nondstdatestringwithzerousec));
+			nondstdatestringwithzerousec,
+			charstring::length(nondstdatestringwithzerousec)));
+
 	stdoutput.printf("\n");
 
 

@@ -732,8 +732,11 @@ void semaphoreset::dontRetryInterruptedOperations() {
 }
 
 bool semaphoreset::supported() {
-	#if defined(RUDIMENTS_HAVE_SEMGET) || \
-		defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
+	#if defined(RUDIMENTS_HAVE_SEMGET)
+		error::clearError();
+		semget(0,0,0);
+		return (error::getErrorNumber()!=ENOTSUP);
+	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return true;
 	#else
 		return false;
