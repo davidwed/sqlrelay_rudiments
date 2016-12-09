@@ -92,47 +92,44 @@ int main(int argc, const char **argv) {
 
 	header("threadmutex");
 
-	if (thread::supportsThreads()) {
-
-		// initialize threads
-		thread		t[2];
-		struct args	a[2];
-		for (uint16_t i=0; i<2; i++) {
-			a[i].th=&t[i];
-			a[i].id=i;
-		}
-
-		// run threads
-		for (uint16_t j=0; j<2; j++) {
-			stringbuffer	title;
-			title.append("spawn ")->append(j);
-			test(title.getString(),
-				t[j].spawn((void*(*)(void*))sync,
-						(void *)&a[j],false));
-		}
-
-		// wait for the threads to exit
-		for (uint16_t k=0; k<2; k++) {
-
-			int32_t	tstatus=-1;
-
-			stringbuffer	title;
-			title.append("wait ")->append(k);
-			test(title.getString(),t[k].wait(&tstatus));
-
-			title.clear();
-			title.append("status ")->append(k);
-			test(title.getString(),tstatus==k);
-		}
-
-		// check output
-		test("output",!charstring::compare(output.getString(),
-				"1234123412341234123412341234123412341234"));
-
-		stdoutput.printf("\n");
-
-	} else {
-
+	if (!thread::supported()) {
 		stdoutput.printf("threads not supported\n\n");
 	}
+
+	// initialize threads
+	thread		t[2];
+	struct args	a[2];
+	for (uint16_t i=0; i<2; i++) {
+		a[i].th=&t[i];
+		a[i].id=i;
+	}
+
+	// run threads
+	for (uint16_t j=0; j<2; j++) {
+		stringbuffer	title;
+		title.append("spawn ")->append(j);
+		test(title.getString(),
+			t[j].spawn((void*(*)(void*))sync,
+					(void *)&a[j],false));
+	}
+
+	// wait for the threads to exit
+	for (uint16_t k=0; k<2; k++) {
+
+		int32_t	tstatus=-1;
+
+		stringbuffer	title;
+		title.append("wait ")->append(k);
+		test(title.getString(),t[k].wait(&tstatus));
+
+		title.clear();
+		title.append("status ")->append(k);
+		test(title.getString(),tstatus==k);
+	}
+
+	// check output
+	test("output",!charstring::compare(output.getString(),
+			"1234123412341234123412341234123412341234"));
+
+	stdoutput.printf("\n");
 }

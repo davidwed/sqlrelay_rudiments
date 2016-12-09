@@ -9,6 +9,7 @@
 #include <rudiments/datetime.h>
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
+#include <rudiments/sys.h>
 #include <rudiments/snooze.h>
 #include "test.cpp"
 
@@ -21,6 +22,9 @@ int main(int argc, const char **argv) {
 		header("file");
 
 		file::remove("testfile.txt");
+
+
+		char	*osname=sys::getOperatingSystemName();
 
 
 		test("create",fl.create("testfile.txt",
@@ -39,14 +43,22 @@ int main(int argc, const char **argv) {
 		char	*groupname=groupentry::getName(gid);
 		test("group",gid==process::getGroupId());
 
-		test("chown",fl.changeOwner(username,groupname));
+		// not supported on syllable
+		if (charstring::compare(osname,"syllable")) {
+			test("chown",fl.changeOwner(username,groupname));
+		}
+
 		delete[] username;
 		delete[] groupname;
 
 		test("size",fl.getSize()==5);
 
 		test("block size",fl.getBlockSize()>0);
-		test("blocks",fl.getBlockCount()!=0);
+
+		// not supported on syllable
+		if (charstring::compare(osname,"syllable")) {
+			test("blocks",fl.getBlockCount()!=0);
+		}
 
 		test("is a socket",!fl.isSocket());
 		test("is a symlink",!fl.isSymbolicLink());
@@ -122,6 +134,7 @@ int main(int argc, const char **argv) {
 		fl.close();
 
 
+		delete[] osname;
 		file::remove("testfile.txt");
 
 	} else {

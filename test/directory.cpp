@@ -5,6 +5,7 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/charstring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
 #include "test.cpp"
@@ -160,9 +161,16 @@ int main(int argc, const char **argv) {
 	test("maxPathLength valid",
 			directory::maxPathLength(cwd)>0);
 	d.open(cwd);
-	test("maxFileNameLength cross-check",
+
+	// Syllable has bugs
+	char	*osname=sys::getOperatingSystemName();
+	if (charstring::compare(osname,"syllable")) {
+		test("maxFileNameLength cross-check",
 			directory::maxFileNameLength(cwd)==
 			d.maxFileNameLength());
+	}
+	delete[] osname;
+
 	test("maxPathLength cross-check",
 			directory::maxPathLength(cwd)==
 			d.maxPathLength());

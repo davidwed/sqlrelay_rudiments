@@ -22,6 +22,11 @@ int main(int argc, const char **argv) {
 
 		header("sharedmemory");
 
+		if (!sharedmemory::supported()) {
+			stdoutput.printf("sharedmemory not supported\n\n");
+			return 0;
+		}
+
 		stdoutput.write("setup...\n");
 
 		// create the key file

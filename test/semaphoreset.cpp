@@ -48,6 +48,11 @@ int main(int argc, const char **argv) {
 
 		header("semaphoreset");
 
+		if (!semaphoreset::supported()) {
+			stdoutput.printf("semaphores not supported\n\n");
+			return 0;
+		}
+
 		stdoutput.write("setup...\n");
 
 		// create the key file
