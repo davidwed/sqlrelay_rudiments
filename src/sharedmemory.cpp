@@ -417,7 +417,7 @@ bool sharedmemory::supported() {
 	#if defined(RUDIMENTS_HAVE_SHMGET)
 		error::clearError();
 		shmget(0,0,0);
-		return (error::getErrorNumber()!=ENOTSUP);
+		return (error::getErrorNumber()!=ENOSYS);
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		return true;
 	#else

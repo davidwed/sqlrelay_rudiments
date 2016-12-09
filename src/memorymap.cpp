@@ -465,3 +465,17 @@ bool memorymap::mLockAll(int32_t flags) {
 		return false;
 	#endif
 }
+
+bool memorymap::supported() {
+	#if defined(_SYLLABLE)
+		// Syllable has mmap, but it appears that it can only map
+		// from byte-0 of the file.  Attempts to map further into
+		// the file just result in re-mapping at byte-0.
+		return false;
+	#elif defined(RUDIMENTS_HAVE_MMAP) || \
+		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
+		return true;
+	#else
+		return false;
+	#endif
+}

@@ -4,14 +4,21 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/sys.h>
+#include <rudiments/charstring.h>
 #include <rudiments/memorymap.h>
 #include <rudiments/process.h>
+#include <rudiments/error.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
 
 	header("memorymap");
+
+	if (!memorymap::supported()) {
+		stdoutput.printf("	not supported\n\n");
+		return 0;
+	}
 
 	size_t	allocgran=sys::getAllocationGranularity();
 

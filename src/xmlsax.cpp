@@ -913,6 +913,9 @@ const char *xmlsax::getError() {
 
 bool xmlsax::mapFile() {
 
+	if (!memorymap::supported()) {
+		return false;
+	}
 	if (pvt->_fileoffset) {
 		pvt->_mm.detach();
 	}

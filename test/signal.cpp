@@ -6,6 +6,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/directory.h>
 #include <rudiments/process.h>
+#include <rudiments/sys.h>
 #include <rudiments/snooze.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -34,12 +35,24 @@ void handleSigalrm(int32_t sig) {
 
 int main(int argc, const char **argv) {
 
-// FIXME: it's not clear why this doesn't work on windows,
-// signals generally do work...
-#ifndef _WIN32
 	if (argc==1) {
 
 		header("signal");
+
+
+		char	*osname=sys::getOperatingSystemName();
+
+		// FIXME: it's not clear why this doesn't work on windows,
+		// signals generally do work...
+		// FIXME: this does actually work on syllable but there's
+		// some problem with the timer and it takes forever
+		if (!charstring::compare(osname,"Windows") ||
+			!charstring::compare(osname,"syllable")) {
+			stdoutput.printf("	not supported\n\n");
+			delete[] osname;
+			return 0;
+		}
+
 
 		// spawn a child to signal this process
 		stringbuffer	cmd;
@@ -108,6 +121,8 @@ int main(int argc, const char **argv) {
 		test("SIGALRM",gotsigalrm);
 		#endif
 
+		delete[] osname;
+
 	} else {
 
 		// get the parent pid from the command line
@@ -123,5 +138,4 @@ int main(int argc, const char **argv) {
 		process::sendSignal(pid,SIGFPE);
 		#endif
 	}
-#endif
 }

@@ -93,7 +93,7 @@ int main(int argc, const char **argv) {
 	header("threadmutex");
 
 	if (!thread::supported()) {
-		stdoutput.printf("threads not supported\n\n");
+		stdoutput.printf("	not supported\n\n");
 	}
 
 	// initialize threads

@@ -72,10 +72,7 @@ void handoff1() {
 
 	// clean up
 	serversock.close();
-#ifndef _WIN32
-	// FIXME: crashes on windows
 	handoffsock.close();
-#endif
 	file::remove("handoff.sck");
 }
 
@@ -136,14 +133,15 @@ int main(int argc, const char **argv) {
 
 		header("handoff");
 
-        	// not supported on Cygwin and Linux < 2.2
+        	// not supported on Cygwin, Linux < 2.2, syllable...
         	char    *os=sys::getOperatingSystemName();
         	char    *rel=sys::getOperatingSystemRelease();
         	double  ver=charstring::toFloat(rel);
         	bool	notsupported=
 				(!charstring::compare(os,"CYGWIN",6) ||
                			(!charstring::compare(os,"Linux",5) &&
-				ver<2.2));
+				ver<2.2) ||
+				!charstring::compare(os,"syllable",8));
 		// FIXME: this really ought to work on SCO OSR5
 		#ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
 			notsupported=true;
@@ -151,7 +149,7 @@ int main(int argc, const char **argv) {
 		delete[] os;
 		delete[] rel;
 		if (notsupported) {
-			stdoutput.printf("not supported\n\n");
+			stdoutput.printf("	not supported\n\n");
 			return 0;
 		}
 

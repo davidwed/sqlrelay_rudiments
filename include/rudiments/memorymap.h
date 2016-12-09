@@ -270,6 +270,10 @@ class RUDIMENTS_DLLSPEC memorymap {
 		 *  this method returns false; */
 		static bool	unlockAll();
 
+		/** Returns true if the platform supports
+		 *  memory mapping and false otherwise. */
+		static bool	supported();
+
 	#include <rudiments/private/memorymap.h>
 };
 

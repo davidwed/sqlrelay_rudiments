@@ -37,7 +37,7 @@ int main(int argc, const char **argv) {
 	header("threads");
 
 	if (!thread::supported()) {
-		stdoutput.printf("threads not supported\n\n");
+		stdoutput.printf("	not supported\n\n");
 	}
 
 	// create control

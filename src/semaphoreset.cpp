@@ -4,6 +4,7 @@
 #include <rudiments/semaphoreset.h>
 #include <rudiments/userentry.h>
 #include <rudiments/groupentry.h>
+#include <rudiments/stdio.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_CREATESEMAPHORE
@@ -735,7 +736,8 @@ bool semaphoreset::supported() {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		error::clearError();
 		semget(0,0,0);
-		return (error::getErrorNumber()!=ENOTSUP);
+		return (error::getErrorNumber()!=ENOSYS &&
+				error::getErrorNumber()!=ENOTSUP);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return true;
 	#else
