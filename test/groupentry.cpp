@@ -3,16 +3,21 @@
 
 #include <rudiments/groupentry.h>
 #include <rudiments/charstring.h>
+#include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
-#ifdef _WIN32
-const char	*groupname="None";
-#else
-const char	*groupname="bin";
-#endif
-
 int main(int argc, const char **argv) {
+
+	char	*osname=sys::getOperatingSystemName();
+	const char	*groupname="bin";
+	if (!charstring::compare(osname,"Windows")) {
+		groupname="None";
+	} else if (!charstring::compare(osname,"Haiku")) {
+		groupname="root";
+	}
+	delete[] osname;
+
 
 	header("groupentry");
 
