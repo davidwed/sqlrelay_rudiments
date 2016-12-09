@@ -12,7 +12,9 @@ int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
 	const char	*username="bin";
-	if (!charstring::compare(osname,"Haiku")) {
+	if (!charstring::compare(osname,"Windows")) {
+		username="Guest";
+	} else if (!charstring::compare(osname,"Haiku")) {
 		username="user";
 	}
 
