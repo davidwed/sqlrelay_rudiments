@@ -16246,6 +16246,9 @@ case $host_os in
 
 $as_echo "#define RUDIMENTS_DISABLE_FIONBIO 1" >>confdefs.h
 
+
+$as_echo "#define _SYLLABLE 1" >>confdefs.h
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 		;;

@@ -1534,6 +1534,9 @@
 /* Hack for gcc on SCO OSR6 */
 /* #undef _CFRONT_3_0 */
 
+/* Syllable OS */
+/* #undef _SYLLABLE */
+
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
 

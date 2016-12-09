@@ -5,7 +5,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/snooze.h>
 #include <rudiments/error.h>
-#if defined(_WIN32) || defined(__VMS)
+#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 	#include <rudiments/inetsocketclient.h>
 #endif
 
@@ -14,14 +14,14 @@
 class unixsocketclientprivate {
 	friend class unixsocketclient;
 	private:
-		#if defined(_WIN32) || defined(__VMS)
+		#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 			inetsocketclient	_isc;
 		#endif
 };
 
 unixsocketclient::unixsocketclient() : socketclient(), unixsocketutil() {
 	pvt=new unixsocketclientprivate;
-	#if defined(_WIN32) || defined(__VMS)
+	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 		translateByteOrder();
 	#endif
 	type("unixsocketclient");
@@ -37,7 +37,7 @@ unixsocketclient &unixsocketclient::operator=(const unixsocketclient &u) {
 	if (this!=&u) {
 		socketclient::operator=(u);
 		unixsocketutil::operator=(u);
-		#if defined(_WIN32) || defined(__VMS)
+		#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 			pvt->_isc=u.pvt->_isc;
 		#endif
 	}
@@ -54,7 +54,7 @@ unixsocketclient::~unixsocketclient() {
 	// lowLevelClose() rather than filedescriptor::lowLevelClose().
 	close();
 	delete pvt;
-	#if defined(_WIN32) || defined(__VMS)
+	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 		fd(-1);
 	#endif
 }
@@ -75,7 +75,7 @@ void unixsocketclient::initialize(const char *filename,
 						uint32_t tries) {
 	unixsocketutil::initialize(filename);
 	client::initialize(NULL,timeoutsec,timeoutusec,retrywait,tries);
-	#if defined(_WIN32) || defined(__VMS)
+	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 		pvt->_isc.initialize("127.0.0.1",
 					filenameToPort(filename),
 					timeoutsec,timeoutusec,
@@ -109,7 +109,7 @@ int32_t unixsocketclient::connect() {
 
 	close();
 
-#if defined(_WIN32) || defined(__VMS)
+#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 	pvt->_isc.setSecurityContext(getSecurityContext());
 	int32_t	result=pvt->_isc.connect();
 	if (result>-1) {
@@ -184,7 +184,7 @@ int32_t unixsocketclient::connect() {
 }
 
 bool unixsocketclient::close() {
-	#if defined(_WIN32) || defined(__VMS)
+	#if defined(_WIN32) || defined(__VMS) || defined(_SYLLABLE)
 		pvt->_isc.close();
 		fd(-1);
 	#endif

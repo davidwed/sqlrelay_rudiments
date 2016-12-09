@@ -44,6 +44,7 @@
 	added commandline::getValue/found that take arg and abbr parameters
 	added supported() methods to sharedmemory/semaphoreset classes
 	renamed supportsXXX() methods to supported()
+	unix sockets are faked on syllable now
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

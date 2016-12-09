@@ -601,6 +601,7 @@ case $host_os in
 			prefix="/resources/firstworks"
 		fi
 		AC_DEFINE(RUDIMENTS_DISABLE_FIONBIO,1,ioctl/FIONBIO doesn't work on some systems)
+		AC_DEFINE(_SYLLABLE,1,Syllable OS)
 		AC_MSG_RESULT(yes)
 		;;
 	* )
