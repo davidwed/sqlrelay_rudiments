@@ -400,7 +400,7 @@ int64_t directory::maxFileNameLength() {
 	int64_t	retval=fpathConf(_PC_NAME_MAX);
 	#if defined(NAME_MAX)
 	if (retval==-1) {
-		retval = NAME_MAX;
+		retval=NAME_MAX;
 	}
 	#endif
 	return retval;
