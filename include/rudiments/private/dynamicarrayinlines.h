@@ -137,14 +137,13 @@ valuetype &dynamicarray<valuetype>::find(uint64_t index) {
 		eind=0;
 	} else {
 		uint64_t	targetind=(index-initial+extsize)/extsize;
-		while (curind!=targetind) {
-			if (curind>targetind) {
-				curext=curext->getPrevious();
-				curind--;
-			} else {
-				curext=curext->getNext();
-				curind++;
-			}
+		while (curind>targetind) {
+			curext=curext->getPrevious();
+			curind--;
+		}
+		while (curind<targetind) {
+			curext=curext->getNext();
+			curind++;
 		}
 		eind=initial+extsize*(curind-1);
 	}

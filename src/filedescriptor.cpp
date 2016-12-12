@@ -218,6 +218,8 @@ class filedescriptorprivate {
 
 		const char	*_type;
 
+		listener	*_lstnr;
+
 		unsigned char	*_writebuffer;
 		unsigned char	*_writebufferend;
 		unsigned char	*_writebufferptr;
@@ -264,6 +266,7 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_translatebyteorder=false;
 	pvt->_secctx=NULL;
 	pvt->_type="filedescriptor";
+	pvt->_lstnr=NULL;
 	pvt->_writebuffer=NULL;
 	pvt->_writebufferend=NULL;
 	pvt->_writebufferptr=NULL;
@@ -304,6 +307,7 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 filedescriptor::~filedescriptor() {
 	delete[] pvt->_readbuffer;
 	delete[] pvt->_writebuffer;
+	delete pvt->_lstnr;
 	close();
 	delete pvt;
 }
@@ -961,7 +965,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 		return safeRead(buf,count,sec,usec);
 	}
 
-	unsigned char	*data=reinterpret_cast<unsigned char *>(buf);
+	unsigned char	*data=(unsigned char *)buf;
 	ssize_t		bytesread=0;
 	ssize_t		bytesunread=count;
 
@@ -993,7 +997,7 @@ ssize_t filedescriptor::bufferedRead(void *buf, ssize_t count,
 			pvt->_readbufferhead=pvt->_readbufferhead+bytestocopy;
 			bytesunread=bytesunread-bytestocopy;
 
-			// if we've read enough, break out
+			// return if we've read enough
 			if (bytesread==count) {
 				#if defined(DEBUG_READ) && \
 					 defined(DEBUG_BUFFERING)
@@ -1088,19 +1092,14 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 	ssize_t	totalread=0;
 	ssize_t	sizetoread;
 	ssize_t	actualread;
+	ssize_t	sizemax=(pvt->_secctx)?pvt->_secctx->getSizeMax():SSIZE_MAX;
 	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalread<count) {
 
 		// limit size of individual reads
 		sizetoread=count-totalread;
-		if (pvt->_secctx) {
-			if (sizetoread>pvt->_secctx->getSizeMax()) {
-				sizetoread=pvt->_secctx->getSizeMax();
-			}
-		} else {
-			if (sizetoread>SSIZE_MAX) {
-				sizetoread=SSIZE_MAX;
-			}
+		if (sizetoread>sizemax) {
+			sizetoread=pvt->_secctx->getSizeMax();
 		}
 
 		// wait if necessary
@@ -1119,9 +1118,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		// set a pointer to the position in the buffer that we need
 		// to read data into
-		void	*ptr=static_cast<void *>(
-				static_cast<unsigned char *>(buf)+
-				totalread);
+		void	*ptr=(void *)((unsigned char *)buf+totalread);
 
 		// read...
 		error::clearError();
@@ -1138,8 +1135,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 
 		#ifdef DEBUG_READ
 		for (int32_t i=0; i<actualread; i++) {
-			debugSafePrint(
-				(static_cast<unsigned char *>(ptr))[i]);
+			debugSafePrint(((unsigned char *)ptr)[i]);
 		}
 		debugPrintf("(%ld bytes) ",(long)actualread);
 		if (actualread==-1) {
@@ -1232,8 +1228,7 @@ ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 		return safeWrite(buf,count,sec,usec);
 	}
 
-	const unsigned char	*data=
-		reinterpret_cast<const unsigned char *>(buf);
+	const unsigned char	*data=(const unsigned char *)buf;
 
 	ssize_t	initialwritebuffersize=pvt->_writebufferptr-pvt->_writebuffer;
 	bool	first=true;
@@ -1344,18 +1339,13 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	ssize_t	totalwrite=0;
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
+	ssize_t	sizemax=(pvt->_secctx)?pvt->_secctx->getSizeMax():SSIZE_MAX;
 	while (totalwrite<count) {
 
 		// limit size of individual writes
 		sizetowrite=count-totalwrite;
-		if (pvt->_secctx) {
-			if (sizetowrite>pvt->_secctx->getSizeMax()) {
-				sizetowrite=pvt->_secctx->getSizeMax();
-			}
-		} else {
-			if (sizetowrite>SSIZE_MAX) {
-				sizetowrite=SSIZE_MAX;
-			}
+		if (sizetowrite>sizemax) {
+			sizetowrite=pvt->_secctx->getSizeMax();
 		}
 
 		// wait if necessary
@@ -1374,9 +1364,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		// set a pointer to the position in the buffer that we need
 		// to write data from
-		const void	*ptr=static_cast<const void *>(
-				static_cast<const unsigned char *>(buf)+
-				totalwrite);
+		const void	*ptr=
+			(const void *)((const unsigned char *)buf+totalwrite);
 
 		error::clearError();
 		if (pvt->_secctx) {
@@ -1392,8 +1381,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 		#ifdef DEBUG_WRITE
 		for (int32_t i=0; i<actualwrite; i++) {
-			debugSafePrint(
-			(static_cast<const unsigned char *>(ptr))[i]);
+			debugSafePrint(((const unsigned char *)(ptr))[i]);
 		}
 		debugPrintf("(%ld bytes) ",(long)actualwrite);
 		if (actualwrite==-1) {
@@ -1462,16 +1450,24 @@ ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
 
 int32_t filedescriptor::waitForNonBlockingRead(
 				int32_t sec, int32_t usec) const {
-	listener	lstnr;
-	lstnr.addReadFileDescriptor((filedescriptor *)this);
-	return lstnr.listen(sec,usec);
+	if (!pvt->_lstnr) {
+		pvt->_lstnr=new listener();
+	} else {
+		pvt->_lstnr->removeAllFileDescriptors();
+	}
+	pvt->_lstnr->addReadFileDescriptor((filedescriptor *)this);
+	return pvt->_lstnr->listen(sec,usec);
 }
 
 int32_t filedescriptor::waitForNonBlockingWrite(
 				int32_t sec, int32_t usec) const {
-	listener	lstnr;
-	lstnr.addWriteFileDescriptor((filedescriptor *)this);
-	return lstnr.listen(sec,usec);
+	if (!pvt->_lstnr) {
+		pvt->_lstnr=new listener();
+	} else {
+		pvt->_lstnr->removeAllFileDescriptors();
+	}
+	pvt->_lstnr->addWriteFileDescriptor((filedescriptor *)this);
+	return pvt->_lstnr->listen(sec,usec);
 }
 
 void filedescriptor::translateByteOrder() {
@@ -1929,20 +1925,18 @@ bool filedescriptor::receiveFileDescriptor(int32_t *fd) {
 					debugPrintf("%d: ",
 						(int)process::getProcessId());
 					debugPrintf("got cmsg_level=%ld",
-						static_cast<long>(
-							cmptr->cmsg_level));
+						(long)(cmptr->cmsg_level));
 					debugPrintf(" instead of %ld",
-						static_cast<long>(SOL_SOCKET));
+						(long)(SOL_SOCKET));
 					debugPrintf("\n");
 				}
 				if (cmptr->cmsg_type!=SCM_RIGHTS) {
 					debugPrintf("%d: ",
 						(int)process::getProcessId());
 					debugPrintf("got cmsg_type=%ld",
-						static_cast<long>(
-							cmptr->cmsg_type));
+						(long)(cmptr->cmsg_type));
 					debugPrintf(" instead of %ld",
-						static_cast<long>(SCM_RIGHTS));
+						(long)(SCM_RIGHTS));
 					debugPrintf("\n");
 				}
 			}
@@ -2096,7 +2090,7 @@ bool filedescriptor::getTcpWriteBufferSize(int32_t *size) {
 bool filedescriptor::setTcpWriteBufferSize(int32_t size) {
 	return !setSockOpt(SOL_SOCKET,SO_SNDBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
-				static_cast<socklen_t>(sizeof(int)));
+				(socklen_t)sizeof(int));
 }
 
 bool filedescriptor::getTcpReadBufferSize(int32_t *size) {
@@ -2109,14 +2103,15 @@ bool filedescriptor::getTcpReadBufferSize(int32_t *size) {
 bool filedescriptor::setTcpReadBufferSize(int32_t size) {
 	return setSockOpt(SOL_SOCKET,SO_RCVBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
-				static_cast<socklen_t>(sizeof(int)))!=-1;
+				(socklen_t)sizeof(int))!=-1;
 }
 
 bool filedescriptor::disableIPv4() {
 #ifdef IPV6_V6ONLY
 	int32_t	no=0;
 	return setSockOpt(IPPROTO_IPV6,IPV6_V6ONLY,
-		(void *)&no,static_cast<socklen_t>(sizeof(int32_t)))!=-1;
+				(void *)&no,
+				(socklen_t)sizeof(int32_t))!=-1;
 #else
 	RUDIMENTS_SET_ENOSYS
 	return false;
@@ -2127,7 +2122,8 @@ bool filedescriptor::enableIPv4() {
 #ifdef IPV6_V6ONLY
 	int32_t	yes=1;
 	return setSockOpt(IPPROTO_IPV6,IPV6_V6ONLY,
-		(void *)&yes,static_cast<socklen_t>(sizeof(int32_t)))!=-1;
+				(void *)&yes,
+				(socklen_t)sizeof(int32_t))!=-1;
 #else
 	RUDIMENTS_SET_ENOSYS
 	return false;
@@ -2150,8 +2146,7 @@ char *filedescriptor::getPeerAddress() const {
 	error::clearError();
 	do {
 		result=getpeername(pvt->_fd,
-				reinterpret_cast<struct sockaddr *>(&clientsin),
-				&size);
+				(struct sockaddr *)&clientsin,&size);
 	} while (result==-1 && error::getErrorNumber()==EINTR);
 
 	// if getpeername was successful and the peer was an inet socket,
@@ -2416,43 +2411,35 @@ void filedescriptor::safePrint(const unsigned char *string) {
 }
 
 void filedescriptor::printBits(unsigned char value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(uint16_t value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(uint32_t value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(uint64_t value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(char value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(int16_t value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(int32_t value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(int64_t value) {
-	printBits(reinterpret_cast<const unsigned char *>(&value),
-							sizeof(value));
+	printBits((const unsigned char *)&value,sizeof(value));
 }
 
 void filedescriptor::printBits(const unsigned char *bits, uint64_t size) {
