@@ -49,12 +49,18 @@ class memorypoolprivate {
 		size_t	_totalusedsize;
 };
 
+// Pad to 8-byte boundary.  It's faster to access data aligned on a word
+// boundary.  Some architectures (eg. sparc) require it and will throw a bus
+// error if you don't.  Arguably we should make this optional for architectures
+// that don't require it though, to conserve memory.
+#define MEMORYPOOLPAD(a) ((8-(a%8))%8)
+
 memorypool::memorypool(size_t initialsize,
 			size_t increment,
 			size_t resizeinterval) {
 	pvt=new memorypoolprivate;
-	pvt->_initialsize=initialsize;
-	pvt->_increment=increment;
+	pvt->_initialsize=initialsize+MEMORYPOOLPAD(initialsize);
+	pvt->_increment=increment+MEMORYPOOLPAD(increment);
 	pvt->_freecounter=0;
 	pvt->_resizeinterval=resizeinterval;
 	pvt->_totalusedsize=0;
@@ -69,6 +75,8 @@ memorypool::~memorypool() {
 }
 
 unsigned char *memorypool::allocate(size_t length) { 
+
+	length=length+MEMORYPOOLPAD(length);
 
 	// look for a node with enough memory remaining
 	memorypoollistnode	*node=pvt->_first;
@@ -92,6 +100,7 @@ unsigned char *memorypool::allocate(size_t length) {
 		}
 		if (incr<(pvt->_totalusedsize/10)) {
 			incr=(pvt->_totalusedsize/10);
+			incr=incr+MEMORYPOOLPAD(incr);
 		}
 		memnode=new memorypoolnode(incr);
 		pvt->_nodelist.append(memnode);
