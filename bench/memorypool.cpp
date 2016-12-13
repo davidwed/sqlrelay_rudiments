@@ -23,7 +23,7 @@ int main(int argc, const char **argv) {
 	dt.getSystemDateAndTime();
 	time_t	start=dt.getEpoch();
 	for (i=0; i<stresscycles; i++) {
-		for (j=0; j<stresssize; j++) {
+		for (j=1; j<=stresssize; j++) {
 			mp->allocate(j);
 		}
 		mp->deallocate();
