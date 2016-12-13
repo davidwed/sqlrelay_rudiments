@@ -16,11 +16,11 @@
 	#include <rudiments/stdio.h>
 #endif
 
-class memorypoolnode {
+class memorypoolbuffer {
 	friend class memorypool;
 	private:
-			memorypoolnode(size_t size);
-			~memorypoolnode();
+			memorypoolbuffer(size_t size);
+			~memorypoolbuffer();
 
 		unsigned char	*_buffer;
 		size_t		_size;
@@ -28,24 +28,24 @@ class memorypoolnode {
 		size_t		_position;
 };
 
-memorypoolnode::memorypoolnode(size_t size) {
+memorypoolbuffer::memorypoolbuffer(size_t size) {
 	_buffer=new unsigned char[size];
 	_size=size;
 	_remaining=size;
 	_position=0;
 }
 
-memorypoolnode::~memorypoolnode() {
+memorypoolbuffer::~memorypoolbuffer() {
 	delete[] _buffer;
 }
 
-typedef	linkedlistnode<memorypoolnode *>	memorypoollistnode;
-typedef	linkedlist<memorypoolnode *>		memorypoollist;
+typedef	linkedlistnode<memorypoolbuffer *>	memorypoollistnode;
+typedef	linkedlist<memorypoolbuffer *>		memorypoollist;
 
 class memorypoolprivate {
 	friend class memorypool;
 	private:
-		memorypoollist		_nodelist;
+		memorypoollist		_bufferlist;
 		memorypoollistnode	*_first;
 
 		size_t	_initialsize;
@@ -76,12 +76,17 @@ memorypool::memorypool(size_t initialsize,
 	pvt->_total=0;
 	pvt->_average=0;
 
-	pvt->_nodelist.append(new memorypoolnode(pvt->_initialsize));
-	pvt->_first=pvt->_nodelist.getFirst();
+	pvt->_bufferlist.append(new memorypoolbuffer(pvt->_initialsize));
+	pvt->_first=pvt->_bufferlist.getFirst();
 }
 
 memorypool::~memorypool() {
-	deallocate(false);
+
+	for (memorypoollistnode	*node=pvt->_first; node; node=node->getNext()) {
+		delete node->getValue();
+	}
+	pvt->_bufferlist.clear();
+
 	delete pvt;
 }
 
@@ -101,11 +106,11 @@ unsigned char *memorypool::allocate(size_t length) {
 
 	// look for a node with enough memory remaining
 	memorypoollistnode	*node=pvt->_first;
-	memorypoolnode		*memnode;
+	memorypoolbuffer	*membuf;
 	while (node) {
 
-		memnode=node->getValue();
-		if (memnode->_remaining>=length) {
+		membuf=node->getValue();
+		if (membuf->_remaining>=length) {
 			break;
 		}
 		node=node->getNext();
@@ -118,7 +123,7 @@ unsigned char *memorypool::allocate(size_t length) {
 	#ifdef DEBUG_ALLOCATE
 	if (node) {
 		stdoutput.printf("	node : %d (of %d)\n",
-					counter,pvt->_nodelist.getLength());
+					counter,pvt->_bufferlist.getLength());
 	}
 	#endif
 
@@ -136,8 +141,8 @@ unsigned char *memorypool::allocate(size_t length) {
 			incr=(pvt->_total/10);
 			incr+=MEMORYPOOLPAD(incr);
 		}
-		memnode=new memorypoolnode(incr);
-		pvt->_nodelist.append(memnode);
+		membuf=new memorypoolbuffer(incr);
+		pvt->_bufferlist.append(membuf);
 
 		#ifdef DEBUG_ALLOCATE
 		stdoutput.printf("\n	allocating new new node "
@@ -153,23 +158,23 @@ unsigned char *memorypool::allocate(size_t length) {
 	#endif
 
 	// get the buffer to return
-	unsigned char	*buffer=memnode->_buffer+memnode->_position;
+	unsigned char	*buffer=membuf->_buffer+membuf->_position;
 
 	// adjust position and bytes remaining in
 	// the node that the buffer came from
-	memnode->_position+=length;
-	memnode->_remaining-=length;
+	membuf->_position+=length;
+	membuf->_remaining-=length;
 
 	// balance the list...
 	if (node!=pvt->_first) {
 
-		memorypoolnode		*firstmemnode=pvt->_first->getValue();
+		memorypoolbuffer	*firstmembuf=pvt->_first->getValue();
 
 		#ifdef DEBUG_ALLOCATE
 		stdoutput.printf("\n	remain in this node : %d\n",
-						memnode->_remaining);
+						membuf->_remaining);
 		stdoutput.printf("	remain in first node: %d\n",
-						firstmemnode->_remaining);
+						firstmembuf->_remaining);
 		#endif
 
 		// If this node has 128 bytes more space remaining than the
@@ -180,15 +185,15 @@ unsigned char *memorypool::allocate(size_t length) {
 		// of the list and the next allocate has a better chance of
 		// finding space without having to search too hard.  The
 		// 128/10% hopes to prevent flip-flopping of nodes.
-		if (memnode->_remaining>firstmemnode->_remaining) {
-			size_t	difference=memnode->_remaining-
-						firstmemnode->_remaining;
-			if (!firstmemnode->_remaining ||
+		if (membuf->_remaining>firstmembuf->_remaining) {
+			size_t	difference=membuf->_remaining-
+						firstmembuf->_remaining;
+			if (!firstmembuf->_remaining ||
 				(difference>128 &&
-				difference>firstmemnode->_remaining/10)) {
+				difference>firstmembuf->_remaining/10)) {
 
-				pvt->_nodelist.moveBefore(pvt->_first,node);
-				pvt->_first=pvt->_nodelist.getFirst();
+				pvt->_bufferlist.moveBefore(pvt->_first,node);
+				pvt->_first=pvt->_bufferlist.getFirst();
 
 				#ifdef DEBUG_ALLOCATE
 				stdoutput.printf("\n	moving node "
@@ -213,97 +218,99 @@ unsigned char *memorypool::allocateAndClear(size_t length) {
 }
 
 void memorypool::deallocate() {
-	deallocate(true);
-}
-
-void memorypool::deallocate(bool reinit) {
 
 	#ifdef DEBUG_DEALLOCATE
 	stdoutput.printf("deallocate {\n");
 	#endif
 
-	memorypoolnode		*first=NULL;
-
-	if (reinit) {
-
-		first=pvt->_first->getValue();
-
-		pvt->_deallocations++;
-
-		// update the running average
-		pvt->_average-=pvt->_average/pvt->_deallocations;
-		pvt->_average+=pvt->_total/pvt->_deallocations;
+	// if the pool was unused during this iteration...
+	// (a surprisingly common case)
+	if (pvt->_bufferlist.getLength()==1 &&
+			!pvt->_first->getValue()->_position) {
 
 		#ifdef DEBUG_DEALLOCATE
-		stdoutput.printf("	num: %d\n",pvt->_deallocations);
-		stdoutput.printf("	avg: %d\n",pvt->_average);
-		stdoutput.printf("	tot: %d\n",pvt->_total);
+		stdoutput.printf("	pool was unused\n");
+		stdoutput.printf("}\n");
 		#endif
 
-		// if it's time to re-evaluate and
-		// re-size the first node then do that
-		if (pvt->_deallocations==pvt->_resizeinterval) {
-
-			// reset initial size to the average amount
-			// of memory allocated between each deallocation
-			pvt->_initialsize=pvt->_average;
-
-			// reset counters
-			pvt->_deallocations=0;
-			pvt->_average=0;
-
-			// resize the first buffer to this size
-			delete[] first->_buffer;
-			first->_buffer=new unsigned char[pvt->_initialsize];
-			first->_size=pvt->_initialsize;
-
-			#ifdef DEBUG_DEALLOCATE
-			stdoutput.printf("	resize {\n");
-			stdoutput.printf("		initialsize: %d\n",
-							pvt->_initialsize);
-			stdoutput.printf("	}\n");
-			#endif
-		}
-
-		// reset position and remaining on the first node
-		first->_position=0;
-		first->_remaining=first->_size;
-
-		// reset total
-		pvt->_total=0;
+		return;
 	}
+
+	// get the first buffer
+	// (we'll need it later and pvt->_first is about to become invalid)
+	memorypoolbuffer	*firstmembuf=pvt->_first->getValue();
 
 	#ifdef DEBUG_DEALLOCATE
 	stdoutput.printf("	clearing %d nodes\n",
-					pvt->_nodelist.getLength());
+					pvt->_bufferlist.getLength());
 	#endif
 
-	// delete all nodes
-	// (except for the first node, if we're reinit'ing)
-	memorypoollistnode	*currentlistnode=
-				(reinit)?pvt->_first->getNext():pvt->_first;
-	memorypoollistnode	*nextlistnode;
-	while (currentlistnode) {
-		nextlistnode=currentlistnode->getNext();
-		delete currentlistnode->getValue();
-		currentlistnode=nextlistnode;
+	// delete all buffers except for the first one
+	for (memorypoollistnode	*node=pvt->_first->getNext();
+					node; node=node->getNext()) {
+		delete node->getValue();
 	}
-	pvt->_nodelist.clear();
+	pvt->_bufferlist.clear();
 
-	// add back the new first node
-	if (reinit) {
-		pvt->_nodelist.append(first);
-		pvt->_first=pvt->_nodelist.getFirst();
-		#ifdef DEBUG_DEALLOCATE
-		stdoutput.printf("	node count: %d\n",
-					pvt->_nodelist.getLength());
-		#endif
-	}
+	// bump deallocations counter
+	pvt->_deallocations++;
+
+	// update the running average
+	pvt->_average-=pvt->_average/pvt->_deallocations;
+	pvt->_average+=pvt->_total/pvt->_deallocations;
 
 	#ifdef DEBUG_DEALLOCATE
-	if (!reinit) {
-		stdoutput.printf("	final\n");
+	stdoutput.printf("	num: %d\n",pvt->_deallocations);
+	stdoutput.printf("	avg: %d\n",pvt->_average);
+	stdoutput.printf("	tot: %d\n",pvt->_total);
+	#endif
+
+	// if it's time to re-evaluate and
+	// re-size the first buffer then do that
+	if (pvt->_deallocations==pvt->_resizeinterval) {
+
+		// don't do anything if the first buffer is alread big enough
+		if (pvt->_average>firstmembuf->_size) {
+
+			// resize the first buffer to the average
+			// total allocation since the last resize
+			delete[] firstmembuf->_buffer;
+			firstmembuf->_buffer=new unsigned char[pvt->_average];
+			firstmembuf->_size=pvt->_average;
+
+			#ifdef DEBUG_DEALLOCATE
+			stdoutput.printf("	resize {\n");
+			stdoutput.printf("		"
+						"average    : %d\n",
+						pvt->_average);
+			stdoutput.printf("	}\n");
+			#endif
+		}
+		#ifdef DEBUG_DEALLOCATE
+		else {
+			stdoutput.printf("	not resizing "
+						"(already big enough)\n");
+		}
+		#endif
+
+		// reset counters
+		pvt->_deallocations=0;
+		pvt->_average=0;
 	}
+
+	// reset position and remaining on the first node
+	firstmembuf->_position=0;
+	firstmembuf->_remaining=firstmembuf->_size;
+
+	// reset total
+	pvt->_total=0;
+
+	// add back the first buffer
+	pvt->_bufferlist.append(firstmembuf);
+	pvt->_first=pvt->_bufferlist.getFirst();
+
+	#ifdef DEBUG_DEALLOCATE
+	stdoutput.printf("	node count: %d\n",pvt->_bufferlist.getLength());
 	stdoutput.printf("}\n");
 	#endif
 }
@@ -311,21 +318,21 @@ void memorypool::deallocate(bool reinit) {
 void memorypool::print() {
 
 	uint64_t		segmentindex=0;
-	memorypoolnode		*memnode;
+	memorypoolbuffer	*membuf;
 
 	for (memorypoollistnode *listnode=pvt->_first;
 				listnode; listnode=listnode->getNext()) {
-		memnode=listnode->getValue();
+		membuf=listnode->getValue();
 		stdoutput.printf("segment %lld(%x): (%d,%d)\n",
-				segmentindex,memnode,
-				(int)memnode->_size,(int)memnode->_position);
-		for (size_t i=0; i<memnode->_position; i++) {
-			if (memnode->_buffer[i]>=' ' && 
-				memnode->_buffer[i]<='~') {
-				stdoutput.printf("'%c'",memnode->_buffer[i]);
+				segmentindex,membuf,
+				(int)membuf->_size,(int)membuf->_position);
+		for (size_t i=0; i<membuf->_position; i++) {
+			if (membuf->_buffer[i]>=' ' && 
+				membuf->_buffer[i]<='~') {
+				stdoutput.printf("'%c'",membuf->_buffer[i]);
 			} else {
 				stdoutput.printf("%3d",
-						(int)memnode->_buffer[i]);
+						(int)membuf->_buffer[i]);
 			}
 			if (!((i+1)%20)) {
 				stdoutput.printf("\n");

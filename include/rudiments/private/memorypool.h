@@ -6,5 +6,3 @@
 				memorypool(const memorypool &m);
 		memorypool	&operator=(const memorypool &m);
 		memorypoolprivate	*pvt;
-
-		void	deallocate(bool reinit);
