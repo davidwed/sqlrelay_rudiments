@@ -11,8 +11,11 @@
 
 //#define DEBUG_ALLOCATE 1
 //#define DEBUG_DEALLOCATE 1
+//#define DEBUG_RESIZE 1
 
-#if defined(DEBUG_ALLOCATE) || defined(DEBUG_DEALLOCATE)
+#if defined(DEBUG_ALLOCATE) || \
+		defined(DEBUG_DEALLOCATE) || \
+		defined(DEBUG_RESIZE)
 	#include <rudiments/stdio.h>
 #endif
 
@@ -269,8 +272,25 @@ void memorypool::deallocate() {
 	// re-size the first buffer then do that
 	if (pvt->_deallocations==pvt->_resizeinterval) {
 
-		// don't do anything if the first buffer is alread big enough
-		if (pvt->_average>firstmembuf->_size) {
+		#ifdef DEBUG_RESIZE
+		stdoutput.printf("	resize {\n");
+		stdoutput.printf("		current    : %d\n",
+							firstmembuf->_size);
+		stdoutput.printf("		average    : %d\n",
+							pvt->_average);
+		#endif
+
+		// calculate the difference between the current size
+		// of the first buffer and average total allocation
+		// since the last resize
+		size_t	difference=
+			(pvt->_average>firstmembuf->_size)?
+				pvt->_average-firstmembuf->_size:
+				firstmembuf->_size-pvt->_average;
+
+		// don't grow or shrink the buffer if the
+		// average is within 10% of its current size
+		if (difference>firstmembuf->_size-firstmembuf->_size/10) {
 
 			// resize the first buffer to the average
 			// total allocation since the last resize
@@ -278,24 +298,23 @@ void memorypool::deallocate() {
 			firstmembuf->_buffer=new unsigned char[pvt->_average];
 			firstmembuf->_size=pvt->_average;
 
-			#ifdef DEBUG_DEALLOCATE
-			stdoutput.printf("	resize {\n");
-			stdoutput.printf("		"
-						"average    : %d\n",
-						pvt->_average);
-			stdoutput.printf("	}\n");
+			#ifdef DEBUG_RESIZE
+			stdoutput.printf("		resizing\n");
 			#endif
 		}
-		#ifdef DEBUG_DEALLOCATE
+		#ifdef DEBUG_RESIZE
 		else {
-			stdoutput.printf("	not resizing "
-						"(already big enough)\n");
+			stdoutput.printf("		not resizing\n");
 		}
 		#endif
 
 		// reset counters
 		pvt->_deallocations=0;
 		pvt->_average=0;
+
+		#ifdef DEBUG_RESIZE
+		stdoutput.printf("	}\n");
+		#endif
 	}
 
 	// reset position and remaining on the first node
@@ -313,34 +332,4 @@ void memorypool::deallocate() {
 	stdoutput.printf("	node count: %d\n",pvt->_bufferlist.getLength());
 	stdoutput.printf("}\n");
 	#endif
-}
-
-void memorypool::print() {
-
-	uint64_t		segmentindex=0;
-	memorypoolbuffer	*membuf;
-
-	for (memorypoollistnode *listnode=pvt->_first;
-				listnode; listnode=listnode->getNext()) {
-		membuf=listnode->getValue();
-		stdoutput.printf("segment %lld(%x): (%d,%d)\n",
-				segmentindex,membuf,
-				(int)membuf->_size,(int)membuf->_position);
-		for (size_t i=0; i<membuf->_position; i++) {
-			if (membuf->_buffer[i]>=' ' && 
-				membuf->_buffer[i]<='~') {
-				stdoutput.printf("'%c'",membuf->_buffer[i]);
-			} else {
-				stdoutput.printf("%3d",
-						(int)membuf->_buffer[i]);
-			}
-			if (!((i+1)%20)) {
-				stdoutput.printf("\n");
-			} else {
-				stdoutput.printf(" ");
-			}
-		}
-		stdoutput.printf("\n\n");
-		segmentindex++;
-	}
 }

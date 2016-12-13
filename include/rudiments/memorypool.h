@@ -20,12 +20,12 @@ class RUDIMENTS_DLLSPEC memorypool {
 		/** Creates a memory pool of initial size "initialsize".
 		 * 
 		 *  When the pool needs to grow, it will grow by at least
-		 *  "increment" bytes.  If more than increment bytes
+		 *  "increment" bytes.  If more than "increment" bytes
 		 *  are requested, it will grow by that amount instead.
 		 * 
 		 *  When deallocate() has been called "resizeinterval" times,
 		 *  it will evaluate the average amount of memory
-		 *  malloc'ed (since the last time it did this) and
+		 *  allocated (since the last time it did this) and
 		 *  resize the initial buffer size to this size. */
 		memorypool(size_t initialsize,
 				size_t increment,
@@ -46,11 +46,13 @@ class RUDIMENTS_DLLSPEC memorypool {
 		unsigned char	*allocateAndClear(size_t size);
 
 		/** Shrinks the pool back down to it's initial size
-		 *  and frees all previously allocated blocks. */
+		 *  and frees all previously allocated blocks.
+		 *
+		 *  When deallocate() has been called "resizeinterval"
+		 *  times (see constructor), it evaluates the average amount
+		 *  of memory allocated (since the last time it did this) and
+		 *  resizes the initial buffer size to this size. */
 		void	deallocate();
-
-		/** Prints a visual representation of the pool. */
-		void	print();
 
 	#include <rudiments/private/memorypool.h>
 };
