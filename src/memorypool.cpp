@@ -38,7 +38,8 @@ memorypoolnode::~memorypoolnode() {
 class memorypoolprivate {
 	friend class memorypool;
 	private:
-		memorypoollist	_nodelist;
+		memorypoollist		_nodelist;
+		memorypoollistnode	*_first;
 
 		size_t	_initialsize;
 		size_t	_increment;
@@ -59,18 +60,18 @@ memorypool::memorypool(size_t initialsize,
 	pvt->_totalusedsize=0;
 
 	pvt->_nodelist.append(new memorypoolnode(pvt->_initialsize));
+	pvt->_first=pvt->_nodelist.getFirst();
 }
 
 memorypool::~memorypool() {
-	deallocate();
-	delete pvt->_nodelist.getFirst()->getValue();
+	deallocate(false);
 	delete pvt;
 }
 
 unsigned char *memorypool::allocate(size_t length) { 
 
 	// look for a node with enough memory remaining
-	memorypoollistnode	*node=pvt->_nodelist.getFirst();
+	memorypoollistnode	*node=pvt->_first;
 	memorypoolnode		*memnode;
 	while (node) {
 		memnode=node->getValue();
@@ -113,9 +114,12 @@ unsigned char *memorypool::allocateAndClear(size_t length) {
 }
 
 void memorypool::deallocate() {
+	deallocate(true);
+}
 
-	memorypoollistnode	*firstlistnode=pvt->_nodelist.getFirst();
-	memorypoolnode		*first=firstlistnode->getValue();
+void memorypool::deallocate(bool reinit) {
+
+	memorypoolnode		*first=pvt->_first->getValue();
 
 	// if it's time to re-evaluate and re-size of the first node, do that
 	pvt->_freecounter++;
@@ -139,7 +143,7 @@ void memorypool::deallocate() {
 	first->_remaining=first->_size;
 
 	// delete all nodes beyond the first node
-	memorypoollistnode	*currentlistnode=firstlistnode->getNext();
+	memorypoollistnode	*currentlistnode=pvt->_first->getNext();
 	memorypoollistnode	*nextlistnode;
 	while (currentlistnode) {
 		nextlistnode=currentlistnode->getNext();
@@ -147,16 +151,20 @@ void memorypool::deallocate() {
 		currentlistnode=nextlistnode;
 	}
 	pvt->_nodelist.clear();
-	pvt->_nodelist.append(first);
+
+	if (reinit) {
+		pvt->_nodelist.append(first);
+		pvt->_first=pvt->_nodelist.getFirst();
+	}
 }
 
 void memorypool::print() {
 
 	uint64_t		segmentindex=0;
-	memorypoollistnode	*listnode=pvt->_nodelist.getFirst();
 	memorypoolnode		*memnode;
 
-	while (listnode) {
+	for (memorypoollistnode *listnode=pvt->_first;
+				listnode; listnode=listnode->getNext()) {
 		memnode=listnode->getValue();
 		stdoutput.printf("segment %lld(%x): (%d,%d)\n",
 				segmentindex,memnode,
@@ -175,7 +183,6 @@ void memorypool::print() {
 				stdoutput.printf(" ");
 			}
 		}
-		listnode=listnode->getNext();
 		stdoutput.printf("\n\n");
 		segmentindex++;
 	}
