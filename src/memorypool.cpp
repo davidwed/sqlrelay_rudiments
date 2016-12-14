@@ -84,12 +84,9 @@ memorypool::memorypool(size_t initialsize,
 }
 
 memorypool::~memorypool() {
-
 	for (memorypoollistnode	*node=pvt->_first; node; node=node->getNext()) {
 		delete node->getValue();
 	}
-	pvt->_bufferlist.clear();
-
 	delete pvt;
 }
 
