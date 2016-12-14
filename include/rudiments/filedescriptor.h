@@ -852,29 +852,27 @@ class RUDIMENTS_DLLSPEC filedescriptor {
 		 *  Returns true on success and false on failure. */
 		bool	dontUseNaglesAlgorithm();
 
-		/** Sets the size of the kernel's TCP write buffer to "size"
-		 *  bytes.  This is only useful for TCP socket file
-		 *  descriptors.  Returns true on success and false on
-		 *  failure. */
-		bool	setTcpWriteBufferSize(int32_t size);
+		/** Sets the size of the kernel's socket write buffer to "size"
+		 *  bytes.  This is only useful for socket file descriptors.
+		 *  Returns true on success and false on failure. */
+		bool	setSocketWriteBufferSize(int32_t size);
 
-		/** Fetches the size of the kernel's TCP write buffer (in bytes)
-		 *  into buffer "size".  This is only useful for TCP socket
-		 *  file descriptors.  Returns true on success and false on
-		 *  failure. */
-		bool	getTcpWriteBufferSize(int32_t *size);
+		/** Fetches the size of the kernel's socket write buffer
+		 *  (in bytes) into buffer "size".  This is only useful for
+		 *  socket file descriptors.  Returns true on success and false
+		 *  on failure. */
+		bool	getSocketWriteBufferSize(int32_t *size);
 
-		/** Sets the size of the kernel's TCP read buffer to "size"
-		 *  bytes.  This is only useful for TCP socket file
-		 *  descriptors.  Returns true on success and false on
-		 *  failure. */
-		bool	setTcpReadBufferSize(int32_t size);
+		/** Sets the size of the kernel's socket read buffer to "size"
+		 *  bytes.  This is only useful for socket file descriptors.
+		 *  Returns true on success and false on failure. */
+		bool	setSocketReadBufferSize(int32_t size);
 
-		/** Fetches the size of the kernel's TCP read buffer (in bytes)
-		 *  into buffer "size".  This is only useful for TCP socket
-		 *  file descriptors.  Returns true on success and false on
-		 *  failure. */
-		bool	getTcpReadBufferSize(int32_t *size);
+		/** Fetches the size of the kernel's socket read buffer
+		 *  (in bytes) into buffer "size".  This is only useful for
+		 *  socket file descriptors.  Returns true on success and false
+		 *  on failure. */
+		bool	getSocketReadBufferSize(int32_t *size);
 
 		/** Disables IPv4 on this file descriptor, only IPv6 will be
 		 *  used.  This is only useful for TCP Socket file descriptors.

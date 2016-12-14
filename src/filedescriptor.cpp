@@ -2080,27 +2080,27 @@ bool filedescriptor::setNoDelay(int32_t onoff) {
 #endif
 }
 
-bool filedescriptor::getTcpWriteBufferSize(int32_t *size) {
+bool filedescriptor::getSocketWriteBufferSize(int32_t *size) {
 	socklen_t	intsize=sizeof(int);
 	return getSockOpt(SOL_SOCKET,SO_SNDBUF,
 				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)size,
 				&intsize)!=-1;
 }
 
-bool filedescriptor::setTcpWriteBufferSize(int32_t size) {
+bool filedescriptor::setSocketWriteBufferSize(int32_t size) {
 	return !setSockOpt(SOL_SOCKET,SO_SNDBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
 				(socklen_t)sizeof(int));
 }
 
-bool filedescriptor::getTcpReadBufferSize(int32_t *size) {
+bool filedescriptor::getSocketReadBufferSize(int32_t *size) {
 	socklen_t	intsize=sizeof(int);
 	return getSockOpt(SOL_SOCKET,SO_RCVBUF,
 				(RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE)size,
 				&intsize)!=-1;
 }
 
-bool filedescriptor::setTcpReadBufferSize(int32_t size) {
+bool filedescriptor::setSocketReadBufferSize(int32_t size) {
 	return setSockOpt(SOL_SOCKET,SO_RCVBUF,
 				(RUDIMENTS_SETSOCKOPT_OPTVAL_TYPE)&size,
 				(socklen_t)sizeof(int))!=-1;

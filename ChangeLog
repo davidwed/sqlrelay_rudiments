@@ -49,6 +49,8 @@
 		comparisons it does and improve performance significantly
 	various performance tweaks to memorypool
 	updated memory pool to 8-byte-align allocations
+	renamed filedescriptor::get/setTcpRead/WriteBufferSize to
+		filedescriptor::get/setSocketRead/WriteBufferSize
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with
