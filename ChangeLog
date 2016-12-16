@@ -1,4 +1,4 @@
-1.0.0 - images directory and contents are installed with the docs now
+1.0.0rc1 - images directory and contents are installed with the docs now
 	added md5 class
 	moved sendSignal/raiseSignal to process class
 	implemented process::backtrace() for windows
