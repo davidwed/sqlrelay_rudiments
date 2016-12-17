@@ -1099,7 +1099,7 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 		// limit size of individual reads
 		sizetoread=count-totalread;
 		if (sizetoread>sizemax) {
-			sizetoread=pvt->_secctx->getSizeMax();
+			sizetoread=sizemax;
 		}
 
 		// wait if necessary
@@ -1345,7 +1345,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		// limit size of individual writes
 		sizetowrite=count-totalwrite;
 		if (sizetowrite>sizemax) {
-			sizetowrite=pvt->_secctx->getSizeMax();
+			sizetowrite=sizemax;
 		}
 
 		// wait if necessary
