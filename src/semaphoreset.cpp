@@ -736,8 +736,11 @@ bool semaphoreset::supported() {
 	#if defined(RUDIMENTS_HAVE_SEMGET)
 		error::clearError();
 		semget(0,0,0);
-		return (error::getErrorNumber()!=ENOSYS &&
-				error::getErrorNumber()!=ENOTSUP);
+		return (error::getErrorNumber()!=ENOSYS
+			#ifdef ENOTSUP
+				&& error::getErrorNumber()!=ENOTSUP
+			#endif
+			);
 	#elif defined(RUDIMENTS_HAVE_CREATESEMAPHORE)
 		return true;
 	#else
