@@ -94,7 +94,7 @@ int main(int argc, const char **argv) {
 
 	if (!thread::supported()) {
 		stdoutput.printf("	not supported\n\n");
-		return 1;
+		return 0;
 	}
 
 	// initialize threads
