@@ -236,6 +236,7 @@ void DICTIONARYNODE_CLASS::print() const {
 
 
 DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 int32_t node_compare(
 			dictionarynode<keytype,valuetype> *value1,
 			dictionarynode<keytype,valuetype> *value2) {
@@ -243,6 +244,7 @@ int32_t node_compare(
 }
 
 DICTIONARYNODE_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 void node_compare(dictionarynode<keytype,valuetype> *value) {
 	node_print(value);
 }
