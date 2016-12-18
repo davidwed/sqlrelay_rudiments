@@ -35,7 +35,8 @@ int main(int argc, const char **argv) {
 	// guarantee it'll actually be "localhost"
 	test("name",he.getName());
 	// it's likely there will be at least localhost.localdomain
-	test("alias list",he.getAliasList());
+	// but we can't count on that
+	//test("alias list",he.getAliasList());
 	test("address type",he.getAddressType()==AF_INET);
 	test("address length",he.getAddressLength()==4);
 	test("address list",he.getAddressList());
@@ -49,7 +50,8 @@ int main(int argc, const char **argv) {
 	// guarantee it'll actually be "localhost"
 	test("name",he.getName());
 	// it's likely there will be at least localhost.localdomain
-	test("alias list",he.getAliasList());
+	// but we can't count on that
+	//test("alias list",he.getAliasList());
 	test("address type",he.getAddressType()==AF_INET);
 	test("address length",he.getAddressLength()==4);
 	test("address list",he.getAddressList());

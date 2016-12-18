@@ -23,8 +23,10 @@ int main(int argc, const char **argv) {
 	test("name",!charstring::compare(se.getName(),"smtp"));
 	test("port",se.getPort()==25);
 	test("protcol",!charstring::compare(se.getProtocol(),"tcp"));
-	test("alias list",se.getAliasList() &&
-			!charstring::compare(se.getAliasList()[0],"mail"));
+	// some platforms alias smtp as mail, but some do not
+	test("alias list",!se.getAliasList() ||
+			(se.getAliasList() &&
+			!charstring::compare(se.getAliasList()[0],"mail")));
 	stdoutput.printf("\n");
 
 	// get the service information for the service on port 25, "tcp"
@@ -33,8 +35,10 @@ int main(int argc, const char **argv) {
 	test("name",!charstring::compare(se.getName(),"smtp"));
 	test("port",se.getPort()==25);
 	test("protcol",!charstring::compare(se.getProtocol(),"tcp"));
-	test("alias list",se.getAliasList() &&
-			!charstring::compare(se.getAliasList()[0],"mail"));
+	// some platforms alias smtp as mail, but some do not
+	test("alias list",!se.getAliasList() ||
+			(se.getAliasList() &&
+			!charstring::compare(se.getAliasList()[0],"mail")));
 	stdoutput.printf("\n");
 
 	// null-safety

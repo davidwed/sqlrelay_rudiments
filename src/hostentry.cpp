@@ -76,7 +76,10 @@ const char *hostentry::getName() const {
 }
 
 const char * const *hostentry::getAliasList() const {
-	return (pvt->_he)?pvt->_he->h_aliases:NULL;
+	return (pvt->_he &&
+		pvt->_he->h_aliases &&
+		pvt->_he->h_aliases[0])?
+		pvt->_he->h_aliases:NULL;
 }
 
 int32_t hostentry::getAddressType() const {
@@ -88,7 +91,10 @@ int32_t hostentry::getAddressLength() const {
 }
 
 const char * const *hostentry::getAddressList() const {
-	return (pvt->_he)?pvt->_he->h_addr_list:NULL;
+	return (pvt->_he &&
+		pvt->_he->h_addr_list &&
+		pvt->_he->h_addr_list[0])?
+		pvt->_he->h_addr_list:NULL;
 }
 
 bool hostentry::needsMutex() {

@@ -51,6 +51,8 @@
 	updated memory pool to 8-byte-align allocations
 	renamed filedescriptor::get/setTcpRead/WriteBufferSize to
 		filedescriptor::get/setSocketRead/WriteBufferSize
+	fixed *entry::getAliasList() to return NULL under all circumstances if
+		there are no aliases
 
 0.57.0 - fixed subtle bug in codegree::compareValue
 	replaced several type-punned pointer dereferences with

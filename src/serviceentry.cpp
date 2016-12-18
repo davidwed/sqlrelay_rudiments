@@ -88,7 +88,10 @@ const char *serviceentry::getProtocol() const {
 }
 
 const char * const *serviceentry::getAliasList() const {
-	return (pvt->_se)?pvt->_se->s_aliases:NULL;
+	return (pvt->_se &&
+		pvt->_se->s_aliases &&
+		pvt->_se->s_aliases[0])?
+		pvt->_se->s_aliases:NULL;
 }
 
 bool serviceentry::needsMutex() {

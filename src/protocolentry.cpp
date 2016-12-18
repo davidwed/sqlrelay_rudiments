@@ -74,7 +74,10 @@ const char *protocolentry::getName() const {
 }
 
 const char * const *protocolentry::getAliasList() const {
-	return (pvt->_pe)?pvt->_pe->p_aliases:NULL;
+	return (pvt->_pe &&
+		pvt->_pe->p_aliases &&
+		pvt->_pe->p_aliases[0])?
+		pvt->_pe->p_aliases:NULL;
 }
 
 int32_t protocolentry::getNumber() const {
