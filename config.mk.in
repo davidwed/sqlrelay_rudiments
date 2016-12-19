@@ -42,7 +42,6 @@ LINK = @CXX@
 AR = @AR@
 LDFLAGS = @LDFLAGS@
 LINKFLAGS = -rpath $(libdir) -version-info $(SONAME_VERSION_INFO) -no-undefined
-MODLINKFLAGS = -rpath $(libdir) -avoid-version -module -no-undefined
 LIBPATH = -L
 LIB = -l
 INSTALLLIB = installlib
