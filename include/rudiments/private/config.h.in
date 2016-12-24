@@ -87,6 +87,12 @@
 /* libcurl has curl_multi_timeout */
 #undef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT
 
+/* SSL has EVP_PKEY_base_id */
+#undef RUDIMENTS_HAS_EVP_PKEY_BASE_ID
+
+/* SSL has EVP_PKEY_get0 */
+#undef RUDIMENTS_HAS_EVP_PKEY_GET0
+
 /* Rudiments supports GSS */
 #undef RUDIMENTS_HAS_GSS
 

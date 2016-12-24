@@ -1816,15 +1816,24 @@ void tlscertificate::setCertificate(void *cert) {
 		EVP_PKEY	*pubkey=X509_get_pubkey(c);
 		pvt->_pkalg=charstring::duplicate(
 					(pubkey)?
-					OBJ_nid2ln(EVP_PKEY_base_id(pubkey)):
-					NULL);
+					OBJ_nid2ln(
+					#ifdef RUDIMENTS_HAS_EVP_PKEY_BASE_ID
+						EVP_PKEY_base_id(pubkey)
+					#else
+						pubkey->type
+					#endif
+					):NULL);
 		// FIXME: public key algorithm parameters
 
 		// get the public key
 		pvt->_pklen=EVP_PKEY_size(pubkey);
 		pvt->_pk=(unsigned char *)bytestring::duplicate(
-						EVP_PKEY_get0(pubkey),
-						pvt->_pklen);
+					#ifdef RUDIMENTS_HAS_EVP_PKEY_GET0
+						EVP_PKEY_get0(pubkey)
+					#else
+						pubkey->pkey.ptr
+					#endif
+					,pvt->_pklen);
 		pvt->_pkbits=EVP_PKEY_bits(pubkey);
 		EVP_PKEY_free(pubkey);
 
