@@ -347,15 +347,25 @@ bool directory::changeDirectory(const char *path) {
 
 bool directory::changeRoot(const char *path) {
 	#ifdef RUDIMENTS_HAVE_CHROOT
-		int32_t	result;
+		bool	result;
 		error::clearError();
 		do {
-			result=chdir(path);
-			if (!result) {
-				result=chroot(path);
-			}
-		} while (result==-1 && error::getErrorNumber()==EINTR);
-		return !result;
+			// Ideally I'd be consistent and do:
+			//
+			// int32	result;
+			// do {
+			// 	result=chdir(path);
+			// 	if (!result) {
+			// 		result=chroot(path)
+			// 	}
+			// } while (result==-1 ...);
+			//
+			// But rpmlint wants the chdir and chroot to be
+			// within 2 lines of x86_64 assembly and this is
+			// the only way to guarantee that.
+			result=(!chdir(path) && !chroot(path));
+		} while (!result && error::getErrorNumber()==EINTR);
+		return result;
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return false;

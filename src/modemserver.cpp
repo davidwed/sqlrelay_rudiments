@@ -68,9 +68,9 @@ void modemserver::initialize(const char *device, const char *baud,
 					const char *acceptscript,
 					const char *disconnectscript) {
 	modemutil::initialize(device,baud);
-	pvt->_listenscript=pvt->_listenscript;
-	pvt->_acceptscript=pvt->_acceptscript;
-	pvt->_disconnectscript=pvt->_disconnectscript;
+	pvt->_listenscript=listenscript;
+	pvt->_acceptscript=acceptscript;
+	pvt->_disconnectscript=disconnectscript;
 }
 
 bool modemserver::listen(const char *device, const char *baud,

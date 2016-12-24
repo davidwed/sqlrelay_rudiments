@@ -37,6 +37,9 @@ distclean: clean
 	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/rudiments.opensdf msvc/rudiments.sdf msvc/rudiments.suo
 	$(RMTREE) autom4te.cache
 
+cppcheck:
+	cppcheck -j4 --enable=warning,performance,portability src > /dev/null
+
 tests:
 	cd test $(AND) $(MAKE) tests
 

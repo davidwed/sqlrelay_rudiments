@@ -7,6 +7,8 @@
 	updated TLS code to use ASN1_STRING_get0_data instead of
 		ASN1_STRING_data if available
 	added chdir before chroot
+	removed redundant mapprot assignment in memorymap
+	fixed errant self-assignment in modemserver
 
 1.0.0 - images directory and contents are installed with the docs now
 	added md5 class
