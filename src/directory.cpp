@@ -347,6 +347,9 @@ bool directory::changeDirectory(const char *path) {
 
 bool directory::changeRoot(const char *path) {
 	#ifdef RUDIMENTS_HAVE_CHROOT
+		if (!changeDirectory(path)) {
+			return false;
+		}
 		int32_t	result;
 		error::clearError();
 		do {
