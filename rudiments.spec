@@ -12,12 +12,12 @@ BuildRequires: readline-devel,pcre-devel,openssl-devel,libcurl-devel,krb5-devel
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
-frameworks for processes, threads, clients, servers, parsers, loggers and
-compilers.  It also includes data structures for buffers, arrays, linked lists
-and dictionaries, and utility classes for processing text and binary data,
-regular expressions, random numbers, encryption, date and time, system
-information,  files, directories, file-systems, inter-process communication,
-dynamic libraries, and XML.
+frameworks for processes, threads, clients, servers, loggers and compilers.  It
+also includes data structures for buffers, arrays, linked lists and
+dictionaries, and utility classes for processing text and binary data, regular
+expressions, random numbers, encryption, date and time, system information,
+files, directories, file-systems, inter-process communication, dynamic
+libraries, and XML.
 
 
 %package devel
@@ -72,6 +72,10 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Fri Dec 23 2016 David Muse <dmuse@firstowrks.com> - 1.0.1-1
+- Updated to version 1.0.1.
+- Removed "parsers" from description text.
+
 * Tue Jul 26 2016 David Muse <dmuse@firstworks.com> - 0.56.0-1
 - Added readline dependency
 
