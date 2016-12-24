@@ -1790,7 +1790,12 @@ void tlscertificate::setCertificate(void *cert) {
 		// get signature algorithm
 		pvt->_sigalg=new char[256];
 		OBJ_obj2txt(pvt->_sigalg,256,
-				OBJ_nid2obj(X509_get_signature_nid(c)),0);
+			#ifdef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID
+				OBJ_nid2obj(X509_get_signature_nid(c)),
+			#else
+				c->sig_alg->algorithm,
+			#endif
+				0);
 		// FIXME: signature algorithm parameters
 
 		// get the issuer

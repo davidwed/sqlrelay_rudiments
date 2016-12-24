@@ -178,6 +178,9 @@
 /* Some systems have tzset */
 /* #undef RUDIMENTS_HAS_TZSET */
 
+/* SSL has X509_get_signature_nid */
+/* #undef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID */
+
 /* Some systems have _get_timezone */
 #define RUDIMENTS_HAS__GET_TIMEZONE 1
 

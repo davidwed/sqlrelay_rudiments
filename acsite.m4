@@ -1008,6 +1008,9 @@ then
 
 		AC_MSG_CHECKING(for ASN1_STRING_get0_data)
 		FW_TRY_LINK([#include <openssl/asn1.h>],[ASN1_STRING_get0_data(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_ASN1_STRING_GET0_DATA,1,SSL has ASN1_STRING_get0_data) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for X509_get_signature_nid)
+		FW_TRY_LINK([#include <openssl/x509.h>],[X509_get_signature_nid(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_X509_GET_SIGNATURE_NID,1,SSL has X509_get_signature_nid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 	fi
 
 	FW_INCLUDES(ssl,[$SSLINCLUDES])
