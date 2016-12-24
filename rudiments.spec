@@ -33,7 +33,6 @@ Development files for rudiments.
 # Example code is FSFUL.
 License: GPLv2 and FSFUL
 Summary: Documentation for rudiments
-Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildArch: noarch
 
 %description doc
@@ -72,9 +71,10 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Fri Dec 23 2016 David Muse <dmuse@firstowrks.com> - 1.0.1-1
+* Fri Dec 23 2016 David Muse <david.muse@firstworks.com> - 1.0.1-1
 - Updated to version 1.0.1.
 - Removed "parsers" from description text.
+- Removed Requires from doc package.
 
 * Tue Jul 26 2016 David Muse <dmuse@firstworks.com> - 0.56.0-1
 - Added readline dependency
