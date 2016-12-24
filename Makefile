@@ -30,12 +30,17 @@ uninstall:
 	cd bin $(AND) $(MAKE) uninstall
 	cd doc $(AND) $(MAKE) uninstall
 	cd man $(AND) $(MAKE) uninstall
-	$(RMTREE) $(licensedir)
 	$(RM) $(libdir)/pkgconfig/rudiments.pc
+	$(RMTREE) $(licensedir)
 
 distclean: clean
 	$(RM) config.mk config.cache config.h config.log config.status features.mk libtool rudiments.pc include/Makefile include/rudiments/private/config.h include/rudiments/private/config.h.in~ bin/rudiments-config src/Makefile msvc/rudiments.opensdf msvc/rudiments.sdf msvc/rudiments.suo
 	$(RMTREE) autom4te.cache
+
+# for packaging systems that like to grab the license directly from
+# the source code and don't like where it gets installed by default
+uninstall-license:
+	$(RMTREE) $(licensedir)
 
 cppcheck:
 	cppcheck -j4 --enable=warning,performance,portability src > /dev/null

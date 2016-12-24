@@ -49,6 +49,11 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=%{buildroot}
+# "make install" installs COPYING in: %{buildroot}/usr/share/licenses/rudiments
+# But, since we prefer to get it directly from the source code, we'll remove it
+# from the buildroot so it doesn't trigger an "Installed (but unpackaged)
+# file(s) found" error.
+make uninstall-license DESTDIR=%{buildroot}
 
 %post -p /sbin/ldconfig
 
