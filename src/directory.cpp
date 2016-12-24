@@ -347,10 +347,20 @@ bool directory::changeDirectory(const char *path) {
 
 bool directory::changeRoot(const char *path) {
 	#ifdef RUDIMENTS_HAVE_CHROOT
-		if (!changeDirectory(path)) {
+
+		int32_t	result;
+
+		// ideally we'd just call changeDirectory() here but rpmlint
+		// throws a missing-call-to-chdir-with-chroot because it can't
+		// follow the call
+		error::clearError();
+		do {
+			result=chdir(path);
+		} while (result==-1 && error::getErrorNumber()==EINTR);
+		if (result) {
 			return false;
 		}
-		int32_t	result;
+
 		error::clearError();
 		do {
 			result=chroot(path);
