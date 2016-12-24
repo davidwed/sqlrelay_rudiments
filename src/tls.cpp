@@ -1873,7 +1873,7 @@ void tlscertificate::setCertificate(void *cert) {
 					if (asn1len==strlen) {
 						pvt->_san.append(
 							charstring::duplicate(
-								dnsname));
+							(const char *)dnsname));
 					}
 				}
 			}
