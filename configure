@@ -20004,7 +20004,7 @@ $as_echo_n "checking for TLSv1_2_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20042,7 +20042,7 @@ $as_echo_n "checking for TLSv1_1_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20080,7 +20080,7 @@ $as_echo_n "checking for TLSv1_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20118,7 +20118,7 @@ $as_echo_n "checking for TLS_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20156,7 +20156,7 @@ $as_echo_n "checking for SSLv3_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20194,7 +20194,7 @@ $as_echo_n "checking for SSLv23_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20232,7 +20232,7 @@ $as_echo_n "checking for SSLv2_method... " >&6; }
 SAVECPPFLAGS="$CPPFLAGS"
 SAVELIBS="$LIBS"
 SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
-CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+CPPFLAGS="-Werror $CPPFLAGS $SSLINCLUDES"
 LIBS="$SSLLIBS"
 LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
@@ -20288,6 +20288,44 @@ _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
 
 $as_echo "#define RUDIMENTS_HAS_SSL_DNSNAME 1" >>confdefs.h
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ASN1_STRING_get0_data" >&5
+$as_echo_n "checking for ASN1_STRING_get0_data... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $SSLINCLUDES"
+LIBS="$SSLLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <openssl/asn1.h>
+int
+main ()
+{
+ASN1_STRING_get0_data(0);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+$as_echo "#define RUDIMENTS_HAS_ASN1_STRING_GET0_DATA 1" >>confdefs.h
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
@@ -33947,7 +33985,7 @@ echo "******************************"
 
 
 
-RUDIMENTS_VERSION="1.0.0"
+RUDIMENTS_VERSION="1.0.1"
 
 
 cat >>confdefs.h <<_ACEOF

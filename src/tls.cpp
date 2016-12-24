@@ -1789,7 +1789,8 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// get signature algorithm
 		pvt->_sigalg=new char[256];
-		OBJ_obj2txt(pvt->_sigalg,256,c->sig_alg->algorithm,0);
+		OBJ_obj2txt(pvt->_sigalg,256,
+				OBJ_nid2obj(X509_get_signature_nid(c)),0);
 		// FIXME: signature algorithm parameters
 
 		// get the issuer
@@ -1809,13 +1810,15 @@ void tlscertificate::setCertificate(void *cert) {
 		// get the public key algorithm
 		EVP_PKEY	*pubkey=X509_get_pubkey(c);
 		pvt->_pkalg=charstring::duplicate(
-				(pubkey)?OBJ_nid2ln(pubkey->type):NULL);
+					(pubkey)?
+					OBJ_nid2ln(EVP_PKEY_base_id(pubkey)):
+					NULL);
 		// FIXME: public key algorithm parameters
 
 		// get the public key
 		pvt->_pklen=EVP_PKEY_size(pubkey);
 		pvt->_pk=(unsigned char *)bytestring::duplicate(
-						pubkey->pkey.ptr,
+						EVP_PKEY_get0(pubkey),
 						pvt->_pklen);
 		pvt->_pkbits=EVP_PKEY_bits(pubkey);
 		EVP_PKEY_free(pubkey);
@@ -1837,13 +1840,18 @@ void tlscertificate::setCertificate(void *cert) {
 				// FIXME: get other extensions
 				if (cur->type==GEN_DNS) {
 					ASN1_IA5STRING	*dnsia5;
-					#ifdef RUDIMENTS_HAS_SSL_DNSNAME
-						dnsia5=cur->d.dNSName;
-					#else
-						dnsia5=cur->d.ia5;
-					#endif
-					char	*dnsname=(char *)
+				#ifdef RUDIMENTS_HAS_SSL_DNSNAME
+					dnsia5=cur->d.dNSName;
+				#else
+					dnsia5=cur->d.ia5;
+				#endif
+				#ifdef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA
+					const unsigned char	*dnsname=
+						ASN1_STRING_get0_data(dnsia5);
+				#else
+					char *dnsname=(char *)
 						ASN1_STRING_data(dnsia5);
+				#endif
 					size_t	asn1len=
 						ASN1_STRING_length(dnsia5);
 					size_t	strlen=

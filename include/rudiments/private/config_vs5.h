@@ -73,6 +73,9 @@
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
 
+/* SSL has ASN1_STRING_get0_data */
+/* #undef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA */
+
 /* libcurl has CURLOPT_SSH_AUTH_TYPES */
 /* #undef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES */
 
