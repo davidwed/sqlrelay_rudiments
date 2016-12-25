@@ -901,10 +901,20 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		// set ciphers
-		if (retval && !charstring::isNullOrEmpty(pvt->_ciphers)) {
-			if (SSL_CTX_set_cipher_list(
+		if (retval) {
+			if (!charstring::isNullOrEmpty(pvt->_ciphers)) {
+				if (SSL_CTX_set_cipher_list(
 					pvt->_ctx,pvt->_ciphers)!=1) {
-				retval=false;
+					retval=false;
+				}
+			} else {
+				// fedora/redhat wants this, and rpmlint
+				// doesn't detect it if I just default
+				// pvt->_ciphers to "PROFILE=SYSTEM"
+				if (SSL_CTX_set_cipher_list(
+					pvt->_ctx,"PROFILE=SYSTEM")!=1) {
+					retval=false;
+				}
 			}
 		}
 

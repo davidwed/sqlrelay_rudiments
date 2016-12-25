@@ -1,3 +1,6 @@
+1.0.2 - added default SSL_CTX_set_cipher_list(ctx,"PROFILE=SYSTEM") for
+		redhat/fedora
+
 1.0.1 - added -Werror to tests for SSL/TLS*_method to exclude deprecated
 		functions
 	updated TLS code to use functions to EVP_PKEY structs if available,

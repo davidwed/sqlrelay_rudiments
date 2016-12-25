@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 1.0.1
+Version: 1.0.2
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -49,7 +49,7 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=%{buildroot}
-# "make install" installs COPYING in: %{buildroot}/usr/share/licenses/rudiments
+# "make install" installs COPYING in: (buildroot)/usr/share/licenses/rudiments
 # But, since we prefer to get it directly from the source code, we'll remove it
 # from the buildroot so it doesn't trigger an "Installed (but unpackaged)
 # file(s) found" error.
@@ -76,6 +76,10 @@ make uninstall-license DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Sun Dec 25 2016 David Muse <david.muse@firstworks.com> - 1.0.2-1
+- Updated to version 1.0.2.
+- Replaced buildroot macro in comment with (buildroot).
+
 * Fri Dec 23 2016 David Muse <david.muse@firstworks.com> - 1.0.1-1
 - Updated to version 1.0.1.
 - Removed "parsers" from description text.
