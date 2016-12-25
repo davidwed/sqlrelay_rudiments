@@ -1027,14 +1027,8 @@ then
 			then
 				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
 				AC_MSG_RESULT(yes)
-			elif ( test "$ID" = "centos" -a "$VERSION_ID" -ge "7" )
-			then
-				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
-				AC_MSG_RESULT(yes)
-			elif ( test "$ID" = "redhat" -a "$VERSION_ID" -ge "7" )
-			then
-				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
-				AC_MSG_RESULT(yes)
+			else
+				AC_MSG_RESULT(no)
 			fi
 		else
 			AC_MSG_RESULT(no)

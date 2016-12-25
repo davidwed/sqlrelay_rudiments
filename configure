@@ -20467,20 +20467,9 @@ $as_echo "#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1" >>confdefs.h
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-			elif ( test "$ID" = "centos" -a "$VERSION_ID" -ge "7" )
-			then
-
-$as_echo "#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1" >>confdefs.h
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-			elif ( test "$ID" = "redhat" -a "$VERSION_ID" -ge "7" )
-			then
-
-$as_echo "#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1" >>confdefs.h
-
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
+			else
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 			fi
 		else
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
