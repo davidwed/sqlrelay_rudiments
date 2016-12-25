@@ -64,6 +64,9 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
+/* Platform requires default TLS ciper of PROFILE=SYSTEM */
+/* #undef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM */
+
 /* ioctl/FIONBIO doesn't work on some systems */
 /* #undef RUDIMENTS_DISABLE_FIONBIO */
 

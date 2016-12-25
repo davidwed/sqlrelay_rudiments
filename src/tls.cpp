@@ -907,15 +907,23 @@ bool tlscontext::reInit(bool isclient) {
 					pvt->_ctx,pvt->_ciphers)!=1) {
 					retval=false;
 				}
-			} else {
-				// fedora/redhat wants this, and rpmlint
-				// doesn't detect it if I just default
+			}
+			#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
+			else {
+				// Fedora>=21/Redhat>=7 wants this, and
+				// rpmlint doesn't detect it if I just default
 				// pvt->_ciphers to "PROFILE=SYSTEM"
+				//
+				// Also, we can't just call it indiscrimiately.
+				// Calling it on a platform that doesn't
+				// support it appears to trash the entire
+				// context.
 				if (SSL_CTX_set_cipher_list(
 					pvt->_ctx,"PROFILE=SYSTEM")!=1) {
 					retval=false;
 				}
 			}
+			#endif
 		}
 
 		// use ephemeral diffie-hellman key exchange

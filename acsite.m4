@@ -1017,6 +1017,24 @@ then
 
 		AC_MSG_CHECKING(for X509_get_signature_nid)
 		FW_TRY_LINK([#include <openssl/x509.h>],[X509_get_signature_nid(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_X509_GET_SIGNATURE_NID,1,SSL has X509_get_signature_nid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(whether platform requires default cipher of PROFILE=SYSTEM)
+		if ( test -r "/etc/os-release" )
+		then
+			ID=`grep "^ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			VERSION_ID=`grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			if ( test "$ID" = "fedora" -a "$VERSION_ID" -ge "21" )
+			then
+				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
+				AC_MSG_RESULT(yes)
+			elif ( test "$ID" = "centos" -a "$VERSION_ID" -ge "7" )
+			then
+				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
+				AC_MSG_RESULT(yes)
+			fi
+		else
+			AC_MSG_RESULT(no)
+		fi
 	fi
 
 	FW_INCLUDES(ssl,[$SSLINCLUDES])

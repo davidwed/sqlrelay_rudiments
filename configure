@@ -20453,6 +20453,32 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether platform requires default cipher of PROFILE=SYSTEM" >&5
+$as_echo_n "checking whether platform requires default cipher of PROFILE=SYSTEM... " >&6; }
+		if ( test -r "/etc/os-release" )
+		then
+			ID=`grep "^ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			VERSION_ID=`grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			if ( test "$ID" = "fedora" -a "$VERSION_ID" -ge "21" )
+			then
+
+$as_echo "#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1" >>confdefs.h
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			elif ( test "$ID" = "centos" -a "$VERSION_ID" -ge "7" )
+			then
+
+$as_echo "#define RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM 1" >>confdefs.h
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			fi
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		fi
 	fi
 
 
