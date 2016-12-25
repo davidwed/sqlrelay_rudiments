@@ -910,9 +910,9 @@ bool tlscontext::reInit(bool isclient) {
 			}
 			#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
 			else {
-				// Fedora>=21/Redhat>=7 wants this, and
-				// rpmlint doesn't detect it if I just default
-				// pvt->_ciphers to "PROFILE=SYSTEM"
+				// Fedora>=21 wants this, and rpmlint doesn't
+				// detect it if I just default pvt->_ciphers to
+				// "PROFILE=SYSTEM"
 				//
 				// Also, we can't just call it indiscrimiately.
 				// Calling it on a platform that doesn't
