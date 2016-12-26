@@ -30,7 +30,7 @@
 	#define SSIZE_MAX 16383
 #endif
 
-#define DEBUG_TLS 1
+//#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
