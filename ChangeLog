@@ -1,5 +1,4 @@
-1.0.2 - added default SSL_CTX_set_cipher_list(ctx,"PROFILE=SYSTEM")
-		for fedora>=21
+1.0.2 - TLS cipher defaults to PROFILE=SYSTEM for fedora>=21 now
 
 1.0.1 - added -Werror to tests for SSL/TLS*_method to exclude deprecated
 		functions

@@ -30,7 +30,7 @@
 	#define SSIZE_MAX 16383
 #endif
 
-//#define DEBUG_TLS 1
+#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
 bool		tls::_initialized=false;
@@ -102,7 +102,11 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_version=NULL;
 	pvt->_cert=NULL;
 	pvt->_pkpwd=NULL;
+	#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
+	pvt->_ciphers="PROFILE=SYSTEM";
+	#else
 	pvt->_ciphers=NULL;
+	#endif
 	pvt->_validatepeer=false;
 	pvt->_depth=9;
 	pvt->_ca=NULL;
@@ -247,7 +251,12 @@ const char *tlscontext::getPrivateKeyPassword() {
 
 void tlscontext::setCiphers(const char *ciphers) {
 	pvt->_dirty=true;
+	#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
+	pvt->_ciphers=(charstring::isNullOrEmpty(ciphers))?
+					"PROFILE=SYSTEM":ciphers;
+	#else
 	pvt->_ciphers=ciphers;
+	#endif
 }
 
 const char *tlscontext::getCiphers() {
@@ -901,29 +910,12 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		// set ciphers
-		if (retval) {
-			if (!charstring::isNullOrEmpty(pvt->_ciphers)) {
-				if (SSL_CTX_set_cipher_list(
-					pvt->_ctx,pvt->_ciphers)!=1) {
-					retval=false;
-				}
+		if (retval && !charstring::isNullOrEmpty(pvt->_ciphers)) {
+			if (SSL_CTX_set_cipher_list(
+					pvt->_ctx,
+					pvt->_ciphers)!=1) {
+				retval=false;
 			}
-			#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
-			else {
-				// Fedora>=21 wants this, and rpmlint doesn't
-				// detect it if I just default pvt->_ciphers to
-				// "PROFILE=SYSTEM"
-				//
-				// Also, we can't just call it indiscrimiately.
-				// Calling it on a platform that doesn't
-				// support it appears to trash the entire
-				// context.
-				if (SSL_CTX_set_cipher_list(
-					pvt->_ctx,"PROFILE=SYSTEM")!=1) {
-					retval=false;
-				}
-			}
-			#endif
 		}
 
 		// use ephemeral diffie-hellman key exchange
