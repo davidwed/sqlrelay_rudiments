@@ -34129,7 +34129,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-SONAME_VERSION_INFO="4:1:0"
+SONAME_VERSION_INFO="4:2:0"
 
 
 
