@@ -774,6 +774,7 @@ enable_option_checking
 enable_small_code
 enable_debug
 enable_profiling
+enable_fortify
 enable_enosys_notify
 with_system_libtool
 enable_inlines
@@ -1488,6 +1489,7 @@ Optional Features:
   --enable-small-code     optimize for small code size
   --enable-debug          compile with -g option
   --enable-profiling      compile with -pg option
+  --enable-fortify              compile with various gcc fortification options
   --enable-enosys-notify  enable runtime notification of methods that set ENOSYS
   --enable-inlines        use inline methods
   --disable-readline       Disable readline support
@@ -2487,6 +2489,14 @@ if test "${enable_profiling+set}" = set; then :
 else
   CXXFLAGS="$CXXFLAGS"
 fi
+
+# Check whether --enable-fortify was given.
+if test "${enable_fortify+set}" = set; then :
+  enableval=$enable_fortify; CXXFLAGS="$CXXFLAGS -O -D_FORTIFY_SOURCE=2 -fstack-protector-strong"
+else
+  CXXFLAGS="$CXXFLAGS"
+fi
+
 
 # Check whether --enable-enosys-notify was given.
 if test "${enable_enosys_notify+set}" = set; then :
