@@ -77,6 +77,7 @@ make install DESTDIR=%{buildroot}
 - Removed call to make uninstall-license.
 - Added a directive to exclude licenses installed by make install.
 - Added Requires to devel subpackage.
+- Escaped percent sign in changelog.
 
 * Sun Dec 25 2016 David Muse <david.muse@firstworks.com> - 1.0.2-1
 - Updated to version 1.0.2.
@@ -120,7 +121,7 @@ make install DESTDIR=%{buildroot}
 
 * Fri May  3 2002 Matthias Saou <matthias.saou@est.une.marmotte.net>
 - Rebuilt against Red Hat Linux 7.3.
-- Added the %{?_smp_mflags} expansion.
+- Added the %%{?_smp_mflags} expansion.
 
 * Mon Apr 15 2002 Matthias Saou <matthias.saou@est.une.marmotte.net> 0.24-fr1
 - Update to 0.24 at last.
