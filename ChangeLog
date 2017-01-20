@@ -1,4 +1,8 @@
 1.0.3 - added --with-fortify configure option
+	prompt::read() no longer prints an extra blank line when hitting return
+		by itself
+	prompt::read() without readline works as expected when hitting ctrl-D
+		now
 
 1.0.2 - TLS cipher defaults to PROFILE=SYSTEM for fedora>=21 now
 
