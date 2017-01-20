@@ -11,6 +11,7 @@
 #include <rudiments/process.h>
 #include <rudiments/sys.h>
 #include <rudiments/snooze.h>
+#include <rudiments/error.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
