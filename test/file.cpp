@@ -39,6 +39,16 @@ int main(int argc, const char **argv) {
 		test("create without perms",
 				!fl.open("testfile.txt",O_RDWR|O_CREAT,0));
 		test("error",error::getErrorNumber()==EINVAL);
+		test("create",
+			fl.open("testfile.txt",O_RDWR|O_CREAT,
+				permissions::evalPermString("rw-rw----")));
+		test("create if already exists",
+			fl.open("testfile.txt",O_RDWR|O_CREAT,
+				permissions::evalPermString("rw-rw----")));
+		test("create with excl",
+			!fl.open("testfile.txt",O_RDWR|O_CREAT|O_EXCL,
+				permissions::evalPermString("rw-rw----")));
+		file::remove("testfile.txt");
 		test("create",fl.create("testfile.txt",
 				permissions::evalPermString("rw-rw----")));
 		test("write",fl.write("hello")==5);
