@@ -3,6 +3,7 @@
 		by itself
 	prompt::read() without readline works as expected when hitting ctrl-D
 		now
+	updated spec file a bit
 
 1.0.2 - TLS cipher defaults to PROFILE=SYSTEM for fedora>=21 now
 

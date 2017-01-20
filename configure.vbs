@@ -390,7 +390,7 @@ privateheaders7="codetree.h "+_
 	"promptincludes.h"
 
 ' version
-RUDIMENTS_VERSION="1.0.2"
+RUDIMENTS_VERSION="1.0.3"
 
 ' paths
 prefix="C:\""Program Files""\Firstworks"
