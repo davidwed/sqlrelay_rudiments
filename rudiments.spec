@@ -72,7 +72,7 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Fri Jan 10 2017 David Muse <david.muse@firstworks.com> - 1.0.3-1
+* Fri Jan 20 2017 David Muse <david.muse@firstworks.com> - 1.0.3-1
 - Updated to version 1.0.3.
 - Removed call to make uninstall-license.
 - Added a directive to exclude licenses installed by make install.
