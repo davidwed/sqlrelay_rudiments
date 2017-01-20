@@ -57,8 +57,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5059409e288c8524927de991d82b11ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91c9342cd435cab56e40e9ecedd4fb36"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#a91c9342cd435cab56e40e9ecedd4fb36">getValue</a> (const char *arg) const </td></tr>
 <tr class="separator:a91c9342cd435cab56e40e9ecedd4fb36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6de185125fd3ed3f47d8e4ec9986a4cb"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#a6de185125fd3ed3f47d8e4ec9986a4cb">getValue</a> (const char *arg, const char *abbr) const </td></tr>
+<tr class="separator:a6de185125fd3ed3f47d8e4ec9986a4cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91fd072eb5abb5972ef62f6ac13093b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#a91fd072eb5abb5972ef62f6ac13093b2">found</a> (const char *arg) const </td></tr>
 <tr class="separator:a91fd072eb5abb5972ef62f6ac13093b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada8cd270b4a5884e3473bf93fa0e897a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommandline.html#ada8cd270b4a5884e3473bf93fa0e897a">found</a> (const char *arg, const char *abbr) const </td></tr>
+<tr class="separator:ada8cd270b4a5884e3473bf93fa0e897a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The commandline class provides methods for parsing command line arguments. </p>
@@ -120,7 +124,37 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns true if "-arg", "--arg" or "--arg=value" was found on the command line and false if it was not found. This is useful for processing command line switches. </p>
+<p>Returns true if "-arg", "--arg" or "--arg=value" was found on the command line and false if it was not found.</p>
+<p>This is useful for processing command line switches. </p>
+
+</div>
+</div>
+<a class="anchor" id="ada8cd270b4a5884e3473bf93fa0e897a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> commandline::found </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>arg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>abbr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns true if the argument or an abbreviated version of it was found on the command line and false if neither were found.</p>
+<p>For example, if "arg" is "recursive" and "abbr" is "r" then it returns true if "-recursive", "--recursive", "-r", or "--r" was found on the command line.</p>
+<p>This is useful for processing command line switches. </p>
 
 </div>
 </div>
@@ -141,10 +175,41 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6de185125fd3ed3f47d8e4ec9986a4cb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* commandline::getValue </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>arg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>abbr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Looks for the argument or an abbreviated version of it on the command line and returns the value.</p>
+<p>For example, if "arg" is "name" and "abbr" is "n" then it looks for either: </p><pre class="fragment">-name value
+</pre><p> or &ndash;name=value or -n value or &ndash;n==value</p>
+<p>on the command line and returns value.</p>
+<p>If both "arg" and "abbr" are found then the value for "arg" is returned. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 8 2016 17:18:51 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 20 2017 03:23:20 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

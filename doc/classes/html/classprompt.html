@@ -215,7 +215,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Displays the prompt configured by <a class="el" href="classprompt.html#ae2484abe69138d939b0c7a0b6d2972e2">setPrompt()</a>, reads a line from standard input, queues the line in memory, and calls <a class="el" href="classprompt.html#a50c2df3cd66f6e8b2b3c1a45216aab07">flushHistory()</a> if the queue has grown beyond the number of lines configured by <a class="el" href="classprompt.html#ac538673d1f07f8338f866e5562bde2a8">getMaxHistoryQueue()</a>.</p>
-<p>Returns the line that was read from standard input.</p>
+<p>Returns the line that was read from standard input without the trailing carriage return and/or line feed.</p>
+<p>Returns an empty string if return/enter is hit by itself.</p>
+<p>Returns NULL if ctrl-D was hit.</p>
 <p>Note that return value is allocated internally and returned. The calling program must free the buffer. </p>
 
 </div>
@@ -298,7 +300,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 8 2016 17:18:51 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 20 2017 03:23:20 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>
