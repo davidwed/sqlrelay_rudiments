@@ -50,14 +50,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  O_TRUNC - Truncate the file.  Requires O_WRONLY or O_RDWR.
 		 *
-		 *  O_CREAT - Creates the file if it doesn't exist.  See O_EXCL.
-		 *
-		 *  O_EXCL - Requires O_CREAT.  Causes O_CREAT to fail if the
-		 *  		file already exists.  Without O_EXCL, O_CREAT
-		 *  		will succeed, and just open the file, if the
-		 *  		file already exists.
-		 *
 		 *  Many platforms support additional, platform-specific flags.
+		 *
+		 *  Note that since this method doesn't allow file permissions
+		 *  to be set, attempts to open the file with the O_CREAT flag
+		 *  (which creates the file if it doesn't exist) will fail.
 		 *
 		 *  Returns true on success and false on failure. */
 		virtual bool	open(const char *name, int32_t flags);
@@ -88,6 +85,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  If "flags" contains O_CREAT and the file doesn't already
 		 *  exist, then it will be created with permissions "perms".
+		 *  Note that if "perms" is 0 then the method will fail.
 		 *
 		 *  Returns true on success and false on failure. */
 		virtual bool	open(const char *name,
@@ -97,6 +95,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		/** Creates the file "name" with permissions "perms".  If the
 		 *  file already exists, it will be truncated.  Returns true on
 		 *  success and false on failure.
+		 *
+		 *  Note that if "perms" is 0 then the method will fail.
 		 *
 		 *  Equivalent to calling:
 		 *  open(name,O_CREAT|O_WRONLY|O_TRUNC|O_BINARY,perms) */

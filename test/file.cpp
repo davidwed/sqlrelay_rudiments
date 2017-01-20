@@ -26,7 +26,18 @@ int main(int argc, const char **argv) {
 
 		char	*osname=sys::getOperatingSystemName();
 
-
+		error::clearError();
+		test("create without perms",
+				!fl.create("testfile.txt",0));
+		test("error",error::getErrorNumber()==EINVAL);
+		error::clearError();
+		test("create without perms",
+				!fl.open("testfile.txt",O_RDWR|O_CREAT));
+		test("error",error::getErrorNumber()==EINVAL);
+		error::clearError();
+		test("create without perms",
+				!fl.open("testfile.txt",O_RDWR|O_CREAT,0));
+		test("error",error::getErrorNumber()==EINVAL);
 		test("create",fl.create("testfile.txt",
 				permissions::evalPermString("rw-rw----")));
 		test("write",fl.write("hello")==5);
