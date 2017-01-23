@@ -173,6 +173,12 @@ bool file::createFile(const char *name, mode_t perms) {
 bool file::lowLevelOpen(const char *name, int32_t flags,
 				mode_t perms, bool useperms) {
 
+	// don't allow create without perms
+	if (flags&O_CREAT && (!perms || !useperms)) {
+		error::setErrorNumber(EINVAL);
+		return false;
+	}
+
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		delete[] pvt->_name;
 		pvt->_name=charstring::duplicate(name);

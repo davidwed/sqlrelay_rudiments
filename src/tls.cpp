@@ -102,7 +102,11 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_version=NULL;
 	pvt->_cert=NULL;
 	pvt->_pkpwd=NULL;
+	#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
+	pvt->_ciphers="PROFILE=SYSTEM";
+	#else
 	pvt->_ciphers=NULL;
+	#endif
 	pvt->_validatepeer=false;
 	pvt->_depth=9;
 	pvt->_ca=NULL;
@@ -247,7 +251,12 @@ const char *tlscontext::getPrivateKeyPassword() {
 
 void tlscontext::setCiphers(const char *ciphers) {
 	pvt->_dirty=true;
+	#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
+	pvt->_ciphers=(charstring::isNullOrEmpty(ciphers))?
+					"PROFILE=SYSTEM":ciphers;
+	#else
 	pvt->_ciphers=ciphers;
+	#endif
 }
 
 const char *tlscontext::getCiphers() {
@@ -903,7 +912,8 @@ bool tlscontext::reInit(bool isclient) {
 		// set ciphers
 		if (retval && !charstring::isNullOrEmpty(pvt->_ciphers)) {
 			if (SSL_CTX_set_cipher_list(
-					pvt->_ctx,pvt->_ciphers)!=1) {
+					pvt->_ctx,
+					pvt->_ciphers)!=1) {
 				retval=false;
 			}
 		}
@@ -1789,7 +1799,13 @@ void tlscertificate::setCertificate(void *cert) {
 
 		// get signature algorithm
 		pvt->_sigalg=new char[256];
-		OBJ_obj2txt(pvt->_sigalg,256,c->sig_alg->algorithm,0);
+		OBJ_obj2txt(pvt->_sigalg,256,
+			#ifdef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID
+				OBJ_nid2obj(X509_get_signature_nid(c)),
+			#else
+				c->sig_alg->algorithm,
+			#endif
+				0);
 		// FIXME: signature algorithm parameters
 
 		// get the issuer
@@ -1809,14 +1825,25 @@ void tlscertificate::setCertificate(void *cert) {
 		// get the public key algorithm
 		EVP_PKEY	*pubkey=X509_get_pubkey(c);
 		pvt->_pkalg=charstring::duplicate(
-				(pubkey)?OBJ_nid2ln(pubkey->type):NULL);
+					(pubkey)?
+					OBJ_nid2ln(
+					#ifdef RUDIMENTS_HAS_EVP_PKEY_BASE_ID
+						EVP_PKEY_base_id(pubkey)
+					#else
+						pubkey->type
+					#endif
+					):NULL);
 		// FIXME: public key algorithm parameters
 
 		// get the public key
 		pvt->_pklen=EVP_PKEY_size(pubkey);
 		pvt->_pk=(unsigned char *)bytestring::duplicate(
-						pubkey->pkey.ptr,
-						pvt->_pklen);
+					#ifdef RUDIMENTS_HAS_EVP_PKEY_GET0
+						EVP_PKEY_get0(pubkey)
+					#else
+						pubkey->pkey.ptr
+					#endif
+					,pvt->_pklen);
 		pvt->_pkbits=EVP_PKEY_bits(pubkey);
 		EVP_PKEY_free(pubkey);
 
@@ -1837,13 +1864,18 @@ void tlscertificate::setCertificate(void *cert) {
 				// FIXME: get other extensions
 				if (cur->type==GEN_DNS) {
 					ASN1_IA5STRING	*dnsia5;
-					#ifdef RUDIMENTS_HAS_SSL_DNSNAME
-						dnsia5=cur->d.dNSName;
-					#else
-						dnsia5=cur->d.ia5;
-					#endif
-					char	*dnsname=(char *)
+				#ifdef RUDIMENTS_HAS_SSL_DNSNAME
+					dnsia5=cur->d.dNSName;
+				#else
+					dnsia5=cur->d.ia5;
+				#endif
+				#ifdef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA
+					const unsigned char	*dnsname=
+						ASN1_STRING_get0_data(dnsia5);
+				#else
+					char *dnsname=(char *)
 						ASN1_STRING_data(dnsia5);
+				#endif
 					size_t	asn1len=
 						ASN1_STRING_length(dnsia5);
 					size_t	strlen=
@@ -1851,7 +1883,7 @@ void tlscertificate::setCertificate(void *cert) {
 					if (asn1len==strlen) {
 						pvt->_san.append(
 							charstring::duplicate(
-								dnsname));
+							(const char *)dnsname));
 					}
 				}
 			}

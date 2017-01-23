@@ -16,8 +16,8 @@ int main(int argc, const char **argv) {
 	// process the command line
 	commandline	cmdl(argc,argv);
 
-	if (cmdl.found("help")) {
-		stdoutput.printf("tlsserver [-port port] [-version version] [-cert cert] [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
+	if (cmdl.found("help") || !cmdl.found("cert")) {
+		stdoutput.printf("tlsserver [-port port] [-version version] -cert cert [-ciphers ciphers] [-validate (yes|no)] [-depth depth] [-ca ca] [-commonname name]\n");
 		process::exit(0);
 	}
 
@@ -29,10 +29,7 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("version")) {
 		version=cmdl.getValue("version");
 	}
-	const char	*cert=NULL;
-	if (cmdl.found("cert")) {
-		cert=cmdl.getValue("cert");
-	}
+	const char	*cert=cmdl.getValue("cert");
 	const char	*ciphers=NULL;
 	if (cmdl.found("ciphers")) {
 		ciphers=cmdl.getValue("ciphers");

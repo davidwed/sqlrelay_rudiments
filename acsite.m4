@@ -983,28 +983,56 @@ then
 		fi
 
 		AC_MSG_CHECKING(for TLSv1_2_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLSv1_2_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLSV1_2_METHOD,1,SSL has TLSv1_2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLSv1_2_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLSV1_2_METHOD,1,SSL has TLSv1_2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for TLSv1_1_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLSv1_1_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLSV1_1_METHOD,1,SSL has TLSv1_1_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLSv1_1_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLSV1_1_METHOD,1,SSL has TLSv1_1_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for TLSv1_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLSv1_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLSV1_METHOD,1,SSL has TLSv1_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLSv1_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLSV1_METHOD,1,SSL has TLSv1_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for TLS_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLS_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLS_METHOD,1,SSL has TLS_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=TLS_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLS_METHOD,1,SSL has TLS_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for SSLv3_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv3_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV3_METHOD,1,SSL has SSLv3_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv3_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV3_METHOD,1,SSL has SSLv3_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for SSLv23_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv23_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV23_METHOD,1,SSL has SSLv23_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv23_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV23_METHOD,1,SSL has SSLv23_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for SSLv2_method)
-		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv2_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV2_METHOD,1,SSL has SSLv2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv2_method();],[-Werror $CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV2_METHOD,1,SSL has SSLv2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
 		AC_MSG_CHECKING(for dNSName)
 		FW_TRY_LINK([#include <openssl/x509v3.h>],[GENERAL_NAME g; g.d.dNSName=0;],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSL_DNSNAME,1,SSL has dNSName) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for EVP_PKEY_base_id)
+		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_PKEY_base_id(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_PKEY_BASE_ID,1,SSL has EVP_PKEY_base_id) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for EVP_PKEY_get0)
+		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_PKEY_get0(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_PKEY_GET0,1,SSL has EVP_PKEY_get0) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for ASN1_STRING_get0_data)
+		FW_TRY_LINK([#include <openssl/asn1.h>],[ASN1_STRING_get0_data(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_ASN1_STRING_GET0_DATA,1,SSL has ASN1_STRING_get0_data) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for X509_get_signature_nid)
+		FW_TRY_LINK([#include <openssl/x509.h>],[X509_get_signature_nid(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_X509_GET_SIGNATURE_NID,1,SSL has X509_get_signature_nid) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(whether platform requires default cipher of PROFILE=SYSTEM)
+		if ( test -r "/etc/os-release" )
+		then
+			ID=`grep "^ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			VERSION_ID=`grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			if ( test "$ID" = "fedora" -a "$VERSION_ID" -ge "21" )
+			then
+				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
+				AC_MSG_RESULT(yes)
+			else
+				AC_MSG_RESULT(no)
+			fi
+		else
+			AC_MSG_RESULT(no)
+		fi
 	fi
 
 	FW_INCLUDES(ssl,[$SSLINCLUDES])

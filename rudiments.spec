@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 1.0.0
+Version: 1.0.3
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -8,22 +8,22 @@ License: LGPLv2
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-BuildRequires: readline-devel,pcre-devel,openssl-devel,libcurl-devel,krb5-devel
+BuildRequires: readline-devel, pcre-devel, openssl-devel, libcurl-devel, krb5-devel
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
-frameworks for processes, threads, clients, servers, parsers, loggers and
-compilers.  It also includes data structures for buffers, arrays, linked lists
-and dictionaries, and utility classes for processing text and binary data,
-regular expressions, random numbers, encryption, date and time, system
-information,  files, directories, file-systems, inter-process communication,
-dynamic libraries, and XML.
+frameworks for processes, threads, clients, servers, loggers and compilers.  It
+also includes data structures for buffers, arrays, linked lists and
+dictionaries, and utility classes for processing text and binary data, regular
+expressions, random numbers, encryption, date and time, system information,
+files, directories, file-systems, inter-process communication, dynamic
+libraries, and XML.
 
 
 %package devel
 License: LGPLv2
 Summary: Development files for rudiments
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}, readline-devel, openssl-devel, libcurl-devel, krb5-devel
 
 %description devel
 Development files for rudiments.
@@ -33,7 +33,6 @@ Development files for rudiments.
 # Example code is FSFUL.
 License: GPLv2 and FSFUL
 Summary: Documentation for rudiments
-Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildArch: noarch
 
 %description doc
@@ -60,6 +59,7 @@ make install DESTDIR=%{buildroot}
 %doc AUTHORS ChangeLog
 %license COPYING
 %exclude %{_libdir}/librudiments.la
+%exclude %{_datadir}/licenses/rudiments
 
 %files devel
 %{_includedir}/rudiments
@@ -72,6 +72,22 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Fri Jan 20 2017 David Muse <david.muse@firstworks.com> - 1.0.3-1
+- Updated to version 1.0.3.
+- Removed call to make uninstall-license.
+- Added a directive to exclude licenses installed by make install.
+- Added Requires to devel subpackage.
+- Escaped percent sign in changelog.
+
+* Sun Dec 25 2016 David Muse <david.muse@firstworks.com> - 1.0.2-1
+- Updated to version 1.0.2.
+- Replaced buildroot macro in comment with (buildroot).
+
+* Fri Dec 23 2016 David Muse <david.muse@firstworks.com> - 1.0.1-1
+- Updated to version 1.0.1.
+- Removed "parsers" from description text.
+- Removed Requires from doc package.
+
 * Tue Jul 26 2016 David Muse <dmuse@firstworks.com> - 0.56.0-1
 - Added readline dependency
 
@@ -105,7 +121,7 @@ make install DESTDIR=%{buildroot}
 
 * Fri May  3 2002 Matthias Saou <matthias.saou@est.une.marmotte.net>
 - Rebuilt against Red Hat Linux 7.3.
-- Added the %{?_smp_mflags} expansion.
+- Added the %%{?_smp_mflags} expansion.
 
 * Mon Apr 15 2002 Matthias Saou <matthias.saou@est.une.marmotte.net> 0.24-fr1
 - Update to 0.24 at last.

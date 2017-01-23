@@ -88,7 +88,12 @@ class RUDIMENTS_DLLSPEC prompt {
 		 *  calls flushHistory() if the queue has grown beyond the
 		 *  number of lines configured by getMaxHistoryQueue().
 		 *
-		 *  Returns the line that was read from standard input.
+		 *  Returns the line that was read from standard input without
+		 *  the trailing carriage return and/or line feed.
+		 *
+		 *  Returns an empty string if return/enter is hit by itself.
+		 *
+		 *  Returns NULL if ctrl-D was hit.
 		 *
 		 *  Note that return value is allocated internally and returned.
 		 *  The calling program must free the buffer. */

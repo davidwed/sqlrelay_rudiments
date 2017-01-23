@@ -61,8 +61,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa480e88f146457e373985530ce8dd1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af30aec3a16851598ad69b7fd17ba487f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate</a> ()</td></tr>
 <tr class="separator:af30aec3a16851598ad69b7fd17ba487f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b4851b435f8f6400bc214fc811e52c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemorypool.html#a7b4851b435f8f6400bc214fc811e52c6">print</a> ()</td></tr>
-<tr class="separator:a7b4851b435f8f6400bc214fc811e52c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The memorypool class provides methods for creating and using a memory pool.</p>
@@ -98,8 +96,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Creates a memory pool of initial size "initialsize".</p>
-<p>When the pool needs to grow, it will grow by at least "increment" bytes. If more than increment bytes are requested, it will grow by that amount instead.</p>
-<p>When <a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate()</a> has been called "resizeinterval" times, it will evaluate the average amount of memory malloc'ed (since the last time it did this) and resize the initial buffer size to this size. </p>
+<p>When the pool needs to grow, it will grow by at least "increment" bytes. If more than "increment" bytes are requested, it will grow by that amount instead.</p>
+<p>When <a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate()</a> has been called "resizeinterval" times, it will evaluate the average amount of memory allocated (since the last time it did this) and resize the initial buffer size to this size. </p>
 
 </div>
 </div>
@@ -166,30 +164,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Shrinks the pool back down to it's initial size and frees all previously allocated blocks. </p>
-
-</div>
-</div>
-<a class="anchor" id="a7b4851b435f8f6400bc214fc811e52c6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void memorypool::print </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Prints a visual representation of the pool. </p>
+<p>Shrinks the pool back down to it's initial size and frees all previously allocated blocks.</p>
+<p>When <a class="el" href="classmemorypool.html#af30aec3a16851598ad69b7fd17ba487f">deallocate()</a> has been called "resizeinterval" times (see constructor), it evaluates the average amount of memory allocated (since the last time it did this) and resizes the initial buffer size to this size. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 8 2016 17:18:51 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 20 2017 03:23:20 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

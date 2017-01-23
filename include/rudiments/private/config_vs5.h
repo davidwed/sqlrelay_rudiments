@@ -64,6 +64,9 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
+/* Platform requires default TLS ciper of PROFILE=SYSTEM */
+/* #undef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM */
+
 /* ioctl/FIONBIO doesn't work on some systems */
 /* #undef RUDIMENTS_DISABLE_FIONBIO */
 
@@ -72,6 +75,9 @@
 
 /* getsockopt has a void * on most systems */
 #define RUDIMENTS_GETSOCKOPT_OPTVAL_TYPE char *
+
+/* SSL has ASN1_STRING_get0_data */
+/* #undef RUDIMENTS_HAS_ASN1_STRING_GET0_DATA */
 
 /* libcurl has CURLOPT_SSH_AUTH_TYPES */
 /* #undef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES */
@@ -84,6 +90,12 @@
 
 /* libcurl has curl_multi_timeout */
 /* #undef RUDIMENTS_HAS_CURL_MULTI_TIMEOUT */
+
+/* SSL has EVP_PKEY_base_id */
+/* #undef RUDIMENTS_HAS_EVP_PKEY_BASE_ID */
+
+/* SSL has EVP_PKEY_get0 */
+/* #undef RUDIMENTS_HAS_EVP_PKEY_GET0 */
 
 /* Rudiments supports GSS */
 /* #undef RUDIMENTS_HAS_GSS */
@@ -174,6 +186,9 @@
 
 /* Some systems have tzset */
 /* #undef RUDIMENTS_HAS_TZSET */
+
+/* SSL has X509_get_signature_nid */
+/* #undef RUDIMENTS_HAS_X509_GET_SIGNATURE_NID */
 
 /* Some systems have _get_timezone */
 /* #undef RUDIMENTS_HAS__GET_TIMEZONE */

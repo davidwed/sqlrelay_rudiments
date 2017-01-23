@@ -110,7 +110,7 @@ char *prompt::read() {
 		char	*retval=readline(pvt->_prompt);
 
 		// queue the line to be flushed to the history
-		if (!charstring::isNullOrEmpty(retval)) {
+		if (retval && retval[0]) {
 
 			add_history(retval);
 			pvt->_queue++;
@@ -120,8 +120,7 @@ char *prompt::read() {
 				pvt->_queue==pvt->_maxhistoryqueue) {
 				flushHistory();
 			}
-		} else {
-			stdoutput.write('\n');
+
 		}
 
 	#else
@@ -131,12 +130,21 @@ char *prompt::read() {
 		size_t	retvalsize=sys::getMaxLineLength();
 		char	*retval=new char[retvalsize];
 		ssize_t	bytes=stdinput.read(retval,retvalsize-1);
-		retval[bytes-1]='\0';
-		#ifdef ADD_NEWLINE_AFTER_READ_FROM_STDIN
-			stdoutput.write('\n');
-		#endif
+		if (bytes>0) {
+			retval[bytes-1]='\0';
+			#ifdef ADD_NEWLINE_AFTER_READ_FROM_STDIN
+				stdoutput.write('\n');
+			#endif
+		} else {
+			delete[] retval;
+			retval=NULL;
+		}
 
 	#endif
+
+	if (!retval) {
+		stdoutput.write('\n');
+	}
 
 	return retval;
 }
