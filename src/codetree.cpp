@@ -71,7 +71,6 @@ static const char	NONE='n';
 static const char	YES='y';
 
 static const char	STX=0x2;
-static const char	ETX=0x3;
 
 class codetreegrammarprivate {
 	friend class codetreegrammar;
@@ -747,22 +746,10 @@ bool codetree::compareValue(const char *code,
 		}
 	}
 
-	// next, check for an end-of-line character
-	size_t	lengthtocompare=*valuelength;
-	bool	compareend=false;
-	if (value && value[*valuelength]==ETX) {
-		lengthtocompare--;
-	}
-
 	// see if the code matches this value
-	if (!((casesensitive && casesensitive[0]=='f')?
-		!charstring::compareIgnoringCase(value,code,lengthtocompare):
-		!charstring::compare(value,code,lengthtocompare))) {
-		return false;
-	}
-
-	// if we have to check the end, then do that now
-	return (compareend)?(*(code+lengthtocompare)=='\0'):true;
+	return (casesensitive && casesensitive[0]=='f')?
+		!charstring::compareIgnoringCase(value,code,*valuelength):
+		!charstring::compare(value,code,*valuelength);
 }
 
 bool codetree::parseLetter(xmldomnode *grammarnode,
