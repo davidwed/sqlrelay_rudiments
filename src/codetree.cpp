@@ -71,6 +71,7 @@ static const char	NONE='n';
 static const char	YES='y';
 
 static const char	STX=0x2;
+static const char	EOT=0x4;
 
 class codetreegrammarprivate {
 	friend class codetreegrammar;
@@ -746,10 +747,23 @@ bool codetree::compareValue(const char *code,
 		}
 	}
 
+	// see if we need to look for the end-of-transmission
+	bool	lookforeot=false;
+	size_t	lengthtocompare=*valuelength;
+	if (value && value[(*valuelength)-1]==EOT) {
+		lookforeot=true;
+		lengthtocompare--;
+	}
+
 	// see if the code matches this value
-	return (casesensitive && casesensitive[0]=='f')?
-		!charstring::compareIgnoringCase(value,code,*valuelength):
-		!charstring::compare(value,code,*valuelength);
+	if (!((casesensitive && casesensitive[0]=='f')?
+		!charstring::compareIgnoringCase(value,code,lengthtocompare):
+		!charstring::compare(value,code,lengthtocompare))) {
+		return false;
+	}
+
+	// if we must look for the end-of-transmission...
+	return (lookforeot)?(*(code+*valuelength)=='\0'):true;
 }
 
 bool codetree::parseLetter(xmldomnode *grammarnode,

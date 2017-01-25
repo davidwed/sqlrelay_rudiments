@@ -149,7 +149,8 @@ class codetreeprivate;
  *     value - The text of the terminal.  Ascii characters or XML entities
  *             can be used.  To specify the end of a line, use XML entity
  *             &#10; (newline).  To specify the beginning of a line, use
- *             XML entity &#2; (start of text).
+ *             XML entity &#2; (start of text).  To specify the end of all
+ *             code, use XML entity &#4; (end of transmission).
  *
  *     case - Whether the terminal is case-sensitive or not.  Acceptable values
  *            are true or false.  Defaults to false.
