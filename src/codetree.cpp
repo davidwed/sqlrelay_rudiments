@@ -763,7 +763,7 @@ bool codetree::compareValue(const char *code,
 	}
 
 	// if we must look for the end-of-transmission...
-	return (lookforeot)?(*(code+*valuelength)=='\0'):true;
+	return (lookforeot)?(*(code+lengthtocompare)=='\0'):true;
 }
 
 bool codetree::parseLetter(xmldomnode *grammarnode,
