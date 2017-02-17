@@ -40,7 +40,11 @@ Documentation for rudiments.
 
 
 %prep
+%if 0%{?rhel} <= 6
+%setup -q
+%else
 %autosetup -p1
+%endif
 
 %build
 chmod -x include/rudiments/private/permissions.h
