@@ -57,9 +57,13 @@ make install DESTDIR=%{buildroot}
 %files
 %{_libdir}/librudiments.so.*
 %doc AUTHORS ChangeLog
-%license COPYING
 %exclude %{_libdir}/librudiments.la
+%if 0%{?fedora}
+%license COPYING
 %exclude %{_datadir}/licenses/rudiments
+%else
+%{_datadir}/licenses/rudiments
+%endif
 
 %files devel
 %{_includedir}/rudiments
@@ -72,6 +76,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Thu Feb 16 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
+- Added dist-tag conditionals.
+
 * Wed Jan 25 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
 - Updated to version 1.0.4.
 
