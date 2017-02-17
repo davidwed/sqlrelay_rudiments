@@ -58,11 +58,11 @@ make install DESTDIR=%{buildroot}
 %{_libdir}/librudiments.so.*
 %doc AUTHORS ChangeLog
 %exclude %{_libdir}/librudiments.la
-%if 0%{?rhel}
-%{_datadir}/licenses/rudiments
-%else
+%if 0%{?fedora}
 %license COPYING
 %exclude %{_datadir}/licenses/rudiments
+%else
+%{_datadir}/licenses/rudiments
 %endif
 
 %files devel
@@ -77,7 +77,7 @@ make install DESTDIR=%{buildroot}
 
 %changelog
 * Thu Feb 16 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
-- Added rhel conditional.
+- Added fedora dist-tag conditional.
 
 * Wed Jan 25 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
 - Updated to version 1.0.4.
