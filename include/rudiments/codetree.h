@@ -51,6 +51,11 @@ class codetreeprivate;
  *            name used to represent the nonterminal in the XML representation
  *            of the code.
  *
+ *    alias - Options.  A string to use in place of the name in the XML
+ *            representation of the code.  May be the same as the name of
+ *            another definition.  Useful when you want one definition to
+ *            masquerade as another.
+ *
  *    start - Optional.  A string to be printed before the nonterminal when
  *            writing it back out.
  *

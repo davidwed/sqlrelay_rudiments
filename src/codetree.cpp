@@ -61,6 +61,7 @@ static const char	*END="e";
 static const char	*VALUE="v";
 static const char	*CASE="c";
 static const char	*RECURSIVE="r";
+static const char	*ALIAS="a";
 
 static const char	INLINE='i';
 static const char	LITERAL='l';
@@ -960,8 +961,12 @@ bool codetree::parseNonTerminal(xmldomnode *grammarnode,
 		return false;
 	}
 
-	// get the name
+	// get the name (or alias)
 	const char	*name=def->getAttributeValue(NAME);
+	const char	*alias=def->getAttributeValue(ALIAS);
+	if (alias) {
+		name=alias;
+	}
 
 	// some variables...
 	xmldomnode	*codenode=NULL;

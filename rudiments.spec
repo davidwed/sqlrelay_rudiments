@@ -40,11 +40,7 @@ Documentation for rudiments.
 
 
 %prep
-%if 0%{?rhel} <= 6
-%setup -q
-%else
 %autosetup -p1
-%endif
 
 %build
 chmod -x include/rudiments/private/permissions.h
@@ -62,11 +58,11 @@ make install DESTDIR=%{buildroot}
 %{_libdir}/librudiments.so.*
 %doc AUTHORS ChangeLog
 %exclude %{_libdir}/librudiments.la
-%if 0%{?fedora}
+%if 0%{?rhel}
+%{_datadir}/licenses/rudiments
+%else
 %license COPYING
 %exclude %{_datadir}/licenses/rudiments
-%else
-%{_datadir}/licenses/rudiments
 %endif
 
 %files devel
@@ -81,7 +77,7 @@ make install DESTDIR=%{buildroot}
 
 %changelog
 * Thu Feb 16 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
-- Added dist-tag conditionals.
+- Added rhel conditional.
 
 * Wed Jan 25 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
 - Updated to version 1.0.4.

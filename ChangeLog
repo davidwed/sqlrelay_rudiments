@@ -1,5 +1,6 @@
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class
+	added alias support to codetree class
 
 1.0.3 - added --with-fortify configure option
 	prompt::read() no longer prints an extra blank line when hitting return
