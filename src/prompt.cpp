@@ -9,6 +9,8 @@
 #include <rudiments/stdio.h>
 
 #ifdef HAVE_LIBEDIT
+	// some versions of libedit don't include stdio.h, so FILE is undefined
+	#include <stdio.h>
 	#include <editline/readline.h>
 #endif
 
