@@ -8,10 +8,15 @@
 #include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 
-#ifdef HAVE_LIBEDIT
+#ifdef RUDIMENTS_HAVE_LIBEDIT
 	// some versions of libedit don't include stdio.h, so FILE is undefined
 	#include <stdio.h>
 	#include <editline/readline.h>
+	#ifdef RUDIMENTS_LIBEDIT_UNDEFINED_HISTORY_TRUNCATE_FILE
+		extern "C" {
+			extern int history_truncate_file(const char *, int);
+		}
+	#endif
 #endif
 
 class promptprivate {
@@ -77,7 +82,7 @@ const char *prompt::getPrompt() {
 }
 
 char *prompt::read() {
-	#ifdef HAVE_LIBEDIT
+	#ifdef RUDIMENTS_HAVE_LIBEDIT
 
 		// read the history file if we haven't already
 		if (!charstring::isNullOrEmpty(pvt->_historyfilename) &&
@@ -140,7 +145,7 @@ char *prompt::read() {
 }
 
 void prompt::flushHistory() {
-	#ifdef HAVE_LIBEDIT
+	#ifdef RUDIMENTS_HAVE_LIBEDIT
 		if (!charstring::isNullOrEmpty(pvt->_historyfilename)) {
 			write_history(pvt->_historyfilename);
 			if (pvt->_maxhistorylines) {

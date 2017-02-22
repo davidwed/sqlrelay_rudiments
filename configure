@@ -33561,6 +33561,7 @@ $as_echo "no" >&6; }
 		LIBEDITINCLUDES="$LIBEDITINCLUDES $TERMCAPINCLUDES"
 
 		LIBEDITLIBS="$LIBEDITLIBS $TERMCAPLIBS"
+		TEMPLIBEDITLIBS=$LIBEDITLIBS
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether libedit/termcap works" >&5
 $as_echo_n "checking whether libedit/termcap works... " >&6; }
@@ -33574,12 +33575,13 @@ LD_LIBRARY_PATH=""
 export LD_LIBRARY_PATH
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <stdlib.h>
-	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }
+#include <stdio.h>
+#include <editline/readline.h>
+
 int
 main ()
 {
-readline(NULL);
+add_history(NULL); read_history(NULL); write_history(NULL); history_truncate_file(NULL,0); readline(NULL);
   ;
   return 0;
 }
@@ -33598,6 +33600,56 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
+
+		if ( test -z "$LIBEDITLIBS" )
+		then
+			LIBEDITLIBS=$TEMPLIBEDITLIBS
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for undefined history_truncate_file" >&5
+$as_echo_n "checking for undefined history_truncate_file... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$LIBEDITINCLUDES"
+LIBS="$LIBEDITLIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdio.h>
+#include <editline/readline.h>
+extern "C" {
+extern int history_truncate_file(const char *, int);
+}
+
+int
+main ()
+{
+add_history(NULL); read_history(NULL); write_history(NULL); history_truncate_file(NULL,0); readline(NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; };
+cat >>confdefs.h <<_ACEOF
+#define RUDIMENTS_LIBEDIT_UNDEFINED_HISTORY_TRUNCATE_FILE 1
+_ACEOF
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }; LIBEDITLIBS=""
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+		fi
 	fi
 
 
@@ -33607,7 +33659,7 @@ export LD_LIBRARY_PATH
 	then
 
 cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBEDIT 1
+#define RUDIMENTS_HAVE_LIBEDIT 1
 _ACEOF
 
 	fi
