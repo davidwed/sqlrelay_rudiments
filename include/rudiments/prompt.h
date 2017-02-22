@@ -12,7 +12,7 @@ class promptprivate;
  *  user input.
  *
  *  Input history and tab-completion are supported if the underlying system
- *  supports them.  On Unix-like systems, this is enabled by the readline
+ *  supports them.  On Unix-like systems, this is enabled by the libedit
  *  library.  On many Windows systems, this is provided by the OS. */
 class RUDIMENTS_DLLSPEC prompt {
 	public:
@@ -30,7 +30,7 @@ class RUDIMENTS_DLLSPEC prompt {
 		 *  the user's home directory.
 		 *
 		 *  Does nothing if rudiments is compiled without support for
-		 *  readline. */
+		 *  libedit. */
 		void	setHistoryFile(const char *filename);
 
 		/** Returns the name of the file used to store the input
@@ -48,7 +48,7 @@ class RUDIMENTS_DLLSPEC prompt {
  		 *  truncated during calls to flushHistory().
 		 *
 		 *  Does nothing if rudiments is compiled without support for
-		 *  readline. */
+		 *  libedit. */
 		void	setMaxHistoryLines(uint32_t lines);
 
 		/** Returns the maximum number of lines to store in the input
@@ -67,7 +67,7 @@ class RUDIMENTS_DLLSPEC prompt {
  		 *  deleted.
 		 *
 		 *  Does nothing if rudiments is compiled without support for
-		 *  readline. */
+		 *  libedit. */
 		void	setMaxHistoryQueue(uint32_t queue);
 
 		/** Returns the maximum number of lines of input history that

@@ -15,8 +15,8 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
-/* Do we have readline */
-/* #undef HAVE_READLINE */
+/* Do we have libedit */
+/* #undef HAVE_LIBEDIT */
 
 /* Define to 1 if you have the <stdint.h> header file. */
 /* #undef HAVE_STDINT_H */

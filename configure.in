@@ -35,18 +35,18 @@ AC_ARG_WITH(pthread-prefix,
 	[  --with-pthread-prefix   Location of pthread library],
 	PTHREADPATH="$withval",
 	PTHREADPATH="")
-AC_ARG_ENABLE(readline,
-	[  --disable-readline       Disable readline support],
-	ENABLE_RUDIMENTS_READLINE="no",
-	ENABLE_RUDIMENTS_READLINE="yes")
-AC_ARG_WITH(readline-includes,
-	[  --with-readline-includes readline includes],
-	READLINEINCLUDES="$withval",
-	READLINEINCLUDES="")
-AC_ARG_WITH(readline-libs,
-	[  --with-readline-libs     readline libraries],
-	READLINELIBS="$withval",
-	READLINELIBS="")
+AC_ARG_ENABLE(libedit,
+	[  --disable-libedit       Disable libedit support],
+	ENABLE_RUDIMENTS_LIBEDIT="no",
+	ENABLE_RUDIMENTS_LIBEDIT="yes")
+AC_ARG_WITH(libedit-includes,
+	[  --with-libedit-includes libedit includes],
+	LIBEDITINCLUDES="$withval",
+	LIBEDITINCLUDES="")
+AC_ARG_WITH(libedit-libs,
+	[  --with-libedit-libs     libedit libraries],
+	LIBEDITLIBS="$withval",
+	LIBEDITLIBS="")
 AC_ARG_ENABLE(ssl,
 	[  --disable-ssl           Disable TLS/SSL support],
 	ENABLE_RUDIMENTS_SSL="no",
@@ -3578,10 +3578,10 @@ dnl Checks for prompt functions
 echo
 echo "***** Prompt Libraries *******"
 
-if ( test "$INCLUDE_PROMPT" = "1" -a "$ENABLE_RUDIMENTS_READLINE" = "yes" )
+if ( test "$INCLUDE_PROMPT" = "1" -a "$ENABLE_RUDIMENTS_LIBEDIT" = "yes" )
 then
 
-	if ( test -z "$READLINELIBS" -a -z "$READLINEINCLUDES" )
+	if ( test -z "$LIBEDITLIBS" -a -z "$LIBEDITINCLUDES" )
 	then
 
 		AC_MSG_CHECKING(for termcap)
@@ -3593,62 +3593,32 @@ then
 			AC_MSG_RESULT(no)
 		fi
 
-		dnl if there was no termcap, try curses instead
-		if ( test -z "$TERMCAPLIBS" )
+		AC_MSG_CHECKING(for libedit)
+		FW_CHECK_HEADERS_AND_LIBS([/usr],[editline],[editline/readline.h],[edit],[""],[""],[LIBEDITINCLUDES],[LIBEDITLIBS],[LIBEDITLIBPATH],[LIBEDITSTATIC])
+		if ( test -n "$LIBEDITLIBS" )
 		then
-			AC_MSG_CHECKING(for curses)
-			FW_CHECK_HEADERS_AND_LIBS([/usr],[curses],[curses.h],[curses],[""],[""],[CURSESINCLUDES],[CURSESLIBS],[CURSESLIBPATH],[CURSESSTATIC])
-			if ( test -n "$CURSESLIBS" )
-			then
-				AC_MSG_RESULT(yes)
-			else
-				AC_MSG_RESULT(no)
-			fi
-		fi
-
-		AC_MSG_CHECKING(for history)
-		FW_CHECK_HEADERS_AND_LIBS([/usr],[history],[readline/history.h],[history],[""],[""],[HISTORYINCLUDES],[HISTORYLIBS],[HISTORYLIBPATH],[HISTORYSTATIC])
-		if ( test -n "$HISTORYLIBS" )
-		then
+			LIBEDITLIBS="$LIBEDITLIBS"
 			AC_MSG_RESULT(yes)
 		else
 			AC_MSG_RESULT(no)
 		fi
 
-		AC_MSG_CHECKING(for readline)
-		FW_CHECK_HEADERS_AND_LIBS([/usr],[readline],[readline/readline.h],[readline],[""],[""],[READLINEINCLUDES],[READLINELIBS],[READLINELIBPATH],[READLINESTATIC])
-		if ( test -n "$READLINELIBS" )
-		then
-			READLINELIBS="$READLINELIBS"
-			AC_MSG_RESULT(yes)
-		else
-			AC_MSG_RESULT(no)
-		fi
+		LIBEDITINCLUDES="$LIBEDITINCLUDES $TERMCAPINCLUDES"
 
-		READLINEINCLUDES="$READLINEINCLUDES $HISTORYINCLUDES $CURSESINCLUDES $TERMCAPINCLUDES"
+		LIBEDITLIBS="$LIBEDITLIBS $TERMCAPLIBS"
 
-		TEMPREADLINELIBS="$READLINELIBS $CURSESLIBS $TERMCAPLIBS"
-
-		AC_MSG_CHECKING(whether termcap/curses/readline works)
+		AC_MSG_CHECKING(whether libedit/termcap works)
 		FW_TRY_LINK([#include <stdlib.h>
-	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$TEMPREADLINEINCLUDES],[$TEMPREADLINELIBS],[],[AC_MSG_RESULT(yes); READLINELIBS="$TEMPREADLINELIBS"],[AC_MSG_RESULT(no); READLINELIBS=""])
-
-		if ( test -z "$READLINELIBS" )
-		then
-			TEMPREADLINELIBS="$READLINELIBS $HISTORYLIBS $CURSESLIBS $TERMCAPLIBS"
-
-			AC_MSG_CHECKING(whether termcap/curses/history/readline works)
-			FW_TRY_LINK([#include <stdlib.h>
-	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$TEMPREADLINEINCLUDES],[$TEMPREADLINELIBS],[],[AC_MSG_RESULT(yes); READLINELIBS="$TEMPREADLINELIBS"],[AC_MSG_RESULT(no); READLINELIBS=""])
+	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$LIBEDITINCLUDES],[$LIBEDITLIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); LIBEDITLIBS=""])
 		fi
 	fi
 
-	AC_SUBST(READLINEINCLUDES)
-	AC_SUBST(READLINELIBS)
+	AC_SUBST(LIBEDITINCLUDES)
+	AC_SUBST(LIBEDITLIBS)
 	
-	if ( test -n "$READLINELIBS" )
+	if ( test -n "$LIBEDITLIBS" )
 	then
-		AC_DEFINE_UNQUOTED(HAVE_READLINE,1,Do we have readline)
+		AC_DEFINE_UNQUOTED(HAVE_LIBEDIT,1,Do we have libedit)
 	fi
 
 	case $host_os in
@@ -4323,10 +4293,10 @@ if ( test -n "$HAVE_GSS" )
 then
 	GSSBUILD="yes"
 fi
-READLINEBUILD="no"
-if ( test -n "$READLINELIBS" )
+LIBEDITBUILD="no"
+if ( test -n "$LIBEDITLIBS" )
 then
-	READLINEBUILD="yes"
+	LIBEDITBUILD="yes"
 fi
 
 echo " Features     : Threads  $HAS_THREADS"
@@ -4334,7 +4304,7 @@ echo "                PCRE     $PCREBUILD"
 echo "                libcurl  $LIBCURLBUILD"
 echo "                TLS/SSL  $SSLBUILD"
 echo "                GSS      $GSSBUILD"
-echo "                Readline $READLINEBUILD"
+echo "                libedit  $LIBEDITBUILD"
 echo "*******************************"
 echo
 echo "If you expected a feature that doesn't show up in the Summary"

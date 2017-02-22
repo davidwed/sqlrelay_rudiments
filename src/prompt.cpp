@@ -8,22 +8,6 @@
 #include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 
-#ifdef HAVE_READLINE
-	// This is an interesting story...
-	// readline 2's include files don't list any parameters for any of
-	// the functions.  This is fine for C, but not C++, at least not with
-	// the compiler I'm using, even with the extern "C" {} bit.
-	// This is fixed in readline 4, but, to maintain compatibility with 
-	// readline 2, I define the functions myself.
-	extern "C" {
-		extern char *readline(char *prompt);
-		extern void add_history(char *line);
-		extern void read_history(char *file);
-		extern void write_history(char *file);
-		extern void history_truncate_file(char *file, int line);
-	}
-#endif
-
 class promptprivate {
 	friend class prompt;
 	private:
@@ -87,7 +71,7 @@ const char *prompt::getPrompt() {
 }
 
 char *prompt::read() {
-	#ifdef HAVE_READLINE
+	#ifdef HAVE_LIBEDIT
 
 		// read the history file if we haven't already
 		if (!charstring::isNullOrEmpty(pvt->_historyfilename) &&
@@ -150,7 +134,7 @@ char *prompt::read() {
 }
 
 void prompt::flushHistory() {
-	#ifdef HAVE_READLINE
+	#ifdef HAVE_LIBEDIT
 		if (!charstring::isNullOrEmpty(pvt->_historyfilename)) {
 			write_history(pvt->_historyfilename);
 			if (pvt->_maxhistorylines) {

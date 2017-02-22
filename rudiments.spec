@@ -8,7 +8,7 @@ License: LGPLv2
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-BuildRequires: readline-devel, pcre-devel, openssl-devel, libcurl-devel, krb5-devel
+BuildRequires: libedit-devel, pcre-devel, openssl-devel, libcurl-devel, krb5-devel
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
@@ -23,7 +23,7 @@ libraries, and XML.
 %package devel
 License: LGPLv2
 Summary: Development files for rudiments
-Requires: %{name}%{?_isa} = %{version}-%{release}, readline-devel, openssl-devel, libcurl-devel, krb5-devel
+Requires: %{name}%{?_isa} = %{version}-%{release}, libedit-devel, openssl-devel, libcurl-devel, krb5-devel
 
 %description devel
 Development files for rudiments.
@@ -76,8 +76,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
-* Thu Feb 16 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
+* Tue Feb 21 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
 - Added fedora dist-tag conditional.
+- Replaced readline with libedit.
 
 * Wed Jan 25 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
 - Updated to version 1.0.4.
