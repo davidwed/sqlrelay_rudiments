@@ -8,6 +8,10 @@
 #include <rudiments/sys.h>
 #include <rudiments/stdio.h>
 
+#ifdef HAVE_LIBEDIT
+	#include <editline/readline.h>
+#endif
+
 class promptprivate {
 	friend class prompt;
 	private:

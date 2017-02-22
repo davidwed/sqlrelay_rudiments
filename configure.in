@@ -3610,7 +3610,6 @@ then
 		AC_MSG_CHECKING(whether libedit/termcap works)
 		FW_TRY_LINK([#include <stdlib.h>
 	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$LIBEDITINCLUDES],[$LIBEDITLIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); LIBEDITLIBS=""])
-		fi
 	fi
 
 	AC_SUBST(LIBEDITINCLUDES)
