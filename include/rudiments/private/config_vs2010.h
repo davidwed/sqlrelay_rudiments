@@ -1513,8 +1513,8 @@
 /* iov_base is char * */
 #define RUDIMENTS_IOV_BASE_TYPE char *
 
-/* Some versions of libedit fail to define history_truncate_file */
-/* #undef RUDIMENTS_LIBEDIT_UNDEFINED_HISTORY_TRUNCATE_FILE */
+/* Some versions of libedit provide history_truncate_file */
+/* #undef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE */
 
 /* Some systems have swab but dont define it */
 /* #undef RUDIMENTS_MUST_DEFINE_SWAB */

@@ -12,10 +12,11 @@
 	// some versions of libedit don't include stdio.h, so FILE is undefined
 	#include <stdio.h>
 	#include <editline/readline.h>
-	#ifdef RUDIMENTS_LIBEDIT_UNDEFINED_HISTORY_TRUNCATE_FILE
-		extern "C" {
-			extern int history_truncate_file(const char *, int);
-		}
+	#ifndef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
+static int history_truncate_file(const char * filename, int lines);
+	// FIXME: implement this
+	return 1;
+}
 	#endif
 #endif
 

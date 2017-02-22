@@ -3606,24 +3606,18 @@ then
 		LIBEDITINCLUDES="$LIBEDITINCLUDES $TERMCAPINCLUDES"
 
 		LIBEDITLIBS="$LIBEDITLIBS $TERMCAPLIBS"
-		TEMPLIBEDITLIBS=$LIBEDITLIBS
 
-		AC_MSG_CHECKING(whether libedit/termcap works)
+		AC_MSG_CHECKING(whether libedit works)
 		FW_TRY_LINK([#include <stdio.h>
 #include <editline/readline.h>
-],[add_history(NULL); read_history(NULL); write_history(NULL); history_truncate_file(NULL,0); readline(NULL);],[$LIBEDITINCLUDES],[$LIBEDITLIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); LIBEDITLIBS=""])
+],[add_history(NULL); read_history(NULL); write_history(NULL); readline(NULL);],[$LIBEDITINCLUDES],[$LIBEDITLIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); LIBEDITLIBS=""])
 
-		if ( test -z "$LIBEDITLIBS" )
+		if ( test -n "$LIBEDITLIBS" )
 		then
-			LIBEDITLIBS=$TEMPLIBEDITLIBS
-
-			AC_MSG_CHECKING(for undefined history_truncate_file)
+			AC_MSG_CHECKING(for history_truncate_file)
 			FW_TRY_LINK([#include <stdio.h>
 #include <editline/readline.h>
-extern "C" {
-extern int history_truncate_file(const char *, int);
-}
-],[add_history(NULL); read_history(NULL); write_history(NULL); history_truncate_file(NULL,0); readline(NULL);],[$LIBEDITINCLUDES],[$LIBEDITLIBS],[],[AC_MSG_RESULT(yes); AC_DEFINE_UNQUOTED(RUDIMENTS_LIBEDIT_UNDEFINED_HISTORY_TRUNCATE_FILE,1,Some versions of libedit fail to define history_truncate_file)],[AC_MSG_RESULT(no); LIBEDITLIBS=""])
+],[history_truncate_file(NULL,0);],[$LIBEDITINCLUDES],[$LIBEDITLIBS],[],[AC_MSG_RESULT(yes); AC_DEFINE_UNQUOTED(RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE,1,Modern versions of libedit provide history_truncate_file)],[AC_MSG_RESULT(no)])
 		fi
 	fi
 
