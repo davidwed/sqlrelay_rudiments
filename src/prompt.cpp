@@ -13,6 +13,7 @@
 	#include <stdio.h>
 	#include <editline/readline.h>
 	#ifndef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
+		#include <rudiments/error.h>
 		static int history_truncate_file(const char * filename, int n);
 	#endif
 #endif
@@ -201,35 +202,35 @@ history_truncate_file (const char *filename, int nlines)
 	ssize_t left = 0;
 
 	if (filename == NULL && (filename = _default_history_file()) == NULL)
-		return errno;
+		return error::getErrorNumber();
 	if ((fp = fopen(filename, "r+")) == NULL)
-		return errno;
+		return error::getErrorNumber();
 	strcpy(template, _history_tmp_template);
-	if ((fd = mkstemp(template)) == -1) {
-		ret = errno;
+	if ((fd = file::createTemporaryFile(template)) == -1) {
+		ret = error::getErrorNumber();
 		goto out1;
 	}
 
 	if ((tp = fdopen(fd, "r+")) == NULL) {
 		close(fd);
-		ret = errno;
+		ret = error::getErrorNumber();
 		goto out2;
 	}
 
 	for(;;) {
 		if (fread(buf, sizeof(buf), (size_t)1, fp) != 1) {
 			if (ferror(fp)) {
-				ret = errno;
+				ret = error::getErrorNumber();
 				break;
 			}
 			if (fseeko(fp, (off_t)sizeof(buf) * count, SEEK_SET) ==
 			    (off_t)-1) {
-				ret = errno;
+				ret = error::getErrorNumber();
 				break;
 			}
 			left = (ssize_t)fread(buf, (size_t)1, sizeof(buf), fp);
 			if (ferror(fp)) {
-				ret = errno;
+				ret = error::getErrorNumber();
 				break;
 			}
 			if (left == 0) {
@@ -237,14 +238,14 @@ history_truncate_file (const char *filename, int nlines)
 				left = sizeof(buf);
 			} else if (fwrite(buf, (size_t)left, (size_t)1, tp)
 			    != 1) {
-				ret = errno;
+				ret = error::getErrorNumber();
 				break;
 			}
 			fflush(tp);
 			break;
 		}
 		if (fwrite(buf, sizeof(buf), (size_t)1, tp) != 1) {
-			ret = errno;
+			ret = error::getErrorNumber();
 			break;
 		}
 		count++;
@@ -270,12 +271,12 @@ history_truncate_file (const char *filename, int nlines)
 			break;
 		count--;
 		if (fseeko(tp, (off_t)sizeof(buf) * count, SEEK_SET) < 0) {
-			ret = errno;
+			ret = error::getErrorNumber();
 			break;
 		}
 		if (fread(buf, sizeof(buf), (size_t)1, tp) != 1) {
 			if (ferror(tp)) {
-				ret = errno;
+				ret = error::getErrorNumber();
 				break;
 			}
 			ret = EAGAIN;
@@ -288,24 +289,24 @@ history_truncate_file (const char *filename, int nlines)
 		goto out3;
 
 	if (fseeko(fp, (off_t)0, SEEK_SET) == (off_t)-1) {
-		ret = errno;
+		ret = error::getErrorNumber();
 		goto out3;
 	}
 
 	if (fseeko(tp, (off_t)sizeof(buf) * count + (cp - buf), SEEK_SET) ==
 	    (off_t)-1) {
-		ret = errno;
+		ret = error::getErrorNumber();
 		goto out3;
 	}
 
 	for(;;) {
 		if ((left = (ssize_t)fread(buf, (size_t)1, sizeof(buf), tp)) == 0) {
 			if (ferror(fp))
-				ret = errno;
+				ret = error::getErrorNumber();
 			break;
 		}
 		if (fwrite(buf, (size_t)left, (size_t)1, fp) != 1) {
-			ret = errno;
+			ret = error::getErrorNumber();
 			break;
 		}
 	}
@@ -315,7 +316,7 @@ history_truncate_file (const char *filename, int nlines)
 out3:
 	fclose(tp);
 out2:
-	unlink(template);
+	file::remove(template);
 out1:
 	fclose(fp);
 
