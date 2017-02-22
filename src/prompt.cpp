@@ -13,10 +13,7 @@
 	#include <stdio.h>
 	#include <editline/readline.h>
 	#ifndef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
-static int history_truncate_file(const char * filename, int lines) {
-	// FIXME: implement this
-	return 1;
-}
+		static int history_truncate_file(const char * filename, int n);
 	#endif
 #endif
 
@@ -157,3 +154,171 @@ void prompt::flushHistory() {
 		}
 	#endif
 }
+
+#ifndef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
+/*-
+ * Copyright (c) 1997 The NetBSD Foundation, Inc.
+ * All rights reserved.
+ *
+ * This code is derived from software contributed to The NetBSD Foundation
+ * by Jaromir Dolecek.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+static const char _history_tmp_template[] = "/tmp/.historyXXXXXX";
+
+int
+history_truncate_file (const char *filename, int nlines)
+{
+	int ret = 0;
+	FILE *fp, *tp;
+	char template[sizeof(_history_tmp_template)];
+	char buf[4096];
+	int fd;
+	char *cp;
+	off_t off;
+	int count = 0;
+	ssize_t left = 0;
+
+	if (filename == NULL && (filename = _default_history_file()) == NULL)
+		return errno;
+	if ((fp = fopen(filename, "r+")) == NULL)
+		return errno;
+	strcpy(template, _history_tmp_template);
+	if ((fd = mkstemp(template)) == -1) {
+		ret = errno;
+		goto out1;
+	}
+
+	if ((tp = fdopen(fd, "r+")) == NULL) {
+		close(fd);
+		ret = errno;
+		goto out2;
+	}
+
+	for(;;) {
+		if (fread(buf, sizeof(buf), (size_t)1, fp) != 1) {
+			if (ferror(fp)) {
+				ret = errno;
+				break;
+			}
+			if (fseeko(fp, (off_t)sizeof(buf) * count, SEEK_SET) ==
+			    (off_t)-1) {
+				ret = errno;
+				break;
+			}
+			left = (ssize_t)fread(buf, (size_t)1, sizeof(buf), fp);
+			if (ferror(fp)) {
+				ret = errno;
+				break;
+			}
+			if (left == 0) {
+				count--;
+				left = sizeof(buf);
+			} else if (fwrite(buf, (size_t)left, (size_t)1, tp)
+			    != 1) {
+				ret = errno;
+				break;
+			}
+			fflush(tp);
+			break;
+		}
+		if (fwrite(buf, sizeof(buf), (size_t)1, tp) != 1) {
+			ret = errno;
+			break;
+		}
+		count++;
+	}
+	if (ret)
+		goto out3;
+	cp = buf + left - 1;
+	if(*cp != '\n')
+		cp++;
+	for(;;) {
+		while (--cp >= buf) {
+			if (*cp == '\n') {
+				if (--nlines == 0) {
+					if (++cp >= buf + sizeof(buf)) {
+						count++;
+						cp = buf;
+					}
+					break;
+				}
+			}
+		}
+		if (nlines <= 0 || count == 0)
+			break;
+		count--;
+		if (fseeko(tp, (off_t)sizeof(buf) * count, SEEK_SET) < 0) {
+			ret = errno;
+			break;
+		}
+		if (fread(buf, sizeof(buf), (size_t)1, tp) != 1) {
+			if (ferror(tp)) {
+				ret = errno;
+				break;
+			}
+			ret = EAGAIN;
+			break;
+		}
+		cp = buf + sizeof(buf);
+	}
+
+	if (ret || nlines > 0)
+		goto out3;
+
+	if (fseeko(fp, (off_t)0, SEEK_SET) == (off_t)-1) {
+		ret = errno;
+		goto out3;
+	}
+
+	if (fseeko(tp, (off_t)sizeof(buf) * count + (cp - buf), SEEK_SET) ==
+	    (off_t)-1) {
+		ret = errno;
+		goto out3;
+	}
+
+	for(;;) {
+		if ((left = (ssize_t)fread(buf, (size_t)1, sizeof(buf), tp)) == 0) {
+			if (ferror(fp))
+				ret = errno;
+			break;
+		}
+		if (fwrite(buf, (size_t)left, (size_t)1, fp) != 1) {
+			ret = errno;
+			break;
+		}
+	}
+	fflush(fp);
+	if((off = ftello(fp)) > 0)
+		(void)ftruncate(fileno(fp), off);
+out3:
+	fclose(tp);
+out2:
+	unlink(template);
+out1:
+	fclose(fp);
+
+	return ret;
+}
+#endif
