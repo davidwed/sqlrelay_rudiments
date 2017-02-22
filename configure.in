@@ -3619,16 +3619,28 @@ then
 		FW_CHECK_HEADERS_AND_LIBS([/usr],[readline],[readline/readline.h],[readline],[""],[""],[READLINEINCLUDES],[READLINELIBS],[READLINELIBPATH],[READLINESTATIC])
 		if ( test -n "$READLINELIBS" )
 		then
-			READLINEINCLUDES="$READLINEINCLUDES $HISTORYINCLUDES $CURSESINCLUDES $TERMCAPINCLUDES"
-			READLINELIBS="$READLINELIBS $HISTORYLIBS $CURSESLIBS $TERMCAPLIBS"
+			READLINELIBS="$READLINELIBS"
 			AC_MSG_RESULT(yes)
 		else
 			AC_MSG_RESULT(no)
 		fi
 
-		AC_MSG_CHECKING(whether termcap/curses/history/readline work)
+		READLINEINCLUDES="$READLINEINCLUDES $HISTORYINCLUDES $CURSESINCLUDES $TERMCAPINCLUDES"
+
+		TEMPREADLINELIBS="$READLINELIBS $CURSESLIBS $TERMCAPLIBS"
+
+		AC_MSG_CHECKING(whether termcap/curses/readline works)
 		FW_TRY_LINK([#include <stdlib.h>
-	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$READLINEINCLUDES],[$READLINELIBS],[],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no); READLINELIBS=""])
+	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$TEMPREADLINEINCLUDES],[$TEMPREADLINELIBS],[],[AC_MSG_RESULT(yes); READLINELIBS="$TEMPREADLINELIBS"],[AC_MSG_RESULT(no); READLINELIBS=""])
+
+		if ( test -z "$READLINELIBS" )
+		then
+			TEMPREADLINELIBS="$READLINELIBS $HISTORYLIBS $CURSESLIBS $TERMCAPLIBS"
+
+			AC_MSG_CHECKING(whether termcap/curses/history/readline works)
+			FW_TRY_LINK([#include <stdlib.h>
+	extern "C" { extern char *readline(char *prompt); extern void add_history(char *line); extern void read_history(char *file); extern void write_history(char *file); extern void history_truncate_file(char *file, int line); }],[readline(NULL);],[$TEMPREADLINEINCLUDES],[$TEMPREADLINELIBS],[],[AC_MSG_RESULT(yes); READLINELIBS="$TEMPREADLINELIBS"],[AC_MSG_RESULT(no); READLINELIBS=""])
+		fi
 	fi
 
 	AC_SUBST(READLINEINCLUDES)
