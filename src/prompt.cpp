@@ -13,7 +13,7 @@
 	#include <stdio.h>
 	#include <editline/readline.h>
 	#ifndef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
-static int history_truncate_file(const char * filename, int lines);
+static int history_truncate_file(const char * filename, int lines) {
 	// FIXME: implement this
 	return 1;
 }
