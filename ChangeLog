@@ -1,3 +1,11 @@
+1.0.4 - added support for EOT to codetree
+	added loop-avoidance to xmldomevents class
+	added alias support to codetree class
+	replaced readline with libedit
+	included implementation of history_truncate_file for versions of
+		libedit that don't provide it
+	added --disable-wall and --disable-werror configure options
+
 1.0.3 - added --with-fortify configure option
 	prompt::read() no longer prints an extra blank line when hitting return
 		by itself

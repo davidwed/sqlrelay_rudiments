@@ -15,9 +15,6 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Do we have readline */
-#undef HAVE_READLINE
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -704,6 +701,9 @@
 
 /* Some systems have void * kqueue user data */
 #undef RUDIMENTS_HAVE_KQUEUE_VOID_UDATA
+
+/* Do we have libedit */
+#undef RUDIMENTS_HAVE_LIBEDIT
 
 /* Some systems have limits.h */
 #undef RUDIMENTS_HAVE_LIMITS_H
@@ -1475,6 +1475,9 @@
 
 /* iov_base is char * */
 #undef RUDIMENTS_IOV_BASE_TYPE
+
+/* Modern versions of libedit provide history_truncate_file */
+#undef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
 
 /* Some systems have swab but dont define it */
 #undef RUDIMENTS_MUST_DEFINE_SWAB

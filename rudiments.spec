@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 1.0.3
+Version: 1.0.4
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -8,7 +8,7 @@ License: LGPLv2
 URL: http://rudiments.sourceforge.net
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
-BuildRequires: readline-devel, pcre-devel, openssl-devel, libcurl-devel, krb5-devel
+BuildRequires: libedit-devel, pcre-devel, openssl-devel, libcurl-devel, krb5-devel
 
 %description
 A C++ class library for developing systems and applications.  Rudiments includes
@@ -23,7 +23,7 @@ libraries, and XML.
 %package devel
 License: LGPLv2
 Summary: Development files for rudiments
-Requires: %{name}%{?_isa} = %{version}-%{release}, readline-devel, openssl-devel, libcurl-devel, krb5-devel
+Requires: %{name}%{?_isa} = %{version}-%{release}, libedit-devel, openssl-devel, libcurl-devel, krb5-devel
 
 %description devel
 Development files for rudiments.
@@ -57,9 +57,13 @@ make install DESTDIR=%{buildroot}
 %files
 %{_libdir}/librudiments.so.*
 %doc AUTHORS ChangeLog
-%license COPYING
 %exclude %{_libdir}/librudiments.la
+%if 0%{?fedora}
+%license COPYING
 %exclude %{_datadir}/licenses/rudiments
+%else
+%{_datadir}/licenses/rudiments
+%endif
 
 %files devel
 %{_includedir}/rudiments
@@ -72,6 +76,13 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Tue Feb 21 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
+- Added fedora dist-tag conditional.
+- Replaced readline with libedit.
+
+* Wed Jan 25 2017 David Muse <david.muse@firstworks.com> - 1.0.4-1
+- Updated to version 1.0.4.
+
 * Fri Jan 20 2017 David Muse <david.muse@firstworks.com> - 1.0.3-1
 - Updated to version 1.0.3.
 - Removed call to make uninstall-license.

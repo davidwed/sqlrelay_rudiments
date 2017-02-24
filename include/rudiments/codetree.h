@@ -51,6 +51,11 @@ class codetreeprivate;
  *            name used to represent the nonterminal in the XML representation
  *            of the code.
  *
+ *    alias - Options.  A string to use in place of the name in the XML
+ *            representation of the code.  May be the same as the name of
+ *            another definition.  Useful when you want one definition to
+ *            masquerade as another.
+ *
  *    start - Optional.  A string to be printed before the nonterminal when
  *            writing it back out.
  *
@@ -149,7 +154,8 @@ class codetreeprivate;
  *     value - The text of the terminal.  Ascii characters or XML entities
  *             can be used.  To specify the end of a line, use XML entity
  *             &#10; (newline).  To specify the beginning of a line, use
- *             XML entity &#2; (start of text).
+ *             XML entity &#2; (start of text).  To specify the end of all
+ *             code, use XML entity &#4; (end of transmission).
  *
  *     case - Whether the terminal is case-sensitive or not.  Acceptable values
  *            are true or false.  Defaults to false.

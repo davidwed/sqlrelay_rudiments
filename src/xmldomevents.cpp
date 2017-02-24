@@ -105,6 +105,15 @@ bool xmldomevents::process(xmldomnode *codetreenode) {
 		// find the corresponding node in the event tree
 		xmldomnode	*etnode=findEvent(codetreenode);
 
+		// avoid loops...
+		// If this event tree node is already set as the private
+		// data of this code tree node, then the node has already
+		// been processed by this event.  Move on.
+		if (codetreenode->getPrivateData()==etnode) {
+			codetreenode=codetreenode->getNextTag();
+			continue;
+		}
+
 		// attach the event tree node to the code tree node
 		codetreenode->setPrivateData(etnode);
 
