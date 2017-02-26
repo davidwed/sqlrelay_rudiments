@@ -1,3 +1,5 @@
+1.0.5 - added asprintf()/vasprintf() analogs to charstring
+
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class
 	added alias support to codetree class

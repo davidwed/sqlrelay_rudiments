@@ -70,14 +70,28 @@ int main(int argc, const char **argv) {
 	// duplicate
 	stdoutput.printf("duplicate/subString...\n");
 	char	*hellothere=charstring::duplicate(s);
-	stdoutput.printf("duplicate",!charstring::compare(hellothere,"hello"));
+	test("duplicate",!charstring::compare(hellothere,"hello"));
 	char	*ell=charstring::subString(hellothere,1,3);
-	stdoutput.printf("subString",!charstring::compare(ell,"ell"));
-	char	*lle=charstring::subString(hellothere,3,1);
-	stdoutput.printf("subString",!charstring::compare(lle,"lle"));
+	test("subString",!charstring::compare(ell,"ell"));
+	char	*llo=charstring::subString(hellothere,2,4);
+	test("subString",!charstring::compare(llo,"llo"));
 	delete[] hellothere;
 	delete[] ell;
-	delete[] lle;
+	delete[] llo;
+	stdoutput.printf("\n");
+
+
+	// printf
+	stdoutput.printf("printf...\n");
+	char	buffer[100];
+	ssize_t	size=charstring::printf(buffer,20,"%c%d%s",'a',123,"hello");
+	test("size",size==9);
+	test("contents",!charstring::compare(buffer,"a123hello"));
+	char	*buf=NULL;
+	size=charstring::printf(&buf,"%c%d%s",'a',123,"hello");
+	test("size",size==9);
+	test("contents",!charstring::compare(buffer,"a123hello"));
+	delete[] buf;
 	stdoutput.printf("\n");
 
 
@@ -326,7 +340,6 @@ int main(int argc, const char **argv) {
 
 	// trim
 	stdoutput.printf("trim...\n");
-	char    buffer[100];
 	charstring::copy(buffer,"\r\n	     hello there buddy     	\r\n");
 	charstring::rightTrim(buffer);
 	test("rtrim",!charstring::compare(buffer,

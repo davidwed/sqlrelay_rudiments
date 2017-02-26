@@ -2346,26 +2346,24 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 	// If we are buffering writes though, don't use the above because it
 	// would bypass the buffer.
 
-	// Use vasprintf if it is available, otherwise play games with
-	// charstring::printf().
+	// write the formatted data to a buffer
 	char	*buffer=NULL;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
 		size=vasprintf(&buffer,format,*argp);
 	#else
-		// Some compilers throw a warning if they see "printf(NULL..."
-		// at all, whether it's the global function printf() or one
-		// that you've defined yourself.  Using buffer here works
-		// around that.
-		size=charstring::printf(buffer,0,format,argp);
-		buffer=new char[size+1];
-		size=charstring::printf(buffer,size+1,format,argp);
+		size=charstring::printf(&buffer,format,argp);
 	#endif
+
+	// write the buffer to the file descriptor
 	write(buffer,size);
+
+	// clean up
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
 		free(buffer);
 	#else
 		delete[] buffer;
 	#endif
+
 	return size;
 }
 

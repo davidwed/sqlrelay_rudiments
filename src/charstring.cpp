@@ -1795,10 +1795,10 @@ char *charstring::pad(const char *str, char padchar,
 
 ssize_t charstring::printf(char *buffer, size_t length,
 					const char *format, ...) {
-	va_list	argp;
-	va_start(argp,format);
-	size_t	result=printf(buffer,length,format,&argp);
-	va_end(argp);
+	va_list	args;
+	va_start(args,format);
+	size_t	result=printf(buffer,length,format,&args);
+	va_end(args);
 	return result;
 }
 
@@ -2030,5 +2030,39 @@ ssize_t charstring::printf(char *buffer, size_t length,
 			inc=1024;
 		}
 	}
+	return size;
+}
+
+ssize_t charstring::printf(char **buffer, const char *format, ...) {
+	va_list	args;
+	va_start(args,format);
+	// the printf() below will call va_end(args)
+	return printf(buffer,format,&args);
+}
+
+ssize_t charstring::printf(char **buffer, const char *format, va_list *argp) {
+
+	// sanity check
+	if (!buffer) {
+		return 0;
+	}
+
+	// initialize *buffer
+	*buffer=NULL;
+
+	// Ideally we'd use vasprintf() if it's available, but we want to be
+	// able to delete[] buffer, and if we use vasprintf() to create it then
+	// we'd have to free(buffer).
+
+	// Some compilers throw a warning if they see "printf(NULL..." at all,
+	// whether it's the global function printf() or one that you've defined
+	// yourself.  Using *buffer here works around that.
+	va_list	argp1;
+	va_copy(argp1,*argp);
+	ssize_t	size=charstring::printf(*buffer,0,format,argp);
+	va_end(*argp);
+	*buffer=new char[size+1];
+	size=charstring::printf(*buffer,size+1,format,&argp1);
+	va_end(argp1);
 	return size;
 }
