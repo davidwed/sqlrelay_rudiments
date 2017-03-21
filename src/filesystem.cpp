@@ -41,6 +41,7 @@
 		#include <windows.h>
 	#endif
 	#ifdef RUDIMENTS_HAVE_PSAPI_H
+		#define PSAPI_VERSION 1
 		#include <psapi.h>
 	#endif
 	#ifdef RUDIMENTS_HAVE_SYS_PARAM_H
