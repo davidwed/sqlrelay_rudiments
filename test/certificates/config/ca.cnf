@@ -44,9 +44,9 @@ certopt			= default_ca
 policy			= policy_match
 
 [ policy_match ]
-countryName		= match
-stateOrProvinceName	= match
-organizationName	= match
+countryName		= optional
+stateOrProvinceName	= optional
+organizationName	= optional
 organizationalUnitName	= optional
 commonName		= supplied
 emailAddress		= optional
