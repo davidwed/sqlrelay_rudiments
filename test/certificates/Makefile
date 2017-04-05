@@ -1,6 +1,6 @@
 include ../../config.mk
 
-all: certificates/ca.pfx certificatechains/client.pfx certificatechains/server.pfx
+all: certificates/ca.pfx certificatechains/client.pfx certificatechains/server.pfx certificatechains/db.pfx
 
 clean:
 	cd keys $(AND) $(RM) *.key
@@ -80,3 +80,28 @@ certificatechains/server.pem: certificates/server.pem
 
 certificatechains/server.pfx: certificatechains/server.pem
 	PASSWORD="" openssl pkcs12 -export -passout env:PASSWORD -in certificates/server.pem -inkey keys/server.key -certfile certificates/ca.pem -out certificatechains/server.pfx
+
+keys/db.key:
+	openssl genrsa -out keys/db.key || \
+	if ( test "$$?" = "1" ); \
+	then \
+		openssl genrsa -rand /etc/passwd -out keys/db.key; \
+	fi
+
+requests/db.csr: keys/db.key certificates/ca.pem
+	openssl req -config config/db.cnf -new -key keys/db.key -out requests/db.csr
+
+certificates/db.pem: requests/db.csr
+	openssl ca -batch -config config/ca.cnf -in requests/db.csr -out certificates/db.pem -extfile config/db.ca.cnf; \
+	if ( test "$$?" = "1" ); \
+	then \
+		openssl ca -batch -config config/ca.cnf -in requests/db.csr -out certificates/db.pem; \
+	fi
+
+certificatechains/db.pem: certificates/db.pem
+	cat certificates/db.pem > certificatechains/db.pem
+	cat keys/db.key >> certificatechains/db.pem
+	cat certificates/ca.pem >> certificatechains/db.pem
+
+certificatechains/db.pfx: certificatechains/db.pem
+	PASSWORD="" openssl pkcs12 -export -passout env:PASSWORD -in certificates/db.pem -inkey keys/db.key -certfile certificates/ca.pem -out certificatechains/db.pfx
