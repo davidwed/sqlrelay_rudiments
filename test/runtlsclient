@@ -5,16 +5,16 @@ HOST=`hostname`
 # validate server...
 
 # negotiate protocol
-./tlsclient -host $HOST -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.pem -ccount 5 -mcount 10 -dcount 100000
+./tlsclient -host $HOST -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.crt -ccount 5 -mcount 10 -dcount 100000
 
 # tls 1.2
-./tlsclient -host $HOST -version TLS1_2 -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.pem -ccount 5 -mcount 10 -dcount 100000
+./tlsclient -host $HOST -version TLS1_2 -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.crt -ccount 5 -mcount 10 -dcount 100000
 
 # tls 1.1
-./tlsclient -host $HOST -version TLS1_1 -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.pem -ccount 5 -mcount 10 -dcount 100000
+./tlsclient -host $HOST -version TLS1_1 -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.crt -ccount 5 -mcount 10 -dcount 100000
 
 # tls 1
-./tlsclient -host $HOST -version TLS1 -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.pem -ccount 5 -mcount 10 -dcount 100000
+./tlsclient -host $HOST -version TLS1 -cert /usr/local/firstworks/etc/client.pem -ca /usr/local/firstworks/etc/ca.crt -ccount 5 -mcount 10 -dcount 100000
 
 
 

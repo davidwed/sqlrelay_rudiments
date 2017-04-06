@@ -293,7 +293,7 @@ md5sum: md5sum.cpp md5sum.$(OBJ)
 
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
-	cp certificates/certificates/ca.pem .
+	cp certificates/certificates/ca.crt .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .
 	cp certificates/certificates/ca.pfx .
