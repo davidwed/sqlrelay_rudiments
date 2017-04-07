@@ -1,6 +1,6 @@
 include ../../config.mk
 
-all: certificates/ca.pfx certificatechains/client.pfx certificatechains/server.pfx certificatechains/db.pfx
+all: certificatechains/ca.pfx certificatechains/client.pfx certificatechains/server.pfx certificatechains/db.pfx
 
 clean:
 	cd keys $(AND) $(RM) *.key
@@ -27,8 +27,11 @@ keys/ca.key: database/serial
 certificates/ca.crt: keys/ca.key
 	openssl req -config config/ca.cnf -new -x509 -days 3650 -key keys/ca.key -out certificates/ca.crt
 
-certificates/ca.pfx: certificates/ca.crt
-	PASSWORD="" openssl pkcs12 -export -passout env:PASSWORD -in certificates/ca.crt -inkey keys/ca.key -out certificates/ca.pfx
+certificatechains/ca.pem: certificates/ca.crt
+	cat certificates/ca.crt > certificatechains/ca.pem
+
+certificatechains/ca.pfx: certificatechains/ca.pem
+	PASSWORD="" openssl pkcs12 -export -passout env:PASSWORD -in certificates/ca.crt -inkey keys/ca.key -out certificatechains/ca.pfx
 
 keys/client.key:
 	openssl genrsa -out keys/client.key || \
