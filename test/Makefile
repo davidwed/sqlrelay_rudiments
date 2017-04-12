@@ -126,7 +126,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
-	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.crt *.pem *.pfx *.xml *.sck *.ii
+	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii
 	cd certificates $(AND) $(MAKE) clean
 
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
@@ -291,11 +291,14 @@ gssclient: gssclient.cpp gssclient.$(OBJ)
 md5sum: md5sum.cpp md5sum.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) md5sum.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
+socketbench: socketbench.cpp socketbench.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) socketbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
-	cp certificates/certificates/ca.crt .
+	cp certificates/certificatechains/ca.pem .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .
-	cp certificates/certificates/ca.pfx .
+	cp certificates/certificatechains/ca.pfx .
 	cp certificates/certificatechains/server.pfx .
 	cp certificates/certificatechains/client.pfx .
