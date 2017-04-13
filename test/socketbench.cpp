@@ -12,6 +12,7 @@
 #include <rudiments/datetime.h>
 #include <rudiments/snooze.h>
 #include <rudiments/commandline.h>
+#include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
 bool		disablenagle=true;
@@ -172,20 +173,6 @@ void listen() {
 
 void session(socketclient *clnt) {
 
-	// set buffer sizes
-	if (socketreadbuffer) {
-		clnt->setSocketReadBufferSize(socketreadbuffer);
-	}
-	if (socketwritebuffer) {
-		clnt->setSocketWriteBufferSize(socketwritebuffer);
-	}
-	if (readbuffer) {
-		clnt->setReadBufferSize(readbuffer);
-	}
-	if (writebuffer) {
-		clnt->setWriteBufferSize(writebuffer);
-	}
-
 	// read/write buffer
 	uint32_t	bytecount=65536;
 	unsigned char	bytes[65536];
@@ -207,9 +194,37 @@ void session(socketclient *clnt) {
 	clnt->flushWriteBuffer(-1,-1);
 
 	// try different chunk sizes
-	for (uint32_t chunksize=65536; chunksize>=1024; chunksize/=2) {
+	for (uint32_t chunksize=131072; chunksize>=512; chunksize/=2) {
 
-		stdoutput.printf("	chunksize %d {\n",chunksize);
+		bool	nonblocking=(chunksize==131072);
+
+		if (nonblocking) {
+			stdoutput.printf("	non-blocking {\n");
+		} else {
+			stdoutput.printf("	chunksize %d {\n",chunksize);
+		}
+
+		// use non-blocking mode if necessary
+		if (nonblocking) {
+			clnt->useNonBlockingMode();
+			clnt->setReadBufferSize(0);
+			clnt->setWriteBufferSize(0);
+		} else {
+			if (readbuffer) {
+				clnt->setReadBufferSize(readbuffer);
+			}
+			if (writebuffer) {
+				clnt->setWriteBufferSize(writebuffer);
+			}
+		}
+
+		// set buffer sizes
+		if (socketreadbuffer) {
+			clnt->setSocketReadBufferSize(socketreadbuffer);
+		}
+		if (socketwritebuffer) {
+			clnt->setSocketWriteBufferSize(socketwritebuffer);
+		}
 
 		// loop, writing to the server
 		stdoutput.printf("		writing %d times...\n",
@@ -218,14 +233,35 @@ void session(socketclient *clnt) {
 		start.getSystemDateAndTime();
 		for (uint32_t i=0; i<loopcount; i++) {
 			uint32_t	byteswritten=0;
+			uint32_t	bytesremaining=bytecount;
 			while (byteswritten<bytecount) {
-				if (clnt->write(bytes+byteswritten,
-						chunksize)!=chunksize) {
-					stdoutput.printf("	"
+				if (nonblocking) {
+					clnt->waitForNonBlockingWrite(-1,-1);
+					ssize_t	ret=clnt->write(
+							bytes+byteswritten,
+							bytesremaining);
+					if (ret<0) {
+						stdoutput.printf("	"
 						"write bytes failed\n}\n");
-					return;
+						return;
+					}
+					// write() bug?
+					if (ret>bytesremaining) {
+						stdoutput.printf("	"
+						"something weird "
+						"happened\n}\n");
+					}
+					byteswritten+=ret;
+					bytesremaining-=ret;
+				} else {
+					if (clnt->write(bytes+byteswritten,
+							chunksize)!=chunksize) {
+						stdoutput.printf("	"
+						"write bytes failed\n}\n");
+						return;
+					}
+					byteswritten+=chunksize;
 				}
-				byteswritten+=chunksize;
 			}
 		}
 		clnt->flushWriteBuffer(-1,-1);
@@ -257,14 +293,36 @@ void session(socketclient *clnt) {
 		start.getSystemDateAndTime();
 		for (uint32_t i=0; i<loopcount; i++) {
 			uint32_t	bytesread=0;
+			uint32_t	bytesremaining=bytecount;
 			while (bytesread<bytecount) {
-				if (clnt->read(bytes+bytesread,
-						chunksize)!=chunksize) {
-					stdoutput.printf("	"
+				if (nonblocking) {
+					clnt->waitForNonBlockingRead(-1,-1);
+					ssize_t	ret=clnt->read(
+							bytes+bytesread,
+							bytesremaining);
+					if (ret<0) {
+						stdoutput.printf("	"
 						"read bytes failed\n}\n");
-					return;
+						return;
+					}
+					// read() bug?
+					if (ret>bytesremaining) {
+						stdoutput.printf("	"
+						"something weird "
+						"happened\n}\n");
+						return;
+					}
+					bytesread+=ret;
+					bytesremaining-=ret;
+				} else {
+					if (clnt->read(bytes+bytesread,
+							chunksize)!=chunksize) {
+						stdoutput.printf("	"
+						"read bytes failed\n}\n");
+						return;
+					}
+					bytesread+=chunksize;
 				}
-				bytesread+=chunksize;
 			}
 		}
 		end.getSystemDateAndTime();
@@ -287,6 +345,11 @@ void session(socketclient *clnt) {
 						mbps,totalsec);
 
 		stdoutput.printf("	}\n");
+
+		// restore blocking mode
+		if (nonblocking) {
+			clnt->useBlockingMode();
+		}
 	}
 }
 

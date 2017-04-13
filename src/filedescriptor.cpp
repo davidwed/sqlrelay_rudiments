@@ -1152,8 +1152,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#ifdef DEBUG_READ
 				debugPrintf(" EAGAIN ");
 				#endif
-				// if we got an EAGAIN, then presumably we're
-				// in non-blocking mode, there was nothing
+				// if we got an EAGAIN, and we're in
+				// non-blocking mode, there was nothing
 				// to read and we're done
 				break;
 			} else if (error::getErrorNumber()==EINTR) {
@@ -1340,6 +1340,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
 	ssize_t	sizemax=(pvt->_secctx)?pvt->_secctx->getSizeMax():SSIZE_MAX;
+	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalwrite<count) {
 
 		// limit size of individual writes
@@ -1393,7 +1394,15 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
 		if (actualwrite!=sizetowrite) {
-			if (error::getErrorNumber()==EINTR) {
+			if (isusingnonblockingmode &&
+				error::getErrorNumber()==EAGAIN) {
+				#ifdef DEBUG_READ
+				debugPrintf(" EAGAIN ");
+				#endif
+				// if we got an EAGAIN, and we're in
+				// non-blocking mode, then try again
+				break;
+			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_WRITE
 				debugPrintf(" EINTR ");
 				#endif

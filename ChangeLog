@@ -2,6 +2,7 @@
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
 		will be correctly mapped to K32GetMappedFileName on 32-bit
 		Windows 7 and Server 2008
+	added EAGAIN handling to filedescriptor::safeWrite()
 
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class
