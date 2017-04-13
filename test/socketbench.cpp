@@ -29,9 +29,15 @@ void populateBytes(unsigned char *bytes, uint32_t bytecount) {
 	}
 }
 
-void listen() {
+void listen(bool nonblocking) {
 
 	stdoutput.printf("listener {\n");
+
+	if (nonblocking) {
+		stdoutput.printf("	nonblocking\n");
+	} else {
+		stdoutput.printf("	blocking\n");
+	}
 
 	// listen on inet socket port 8000
 	inetsocketserver	inetsock;
@@ -102,8 +108,14 @@ void listen() {
 			clientsock->setSocketWriteBufferSize(socketwritebuffer);
 		}
 
+		// use non-blocking mode if necessary
+		if (nonblocking) {
+			clientsock->useNonBlockingMode();
+		}
+
 		// get loop count
 		uint32_t	loopcount;
+		clientsock->waitForNonBlockingRead(-1,-1);
 		if (clientsock->read(&loopcount)!=sizeof(uint32_t)) {
 			stdoutput.printf("	read loopcount failed\n}\n");
 			return;
@@ -111,6 +123,7 @@ void listen() {
 
 		// get byte count
 		uint32_t	bytecount;
+		clientsock->waitForNonBlockingRead(-1,-1);
 		if (clientsock->read(&bytecount)!=sizeof(uint32_t)) {
 			stdoutput.printf("	"
 					"read bytecount failed\n}\n");
@@ -124,11 +137,39 @@ void listen() {
 			stdoutput.printf("	reading %d times...\n",
 								loopcount);
 			for (uint32_t i=0; i<loopcount && !fail; i++) {
-				if (clientsock->read(bytes,
-						bytecount)!=bytecount) {
-					stdoutput.printf("	"
-						"read bytes failed\n");
-					fail=true;
+				uint32_t	bytesread=0;
+				uint32_t	bytesremaining=bytecount;
+				if (nonblocking) {
+					while (bytesread<bytecount && !fail) {
+						clientsock->
+						waitForNonBlockingRead(-1,-1);
+						ssize_t	ret=clientsock->read(
+								bytes+bytesread,
+								bytesremaining);
+						if (ret<0) {
+							stdoutput.printf(
+							"	"
+							"read bytes "
+							"failed\n}\n");
+							fail=true;
+						}
+						// read() bug?
+						if (ret>bytesremaining) {
+							stdoutput.printf("	"
+							"something weird "
+							"happened\n}\n");
+							fail=true;
+						}
+						bytesread+=ret;
+						bytesremaining-=ret;
+					}
+				} else {
+					if (clientsock->read(bytes,
+							bytecount)!=bytecount) {
+						stdoutput.printf("	"
+							"read bytes failed\n");
+						fail=true;
+					}
 				}
 			}
 			if (fail) {
@@ -141,11 +182,41 @@ void listen() {
 			stdoutput.printf("	writing %d times...\n",
 								loopcount);
 			for (uint32_t i=0; i<loopcount && !fail; i++) {
-				if (clientsock->write(bytes,
-						bytecount)!=bytecount) {
-					stdoutput.printf("	"
-						"write bytes failed\n");
-					fail=true;
+				uint32_t	byteswritten=0;
+				uint32_t	bytesremaining=bytecount;
+				if (nonblocking) {
+					while (byteswritten<bytecount &&
+								!fail) {
+						clientsock->
+						waitForNonBlockingWrite(-1,-1);
+						ssize_t	ret=clientsock->write(
+							bytes+byteswritten,
+							bytesremaining);
+						if (ret<0) {
+							stdoutput.printf(
+							"	"
+							"write bytes "
+							"failed\n}\n");
+							fail=true;
+						}
+						// write() bug?
+						if (ret>bytesremaining) {
+							stdoutput.printf(
+							"	"
+							"something weird "
+							"happened\n}\n");
+							fail=true;
+						}
+						byteswritten+=ret;
+						bytesremaining-=ret;
+					}
+				} else {
+					if (clientsock->write(bytes,
+							bytecount)!=bytecount) {
+						stdoutput.printf("	"
+							"write bytes failed\n");
+						fail=true;
+					}
 				}
 			}
 			if (fail) {
@@ -426,6 +497,7 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("dontdisablenagle")) {
 		disablenagle=false;
 	}
+	bool	nonblockingserver=cmdl.found("nonblockingserver");
 
 	stdoutput.printf("parameters {\n");
 	stdoutput.printf("	readbuffer: 		%d\n",
@@ -442,7 +514,7 @@ int main(int argc, const char **argv) {
 	
 
 	if (cmdl.found("listener")) {
-		listen();
+		listen(nonblockingserver);
 	} else if (cmdl.found("inet")) {
 		inetclient(cmdl.getValue("host"));
 	} else if (cmdl.found("unix")) {
