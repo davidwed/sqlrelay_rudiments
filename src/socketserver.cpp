@@ -3,6 +3,7 @@
 
 #include <rudiments/socketserver.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 

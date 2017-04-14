@@ -27,6 +27,10 @@
 		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
 #endif
+#include <rudiments/thread.h>
+#include <rudiments/semaphoreset.h>
+#include <rudiments/file.h>
+#include <rudiments/permissions.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -228,6 +232,15 @@ class filedescriptorprivate {
 		unsigned char	*_readbufferend;
 		unsigned char	*_readbufferhead;
 		unsigned char	*_readbuffertail;
+
+		thread		*_thr;
+		semaphoreset	*_thrsem;
+		bool		_threxit;
+		bool		_threrror;
+		bool		_asyncwrite;
+		unsigned char	*_asyncbuf;
+		uint32_t	_asyncbufsize;
+		ssize_t		_asynccount;
 };
 
 filedescriptor::filedescriptor() {
@@ -274,6 +287,14 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_readbufferend=NULL;
 	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
+	pvt->_thr=NULL;
+	pvt->_thrsem=NULL;
+	pvt->_threxit=false;
+	pvt->_threrror=false;
+	pvt->_asyncwrite=false;
+	pvt->_asyncbuf=NULL;
+	pvt->_asyncbufsize=0;
+	pvt->_asynccount=0;
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
@@ -305,10 +326,23 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 }
 
 filedescriptor::~filedescriptor() {
+
+	if (pvt->_thr) {
+		pvt->_thrsem->wait(1);
+		pvt->_threxit=true;
+		pvt->_thrsem->signal(0);
+		pvt->_thr->wait(NULL);
+		delete pvt->_thr;
+		delete pvt->_thrsem;
+		delete[] pvt->_asyncbuf;
+	}
+
 	delete[] pvt->_readbuffer;
 	delete[] pvt->_writebuffer;
 	delete pvt->_lstnr;
+
 	close();
+
 	delete pvt;
 }
 
@@ -439,6 +473,14 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#else
 		return false;
 	#endif
+}
+
+void filedescriptor::useAsyncWrite() {
+	pvt->_asyncwrite=true;
+}
+
+void filedescriptor::dontUseAsyncWrite() {
+	pvt->_asyncwrite=false;
 }
 
 ssize_t filedescriptor::write(uint16_t number) const {
@@ -1377,7 +1419,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 			actualwrite=pvt->_secctx->write(ptr,sizetowrite);
 		} else {
-			actualwrite=lowLevelWrite(ptr,sizetowrite);
+			actualwrite=midLevelWrite(ptr,sizetowrite);
 		}
 
 		#ifdef DEBUG_WRITE
@@ -1445,6 +1487,117 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	debugPrintf(",%d)\n",(int)totalwrite);
 	#endif
 	return totalwrite;
+}
+
+void filedescriptor::lowLevelWriteWorker(void *attr) {
+
+	// get the filedescriptor
+	filedescriptor	*fd=(filedescriptor *)attr;
+
+	for (;;) {
+
+		// signal that we're ready for work
+		fd->pvt->_thrsem->signal(1);
+
+		// wait for work to do
+		fd->pvt->_thrsem->wait(0);
+
+		// handle exit
+		if (fd->pvt->_threxit) {
+			return;
+		}
+
+		// attempt to write all data
+		// FIXME: what about allowshortwrites?
+		ssize_t	bytestowrite=fd->pvt->_asynccount;
+		ssize_t	byteswritten=0;
+		do {
+			error::clearError();
+			ssize_t	result=fd->lowLevelWrite(
+						fd->pvt->_asyncbuf+byteswritten,
+						bytestowrite);
+			if (result==-1) {
+				if (error::getErrorNumber()==EINTR &&
+					fd->pvt->_retryinterruptedwrites) {
+					continue;
+				} else {
+					break;
+				}
+			}
+			bytestowrite-=result;
+			byteswritten+=result;
+		} while (byteswritten<fd->pvt->_asynccount);
+
+		// if we failed to write everything, then
+		// declare than an error has occurred
+		if (byteswritten!=fd->pvt->_asynccount) {
+			fd->pvt->_threrror=true;
+		}
+	}
+}
+
+ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) const {
+
+	if (pvt->_asyncwrite) {
+
+		if (!pvt->_thr) {
+
+			// create the worker thread semaphore
+			pvt->_thrsem=new semaphoreset;
+			int32_t	vals[2]={0,0};
+			if (!pvt->_thrsem->create(
+				IPC_PRIVATE,
+				permissions::evalPermString("rw-------"),
+				2,vals)) {
+				delete pvt->_thrsem;
+				pvt->_thrsem=NULL;
+				return RESULT_ERROR;
+			}
+
+			// create the worker thread
+			pvt->_thr=new thread;
+			if (!pvt->_thr->spawn(
+				(void *(*)(void *))lowLevelWriteWorker,
+				(void *)this,false)) {	
+
+				delete pvt->_thrsem;
+				pvt->_thrsem=NULL;
+				delete pvt->_thr;
+				pvt->_thr=NULL;
+				return RESULT_ERROR;
+			}
+		}
+
+		// wait for the worker thread to be ready
+		pvt->_thrsem->wait(1);
+
+		// if a previous write failed, then return an error
+		if (pvt->_threrror) {
+			pvt->_threrror=false;
+			// FIXME: RESULT_ASYNC_ERROR or something...
+			return RESULT_ERROR;
+		}
+
+		// copy the buffer
+		if (pvt->_asyncbufsize<count) {
+			delete[] pvt->_asyncbuf;
+			// pad to 1024-byte boundary to reduce the need to
+			// re-allocate this buffer
+			pvt->_asyncbufsize=count+((1024-(count%1024))%1024);
+			pvt->_asyncbuf=new unsigned char[pvt->_asyncbufsize];
+		}
+		bytestring::copy(pvt->_asyncbuf,buf,count);
+		pvt->_asynccount=count;
+
+		// signal the worker thread to do work
+		pvt->_thrsem->signal(0);
+
+		// return success
+		return count;
+
+	} else {
+		return lowLevelWrite(buf,count);
+	}
 }
 
 ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {

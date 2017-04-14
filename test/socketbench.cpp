@@ -16,6 +16,7 @@
 #include <rudiments/stdio.h>
 
 bool		disablenagle=true;
+bool		asyncwrite=false;
 uint32_t	socketreadbuffer=65536;
 uint32_t	socketwritebuffer=65536;
 size_t		readbuffer=65536;
@@ -111,6 +112,11 @@ void listen(bool nonblocking) {
 		// use non-blocking mode if necessary
 		if (nonblocking) {
 			clientsock->useNonBlockingMode();
+		}
+
+		// use async write if necessary
+		if (asyncwrite) {
+			clientsock->useAsyncWrite();
 		}
 
 		// get loop count
@@ -243,6 +249,11 @@ void listen(bool nonblocking) {
 }
 
 void session(socketclient *clnt) {
+
+	// use async write if necessary
+	if (asyncwrite) {
+		clnt->useAsyncWrite();
+	}
 
 	// read/write buffer
 	uint32_t	bytecount=65536;
@@ -497,6 +508,9 @@ int main(int argc, const char **argv) {
 	if (cmdl.found("dontdisablenagle")) {
 		disablenagle=false;
 	}
+	if (cmdl.found("asyncwrite")) {
+		asyncwrite=true;
+	}
 	bool	nonblockingserver=cmdl.found("nonblockingserver");
 
 	stdoutput.printf("parameters {\n");
@@ -510,6 +524,8 @@ int main(int argc, const char **argv) {
 							socketwritebuffer);
 	stdoutput.printf("	disablenagle: 		%d\n",
 							disablenagle);
+	stdoutput.printf("	asyncwrite: 		%d\n",
+							asyncwrite);
 	stdoutput.printf("}\n");
 	
 
@@ -527,6 +543,7 @@ int main(int argc, const char **argv) {
 			"			[-writebuffer size]\n"
 			"			[-socketreadbuffer size]\n"
 			"			[-socketwritebuffer size]\n"
-			"			[-disablenagle]\n");
+			"			[-disablenagle]\n"
+			"			[-asyncwrite]\n");
 	}
 }

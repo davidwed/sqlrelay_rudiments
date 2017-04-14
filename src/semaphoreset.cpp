@@ -590,13 +590,22 @@ int32_t semaphoreset::semGet(key_t key, int32_t nsems,
 		for (int32_t i=0; i<nsems; i++) {
 
 			// set the semaphore name
-			int32_t	semnamelen=11+charstring::integerLength(key)+1+
-						charstring::integerLength(i)+1;
-			pvt->_semnames[i]=new char[semnamelen];
-			charstring::copy(pvt->_semnames[i],"rudiments::");
-			charstring::append(pvt->_semnames[i],(int64_t)key);
-			charstring::append(pvt->_semnames[i],"-");
-			charstring::append(pvt->_semnames[i],(int64_t)i);
+			if (key!=IPC_PRIVATE) {
+				int32_t	semnamelen=11+
+					charstring::integerLength(key)+1+
+					charstring::integerLength(i)+1;
+				pvt->_semnames[i]=new char[semnamelen];
+				charstring::copy(
+					pvt->_semnames[i],"rudiments::");
+				charstring::append(
+					pvt->_semnames[i],(int64_t)key);
+				charstring::append(
+					pvt->_semnames[i],"-");
+				charstring::append(
+					pvt->_semnames[i],(int64_t)i);
+			} else {
+				pvt->_semnames[i]=NULL;
+			}
 
 			if (semflg&(IPC_CREAT|IPC_EXCL)) {
 
