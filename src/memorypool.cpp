@@ -145,7 +145,7 @@ unsigned char *memorypool::allocate(size_t length) {
 		pvt->_bufferlist.append(membuf);
 
 		#ifdef DEBUG_ALLOCATE
-		stdoutput.printf("\n	allocating new new node "
+		stdoutput.printf("\n	allocating new node "
 						"(%d bytes)\n\n",incr);
 		#endif
 	}
