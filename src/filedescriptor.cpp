@@ -1581,7 +1581,7 @@ ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) const {
 		}
 
 		// copy the buffer
-		if (pvt->_asyncbufsize<count) {
+		if ((ssize_t)pvt->_asyncbufsize<count) {
 			delete[] pvt->_asyncbuf;
 			// pad to 1024-byte boundary to reduce the need to
 			// re-allocate this buffer
