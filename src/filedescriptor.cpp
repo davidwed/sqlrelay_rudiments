@@ -382,6 +382,7 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 		#endif
 		return false;
 	}
+
 	delete[] pvt->_readbuffer;
 	pvt->_readbuffer=(size)?new unsigned char[size]:NULL;
 	pvt->_readbufferend=pvt->_readbuffer+size;
@@ -496,55 +497,55 @@ ssize_t filedescriptor::write(uint64_t number) const {
 }
 
 ssize_t filedescriptor::write(int16_t number) const {
-	return bufferedWrite(&number,sizeof(int16_t),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(int32_t number) const {
-	return bufferedWrite(&number,sizeof(int32_t),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(int64_t number) const {
-	return bufferedWrite(&number,sizeof(int64_t),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(float number) const {
-	return bufferedWrite(&number,sizeof(float),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(double number) const {
-	return bufferedWrite(&number,sizeof(double),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned char character) const {
-	return bufferedWrite(&character,sizeof(unsigned char),-1,-1);
+	return write(character,-1,-1);
 }
 
 ssize_t filedescriptor::write(bool value) const {
-	return bufferedWrite(&value,sizeof(bool),-1,-1);
+	return write(value,-1,-1);
 }
 
 ssize_t filedescriptor::write(char character) const {
-	return bufferedWrite(&character,sizeof(char),-1,-1);
+	return write(character,-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size) const {
-	return bufferedWrite(string,size,-1,-1);
+	return write(string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size) const {
-	return bufferedWrite(string,size,-1,-1);
+	return write(string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string) const {
-	return bufferedWrite(string,charstring::length(string),-1,-1);
+	return write(string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string) const {
-	return bufferedWrite(string,charstring::length(string),-1,-1);
+	return write(string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size) const {
-	return bufferedWrite(buffer,size,-1,-1);
+	return write(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(uint16_t number,
@@ -649,47 +650,47 @@ ssize_t filedescriptor::read(uint64_t *buffer) {
 }
 
 ssize_t filedescriptor::read(int16_t *buffer) {
-	return bufferedRead(buffer,sizeof(int16_t),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(int32_t *buffer) {
-	return bufferedRead(buffer,sizeof(int32_t),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(int64_t *buffer) {
-	return bufferedRead(buffer,sizeof(int64_t),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(float *buffer) {
-	return bufferedRead(buffer,sizeof(float),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(double *buffer) {
-	return bufferedRead(buffer,sizeof(double),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer) {
-	return bufferedRead(buffer,sizeof(unsigned char),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(bool *buffer) {
-	return bufferedRead(buffer,sizeof(bool),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(char *buffer) {
-	return bufferedRead(buffer,sizeof(char),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
-	return bufferedRead(buffer,size,-1,-1);
+	return read(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::read(char *buffer, size_t size) {
-	return bufferedRead(buffer,size,-1,-1);
+	return read(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size) {
-	return bufferedRead(buffer,size,-1,-1);
+	return read(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator) {
@@ -1255,6 +1256,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					int32_t sec, int32_t usec) const {
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("bufferedWrite of %d bytes\n",(int)count);
 	#endif
