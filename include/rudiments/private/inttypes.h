@@ -45,6 +45,9 @@
 #ifndef RUDIMENTS_HAVE_UINT16_T
 	typedef	unsigned short		uint16_t;
 #endif
+#ifndef RUDIMENTS_HAVE_CHAR16_T
+	typedef	unsigned short		char16_t;
+#endif
 #ifndef RUDIMENTS_HAVE_INT32_T
 	typedef	signed int		int32_t;
 #endif

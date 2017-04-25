@@ -259,6 +259,9 @@
 /* Some systems have CaptureStackBackTrace */
 #define RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE 1
 
+/* Some systems have char16_t */
+/* #undef RUDIMENTS_HAVE_CHAR16_T */
+
 /* Some systems have chmod */
 /* #undef RUDIMENTS_HAVE_CHMOD */
 

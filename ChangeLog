@@ -4,6 +4,7 @@
 		Windows 7 and Server 2008
 	added EAGAIN handling to filedescriptor::safeWrite()
 	added IPC_PRIVATE support to semaphores on windows
+	added configure test for char16_t type
 
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class
