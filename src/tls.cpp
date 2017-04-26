@@ -65,6 +65,7 @@ class tlscontextprivate {
 		bool			_isclient;
 		const char		*_version;
 		const char		*_cert;
+		const char		*_pk;
 		const char		*_pkpwd;
 		const char		*_ciphers;
 		bool			_validatepeer;
@@ -101,6 +102,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_isclient=false;
 	pvt->_version=NULL;
 	pvt->_cert=NULL;
+	pvt->_pk=NULL;
 	pvt->_pkpwd=NULL;
 	#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
 	pvt->_ciphers="PROFILE=SYSTEM";
@@ -238,6 +240,15 @@ void tlscontext::setCertificateChainFile(const char *filename) {
 
 const char *tlscontext::getCertificateChainFile() {
 	return pvt->_cert;
+}
+
+void tlscontext::setPrivateKeyFile(const char *filename) {
+	pvt->_dirty=true;
+	pvt->_pk=filename;
+}
+
+const char *tlscontext::getPrivateKeyFile() {
+	return pvt->_pk;
 }
 
 void tlscontext::setPrivateKeyPassword(const char *password) {
@@ -899,7 +910,8 @@ bool tlscontext::reInit(bool isclient) {
 			if (SSL_CTX_use_certificate_chain_file(
 						pvt->_ctx,pvt->_cert)!=1 ||
 				SSL_CTX_use_PrivateKey_file(
-						pvt->_ctx,pvt->_cert,
+						pvt->_ctx,
+						(pvt->_pk)?pvt->_pk:pvt->_cert,
 						SSL_FILETYPE_PEM)!=1 ||
 				SSL_CTX_check_private_key(pvt->_ctx)!=1) {
 				retval=false;
@@ -954,9 +966,11 @@ bool tlscontext::reInit(bool isclient) {
 
 		#ifdef DEBUG_TLS
 			stdoutput.printf("  version: %s\n",pvt->_version);
-			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
-					pvt->_cert,pvt->_pkpwd,
-					(certloaded)?"valid":"invalid");
+			stdoutput.printf("  cert chain: %s\n",pvt->_cert);
+			stdoutput.printf("  private key: %s\n",
+					(pvt->_pk)?pvt->_pk:pvt->_cert);
+			stdoutput.printf("  cert/pk loaded/valid: %s\n",
+					(certloaded)?"yes":"no");
 			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
 			stdoutput.printf("  ca: %s\n",pvt->_ca);

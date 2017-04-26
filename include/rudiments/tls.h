@@ -39,11 +39,15 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		/** Sets the location of the certificate chain file to use
 		 *  during the next call to connect() or accept().
 		 *  
-		 *  The file should contain:
-		 *      * the client's certificate
-		 *      * the client's private key
-		 *      * a chain of signing certificates, terminating in
-		 *        a certificate for a root certificate authority
+		 *  The file must contain the client's certificate and the
+		 *  chain of signing certificates, terminating in a certificate
+		 *  for a root certificate authority.
+		 *
+		 *  On Windows platforms, the file must also contain the
+		 *  client's private key
+		 *
+		 *  On non-Windows platforms, the private key may be stored in
+		 *  a separate file, specified by setPrivateKeyFile().
 		 *  
 		 *  Note that the supported file formats may vary between
 		 *  platforms.  A variety of formats are generally supported
@@ -58,6 +62,29 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  will be used during the next call to connect() or
 		 *  accept(). */
 		const char	*getCertificateChainFile();
+
+		/** Ignored on Windows platforms.
+		 *
+		 *  On non-Windows platforms:
+		 *
+		 *  Sets the location of the private key file to use
+		 *  during the next call to connect() or accept().
+		 *
+		 *  If no private key file is specified via this call, either
+		 *  because the call is omitted, or because "filename" is
+		 *  NULL or empty, then the certificate chain file will be
+		 *  searched for the private key.
+		 *  
+		 *  Note that the supported file formats may vary between
+		 *  platforms.  A variety of formats are generally supported
+		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
+		 *  the .pfx format is currently supported on Windows. */
+		void		setPrivateKeyFile(const char *filename);
+
+		/** Returns the location of the private key file that
+		 *  (on non-Windows platforms) will be used during the
+		 *  next call to connect() or accept(). */
+		const char	*getPrivateKeyFile();
 
 		/** Sets the password to use when accessing the private key
 		 *  in the certificate chain file during the next call to
