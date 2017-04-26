@@ -6,6 +6,7 @@
 	added IPC_PRIVATE support to semaphores on windows
 	added configure test for char16_t type
 	added support for separate TLS cert/key files on non-Windows platforms
+	added missing byte-order translation for read/write of signed integers
 
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class

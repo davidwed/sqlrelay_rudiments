@@ -574,16 +574,25 @@ ssize_t filedescriptor::write(uint64_t number,
 
 ssize_t filedescriptor::write(int16_t number,
 				int32_t sec, int32_t usec) const {
+	if (pvt->_translatebyteorder) {
+		number=hostToNet((uint16_t)number);
+	}
 	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int32_t number,
 				int32_t sec, int32_t usec) const {
+	if (pvt->_translatebyteorder) {
+		number=hostToNet((uint32_t)number);
+	}
 	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int64_t number,
 				int32_t sec, int32_t usec) const {
+	if (pvt->_translatebyteorder) {
+		number=hostToNet((uint64_t)number);
+	}
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
@@ -736,17 +745,29 @@ ssize_t filedescriptor::read(uint64_t *buffer,
 
 ssize_t filedescriptor::read(int16_t *buffer,
 				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(int16_t),sec,usec);
+	ssize_t	retval=bufferedRead(buffer,sizeof(int16_t),sec,usec);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost((uint16_t)*buffer);
+	}
+	return retval;
 }
 
 ssize_t filedescriptor::read(int32_t *buffer,
 				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(int32_t),sec,usec);
+	ssize_t	retval=bufferedRead(buffer,sizeof(int32_t),sec,usec);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost((uint32_t)*buffer);
+	}
+	return retval;
 }
 
 ssize_t filedescriptor::read(int64_t *buffer,
 				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(int64_t),sec,usec);
+	ssize_t	retval=bufferedRead(buffer,sizeof(int64_t),sec,usec);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost((uint64_t)*buffer);
+	}
+	return retval;
 }
 
 ssize_t filedescriptor::read(float *buffer,
