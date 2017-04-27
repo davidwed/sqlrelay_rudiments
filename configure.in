@@ -630,6 +630,10 @@ AC_MSG_CHECKING(for inttypes.h)
 AC_TRY_COMPILE([#include <inttypes.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_INTTYPES_H, 1, Some systems have inttypes.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for uchar.h)
+AC_TRY_COMPILE([#include <uchar.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_UCHAR_H, 1, Some systems have uchar.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for limits.h)
 AC_TRY_COMPILE([#include <limits.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_LIMITS_H, 1, Some systems have limits.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -1070,6 +1074,9 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <sys/bitypes.h>
 #elif defined(RUDIMENTS_HAVE_INTTYPES_H)
 	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
 #endif],
 [char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
@@ -3676,7 +3683,7 @@ dnl if library source changed at all,         c:r:a -> c:r+1:a
 dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
 dnl if interfaces added,                      c:r:a -> c:r:a+1
 dnl if interfaces removed,                    c:r:a -> c:r:0
-SONAME_VERSION_INFO="4:4:0"
+SONAME_VERSION_INFO="4:5:0"
 AC_SUBST(SONAME_VERSION_INFO)
 
 

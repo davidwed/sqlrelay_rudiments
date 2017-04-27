@@ -1344,6 +1344,9 @@
 /* Some systems have uadmin with a integer argument */
 #undef RUDIMENTS_HAVE_UADMIN_INT
 
+/* Some systems have uchar.h */
+#undef RUDIMENTS_HAVE_UCHAR_H
+
 /* Some systems have uint16_t */
 #undef RUDIMENTS_HAVE_UINT16_T
 

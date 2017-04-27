@@ -33,6 +33,10 @@
 	#include <inttypes.h>
 #endif
 
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+
 #ifndef RUDIMENTS_HAVE_INT8_T
 	typedef	signed char		int8_t;
 #endif
