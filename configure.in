@@ -1067,6 +1067,7 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #endif],
 [uint16_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT16_T,1,Some systems have uint16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
+RUDIMENTS_HAVE_CHAR16_T="no"
 AC_MSG_CHECKING(for char16_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <stdint.h>
@@ -1078,7 +1079,16 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
 	#include <uchar.h>
 #endif],
-[char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+[char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR16_T="yes", AC_MSG_RESULT(no))
+
+if ( test "$RUDIMENTS_HAVE_CHAR16_T" = "no" )
+then
+OLDCC=$CC
+CC=$CXX
+AC_MSG_CHECKING(for char16_t type again)
+AC_TRY_COMPILE([],[char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+CC=$OLDCC
+fi
 
 AC_MSG_CHECKING(for int32_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
