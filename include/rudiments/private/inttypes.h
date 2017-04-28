@@ -49,7 +49,8 @@
 #ifndef RUDIMENTS_HAVE_UINT16_T
 	typedef	unsigned short		uint16_t;
 #endif
-#ifndef RUDIMENTS_HAVE_CHAR16_T
+#if !defined(RUDIMENTS_HAVE_CHAR16_T) && \
+	defined(__cplusplus) && (__cplusplus<201103L)
 	typedef	unsigned short		char16_t;
 #endif
 #ifndef RUDIMENTS_HAVE_INT32_T
