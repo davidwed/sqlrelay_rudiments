@@ -2216,6 +2216,13 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 #include <stdio.h>],
 va_list a; vasprintf(0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VASPRINTF,1,Some systems have vasprintf), AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for va_copy)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
+	#include <stdarg.h>
+#endif
+#include <stdio.h>],
+va_list a; va_list b; va_copy(a,b);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VA_COPY,1,Some systems have va_copy), AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for llabs)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>

@@ -10,3 +10,7 @@
 #ifdef RUDIMENTS_HAVE_STDARG_H
 	#include <stdarg.h>
 #endif
+
+#ifndef RUDIMENTS_HAVE_VA_COPY
+	#define va_copy(a,b) ((a)=(b))
+#endif
