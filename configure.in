@@ -1078,6 +1078,12 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 #endif
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
 	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
 #endif],
 [char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR16_T="yes", AC_MSG_RESULT(no))
 

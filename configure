@@ -22423,6 +22423,12 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #if defined(RUDIMENTS_HAVE_UCHAR_H)
 	#include <uchar.h>
 #endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif
 int
 main ()
 {
