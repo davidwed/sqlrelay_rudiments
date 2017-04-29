@@ -19,6 +19,10 @@
 #endif
 
 
+// some platforms define types in their new or new.h
+#include <rudiments/private/new.h>
+
+
 // define [u]int(8|16|32|64)_t...
 
 #if defined(RUDIMENTS_HAVE_STDINT_H)
