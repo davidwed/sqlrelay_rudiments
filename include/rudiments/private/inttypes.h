@@ -19,8 +19,12 @@
 #endif
 
 
-// some platforms define types in their new or new.h
-#include <rudiments/private/new.h>
+// some platforms define types like char16_t in their new or new.h
+// (some firstworks C code uses inttypes.h to make sure types are defined
+// though, and we don't want that code to include new.h)
+#ifdef __cplusplus
+	#include <rudiments/private/new.h>
+#endif
 
 
 // define [u]int(8|16|32|64)_t...
