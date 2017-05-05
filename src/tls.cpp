@@ -30,6 +30,24 @@
 	#define SSIZE_MAX 16383
 #endif
 
+#if defined(RUDIMENTS_HAS_SSPI)
+// FIXME: move to charstring class
+static WCHAR *asciiToUnicode(const CHAR *in) {
+
+	int32_t	size=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,NULL,0);
+	if (!size) {
+		return NULL;
+	}
+
+	WCHAR	*out=new WCHAR[size];
+	if (!MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,out,size)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+#endif
+
 //#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
@@ -769,6 +787,34 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 }
 #endif
 
+#ifdef RUDIMENTS_HAS_SSPI
+static DWORD getLocation(const char *provider) {
+	if (!charstring::compare(provider,
+				"LOCAL_MACHINE")) {
+    		return CERT_SYSTEM_STORE_LOCAL_MACHINE;
+	} else if (!charstring::compare(provider,
+				"CURRENT_SERVICE")) {
+    		return CERT_SYSTEM_STORE_CURRENT_SERVICE;
+	} else if (!charstring::compare(provider,
+				"SERVICES")) {
+    		return CERT_SYSTEM_STORE_SERVICES;
+	} else if (!charstring::compare(provider,
+				"USERS")) {
+    		return CERT_SYSTEM_STORE_USERS;
+	} else if (!charstring::compare(provider,
+				"CURRENT_USER_GROUP_POLICY")) {
+    		return CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY;
+	} else if (!charstring::compare(provider,
+				"LOCAL_MACHINE_GROUP_POLICY")) {
+    		return CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY;
+	} else if (!charstring::compare(provider,
+				"LOCAL_MACHINE_ENTERPRISE")) {
+    		return CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE;
+	}
+    	return CERT_SYSTEM_STORE_CURRENT_USER;
+}
+#endif
+
 bool tlscontext::reInit(bool isclient) {
 
 	// free/clear any old peer certificate
@@ -1196,13 +1242,35 @@ bool tlscontext::reInit(bool isclient) {
 				// store...
 
 				// assume that pvt->_cert is formatted like:
-				// store-name/common-name...
+				// * location:store:subject
+				// or
+				// * store:subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER)
+				// or
+				// * subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER,
+				//	store presumed to be "MY")
 
-				// split pvt->_cert into store/common names
+				// split/process pvt->_cert 
 				char		**parts=NULL;
 				uint64_t	partcount=0;
-				charstring::split(pvt->_cert,"/",true,
+				charstring::split(pvt->_cert,":",true,
 							&parts,&partcount);
+				DWORD	location=CERT_SYSTEM_STORE_CURRENT_USER;
+				const char	*store="MY";
+				const char	*subject="";
+				if (partcount>2) {
+					location=getLocation(parts[0]);
+					store=parts[1];
+					subject=parts[2];
+				} else if (partcount==2) {
+					store=parts[0];
+					subject=parts[1];
+				} else if (partcount==1) {
+					subject=parts[0];
+				}
 
 				if (partcount>=2) {
 
@@ -1211,13 +1279,15 @@ bool tlscontext::reInit(bool isclient) {
 						CERT_STORE_PROV_SYSTEM_A,
 						0,
 						NULL,
-						0,
-						parts[0]);
+						location,
+						store);
 
 					if (pvt->_cstore) {
 
-						// get the cert with
-						// the specified common name
+						// get the cert who's subject
+						// includes the specified string
+						WCHAR	*subjectw=
+						asciiToUnicode(subject);
 						PCCERT_CONTEXT	cctx=
 						CertFindCertificateInStore(
 							pvt->_cstore,
@@ -1225,8 +1295,9 @@ bool tlscontext::reInit(bool isclient) {
 							PKCS_7_ASN_ENCODING,
 							0,
 							CERT_FIND_SUBJECT_STR,
-							parts[1],
+							subjectw,
 							NULL);
+						delete[] subjectw;
 
 						// FIXME: support private
 						// key password
