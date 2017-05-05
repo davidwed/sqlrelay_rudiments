@@ -1136,7 +1136,9 @@ bool tlscontext::reInit(bool isclient) {
 				credflags|=SCH_CRED_NO_DEFAULT_CREDS;
 			}
 
-			// open the specified certificate store
+			// open the specified certificate store...
+
+			// first look for a file named pvt->_cert
 			pvt->_cstore=CertOpenStore(
 					CERT_STORE_PROV_FILENAME_A,
 					X509_ASN_ENCODING|
@@ -1144,6 +1146,17 @@ bool tlscontext::reInit(bool isclient) {
 					NULL,
 					0,
 					pvt->_cert);
+
+			// if that fails, look for a store named pvt->_cert
+			// in the system store
+			if (!pvt->_cstore) {
+				pvt->_cstore=CertOpenStore(
+					CERT_STORE_PROV_SYSTEM_A,
+					0,
+					NULL,
+					0,
+					pvt->_cert);
+			}
 
 			if (pvt->_cstore) {
 
