@@ -1438,6 +1438,9 @@
 /* Some systems have vasprintf */
 /* #undef RUDIMENTS_HAVE_VASPRINTF */
 
+/* Some systems have va_copy */
+#define RUDIMENTS_HAVE_VA_COPY 1
+
 /* Some systems have vdprintf */
 /* #undef RUDIMENTS_HAVE_VDPRINTF */
 
