@@ -55,6 +55,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7ba1b0796def0e074da29deb412523d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bcd59fdee7584c5e6418c26ef4d1474"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classerror.html#a5bcd59fdee7584c5e6418c26ef4d1474">getErrorString</a> ()</td></tr>
 <tr class="separator:a5bcd59fdee7584c5e6418c26ef4d1474"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd51eabc1b68bd6de35228613d4cd8ab"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classerror.html#acd51eabc1b68bd6de35228613d4cd8ab">clearNativeError</a> ()</td></tr>
+<tr class="separator:acd51eabc1b68bd6de35228613d4cd8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a872558e6402d4532691892b4e92983cc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classerror.html#a872558e6402d4532691892b4e92983cc">setNativeErrorNumber</a> (int32_t err)</td></tr>
+<tr class="separator:a872558e6402d4532691892b4e92983cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1feaa067b2f654a5cf68650d4cfd6569"><td class="memItemLeft" align="right" valign="top">static int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classerror.html#a1feaa067b2f654a5cf68650d4cfd6569">getNativeErrorNumber</a> ()</td></tr>
 <tr class="separator:a1feaa067b2f654a5cf68650d4cfd6569"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3093a59d36abcc5987818e28b81a40af"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classerror.html#a3093a59d36abcc5987818e28b81a40af">getNativeErrorString</a> ()</td></tr>
@@ -86,6 +90,32 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Set the current posix system error to 0, "Success". </p>
+
+</div>
+</div>
+<a id="acd51eabc1b68bd6de35228613d4cd8ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd51eabc1b68bd6de35228613d4cd8ab">&#9670;&nbsp;</a></span>clearNativeError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void error::clearNativeError </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the current native error to 0, "Success". For systems (like Windows) that have their own native error number system, distinct from posix, this method sets that error number. For systems where the posix system error is the native error, this method has the same effect as <a class="el" href="classerror.html#ae3a1e533cf14021867aa9bfd28f7ad9f">clearError()</a>. </p>
 
 </div>
 </div>
@@ -220,10 +250,37 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a872558e6402d4532691892b4e92983cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a872558e6402d4532691892b4e92983cc">&#9670;&nbsp;</a></span>setNativeErrorNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void error::setNativeErrorNumber </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>err</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the current native system error to "err". For systems (like Windows) that have their own native error number system, distinct from posix, this method sets that error number. For systems where the posix system error is the native error, this method has the same effect as setError(). </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 26 2017 01:02:10 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 5 2017 17:31:10 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

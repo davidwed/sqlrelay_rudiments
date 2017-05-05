@@ -38,24 +38,71 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 
 		/** Sets the location of the certificate chain file to use
 		 *  during the next call to connect() or accept().
+		 *
+		 *  If "filename" is NULL or empty then no certificate will
+		 *  be sent to the peer.
+		 *
+		 *  Otherwise...
+		 *
+		 *
+		 *  On non-Windows platforms, "filename" must refer to an
+		 *  actual file.  On Windows platforms, it may refer to an
+		 *  actual file or to a certificate found in a Windows
+		 *  Certificate Store.
 		 *  
-		 *  The file must contain the client's certificate and the
-		 *  chain of signing certificates, terminating in a certificate
-		 *  for a root certificate authority.
 		 *
-		 *  On Windows platforms, the file must also contain the
-		 *  client's private key
-		 *
-		 *  On non-Windows platforms, the private key may be stored in
-		 *  a separate file, specified by setPrivateKeyFile().
+		 *  Actual files must contain the client's certificate and
+		 *  the chain of signing certificates, terminating in a
+		 *  certificate for a root certificate authority.  On Windows
+		 *  platforms, the file must also contain the client's private
+		 *  key.  On non-Windows platforms, the private key may be
+		 *  stored in a separate file, specified by setPrivateKeyFile().
 		 *  
 		 *  Note that the supported file formats may vary between
 		 *  platforms.  A variety of formats are generally supported
 		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
-		 *  the .pfx format is currently supported on Windows.
-		 * 
-		 *  If "filename" is NULL or empty then no certificate will
-		 *  be sent to the peer. */
+		 *  .pfx files are currently supported on Windows.
+		 *
+		 *
+		 *  Certificates in a Windows Certificate Store must have an
+		 *  associated private key and associated chain of signing
+		 *  certificates, terminating in a certificate for a root
+		 *  certificate authority.
+		 *
+		 *  To specify an entry in a Windows Certificate Store,
+		 *  "filename" must be specified in one of the following
+		 *  formats:
+		 * 	location:store:subject
+		 * 	store:subject
+		 * 	subject
+		 *
+		 *  The "location" parameter identifies the certificate store
+		 *  location, and must be one of the following:
+		 * 	CURRENT_USER
+		 *	LOCAL_MACHINE
+		 *	CURRENT_SERVICE
+		 *	SERVICES
+		 *	USERS
+		 *	CURRENT_USER_GROUP_POLICY
+		 *	LOCAL_MACHINE_GROUP_POLICY
+		 *	LOCAL_MACHINE_ENTERPRISE
+		 *  If "location" is omitted then it defaults to CURRENT_USER.
+		 *
+		 *  The "store" parameter identifies the certificate store, and
+		 *  must be one of the following:
+		 *  	MY
+		 *  	Root
+		 *  	Trust
+		 *  	CA
+		 *  If "store" is omitted then it defaults to MY.
+		 *
+		 *  If "subject" identifies the certificate.  The first
+		 *  certificate in the specified location/store who's Subject
+		 *  contains "subject" (case-insensitive) will be used.  Note
+		 *  that the order of the certificates in the store is not
+		 *  guaranteed, so "subject" should contain enough information
+		 *  to uniquely identify a certificate.
+		 */
 		void		setCertificateChainFile(const char *filename);
 
 		/** Returns the location of the certificate chain file that

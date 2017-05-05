@@ -8,6 +8,8 @@
 	added support for separate TLS cert/key files on non-Windows platforms
 	added missing byte-order translation for read/write of signed integers
 	added clearNativeError and setNativeError methods to error class
+	added support for loading certificates/keys from windows cert stores
+		to the tls class
 
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class

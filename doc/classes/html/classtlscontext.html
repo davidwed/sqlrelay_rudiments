@@ -604,11 +604,16 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Sets the location of the certificate chain file to use during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>.</p>
-<p>The file must contain the client's certificate and the chain of signing certificates, terminating in a certificate for a root certificate authority.</p>
-<p>On Windows platforms, the file must also contain the client's private key</p>
-<p>On non-Windows platforms, the private key may be stored in a separate file, specified by <a class="el" href="classtlscontext.html#af01ed813bb31e2a7145cc0f47cab4fd3">setPrivateKeyFile()</a>.</p>
-<p>Note that the supported file formats may vary between platforms. A variety of formats are generally supported on Linux and Unix platforms (.pem, .pfx, etc.) but only the .pfx format is currently supported on Windows.</p>
-<p>If "filename" is NULL or empty then no certificate will be sent to the peer. </p>
+<p>If "filename" is NULL or empty then no certificate will be sent to the peer.</p>
+<p>Otherwise...</p>
+<p>On non-Windows platforms, "filename" must refer to an actual file. On Windows platforms, it may refer to an actual file or to a certificate found in a Windows Certificate Store.</p>
+<p>Actual files must contain the client's certificate and the chain of signing certificates, terminating in a certificate for a root certificate authority. On Windows platforms, the file must also contain the client's private key. On non-Windows platforms, the private key may be stored in a separate file, specified by <a class="el" href="classtlscontext.html#af01ed813bb31e2a7145cc0f47cab4fd3">setPrivateKeyFile()</a>.</p>
+<p>Note that the supported file formats may vary between platforms. A variety of formats are generally supported on Linux and Unix platforms (.pem, .pfx, etc.) but only .pfx files are currently supported on Windows.</p>
+<p>Certificates in a Windows Certificate Store must have an associated private key and associated chain of signing certificates, terminating in a certificate for a root certificate authority.</p>
+<p>To specify an entry in a Windows Certificate Store, "filename" must be specified in one of the following formats: location:store:subject store:subject subject</p>
+<p>The "location" parameter identifies the certificate store location, and must be one of the following: CURRENT_USER LOCAL_MACHINE CURRENT_SERVICE SERVICES USERS CURRENT_USER_GROUP_POLICY LOCAL_MACHINE_GROUP_POLICY LOCAL_MACHINE_ENTERPRISE If "location" is omitted then it defaults to CURRENT_USER.</p>
+<p>The "store" parameter identifies the certificate store, and must be one of the following: MY Root Trust CA If "store" is omitted then it defaults to MY.</p>
+<p>If "subject" identifies the certificate. The first certificate in the specified location/store who's Subject contains "subject" (case-insensitive) will be used. Note that the order of the certificates in the store is not guaranteed, so "subject" should contain enough information to uniquely identify a certificate. </p>
 
 </div>
 </div>
@@ -816,7 +821,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 26 2017 01:02:10 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 5 2017 17:31:10 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
