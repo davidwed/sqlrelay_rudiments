@@ -48,6 +48,7 @@ PROGS2= dynamicarray \
 	memorymap \
 	character \
 	bytestring \
+	bytestringbench \
 	tlsserver \
 	tlsclient
 
@@ -266,6 +267,9 @@ character: character.cpp character.$(OBJ)
 
 bytestring: bytestring.cpp bytestring.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+bytestringbench: bytestringbench.cpp bytestringbench.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestringbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 sys: sys.cpp sys.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sys.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
