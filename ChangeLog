@@ -7,6 +7,7 @@
 	added configure test for char16_t type
 	added support for separate TLS cert/key files on non-Windows platforms
 	added missing byte-order translation for read/write of signed integers
+	added clearNativeError and setNativeError methods to error class
 
 1.0.4 - added support for EOT to codetree
 	added loop-avoidance to xmldomevents class

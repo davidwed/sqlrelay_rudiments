@@ -1126,7 +1126,7 @@ bool tlscontext::reInit(bool isclient) {
 			}
 		}
 
-		// set certificate chain file
+		// set the certificate and private key
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
 
 			// cert specified...
@@ -1146,17 +1146,6 @@ bool tlscontext::reInit(bool isclient) {
 					NULL,
 					0,
 					pvt->_cert);
-
-			// if that fails, look for a store named pvt->_cert
-			// in the system store
-			if (!pvt->_cstore) {
-				pvt->_cstore=CertOpenStore(
-					CERT_STORE_PROV_SYSTEM_A,
-					0,
-					NULL,
-					0,
-					pvt->_cert);
-			}
 
 			if (pvt->_cstore) {
 
@@ -1195,6 +1184,80 @@ bool tlscontext::reInit(bool isclient) {
 					pvt->_cctx[0]=cctx;
 					pvt->_cctxcount=1;
 				}
+
+			} else {
+
+				// clear any error set by the previous call to
+				// CertOpenStore()
+				error::clearNativeError();
+
+				// if there was no cert file with the specified
+				// name, then look for the cert in the system
+				// store...
+
+				// assume that pvt->_cert is formatted like:
+				// store-name/common-name...
+
+				// split pvt->_cert into store/common names
+				char		**parts=NULL;
+				uint64_t	partcount=0;
+				charstring::split(pvt->_cert,"/",true,
+							&parts,&partcount);
+
+				if (partcount>=2) {
+
+					// first look for the specified store
+					pvt->_cstore=CertOpenStore(
+						CERT_STORE_PROV_SYSTEM_A,
+						0,
+						NULL,
+						0,
+						parts[0]);
+
+					if (pvt->_cstore) {
+
+						// get the cert with
+						// the specified common name
+						PCCERT_CONTEXT	cctx=
+						CertFindCertificateInStore(
+							pvt->_cstore,
+							X509_ASN_ENCODING|
+							PKCS_7_ASN_ENCODING,
+							0,
+							CERT_FIND_SUBJECT_STR,
+							parts[1],
+							NULL);
+
+						// FIXME: support private
+						// key password
+
+						if (cctx) {
+
+							// verify that the cert
+							// contained a private
+							// key
+					HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
+					CryptAcquireCertificatePrivateKey(
+								cctx,
+								0,
+								NULL,
+								&kh,
+								NULL,
+								NULL);
+
+							pvt->_cctx=
+							new PCCERT_CONTEXT[1];
+							pvt->_cctx[0]=cctx;
+							pvt->_cctxcount=1;
+						}
+					}
+				}
+
+				// clean up 
+				for (uint64_t i=0; i<partcount; i++) {
+					delete[] parts[i];
+				}
+				delete[] parts;
 			}
 
 			// If CertOpenStoreFailed, CertFindCertificateInStore
