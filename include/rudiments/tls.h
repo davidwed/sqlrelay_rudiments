@@ -96,10 +96,10 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  	CA
 		 *  If "store" is omitted then it defaults to MY.
 		 *
-		 *  If "subject" identifies the certificate.  The first
-		 *  certificate in the specified location/store who's Subject
-		 *  contains "subject" (case-insensitive) will be used.  Note
-		 *  that the order of the certificates in the store is not
+		 *  The "subject" parameter identifies the certificate.  The
+		 *  first certificate in the specified location/store who's
+		 *  Subject contains "subject" (case-insensitive) will be used.
+		 *  Note that the order of the certificates in the store is not
 		 *  guaranteed, so "subject" should contain enough information
 		 *  to uniquely identify a certificate.
 		 */
