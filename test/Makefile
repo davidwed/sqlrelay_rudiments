@@ -48,7 +48,6 @@ PROGS2= dynamicarray \
 	memorymap \
 	character \
 	bytestring \
-	bytestringbench \
 	tlsserver \
 	tlsclient
 
