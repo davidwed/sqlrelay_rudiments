@@ -1402,7 +1402,7 @@ bool tlscontext::reInit(bool isclient) {
 
 				// open the specified certificate
 				// authority store
-				pvt->_cstore=CertOpenStore(
+				pvt->_castore=CertOpenStore(
 						CERT_STORE_PROV_SYSTEM_A,
 						0,
 						NULL,
