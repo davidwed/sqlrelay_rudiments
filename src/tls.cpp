@@ -1272,24 +1272,22 @@ bool tlscontext::reInit(bool isclient) {
 					subject=parts[0];
 				}
 
-				if (partcount>=2) {
-
-					// first look for the specified store
-					pvt->_cstore=CertOpenStore(
+				// first look for the specified store
+				pvt->_cstore=CertOpenStore(
 						CERT_STORE_PROV_SYSTEM_A,
 						0,
 						NULL,
 						location,
 						store);
 
-					if (pvt->_cstore) {
+				if (pvt->_cstore) {
 
-						// get the cert who's subject
-						// includes the specified string
-						WCHAR	*subjectw=
-						asciiToUnicode(subject);
-						PCCERT_CONTEXT	cctx=
-						CertFindCertificateInStore(
+					// get the cert who's subject
+					// includes the specified string
+					WCHAR	*subjectw=
+					asciiToUnicode(subject);
+					PCCERT_CONTEXT	cctx=
+					CertFindCertificateInStore(
 							pvt->_cstore,
 							X509_ASN_ENCODING|
 							PKCS_7_ASN_ENCODING,
@@ -1297,16 +1295,14 @@ bool tlscontext::reInit(bool isclient) {
 							CERT_FIND_SUBJECT_STR,
 							subjectw,
 							NULL);
-						delete[] subjectw;
+					delete[] subjectw;
 
-						// FIXME: support private
-						// key password
+					// FIXME: support private key password
 
-						if (cctx) {
+					if (cctx) {
 
-							// verify that the cert
-							// contained a private
-							// key
+						// verify that the cert
+						// contained a private key
 					HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
 					CryptAcquireCertificatePrivateKey(
 								cctx,
@@ -1316,11 +1312,10 @@ bool tlscontext::reInit(bool isclient) {
 								NULL,
 								NULL);
 
-							pvt->_cctx=
-							new PCCERT_CONTEXT[1];
-							pvt->_cctx[0]=cctx;
-							pvt->_cctxcount=1;
-						}
+						pvt->_cctx=
+						new PCCERT_CONTEXT[1];
+						pvt->_cctx[0]=cctx;
+						pvt->_cctxcount=1;
 					}
 				}
 
@@ -1363,6 +1358,58 @@ bool tlscontext::reInit(bool isclient) {
 					NULL,
 					0,
 					pvt->_ca);
+
+			if (!pvt->_castore) {
+
+				// clear any error set by the previous call to
+				// CertOpenStore()
+				error::clearNativeError();
+
+				// if there was no ca file with the specified
+				// name, then look for the ca in the system
+				// store...
+
+				// assume that pvt->_ca is formatted like:
+				// * location:store:subject
+				// or
+				// * store:subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER)
+				// or
+				// * subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER,
+				//	store presumed to be "MY")
+
+				// split/process pvt->_ca 
+				char		**parts=NULL;
+				uint64_t	partcount=0;
+				charstring::split(pvt->_ca,":",true,
+							&parts,&partcount);
+				DWORD	location=CERT_SYSTEM_STORE_CURRENT_USER;
+				const char	*store="MY";
+				const char	*subject="";
+				if (partcount>2) {
+					location=getLocation(parts[0]);
+					store=parts[1];
+					subject=parts[2];
+				} else if (partcount==2) {
+					store=parts[0];
+					subject=parts[1];
+				} else if (partcount==1) {
+					subject=parts[0];
+				}
+
+				// open the specified certificate
+				// authority store
+				pvt->_cstore=CertOpenStore(
+						CERT_STORE_PROV_SYSTEM_A,
+						0,
+						NULL,
+						location,
+						store);
+			}
+
 			if (!pvt->_castore) {
 				setNativeError();
 				retval=false;
