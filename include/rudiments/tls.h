@@ -222,6 +222,64 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  If "ca" is NULL or empty then no validation of the peer
 		 *  certificate will occur during the next call to connect() or
 		 *  accept(). */
+
+		/** Sets the location of the certificate authority to use when
+		 *  validating the peer's certificate during the next call
+		 *  to connect() or accept().
+		 *
+		 *  If "ca" is NULL or empty then no validation of the peer
+		 *  certificate will occur during the next call to connect() or
+		 *  accept().
+		 *
+		 *  Otherwise...
+		 *
+		 *
+		 *  On non-Windows systems, "ca" can be either a file name or
+		 *  directory name.  If it a file name, then only that file
+		 *  will be used.  If it is a directory name, then all
+		 *  certificate authority files found in that directory will
+		 *  be used.  On Windows platforms, "ca" may refer to a file or
+		 *  to a certificate found in a Windows Certificate Store.
+		 *  
+		 *
+		 *  Note that the supported file formats may vary between
+		 *  platforms.  A variety of formats are generally supported
+		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
+		 *  .pfx files are currently supported on Windows.
+		 *
+		 *  To specify an entry in a Windows Certificate Store,
+		 *  "ca" must be specified in one of the following formats:
+		 * 	location:store:subject
+		 * 	store:subject
+		 * 	subject
+		 *
+		 *  The "location" parameter identifies the certificate store
+		 *  location, and must be one of the following:
+		 * 	CURRENT_USER
+		 *	LOCAL_MACHINE
+		 *	CURRENT_SERVICE
+		 *	SERVICES
+		 *	USERS
+		 *	CURRENT_USER_GROUP_POLICY
+		 *	LOCAL_MACHINE_GROUP_POLICY
+		 *	LOCAL_MACHINE_ENTERPRISE
+		 *  If "location" is omitted then it defaults to CURRENT_USER.
+		 *
+		 *  The "store" parameter identifies the certificate store, and
+		 *  must be one of the following:
+		 *  	MY
+		 *  	Root
+		 *  	Trust
+		 *  	CA
+		 *  If "store" is omitted then it defaults to MY.
+		 *
+		 *  The "subject" parameter identifies the CA certificate.  The
+		 *  first certificate in the specified location/store who's
+		 *  Subject contains "subject" (case-insensitive) will be used.
+		 *  Note that the order of the certificates in the store is not
+		 *  guaranteed, so "subject" should contain enough information
+		 *  to uniquely identify a CA certificate.
+		 */
 		void		setCertificateAuthority(const char *ca);
 
 		/** Returns the location of the certificate authority that
