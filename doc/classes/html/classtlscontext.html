@@ -581,18 +581,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the location of the certificate authority to use when validating the peer's certificate during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>.</p>
-<p>On Windows, "ca" must be a file name.</p>
-<p>On non-Windows systems, "ca" can be either a file or directory name. If it is a directory name, then all certificate authority files found in that directory will be used. If it a file name, then only that file will be used.</p>
-<p>If "ca" is NULL or empty then no validation of the peer certificate will occur during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>. Sets the location of the certificate authority to use when validating the peer's certificate during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>.</p>
+<p>Sets the location of the certificate store that contains the certificate of the certificate authority (CA cert) to use when validating the peer's certificate during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>.</p>
 <p>If "ca" is NULL or empty then no validation of the peer certificate will occur during the next call to <a class="el" href="classtlscontext.html#ab4b4f26b8a62b53201001427f8dab088">connect()</a> or <a class="el" href="classtlscontext.html#ad5e2d2267b6dd22b195a887824a6f525">accept()</a>.</p>
 <p>Otherwise...</p>
-<p>On non-Windows systems, "ca" can be either a file name or directory name. If it a file name, then only that file will be used. If it is a directory name, then all certificate authority files found in that directory will be used. On Windows platforms, "ca" may refer to a file or to a certificate found in a Windows Certificate Store.</p>
+<p>On non-Windows systems, "ca" can be either a file name or directory name. If it a file name, then only that file will be used, though the file may contain multiple CA certs. If it is a directory name, then all certificate store files found in that directory will be used.</p>
+<p>On Windows platforms, "ca" may refer to a file or to a Windows Certificate Store. If it a file name, then only that file will be used, though the file may contain multiple CA certs. If it is a Windows Certificate Store, then all certificates in the store will be used.</p>
 <p>Note that the supported file formats may vary between platforms. A variety of formats are generally supported on Linux and Unix platforms (.pem, .pfx, etc.) but only .pfx files are currently supported on Windows.</p>
-<p>To specify an entry in a Windows Certificate Store, "ca" must be specified in one of the following formats: location:store:subject store:subject subject</p>
+<p>To specify a Windows Certificate Store, "ca" must be specified in one of the following formats: location:store store</p>
 <p>The "location" parameter identifies the certificate store location, and must be one of the following: CURRENT_USER LOCAL_MACHINE CURRENT_SERVICE SERVICES USERS CURRENT_USER_GROUP_POLICY LOCAL_MACHINE_GROUP_POLICY LOCAL_MACHINE_ENTERPRISE If "location" is omitted then it defaults to CURRENT_USER.</p>
-<p>The "store" parameter identifies the certificate store, and must be one of the following: MY Root Trust CA If "store" is omitted then it defaults to MY.</p>
-<p>The "subject" parameter identifies the CA certificate. The first certificate in the specified location/store who's Subject contains "subject" (case-insensitive) will be used. Note that the order of the certificates in the store is not guaranteed, so "subject" should contain enough information to uniquely identify a CA certificate. </p>
+<p>The "store" parameter identifies the certificate store, and must be one of the following: MY Root Trust CA If "store" is omitted then it defaults to MY. </p>
 
 </div>
 </div>
@@ -829,7 +826,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 5 2017 22:15:02 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 5 2017 22:27:22 for Rudiments by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

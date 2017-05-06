@@ -208,24 +208,10 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  connect() or accept(). */
 		uint16_t	getValidationDepth();
 
-		/** Sets the location of the certificate authority to use when
-		 *  validating the peer's certificate during the next call
-		 *  to connect() or accept().
-		 *
-		 *  On Windows, "ca" must be a file name.
-		 *
-		 *  On non-Windows systems, "ca" can be either a file or
-		 *  directory name.  If it is a directory name, then all
-		 *  certificate authority files found in that directory will be
-		 *  used.  If it a file name, then only that file will be used.
-		 *
-		 *  If "ca" is NULL or empty then no validation of the peer
-		 *  certificate will occur during the next call to connect() or
-		 *  accept(). */
-
-		/** Sets the location of the certificate authority to use when
-		 *  validating the peer's certificate during the next call
-		 *  to connect() or accept().
+		/** Sets the location of the certificate store that contains
+		 *  the certificate of the certificate authority (CA cert) to
+		 *  use when validating the peer's certificate during the next
+		 *  call to connect() or accept().
 		 *
 		 *  If "ca" is NULL or empty then no validation of the peer
 		 *  certificate will occur during the next call to connect() or
@@ -236,10 +222,15 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *
 		 *  On non-Windows systems, "ca" can be either a file name or
 		 *  directory name.  If it a file name, then only that file
-		 *  will be used.  If it is a directory name, then all
-		 *  certificate authority files found in that directory will
-		 *  be used.  On Windows platforms, "ca" may refer to a file or
-		 *  to a certificate found in a Windows Certificate Store.
+		 *  will be used, though the file may contain multiple CA certs.
+		 *  If it is a directory name, then all certificate store files
+		 *  found in that directory will be used.
+		 *
+		 *  On Windows platforms, "ca" may refer to a file or to a
+		 *  Windows Certificate Store.  If it a file name, then only
+		 *  that file will be used, though the file may contain
+		 *  multiple CA certs.  If it is a Windows Certificate Store,
+		 *  then all certificates in the store will be used.
 		 *  
 		 *
 		 *  Note that the supported file formats may vary between
@@ -247,11 +238,10 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
 		 *  .pfx files are currently supported on Windows.
 		 *
-		 *  To specify an entry in a Windows Certificate Store,
-		 *  "ca" must be specified in one of the following formats:
-		 * 	location:store:subject
-		 * 	store:subject
-		 * 	subject
+		 *  To specify a Windows Certificate Store, "ca" must be
+		 *  specified in one of the following formats:
+		 * 	location:store
+		 * 	store
 		 *
 		 *  The "location" parameter identifies the certificate store
 		 *  location, and must be one of the following:
@@ -271,15 +261,7 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  	Root
 		 *  	Trust
 		 *  	CA
-		 *  If "store" is omitted then it defaults to MY.
-		 *
-		 *  The "subject" parameter identifies the CA certificate.  The
-		 *  first certificate in the specified location/store who's
-		 *  Subject contains "subject" (case-insensitive) will be used.
-		 *  Note that the order of the certificates in the store is not
-		 *  guaranteed, so "subject" should contain enough information
-		 *  to uniquely identify a CA certificate.
-		 */
+		 *  If "store" is omitted then it defaults to MY. */
 		void		setCertificateAuthority(const char *ca);
 
 		/** Returns the location of the certificate authority that

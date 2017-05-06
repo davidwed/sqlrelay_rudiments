@@ -1370,16 +1370,11 @@ bool tlscontext::reInit(bool isclient) {
 				// store...
 
 				// assume that pvt->_ca is formatted like:
-				// * location:store:subject
+				// * location:store
 				// or
 				// * store:subject
 				// 	(location presumed to be
 				//	CERT_SYSTEM_STORE_CURRENT_USER)
-				// or
-				// * subject
-				// 	(location presumed to be
-				//	CERT_SYSTEM_STORE_CURRENT_USER,
-				//	store presumed to be "MY")
 
 				// split/process pvt->_ca 
 				char		**parts=NULL;
@@ -1388,16 +1383,11 @@ bool tlscontext::reInit(bool isclient) {
 							&parts,&partcount);
 				DWORD	location=CERT_SYSTEM_STORE_CURRENT_USER;
 				const char	*store="MY";
-				const char	*subject="";
-				if (partcount>2) {
+				if (partcount>1) {
 					location=getLocation(parts[0]);
 					store=parts[1];
-					subject=parts[2];
-				} else if (partcount==2) {
-					store=parts[0];
-					subject=parts[1];
 				} else if (partcount==1) {
-					subject=parts[0];
+					store=parts[0];
 				}
 
 				// open the specified certificate
@@ -1408,6 +1398,12 @@ bool tlscontext::reInit(bool isclient) {
 						NULL,
 						location,
 						store);
+
+				// clean up 
+				for (uint64_t i=0; i<partcount; i++) {
+					delete[] parts[i];
+				}
+				delete[] parts;
 			}
 
 			if (!pvt->_castore) {
