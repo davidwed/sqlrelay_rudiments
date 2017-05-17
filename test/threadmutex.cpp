@@ -19,7 +19,7 @@ stringbuffer	output;
 threadmutex	tm;
 uint16_t	next=1;
 
-void sync(void *args) {
+void syncronize(void *args) {
 
 	struct args	*a=(struct args *)args;
 
@@ -110,8 +110,8 @@ int main(int argc, const char **argv) {
 		stringbuffer	title;
 		title.append("spawn ")->append(j);
 		test(title.getString(),
-			t[j].spawn((void*(*)(void*))sync,
-					(void *)&a[j],false));
+			t[j].spawn((void*(*)(void*))syncronize,
+						(void *)&a[j],false));
 	}
 
 	// wait for the threads to exit
