@@ -787,7 +787,7 @@ class RUDIMENTS_DLLSPEC charstring {
 		static ssize_t	printf(char *buffer, size_t length,
 						const char *format, ...);
 
-		/** Appends "..." to "buffer" of length "length" using
+		/** Appends "argp" to "buffer" of length "length" using
 		 *  "format" which should comply with standard printf
 		 *  formatting rules.
 		 *
@@ -808,6 +808,35 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Returns -1 if an error occurred. */
 		static ssize_t	printf(char *buffer, size_t length,
+						const char *format,
+						va_list *argp);
+
+		/** Allocates "buffer" to sufficient size and writes "..." to
+		 *  it using "format" which should comply with standard printf
+		 *  formatting rules.
+		 *
+		 *  Returns the number of characters written to "buffer"
+		 *  excluding the NULL terminator.
+		 *
+		 *  If "buffer" is NULL then nothing is written to "buffer" and
+		 *  0 is returned.
+		 *
+		 *  Returns -1 if an error occurred. */
+		static ssize_t	printf(char **buffer,
+						const char *format, ...);
+
+		/** Allocates "buffer" to sufficient size and writes "argp" to
+		 *  it using "format" which should comply with standard printf
+		 *  formatting rules.
+		 *
+		 *  Returns the number of characters written to "buffer"
+		 *  excluding the NULL terminator.
+		 *
+		 *  If "buffer" is NULL then nothing is written to "buffer" and
+		 *  0 is returned.
+		 *
+		 *  Returns -1 if an error occurred. */
+		static ssize_t	printf(char **buffer,
 						const char *format,
 						va_list *argp);
 

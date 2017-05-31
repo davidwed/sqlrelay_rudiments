@@ -2,5 +2,5 @@ extendedKeyUsage	= serverAuth, clientAuth
 subjectAltName		= @alt_names
 
 [ alt_names ]
-DNS.1			= client.localdomain
+DNS.1			= db.localdomain
 DNS.2			= localdomain

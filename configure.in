@@ -630,6 +630,10 @@ AC_MSG_CHECKING(for inttypes.h)
 AC_TRY_COMPILE([#include <inttypes.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_INTTYPES_H, 1, Some systems have inttypes.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for uchar.h)
+AC_TRY_COMPILE([#include <uchar.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_UCHAR_H, 1, Some systems have uchar.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for limits.h)
 AC_TRY_COMPILE([#include <limits.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_LIMITS_H, 1, Some systems have limits.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
@@ -1062,6 +1066,26 @@ AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
 	#include <inttypes.h>
 #endif],
 [uint16_t i;],AC_DEFINE(RUDIMENTS_HAVE_UINT16_T,1,Some systems have uint16_t) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+RUDIMENTS_HAVE_CHAR16_T="no"
+AC_MSG_CHECKING(for char16_t type)
+AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
+	#include <stdint.h>
+#elif defined(RUDIMENTS_HAVE_SYS_BITYPES_H)
+	#include <sys/bitypes.h>
+#elif defined(RUDIMENTS_HAVE_INTTYPES_H)
+	#include <inttypes.h>
+#endif
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW)
+	#include <new>
+#endif
+#if defined(RUDIMENTS_HAVE_NEW_H)
+	#include <new.h>
+#endif],
+[char16_t i;],AC_DEFINE(RUDIMENTS_HAVE_CHAR16_T,1,Some systems have char16_t) AC_MSG_RESULT(yes); RUDIMENTS_HAVE_CHAR16_T="yes", AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for int32_t type)
 AC_TRY_COMPILE([#if defined(RUDIMENTS_HAVE_STDINT_H)
@@ -2197,6 +2221,13 @@ AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 #endif
 #include <stdio.h>],
 va_list a; vasprintf(0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VASPRINTF,1,Some systems have vasprintf), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for va_copy)
+AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
+	#include <stdarg.h>
+#endif
+#include <stdio.h>],
+va_list a; va_list b; va_copy(a,b);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VA_COPY,1,Some systems have va_copy), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for llabs)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -3656,7 +3687,7 @@ dnl    (and set MINOR and PATCH to 0)
 dnl 2. MINOR when you add backwards-compatible features
 dnl    (and set PATCH to 0)
 dnl 3. PATCH when you make backwards-compatible fixes
-RUDIMENTS_VERSION="1.0.4"
+RUDIMENTS_VERSION="1.0.5"
 AC_SUBST(RUDIMENTS_VERSION)
 AC_DEFINE_UNQUOTED(RUDIMENTS_VERSION,"$RUDIMENTS_VERSION",Version)
 
@@ -3666,7 +3697,7 @@ dnl if library source changed at all,         c:r:a -> c:r+1:a
 dnl if interfaces added, removed, or changed, c:r:a -> c+1:0:a
 dnl if interfaces added,                      c:r:a -> c:r:a+1
 dnl if interfaces removed,                    c:r:a -> c:r:0
-SONAME_VERSION_INFO="4:4:0"
+SONAME_VERSION_INFO="4:5:0"
 AC_SUBST(SONAME_VERSION_INFO)
 
 

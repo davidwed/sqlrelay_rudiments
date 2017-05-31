@@ -38,26 +38,100 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 
 		/** Sets the location of the certificate chain file to use
 		 *  during the next call to connect() or accept().
+		 *
+		 *  If "filename" is NULL or empty then no certificate will
+		 *  be sent to the peer.
+		 *
+		 *  Otherwise...
+		 *
+		 *
+		 *  On non-Windows platforms, "filename" must refer to an
+		 *  actual file.  On Windows platforms, it may refer to an
+		 *  actual file or to a certificate found in a Windows
+		 *  Certificate Store.
 		 *  
-		 *  The file should contain:
-		 *      * the client's certificate
-		 *      * the client's private key
-		 *      * a chain of signing certificates, terminating in
-		 *        a certificate for a root certificate authority
+		 *
+		 *  Actual files must contain the client's certificate and
+		 *  the chain of signing certificates, terminating in a
+		 *  certificate for a root certificate authority.  On Windows
+		 *  platforms, the file must also contain the client's private
+		 *  key.  On non-Windows platforms, the private key may be
+		 *  stored in a separate file, specified by setPrivateKeyFile().
 		 *  
 		 *  Note that the supported file formats may vary between
 		 *  platforms.  A variety of formats are generally supported
 		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
-		 *  the .pfx format is currently supported on Windows.
-		 * 
-		 *  If "filename" is NULL or empty then no certificate will
-		 *  be sent to the peer. */
+		 *  .pfx files are currently supported on Windows.
+		 *
+		 *
+		 *  Certificates in a Windows Certificate Store must have an
+		 *  associated private key and associated chain of signing
+		 *  certificates, terminating in a certificate for a root
+		 *  certificate authority.
+		 *
+		 *  To specify an entry in a Windows Certificate Store,
+		 *  "filename" must be specified in one of the following
+		 *  formats:
+		 * 	location:store:subject
+		 * 	store:subject
+		 * 	subject
+		 *
+		 *  The "location" parameter identifies the certificate store
+		 *  location, and must be one of the following:
+		 * 	CURRENT_USER
+		 *	LOCAL_MACHINE
+		 *	CURRENT_SERVICE
+		 *	SERVICES
+		 *	USERS
+		 *	CURRENT_USER_GROUP_POLICY
+		 *	LOCAL_MACHINE_GROUP_POLICY
+		 *	LOCAL_MACHINE_ENTERPRISE
+		 *  If "location" is omitted then it defaults to CURRENT_USER.
+		 *
+		 *  The "store" parameter identifies the certificate store, and
+		 *  must be one of the following:
+		 *  	MY
+		 *  	Root
+		 *  	Trust
+		 *  	CA
+		 *  If "store" is omitted then it defaults to MY.
+		 *
+		 *  The "subject" parameter identifies the certificate.  The
+		 *  first certificate in the specified location/store who's
+		 *  Subject contains "subject" (case-insensitive) will be used.
+		 *  Note that the order of the certificates in the store is not
+		 *  guaranteed, so "subject" should contain enough information
+		 *  to uniquely identify a certificate.
+		 */
 		void		setCertificateChainFile(const char *filename);
 
 		/** Returns the location of the certificate chain file that
 		 *  will be used during the next call to connect() or
 		 *  accept(). */
 		const char	*getCertificateChainFile();
+
+		/** Ignored on Windows platforms.
+		 *
+		 *  On non-Windows platforms:
+		 *
+		 *  Sets the location of the private key file to use
+		 *  during the next call to connect() or accept().
+		 *
+		 *  If no private key file is specified via this call, either
+		 *  because the call is omitted, or because "filename" is
+		 *  NULL or empty, then the certificate chain file will be
+		 *  searched for the private key.
+		 *  
+		 *  Note that the supported file formats may vary between
+		 *  platforms.  A variety of formats are generally supported
+		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
+		 *  the .pfx format is currently supported on Windows. */
+		void		setPrivateKeyFile(const char *filename);
+
+		/** Returns the location of the private key file that
+		 *  (on non-Windows platforms) will be used during the
+		 *  next call to connect() or accept(). */
+		const char	*getPrivateKeyFile();
 
 		/** Sets the password to use when accessing the private key
 		 *  in the certificate chain file during the next call to
@@ -134,20 +208,60 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		 *  connect() or accept(). */
 		uint16_t	getValidationDepth();
 
-		/** Sets the location of the certificate authority to use when
-		 *  validating the peer's certificate during the next call
-		 *  to connect() or accept().
-		 *
-		 *  On Windows, "ca" must be a file name.
-		 *
-		 *  On non-Windows systems, "ca" can be either a file or
-		 *  directory name.  If it is a directory name, then all
-		 *  certificate authority files found in that directory will be
-		 *  used.  If it a file name, then only that file will be used.
+		/** Sets the location of the certificate store that contains
+		 *  the certificate of the certificate authority (CA cert) to
+		 *  use when validating the peer's certificate during the next
+		 *  call to connect() or accept().
 		 *
 		 *  If "ca" is NULL or empty then no validation of the peer
 		 *  certificate will occur during the next call to connect() or
-		 *  accept(). */
+		 *  accept().
+		 *
+		 *  Otherwise...
+		 *
+		 *
+		 *  On non-Windows systems, "ca" can be either a file name or
+		 *  directory name.  If it a file name, then only that file
+		 *  will be used, though the file may contain multiple CA certs.
+		 *  If it is a directory name, then all certificate store files
+		 *  found in that directory will be used.
+		 *
+		 *  On Windows platforms, "ca" may refer to a file or to a
+		 *  Windows Certificate Store.  If it a file name, then only
+		 *  that file will be used, though the file may contain
+		 *  multiple CA certs.  If it is a Windows Certificate Store,
+		 *  then all certificates in the store will be used.
+		 *  
+		 *
+		 *  Note that the supported file formats may vary between
+		 *  platforms.  A variety of formats are generally supported
+		 *  on Linux and Unix platforms (.pem, .pfx, etc.) but only
+		 *  .pfx files are currently supported on Windows.
+		 *
+		 *  To specify a Windows Certificate Store, "ca" must be
+		 *  specified in one of the following formats:
+		 * 	location:store
+		 * 	store
+		 *
+		 *  The "location" parameter identifies the certificate store
+		 *  location, and must be one of the following:
+		 * 	CURRENT_USER
+		 *	LOCAL_MACHINE
+		 *	CURRENT_SERVICE
+		 *	SERVICES
+		 *	USERS
+		 *	CURRENT_USER_GROUP_POLICY
+		 *	LOCAL_MACHINE_GROUP_POLICY
+		 *	LOCAL_MACHINE_ENTERPRISE
+		 *  If "location" is omitted then it defaults to CURRENT_USER.
+		 *
+		 *  The "store" parameter identifies the certificate store, and
+		 *  must be one of the following:
+		 *  	MY
+		 *  	Root
+		 *  	Trust
+		 *  	CA
+		 *  If "store" is omitted then it defaults to MY. */
 		void		setCertificateAuthority(const char *ca);
 
 		/** Returns the location of the certificate authority that

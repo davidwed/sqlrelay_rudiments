@@ -4,6 +4,7 @@
 #include <rudiments/socketclient.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/error.h>
+#include <rudiments/stdio.h>
 
 #include <rudiments/private/winsock.h>
 

@@ -30,6 +30,24 @@
 	#define SSIZE_MAX 16383
 #endif
 
+#if defined(RUDIMENTS_HAS_SSPI)
+// FIXME: move to charstring class
+static WCHAR *asciiToUnicode(const CHAR *in) {
+
+	int32_t	size=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,NULL,0);
+	if (!size) {
+		return NULL;
+	}
+
+	WCHAR	*out=new WCHAR[size];
+	if (!MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,in,-1,out,size)) {
+		delete[] out;
+		out=NULL;
+	}
+	return out;
+}
+#endif
+
 //#define DEBUG_TLS 1
 
 threadmutex	tls::_tlsmutex;
@@ -65,6 +83,7 @@ class tlscontextprivate {
 		bool			_isclient;
 		const char		*_version;
 		const char		*_cert;
+		const char		*_pk;
 		const char		*_pkpwd;
 		const char		*_ciphers;
 		bool			_validatepeer;
@@ -101,6 +120,7 @@ tlscontext::tlscontext() : securitycontext() {
 	pvt->_isclient=false;
 	pvt->_version=NULL;
 	pvt->_cert=NULL;
+	pvt->_pk=NULL;
 	pvt->_pkpwd=NULL;
 	#ifdef RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM
 	pvt->_ciphers="PROFILE=SYSTEM";
@@ -238,6 +258,15 @@ void tlscontext::setCertificateChainFile(const char *filename) {
 
 const char *tlscontext::getCertificateChainFile() {
 	return pvt->_cert;
+}
+
+void tlscontext::setPrivateKeyFile(const char *filename) {
+	pvt->_dirty=true;
+	pvt->_pk=filename;
+}
+
+const char *tlscontext::getPrivateKeyFile() {
+	return pvt->_pk;
 }
 
 void tlscontext::setPrivateKeyPassword(const char *password) {
@@ -758,6 +787,34 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 }
 #endif
 
+#ifdef RUDIMENTS_HAS_SSPI
+static DWORD getLocation(const char *provider) {
+	if (!charstring::compare(provider,
+				"LOCAL_MACHINE")) {
+    		return CERT_SYSTEM_STORE_LOCAL_MACHINE;
+	} else if (!charstring::compare(provider,
+				"CURRENT_SERVICE")) {
+    		return CERT_SYSTEM_STORE_CURRENT_SERVICE;
+	} else if (!charstring::compare(provider,
+				"SERVICES")) {
+    		return CERT_SYSTEM_STORE_SERVICES;
+	} else if (!charstring::compare(provider,
+				"USERS")) {
+    		return CERT_SYSTEM_STORE_USERS;
+	} else if (!charstring::compare(provider,
+				"CURRENT_USER_GROUP_POLICY")) {
+    		return CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY;
+	} else if (!charstring::compare(provider,
+				"LOCAL_MACHINE_GROUP_POLICY")) {
+    		return CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY;
+	} else if (!charstring::compare(provider,
+				"LOCAL_MACHINE_ENTERPRISE")) {
+    		return CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE;
+	}
+    	return CERT_SYSTEM_STORE_CURRENT_USER;
+}
+#endif
+
 bool tlscontext::reInit(bool isclient) {
 
 	// free/clear any old peer certificate
@@ -899,7 +956,8 @@ bool tlscontext::reInit(bool isclient) {
 			if (SSL_CTX_use_certificate_chain_file(
 						pvt->_ctx,pvt->_cert)!=1 ||
 				SSL_CTX_use_PrivateKey_file(
-						pvt->_ctx,pvt->_cert,
+						pvt->_ctx,
+						(pvt->_pk)?pvt->_pk:pvt->_cert,
 						SSL_FILETYPE_PEM)!=1 ||
 				SSL_CTX_check_private_key(pvt->_ctx)!=1) {
 				retval=false;
@@ -954,9 +1012,11 @@ bool tlscontext::reInit(bool isclient) {
 
 		#ifdef DEBUG_TLS
 			stdoutput.printf("  version: %s\n",pvt->_version);
-			stdoutput.printf("  cert chain: %s - (%s) - (%s)\n",
-					pvt->_cert,pvt->_pkpwd,
-					(certloaded)?"valid":"invalid");
+			stdoutput.printf("  cert chain: %s\n",pvt->_cert);
+			stdoutput.printf("  private key: %s\n",
+					(pvt->_pk)?pvt->_pk:pvt->_cert);
+			stdoutput.printf("  cert/pk loaded/valid: %s\n",
+					(certloaded)?"yes":"no");
 			stdoutput.printf("  ciphers: %s\n",pvt->_ciphers);
 			stdoutput.printf("  depth: %d\n",pvt->_depth);
 			stdoutput.printf("  ca: %s\n",pvt->_ca);
@@ -1112,7 +1172,7 @@ bool tlscontext::reInit(bool isclient) {
 			}
 		}
 
-		// set certificate chain file
+		// set the certificate and private key
 		if (!charstring::isNullOrEmpty(pvt->_cert)) {
 
 			// cert specified...
@@ -1122,7 +1182,9 @@ bool tlscontext::reInit(bool isclient) {
 				credflags|=SCH_CRED_NO_DEFAULT_CREDS;
 			}
 
-			// open the specified certificate store
+			// open the specified certificate store...
+
+			// first look for a file named pvt->_cert
 			pvt->_cstore=CertOpenStore(
 					CERT_STORE_PROV_FILENAME_A,
 					X509_ASN_ENCODING|
@@ -1168,6 +1230,100 @@ bool tlscontext::reInit(bool isclient) {
 					pvt->_cctx[0]=cctx;
 					pvt->_cctxcount=1;
 				}
+
+			} else {
+
+				// clear any error set by the previous call to
+				// CertOpenStore()
+				error::clearNativeError();
+
+				// if there was no cert file with the specified
+				// name, then look for the cert in the system
+				// store...
+
+				// assume that pvt->_cert is formatted like:
+				// * location:store:subject
+				// or
+				// * store:subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER)
+				// or
+				// * subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER,
+				//	store presumed to be "MY")
+
+				// split/process pvt->_cert 
+				char		**parts=NULL;
+				uint64_t	partcount=0;
+				charstring::split(pvt->_cert,":",true,
+							&parts,&partcount);
+				DWORD	location=CERT_SYSTEM_STORE_CURRENT_USER;
+				const char	*store="MY";
+				const char	*subject="";
+				if (partcount>2) {
+					location=getLocation(parts[0]);
+					store=parts[1];
+					subject=parts[2];
+				} else if (partcount==2) {
+					store=parts[0];
+					subject=parts[1];
+				} else if (partcount==1) {
+					subject=parts[0];
+				}
+
+				// first look for the specified store
+				pvt->_cstore=CertOpenStore(
+						CERT_STORE_PROV_SYSTEM_A,
+						0,
+						NULL,
+						location,
+						store);
+
+				if (pvt->_cstore) {
+
+					// get the cert who's subject
+					// includes the specified string
+					WCHAR	*subjectw=
+					asciiToUnicode(subject);
+					PCCERT_CONTEXT	cctx=
+					CertFindCertificateInStore(
+							pvt->_cstore,
+							X509_ASN_ENCODING|
+							PKCS_7_ASN_ENCODING,
+							0,
+							CERT_FIND_SUBJECT_STR,
+							subjectw,
+							NULL);
+					delete[] subjectw;
+
+					// FIXME: support private key password
+
+					if (cctx) {
+
+						// verify that the cert
+						// contained a private key
+					HCRYPTPROV_OR_NCRYPT_KEY_HANDLE	kh=NULL;
+					CryptAcquireCertificatePrivateKey(
+								cctx,
+								0,
+								NULL,
+								&kh,
+								NULL,
+								NULL);
+
+						pvt->_cctx=
+						new PCCERT_CONTEXT[1];
+						pvt->_cctx[0]=cctx;
+						pvt->_cctxcount=1;
+					}
+				}
+
+				// clean up 
+				for (uint64_t i=0; i<partcount; i++) {
+					delete[] parts[i];
+				}
+				delete[] parts;
 			}
 
 			// If CertOpenStoreFailed, CertFindCertificateInStore
@@ -1202,6 +1358,54 @@ bool tlscontext::reInit(bool isclient) {
 					NULL,
 					0,
 					pvt->_ca);
+
+			if (!pvt->_castore) {
+
+				// clear any error set by the previous call to
+				// CertOpenStore()
+				error::clearNativeError();
+
+				// if there was no ca file with the specified
+				// name, then look for the ca in the system
+				// store...
+
+				// assume that pvt->_ca is formatted like:
+				// * location:store
+				// or
+				// * store:subject
+				// 	(location presumed to be
+				//	CERT_SYSTEM_STORE_CURRENT_USER)
+
+				// split/process pvt->_ca 
+				char		**parts=NULL;
+				uint64_t	partcount=0;
+				charstring::split(pvt->_ca,":",true,
+							&parts,&partcount);
+				DWORD	location=CERT_SYSTEM_STORE_CURRENT_USER;
+				const char	*store="MY";
+				if (partcount>1) {
+					location=getLocation(parts[0]);
+					store=parts[1];
+				} else if (partcount==1) {
+					store=parts[0];
+				}
+
+				// open the specified certificate
+				// authority store
+				pvt->_castore=CertOpenStore(
+						CERT_STORE_PROV_SYSTEM_A,
+						0,
+						NULL,
+						location,
+						store);
+
+				// clean up 
+				for (uint64_t i=0; i<partcount; i++) {
+					delete[] parts[i];
+				}
+				delete[] parts;
+			}
+
 			if (!pvt->_castore) {
 				setNativeError();
 				retval=false;

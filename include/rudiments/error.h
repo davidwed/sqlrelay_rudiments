@@ -27,11 +27,27 @@ class RUDIMENTS_DLLSPEC error {
 		 *  returned, and must be freed by the calling program. */
 		static	char	*getErrorString();
 
-		/** Returns the current native error number.  For systems (like
-		 *  Windows) that have their own native error number system,
-		 *  distinct from posix, this method returns that error number.
-		 *  For systems where the posix system error is the native
-		 *  error, this method returns the same error as
+		/** Set the current native error to 0, "Success".
+ 		 *  For systems (like Windows) that have their own native error
+ 		 *  number system, distinct from posix, this method sets that
+ 		 *  error number.  For systems where the posix system error is
+ 		 *  the native error, this method has the same effect as
+ 		 *  clearError(). */
+		static	void		clearNativeError();
+
+		/** Set the current native system error to "err".
+ 		 *  For systems (like Windows) that have their own native error
+ 		 *  number system, distinct from posix, this method sets that
+ 		 *  error number.  For systems where the posix system error is
+ 		 *  the native error, this method has the same effect as
+ 		 *  setError(). */
+		static	void		setNativeErrorNumber(int32_t err);
+
+		/** Returns the current native error number.
+		 *  For systems (like Windows) that have their own native error
+		 *  number system, distinct from posix, this method returns
+		 *  that error number.  For systems where the posix system error
+		 *  is the native error, this method returns the same error as
 		 *  getErrorNumber(). */
 		static	int32_t		getNativeErrorNumber();
 

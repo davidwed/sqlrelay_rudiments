@@ -259,6 +259,9 @@
 /* Some systems have CaptureStackBackTrace */
 #define RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE 1
 
+/* Some systems have char16_t */
+/* #undef RUDIMENTS_HAVE_CHAR16_T */
+
 /* Some systems have chmod */
 /* #undef RUDIMENTS_HAVE_CHMOD */
 
@@ -1381,6 +1384,9 @@
 /* Some systems have uadmin with a integer argument */
 /* #undef RUDIMENTS_HAVE_UADMIN_INT */
 
+/* Some systems have uchar.h */
+/* #undef RUDIMENTS_HAVE_UCHAR_H */
+
 /* Some systems have uint16_t */
 #define RUDIMENTS_HAVE_UINT16_T 1
 
@@ -1428,6 +1434,9 @@
 
 /* Some systems have vasprintf */
 /* #undef RUDIMENTS_HAVE_VASPRINTF */
+
+/* Some systems have va_copy */
+#define RUDIMENTS_HAVE_VA_COPY 1
 
 /* Some systems have vdprintf */
 /* #undef RUDIMENTS_HAVE_VDPRINTF */

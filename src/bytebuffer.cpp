@@ -320,19 +320,13 @@ bytebuffer *bytebuffer::writeFormatted(const char *format, ...) {
 
 bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
 
-	// If vasprintf is available, then use it, otherwise play games with
-	// charstring::printf().
+	// write the formatted data to a buffer
 	char	*buffer=NULL;
 	ssize_t	size=0;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
-	size=vasprintf(&buffer,format,*argp);
+		size=vasprintf(&buffer,format,*argp);
 	#else
-	// Some compilers throw a warning if they see "printf(NULL..." at all,
-	// whether it's the global function printf() or one that you've defined
-	// yourself.  Using buffer here works around that.
-	size=charstring::printf(buffer,0,format,argp);
-	buffer=new char[size+1];
-	size=charstring::printf(buffer,size+1,format,argp);
+		size=charstring::printf(&buffer,format,argp);
 	#endif
 
 	// extend the list of buffers to accommodate
@@ -344,9 +338,9 @@ bytebuffer *bytebuffer::writeFormatted(const char *format, va_list *argp) {
 
 	// clean up
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
-	free(buffer);
+		free(buffer);
 	#else
-	delete[] buffer;
+		delete[] buffer;
 	#endif
 	
 	return this;

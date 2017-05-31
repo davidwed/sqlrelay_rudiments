@@ -33,7 +33,7 @@ default_ca		= CA_default
 serial			= database/serial
 database		= database/index.txt
 new_certs_dir		= database/newcerts
-certificate		= certificates/ca.pem
+certificate		= certificates/ca.crt
 private_key		= keys/ca.key
 default_days		= 3650
 default_md		= sha1
@@ -44,9 +44,9 @@ certopt			= default_ca
 policy			= policy_match
 
 [ policy_match ]
-countryName		= match
-stateOrProvinceName	= match
-organizationName	= match
+countryName		= optional
+stateOrProvinceName	= optional
+organizationName	= optional
 organizationalUnitName	= optional
 commonName		= supplied
 emailAddress		= optional

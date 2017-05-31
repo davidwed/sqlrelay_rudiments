@@ -27,6 +27,10 @@
 		defined(DEBUG_READ) || defined(RUDIMENTS_HAVE_DUPLICATEHANDLE)
 	#include <rudiments/process.h>
 #endif
+#include <rudiments/thread.h>
+#include <rudiments/semaphoreset.h>
+#include <rudiments/file.h>
+#include <rudiments/permissions.h>
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
@@ -228,6 +232,15 @@ class filedescriptorprivate {
 		unsigned char	*_readbufferend;
 		unsigned char	*_readbufferhead;
 		unsigned char	*_readbuffertail;
+
+		thread		*_thr;
+		semaphoreset	*_thrsem;
+		bool		_threxit;
+		bool		_threrror;
+		bool		_asyncwrite;
+		unsigned char	*_asyncbuf;
+		uint32_t	_asyncbufsize;
+		ssize_t		_asynccount;
 };
 
 filedescriptor::filedescriptor() {
@@ -274,6 +287,14 @@ void filedescriptor::filedescriptorInit() {
 	pvt->_readbufferend=NULL;
 	pvt->_readbufferhead=NULL;
 	pvt->_readbuffertail=NULL;
+	pvt->_thr=NULL;
+	pvt->_thrsem=NULL;
+	pvt->_threxit=false;
+	pvt->_threrror=false;
+	pvt->_asyncwrite=false;
+	pvt->_asyncbuf=NULL;
+	pvt->_asyncbufsize=0;
+	pvt->_asynccount=0;
 }
 
 void filedescriptor::filedescriptorClone(const filedescriptor &f) {
@@ -305,10 +326,23 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 }
 
 filedescriptor::~filedescriptor() {
+
+	if (pvt->_thr) {
+		pvt->_thrsem->wait(1);
+		pvt->_threxit=true;
+		pvt->_thrsem->signal(0);
+		pvt->_thr->wait(NULL);
+		delete pvt->_thr;
+		delete pvt->_thrsem;
+		delete[] pvt->_asyncbuf;
+	}
+
 	delete[] pvt->_readbuffer;
 	delete[] pvt->_writebuffer;
 	delete pvt->_lstnr;
+
 	close();
+
 	delete pvt;
 }
 
@@ -348,6 +382,7 @@ bool filedescriptor::setReadBufferSize(ssize_t size) const {
 		#endif
 		return false;
 	}
+
 	delete[] pvt->_readbuffer;
 	pvt->_readbuffer=(size)?new unsigned char[size]:NULL;
 	pvt->_readbufferend=pvt->_readbuffer+size;
@@ -441,6 +476,14 @@ bool filedescriptor::isUsingNonBlockingMode() const {
 	#endif
 }
 
+void filedescriptor::useAsyncWrite() {
+	pvt->_asyncwrite=true;
+}
+
+void filedescriptor::dontUseAsyncWrite() {
+	pvt->_asyncwrite=false;
+}
+
 ssize_t filedescriptor::write(uint16_t number) const {
 	return write(number,-1,-1);
 }
@@ -454,55 +497,55 @@ ssize_t filedescriptor::write(uint64_t number) const {
 }
 
 ssize_t filedescriptor::write(int16_t number) const {
-	return bufferedWrite(&number,sizeof(int16_t),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(int32_t number) const {
-	return bufferedWrite(&number,sizeof(int32_t),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(int64_t number) const {
-	return bufferedWrite(&number,sizeof(int64_t),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(float number) const {
-	return bufferedWrite(&number,sizeof(float),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(double number) const {
-	return bufferedWrite(&number,sizeof(double),-1,-1);
+	return write(number,-1,-1);
 }
 
 ssize_t filedescriptor::write(unsigned char character) const {
-	return bufferedWrite(&character,sizeof(unsigned char),-1,-1);
+	return write(character,-1,-1);
 }
 
 ssize_t filedescriptor::write(bool value) const {
-	return bufferedWrite(&value,sizeof(bool),-1,-1);
+	return write(value,-1,-1);
 }
 
 ssize_t filedescriptor::write(char character) const {
-	return bufferedWrite(&character,sizeof(char),-1,-1);
+	return write(character,-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string, size_t size) const {
-	return bufferedWrite(string,size,-1,-1);
+	return write(string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string, size_t size) const {
-	return bufferedWrite(string,size,-1,-1);
+	return write(string,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(const unsigned char *string) const {
-	return bufferedWrite(string,charstring::length(string),-1,-1);
+	return write(string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const char *string) const {
-	return bufferedWrite(string,charstring::length(string),-1,-1);
+	return write(string,charstring::length(string),-1,-1);
 }
 
 ssize_t filedescriptor::write(const void *buffer, size_t size) const {
-	return bufferedWrite(buffer,size,-1,-1);
+	return write(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::write(uint16_t number,
@@ -531,16 +574,25 @@ ssize_t filedescriptor::write(uint64_t number,
 
 ssize_t filedescriptor::write(int16_t number,
 				int32_t sec, int32_t usec) const {
+	if (pvt->_translatebyteorder) {
+		number=hostToNet((uint16_t)number);
+	}
 	return bufferedWrite(&number,sizeof(int16_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int32_t number,
 				int32_t sec, int32_t usec) const {
+	if (pvt->_translatebyteorder) {
+		number=hostToNet((uint32_t)number);
+	}
 	return bufferedWrite(&number,sizeof(int32_t),sec,usec);
 }
 
 ssize_t filedescriptor::write(int64_t number,
 				int32_t sec, int32_t usec) const {
+	if (pvt->_translatebyteorder) {
+		number=hostToNet((uint64_t)number);
+	}
 	return bufferedWrite(&number,sizeof(int64_t),sec,usec);
 }
 
@@ -607,47 +659,47 @@ ssize_t filedescriptor::read(uint64_t *buffer) {
 }
 
 ssize_t filedescriptor::read(int16_t *buffer) {
-	return bufferedRead(buffer,sizeof(int16_t),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(int32_t *buffer) {
-	return bufferedRead(buffer,sizeof(int32_t),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(int64_t *buffer) {
-	return bufferedRead(buffer,sizeof(int64_t),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(float *buffer) {
-	return bufferedRead(buffer,sizeof(float),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(double *buffer) {
-	return bufferedRead(buffer,sizeof(double),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer) {
-	return bufferedRead(buffer,sizeof(unsigned char),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(bool *buffer) {
-	return bufferedRead(buffer,sizeof(bool),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(char *buffer) {
-	return bufferedRead(buffer,sizeof(char),-1,-1);
+	return read(buffer,-1,-1);
 }
 
 ssize_t filedescriptor::read(unsigned char *buffer, size_t size) {
-	return bufferedRead(buffer,size,-1,-1);
+	return read(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::read(char *buffer, size_t size) {
-	return bufferedRead(buffer,size,-1,-1);
+	return read(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::read(void *buffer, size_t size) {
-	return bufferedRead(buffer,size,-1,-1);
+	return read(buffer,size,-1,-1);
 }
 
 ssize_t filedescriptor::read(char **buffer, const char *terminator) {
@@ -693,17 +745,29 @@ ssize_t filedescriptor::read(uint64_t *buffer,
 
 ssize_t filedescriptor::read(int16_t *buffer,
 				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(int16_t),sec,usec);
+	ssize_t	retval=bufferedRead(buffer,sizeof(int16_t),sec,usec);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost((uint16_t)*buffer);
+	}
+	return retval;
 }
 
 ssize_t filedescriptor::read(int32_t *buffer,
 				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(int32_t),sec,usec);
+	ssize_t	retval=bufferedRead(buffer,sizeof(int32_t),sec,usec);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost((uint32_t)*buffer);
+	}
+	return retval;
 }
 
 ssize_t filedescriptor::read(int64_t *buffer,
 				int32_t sec, int32_t usec) {
-	return bufferedRead(buffer,sizeof(int64_t),sec,usec);
+	ssize_t	retval=bufferedRead(buffer,sizeof(int64_t),sec,usec);
+	if (pvt->_translatebyteorder) {
+		*buffer=netToHost((uint64_t)*buffer);
+	}
+	return retval;
 }
 
 ssize_t filedescriptor::read(float *buffer,
@@ -1152,8 +1216,8 @@ ssize_t filedescriptor::safeRead(void *buf, ssize_t count,
 				#ifdef DEBUG_READ
 				debugPrintf(" EAGAIN ");
 				#endif
-				// if we got an EAGAIN, then presumably we're
-				// in non-blocking mode, there was nothing
+				// if we got an EAGAIN, and we're in
+				// non-blocking mode, there was nothing
 				// to read and we're done
 				break;
 			} else if (error::getErrorNumber()==EINTR) {
@@ -1213,6 +1277,7 @@ ssize_t filedescriptor::lowLevelRead(void *buf, ssize_t count) {
 
 ssize_t filedescriptor::bufferedWrite(const void *buf, ssize_t count,
 					int32_t sec, int32_t usec) const {
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 	debugPrintf("bufferedWrite of %d bytes\n",(int)count);
 	#endif
@@ -1340,6 +1405,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
 	ssize_t	sizemax=(pvt->_secctx)?pvt->_secctx->getSizeMax():SSIZE_MAX;
+	bool	isusingnonblockingmode=isUsingNonBlockingMode();
 	while (totalwrite<count) {
 
 		// limit size of individual writes
@@ -1376,7 +1442,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 
 			actualwrite=pvt->_secctx->write(ptr,sizetowrite);
 		} else {
-			actualwrite=lowLevelWrite(ptr,sizetowrite);
+			actualwrite=midLevelWrite(ptr,sizetowrite);
 		}
 
 		#ifdef DEBUG_WRITE
@@ -1393,7 +1459,15 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 		// if we didn't read the number of bytes we expected to,
 		// handle that...
 		if (actualwrite!=sizetowrite) {
-			if (error::getErrorNumber()==EINTR) {
+			if (isusingnonblockingmode &&
+				error::getErrorNumber()==EAGAIN) {
+				#ifdef DEBUG_READ
+				debugPrintf(" EAGAIN ");
+				#endif
+				// if we got an EAGAIN, and we're in
+				// non-blocking mode, then try again
+				break;
+			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_WRITE
 				debugPrintf(" EINTR ");
 				#endif
@@ -1436,6 +1510,117 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	debugPrintf(",%d)\n",(int)totalwrite);
 	#endif
 	return totalwrite;
+}
+
+void filedescriptor::lowLevelWriteWorker(void *attr) {
+
+	// get the filedescriptor
+	filedescriptor	*fd=(filedescriptor *)attr;
+
+	for (;;) {
+
+		// signal that we're ready for work
+		fd->pvt->_thrsem->signal(1);
+
+		// wait for work to do
+		fd->pvt->_thrsem->wait(0);
+
+		// handle exit
+		if (fd->pvt->_threxit) {
+			return;
+		}
+
+		// attempt to write all data
+		// FIXME: what about allowshortwrites?
+		ssize_t	bytestowrite=fd->pvt->_asynccount;
+		ssize_t	byteswritten=0;
+		do {
+			error::clearError();
+			ssize_t	result=fd->lowLevelWrite(
+						fd->pvt->_asyncbuf+byteswritten,
+						bytestowrite);
+			if (result==-1) {
+				if (error::getErrorNumber()==EINTR &&
+					fd->pvt->_retryinterruptedwrites) {
+					continue;
+				} else {
+					break;
+				}
+			}
+			bytestowrite-=result;
+			byteswritten+=result;
+		} while (byteswritten<fd->pvt->_asynccount);
+
+		// if we failed to write everything, then
+		// declare than an error has occurred
+		if (byteswritten!=fd->pvt->_asynccount) {
+			fd->pvt->_threrror=true;
+		}
+	}
+}
+
+ssize_t filedescriptor::midLevelWrite(const void *buf, ssize_t count) const {
+
+	if (pvt->_asyncwrite) {
+
+		if (!pvt->_thr) {
+
+			// create the worker thread semaphore
+			pvt->_thrsem=new semaphoreset;
+			int32_t	vals[2]={0,0};
+			if (!pvt->_thrsem->create(
+				IPC_PRIVATE,
+				permissions::evalPermString("rw-------"),
+				2,vals)) {
+				delete pvt->_thrsem;
+				pvt->_thrsem=NULL;
+				return RESULT_ERROR;
+			}
+
+			// create the worker thread
+			pvt->_thr=new thread;
+			if (!pvt->_thr->spawn(
+				(void *(*)(void *))lowLevelWriteWorker,
+				(void *)this,false)) {	
+
+				delete pvt->_thrsem;
+				pvt->_thrsem=NULL;
+				delete pvt->_thr;
+				pvt->_thr=NULL;
+				return RESULT_ERROR;
+			}
+		}
+
+		// wait for the worker thread to be ready
+		pvt->_thrsem->wait(1);
+
+		// if a previous write failed, then return an error
+		if (pvt->_threrror) {
+			pvt->_threrror=false;
+			// FIXME: RESULT_ASYNC_ERROR or something...
+			return RESULT_ERROR;
+		}
+
+		// copy the buffer
+		if ((ssize_t)pvt->_asyncbufsize<count) {
+			delete[] pvt->_asyncbuf;
+			// pad to 1024-byte boundary to reduce the need to
+			// re-allocate this buffer
+			pvt->_asyncbufsize=count+((1024-(count%1024))%1024);
+			pvt->_asyncbuf=new unsigned char[pvt->_asyncbufsize];
+		}
+		bytestring::copy(pvt->_asyncbuf,buf,count);
+		pvt->_asynccount=count;
+
+		// signal the worker thread to do work
+		pvt->_thrsem->signal(0);
+
+		// return success
+		return count;
+
+	} else {
+		return lowLevelWrite(buf,count);
+	}
 }
 
 ssize_t filedescriptor::lowLevelWrite(const void *buf, ssize_t count) const {
@@ -2346,26 +2531,24 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 	// If we are buffering writes though, don't use the above because it
 	// would bypass the buffer.
 
-	// Use vasprintf if it is available, otherwise play games with
-	// charstring::printf().
+	// write the formatted data to a buffer
 	char	*buffer=NULL;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
 		size=vasprintf(&buffer,format,*argp);
 	#else
-		// Some compilers throw a warning if they see "printf(NULL..."
-		// at all, whether it's the global function printf() or one
-		// that you've defined yourself.  Using buffer here works
-		// around that.
-		size=charstring::printf(buffer,0,format,argp);
-		buffer=new char[size+1];
-		size=charstring::printf(buffer,size+1,format,argp);
+		size=charstring::printf(&buffer,format,argp);
 	#endif
+
+	// write the buffer to the file descriptor
 	write(buffer,size);
+
+	// clean up
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
 		free(buffer);
 	#else
 		delete[] buffer;
 	#endif
+
 	return size;
 }
 

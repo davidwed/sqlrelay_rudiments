@@ -15,3 +15,7 @@
 
 struct sembuf;
 union semun;
+
+#ifndef IPC_PRIVATE
+	#define IPC_PRIVATE	((key_t)0)
+#endif

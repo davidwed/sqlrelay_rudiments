@@ -19,6 +19,14 @@
 #endif
 
 
+// some platforms define types like char16_t in their new or new.h
+// (some firstworks C code uses inttypes.h to make sure types are defined
+// though, and we don't want that code to include new.h)
+#ifdef __cplusplus
+	#include <rudiments/private/new.h>
+#endif
+
+
 // define [u]int(8|16|32|64)_t...
 
 #if defined(RUDIMENTS_HAVE_STDINT_H)
@@ -33,6 +41,10 @@
 	#include <inttypes.h>
 #endif
 
+#if defined(RUDIMENTS_HAVE_UCHAR_H)
+	#include <uchar.h>
+#endif
+
 #ifndef RUDIMENTS_HAVE_INT8_T
 	typedef	signed char		int8_t;
 #endif
@@ -44,6 +56,10 @@
 #endif
 #ifndef RUDIMENTS_HAVE_UINT16_T
 	typedef	unsigned short		uint16_t;
+#endif
+#if !defined(RUDIMENTS_HAVE_CHAR16_T) && \
+	defined(__cplusplus) && (__cplusplus<201103L)
+	typedef	unsigned short		char16_t;
 #endif
 #ifndef RUDIMENTS_HAVE_INT32_T
 	typedef	signed int		int32_t;

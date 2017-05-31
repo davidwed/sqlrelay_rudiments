@@ -3,7 +3,7 @@ top_builddir = ..
 include ../config.mk
 
 CPPFLAGS = $(BASECPPFLAGS) $(INC)../ $(INC)../include
-LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(READLINELIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
+LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(LIBEDITLIBS) $(SSLLIBS) $(GSSLIBS) $(PCRELIBS) $(LIBCURLLIBS) $(NANOSLEEPLIB) $(CLOCKNANOSLEEPLIB) $(CRYPTLIB) $(INETATONLIB) $(BELIB) $(GNULIB) $(CRTLIB) $(DLLIB) $(GETPGIDLIB) $(DEBUGLIB)
 
 PROGS0 = listener \
 	directory \
@@ -126,6 +126,7 @@ clean:
 	$(LTCLEAN) $(RM) $(PROGS1)
 	$(LTCLEAN) $(RM) $(PROGS2)
 	$(LTCLEAN) $(RM) $(PROGS3)
+	$(LTCLEAN) $(RM) socketbench$(EXE) bytestringbench$(EXE)
 	$(LTCLEAN) $(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii
 	cd certificates $(AND) $(MAKE) clean
 
@@ -267,6 +268,9 @@ character: character.cpp character.$(OBJ)
 bytestring: bytestring.cpp bytestring.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestring.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
+bytestringbench: bytestringbench.cpp bytestringbench.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bytestringbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
 sys: sys.cpp sys.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sys.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
@@ -291,11 +295,14 @@ gssclient: gssclient.cpp gssclient.$(OBJ)
 md5sum: md5sum.cpp md5sum.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) md5sum.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
+socketbench: socketbench.cpp socketbench.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) socketbench.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
 server.pem:
 	cd certificates $(AND) $(MAKE) clean all
-	cp certificates/certificates/ca.pem .
+	cp certificates/certificatechains/ca.pem .
 	cp certificates/certificatechains/server.pem .
 	cp certificates/certificatechains/client.pem .
-	cp certificates/certificates/ca.pfx .
+	cp certificates/certificatechains/ca.pfx .
 	cp certificates/certificatechains/server.pfx .
 	cp certificates/certificatechains/client.pfx .

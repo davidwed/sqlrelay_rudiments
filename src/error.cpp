@@ -75,6 +75,22 @@ char *error::getErrorString() {
 	#endif
 }
 
+void error::clearNativeError() {
+	#if defined(RUDIMENTS_HAVE_GETLASTERROR)
+		SetLastError(0);
+	#else
+		clearError();
+	#endif
+}
+
+void error::setNativeErrorNumber(int32_t err) {
+	#if defined(RUDIMENTS_HAVE_GETLASTERROR)
+		SetLastError(err);
+	#else
+		clearError();
+	#endif
+}
+
 int32_t error::getNativeErrorNumber() {
 	#if defined(RUDIMENTS_HAVE_GETLASTERROR)
 		return GetLastError();
