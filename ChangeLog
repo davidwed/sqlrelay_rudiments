@@ -1,3 +1,5 @@
+1.0.6 - fixed url user/password parsing
+
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
 		will be correctly mapped to K32GetMappedFileName on 32-bit
