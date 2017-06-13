@@ -56,6 +56,18 @@ void DICTIONARY_CLASS::setValue(keytype key, valuetype value) {
 
 DICTIONARY_TEMPLATE
 RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::setValues(keytype *keys, valuetype *values) {
+	keytype		*key=keys;
+	valuetype	*value=values;
+	while (*key) {
+		setValue(*key,*value);
+		key++;
+		value++;
+	}
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
 bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 	dictionarynode<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
@@ -63,6 +75,30 @@ bool DICTIONARY_CLASS::getValue(keytype key, valuetype *value) {
 		return true;
 	}
 	return false;
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::setValues(keytype *keys, valuetype *values,
+							uint64_t count) {
+	keytype		*key=keys;
+	valuetype	*value=values;
+	for (uint64_t i=0; i<count; i++) {
+		setValue(*key,*value);
+		key++;
+		value++;
+	}
+}
+
+DICTIONARY_TEMPLATE
+RUDIMENTS_TEMPLATE_INLINE
+void DICTIONARY_CLASS::setValues(dictionary<keytype,valuetype> *dict) {
+	for (linkedlistnode< dictionarynode< keytype, valuetype > *>
+					*node=dict->getList()->getFirst();
+					node; node=node->getNext()) {
+		setValue(node->getValue()->getKey(),
+				node->getValue()->getValue());
+	}
 }
 
 DICTIONARY_TEMPLATE
