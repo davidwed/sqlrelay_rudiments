@@ -120,6 +120,7 @@ class dictionary {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value". */
 		void	setValues(keytype *keys, valuetype *values);
+		void	setValues(keytype const *keys, valuetype const *values);
 
 		/** Sets the value associated with each of "count" keys
 		 *  in the "keys" array to the corresponding value in the
@@ -128,6 +129,8 @@ class dictionary {
 		 *  accociated with it is replaced with "value". */
 		void	setValues(keytype *keys, valuetype *values,
 							uint64_t count);
+		void	setValues(keytype const *keys, valuetype const *values,
+								uint64_t count);
 
 		/** Sets the value associated with each key in "dict" to the
 		 *  corresponding value from "dict".
