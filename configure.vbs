@@ -3,6 +3,7 @@ OPTCPPFLAGS="/O2"
 DEBUGCPPFLAGS="/MD"
 DEBUGLDFLAGS=""
 hexversion=""
+
 for i=0 to WScript.Arguments.Count-1
 
 	arg=Wscript.Arguments.Item(i)
