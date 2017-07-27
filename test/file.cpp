@@ -42,14 +42,17 @@ int main(int argc, const char **argv) {
 		test("create",
 			fl.open("testfile.txt",O_RDWR|O_CREAT,
 				permissions::evalPermString("rw-rw----")));
-		test("create if already exists",
+		fl.close();
+		test("create when already exists",
 			fl.open("testfile.txt",O_RDWR|O_CREAT,
 				permissions::evalPermString("rw-rw----")));
+		fl.close();
 		test("create with excl",
 			!fl.open("testfile.txt",O_RDWR|O_CREAT|O_EXCL,
 				permissions::evalPermString("rw-rw----")));
 		file::remove("testfile.txt");
-		test("create",fl.create("testfile.txt",
+		test("create",
+			fl.create("testfile.txt",
 				permissions::evalPermString("rw-rw----")));
 		test("write",fl.write("hello")==5);
 		test("get properties",fl.getCurrentProperties());
