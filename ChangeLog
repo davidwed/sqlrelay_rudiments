@@ -3,7 +3,8 @@
 	added --with-windows-version to configure.vbs
 	CaptureStackBackTrace is defined for Windows XP now
 	added #ifdefs around TLS algorithms not present on XP/2000/NT4
-	added definition for va_copy for MSVC 2008 and earlier
+	added definition for va_copy for older MSVC
+	added some gss ifdefs for older MSVC
 
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
