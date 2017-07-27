@@ -45,7 +45,8 @@
 
 	//  (Rtl)CaptureStackBackTrace isn't defined prior to Vista
 	#if _WIN32_WINNT < 0x0600
-	USHORT WINAPI RtlCaptureStackBackTrace(ULONG FramesToSkip,
+	extern "C" USHORT WINAPI CaptureStackBackTrace(
+						ULONG FramesToSkip,
 						ULONG FramesToCapture,
 						PVOID *BackTrace,
 						PULONG BackTraceHash);
