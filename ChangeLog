@@ -1,10 +1,9 @@
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class
 	added --with-windows-version to configure.vbs
-	CaptureStackBackTrace is defined for Windows XP now
-	added #ifdefs around TLS algorithms not present on XP/2000/NT4
-	added definition for va_copy for older MSVC
-	added some gss ifdefs for older MSVC
+	added definition for va_copy for older Windows
+	added some GSS/TLS ifdefs for older Windows
+	added HCRYPTPROV_OR_NCRYPT_KEY_HANDLE typedef for older Windows
 
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName

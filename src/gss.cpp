@@ -388,42 +388,42 @@ const char *gss::getSspiStatusString(uint32_t status) {
 			case SEC_E_KDC_CERT_REVOKED:
 				return "SEC_E_KDC_CERT_REVOKED";
 				break;
-			#ifdef SEC_I_SIGNATURE_NEEDED:
+			#ifdef SEC_I_SIGNATURE_NEEDED
 			case SEC_I_SIGNATURE_NEEDED:
 				return "SEC_I_SIGNATURE_NEEDED";
 				break;
 			#endif
-			#ifdef SEC_E_INVALID_PARAMETER:
+			#ifdef SEC_E_INVALID_PARAMETER
 			case SEC_E_INVALID_PARAMETER:
 				return "SEC_E_INVALID_PARAMETER";
 				break;
 			#endif
-			#ifdef SEC_E_DELEGATION_POLICY:
+			#ifdef SEC_E_DELEGATION_POLICY
 			case SEC_E_DELEGATION_POLICY:
 				return "SEC_E_DELEGATION_POLICY";
 				break;
 			#endif
-			#ifdef SEC_E_POLICY_NLTM_ONLY:
+			#ifdef SEC_E_POLICY_NLTM_ONLY
 			case SEC_E_POLICY_NLTM_ONLY:
 				return "SEC_E_POLICY_NLTM_ONLY";
 				break;
 			#endif
-			#ifdef SEC_I_NO_RENEGOTIATION:
+			#ifdef SEC_I_NO_RENEGOTIATION
 			case SEC_I_NO_RENEGOTIATION:
 				return "SEC_I_NO_RENEGOTIATION";
 				break;
 			#endif
-			#ifdef SEC_E_NO_CONTEXT:
+			#ifdef SEC_E_NO_CONTEXT
 			case SEC_E_NO_CONTEXT:
 				return "SEC_E_NO_CONTEXT";
 				break;
 			#endif
-			#ifdef SEC_E_PKU2U_CERT_FAILURE:
+			#ifdef SEC_E_PKU2U_CERT_FAILURE
 			case SEC_E_PKU2U_CERT_FAILURE:
 				return "SEC_E_PKU2U_CERT_FAILURE";
 				break;
 			#endif
-			#ifdef SEC_E_MUTUAL_AUTH_FAILED:
+			#ifdef SEC_E_MUTUAL_AUTH_FAILED
 			case SEC_E_MUTUAL_AUTH_FAILED:
 				return "SEC_E_MUTUAL_AUTH_FAILED";
 				break;

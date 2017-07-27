@@ -18,6 +18,11 @@
 	#include <rudiments/bytestring.h>
 	#include <schannel.h>
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
+
+	// MSVC 2008- doesn't define HCRYPTPROV_OR_NCRYPT_KEY_HANDLE
+	#if _MSC_VER <= 1500
+		typedef	ULONG_PTR	HCRYPTPROV_OR_NCRYPT_KEY_HANDLE;
+	#endif
 #endif
 
 #ifdef RUDIMENTS_HAVE_LIMITS_H
@@ -694,12 +699,16 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 						c[i],"NO_SIGN")) {
 			(*algids)[algindex++]=CALG_NO_SIGN;
 		#endif
+		#ifdef CALG_OID_INFO_CNG_ONLY
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_CNG_ONLY")) {
 			(*algids)[algindex++]=CALG_OID_INFO_CNG_ONLY;
+		#endif
+		#ifdef CALG_OID_INFO_PARAMETERS
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_PARAMETERS")) {
 			(*algids)[algindex++]=CALG_OID_INFO_PARAMETERS;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"PCT1_MASTER")) {
 			(*algids)[algindex++]=CALG_PCT1_MASTER;

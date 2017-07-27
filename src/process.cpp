@@ -42,15 +42,6 @@
 
 #ifdef RUDIMENTS_HAVE_WINDOWS_H
 	#include <windows.h>
-
-	//  (Rtl)CaptureStackBackTrace isn't defined prior to Vista
-	#if _WIN32_WINNT < 0x0600
-	extern "C" USHORT WINAPI CaptureStackBackTrace(
-						ULONG FramesToSkip,
-						ULONG FramesToCapture,
-						PVOID *BackTrace,
-						PULONG BackTraceHash);
-	#endif
 #endif
 #ifdef RUDIMENTS_HAVE_TLHELP32_H
 	#include <tlhelp32.h>
@@ -1152,7 +1143,9 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 		}
 		delete[] btstrings;
 		delete[] btarray;
-	#elif defined(RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE)
+	#elif defined(RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE) && \
+						_WIN32_WINVER >= 0x0600
+		// CaptureStackBackTrace not supported prior to Vista
 		HANDLE	process=GetCurrentProcess();
 		if (!SymInitialize(process,NULL,TRUE)) {
 			return;
