@@ -466,7 +466,7 @@ end if
 
 
 ' determine OS Version number
-if length(hexversion)=0 then
+if len(hexversion)=0 then
 	set cmd=WshShell.exec("%comspec% /c ver")
 	stdout=cmd.StdOut.ReadAll()
 	stderr=cmd.StdErr.ReadLine()
