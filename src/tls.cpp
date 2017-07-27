@@ -650,9 +650,11 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 						c[i],"ECDSA")) {
 			(*algids)[algindex++]=CALG_ECDSA;
 		#endif
+		#ifdef CALG_ECMQV
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"ECMQV")) {
 			(*algids)[algindex++]=CALG_ECMQV;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HASH_REPLACE_OWF")) {
 			(*algids)[algindex++]=CALG_HASH_REPLACE_OWF;
@@ -722,15 +724,21 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA1")) {
 			(*algids)[algindex++]=CALG_SHA1;
+		#ifdef CALG_SHA_256
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_256")) {
 			(*algids)[algindex++]=CALG_SHA_256;
+		#endif
+		#ifdef CALG_SHA_384
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_384")) {
 			(*algids)[algindex++]=CALG_SHA_384;
+		#endif
+		#ifdef CALG_SHA_512
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_512")) {
 			(*algids)[algindex++]=CALG_SHA_512;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SKIPJACK")) {
 			(*algids)[algindex++]=CALG_SKIPJACK;
