@@ -602,18 +602,26 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"3DES_112")) {
 			(*algids)[algindex++]=CALG_3DES_112;
+		#ifdef CALG_AES
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES")) {
 			(*algids)[algindex++]=CALG_AES;
+		#endif
+		#ifdef CALG_AES_128
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_128")) {
 			(*algids)[algindex++]=CALG_AES_128;
+		#endif
+		#ifdef CALG_AES_192
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_192")) {
 			(*algids)[algindex++]=CALG_AES_192;
+		#endif
+		#ifdef CALG_AES_256
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_256")) {
 			(*algids)[algindex++]=CALG_AES_256;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AGREEDKEY_ANY")) {
 			(*algids)[algindex++]=CALG_AGREEDKEY_ANY;
@@ -655,9 +663,11 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 						c[i],"ECMQV")) {
 			(*algids)[algindex++]=CALG_ECMQV;
 		#endif
+		#ifdef CALG_HASH_REPLACE_OWF
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HASH_REPLACE_OWF")) {
 			(*algids)[algindex++]=CALG_HASH_REPLACE_OWF;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HUGHES_MD5")) {
 			(*algids)[algindex++]=CALG_HUGHES_MD5;
@@ -679,9 +689,11 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"MD5")) {
 			(*algids)[algindex++]=CALG_MD5;
+		#ifdef CALG_NO_SIGN
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"NO_SIGN")) {
 			(*algids)[algindex++]=CALG_NO_SIGN;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_CNG_ONLY")) {
 			(*algids)[algindex++]=CALG_OID_INFO_CNG_ONLY;
