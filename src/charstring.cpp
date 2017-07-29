@@ -35,8 +35,8 @@ extern "C" int __vsnprintf(char *str, size_t size,
 				const char *format, va_list ap);
 #endif
 
-// MSVC 2008- doesn't define va_copy
-#if defined(_MSC_VER) && (_MSC_VER <= 1500)
+// MSVC 2010- doesn't define va_copy
+#if defined(_MSC_VER) && (_MSC_VER <= 1700)
 	#define va_copy(a,b) ((a)=(b))
 #endif
 
