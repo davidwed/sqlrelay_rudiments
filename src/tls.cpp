@@ -2165,13 +2165,25 @@ void tlscertificate::setCertificate(void *cert) {
 		uint64_t	t=
 		(((((uint64_t)c->NotBefore.dwHighDateTime)<<32)|
 				c->NotBefore.dwLowDateTime)/10)-
-				11644473600000000ULL;
+				// Visual C++ 2002- doesn't like the ULL suffix
+				#if defined(_MSC_VER) && (_MSC_VER <= 1300)
+					11644473600000000
+				#else
+					11644473600000000ULL
+				#endif
+				;
 		pvt->_validfrom.initialize(t/1000000,t%1000000);
 
 		// get valid-to
 		t=(((((uint64_t)c->NotAfter.dwHighDateTime)<<32)|
 				c->NotAfter.dwLowDateTime)/10)-
-				11644473600000000ULL;
+				// Visual C++ 2002- doesn't like the ULL suffix
+				#if defined(_MSC_VER) && (_MSC_VER <= 1300)
+					11644473600000000
+				#else
+					11644473600000000ULL
+				#endif
+				;
 		pvt->_validto.initialize(t/1000000,t%1000000);
 
 		// get the subject
