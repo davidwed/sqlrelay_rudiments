@@ -6717,6 +6717,13 @@
         }
         "LaunchCondition"
         {
+            "{836E08B8-0285-4809-BA42-01DB6754A45D}:_89E1DF65F2AE4B8086D7D7816EC4FDAC"
+            {
+            "Name" = "8:Privileged"
+            "Condition" = "8:Privileged"
+            "Message" = "8:This package must be installed by an Administrator."
+            "InstallUrl" = "8:"
+            }
         }
         "Locator"
         {

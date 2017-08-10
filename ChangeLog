@@ -4,6 +4,7 @@
 	added definition for va_copy for older Windows
 	added some GSS/TLS ifdefs for older Windows
 	added HCRYPTPROV_OR_NCRYPT_KEY_HANDLE typedef for older Windows
+	added run-as-Admin requirement to Windows installer
 
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
