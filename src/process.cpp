@@ -196,9 +196,9 @@ uid_t process::getEffectiveUserId() {
 	#if defined(RUDIMENTS_HAVE_GETEUID)
 		return geteuid();
 	#else
-		// windows doesn't have the notion of effective user id's
-		RUDIMENTS_SET_ENOSYS
-		return -1;
+		// windows doesn't have the notion of effective vs. actual
+		// user id's, so we'll return the actual user id
+		return getUserId();
 	#endif
 }
 
@@ -271,9 +271,9 @@ gid_t process::getEffectiveGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETEGID)
 		return getegid();
 	#else
-		// windows doesn't have the notion of effective group id's
-		RUDIMENTS_SET_ENOSYS
-		return -1;
+		// windows doesn't have the notion of effective vs. actual
+		// group id's, so we'll return the actual group id
+		return getGroupId();
 	#endif
 }
 

@@ -5,6 +5,8 @@
 	added some GSS/TLS ifdefs for older Windows
 	added HCRYPTPROV_OR_NCRYPT_KEY_HANDLE typedef for older Windows
 	added run-as-Admin requirement to Windows installer
+	implemented process::getEffectiveUser/GroupId to just return
+		getUser/GroupId on Windows
 
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
