@@ -178,10 +178,16 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define msg_accrightslen msg_controllen
 #endif
 
-// if SSIZE_MAX is undefined, choose a good safe value
-// that should even work on 16-bit systems
+// if SSIZE_MAX is undefined...
 #ifndef SSIZE_MAX
-	#define SSIZE_MAX 16383
+	#if defined(_WIN64)
+		#define SSIZE_MAX _I64_MAX
+	#elif defined(_WIN32)
+		#define SSIZE_MAX LONG_MAX
+	#else
+		// a good safe value that should even work on 16-bit systems
+		#define SSIZE_MAX 16383
+	#endif
 #endif
 
 // most platforms FILE struct have a member for the file descriptor,
@@ -348,6 +354,10 @@ filedescriptor::~filedescriptor() {
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
+	if (size>SSIZE_MAX) {
+		size=SSIZE_MAX;
+	}
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting write buffer size to %d\n",size);
 	#endif
@@ -371,6 +381,10 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 }
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
+
+	if (size>SSIZE_MAX) {
+		size=SSIZE_MAX;
+	}
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting read buffer size to %d\n",size);
