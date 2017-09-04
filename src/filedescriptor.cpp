@@ -180,9 +180,7 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 
 // if SSIZE_MAX is undefined...
 #ifndef SSIZE_MAX
-	#if defined(_WIN64)
-		#define SSIZE_MAX _I64_MAX
-	#elif defined(_WIN32)
+	#if defined(_WIN32)
 		#define SSIZE_MAX LONG_MAX
 	#else
 		// a good safe value that should even work on 16-bit systems
