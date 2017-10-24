@@ -1030,7 +1030,7 @@ then
 		if ( test -r "/etc/os-release" )
 		then
 			ID=`grep "^ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
-			VERSION_ID=`grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"'`
+			VERSION_ID=`grep "^VERSION_ID=" /etc/os-release | cut -d= -f2 | tr -d '"' | cut -d. -f1`
 			if ( test "$ID" = "fedora" -a "$VERSION_ID" -ge "21" )
 			then
 				AC_DEFINE(RUDIMENTS_DEFAULT_CIPHER_PROFILE_SYSTEM,1,Platform requires default TLS ciper of PROFILE=SYSTEM)
