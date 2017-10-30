@@ -4,6 +4,7 @@
 #include <rudiments/private/config.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
+#include <rudiments/stdio.h>
 
 #include <stdio.h>
 
@@ -45,23 +46,28 @@ char *error::getErrorString() {
 	#if defined(RUDIMENTS_HAVE_STRERROR_S) || \
 		defined(RUDIMENTS_HAVE_STRERROR_R)
 
+		int32_t	errornumber=getErrorNumber();
+
 		for (size_t size=256; size<=1024; size=size+256) {
 
 			char	*buffer=new char[size];
 
 			#if defined(RUDIMENTS_HAVE_STRERROR_S)
-			errno_t	result=strerror_s(buffer,size,errno);
+			errno_t	result=strerror_s(buffer,size,errornumber);
 			if (!result) {
 				return buffer;
 			} else if (result!=ERANGE) {
+				setErrorNumber(errornumber);
 				break;
 			}
 			#elif defined(RUDIMENTS_HAVE_STRERROR_R)
-			if (!strerror_r(errno,buffer,size)) {
+			if (!strerror_r(errornumber,buffer,size)) {
 				return buffer;
 			} else if (getErrorNumber()!=ERANGE) {
+				setErrorNumber(errornumber);
 				break;
 			}
+			setErrorNumber(errornumber);
 			#endif
 
 			delete[] buffer;
