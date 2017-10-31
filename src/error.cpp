@@ -4,7 +4,6 @@
 #include <rudiments/private/config.h>
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
-#include <rudiments/stdio.h>
 
 #include <stdio.h>
 
@@ -61,13 +60,38 @@ char *error::getErrorString() {
 				break;
 			}
 			#elif defined(RUDIMENTS_HAVE_STRERROR_R)
-			if (!strerror_r(errornumber,buffer,size)) {
-				return buffer;
-			} else if (getErrorNumber()!=ERANGE) {
+
+			// There are 2 versions of strerror_r.  The XSI version
+			// returns an int (success/fail) and the GNU version
+			// returns char * (the error).  Platforms like redhat 9
+			// only support the GNU version.
+			//
+			// It's difficult to autodetect a return value at
+			// configure time, so we'll deal with it here.
+			//
+			// Also, the GNU version returns the error, but doesn't
+			// fill the buffer at all!  In that case, the return
+			// value is the only thing we can trust to contain the
+			// error.
+			int	result=reinterpret_cast<int>(
+					strerror_r(errornumber,buffer,size));
+			if (result!=-1) {
+				if (!result) {
+					return buffer;
+				}
+				char	*charresult=
+					reinterpret_cast<char *>(result);
+				if (charresult!=buffer) {
+					delete[] buffer;
+				}
+				return charresult;
+			} else {
+				if (getErrorNumber()!=ERANGE) {
+					setErrorNumber(errornumber);
+					break;
+				}
 				setErrorNumber(errornumber);
-				break;
 			}
-			setErrorNumber(errornumber);
 			#endif
 
 			delete[] buffer;

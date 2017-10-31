@@ -9,6 +9,8 @@
 		getUser/GroupId on Windows
 	SSIZE_MAX in the filedescriptor class is more accurate on Windows now
 	filedescriptor limits buffer sizes to SSIZE_MAX
+	fixed GNU strerror_r usage
+	fixed clobbering of errno in filedescriptor write/printf
 
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName

@@ -1,5 +1,6 @@
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
+#include <rudiments/error.h>
 
 void header(const char *title) {
 	stdoutput.printf("\n===============================================================================\n");
@@ -7,10 +8,10 @@ void header(const char *title) {
 }
 
 void test(const char *printstring, bool result) {
-	stdoutput.printf("\t");
-	stdoutput.printf(printstring);
-	stdoutput.printf((result)?": success":": failed");
-	stdoutput.printf("\n");
+	stdoutput.write("\t");
+	stdoutput.write(printstring);
+	stdoutput.write((result)?": success":": failed");
+	stdoutput.write("\n");
 	if (!result) {
 		process::exit(1);
 	}

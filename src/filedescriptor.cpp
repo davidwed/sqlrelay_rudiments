@@ -1413,6 +1413,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
+	int32_t	olderrno=error::getErrorNumber();
+
 	ssize_t	totalwrite=0;
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
@@ -1521,6 +1523,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	#ifdef DEBUG_WRITE
 	debugPrintf(",%d)\n",(int)totalwrite);
 	#endif
+	error::setErrorNumber(olderrno);
 	return totalwrite;
 }
 
@@ -2464,7 +2467,15 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 		#ifdef RUDIMENTS_HAVE_VDPRINTF
 
 			// use vdprintf if it's available
-			return vdprintf(pvt->_fd,format,*argp);
+			// (on some platforms (redhat 9), it tends to set
+			// errno=ESPIPE, even on success, so save/restore
+			// errno too)
+			int32_t	olderr=error::getErrorNumber();
+			int	result=vdprintf(pvt->_fd,format,*argp);
+			if (result>-1) {
+				error::setErrorNumber(olderr);
+			}
+			return result;
 
 		#else
 
