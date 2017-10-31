@@ -35,7 +35,11 @@ int main(int argc, const char **argv) {
 	test("pid",pid>1);
 	test("ppid",ppid>1);
 #ifndef _WIN32
+	#ifdef RUDIMENTS_HAVE_GETPGID
 	test("pgid",pgid>1);
+	#else
+	test("pgid",pgid==-1);
+	#endif
 	test("uid/euid",uid==euid);
 	test("gid/egid",gid==egid);
 #endif

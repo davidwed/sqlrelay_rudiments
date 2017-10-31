@@ -43,7 +43,8 @@ int32_t error::getErrorNumber() {
 
 char *error::getErrorString() {
 	#if defined(RUDIMENTS_HAVE_STRERROR_S) || \
-		defined(RUDIMENTS_HAVE_STRERROR_R)
+		defined(RUDIMENTS_HAVE_XSI_STRERROR_R) || \
+		defined(RUDIMENTS_HAVE_GNU_STRERROR_R)
 
 		int32_t	errornumber=getErrorNumber();
 
@@ -56,41 +57,23 @@ char *error::getErrorString() {
 			if (!result) {
 				return buffer;
 			} else if (result!=ERANGE) {
-				setErrorNumber(errornumber);
 				break;
 			}
-			#elif defined(RUDIMENTS_HAVE_STRERROR_R)
-
-			// There are 2 versions of strerror_r.  The XSI version
-			// returns an int (success/fail) and the GNU version
-			// returns char * (the error).  Platforms like redhat 9
-			// only support the GNU version.
-			//
-			// It's difficult to autodetect a return value at
-			// configure time, so we'll deal with it here.
-			//
-			// Also, the GNU version returns the error, but doesn't
-			// fill the buffer at all!  In that case, the return
-			// value is the only thing we can trust to contain the
-			// error.
-			int	result=reinterpret_cast<int>(
-					strerror_r(errornumber,buffer,size));
-			if (result!=-1) {
-				if (!result) {
-					return buffer;
-				}
-				char	*charresult=
-					reinterpret_cast<char *>(result);
-				if (charresult!=buffer) {
-					delete[] buffer;
-				}
-				return charresult;
-			} else {
-				if (getErrorNumber()!=ERANGE) {
-					setErrorNumber(errornumber);
-					break;
-				}
+			setErrorNumber(errornumber);
+			#elif defined(RUDIMENTS_HAVE_XSI_STRERROR_R)
+			int	result=strerror_r(errornumber,buffer,size);
+			if (!result) {
+				return buffer;
+			} else if (getErrorNumber()!=ERANGE) {
+				break;
+			}
+			setErrorNumber(errornumber);
+			#elif defined(RUDIMENTS_HAVE_GNU_STRERROR_R)
+			char	*result=strerror_r(errornumber,buffer,size);
+			if (getErrorNumber()==ERANGE) {
 				setErrorNumber(errornumber);
+			} else {
+				return result;
 			}
 			#endif
 

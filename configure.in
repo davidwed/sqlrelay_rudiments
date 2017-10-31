@@ -1942,17 +1942,35 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
 #endif],
 strerror(0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR,1,Some systems have strerror) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for strerror_r)
-AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+AC_MSG_CHECKING(for XSI strerror_r)
+AC_TRY_COMPILE([
+#ifdef RUDIMENTS_HAVE_STDLIB_H
 	#include <stdlib.h>
 #endif
+#undef __USE_GNU
+#undef __REDIRECT
+#include <stdio.h>
 #ifdef RUDIMENTS_HAVE_STRINGS_H
 	#include <strings.h>
 #endif
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
 #endif],
-strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_STRERROR_R,1,Some systems have strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+int a=strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_XSI_STRERROR_R,1,Some systems have XSI strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for GNU strerror_r)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+#undef __REDIRECT
+#include <stdio.h>
+#ifdef RUDIMENTS_HAVE_STRINGS_H
+	#include <strings.h>
+#endif
+#ifdef RUDIMENTS_HAVE_STRING_H
+	#include <string.h>
+#endif],
+char *a=strerror_r(0,NULL,0);,AC_DEFINE(RUDIMENTS_HAVE_GNU_STRERROR_R,1,Some systems have GNU strerror_r) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for strerror_s)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDLIB_H

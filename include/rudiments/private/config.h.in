@@ -648,6 +648,9 @@
 /* Some systems have GlobalMemoryStatusEx */
 #undef RUDIMENTS_HAVE_GLOBALMEMORYSTATUSEX
 
+/* Some systems have GNU strerror_r */
+#undef RUDIMENTS_HAVE_GNU_STRERROR_R
+
 /* Some systems have grp.h */
 #undef RUDIMENTS_HAVE_GRP_H
 
@@ -1161,9 +1164,6 @@
 /* Some systems have strerror */
 #undef RUDIMENTS_HAVE_STRERROR
 
-/* Some systems have strerror_r */
-#undef RUDIMENTS_HAVE_STRERROR_R
-
 /* Some systems have strerror_s */
 #undef RUDIMENTS_HAVE_STRERROR_S
 
@@ -1427,6 +1427,9 @@
 
 /* Some systems have WSADuplicateSocket */
 #undef RUDIMENTS_HAVE_WSADUPLICATESOCKET
+
+/* Some systems have XSI strerror_r */
+#undef RUDIMENTS_HAVE_XSI_STRERROR_R
 
 /* Some systems have _access_s() */
 #undef RUDIMENTS_HAVE__ACCESS_S
