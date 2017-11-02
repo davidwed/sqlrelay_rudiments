@@ -10,6 +10,7 @@ clean:
 	cd test $(AND) $(MAKE) clean
 	cd bench $(AND) $(MAKE) clean
 	cd examples $(AND) $(MAKE) clean
+	$(RMTREE) msvc/setupx86/Release msvc/setupx86/Debug msvc/setupx64/Release msvc/setupx64/Debug
 
 install:
 	cd src $(AND) $(MAKE) install
