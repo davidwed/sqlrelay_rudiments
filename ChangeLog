@@ -11,6 +11,8 @@
 	filedescriptor limits buffer sizes to SSIZE_MAX
 	fixed GNU strerror_r usage
 	fixed clobbering of errno in filedescriptor write/printf
+	prompt class assigns result of ftruncate for platforms where it's
+		declared with attribute warn_unused_result
 
 1.0.5 - added asprintf()/vasprintf() analogs to charstring
 	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
