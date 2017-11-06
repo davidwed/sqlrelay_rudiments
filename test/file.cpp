@@ -130,33 +130,38 @@ int main(int argc, const char **argv) {
 		test("key",file::generateKey("testfile.txt",1)!=0);
 
 
-		fl.open("testfile.txt",O_RDWR);
-		test("lock 1",fl.lockFile(
-				#if defined(F_RDLCK) && defined(F_WRLCK)
-					F_RDLCK|F_WRLCK
-				#else
-					0
-				#endif
-					));
+		// not reliable over nfs on SCO systems
+		if (charstring::compare(osname,"UnixWare") &&
+			charstring::compare(osname,"SCO_SV")) {
 
-		stringbuffer	cmd;
-		char	*pwd=directory::getCurrentWorkingDirectory();
-		cmd.append(pwd)->append("/file");
-		#ifdef _WIN32
-			cmd.append(".exe");
-		#endif
-		delete[] pwd;
-		const char	*args1[]={"file","child",NULL};
-		process::spawn(cmd.getString(),args1,true);
+			fl.open("testfile.txt",O_RDWR);
+			test("lock 1",fl.lockFile(
+					#if defined(F_RDLCK) && defined(F_WRLCK)
+						F_RDLCK|F_WRLCK
+					#else
+						0
+					#endif
+						));
 
-		snooze::macrosnooze(1);
+			stringbuffer	cmd;
+			char	*pwd=directory::getCurrentWorkingDirectory();
+			cmd.append(pwd)->append("/file");
+			#ifdef _WIN32
+				cmd.append(".exe");
+			#endif
+			delete[] pwd;
+			const char	*args1[]={"file","child",NULL};
+			process::spawn(cmd.getString(),args1,true);
 
-		test("unlock 1",fl.unlockFile());
+			snooze::macrosnooze(1);
 
-		snooze::macrosnooze(1);
-		stdoutput.printf("\n");
+			test("unlock 1",fl.unlockFile());
 
-		fl.close();
+			snooze::macrosnooze(1);
+			stdoutput.printf("\n");
+
+			fl.close();
+		}
 
 
 		delete[] osname;
