@@ -10,6 +10,7 @@
 	SSIZE_MAX in the filedescriptor class is more accurate on Windows now
 	filedescriptor limits buffer sizes to SSIZE_MAX
 	fixed GNU strerror_r usage
+	worked around strerror_r bugs in older freebsd
 	fixed clobbering of errno in filedescriptor write/printf
 	prompt class assigns result of ftruncate for platforms where it's
 		declared with attribute warn_unused_result

@@ -4,6 +4,7 @@
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
 #include <stdio.h>
+#include <string.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
@@ -30,6 +31,7 @@ int main(int argc, const char **argv) {
 		"No error: 0",
 		"Error 0",
 		"Unknown error",
+		"Unknown error: 0",
 		"Undefined error: 0",
 		NULL
 	};

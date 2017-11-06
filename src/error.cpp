@@ -64,6 +64,17 @@ char *error::getErrorString() {
 			int	result=strerror_r(errornumber,buffer,size);
 			if (!result) {
 				return buffer;
+			} else if (result==EINVAL) {
+				// strerror_r on older freebsd, doesn't like it
+				// if errornumber is 0.  It returns EINVAL,
+				// sets the error number to EINVAL, and
+				// doesn't fill the buffer.  Emulate the
+				// behavior of strerror(0) by setting the
+				// buffer to "Unknown error: 0" and resetting
+				// the error number.
+				charstring::copy(buffer,"Unknown error: 0");
+				setErrorNumber(errornumber);
+				return buffer;
 			} else if (getErrorNumber()!=ERANGE) {
 				break;
 			}
