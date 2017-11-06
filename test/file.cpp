@@ -131,7 +131,6 @@ int main(int argc, const char **argv) {
 
 
 		fl.open("testfile.txt",O_RDWR);
-
 		test("lock 1",fl.lockFile(
 				#if defined(F_RDLCK) && defined(F_WRLCK)
 					F_RDLCK|F_WRLCK
