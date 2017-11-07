@@ -16,6 +16,8 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+const char	*handoffsck="handoff.sck";
+
 void handoff1() {
 
 	// create a file containing "bye"
@@ -28,7 +30,7 @@ void handoff1() {
 	// open a unix socket
 	unixsocketserver	handoffsock;
 	test("handoff1 - unix socket",
-			handoffsock.listen("handoff.sck",0000,15));
+			handoffsock.listen(handoffsck,0000,15));
 
 	// open an inet socket
 	inetsocketserver	serversock;
@@ -73,7 +75,7 @@ void handoff1() {
 	// clean up
 	serversock.close();
 	handoffsock.close();
-	file::remove("handoff.sck");
+	file::remove(handoffsck);
 }
 
 void handoff2() {
@@ -81,7 +83,7 @@ void handoff2() {
 	// connect to handoff1
 	unixsocketclient clnt;
 	test("handoff2 - connect",
-		clnt.connect("handoff.sck",-1,-1,0,1)==RESULT_SUCCESS);
+		clnt.connect(handoffsck,-1,-1,0,1)==RESULT_SUCCESS);
 
 
 	// receive the file
@@ -142,10 +144,11 @@ int main(int argc, const char **argv) {
                			(!charstring::compare(os,"Linux",5) &&
 				ver<2.2) ||
 				!charstring::compare(os,"syllable",8));
-		// FIXME: this really ought to work on SCO OSR5
-		#ifdef RUDIMENTS_HAVE_BAD_SCO_MSGHDR
+		// FIXME: this really ought to work on OSR
+		if (!charstring::compare(os,"SCO_SV",6)) {
 			notsupported=true;
-		#endif
+			//handoffsck="/tmp/handoff.sck";
+		}
 		delete[] os;
 		delete[] rel;
 		if (notsupported) {

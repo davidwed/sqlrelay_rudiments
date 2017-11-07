@@ -16,6 +16,8 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+const char	*listenersck="listener.sck";
+
 void listen() {
 
 	// listen on inet socket port 8000
@@ -24,7 +26,7 @@ void listen() {
 
 	// listen on unix socket "listener.sck"
 	unixsocketserver	unixsock;
-	test("listener - unix socket",unixsock.listen("listener.sck",0000,15));
+	test("listener - unix socket",unixsock.listen(listenersck,0000,15));
 
 	// create a listener and add the 2 sockets to it
 	listener	pool;
@@ -78,7 +80,7 @@ void listen() {
 	// clean up
 	inetsock.close();
 	unixsock.close();
-	file::remove("listener.sck");
+	file::remove(listenersck);
 
 	stdoutput.printf("\n");
 }
@@ -113,7 +115,7 @@ void unixclient() {
 
 	// connect to the server
 	test("unix client - connect",
-			clnt.connect("listener.sck",-1,-1,1,1)>=0);
+			clnt.connect(listenersck,-1,-1,1,1)>=0);
 
 	// write "hello" to the server
 	test("unix client - write \"unix\"",clnt.write("unix",4)==4);
@@ -130,6 +132,13 @@ void unixclient() {
 }
 
 int main(int argc, const char **argv) {
+
+	// socket must be on a local fs on OSR
+	char	*osname=sys::getOperatingSystemName();
+	if (!charstring::compare(osname,"SCO_SV")) {
+		listenersck="/tmp/listener.sck";
+	}
+	
 
 	if (argc==1) {
 

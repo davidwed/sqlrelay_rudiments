@@ -157,10 +157,10 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("path-related...\n");
 	cwd=directory::getCurrentWorkingDirectory();
 	// not always valid with nfs/cifs
-	//test("maxFileNameLength valid",
-			//directory::maxFileNameLength(cwd)>0);
-	//test("maxPathLength valid",
-			//directory::maxPathLength(cwd)>0);
+	/*test("maxFileNameLength valid",
+			directory::maxFileNameLength(cwd)>0);
+	test("maxPathLength valid",
+			directory::maxPathLength(cwd)>0);*/
 	d.open(cwd);
 
 	// Syllable has bugs
