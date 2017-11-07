@@ -114,6 +114,30 @@ class dictionary {
 		 *  accociated with it is replaced with "value". */
 		void	setValue(keytype key, valuetype value);
 
+		/** Sets the value associated with each key in the "keys"
+		 *  array to the corresponding value in the "values" array.
+		 *  Assumes that keys is NULL terminated.
+		 *  If "key" already exists, the value currently
+		 *  accociated with it is replaced with "value". */
+		void	setValues(keytype *keys, valuetype *values);
+		void	setValues(keytype const *keys, valuetype const *values);
+
+		/** Sets the value associated with each of "count" keys
+		 *  in the "keys" array to the corresponding value in the
+		 *  "values" array.
+		 *  If "key" already exists, the value currently
+		 *  accociated with it is replaced with "value". */
+		void	setValues(keytype *keys, valuetype *values,
+							uint64_t count);
+		void	setValues(keytype const *keys, valuetype const *values,
+								uint64_t count);
+
+		/** Sets the value associated with each key in "dict" to the
+		 *  corresponding value from "dict".
+		 *  If "key" already exists, the value currently
+		 *  accociated with it is replaced with "value". */
+		void	setValues(dictionary< keytype, valuetype > *dict);
+
 		/** Sets "value" to the value associated with "key".
 		 *  Returns true on success or false if "key" wasn't
 		 *  found. */

@@ -151,9 +151,10 @@ bool url::lowLevelOpen(const char *name, int32_t flags,
 	char	*userpwd=NULL;
 	char	*cleanurl=NULL;
 
-	// is there an @ in the url?
+	// is there an @ in the url? (between the first :// and subsequent /)
+	const char	*nextslash=charstring::findFirstOrEnd(protodelim+3,'/');
 	const char	*at=charstring::findFirst(protodelim+3,'@');
-	if (at) {
+	if (at && at<nextslash) {
 
 		// extract the user/password block
 		userpwd=charstring::duplicate(protodelim+3,at-protodelim-3);

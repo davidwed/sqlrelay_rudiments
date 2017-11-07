@@ -3,7 +3,8 @@
 
 #include <rudiments/error.h>
 #include <rudiments/charstring.h>
-#include <rudiments/stdio.h>
+#include <stdio.h>
+#include <string.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
@@ -23,13 +24,14 @@ int main(int argc, const char **argv) {
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
 
-	stdoutput.printf("%s\n",error::getErrorString());
+	//stdoutput.printf("\"%s\"\n",error::getErrorString());
 	const char	*success[]={
 		"Success",
 		"No error",
 		"No error: 0",
 		"Error 0",
 		"Unknown error",
+		"Unknown error: 0",
 		"Undefined error: 0",
 		NULL
 	};

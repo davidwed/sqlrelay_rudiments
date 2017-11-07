@@ -196,9 +196,9 @@ uid_t process::getEffectiveUserId() {
 	#if defined(RUDIMENTS_HAVE_GETEUID)
 		return geteuid();
 	#else
-		// windows doesn't have the notion of effective user id's
-		RUDIMENTS_SET_ENOSYS
-		return -1;
+		// windows doesn't have the notion of effective vs. actual
+		// user id's, so we'll return the actual user id
+		return getUserId();
 	#endif
 }
 
@@ -271,9 +271,9 @@ gid_t process::getEffectiveGroupId() {
 	#if defined(RUDIMENTS_HAVE_GETEGID)
 		return getegid();
 	#else
-		// windows doesn't have the notion of effective group id's
-		RUDIMENTS_SET_ENOSYS
-		return -1;
+		// windows doesn't have the notion of effective vs. actual
+		// group id's, so we'll return the actual group id
+		return getGroupId();
 	#endif
 }
 
@@ -1143,7 +1143,9 @@ void process::backtrace(stringbuffer *buffer, uint32_t maxframes) {
 		}
 		delete[] btstrings;
 		delete[] btarray;
-	#elif defined(RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE)
+	#elif defined(RUDIMENTS_HAVE_CAPTURESTACKBACKTRACE) && \
+						_WIN32_WINVER >= 0x0600
+		// CaptureStackBackTrace not supported prior to Vista
 		HANDLE	process=GetCurrentProcess();
 		if (!SymInitialize(process,NULL,TRUE)) {
 			return;

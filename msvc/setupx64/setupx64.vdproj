@@ -6717,6 +6717,13 @@
         }
         "LaunchCondition"
         {
+            "{836E08B8-0285-4809-BA42-01DB6754A45D}:_89E1DF65F2AE4B8086D7D7816EC4FDAC"
+            {
+            "Name" = "8:Privileged"
+            "Condition" = "8:Privileged"
+            "Message" = "8:This package must be installed by an Administrator."
+            "InstallUrl" = "8:"
+            }
         }
         "Locator"
         {
@@ -6738,7 +6745,7 @@
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.49"
+        "ProductVersion" = "8:1.0.6"
         "Manufacturer" = "8:firstworks.com"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -238,6 +238,7 @@ history_truncate_file (const char *filename, int nlines)
 	off_t off;
 	int count = 0;
 	ssize_t left = 0;
+	int ftrunc;
 
 	if (filename == NULL && (filename = _default_history_file()) == NULL)
 		return errno;
@@ -350,7 +351,7 @@ history_truncate_file (const char *filename, int nlines)
 	}
 	fflush(fp);
 	if((off = ftello(fp)) > 0)
-		(void)ftruncate(fileno(fp), off);
+		ftrunc = ftruncate(fileno(fp), off);
 out3:
 	fclose(tp);
 out2:

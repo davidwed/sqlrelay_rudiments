@@ -159,8 +159,55 @@ int main(int argc, const char **argv) {
 	strstrdict.clear();
 	test("clear: getKeys()->getLength",
 		strstrdict.getKeys()->getLength()==0);
-	stdoutput.printf("\n");
 
+	// array
+	const char	*keys[]={
+		"1","2","3","4",NULL
+	};
+	const char	*values[]={
+		"one","two","three","four",NULL
+	};
+	strstrdict.setValues(keys,values);
+	test("array (null): getKeys()->getLength",
+		strstrdict.getKeys()->getLength()==4);
+	test("array (null): setValue()/getValue() 1",
+		!charstring::compare(strstrdict.getValue("1"),"one"));
+	test("array (null): setValue()/getValue() 2",
+		!charstring::compare(strstrdict.getValue("2"),"two"));
+	test("array (null): setValue()/getValue() 3",
+		!charstring::compare(strstrdict.getValue("3"),"three"));
+	test("array (null): setValue()/getValue() 4",
+		!charstring::compare(strstrdict.getValue("4"),"four"));
+	test("array (null): getValue(): 5",!strstrdict.getValue("5"));
+	strstrdict.clear();
+	strstrdict.setValues(keys,values,4);
+	test("array (count): getKeys()->getLength",
+		strstrdict.getKeys()->getLength()==4);
+	test("array (count): setValue()/getValue() 1",
+		!charstring::compare(strstrdict.getValue("1"),"one"));
+	test("array (count): setValue()/getValue() 2",
+		!charstring::compare(strstrdict.getValue("2"),"two"));
+	test("array (count): setValue()/getValue() 3",
+		!charstring::compare(strstrdict.getValue("3"),"three"));
+	test("array (count): setValue()/getValue() 4",
+		!charstring::compare(strstrdict.getValue("4"),"four"));
+	test("array (count): getValue(): 5",!strstrdict.getValue("5"));
+
+	// from another dictionary
+	dictionary< const char *, const char * >	strstrdict1;
+	strstrdict1.setValues(&strstrdict);
+	test("dict: getKeys()->getLength",
+		strstrdict.getKeys()->getLength()==4);
+	test("dict: setValue()/getValue() 1",
+		!charstring::compare(strstrdict.getValue("1"),"one"));
+	test("dict: setValue()/getValue() 2",
+		!charstring::compare(strstrdict.getValue("2"),"two"));
+	test("dict: setValue()/getValue() 3",
+		!charstring::compare(strstrdict.getValue("3"),"three"));
+	test("dict: setValue()/getValue() 4",
+		!charstring::compare(strstrdict.getValue("4"),"four"));
+	test("dict: getValue(): 5",!strstrdict.getValue("5"));
+	stdoutput.printf("\n");
 
 
 	// int/string

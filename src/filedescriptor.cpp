@@ -178,10 +178,14 @@ extern ssize_t __xnet_sendmsg (int, const struct msghdr *, int);
 	#define msg_accrightslen msg_controllen
 #endif
 
-// if SSIZE_MAX is undefined, choose a good safe value
-// that should even work on 16-bit systems
+// if SSIZE_MAX is undefined...
 #ifndef SSIZE_MAX
-	#define SSIZE_MAX 16383
+	#if defined(_WIN32)
+		#define SSIZE_MAX LONG_MAX
+	#else
+		// a good safe value that should even work on 16-bit systems
+		#define SSIZE_MAX 16383
+	#endif
 #endif
 
 // most platforms FILE struct have a member for the file descriptor,
@@ -348,6 +352,10 @@ filedescriptor::~filedescriptor() {
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 
+	if (size>SSIZE_MAX) {
+		size=SSIZE_MAX;
+	}
+
 	#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting write buffer size to %d\n",size);
 	#endif
@@ -371,6 +379,10 @@ bool filedescriptor::setWriteBufferSize(ssize_t size) const {
 }
 
 bool filedescriptor::setReadBufferSize(ssize_t size) const {
+
+	if (size>SSIZE_MAX) {
+		size=SSIZE_MAX;
+	}
 
 	#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
 		debugPrintf("setting read buffer size to %d\n",size);
@@ -1401,6 +1413,8 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
 
+	int32_t	olderrno=error::getErrorNumber();
+
 	ssize_t	totalwrite=0;
 	ssize_t	sizetowrite;
 	ssize_t	actualwrite;
@@ -1509,6 +1523,7 @@ ssize_t filedescriptor::safeWrite(const void *buf, ssize_t count,
 	#ifdef DEBUG_WRITE
 	debugPrintf(",%d)\n",(int)totalwrite);
 	#endif
+	error::setErrorNumber(olderrno);
 	return totalwrite;
 }
 
@@ -2452,7 +2467,15 @@ size_t filedescriptor::printf(const char *format, va_list *argp) {
 		#ifdef RUDIMENTS_HAVE_VDPRINTF
 
 			// use vdprintf if it's available
-			return vdprintf(pvt->_fd,format,*argp);
+			// (on some platforms (redhat 9), it tends to set
+			// errno=ESPIPE, even on success, so save/restore
+			// errno too)
+			int32_t	olderr=error::getErrorNumber();
+			int	result=vdprintf(pvt->_fd,format,*argp);
+			if (result>-1) {
+				error::setErrorNumber(olderr);
+			}
+			return result;
 
 		#else
 

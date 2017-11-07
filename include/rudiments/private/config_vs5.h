@@ -1195,8 +1195,11 @@
 /* Some systems have strerror */
 #define RUDIMENTS_HAVE_STRERROR 1
 
-/* Some systems have strerror_r */
-/* #undef RUDIMENTS_HAVE_STRERROR_R */
+/* Some systems have GNU strerror_r */
+/* #undef RUDIMENTS_HAVE_GNU_STRERROR_R */
+
+/* Some systems have XSI strerror_r */
+/* #undef RUDIMENTS_HAVE_XSI_STRERROR_R */
 
 /* Some systems have strerror_s */
 /* #undef RUDIMENTS_HAVE_STRERROR_S */

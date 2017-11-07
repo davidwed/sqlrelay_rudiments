@@ -43,24 +43,48 @@ int32_t error::getErrorNumber() {
 
 char *error::getErrorString() {
 	#if defined(RUDIMENTS_HAVE_STRERROR_S) || \
-		defined(RUDIMENTS_HAVE_STRERROR_R)
+		defined(RUDIMENTS_HAVE_XSI_STRERROR_R) || \
+		defined(RUDIMENTS_HAVE_GNU_STRERROR_R)
+
+		int32_t	errornumber=getErrorNumber();
 
 		for (size_t size=256; size<=1024; size=size+256) {
 
 			char	*buffer=new char[size];
 
 			#if defined(RUDIMENTS_HAVE_STRERROR_S)
-			errno_t	result=strerror_s(buffer,size,errno);
+			errno_t	result=strerror_s(buffer,size,errornumber);
 			if (!result) {
 				return buffer;
 			} else if (result!=ERANGE) {
 				break;
 			}
-			#elif defined(RUDIMENTS_HAVE_STRERROR_R)
-			if (!strerror_r(errno,buffer,size)) {
+			setErrorNumber(errornumber);
+			#elif defined(RUDIMENTS_HAVE_XSI_STRERROR_R)
+			int	result=strerror_r(errornumber,buffer,size);
+			if (!result) {
+				return buffer;
+			} else if (result==EINVAL) {
+				// strerror_r on older freebsd, doesn't like it
+				// if errornumber is 0.  It returns EINVAL,
+				// sets the error number to EINVAL, and
+				// doesn't fill the buffer.  Emulate the
+				// behavior of strerror(0) by setting the
+				// buffer to "Unknown error: 0" and resetting
+				// the error number.
+				charstring::copy(buffer,"Unknown error: 0");
+				setErrorNumber(errornumber);
 				return buffer;
 			} else if (getErrorNumber()!=ERANGE) {
 				break;
+			}
+			setErrorNumber(errornumber);
+			#elif defined(RUDIMENTS_HAVE_GNU_STRERROR_R)
+			char	*result=strerror_r(errornumber,buffer,size);
+			if (getErrorNumber()==ERANGE) {
+				setErrorNumber(errornumber);
+			} else {
+				return result;
 			}
 			#endif
 

@@ -349,12 +349,16 @@ const char *gss::getSspiStatusString(uint32_t status) {
 			case SEC_E_NO_KERB_KEY:
 				return "SEC_E_NO_KERB_KEY";
 				break;
+			#ifdef SEC_E_CERT_WRONG_USAGE
 			case SEC_E_CERT_WRONG_USAGE:
 				return "SEC_E_CERT_WRONG_USAGE";
 				break;
+			#endif
+			#ifdef SEC_E_DOWNGRADE_DETECTED:
 			case SEC_E_DOWNGRADE_DETECTED:
 				return "SEC_E_DOWNGRADE_DETECTED";
 				break;
+			#endif
 			case SEC_E_SMARTCARD_CERT_REVOKED:
 				return "SEC_E_SMARTCARD_CERT_REVOKED";
 				break;
@@ -370,48 +374,76 @@ const char *gss::getSspiStatusString(uint32_t status) {
 			case SEC_E_SMARTCARD_CERT_EXPIRED:
 				return "SEC_E_SMARTCARD_CERT_EXPIRED";
 				break;
+			#ifdef SEC_E_NO_S4U_PROT_SUPPORT
 			case SEC_E_NO_S4U_PROT_SUPPORT:
 				return "SEC_E_NO_S4U_PROT_SUPPORT";
 				break;
+			#endif
+			#ifdef SEC_E_CROSSREALM_DELEGATION_FAILURE
 			case SEC_E_CROSSREALM_DELEGATION_FAILURE:
 				return "SEC_E_CROSSREALM_DELEGATION_FAILURE";
 				break;
+			#endif
+			#ifdef SEC_E_REVOCATION_OFFLINE_KDC
 			case SEC_E_REVOCATION_OFFLINE_KDC:
 				return "SEC_E_REVOCATION_OFFLINE_KDC";
 				break;
+			#endif
+			#ifdef SEC_E_ISSUING_CA_UNTRUSTED_KDC
 			case SEC_E_ISSUING_CA_UNTRUSTED_KDC:
 				return "SEC_E_ISSUING_CA_UNTRUSTED_KDC";
 				break;
+			#endif
+			#ifdef SEC_E_KDC_CERT_EXPIRED
 			case SEC_E_KDC_CERT_EXPIRED:
 				return "SEC_E_KDC_CERT_EXPIRED";
 				break;
+			#endif
+			#ifdef SEC_E_KDC_CERT_REVOKED
 			case SEC_E_KDC_CERT_REVOKED:
 				return "SEC_E_KDC_CERT_REVOKED";
 				break;
+			#endif
+			#ifdef SEC_I_SIGNATURE_NEEDED
 			case SEC_I_SIGNATURE_NEEDED:
 				return "SEC_I_SIGNATURE_NEEDED";
 				break;
+			#endif
+			#ifdef SEC_E_INVALID_PARAMETER
 			case SEC_E_INVALID_PARAMETER:
 				return "SEC_E_INVALID_PARAMETER";
 				break;
+			#endif
+			#ifdef SEC_E_DELEGATION_POLICY
 			case SEC_E_DELEGATION_POLICY:
 				return "SEC_E_DELEGATION_POLICY";
 				break;
+			#endif
+			#ifdef SEC_E_POLICY_NLTM_ONLY
 			case SEC_E_POLICY_NLTM_ONLY:
 				return "SEC_E_POLICY_NLTM_ONLY";
 				break;
+			#endif
+			#ifdef SEC_I_NO_RENEGOTIATION
 			case SEC_I_NO_RENEGOTIATION:
 				return "SEC_I_NO_RENEGOTIATION";
 				break;
+			#endif
+			#ifdef SEC_E_NO_CONTEXT
 			case SEC_E_NO_CONTEXT:
 				return "SEC_E_NO_CONTEXT";
 				break;
+			#endif
+			#ifdef SEC_E_PKU2U_CERT_FAILURE
 			case SEC_E_PKU2U_CERT_FAILURE:
 				return "SEC_E_PKU2U_CERT_FAILURE";
 				break;
+			#endif
+			#ifdef SEC_E_MUTUAL_AUTH_FAILED
 			case SEC_E_MUTUAL_AUTH_FAILED:
 				return "SEC_E_MUTUAL_AUTH_FAILED";
 				break;
+			#endif
 			case SEC_E_OK:
 				return "SEC_E_OK";
 				break;

@@ -18,6 +18,11 @@
 	#include <rudiments/bytestring.h>
 	#include <schannel.h>
 	#define SSPI_ERROR(sstatus)	((sstatus)<0)
+
+	// MSVC 2008- doesn't define HCRYPTPROV_OR_NCRYPT_KEY_HANDLE
+	#if _MSC_VER <= 1500
+		typedef	ULONG_PTR	HCRYPTPROV_OR_NCRYPT_KEY_HANDLE;
+	#endif
 #endif
 
 #ifdef RUDIMENTS_HAVE_LIMITS_H
@@ -602,18 +607,26 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"3DES_112")) {
 			(*algids)[algindex++]=CALG_3DES_112;
+		#ifdef CALG_AES
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES")) {
 			(*algids)[algindex++]=CALG_AES;
+		#endif
+		#ifdef CALG_AES_128
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_128")) {
 			(*algids)[algindex++]=CALG_AES_128;
+		#endif
+		#ifdef CALG_AES_192
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_192")) {
 			(*algids)[algindex++]=CALG_AES_192;
+		#endif
+		#ifdef CALG_AES_256
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AES_256")) {
 			(*algids)[algindex++]=CALG_AES_256;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"AGREEDKEY_ANY")) {
 			(*algids)[algindex++]=CALG_AGREEDKEY_ANY;
@@ -650,12 +663,16 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 						c[i],"ECDSA")) {
 			(*algids)[algindex++]=CALG_ECDSA;
 		#endif
+		#ifdef CALG_ECMQV
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"ECMQV")) {
 			(*algids)[algindex++]=CALG_ECMQV;
+		#endif
+		#ifdef CALG_HASH_REPLACE_OWF
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HASH_REPLACE_OWF")) {
 			(*algids)[algindex++]=CALG_HASH_REPLACE_OWF;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"HUGHES_MD5")) {
 			(*algids)[algindex++]=CALG_HUGHES_MD5;
@@ -677,15 +694,21 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"MD5")) {
 			(*algids)[algindex++]=CALG_MD5;
+		#ifdef CALG_NO_SIGN
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"NO_SIGN")) {
 			(*algids)[algindex++]=CALG_NO_SIGN;
+		#endif
+		#ifdef CALG_OID_INFO_CNG_ONLY
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_CNG_ONLY")) {
 			(*algids)[algindex++]=CALG_OID_INFO_CNG_ONLY;
+		#endif
+		#ifdef CALG_OID_INFO_PARAMETERS
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"OID_INFO_PARAMETERS")) {
 			(*algids)[algindex++]=CALG_OID_INFO_PARAMETERS;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"PCT1_MASTER")) {
 			(*algids)[algindex++]=CALG_PCT1_MASTER;
@@ -722,15 +745,21 @@ static void getCipherAlgs(const char *ciphers, bool isclient,
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA1")) {
 			(*algids)[algindex++]=CALG_SHA1;
+		#ifdef CALG_SHA_256
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_256")) {
 			(*algids)[algindex++]=CALG_SHA_256;
+		#endif
+		#ifdef CALG_SHA_384
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_384")) {
 			(*algids)[algindex++]=CALG_SHA_384;
+		#endif
+		#ifdef CALG_SHA_512
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SHA_512")) {
 			(*algids)[algindex++]=CALG_SHA_512;
+		#endif
 		} else if (!charstring::compareIgnoringCase(
 						c[i],"SKIPJACK")) {
 			(*algids)[algindex++]=CALG_SKIPJACK;
@@ -2136,13 +2165,25 @@ void tlscertificate::setCertificate(void *cert) {
 		uint64_t	t=
 		(((((uint64_t)c->NotBefore.dwHighDateTime)<<32)|
 				c->NotBefore.dwLowDateTime)/10)-
-				11644473600000000ULL;
+				// Visual C++ 2002- doesn't like the ULL suffix
+				#if defined(_MSC_VER) && (_MSC_VER <= 1300)
+					11644473600000000
+				#else
+					11644473600000000ULL
+				#endif
+				;
 		pvt->_validfrom.initialize(t/1000000,t%1000000);
 
 		// get valid-to
 		t=(((((uint64_t)c->NotAfter.dwHighDateTime)<<32)|
 				c->NotAfter.dwLowDateTime)/10)-
-				11644473600000000ULL;
+				// Visual C++ 2002- doesn't like the ULL suffix
+				#if defined(_MSC_VER) && (_MSC_VER <= 1300)
+					11644473600000000
+				#else
+					11644473600000000ULL
+				#endif
+				;
 		pvt->_validto.initialize(t/1000000,t%1000000);
 
 		// get the subject
