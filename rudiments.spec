@@ -1,5 +1,5 @@
 Name: rudiments
-Version: 1.0.6
+Version: 1.0.7
 Release: 1%{?dist}
 Summary: C++ class library for developing systems and applications
 
@@ -76,6 +76,9 @@ make install DESTDIR=%{buildroot}
 %{_docdir}/%{name}
 
 %changelog
+* Wed Sep 08 2017 David Muse <david.muse@firstworks.com> - 1.0.7-1
+- Updated to version 1.0.7.
+
 * Fri Sep 01 2017 David Muse <david.muse@firstworks.com> - 1.0.6-1
 - Updated to version 1.0.6.
 

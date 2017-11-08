@@ -1,3 +1,5 @@
+1.0.7 - 
+
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class
 	added --with-windows-version to configure.vbs
