@@ -187,6 +187,9 @@ int main(int argc, const char **argv) {
 	test("OS Release",!charstring::isNullOrEmpty(release));
 	test("OS Version",!charstring::isNullOrEmpty(version));
 	test("OS Arch",!charstring::isNullOrEmpty(arch));
+	test("Rudiments Version",
+		!charstring::compare(sys::getRudimentsVersion(),
+						RUDIMENTS_VERSION));
 	test("Host Name",!charstring::isNullOrEmpty(hostname));
 
 	// these should either return non-zero or -1 for unsupported
