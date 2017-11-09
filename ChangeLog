@@ -1,4 +1,9 @@
-1.0.7 - 
+1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
+		and dynamciclib destructors to be less disatsterous in the
+		event of a double-free
+	added sys::getRudimentsVersion()
+	added empty-string detection to charstring::isInteger()/isNumber()
+	added charstring::toFloatC()
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

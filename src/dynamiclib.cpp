@@ -36,8 +36,18 @@ dynamiclib::dynamiclib() {
 }
 
 dynamiclib::~dynamiclib() {
+
+	// see NOTE in ~threadmutex()
+
+	if (!pvt) {
+		return;
+	}
+
 	close();
-	delete pvt;
+
+	dynamiclibprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {

@@ -45,13 +45,51 @@ threadmutex::threadmutex(void *mut) {
 }
 
 threadmutex::~threadmutex() {
-	error::clearError();
-	do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
-				error::getErrorNumber()==EINTR);
-	if (pvt->_destroy) {
-		delete pvt->_mut;
+
+	/* NOTE:
+	 * 
+	 * There are various ways that a destructor can be called twice, due to
+	 * the involvement of atexit, on_exit, and the dynamic linker finalizer.
+	 *
+	 * It can also happen as part of the classic shutdown loop:
+	 *
+	 *  a signal triggers shutdown
+	 *  the shutdown handler begins deleting objects
+	 *  another signal re-triggers shutdown
+	 *  loop () {
+	 *      the shutdown handler re-deletes the same objects
+	 *      this causes a SIGSEGV
+	 *      this triggers another shutdown
+	 *  }
+	 *
+	 * Perfect application-level code might not show these kinds of
+	 * behaviors, but it helps to take the following prophylactic measures,
+	 * suggested by George Carrette:
+	 *
+	 *   * use a proxy to delete each object
+	 *   * set the primary object to NULL before deleting the proxy, in
+	 *     case deleting the proxy somehow causes a SIGSEGV and re-triggers
+	 *     a shutdown handler
+	 *   * if the process is involved then bail if the primary object has
+	 *     already been set to NULL
+	 */
+
+	if (!pvt) {
+		return;
 	}
-	delete pvt;
+	error::clearError();
+
+	pthread_mutex_t	*tmpmut=pvt->_mut;
+	pvt->_mut = NULL;
+	if (pvt->_destroy && tmpmut) {
+		do {} while (pthread_mutex_destroy(tmpmut)==-1 &&
+					error::getErrorNumber()==EINTR);
+		delete tmpmut;
+	}
+
+	threadmutexprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 bool threadmutex::lock() {
@@ -100,10 +138,21 @@ threadmutex::threadmutex(void *mut) {
 }
 
 threadmutex::~threadmutex() {
-	if (pvt->_destroy) {
-		CloseHandle(pvt->_mut);
+
+	// see NOTE in non-Windows ~threadmutex()
+	if (!pvt) {
+		return;
 	}
-	delete pvt;
+
+	HANDLE	tmpmut=pvt->_mut;
+	pvt->_mut=NULL;
+	if (pvt->_destroy && tmpmut) {
+		CloseHandle(tmpmut);
+	}
+
+	threadmutexprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 bool threadmutex::lock() {

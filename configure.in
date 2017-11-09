@@ -815,6 +815,10 @@ AC_TRY_COMPILE([#include <dbghelp.h>],
 AC_MSG_CHECKING(for _G_config.h)
 AC_TRY_COMPILE([#include <_G_config.h>],
 [],AC_DEFINE(RUDIMENTS_HAVE_G_CONFIG_H, 1, Some systems have _G_config.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for locale.h)
+AC_TRY_COMPILE([#include <locale.h>],
+[],AC_DEFINE(RUDIMENTS_HAVE_LOCALE_H, 1, Some systems have locale.h) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
 echo "******************************"
 
 

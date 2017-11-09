@@ -205,6 +205,10 @@ char *sys::getOperatingSystemArchitecture() {
 	#endif
 }
 
+const char *sys::getRudimentsVersion() {
+	return RUDIMENTS_VERSION;
+}
+
 char *sys::getHostName() {
 	#if defined(RUDIMENTS_HAVE_GETHOSTNAME)
 

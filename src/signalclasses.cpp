@@ -66,10 +66,19 @@ signalset::signalset() {
 }
 
 signalset::~signalset() {
+
+	// set NOTE in ~threadmutex()
+	if (!pvt) {
+		return;
+	}
+
 	#if !defined(RUDIMENTS_HAVE_SIGACTION)
 		pvt->_siglist.clear();
 	#endif
-	delete pvt;
+
+	signalsetprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 bool signalset::addSignal(int32_t signum) {
@@ -417,7 +426,10 @@ signalhandler::signalhandler() {
 }
 
 signalhandler::~signalhandler() {
-	delete pvt;
+	// set NOTE in ~threadmutex()
+	signalhandlerprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 void signalhandler::setHandler(void (*handler)(int32_t)) {

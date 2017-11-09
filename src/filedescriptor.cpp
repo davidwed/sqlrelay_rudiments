@@ -331,23 +331,50 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 
 filedescriptor::~filedescriptor() {
 
-	if (pvt->_thr) {
-		pvt->_thrsem->wait(1);
-		pvt->_threxit=true;
-		pvt->_thrsem->signal(0);
-		pvt->_thr->wait(NULL);
-		delete pvt->_thr;
-		delete pvt->_thrsem;
-		delete[] pvt->_asyncbuf;
+	// see NOTE in ~threadmutex()
+
+	if (!pvt) {
+		return;
 	}
 
-	delete[] pvt->_readbuffer;
-	delete[] pvt->_writebuffer;
-	delete pvt->_lstnr;
+	if (pvt->_thr) {
+
+		if (pvt->_thrsem) {
+			pvt->_thrsem->wait(1);
+			pvt->_threxit=true;
+			pvt->_thrsem->signal(0);
+			semaphoreset	*tmpthrsem=pvt->_thrsem;
+			pvt->_thrsem=NULL;
+			delete tmpthrsem;
+		}
+
+		pvt->_thr->wait(NULL);
+		thread	*tmpthr=pvt->_thr;
+		pvt->_thr=NULL;
+		delete tmpthr;
+
+		unsigned char	*tmpasyncbuf=pvt->_asyncbuf;
+		pvt->_asyncbuf=NULL;
+		delete[] tmpasyncbuf;
+	}
+
+	unsigned char	*tmpbuffer=pvt->_readbuffer;
+	pvt->_readbuffer=NULL;
+	delete[] tmpbuffer;
+
+	tmpbuffer=pvt->_writebuffer;
+	pvt->_writebuffer=NULL;
+	delete[] tmpbuffer;
+
+	listener	*tmplstnr=pvt->_lstnr;
+	pvt->_lstnr=NULL;
+	delete tmplstnr;
 
 	close();
 
-	delete pvt;
+	filedescriptorprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {

@@ -155,10 +155,24 @@ void file::fileClone(const file &f) {
 }
 
 file::~file() {
+
+	// set NOTE in ~threadmutex()
+
+	if (!pvt) {
+		return;
+	}
+
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
-		delete[] pvt->_name;
+		if (pvt->_name) {
+			char	*tmpname=pvt->_name;
+			pvt->name=NULL;
+			delete[] tmpname;
+		}
 	#endif
-	delete pvt;
+
+	fileprivate	*tmppvt=pvt;
+	pvt=NULL;
+	delete tmppvt;
 }
 
 bool file::create(const char *name, mode_t perms) {

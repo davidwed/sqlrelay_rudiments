@@ -766,6 +766,9 @@
 /* Some systems have LoadLibraryEx */
 #define RUDIMENTS_HAVE_LOADLIBRARYEX 1
 
+/* Some systems have locale.h */
+/* #undef RUDIMENTS_HAVE_LOCALE_H */
+
 /* Some systems have localtime_r */
 /* #undef RUDIMENTS_HAVE_LOCALTIME_R */
 

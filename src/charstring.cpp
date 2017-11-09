@@ -50,6 +50,10 @@ extern "C" int __vsnprintf(char *str, size_t size,
 	#include <strings.h>
 #endif
 
+#ifdef RUDIMENTS_HAVE_LOCALE_H
+	#include <locale.h>
+#endif
+
 const char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
@@ -244,7 +248,7 @@ void charstring::replace(char *str, const char *oldchars, char newchar) {
 
 bool charstring::isInteger(const char *str) {
 
-	if (!str) {
+	if (isNullOrEmpty(str)) {
 		return false;
 	}
 
@@ -262,7 +266,7 @@ bool charstring::isInteger(const char *str) {
 
 bool charstring::isInteger(const char *str, int32_t size) {
 
-	if (!str) {
+	if (!str || !size) {
 		return false;
 	}
 
@@ -281,7 +285,7 @@ bool charstring::isInteger(const char *str, int32_t size) {
 
 bool charstring::isNumber(const char *str) {
 
-	if (!str) {
+	if (isNullOrEmpty(str)) {
 		return false;
 	}
 
@@ -303,7 +307,7 @@ bool charstring::isNumber(const char *str) {
 
 bool charstring::isNumber(const char *str, int32_t size) {
 
-	if (!str) {
+	if (!str || !size) {
 		return false;
 	}
 
@@ -1360,6 +1364,41 @@ uint64_t charstring::toUnsignedInteger(const char *string,
 }
 
 long double charstring::toFloat(const char *string) {
+	return toFloat(string,NULL);
+}
+
+long double charstring::toFloatC(const char *string) {
+
+	/* This method is needed when the locale of the client is different
+	 * from the C/POSIX locale, but we still need to convert a string
+	 * formatted in C/POSIX locale format to a float. Perhaps the string
+	 * was supplied to us by a host which is using the C/POSIX locale).
+	 * Because there are no standard, let alone portable api, for string
+	 * conversion functions that take a locale as argument, this code
+	 * implements a workaround of converting the string from C locale
+	 * representation to one appropriate for the current locale. */
+
+#ifdef RUDIMENTS_HAVE_LOCALE_H
+	size_t		len=length(string);
+	char		stringinlocale[256];
+	const char	*decimalpointlocation;
+	struct	lconv	*currentlconv=localeconv();
+	if ((currentlconv!=NULL) &&
+		(currentlconv->decimal_point!=NULL) &&
+		(currentlconv->decimal_point[0]!=0) &&
+		(currentlconv->decimal_point[0]!='.') &&
+		(currentlconv->decimal_point[1]==0) &&
+		((decimalpointlocation=findFirst(string,'.'))!=NULL) &&
+		(len<sizeof(stringinlocale))) {
+
+		bytestring::copy(stringinlocale,string,len+1);
+
+		stringinlocale[decimalpointlocation-string]=
+					currentlconv->decimal_point[0];
+
+		return toFloat(stringinlocale,NULL);
+	}
+#endif
 	return toFloat(string,NULL);
 }
 

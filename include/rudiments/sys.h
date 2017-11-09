@@ -32,6 +32,9 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  the program is running in.  i386, x86_64, ppc, etc. */
 		static	char	*getOperatingSystemArchitecture();
 
+		/** Returns the version of the rudiments library. */
+		static	const char	*getRudimentsVersion();
+
 		/** Returns the host name of the machine that the program
                  *  is running on, as understood by the kernel.  This may or
                  *  may not necessarily be the name the machine is known by
