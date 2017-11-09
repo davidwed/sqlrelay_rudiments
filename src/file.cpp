@@ -165,7 +165,7 @@ file::~file() {
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		if (pvt->_name) {
 			char	*tmpname=pvt->_name;
-			pvt->name=NULL;
+			pvt->_name=NULL;
 			delete[] tmpname;
 		}
 	#endif
