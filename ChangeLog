@@ -4,6 +4,7 @@
 	added sys::getRudimentsVersion()
 	added empty-string detection to charstring::isInteger()/isNumber()
 	added charstring::toFloatC()
+	wrapped _access_s call with null/empty-string detection
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

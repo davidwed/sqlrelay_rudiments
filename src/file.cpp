@@ -800,7 +800,8 @@ bool file::accessible(const char *filename, int32_t mode) {
 	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__ACCESS_S)
-			result=_access_s(filename,mode);
+			result=(!charstring::isNullOrEmpty(filename))?
+						_access_s(filename,mode):-1;
 		#elif defined(RUDIMENTS_HAVE_ACCESS)
 			result=access(filename,mode);
 		#else
