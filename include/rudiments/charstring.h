@@ -566,6 +566,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Converts "string" to a floating point number. */
 		static	long double	toFloat(const char *string);
 
+		/** Converts "string" to a floating point number, in the C locale */
+		static	long double	toFloatC(const char *string);
+
 		/** Converts "string" to a floating point number.  If
 		 *  non-NULL, endptr will be set to the first character
 		 *  in the string after the number. */
@@ -810,6 +813,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		static ssize_t	printf(char *buffer, size_t length,
 						const char *format,
 						va_list *argp);
+                
+		/** Returns the RUDIMENTS_VERSION string */
+		static const char *rudiments_version();
+
 
 	#include <rudiments/private/charstring.h>
 };

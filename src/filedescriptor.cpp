@@ -305,11 +305,16 @@ void filedescriptor::filedescriptorClone(const filedescriptor &f) {
 }
 
 filedescriptor::~filedescriptor() {
+        if (pvt == NULL) return;
 	delete[] pvt->_readbuffer;
+        pvt->_readbuffer = NULL;
 	delete[] pvt->_writebuffer;
+        pvt->_writebuffer = NULL;
 	delete pvt->_lstnr;
+        pvt->_lstnr = NULL;
 	close();
 	delete pvt;
+        pvt = NULL;
 }
 
 bool filedescriptor::setWriteBufferSize(ssize_t size) const {

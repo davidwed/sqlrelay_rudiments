@@ -70,6 +70,7 @@ signalset::~signalset() {
 		pvt->_siglist.clear();
 	#endif
 	delete pvt;
+        pvt = NULL;
 }
 
 bool signalset::addSignal(int32_t signum) {
@@ -418,6 +419,7 @@ signalhandler::signalhandler() {
 
 signalhandler::~signalhandler() {
 	delete pvt;
+        pvt = NULL;
 }
 
 void signalhandler::setHandler(void (*handler)(int32_t)) {

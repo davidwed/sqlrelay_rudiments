@@ -45,13 +45,32 @@ threadmutex::threadmutex(void *mut) {
 }
 
 threadmutex::~threadmutex() {
-	error::clearError();
-	do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
-				error::getErrorNumber()==EINTR);
-	if (pvt->_destroy) {
-		delete pvt->_mut;
-	}
-	delete pvt;
+  /* There are various ways that a destructor can be called twice, due to the involvement
+     of atexit, on_exit, and the dynamic linker finalizer. You could see these problems
+     as either SEGV or more mildly in valgrind. In the debugger you might see
+     __cxa_finalize or __run_exit_handlers on the stack (in a glib environment).
+     Perfect c++ code might not show these kinds of behaviors, but it does not hurt to take
+     prophylactic measures within ones own runtime libraries.
+     Due to the fact that this method gets called during shutdown, and there can be faults during
+     shutdown that are difficult to debug, be extra careful about replacing pointers with NULL
+     when objects are deleted, in fact we can replace the references with NULL before the deletion,
+     in case the delete operator causes a fault that brings the code back into the shutdown.
+  */
+  if (pvt) {
+    error::clearError();
+    if (pvt->_mut) {
+      do {} while (pthread_mutex_destroy(pvt->_mut)==-1 &&
+                   error::getErrorNumber()==EINTR);
+      pthread_mutex_t *tmp_mut = pvt->_mut;
+      pvt->_mut = NULL;
+      if (pvt->_destroy) {
+        delete tmp_mut;
+      }
+    }
+    threadmutexprivate *tmp_pvt = pvt;
+    pvt = NULL;
+    delete tmp_pvt;
+  }
 }
 
 bool threadmutex::lock() {
@@ -100,10 +119,14 @@ threadmutex::threadmutex(void *mut) {
 }
 
 threadmutex::~threadmutex() {
-	if (pvt->_destroy) {
-		CloseHandle(pvt->_mut);
-	}
-	delete pvt;
+  if (pvt) {
+    if (pvt->_destroy && pvt->_mut) {
+      CloseHandle(pvt->_mut);
+      pvt->_mut = NULL;
+    }
+    delete pvt;
+    pvt = NULL;
+  }
 }
 
 bool threadmutex::lock() {

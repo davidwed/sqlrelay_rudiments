@@ -36,8 +36,10 @@ dynamiclib::dynamiclib() {
 }
 
 dynamiclib::~dynamiclib() {
+        if (pvt == NULL) return;
 	close();
 	delete pvt;
+	pvt = NULL;
 }
 
 bool dynamiclib::open(const char *library, bool loaddependencies, bool global) {

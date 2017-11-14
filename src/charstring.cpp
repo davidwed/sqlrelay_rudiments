@@ -45,6 +45,13 @@ extern "C" int __vsnprintf(char *str, size_t size,
 	#include <strings.h>
 #endif
 
+// TODO: Configure drive this.
+#define RUDIMENTS_HAVE_LOCALE_H
+
+#ifdef RUDIMENTS_HAVE_LOCALE_H
+#include <locale.h>
+#endif
+
 const char *charstring::findLast(const char *haystack, const char *needle) {
 
 	if (!haystack || !needle) {
@@ -276,7 +283,7 @@ bool charstring::isInteger(const char *str, int32_t size) {
 
 bool charstring::isNumber(const char *str) {
 
-	if (!str) {
+	if (!str || !*str) {
 		return false;
 	}
 
@@ -298,7 +305,7 @@ bool charstring::isNumber(const char *str) {
 
 bool charstring::isNumber(const char *str, int32_t size) {
 
-	if (!str) {
+	if (!str || size == 0) {
 		return false;
 	}
 
@@ -1358,6 +1365,36 @@ long double charstring::toFloat(const char *string) {
 	return toFloat(string,NULL);
 }
 
+long double charstring::toFloatC(const char *string) {
+       // This function is needed when the locale of the client is
+       // different from the C/POSIX locale. But we are assuming that
+       // the locale of the server is the C/POSIX locale. Because
+       // there are no standard, let alone portable api, for string
+       // conversion functions that take a locale as argument, this
+       // code applies a work around of converting the string from C
+       // locale representation to one appropriate for the current
+       // locale. The measured overhead of calling localeconv() is 17
+       // nanoseconds.
+#ifdef RUDIMENTS_HAVE_LOCALE_H
+       size_t len = strlen(string);							
+       char string_in_locale[256];
+       const char *decimal_point_location;
+       struct lconv *current_lconv = localeconv();
+       if ((current_lconv != NULL) &&
+           (current_lconv->decimal_point != NULL) &&
+           (current_lconv->decimal_point[0] != 0) &&
+           (current_lconv->decimal_point[0] != '.') &&
+           (current_lconv->decimal_point[1] == 0) &&
+	   ((decimal_point_location = strchr(string, '.')) != NULL) &&
+	   (len < sizeof(string_in_locale))) {
+	 memcpy(&string_in_locale[0], string, len+1);
+         string_in_locale[decimal_point_location - string] = current_lconv->decimal_point[0];
+	 return toFloat(&string_in_locale[0], NULL);
+       }
+#endif
+	return toFloat(string,NULL);
+}
+
 long double charstring::toFloat(const char *string, const char **endptr) {
 	#ifdef RUDIMENTS_HAVE_STRTOLD
 	return (string)?strtold(string,(char **)endptr):0.0;
@@ -2031,4 +2068,8 @@ ssize_t charstring::printf(char *buffer, size_t length,
 		}
 	}
 	return size;
+}
+
+const char *charstring::rudiments_version() {
+  return RUDIMENTS_VERSION;
 }

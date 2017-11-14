@@ -155,10 +155,12 @@ void file::fileClone(const file &f) {
 }
 
 file::~file() {
+	if (pvt == NULL) return;
 	#ifndef RUDIMENTS_HAVE_BLKSIZE_T
 		delete[] pvt->_name;
 	#endif
 	delete pvt;
+	pvt = NULL;
 }
 
 bool file::create(const char *name, mode_t perms) {
