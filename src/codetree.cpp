@@ -42,6 +42,7 @@ static const char	LETTER='l';
 static const char	LOWERCASELETTER='w';
 static const char	UPPERCASELETTER='u';
 static const char	DIGIT='i';
+static const char	NONPRINTABLECHARACTER='p';
 static const char	SET='s';
 static const char	NONTERMINAL='n';
 static const char	BREAK='b';
@@ -104,6 +105,8 @@ bool codetreegrammar::tagStart(const char *ns, const char *name) {
 		ch=LOWERCASELETTER;
 	} else if (!charstring::compare(name,"digit")) {
 		ch=DIGIT;
+	} else if (!charstring::compare(name,"nonprintablecharacter")) {
+		ch=NONPRINTABLECHARACTER;
 	}
 
 	// replace the name
@@ -425,6 +428,15 @@ bool codetree::parseChild(xmldomnode *grammarnode,
 				break;
 			case DIGIT:
 				if (!parseDigit(grammarnode,
+							treeparent,
+							codeposition,
+							localntbuffer)) {
+					retval=false;
+				}
+				break;
+			case NONPRINTABLECHARACTER:
+				if (!parseNonPrintableCharacter(
+							grammarnode,
 							treeparent,
 							codeposition,
 							localntbuffer)) {
@@ -858,6 +870,34 @@ bool codetree::parseDigit(xmldomnode *grammarnode,
 	// if it matches, append the terminal to the
 	// nonterminal and advance the code position
 	if (character::isDigit((int32_t)(**codeposition))) {
+
+		// well... check for a break
+		if (parseBreakStack(codeposition)) {
+			return false;
+		}
+
+		debugPrintIndent(4);
+		debugPrintf(4,"digit found: \"%c\"\n",**codeposition);
+		if (ntbuffer) {
+			ntbuffer->append(**codeposition);
+		}
+		*codeposition=*codeposition+1;
+		return true;
+	}
+
+	// if it didn't match, don't advance the code position
+	return false;
+}
+
+bool codetree::parseNonPrintableCharacter(
+				xmldomnode *grammarnode,
+				xmldomnode *treeparent,
+				const char **codeposition,
+				stringbuffer *ntbuffer) {
+
+	// if it matches, append the terminal to the
+	// nonterminal and advance the code position
+	if (!character::isPrintable((int32_t)(**codeposition))) {
 
 		// well... check for a break
 		if (parseBreakStack(codeposition)) {

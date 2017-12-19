@@ -54,6 +54,11 @@
 					xmldomnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
+		bool	parseNonPrintableCharacter(
+					xmldomnode *grammarnode,
+					xmldomnode *treeparent,
+					const char **codeposition,
+					stringbuffer *ntbuffer);
 		bool	parseSet(xmldomnode *grammarnode,
 					xmldomnode *treeparent,
 					const char **codeposition,
