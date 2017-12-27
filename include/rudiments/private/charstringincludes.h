@@ -5,6 +5,8 @@
 #include <rudiments/private/inttypes.h>
 #include <rudiments/private/rudimentsinlines.h>
 
+#include <rudiments/regularexpression.h>
+
 #include <sys/types.h>
 
 #ifdef RUDIMENTS_HAVE_STDARG_H

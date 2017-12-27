@@ -616,34 +616,19 @@ int main(int argc, const char **argv) {
 		!charstring::compare(originalcopy,
 			"one--two--one--three--one--four--one--five"));
 	delete[] originalcopy;
-	char	*newstr=charstring::replaceFirst(original,"one","1");
-	test("replace first string (smaller)",
-		!charstring::compare(newstr,
-			"1:-two:-one:-three:-one:-four:-one:-five"));
-	delete[] newstr;
-	newstr=charstring::replaceAll(original,"one","1");
-	test("replace all strings (smaller)",
+	char	*newstr=charstring::replace(original,"one","1");
+	test("replace strings (smaller)",
 		!charstring::compare(newstr,
 			"1:-two:-1:-three:-1:-four:-1:-five"));
 	delete[] newstr;
-	newstr=charstring::replaceFirst(original,"one","oneone");
-	test("replace first string (larger)",
-		!charstring::compare(newstr,
-		"oneone:-two:-one:-three:-one:-four:-one:-five"));
-	delete[] newstr;
-	newstr=charstring::replaceAll(original,"one","oneone");
-	test("replace all strings (larger)",
+	newstr=charstring::replace(original,"one","oneone");
+	test("replace strings (larger)",
 		!charstring::compare(newstr,
 		"oneone:-two:-oneone:-three:-oneone:-four:-oneone:-five"));
 	delete[] newstr;
 
-	newstr=charstring::replaceFirst(original,"onee","1");
-	test("replace first string (not found)",
-		!charstring::compare(newstr,
-		"one:-two:-one:-three:-one:-four:-one:-five"));
-	delete[] newstr;
-	newstr=charstring::replaceAll(original,"onee","1");
-	test("replace all strings (not found)",
+	newstr=charstring::replace(original,"onee","1");
+	test("replace strings (not found)",
 		!charstring::compare(newstr,
 		"one:-two:-one:-three:-one:-four:-one:-five"));
 	delete[] newstr;
@@ -656,20 +641,95 @@ int main(int argc, const char **argv) {
 	const char * const newset1[]={
 		"1","2","3","4","5",NULL
 	};
-	newstr=charstring::replaceAll(original,oldset,oldlen,newset1);
-	test("replace all strings set (smaller)",
+	newstr=charstring::replace(original,oldset,oldlen,newset1);
+	test("replace strings set (smaller)",
 		!charstring::compare(newstr,
 			"1:-2:-1:-3:-1:-4:-1:-5"));
 	delete[] newstr;
 	const char * const newset2[]={
 		"oneone","twotwo","threethree","fourfour","fivefive",NULL
 	};
-	newstr=charstring::replaceAll(original,oldset,oldlen,newset2);
-	test("replace all strings set (larger)",
+	newstr=charstring::replace(original,oldset,oldlen,newset2);
+	test("replace strings set (larger)",
 		!charstring::compare(newstr,
 			"oneone:-twotwo:-oneone:-threethree:-"
 			"oneone:-fourfour:-oneone:-fivefive"));
 	delete[] newstr;
+
+	original="0123456789,12345678,234567,3456,45";
+	regularexpression	from;
+	from.compile("[0-9]*");
+	newstr=charstring::replace(original,&from,"numbers",true);
+	test("replace regex/from-to (global)",
+		!charstring::compare(newstr,
+			"numbers,numbers,numbers,numbers,numbers"));
+	delete[] newstr;
+
+	newstr=charstring::replace(original,&from,"numbers",false);
+	test("replace regex/from-to (first)",
+		!charstring::compare(newstr,
+			"numbers,12345678,234567,3456,45"));
+	delete[] newstr;
+
+	regularexpression	match;
+	match.compile("[0-9]*");
+	from.compile("5");
+	newstr=charstring::replace(original,&match,true,&from,"five",true);
+	test("replace regex/match-from-to (larger)",
+		!charstring::compare(newstr,
+			"01234five6789,1234five678,234five67,34five6,4five"));
+	delete[] newstr;
+
+	from.compile("45");
+	newstr=charstring::replace(original,&match,true,&from,"fourfive",true);
+	test("replace regex/match-from-to (larger)",
+		!charstring::compare(newstr,
+			"0123fourfive6789,123fourfive678,"
+			"23fourfive67,3fourfive6,fourfive"));
+	delete[] newstr;
+
+	original="4545454545,45454545,454545,4545,45";
+	from.compile("5");
+	newstr=charstring::replace(original,&match,true,&from,"five",true);
+	test("replace regex/match-from-to (global,global)",
+		!charstring::compare(newstr,
+			"4five4five4five4five4five,"
+			"4five4five4five4five,"
+			"4five4five4five,"
+			"4five4five,"
+			"4five"));
+	delete[] newstr;
+
+	newstr=charstring::replace(original,&match,true,&from,"five",false);
+	test("replace regex/match-from-to (global,first)",
+		!charstring::compare(newstr,
+			"4five45454545,"
+			"4five454545,"
+			"4five4545,"
+			"4five45,"
+			"4five"));
+	delete[] newstr;
+
+	newstr=charstring::replace(original,&match,false,&from,"five",false);
+	test("replace regex/match-from-to (first,first)",
+		!charstring::compare(newstr,
+			"4five45454545,"
+			"45454545,"
+			"454545,"
+			"4545,"
+			"45"));
+	delete[] newstr;
+
+	newstr=charstring::replace(original,&match,false,&from,"five",true);
+	test("replace regex/match-from-to (first,global)",
+		!charstring::compare(newstr,
+			"4five4five4five4five4five,"
+			"45454545,"
+			"454545,"
+			"4545,"
+			"45"));
+	delete[] newstr;
+
 	stdoutput.printf("\n");
 
 

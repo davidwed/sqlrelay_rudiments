@@ -362,16 +362,9 @@ class RUDIMENTS_DLLSPEC charstring {
 					const char *oldchars, char newchar);
 
 		/** Returns a new string which is a copy of "str" in which
-		 *  the first instance of "oldstr" has been replaced with
-		 *  "newstr" */
-		static	char	*replaceFirst(const char *str,
-						const char *oldstr,
-						const char *newstr);
-
-		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of "oldstr" have been replaced with
 		 *  "newstr" */
-		static	char	*replaceAll(const char *str,
+		static	char	*replace(const char *str,
 						const char *oldstr,
 						const char *newstr);
 
@@ -381,10 +374,40 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  array "oldstrlen", have been replaced with the commensurate
 		 *  string found in the NULL-terminated array "newstrset",
 		 *  which must have the same number of members as "oldstrset" */
-		static	char	*replaceAll(const char *str,
+		static	char	*replace(const char *str,
 						const char * const *oldstrset,
 						ssize_t *oldstrlen,
 						const char * const *newstrset);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  parts that match "from" have been replaced with "to".
+		 *
+		 *  If "replaceglobal" is true then all matching parts are
+		 *  replaced.  If "replaceglobal" is false then only the first
+		 *  matching part is replaced. */
+		static	char	*replace(const char *str,
+						regularexpression *from,
+						const char *to,
+						bool replaceglobal);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  parts that match "match" have been modified such that
+		 *  parts of them that match "from" have been replaced with
+		 *  "to".
+		 *
+		 *  If "matchglobal" is true then all matching parts are
+		 *  found and modified.  If "matchglobal" is false then only
+		 *  the first matching part is found and modified.
+		 *
+		 *  If "replaceglobal" is true then all matching parts are
+		 *  replaced.  If "replaceglobal" is false then only the first
+		 *  matching part is replaced. */
+		static	char	*replace(const char *str,
+						regularexpression *match,
+						bool matchglobal,
+						regularexpression *from,
+						const char *to,
+						bool replaceglobal);
 
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
