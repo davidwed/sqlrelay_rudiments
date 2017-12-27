@@ -6,6 +6,7 @@
 	added charstring::toFloatC()
 	wrapped _access_s call with null/empty-string detection
 	added <nonprintablecharacter/> to codetree
+	added various replaceFirst/replaceAll methods to charstring
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

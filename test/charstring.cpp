@@ -593,6 +593,84 @@ int main(int argc, const char **argv) {
 	test("NULL",!charstring::isNo(NULL));
 	test("empty",!charstring::isNo(""));
 	stdoutput.printf("\n");
+	
+
+	// replace
+	stdoutput.printf("replace...\n");
+	original="one:-two:-one:-three:-one:-four:-one:-five";
+	char	*originalcopy=charstring::duplicate(original);
+	charstring::replace(originalcopy,'-','|');
+	test("replace char",
+		!charstring::compare(originalcopy,
+			"one:|two:|one:|three:|one:|four:|one:|five"));
+	charstring::replace(originalcopy,'-','|');
+	test("replace char (not found)",
+		!charstring::compare(originalcopy,
+			"one:|two:|one:|three:|one:|four:|one:|five"));
+	charstring::replace(originalcopy,":|",'-');
+	test("replace set",
+		!charstring::compare(originalcopy,
+			"one--two--one--three--one--four--one--five"));
+	charstring::replace(originalcopy,":|",'-');
+	test("replace set (not found)",
+		!charstring::compare(originalcopy,
+			"one--two--one--three--one--four--one--five"));
+	delete[] originalcopy;
+	char	*newstr=charstring::replaceFirst(original,"one","1");
+	test("replace first string (smaller)",
+		!charstring::compare(newstr,
+			"1:-two:-one:-three:-one:-four:-one:-five"));
+	delete[] newstr;
+	newstr=charstring::replaceAll(original,"one","1");
+	test("replace all strings (smaller)",
+		!charstring::compare(newstr,
+			"1:-two:-1:-three:-1:-four:-1:-five"));
+	delete[] newstr;
+	newstr=charstring::replaceFirst(original,"one","oneone");
+	test("replace first string (larger)",
+		!charstring::compare(newstr,
+		"oneone:-two:-one:-three:-one:-four:-one:-five"));
+	delete[] newstr;
+	newstr=charstring::replaceAll(original,"one","oneone");
+	test("replace all strings (larger)",
+		!charstring::compare(newstr,
+		"oneone:-two:-oneone:-three:-oneone:-four:-oneone:-five"));
+	delete[] newstr;
+
+	newstr=charstring::replaceFirst(original,"onee","1");
+	test("replace first string (not found)",
+		!charstring::compare(newstr,
+		"one:-two:-one:-three:-one:-four:-one:-five"));
+	delete[] newstr;
+	newstr=charstring::replaceAll(original,"onee","1");
+	test("replace all strings (not found)",
+		!charstring::compare(newstr,
+		"one:-two:-one:-three:-one:-four:-one:-five"));
+	delete[] newstr;
+	const char * const oldset[]={
+		"one","two","three","four","five",NULL
+	};
+	ssize_t	oldlen[]={
+		3,3,5,4,4
+	};
+	const char * const newset1[]={
+		"1","2","3","4","5",NULL
+	};
+	newstr=charstring::replaceAll(original,oldset,oldlen,newset1);
+	test("replace all strings set (smaller)",
+		!charstring::compare(newstr,
+			"1:-2:-1:-3:-1:-4:-1:-5"));
+	delete[] newstr;
+	const char * const newset2[]={
+		"oneone","twotwo","threethree","fourfour","fivefive",NULL
+	};
+	newstr=charstring::replaceAll(original,oldset,oldlen,newset2);
+	test("replace all strings set (larger)",
+		!charstring::compare(newstr,
+			"oneone:-twotwo:-oneone:-threethree:-"
+			"oneone:-fourfour:-oneone:-fivefive"));
+	delete[] newstr;
+	stdoutput.printf("\n");
 
 
 	// hosttonet/nettohost (why are these here?)

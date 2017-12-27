@@ -361,6 +361,31 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	void	replace(char *str,
 					const char *oldchars, char newchar);
 
+		/** Returns a new string which is a copy of "str" in which
+		 *  the first instance of "oldstr" has been replaced with
+		 *  "newstr" */
+		static	char	*replaceFirst(const char *str,
+						const char *oldstr,
+						const char *newstr);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of "oldstr" have been replaced with
+		 *  "newstr" */
+		static	char	*replaceAll(const char *str,
+						const char *oldstr,
+						const char *newstr);
+
+		/** Returns a new string which is a copy of "str" in which
+		 *  all instances of strings found in the NULL-terminated
+		 *  array "oldstrset", the lengths of which are given by the
+		 *  array "oldstrlen", have been replaced with the commensurate
+		 *  string found in the NULL-terminated array "newstrset",
+		 *  which must have the same number of members as "oldstrset" */
+		static	char	*replaceAll(const char *str,
+						const char * const *oldstrset,
+						ssize_t *oldstrlen,
+						const char * const *newstrset);
+
 		/** Returns the number of characters needed to represent
 		 *  "number" as a string. */
 		static	uint16_t	integerLength(int16_t number);

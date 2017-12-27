@@ -10,6 +10,7 @@
 	#include <rudiments/process.h>
 	#include <rudiments/file.h>
 #endif
+#include <rudiments/stringbuffer.h>
 
 // for strtold and for strchrnul
 #ifndef __USE_GNU
@@ -244,6 +245,72 @@ void charstring::replace(char *str, const char *oldchars, char newchar) {
 			*ptr=newchar;
 		}
 	}
+}
+
+char *charstring::replaceFirst(const char *str, const char *oldstr,
+						const char *newstr) {
+	const char	*ptr=charstring::findFirst(str,oldstr);
+	if (ptr) {
+		stringbuffer	newstring;
+		newstring.append(str,ptr-str);
+		newstring.append(newstr);
+		ptr+=length(oldstr);
+		newstring.append(ptr);
+		return newstring.detachString();
+	}
+	return duplicate(str);
+}
+
+char *charstring::replaceAll(const char *str, const char *oldstr,
+						const char *newstr) {
+	stringbuffer	newstring;
+	ssize_t		oldstrlen=charstring::length(oldstr);
+	const char	*ptr=str;
+	const char	*start=ptr;
+	while (*ptr) {
+		if (!charstring::compare(ptr,oldstr,oldstrlen)) {
+			newstring.append(start,ptr-start);
+			newstring.append(newstr);
+			ptr+=oldstrlen;
+			start=ptr;
+		} else {
+			ptr++;
+		}
+	}
+	newstring.append(start,ptr-start);
+	return newstring.detachString();
+}
+
+char *charstring::replaceAll(const char *str, const char * const *oldstrset,
+						ssize_t *oldstrlen,
+						const char * const *newstrset) {
+
+	// search and replace
+	stringbuffer	newstring;
+	const char	*ptr=str;
+	const char	*start=ptr;
+	while (*ptr) {
+		bool	found=false;
+		uint64_t i=0;
+		for (const char * const *oldptr=oldstrset; *oldptr; oldptr++) {
+			if (!charstring::compare(
+					ptr,oldstrset[i],oldstrlen[i])) {
+				newstring.append(start,ptr-start);
+				newstring.append(newstrset[i]);
+				ptr+=oldstrlen[i];
+				start=ptr;
+				found=true;
+				break;
+			}
+			i++;
+		}
+		if (!found) {
+			ptr++;
+		}
+	}
+	newstring.append(start,ptr-start);
+
+	return newstring.detachString();
 }
 
 bool charstring::isInteger(const char *str) {
