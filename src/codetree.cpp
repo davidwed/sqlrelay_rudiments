@@ -551,7 +551,7 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 		// or exception
 		if (pvt->_endofstring) {
 
-			for (xmldomnode *rchild=child->getNextTagSibling();
+			for (xmldomnode *rchild=child;
 				!rchild->isNullNode();
 				rchild=rchild->getNextTagSibling()) {
 
@@ -661,20 +661,9 @@ bool codetree::parseRepetition(xmldomnode *grammarnode,
 	bool		anyfound=false;
 	for (;;) {
 
-		// save old break state and reset break flag
-		//bool	oldbreak=pvt->_break;
-		//pvt->_break=false;
-
 		// parse the child
 		bool	parseresult=parseChild(child,treeparent,
 						codeposition,ntbuffer);
-
-		// process a break and restore break state
-		//if (pvt->_break) {
-			//parseresult=false;
-			//anyfound=true;
-		//}
-		//pvt->_break=oldbreak;
 
 		if (!parseresult || pvt->_endofstring) {
 			if (anyfound) {
