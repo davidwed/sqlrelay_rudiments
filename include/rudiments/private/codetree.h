@@ -14,7 +14,7 @@
 					xmldomnode *treeparent,
 					const char **codeposition,
 					stringbuffer *ntbuffer);
-		bool	endOfStringOk(xmldomnode *node);
+		bool	endOfStringOk(xmldomnode *grammarnode);
 		bool	parseAlternation(xmldomnode *grammarnode,
 					xmldomnode *treeparent,
 					const char **codeposition,

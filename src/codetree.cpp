@@ -564,36 +564,53 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 	return true;
 }
 
-bool codetree::endOfStringOk(xmldomnode *node) {
+bool codetree::endOfStringOk(xmldomnode *grammarnode) {
+
+	xmldomnode	*def=NULL;
+	const char	*name=NULL;
 
 	// if we hit the end of the string, then we've only parsed sucessfully
-	// if this node and its siblings are option, repetition, break or
-	// exception (or a nonterminal whose top-level is one of those,
-	// recursively)
-	for (xmldomnode *sibling=node;
-			!sibling->isNullNode();
-			sibling=sibling->getNextTagSibling()) {
+	// if this node and everything downstream of it is optional
+	for (xmldomnode *sib=grammarnode;
+			!sib->isNullNode(); sib=sib->getNextTagSibling()) {
 
-		const char	*name=sibling->getName();
+		name=sib->getName();
 
 		if (!name) {
 			return false;
 		}
 
-		if (name[0]==NONTERMINAL) {
-			xmldomnode	*def=(xmldomnode *)
-						sibling->getPrivateData();
-			if (!def || def->isNullNode()) {
+//stdoutput.printf("got: %s\n",name);
+		switch (name[0]) {
+			case OPTION:
+			case REPETITION:
+			case BREAK:
+			case EXCEPTION:
+				break;
+			case NONTERMINAL:
+				def=(xmldomnode *)sib->getPrivateData();
+				if (!def || def->isNullNode()) {
+//stdoutput.printf("eof failed - def not found\n");
+					return false;
+				}
+//stdoutput.printf("eof check nt\n");
+//def->print(&stdoutput);
+				if (!endOfStringOk(def->getFirstTagChild())) {
+//stdoutput.printf("  fail\n");
+					return false;
+				}
+//stdoutput.printf("  pass\n");
+				break;
+			case CONCATENATION:
+			case ALTERNATION:
+				if (!endOfStringOk(sib->getFirstTagChild())) {
+//stdoutput.printf("eof failed in concat/alt\n");
+					return false;
+				}
+				break;
+			default:
+//stdoutput.printf("eof failed, found %s\n",sib->getName());
 				return false;
-			}
-			return endOfStringOk(def->getFirstTagChild());
-		}
-
-		if (name[0]!=OPTION &&
-			name[0]!=REPETITION &&
-			name[0]!=BREAK &&
-			name[0]!=EXCEPTION) {
-			return false;
 		}
 	}
 
