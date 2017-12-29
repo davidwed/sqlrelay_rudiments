@@ -546,26 +546,10 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 	for (xmldomnode *child=grammarnode->getFirstTagChild();
 		!child->isNullNode(); child=child->getNextTagSibling()) {
 
-		// if we hit the end of the string, then that's only ok if
-		// the rest of the children are option, repetition, break
-		// or exception
-		if (pvt->_endofstring) {
-
-			for (xmldomnode *rchild=child;
-				!rchild->isNullNode();
-				rchild=rchild->getNextTagSibling()) {
-
-				const char	*name=rchild->getName();
-				if (!name || (name[0]!=OPTION &&
-						name[0]!=REPETITION &&
-						name[0]!=BREAK &&
-						name[0]!=EXCEPTION)) {
-					debugPrintIndent(4);
-					debugPrintf(4,
-						"} concatenation failed\n");
-					return false;
-				}
-			}
+		if (pvt->_endofstring && !endOfStringOk(child)) {
+			debugPrintIndent(4);
+			debugPrintf(4,"} concatenation failed\n");
+			return false;
 		}
 
 		if (!parseChild(child,treeparent,codeposition,ntbuffer)) {
@@ -577,6 +561,42 @@ bool codetree::parseConcatenation(xmldomnode *grammarnode,
 
 	debugPrintIndent(4);
 	debugPrintf(4,"} concatenation success\n");
+	return true;
+}
+
+bool codetree::endOfStringOk(xmldomnode *node) {
+
+	// if we hit the end of the string, then we've only parsed sucessfully
+	// if this node and its siblings are option, repetition, break or
+	// exception (or a nonterminal whose top-level is one of those,
+	// recursively)
+	for (xmldomnode *sibling=node;
+			!sibling->isNullNode();
+			sibling=sibling->getNextTagSibling()) {
+
+		const char	*name=sibling->getName();
+
+		if (!name) {
+			return false;
+		}
+
+		if (name[0]==NONTERMINAL) {
+			xmldomnode	*def=(xmldomnode *)
+						sibling->getPrivateData();
+			if (!def || def->isNullNode()) {
+				return false;
+			}
+			return endOfStringOk(def->getFirstTagChild());
+		}
+
+		if (name[0]!=OPTION &&
+			name[0]!=REPETITION &&
+			name[0]!=BREAK &&
+			name[0]!=EXCEPTION) {
+			return false;
+		}
+	}
+
 	return true;
 }
 

@@ -7,9 +7,8 @@
 	wrapped _access_s call with null/empty-string detection
 	added <nonprintablecharacter/> to codetree
 	added various replaceFirst/replaceAll methods to charstring
-	fixed an off-by-one bug in codetree that could cause parsing of a
-		concatenation to succeed at eof when the next child isn't
-		optional
+	fixed some subtle codetree bugs that could cause parsing of a
+		concatenation to succeed at eof inappropriately
 
 1.0.6 - fixed url user/password parsing
 	added setValues() methods to dictionary class

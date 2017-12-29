@@ -153,7 +153,7 @@ xmldomnode *xmldomevents::findEvent(xmldomnode *codetreenode) {
 	const char	*ctnodename=codetreenode->getName();
 	const char	*ctnodevalue=codetreenode->getAttributeValue("value");
 
-	debugPrintf(1,"  <%s%s%s%s%s%s%s> : ",
+	debugPrintf(1,"  <%s%s%s%s%s%s%s> - ",
 				(ctnodens)?ctnodens:"",
 				(ctnodens)?":":"",
 				ctnodename,
